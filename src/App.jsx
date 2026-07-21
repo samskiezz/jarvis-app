@@ -311,6 +311,7 @@ import ClaudeCodeRunMonitor, { isClcdQuery, buildClcdScript } from '@/components
 import ForgeAgentMonitor, { isFrgmQuery, buildFrgmScript } from '@/components/cinematic/ForgeAgentMonitor';
 import ScenarioEnginePanel, { isScenQuery, buildScenScript } from '@/components/cinematic/ScenarioEnginePanel';
 import ApolloDeployMonitor from '@/components/cinematic/ApolloDeployMonitor';
+import OntologyObjectBrowser from '@/components/cinematic/OntologyObjectBrowser';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1349,6 +1350,14 @@ function App() {
                 jarvis:apld-toggle; isApldQuery+buildApldScript wired JarvisBrain;
                 mounted App.jsx; build EXIT:0. */}
             <ApolloDeployMonitor />
+            {/* F283 OntologyObjectBrowser — live browser for the Jarvis ontology object store;
+                polls GET /v1/ontology/types (120 s) + GET /v1/ontology/objects?limit=200 on open;
+                type filter chips; expand object → lazy GET /v1/ontology/objects/{id} for props+links
+                + GET /v1/ontology/objects/{id}/neighbors; OBJECTS|TYPES tab switcher + text search;
+                stat tiles (objects/types/in-types/filtered); ASSESS brief + TTS;
+                ◈ ONTO left:310800 bottom:8 zIndex:161; jarvis:onto-toggle;
+                isOntoQuery+buildOntoScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
+            <OntologyObjectBrowser />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
