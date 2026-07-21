@@ -308,6 +308,7 @@ import VoiceCommandMonitor, { isVcmQuery, buildVcmScript } from '@/components/ci
 import PendingActionsBoard, { isPactQuery, buildPactScript } from '@/components/cinematic/PendingActionsBoard';
 import JarvisOsMonitor, { isJosmQuery, buildJosmScript } from '@/components/cinematic/JarvisOsMonitor';
 import ClaudeCodeRunMonitor, { isClcdQuery, buildClcdScript } from '@/components/cinematic/ClaudeCodeRunMonitor';
+import ForgeAgentMonitor, { isFrgmQuery, buildFrgmScript } from '@/components/cinematic/ForgeAgentMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1322,6 +1323,13 @@ function App() {
                 ◈ CLCD left:292560 bottom:8 zIndex:157; jarvis:clcd-toggle;
                 isClcdQuery+buildClcdScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
             <ClaudeCodeRunMonitor />
+            {/* F280 ForgeAgentMonitor — polls GET /v1/forge/status (90 s) + GET /v1/forge/approvals (60 s on open);
+                lazy GET /v1/forge/approvals/{id} on expand for diff; POST approve/reject inline;
+                stat tiles (candidates/pending/approved/rejected); forge config chips (model/branch-policy/test-gated);
+                PENDING|APPROVED|REJECTED|ALL filter tabs + path search;
+                ◈ FRGM left:297120 bottom:8 zIndex:158; jarvis:frgm-toggle;
+                isFrgmQuery+buildFrgmScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
+            <ForgeAgentMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

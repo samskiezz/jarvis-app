@@ -169,6 +169,7 @@ import { isVcmQuery, buildVcmScript } from "./VoiceCommandMonitor";
 import { isPactQuery, buildPactScript } from "./PendingActionsBoard";
 import { isJosmQuery, buildJosmScript } from "./JarvisOsMonitor";
 import { isClcdQuery, buildClcdScript } from "./ClaudeCodeRunMonitor";
+import { isFrgmQuery, buildFrgmScript } from "./ForgeAgentMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1979,6 +1980,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new Event("jarvis:clcd-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildClcdScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isFrgmQuery(q)) {
+      window.dispatchEvent(new Event("jarvis:frgm-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildFrgmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
