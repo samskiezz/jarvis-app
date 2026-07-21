@@ -305,6 +305,7 @@ import PanicKeyControlPanel, { isPkctlQuery, buildPkctlScript } from '@/componen
 import AcousticContactMonitor, { isAcsnQuery, buildAcsnScript } from '@/components/cinematic/AcousticContactMonitor';
 import NexusEventBusMonitor, { isNxbtQuery, buildNxbtScript } from '@/components/cinematic/NexusEventBusMonitor';
 import VoiceCommandMonitor, { isVcmQuery, buildVcmScript } from '@/components/cinematic/VoiceCommandMonitor';
+import PendingActionsBoard, { isPactQuery, buildPactScript } from '@/components/cinematic/PendingActionsBoard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1299,6 +1300,13 @@ function App() {
                 jarvis:vcmd-toggle; isVcmQuery+buildVcmScript wired JarvisBrain;
                 mounted App.jsx; build EXIT:0. */}
             <VoiceCommandMonitor />
+            {/* F277 PendingActionsBoard — unified "what needs my attention" view;
+                parallel-polls GET /v1/spec/list + /v1/intent/list + /v1/decision/list + /v1/proofpack/list (90 s);
+                draft specs (✓ APPROVE) + raw intents (✓ READY) + draft decisions (expand) + packs (▶ EXPORT);
+                ALL|SPECS|INTENTS|DECISIONS|PACKS tabs + search; stat tiles; ASSESS brief + TTS;
+                ◈ PACT left:283440 bottom:8 zIndex:155; jarvis:pact-toggle;
+                isPactQuery+buildPactScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
+            <PendingActionsBoard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -166,6 +166,7 @@ import { isPkctlQuery, buildPkctlScript } from "./PanicKeyControlPanel";
 import { isAcsnQuery, buildAcsnScript } from "./AcousticContactMonitor";
 import { isNxbtQuery, buildNxbtScript } from "./NexusEventBusMonitor";
 import { isVcmQuery, buildVcmScript } from "./VoiceCommandMonitor";
+import { isPactQuery, buildPactScript } from "./PendingActionsBoard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1949,6 +1950,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new Event("jarvis:vcmd-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildVcmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isPactQuery(q)) {
+      window.dispatchEvent(new Event("jarvis:pact-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildPactScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
