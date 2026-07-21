@@ -309,6 +309,7 @@ import PendingActionsBoard, { isPactQuery, buildPactScript } from '@/components/
 import JarvisOsMonitor, { isJosmQuery, buildJosmScript } from '@/components/cinematic/JarvisOsMonitor';
 import ClaudeCodeRunMonitor, { isClcdQuery, buildClcdScript } from '@/components/cinematic/ClaudeCodeRunMonitor';
 import ForgeAgentMonitor, { isFrgmQuery, buildFrgmScript } from '@/components/cinematic/ForgeAgentMonitor';
+import ScenarioEnginePanel, { isScenQuery, buildScenScript } from '@/components/cinematic/ScenarioEnginePanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1330,6 +1331,14 @@ function App() {
                 ◈ FRGM left:297120 bottom:8 zIndex:158; jarvis:frgm-toggle;
                 isFrgmQuery+buildFrgmScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
             <ForgeAgentMonitor />
+            {/* F281 ScenarioEnginePanel — what-if / model-ops scenario runner;
+                polls GET /v1/scenario/list?limit=50 every 90 s (green badge=run count);
+                GET /v1/scenario/models on open; lazy GET /v1/scenario/{id} on expand;
+                RUNS|MODELS|RUN tab switcher + text search; stat tiles (total/models/recent-7d/engines);
+                inline ▶ RUN form → POST /v1/scenario/run {name,params}; ASSESS brief + TTS;
+                ⊡ SCEN left:301680 bottom:8 zIndex:159; jarvis:scen-toggle;
+                isScenQuery+buildScenScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
+            <ScenarioEnginePanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
