@@ -307,6 +307,7 @@ import NexusEventBusMonitor, { isNxbtQuery, buildNxbtScript } from '@/components
 import VoiceCommandMonitor, { isVcmQuery, buildVcmScript } from '@/components/cinematic/VoiceCommandMonitor';
 import PendingActionsBoard, { isPactQuery, buildPactScript } from '@/components/cinematic/PendingActionsBoard';
 import JarvisOsMonitor, { isJosmQuery, buildJosmScript } from '@/components/cinematic/JarvisOsMonitor';
+import ClaudeCodeRunMonitor, { isClcdQuery, buildClcdScript } from '@/components/cinematic/ClaudeCodeRunMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1315,6 +1316,12 @@ function App() {
                 ◈ JOSM left:288000 bottom:8 zIndex:156; jarvis:josm-toggle;
                 isJosmQuery+buildJosmScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
             <JarvisOsMonitor />
+            {/* F279 ClaudeCodeRunMonitor — polls GET /v1/claude_code/runs (60 s) + GET /v1/claude_code/stats;
+                lazy GET /v1/claude_code/run/{id} on expand; POST /v1/claude_code/archive/{id} to archive;
+                stat tiles (total/active/archived/avg-time); ACTIVE|ALL|ARCHIVED filter tabs + search;
+                ◈ CLCD left:292560 bottom:8 zIndex:157; jarvis:clcd-toggle;
+                isClcdQuery+buildClcdScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
+            <ClaudeCodeRunMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
