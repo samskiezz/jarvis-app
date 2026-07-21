@@ -306,6 +306,7 @@ import AcousticContactMonitor, { isAcsnQuery, buildAcsnScript } from '@/componen
 import NexusEventBusMonitor, { isNxbtQuery, buildNxbtScript } from '@/components/cinematic/NexusEventBusMonitor';
 import VoiceCommandMonitor, { isVcmQuery, buildVcmScript } from '@/components/cinematic/VoiceCommandMonitor';
 import PendingActionsBoard, { isPactQuery, buildPactScript } from '@/components/cinematic/PendingActionsBoard';
+import JarvisOsMonitor, { isJosmQuery, buildJosmScript } from '@/components/cinematic/JarvisOsMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1307,6 +1308,13 @@ function App() {
                 ◈ PACT left:283440 bottom:8 zIndex:155; jarvis:pact-toggle;
                 isPactQuery+buildPactScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
             <PendingActionsBoard />
+            {/* F278 JarvisOsMonitor — architecture map + tamper-evident audit + metrics + approval gates;
+                parallel-polls GET /v1/jarvis/architecture (120s) + /v1/jarvis/audit (60s) +
+                /v1/jarvis/audit/verify (120s) + /v1/jarvis/metrics (60s) + /v1/jarvis/approvals (60s);
+                ARCH|AUDIT|METRICS|APPROVALS tabs; ✓ APPROVE / ✗ DENY per pending gate;
+                ◈ JOSM left:288000 bottom:8 zIndex:156; jarvis:josm-toggle;
+                isJosmQuery+buildJosmScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
+            <JarvisOsMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
