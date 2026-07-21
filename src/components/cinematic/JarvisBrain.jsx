@@ -176,6 +176,7 @@ import { isOntoQuery, buildOntoScript } from "./OntologyObjectBrowser";
 import { isPhonQuery, buildPhonScript } from "./PhoneDialerPanel";
 import { isDeadQuery, buildDeadScript } from "./DeadZoneFinderPanel";
 import { isLabsQuery, buildLabsScript } from "./LabCapabilityWorkbench";
+import { isSimlQuery, buildSimlScript } from "./SimulationIntelPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2062,6 +2063,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:labs-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLabsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "simulation intel / siml / what-if / risk propagation / monte carlo /
+    //  action recommend / object simulation / recommend action / blast radius /
+    //  risk sim / sim engine / decision engine / propagate risk / sim intelligence"
+    if (isSimlQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:siml-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSimlScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

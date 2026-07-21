@@ -315,6 +315,7 @@ import OntologyObjectBrowser from '@/components/cinematic/OntologyObjectBrowser'
 import PhoneDialerPanel, { isPhonQuery, buildPhonScript } from '@/components/cinematic/PhoneDialerPanel';
 import DeadZoneFinderPanel, { isDeadQuery, buildDeadScript } from '@/components/cinematic/DeadZoneFinderPanel';
 import LabCapabilityWorkbench, { isLabsQuery, buildLabsScript } from '@/components/cinematic/LabCapabilityWorkbench';
+import SimulationIntelPanel, { isSimlQuery, buildSimlScript } from '@/components/cinematic/SimulationIntelPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1376,6 +1377,11 @@ function App() {
                 polls GET /v1/labs/catalog every 120 s; POST /v1/labs/run on action;
                 cap filter tabs + search; ▶ RUN + ▶ ASSESS; ⚗ LABS left:324480 bottom:8 zIndex:164 */}
             <LabCapabilityWorkbench />
+            {/* F287 SimulationIntelPanel — Jarvis Simulation Engine;
+                RECOMMEND GET /v1/jarvis/sim/recommend/{id}; WHATIF POST /v1/jarvis/sim/whatif;
+                RISK POST /v1/jarvis/sim/risk; MONTE POST /v1/jarvis/sim/montecarlo;
+                4 tabs; ⬡ SIML left:329040 bottom:8 zIndex:165 */}
+            <SimulationIntelPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
