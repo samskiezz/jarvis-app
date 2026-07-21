@@ -304,6 +304,7 @@ import MusicStudio, { isMgenQuery, buildMgenScript } from '@/components/cinemati
 import PanicKeyControlPanel, { isPkctlQuery, buildPkctlScript } from '@/components/cinematic/PanicKeyControlPanel';
 import AcousticContactMonitor, { isAcsnQuery, buildAcsnScript } from '@/components/cinematic/AcousticContactMonitor';
 import NexusEventBusMonitor, { isNxbtQuery, buildNxbtScript } from '@/components/cinematic/NexusEventBusMonitor';
+import VoiceCommandMonitor, { isVcmQuery, buildVcmScript } from '@/components/cinematic/VoiceCommandMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1290,6 +1291,14 @@ function App() {
                 jarvis:nxbt-toggle; isNxbtQuery+buildNxbtScript wired JarvisBrain;
                 mounted App.jsx; build EXIT:0. */}
             <NexusEventBusMonitor />
+            {/* F276 VoiceCommandMonitor — polls GET /v1/voice/status (60 s) + GET /v1/voice/history (60 s);
+                fetches GET /v1/voice/commands on open; MODE tab: GET /v1/voice/mode + GET /v1/voice/simplified-commands;
+                POST /v1/voice/mode to toggle simplified mode; DELETE /v1/voice/history to clear;
+                stat tiles (TTS/STT/history/categories); HISTORY|COMMANDS|MODE tab switcher + search;
+                ASSESS brief + TTS; 🎤 VCMD left:278880 bottom:8 zIndex:154;
+                jarvis:vcmd-toggle; isVcmQuery+buildVcmScript wired JarvisBrain;
+                mounted App.jsx; build EXIT:0. */}
+            <VoiceCommandMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
