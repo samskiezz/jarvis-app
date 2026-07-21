@@ -174,6 +174,7 @@ import { isScenQuery, buildScenScript } from "./ScenarioEnginePanel";
 import { isApldQuery, buildApldScript } from "./ApolloDeployMonitor";
 import { isOntoQuery, buildOntoScript } from "./OntologyObjectBrowser";
 import { isPhonQuery, buildPhonScript } from "./PhoneDialerPanel";
+import { isDeadQuery, buildDeadScript } from "./DeadZoneFinderPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2036,6 +2037,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:phon-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildPhonScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "dead zone / deadzone / dead zones / stale files / duplicate features /
+    //  missing files / dead code / cleanup intel / dzf / repo cleanup /
+    //  dead zone finder / unused features"
+    if (isDeadQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dead-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDeadScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

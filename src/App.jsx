@@ -313,6 +313,7 @@ import ScenarioEnginePanel, { isScenQuery, buildScenScript } from '@/components/
 import ApolloDeployMonitor from '@/components/cinematic/ApolloDeployMonitor';
 import OntologyObjectBrowser from '@/components/cinematic/OntologyObjectBrowser';
 import PhoneDialerPanel, { isPhonQuery, buildPhonScript } from '@/components/cinematic/PhoneDialerPanel';
+import DeadZoneFinderPanel, { isDeadQuery, buildDeadScript } from '@/components/cinematic/DeadZoneFinderPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1366,6 +1367,10 @@ function App() {
                 ASSESS brief + TTS; ☎ PHON left:315360 bottom:8 zIndex:162; jarvis:phon-toggle;
                 isPhonQuery+buildPhonScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
             <PhoneDialerPanel />
+            {/* F285 DeadZoneFinderPanel — repo/inventory cleanup intelligence;
+                polls GET /v1/deadzone/scan every 120 s; expand → GET /v1/deadzone/{id};
+                kind filter tabs + search; ▶ ASSESS; ◈ DEAD left:319920 bottom:8 zIndex:163 */}
+            <DeadZoneFinderPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
