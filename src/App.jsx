@@ -312,6 +312,7 @@ import ForgeAgentMonitor, { isFrgmQuery, buildFrgmScript } from '@/components/ci
 import ScenarioEnginePanel, { isScenQuery, buildScenScript } from '@/components/cinematic/ScenarioEnginePanel';
 import ApolloDeployMonitor from '@/components/cinematic/ApolloDeployMonitor';
 import OntologyObjectBrowser from '@/components/cinematic/OntologyObjectBrowser';
+import PhoneDialerPanel, { isPhonQuery, buildPhonScript } from '@/components/cinematic/PhoneDialerPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1358,6 +1359,13 @@ function App() {
                 ◈ ONTO left:310800 bottom:8 zIndex:161; jarvis:onto-toggle;
                 isOntoQuery+buildOntoScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
             <OntologyObjectBrowser />
+            {/* F284 PhoneDialerPanel — phone & SMS control surface;
+                polls GET /v1/phone/status every 60 s (badge: green=active, amber=mock/fallback);
+                STATUS|DIAL|SMS tab switcher; stat tiles (provider/dial/sms/status);
+                POST /v1/phone/dial {number, message?} → result; POST /v1/phone/sms {number, text} → result;
+                ASSESS brief + TTS; ☎ PHON left:315360 bottom:8 zIndex:162; jarvis:phon-toggle;
+                isPhonQuery+buildPhonScript wired JarvisBrain; mounted App.jsx; build EXIT:0. */}
+            <PhoneDialerPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

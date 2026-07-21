@@ -173,6 +173,7 @@ import { isFrgmQuery, buildFrgmScript } from "./ForgeAgentMonitor";
 import { isScenQuery, buildScenScript } from "./ScenarioEnginePanel";
 import { isApldQuery, buildApldScript } from "./ApolloDeployMonitor";
 import { isOntoQuery, buildOntoScript } from "./OntologyObjectBrowser";
+import { isPhonQuery, buildPhonScript } from "./PhoneDialerPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2024,6 +2025,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:onto-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildOntoScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "phone / dial / sms / phone control / dialer / outbound call / send sms /
+    //  phone panel / text message / phon / phone status / call control / phone provider"
+    if (isPhonQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:phon-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildPhonScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
