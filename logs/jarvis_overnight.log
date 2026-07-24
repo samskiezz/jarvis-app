@@ -162,3 +162,4 @@
 [2026-07-24] F288 WorkshopAnalyticsPanel.jsx — ad-hoc GROUP BY / HISTOGRAM / PIVOT analytics over live ontology objects via /v1/workshop/* endpoints; wired JarvisBrain+App.jsx; build EXIT:0
 [2026-07-24] F289 GraphAnnotationBoard: GET /v1/graph/annotations (60s poll) + POST /v1/graph/annotate + GET /v1/graph/centrality quick-pick + /v1/jarvis/agent/chat AI brief; ◈ GANN left:338160 zIndex:167; build EXIT:0
 [2026-07-24] F290 SemanticSearchConsole — additive cinematic component; SEARCH/NL/RAG/REINDEX tabs on /v1/semantic/*; ◈ SRCH left:342720 zIndex:168; isSrchQuery+buildSrchScript in JarvisBrain; build EXIT:0
+[2026-07-24] F291 AgentToolsRunner — ⌘⇧T command palette; fetches /v1/jarvis/agent/tools; select+Enter fires /v1/jarvis/agent/chat; shows agent result inline; keyboard overlay distinct from AgentToolRegistry panel; mounted App.jsx; build EXIT:0

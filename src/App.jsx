@@ -265,6 +265,7 @@ import LlmBudgetSentinel, { isLbsgQuery, buildLbsgScript } from '@/components/ci
 import TopObjectsExplorer, { isTopObjectsQuery, buildTopObjectsScript } from '@/components/cinematic/TopObjectsExplorer';
 import RunBuilderMonitor from '@/components/cinematic/RunBuilderMonitor';
 import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
+import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
 import DecisionLedgerMonitor from '@/components/cinematic/DecisionLedgerMonitor';
 import DataGovernanceMonitor, { isGovQuery as _isGovQuery, buildGovScript as _buildGovScript } from '@/components/cinematic/DataGovernanceMonitor';
 import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
@@ -1013,6 +1014,10 @@ function App() {
                 isToolRegistryQuery+buildToolRegistryScript wired JarvisBrain; ◈ ATR left:105600 zIndex:116;
                 "tool registry/agent tools/what tools/jarvis capabilities/available tools/atr" voice triggers */}
             <AgentToolRegistry />
+            {/* F31 AgentToolsRunner — ⌘⇧T keyboard palette; fetches /v1/jarvis/agent/tools;
+                select tool + Enter fires /v1/jarvis/agent/chat and shows result inline.
+                Distinct from AgentToolRegistry (panel): this is a command-palette overlay. */}
+            <AgentToolsRunner />
             {/* F237: Decision Ledger Monitor — GET /v1/decision/list?limit=50 (90-s poll);
                 stat tiles (total/final/reviewed/draft); ALL/DRAFT/FINAL/REVIEWED tabs + search;
                 expand row → body preview + score bar; ▶ ASSESS → agent chat + TTS;
