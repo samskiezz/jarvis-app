@@ -320,6 +320,7 @@ import SimulationIntelPanel, { isSimlQuery, buildSimlScript } from '@/components
 import WorkshopAnalyticsPanel, { isWkspQuery, buildWkspScript } from '@/components/cinematic/WorkshopAnalyticsPanel';
 import GraphAnnotationBoard from '@/components/cinematic/GraphAnnotationBoard';
 import SemanticSearchConsole from '@/components/cinematic/SemanticSearchConsole';
+import OpsDatasetCoverage from '@/components/cinematic/OpsDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1406,6 +1407,11 @@ function App() {
                 polls /v1/semantic/search (on-query), /v1/semantic/nl, /v1/semantic/rag,
                 /v1/semantic/reindex; voice: "semantic search|vector search|rag|srch" */}
             <SemanticSearchConsole />
+            {/* F292: OpsDatasetCoverage — ◈ EVTDS button (left:347280, bottom:8, zIndex:169);
+                parallel-fetches /v1/ops/events + /v1/datasets; keyword-correlates each live
+                event against dataset catalog; DOCUMENTED vs BLIND; amber badge on blind count;
+                ▶ ASSESS → /v1/jarvis/agent/chat + TTS; 90-s auto-refresh */}
+            <OpsDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
