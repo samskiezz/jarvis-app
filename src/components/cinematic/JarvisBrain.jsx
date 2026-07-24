@@ -179,6 +179,7 @@ import { isLabsQuery, buildLabsScript } from "./LabCapabilityWorkbench";
 import { isSimlQuery, buildSimlScript } from "./SimulationIntelPanel";
 import { isWkspQuery, buildWkspScript } from "./WorkshopAnalyticsPanel";
 import { isGannQuery, buildGannScript } from "./GraphAnnotationBoard";
+import { isSrchQuery, buildSrchScript } from "./SemanticSearchConsole";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2100,6 +2101,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gann-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGannScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "semantic search / vector search / rag / knowledge search /
+    //  natural language query / srch / knowledge retrieval /
+    //  search ontology / search knowledge / nl query / reindex"
+    if (isSrchQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srch-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSrchScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -318,6 +318,7 @@ import LabCapabilityWorkbench, { isLabsQuery, buildLabsScript } from '@/componen
 import SimulationIntelPanel, { isSimlQuery, buildSimlScript } from '@/components/cinematic/SimulationIntelPanel';
 import WorkshopAnalyticsPanel, { isWkspQuery, buildWkspScript } from '@/components/cinematic/WorkshopAnalyticsPanel';
 import GraphAnnotationBoard from '@/components/cinematic/GraphAnnotationBoard';
+import SemanticSearchConsole from '@/components/cinematic/SemanticSearchConsole';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1396,6 +1397,10 @@ function App() {
                 "graph annotations/annotate graph/graph notes/annotation board/gann/annotate node/graph markup"
                 voice trigger; jarvis:gann-toggle event */}
             <GraphAnnotationBoard />
+            {/* F290: SemanticSearchConsole — ◈ SRCH button (left:342720, bottom:8, zIndex:168);
+                polls /v1/semantic/search (on-query), /v1/semantic/nl, /v1/semantic/rag,
+                /v1/semantic/reindex; voice: "semantic search|vector search|rag|srch" */}
+            <SemanticSearchConsole />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
