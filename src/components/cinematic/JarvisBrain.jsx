@@ -177,6 +177,7 @@ import { isPhonQuery, buildPhonScript } from "./PhoneDialerPanel";
 import { isDeadQuery, buildDeadScript } from "./DeadZoneFinderPanel";
 import { isLabsQuery, buildLabsScript } from "./LabCapabilityWorkbench";
 import { isSimlQuery, buildSimlScript } from "./SimulationIntelPanel";
+import { isWkspQuery, buildWkspScript } from "./WorkshopAnalyticsPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2075,6 +2076,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:siml-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSimlScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "workshop / analytics panel / group by / histogram / pivot table / wksp /
+    //  data analysis / object analytics / explore data / workshop analytics /
+    //  field analysis / distribution / data explorer"
+    if (isWkspQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wksp-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildWkspScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
