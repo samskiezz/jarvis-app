@@ -178,6 +178,7 @@ import { isDeadQuery, buildDeadScript } from "./DeadZoneFinderPanel";
 import { isLabsQuery, buildLabsScript } from "./LabCapabilityWorkbench";
 import { isSimlQuery, buildSimlScript } from "./SimulationIntelPanel";
 import { isWkspQuery, buildWkspScript } from "./WorkshopAnalyticsPanel";
+import { isGannQuery, buildGannScript } from "./GraphAnnotationBoard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2088,6 +2089,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:wksp-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildWkspScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "graph annotations / annotate graph / graph notes / annotation board /
+    //  gann / annotate node / graph markup"
+    if (isGannQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gann-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGannScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

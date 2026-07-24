@@ -317,6 +317,7 @@ import DeadZoneFinderPanel, { isDeadQuery, buildDeadScript } from '@/components/
 import LabCapabilityWorkbench, { isLabsQuery, buildLabsScript } from '@/components/cinematic/LabCapabilityWorkbench';
 import SimulationIntelPanel, { isSimlQuery, buildSimlScript } from '@/components/cinematic/SimulationIntelPanel';
 import WorkshopAnalyticsPanel, { isWkspQuery, buildWkspScript } from '@/components/cinematic/WorkshopAnalyticsPanel';
+import GraphAnnotationBoard from '@/components/cinematic/GraphAnnotationBoard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1387,6 +1388,14 @@ function App() {
                 POST /v1/workshop/groupby; POST /v1/workshop/histogram; POST /v1/workshop/pivot;
                 3 tabs; ◈ WKSP left:333600 bottom:8 zIndex:166 */}
             <WorkshopAnalyticsPanel />
+            {/* F289: graph annotation board — ◈ GANN button (left:338160, bottom:8, zIndex:167);
+                polls GET /v1/graph/annotations every 60s; LIST tab (search+ALL/NODE/EDGE filter)
+                + ADD tab (quick-pick from /v1/graph/centrality top-15 + form for POST /v1/graph/annotate);
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence annotation brief + TTS via jarvis:speak-dossier;
+                isGannQuery+buildGannScript wired in JarvisBrain;
+                "graph annotations/annotate graph/graph notes/annotation board/gann/annotate node/graph markup"
+                voice trigger; jarvis:gann-toggle event */}
+            <GraphAnnotationBoard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
