@@ -344,6 +344,7 @@ import MotorIntentPanel, { isMintQuery, buildMintScript } from '@/components/cin
 import InvestmentRiskCorrelator, { isIvrcQuery, buildIvrcScript } from '@/components/cinematic/InvestmentRiskCorrelator';
 import SwarmJobAlertCorrelator, { isSwarmAlertQuery, buildSwarmAlertScript } from '@/components/cinematic/SwarmJobAlertCorrelator';
 import AssetDnaScanner, { isAdnaQuery, buildAdnaScript } from '@/components/cinematic/AssetDnaScanner';
+import ContactGraphCentralityPanel, { isCgcpQuery, buildCgcpScript } from '@/components/cinematic/ContactGraphCentralityPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1611,6 +1612,14 @@ function App() {
                 badge green=ok-count, amber=warn, red=stale; ▶ ASSESS → /v1/jarvis/agent/chat + TTS;
                 isAdnaQuery+buildAdnaScript wired JarvisBrain; build EXIT:0. */}
             <AssetDnaScanner />
+            {/* F316: ContactGraphCentralityPanel — ◈ CGCP button (left:456720, bottom:8, zIndex:193);
+                parallel-fetches GET /entities/Contact + GET /v1/graph/centrality every 90 s;
+                keyword-correlates contact names against centrality node names;
+                HIGH-CENTRALITY (graph-linked) vs PERIPHERAL; stat tiles (contacts/central-nodes/linked/peripheral);
+                expand contact → matched centrality node chips with c= score bar;
+                badge green=linked count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isCgcpQuery+buildCgcpScript wired JarvisBrain; build EXIT:0. */}
+            <ContactGraphCentralityPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

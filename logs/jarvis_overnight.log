@@ -187,3 +187,4 @@
 [2026-07-25] F313 InvestmentRiskCorrelator.jsx — /entities/Investment × /entities/RiskSignal correlator; EXPOSED/CLEAR tabs; ASSESS→/v1/jarvis/agent/chat; IVRC button left:443040 zIndex:190; wired App.jsx + JarvisBrain.jsx; build EXIT:0
 [2026-07-25] F314 SwarmJobAlertCorrelator.jsx — parallel-fetches /entities/SwarmJob + /v1/alerts; RESPONDING vs UNMONITORED; ◈ SJAC button; jarvis:sjac-toggle; isSwarmAlertQuery+buildSwarmAlertScript wired JarvisBrain; build EXIT:0.
 [2026-07-25] F315 AssetDnaScanner — polls /v1/asset/list (120s), expand → /v1/asset/{id} deps+recommendations; ALL/OK/WARN/STALE/HIGH-RISK tabs; isAdnaQuery+buildAdnaScript wired JarvisBrain; build EXIT:0.
+[2026-07-25] F316 ContactGraphCentralityPanel.jsx — parallel-fetches /entities/Contact + /v1/graph/centrality; HIGH-CENTRALITY vs PERIPHERAL tabs; isCgcpQuery+buildCgcpScript wired JarvisBrain; ◈ CGCP button left:456720 zIndex:193; build EXIT:0.

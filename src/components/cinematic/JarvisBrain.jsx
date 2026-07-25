@@ -203,6 +203,7 @@ import { isMintQuery, buildMintScript } from "./MotorIntentPanel";
 import { isIvrcQuery, buildIvrcScript } from "./InvestmentRiskCorrelator";
 import { isSwarmAlertQuery, buildSwarmAlertScript } from "./SwarmJobAlertCorrelator";
 import { isAdnaQuery, buildAdnaScript } from "./AssetDnaScanner";
+import { isCgcpQuery, buildCgcpScript } from "./ContactGraphCentralityPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2413,6 +2414,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:adna-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAdnaScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F316 ContactGraphCentralityPanel — /entities/Contact + /v1/graph/centrality
+    // "contact centrality / network contacts / cgcp / influential contacts /
+    //   high centrality contacts / contacts by network / contact graph centrality /
+    //   contact network influence / which contacts are most networked / contact network rank"
+    if (isCgcpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cgcp-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCgcpScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
