@@ -199,6 +199,7 @@ import { isTracQuery, buildTracScript } from "./TaskRiskAlertCorrelator";
 import { isIgapQuery, buildIgapScript } from "./IntelDecisionGapFinder";
 import { isBcrmQuery, buildBcrmScript } from "./BrainCrmDirectory";
 import { isTobjQuery, buildTobjScript } from "./TemporalObjectHistory";
+import { isMintQuery, buildMintScript } from "./MotorIntentPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2357,6 +2358,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tobj-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTobjScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F312 MotorIntentPanel — /v1/motor/stats + /v1/motor/predict + /v1/motor/train
+    // "motor intent / intent predict / dock predict / next app / predict dock /
+    //   mint panel / motor predict / action predictor / motor model /
+    //   dock suggest / next panel / predict panel / dock intent"
+    if (isMintQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mint-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildMintScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

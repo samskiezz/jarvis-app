@@ -340,6 +340,7 @@ import TaskRiskAlertCorrelator from '@/components/cinematic/TaskRiskAlertCorrela
 import IntelDecisionGapFinder from '@/components/cinematic/IntelDecisionGapFinder';
 import BrainCrmDirectory, { isBcrmQuery, buildBcrmScript } from '@/components/cinematic/BrainCrmDirectory';
 import TemporalObjectHistory, { isTobjQuery, buildTobjScript } from '@/components/cinematic/TemporalObjectHistory';
+import MotorIntentPanel, { isMintQuery, buildMintScript } from '@/components/cinematic/MotorIntentPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1573,6 +1574,14 @@ function App() {
                 badge violet=fact count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isTobjQuery+buildTobjScript wired JarvisBrain; build EXIT:0. */}
             <TemporalObjectHistory />
+            {/* F312: MotorIntentPanel — ⊕ MINT button (left:438480, bottom:8, zIndex:189);
+                polls GET /v1/motor/stats every 60 s; STATS|PREDICT|TRAIN tabs;
+                PREDICT: GET /v1/motor/predict?top_k=5 → ranked dock-app candidates with confidence bars;
+                TRAIN: POST /v1/motor/train → accuracy/gating result;
+                badge: green=gate_ready, amber=advisory, dim=cold;
+                ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isMintQuery+buildMintScript wired JarvisBrain; build EXIT:0. */}
+            <MotorIntentPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
