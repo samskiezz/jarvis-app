@@ -328,6 +328,7 @@ import CopFusionDashboard from '@/components/cinematic/CopFusionDashboard';
 import SecurityClearancePanel, { isSclrQuery, buildSclrScript } from '@/components/cinematic/SecurityClearancePanel';
 import PredictionConsole, { isPredQuery, buildPredScript } from '@/components/cinematic/PredictionConsole';
 import SpecCaseCoverage, { isScvcQuery, buildScvcScript } from '@/components/cinematic/SpecCaseCoverage';
+import ReportKnowledgeLinker, { isRlnkQuery, buildRlnkScript } from '@/components/cinematic/ReportKnowledgeLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1466,6 +1467,14 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence governance brief + TTS via jarvis:speak-dossier;
                 ◈ SCVC left:379200 bottom:8 zIndex:176; jarvis:scvc-toggle; isScvcQuery+buildScvcScript wired JarvisBrain; build EXIT:0. */}
             <SpecCaseCoverage />
+            {/* F300 ReportKnowledgeLinker — ◈ RLNK button (left:383760, bottom:8, zIndex:177);
+                parallel-fetches /v1/reports + /knowledge/articles every 90 s;
+                keyword-correlates reports against knowledge articles;
+                LINKED (article match found) vs BLIND (no knowledge coverage); amber badge on blind count;
+                ALL/LINKED/BLIND filter tabs + text search; expand report → matched article chips with score bars;
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS via jarvis:speak-dossier;
+                isRlnkQuery+buildRlnkScript wired in JarvisBrain; build EXIT:0. */}
+            <ReportKnowledgeLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

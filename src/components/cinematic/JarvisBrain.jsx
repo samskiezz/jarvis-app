@@ -187,6 +187,7 @@ import { isCopQuery, buildCopScript } from "./CopFusionDashboard";
 import { isSclrQuery, buildSclrScript } from "./SecurityClearancePanel";
 import { isPredQuery, buildPredScript } from "./PredictionConsole";
 import { isScvcQuery, buildScvcScript } from "./SpecCaseCoverage";
+import { isRlnkQuery, buildRlnkScript } from "./ReportKnowledgeLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2199,6 +2200,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scvc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScvcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "report knowledge / knowledge report / rlnk / report articles / linked reports /
+    //  document knowledge / report coverage / report to knowledge / knowledge linker"
+    if (isRlnkQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rlnk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRlnkScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
