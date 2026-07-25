@@ -196,6 +196,7 @@ import { isUe5pQuery, buildUe5pScript } from "./Ue5PipelineMonitor";
 import { isWtxnQuery, buildWtxnScript } from "./WorldTaxonomyExplorer";
 import { isEhscQuery, buildEhscScript } from "./EntityHealthScorecard";
 import { isTracQuery, buildTracScript } from "./TaskRiskAlertCorrelator";
+import { isIgapQuery, buildIgapScript } from "./IntelDecisionGapFinder";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2314,6 +2315,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:trac-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTracScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F309 IntelDecisionGapFinder — /entities/IntelProfile + /v1/decision/list
+    // "intel gap / decision intel / igap / intel coverage / uncovered intel /
+    //   intel decisions / intel decision coverage / which intel has no decisions /
+    //   intelligence gap / decision coverage intel"
+    if (isIgapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:igap-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIgapScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

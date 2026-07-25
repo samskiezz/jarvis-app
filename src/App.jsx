@@ -337,6 +337,7 @@ import Ue5PipelineMonitor, { isUe5pQuery, buildUe5pScript } from '@/components/c
 import WorldTaxonomyExplorer, { isWtxnQuery, buildWtxnScript } from '@/components/cinematic/WorldTaxonomyExplorer';
 import EntityHealthScorecard, { isEhscQuery, buildEhscScript } from '@/components/cinematic/EntityHealthScorecard';
 import TaskRiskAlertCorrelator from '@/components/cinematic/TaskRiskAlertCorrelator';
+import IntelDecisionGapFinder from '@/components/cinematic/IntelDecisionGapFinder';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1547,6 +1548,14 @@ function App() {
                 stat tiles (tasks/alerts/exposed/clear); ALL/EXPOSED/CLEAR tabs + search; expand
                 task → matched alert chips with severity bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS */}
             <TaskRiskAlertCorrelator />
+            {/* F309: IntelDecisionGapFinder — ◈ IGAP button (left:424800, bottom:8, zIndex:186);
+                parallel-fetches /entities/IntelProfile + /v1/decision/list?limit=50 every 90 s;
+                keyword-correlates intel profile names against decision titles/body_md;
+                COVERED (decision backing found) vs UNCOVERED (no decision tracks this intel);
+                stat tiles (intel/decisions/covered/uncovered); ALL/COVERED/UNCOVERED tabs + search;
+                expand intel → matched decision chips with quality score bars;
+                ▶ ASSESS → /v1/jarvis/agent/chat + TTS */}
+            <IntelDecisionGapFinder />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
