@@ -332,6 +332,7 @@ import ReportKnowledgeLinker, { isRlnkQuery, buildRlnkScript } from '@/component
 import SecretsVaultPanel, { isVltxQuery, buildVltxScript } from '@/components/cinematic/SecretsVaultPanel';
 import LiveIntelSwarmAlignPanel, { isLiswrmQuery, buildLiswrmScript } from '@/components/cinematic/LiveIntelSwarmAlignPanel';
 import SavedSearchConsole, { isSpslQuery, buildSpslScript } from '@/components/cinematic/SavedSearchConsole';
+import BrainThinkWorkbench, { BrainThinkWorkbenchBtn, isBrtwQuery, buildBrtwScript } from '@/components/cinematic/BrainThinkWorkbench';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1507,6 +1508,16 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS via jarvis:speak-dossier;
                 isSpslQuery+buildSpslScript wired in JarvisBrain; build EXIT:0. */}
             <SavedSearchConsole />
+            {/* F304 BrainThinkWorkbench — ⬡ BRTW button (left:402000, bottom:8, zIndex:181);
+                polls GET /v1/brain/health (120s, badge=vault-score);
+                HEALTH tab: score bar + orphan/stale/gap/low-confidence/contradiction counts;
+                CHALLENGE tab: POST /v1/brain/think/challenge {idea} → cited counter-case list;
+                PANEL tab: POST /v1/brain/think/panel {decision,n} → N vault-note perspectives;
+                CONNECT tab: POST /v1/brain/think/connect {a,b} → concept bridge;
+                EMERGE tab: POST /v1/brain/think/emerge {days} → emergent themes bar chart;
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence vault-workbench brief + TTS;
+                isBrtwQuery+buildBrtwScript wired in JarvisBrain; build EXIT:0. */}
+            <BrainThinkWorkbench />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -191,6 +191,7 @@ import { isRlnkQuery, buildRlnkScript } from "./ReportKnowledgeLinker";
 import { isVltxQuery, buildVltxScript } from "./SecretsVaultPanel";
 import { isLiswrmQuery, buildLiswrmScript } from "./LiveIntelSwarmAlignPanel";
 import { isSpslQuery, buildSpslScript } from "./SavedSearchConsole";
+import { isBrtwQuery, buildBrtwScript } from "./BrainThinkWorkbench";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2247,6 +2248,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:spls-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSpslScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F304: brain thinking workbench — "brain think / think tool / challenge idea / red team /
+    //   thought panel / emerge themes / connect concepts / brtw / thinking tools / vault health /
+    //   brain workbench / think with jarvis / knowledge think / vault think"
+    if (isBrtwQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:brtw-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildBrtwScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
