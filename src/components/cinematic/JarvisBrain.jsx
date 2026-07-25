@@ -194,6 +194,7 @@ import { isSpslQuery, buildSpslScript } from "./SavedSearchConsole";
 import { isBrtwQuery, buildBrtwScript } from "./BrainThinkWorkbench";
 import { isUe5pQuery, buildUe5pScript } from "./Ue5PipelineMonitor";
 import { isWtxnQuery, buildWtxnScript } from "./WorldTaxonomyExplorer";
+import { isEhscQuery, buildEhscScript } from "./EntityHealthScorecard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2287,6 +2288,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:wtxn-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildWtxnScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F307 EntityHealthScorecard — /v1/ontology/objects + /v1/jarvis/analytics/anomalies + /v1/alerts
+    // "entity health / entity scorecard / ehsc / object health / entity status /
+    //   which entities have alerts / entity health check / object anomaly /
+    //   health scorecard / entity risk"
+    if (isEhscQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ehsc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildEhscScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -335,6 +335,7 @@ import SavedSearchConsole, { isSpslQuery, buildSpslScript } from '@/components/c
 import BrainThinkWorkbench, { BrainThinkWorkbenchBtn, isBrtwQuery, buildBrtwScript } from '@/components/cinematic/BrainThinkWorkbench';
 import Ue5PipelineMonitor, { isUe5pQuery, buildUe5pScript } from '@/components/cinematic/Ue5PipelineMonitor';
 import WorldTaxonomyExplorer, { isWtxnQuery, buildWtxnScript } from '@/components/cinematic/WorldTaxonomyExplorer';
+import EntityHealthScorecard, { isEhscQuery, buildEhscScript } from '@/components/cinematic/EntityHealthScorecard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1532,6 +1533,13 @@ function App() {
                 ⊕ WTXN button left:411120 bottom:8 zIndex:183;
                 isWtxnQuery+buildWtxnScript wired in JarvisBrain; build EXIT:0. */}
             <WorldTaxonomyExplorer />
+            {/* F307: EntityHealthScorecard — ◈ EHSC button (left:415680, bottom:8, zIndex:184);
+                parallel-fetches /v1/ontology/objects?limit=100 + /v1/jarvis/analytics/anomalies?limit=30
+                + /v1/alerts every 90 s; keyword-correlates entity names against anomaly metrics and
+                alert types; RED=anomaly+alert, AMBER=anomaly only, GREEN=clean; stat tiles
+                (entities/anomalies/alerts/healthy); ALL/RED/AMBER/GREEN tabs + search; expand entity →
+                matched anomaly details + alert details; ▶ ASSESS → /v1/jarvis/agent/chat + TTS */}
+            <EntityHealthScorecard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
