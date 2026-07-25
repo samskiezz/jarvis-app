@@ -190,6 +190,7 @@ import { isScvcQuery, buildScvcScript } from "./SpecCaseCoverage";
 import { isRlnkQuery, buildRlnkScript } from "./ReportKnowledgeLinker";
 import { isVltxQuery, buildVltxScript } from "./SecretsVaultPanel";
 import { isLiswrmQuery, buildLiswrmScript } from "./LiveIntelSwarmAlignPanel";
+import { isSpslQuery, buildSpslScript } from "./SavedSearchConsole";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2235,6 +2236,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:liswrm-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLiswrmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F303: saved search console — "saved search / search console / search manager / spls /
+    //   search plus / faceted search / saved queries / search alerts / new matches / faceted filter"
+    if (isSpslQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:spls-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSpslScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

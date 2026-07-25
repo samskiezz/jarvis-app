@@ -331,6 +331,7 @@ import SpecCaseCoverage, { isScvcQuery, buildScvcScript } from '@/components/cin
 import ReportKnowledgeLinker, { isRlnkQuery, buildRlnkScript } from '@/components/cinematic/ReportKnowledgeLinker';
 import SecretsVaultPanel, { isVltxQuery, buildVltxScript } from '@/components/cinematic/SecretsVaultPanel';
 import LiveIntelSwarmAlignPanel, { isLiswrmQuery, buildLiswrmScript } from '@/components/cinematic/LiveIntelSwarmAlignPanel';
+import SavedSearchConsole, { isSpslQuery, buildSpslScript } from '@/components/cinematic/SavedSearchConsole';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1496,6 +1497,16 @@ function App() {
                 swarm-world-event coverage brief + TTS via jarvis:speak-dossier;
                 isLiswrmQuery+buildLiswrmScript wired in JarvisBrain; build EXIT:0. */}
             <LiveIntelSwarmAlignPanel />
+            {/* F303 SavedSearchConsole — ◈ SPLS button (left:397440, bottom:8, zIndex:180);
+                polls GET /v1/search-plus/saved (60s, badge=saved count);
+                GET /v1/search-plus/facets on open; SAVED tab: ▶ RUN per saved search
+                (GET /v1/search-plus/saved/{id}/run), ✦ NEW (GET /v1/search-plus/saved/{id}/new),
+                ✕ DEL (DELETE /v1/search-plus/saved/{id}); FACETS tab: facet dimension accordion;
+                FILTER tab: POST /v1/search-plus/faceted {type,mark,q} → result list;
+                SAVE tab: POST /v1/search-plus/saved {name,spec}; stat tiles (saved/facet-dims/tab/engine);
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS via jarvis:speak-dossier;
+                isSpslQuery+buildSpslScript wired in JarvisBrain; build EXIT:0. */}
+            <SavedSearchConsole />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
