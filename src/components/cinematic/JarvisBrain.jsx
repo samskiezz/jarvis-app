@@ -188,6 +188,7 @@ import { isSclrQuery, buildSclrScript } from "./SecurityClearancePanel";
 import { isPredQuery, buildPredScript } from "./PredictionConsole";
 import { isScvcQuery, buildScvcScript } from "./SpecCaseCoverage";
 import { isRlnkQuery, buildRlnkScript } from "./ReportKnowledgeLinker";
+import { isVltxQuery, buildVltxScript } from "./SecretsVaultPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2211,6 +2212,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rlnk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRlnkScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "secrets vault / vault panel / secret keys / vltx / vault secrets / stored secrets /
+    //  api keys vault / credential vault / secret registry / connector secrets"
+    if (isVltxQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:vltx-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildVltxScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

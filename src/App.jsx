@@ -329,6 +329,7 @@ import SecurityClearancePanel, { isSclrQuery, buildSclrScript } from '@/componen
 import PredictionConsole, { isPredQuery, buildPredScript } from '@/components/cinematic/PredictionConsole';
 import SpecCaseCoverage, { isScvcQuery, buildScvcScript } from '@/components/cinematic/SpecCaseCoverage';
 import ReportKnowledgeLinker, { isRlnkQuery, buildRlnkScript } from '@/components/cinematic/ReportKnowledgeLinker';
+import SecretsVaultPanel, { isVltxQuery, buildVltxScript } from '@/components/cinematic/SecretsVaultPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1475,6 +1476,15 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS via jarvis:speak-dossier;
                 isRlnkQuery+buildRlnkScript wired in JarvisBrain; build EXIT:0. */}
             <ReportKnowledgeLinker />
+            {/* F301 SecretsVaultPanel — ◈ VLTX button (left:388320, bottom:8, zIndex:178);
+                polls GET /v1/vault/ every 60 s (badge: green=secret count, dim=empty);
+                stat tiles (secrets/owners/last-updated/obfuscation); ALL/BY-OWNER filter tabs + text search;
+                per-secret: name + owner chip + age + ✕ DEL → DELETE /v1/vault/{name};
+                ADD tab: POST /v1/vault/ {name, value, owner};
+                values NEVER returned over API — server-side only;
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence vault brief + TTS;
+                isVltxQuery+buildVltxScript wired in JarvisBrain; build EXIT:0. */}
+            <SecretsVaultPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
