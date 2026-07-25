@@ -181,6 +181,7 @@ import { isWkspQuery, buildWkspScript } from "./WorkshopAnalyticsPanel";
 import { isGannQuery, buildGannScript } from "./GraphAnnotationBoard";
 import { isSrchQuery, buildSrchScript } from "./SemanticSearchConsole";
 import { isAlacQuery, buildAlacScript } from "./AlertAnomalyCorrelator";
+import { isCscrQuery, buildCscrScript } from "./CrossStoreCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2126,6 +2127,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:alac-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAlacScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "cross-store / correlate object / knowledge fusion / cscr / graph fusion /
+    //  vector correlation / cross-store correlation / object correlator /
+    //  fuse knowledge / which objects link"
+    if (isCscrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cscr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCscrScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
