@@ -327,6 +327,7 @@ import KnowledgeGraphPathFinder from '@/components/cinematic/KnowledgeGraphPathF
 import CopFusionDashboard from '@/components/cinematic/CopFusionDashboard';
 import SecurityClearancePanel, { isSclrQuery, buildSclrScript } from '@/components/cinematic/SecurityClearancePanel';
 import PredictionConsole, { isPredQuery, buildPredScript } from '@/components/cinematic/PredictionConsole';
+import SpecCaseCoverage, { isScvcQuery, buildScvcScript } from '@/components/cinematic/SpecCaseCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1458,6 +1459,13 @@ function App() {
                 stat tiles (models/last-domain/confidence/pending-retrain); ◉ PRED left:374 bottom:8 zIndex:175;
                 jarvis:pred-toggle; isPredQuery+buildPredScript wired JarvisBrain; build EXIT:0. */}
             <PredictionConsole />
+            {/* F299 SpecCaseCoverage — parallel-polls GET /v1/spec/list + GET /v1/cases every 90 s;
+                keyword-correlates spec titles against case titles/descriptions;
+                LINKED (has case evidence) vs UNLINKED (no case backing); amber badge=unlinked count;
+                ALL/LINKED/UNLINKED filter tabs + text search; expand spec → matched case chips with status + score bars;
+                ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence governance brief + TTS via jarvis:speak-dossier;
+                ◈ SCVC left:379200 bottom:8 zIndex:176; jarvis:scvc-toggle; isScvcQuery+buildScvcScript wired JarvisBrain; build EXIT:0. */}
+            <SpecCaseCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

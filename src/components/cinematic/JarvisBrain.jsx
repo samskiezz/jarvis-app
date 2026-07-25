@@ -186,6 +186,7 @@ import { isKgpfQuery, buildKgpfScript } from "./KnowledgeGraphPathFinder";
 import { isCopQuery, buildCopScript } from "./CopFusionDashboard";
 import { isSclrQuery, buildSclrScript } from "./SecurityClearancePanel";
 import { isPredQuery, buildPredScript } from "./PredictionConsole";
+import { isScvcQuery, buildScvcScript } from "./SpecCaseCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2187,6 +2188,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:pred-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildPredScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "spec case coverage / case coverage / scvc / spec cases / spec linked / unlinked specs /
+    //  case coverage tracker / spec to case / spec coverage map / spec backing / spec evidence"
+    if (isScvcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scvc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScvcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
