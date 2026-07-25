@@ -330,6 +330,7 @@ import PredictionConsole, { isPredQuery, buildPredScript } from '@/components/ci
 import SpecCaseCoverage, { isScvcQuery, buildScvcScript } from '@/components/cinematic/SpecCaseCoverage';
 import ReportKnowledgeLinker, { isRlnkQuery, buildRlnkScript } from '@/components/cinematic/ReportKnowledgeLinker';
 import SecretsVaultPanel, { isVltxQuery, buildVltxScript } from '@/components/cinematic/SecretsVaultPanel';
+import LiveIntelSwarmAlignPanel, { isLiswrmQuery, buildLiswrmScript } from '@/components/cinematic/LiveIntelSwarmAlignPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1485,6 +1486,16 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence vault brief + TTS;
                 isVltxQuery+buildVltxScript wired in JarvisBrain; build EXIT:0. */}
             <SecretsVaultPanel />
+            {/* F302 LiveIntelSwarmAlignPanel — ◈ LISWRM button (left:392880, bottom:8, zIndex:179);
+                parallel-fetches /functions/getLiveIntel (earthquakes+crypto+FX) + /entities/SwarmJob;
+                keyword-correlates each live world event against active swarm jobs to surface
+                RESPONDING (automation aligned) vs UNAUTOMATED (automation gap);
+                stat tiles (events/jobs/responding/unautomated); ALL/RESPONDING/UNAUTOMATED filter tabs
+                + text search; expand event → matched swarm jobs with status badge + progress + relevance score;
+                red badge on unautomated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence
+                swarm-world-event coverage brief + TTS via jarvis:speak-dossier;
+                isLiswrmQuery+buildLiswrmScript wired in JarvisBrain; build EXIT:0. */}
+            <LiveIntelSwarmAlignPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

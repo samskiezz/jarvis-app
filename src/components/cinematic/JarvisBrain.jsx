@@ -189,6 +189,7 @@ import { isPredQuery, buildPredScript } from "./PredictionConsole";
 import { isScvcQuery, buildScvcScript } from "./SpecCaseCoverage";
 import { isRlnkQuery, buildRlnkScript } from "./ReportKnowledgeLinker";
 import { isVltxQuery, buildVltxScript } from "./SecretsVaultPanel";
+import { isLiswrmQuery, buildLiswrmScript } from "./LiveIntelSwarmAlignPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2223,6 +2224,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:vltx-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildVltxScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F302: live intel × swarm job alignment — "live swarm / world swarm / liswrm /
+    //   swarm world response / automated response / swarm live event / swarm alignment"
+    if (isLiswrmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:liswrm-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLiswrmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
