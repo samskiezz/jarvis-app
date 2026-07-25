@@ -182,6 +182,7 @@ import { isGannQuery, buildGannScript } from "./GraphAnnotationBoard";
 import { isSrchQuery, buildSrchScript } from "./SemanticSearchConsole";
 import { isAlacQuery, buildAlacScript } from "./AlertAnomalyCorrelator";
 import { isCscrQuery, buildCscrScript } from "./CrossStoreCorrelator";
+import { isKgpfQuery, buildKgpfScript } from "./KnowledgeGraphPathFinder";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2139,6 +2140,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cscr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCscrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "graph path / find path / path finder / kgpf / shortest path / connect nodes /
+    //  path between / how are connected / node path / graph route / object path"
+    if (isKgpfQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kgpf-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKgpfScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

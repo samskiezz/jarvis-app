@@ -323,6 +323,7 @@ import SemanticSearchConsole from '@/components/cinematic/SemanticSearchConsole'
 import OpsDatasetCoverage from '@/components/cinematic/OpsDatasetCoverage';
 import AlertAnomalyCorrelator from '@/components/cinematic/AlertAnomalyCorrelator';
 import CrossStoreCorrelator from '@/components/cinematic/CrossStoreCorrelator';
+import KnowledgeGraphPathFinder from '@/components/cinematic/KnowledgeGraphPathFinder';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1424,6 +1425,12 @@ function App() {
                 /v1/correlate/{id} → graph neighbors + cross-store vector/FTS hits; SEARCH tab:
                 debounced GET /v1/correlate/search?q=&k=10; ▶ ASSESS → /v1/jarvis/agent/chat + TTS */}
             <CrossStoreCorrelator />
+            {/* F295: KnowledgeGraphPathFinder — ⬡ KGPF button (left:360960, bottom:8, zIndex:172);
+                FROM+TO object pickers; GET /v1/graph/path?from=&to= → node chip chain;
+                CENTRALITY tab: GET /v1/graph/centrality top-20 with ◀ FROM / TO ▶ quick-set;
+                isKgpfQuery+buildKgpfScript in JarvisBrain;
+                "graph path/find path/path finder/kgpf/shortest path/connect nodes" voice triggers */}
+            <KnowledgeGraphPathFinder />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
