@@ -195,6 +195,7 @@ import { isBrtwQuery, buildBrtwScript } from "./BrainThinkWorkbench";
 import { isUe5pQuery, buildUe5pScript } from "./Ue5PipelineMonitor";
 import { isWtxnQuery, buildWtxnScript } from "./WorldTaxonomyExplorer";
 import { isEhscQuery, buildEhscScript } from "./EntityHealthScorecard";
+import { isTracQuery, buildTracScript } from "./TaskRiskAlertCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2301,6 +2302,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ehsc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildEhscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F308 TaskRiskAlertCorrelator — /entities/Task + /v1/alerts
+    // "task alerts / task risk / trac / tasks with alerts / exposed tasks /
+    //   alert tasks / task coverage / which tasks have alerts / task alert map"
+    if (isTracQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trac-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTracScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

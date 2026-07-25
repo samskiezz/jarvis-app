@@ -336,6 +336,7 @@ import BrainThinkWorkbench, { BrainThinkWorkbenchBtn, isBrtwQuery, buildBrtwScri
 import Ue5PipelineMonitor, { isUe5pQuery, buildUe5pScript } from '@/components/cinematic/Ue5PipelineMonitor';
 import WorldTaxonomyExplorer, { isWtxnQuery, buildWtxnScript } from '@/components/cinematic/WorldTaxonomyExplorer';
 import EntityHealthScorecard, { isEhscQuery, buildEhscScript } from '@/components/cinematic/EntityHealthScorecard';
+import TaskRiskAlertCorrelator from '@/components/cinematic/TaskRiskAlertCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1540,6 +1541,12 @@ function App() {
                 (entities/anomalies/alerts/healthy); ALL/RED/AMBER/GREEN tabs + search; expand entity →
                 matched anomaly details + alert details; ▶ ASSESS → /v1/jarvis/agent/chat + TTS */}
             <EntityHealthScorecard />
+            {/* F308: TaskRiskAlertCorrelator — ◈ TRAC button (left:420240, bottom:8, zIndex:185);
+                parallel-fetches /entities/Task + /v1/alerts every 90 s; keyword-correlates task
+                titles against alert types/categories/messages; EXPOSED (alert match) vs CLEAR;
+                stat tiles (tasks/alerts/exposed/clear); ALL/EXPOSED/CLEAR tabs + search; expand
+                task → matched alert chips with severity bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS */}
+            <TaskRiskAlertCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
