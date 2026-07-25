@@ -342,6 +342,7 @@ import BrainCrmDirectory, { isBcrmQuery, buildBcrmScript } from '@/components/ci
 import TemporalObjectHistory, { isTobjQuery, buildTobjScript } from '@/components/cinematic/TemporalObjectHistory';
 import MotorIntentPanel, { isMintQuery, buildMintScript } from '@/components/cinematic/MotorIntentPanel';
 import InvestmentRiskCorrelator, { isIvrcQuery, buildIvrcScript } from '@/components/cinematic/InvestmentRiskCorrelator';
+import SwarmJobAlertCorrelator, { isSwarmAlertQuery, buildSwarmAlertScript } from '@/components/cinematic/SwarmJobAlertCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1592,6 +1593,16 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isIvrcQuery+buildIvrcScript wired JarvisBrain; build EXIT:0. */}
             <InvestmentRiskCorrelator />
+            {/* F314: SwarmJobAlertCorrelator — ◈ SJAC button (left:447600, bottom:8, zIndex:191);
+                parallel-fetches /entities/SwarmJob + /v1/alerts every 90 s; keyword-correlates
+                swarm job names/targets against alert types/categories/messages;
+                RESPONDING (swarm job covering alert) vs UNMONITORED (alert with no automation);
+                stat tiles (jobs/alerts/responding/unmonitored); ALL/RESPONDING/UNMONITORED tabs + search;
+                expand alert → matched swarm job chips with kind/status/score bars;
+                badge red=unmonitored count, green=all covered;
+                ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isSwarmAlertQuery+buildSwarmAlertScript wired JarvisBrain; build EXIT:0. */}
+            <SwarmJobAlertCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

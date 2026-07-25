@@ -201,6 +201,7 @@ import { isBcrmQuery, buildBcrmScript } from "./BrainCrmDirectory";
 import { isTobjQuery, buildTobjScript } from "./TemporalObjectHistory";
 import { isMintQuery, buildMintScript } from "./MotorIntentPanel";
 import { isIvrcQuery, buildIvrcScript } from "./InvestmentRiskCorrelator";
+import { isSwarmAlertQuery, buildSwarmAlertScript } from "./SwarmJobAlertCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2385,6 +2386,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ivrc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIvrcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F314 SwarmJobAlertCorrelator — /entities/SwarmJob + /v1/alerts
+    // "swarm alert / alert swarm / sjac / alert automation / swarm alert coverage /
+    //   unmonitored alerts / which alerts have swarm / swarm incident /
+    //   alert swarm jobs / swarm response alert"
+    if (isSwarmAlertQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjac-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwarmAlertScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
