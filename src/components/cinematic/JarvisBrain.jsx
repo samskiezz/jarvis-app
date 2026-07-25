@@ -185,6 +185,7 @@ import { isCscrQuery, buildCscrScript } from "./CrossStoreCorrelator";
 import { isKgpfQuery, buildKgpfScript } from "./KnowledgeGraphPathFinder";
 import { isCopQuery, buildCopScript } from "./CopFusionDashboard";
 import { isSclrQuery, buildSclrScript } from "./SecurityClearancePanel";
+import { isPredQuery, buildPredScript } from "./PredictionConsole";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2175,6 +2176,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sclr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSclrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "predict / prediction / forecast / pred / prediction engine / prediction console /
+    //  model forecast / forecast models / what will happen / make a prediction"
+    if (isPredQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:pred-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildPredScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

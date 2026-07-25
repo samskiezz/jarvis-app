@@ -326,6 +326,7 @@ import CrossStoreCorrelator from '@/components/cinematic/CrossStoreCorrelator';
 import KnowledgeGraphPathFinder from '@/components/cinematic/KnowledgeGraphPathFinder';
 import CopFusionDashboard from '@/components/cinematic/CopFusionDashboard';
 import SecurityClearancePanel, { isSclrQuery, buildSclrScript } from '@/components/cinematic/SecurityClearancePanel';
+import PredictionConsole, { isPredQuery, buildPredScript } from '@/components/cinematic/PredictionConsole';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1450,6 +1451,13 @@ function App() {
                 stat tiles (role/clearance/chain-len/overall); ◈ SCLR left:370080 bottom:8 zIndex:174;
                 jarvis:sclr-toggle; isSclrQuery+buildSclrScript wired JarvisBrain; build EXIT:0. */}
             <SecurityClearancePanel />
+            {/* F298 PredictionConsole — polls GET /v1/predict/models (120 s);
+                PREDICT tab: POST /functions/predict → domain/prediction/CI/confidence/assumptions/caveats;
+                MODELS tab: learned model list with name/algo/score/train-age;
+                IMPROVEMENT tab: GET /v1/predict/improvement → scores/retrains/evals;
+                stat tiles (models/last-domain/confidence/pending-retrain); ◉ PRED left:374 bottom:8 zIndex:175;
+                jarvis:pred-toggle; isPredQuery+buildPredScript wired JarvisBrain; build EXIT:0. */}
+            <PredictionConsole />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
