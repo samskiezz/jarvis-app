@@ -324,6 +324,7 @@ import OpsDatasetCoverage from '@/components/cinematic/OpsDatasetCoverage';
 import AlertAnomalyCorrelator from '@/components/cinematic/AlertAnomalyCorrelator';
 import CrossStoreCorrelator from '@/components/cinematic/CrossStoreCorrelator';
 import KnowledgeGraphPathFinder from '@/components/cinematic/KnowledgeGraphPathFinder';
+import CopFusionDashboard from '@/components/cinematic/CopFusionDashboard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1431,6 +1432,15 @@ function App() {
                 isKgpfQuery+buildKgpfScript in JarvisBrain;
                 "graph path/find path/path finder/kgpf/shortest path/connect nodes" voice triggers */}
             <KnowledgeGraphPathFinder />
+            {/* F296: CopFusionDashboard — ◈ COP button (left:365520, bottom:8, zIndex:173);
+                polls /v1/cop/snapshot every 60 s (SNAPSHOT tab: fused geo+graph+temporal+metrics);
+                LAYERS tab: GET /v1/cop/layers, toggle via POST /v1/cop/layers/toggle;
+                GEO tab: geo objects from snapshot with lat/lon + object select → POST /v1/cop/selection;
+                TEMPORAL tab: temporal events from snapshot; METRICS tab: metric cards;
+                badge: cyan=active-layer-count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS;
+                isCopQuery+buildCopScript wired in JarvisBrain;
+                "cop fusion/common operating picture/cop snapshot/cop layers/cop panel" voice triggers */}
+            <CopFusionDashboard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
