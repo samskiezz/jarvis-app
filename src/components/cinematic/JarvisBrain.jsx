@@ -198,6 +198,7 @@ import { isEhscQuery, buildEhscScript } from "./EntityHealthScorecard";
 import { isTracQuery, buildTracScript } from "./TaskRiskAlertCorrelator";
 import { isIgapQuery, buildIgapScript } from "./IntelDecisionGapFinder";
 import { isBcrmQuery, buildBcrmScript } from "./BrainCrmDirectory";
+import { isTobjQuery, buildTobjScript } from "./TemporalObjectHistory";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2342,6 +2343,20 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:bcrm-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildBcrmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F311 TemporalObjectHistory — /v1/jarvis/temporal/history/{id} + /v1/jarvis/temporal/as-of/{id}
+    // + POST /v1/jarvis/temporal/snapshot/{id}
+    // "temporal history / object history / tobj / time travel / object timeline /
+    //   property history / what changed / object changes / temporal object /
+    //   bitemporal / property timeline / temporal facts / fact history / object facts"
+    if (isTobjQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tobj-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTobjScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

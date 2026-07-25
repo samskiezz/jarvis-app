@@ -339,6 +339,7 @@ import EntityHealthScorecard, { isEhscQuery, buildEhscScript } from '@/component
 import TaskRiskAlertCorrelator from '@/components/cinematic/TaskRiskAlertCorrelator';
 import IntelDecisionGapFinder from '@/components/cinematic/IntelDecisionGapFinder';
 import BrainCrmDirectory, { isBcrmQuery, buildBcrmScript } from '@/components/cinematic/BrainCrmDirectory';
+import TemporalObjectHistory, { isTobjQuery, buildTobjScript } from '@/components/cinematic/TemporalObjectHistory';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1563,6 +1564,15 @@ function App() {
                 stat tiles (total/tier1/tier2/tier3+); ▶ ASSESS → /v1/jarvis/agent/chat + TTS;
                 isBcrmQuery+buildBcrmScript wired JarvisBrain; build EXIT:0. */}
             <BrainCrmDirectory />
+            {/* F311: TemporalObjectHistory — ◷ TOBJ button (left:433920, bottom:8, zIndex:188);
+                polls GET /v1/ontology/objects?limit=100 every 120s for object picker;
+                HISTORY tab: GET /v1/jarvis/temporal/history/{id}?limit=50 → fact rows (prop/value/valid_from/tx_time/actor/source);
+                AS-OF tab: GET /v1/jarvis/temporal/as-of/{id}?valid_time= → point-in-time props;
+                ◉ SNAP → POST /v1/jarvis/temporal/snapshot/{id} to snapshot current ontology props as temporal facts;
+                stat tiles (objects/history-events/props-tracked/latest-actor); prop filter search;
+                badge violet=fact count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isTobjQuery+buildTobjScript wired JarvisBrain; build EXIT:0. */}
+            <TemporalObjectHistory />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
