@@ -197,6 +197,7 @@ import { isWtxnQuery, buildWtxnScript } from "./WorldTaxonomyExplorer";
 import { isEhscQuery, buildEhscScript } from "./EntityHealthScorecard";
 import { isTracQuery, buildTracScript } from "./TaskRiskAlertCorrelator";
 import { isIgapQuery, buildIgapScript } from "./IntelDecisionGapFinder";
+import { isBcrmQuery, buildBcrmScript } from "./BrainCrmDirectory";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2328,6 +2329,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igap-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIgapScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F310 BrainCrmDirectory — /v1/brain/people + /v1/brain/people/{name} + POST /v1/brain/mention
+    // "people directory / crm / brain crm / who do you know / contact directory /
+    //   bcrm / tiered contacts / known people / mention person / record observation /
+    //   person profile / my contacts / contact crm"
+    if (isBcrmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:bcrm-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildBcrmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

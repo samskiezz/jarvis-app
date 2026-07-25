@@ -338,6 +338,7 @@ import WorldTaxonomyExplorer, { isWtxnQuery, buildWtxnScript } from '@/component
 import EntityHealthScorecard, { isEhscQuery, buildEhscScript } from '@/components/cinematic/EntityHealthScorecard';
 import TaskRiskAlertCorrelator from '@/components/cinematic/TaskRiskAlertCorrelator';
 import IntelDecisionGapFinder from '@/components/cinematic/IntelDecisionGapFinder';
+import BrainCrmDirectory, { isBcrmQuery, buildBcrmScript } from '@/components/cinematic/BrainCrmDirectory';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1556,6 +1557,12 @@ function App() {
                 expand intel → matched decision chips with quality score bars;
                 ▶ ASSESS → /v1/jarvis/agent/chat + TTS */}
             <IntelDecisionGapFinder />
+            {/* F310: BrainCrmDirectory — ◈ BCRM button (left:429360, bottom:8, zIndex:187);
+                polls GET /v1/brain/people every 90 s; expand person → lazy GET /v1/brain/people/{name};
+                + MENTION form → POST /v1/brain/mention; T1/T2/T3 filter tabs + search;
+                stat tiles (total/tier1/tier2/tier3+); ▶ ASSESS → /v1/jarvis/agent/chat + TTS;
+                isBcrmQuery+buildBcrmScript wired JarvisBrain; build EXIT:0. */}
+            <BrainCrmDirectory />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
