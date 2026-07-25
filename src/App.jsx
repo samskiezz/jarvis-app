@@ -343,6 +343,7 @@ import TemporalObjectHistory, { isTobjQuery, buildTobjScript } from '@/component
 import MotorIntentPanel, { isMintQuery, buildMintScript } from '@/components/cinematic/MotorIntentPanel';
 import InvestmentRiskCorrelator, { isIvrcQuery, buildIvrcScript } from '@/components/cinematic/InvestmentRiskCorrelator';
 import SwarmJobAlertCorrelator, { isSwarmAlertQuery, buildSwarmAlertScript } from '@/components/cinematic/SwarmJobAlertCorrelator';
+import AssetDnaScanner, { isAdnaQuery, buildAdnaScript } from '@/components/cinematic/AssetDnaScanner';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1603,6 +1604,13 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isSwarmAlertQuery+buildSwarmAlertScript wired JarvisBrain; build EXIT:0. */}
             <SwarmJobAlertCorrelator />
+            {/* F315: AssetDnaScanner — ◈ ADNA button (left:452160, bottom:8, zIndex:192);
+                polls GET /v1/asset/list?limit=200 every 120 s; expand row → lazy GET /v1/asset/{id}
+                for deps + dependents + recommendations; stat tiles (total/ok/warn/stale);
+                ALL/OK/WARN/STALE/HIGH-RISK filter tabs + text search;
+                badge green=ok-count, amber=warn, red=stale; ▶ ASSESS → /v1/jarvis/agent/chat + TTS;
+                isAdnaQuery+buildAdnaScript wired JarvisBrain; build EXIT:0. */}
+            <AssetDnaScanner />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

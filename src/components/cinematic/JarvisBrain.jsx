@@ -202,6 +202,7 @@ import { isTobjQuery, buildTobjScript } from "./TemporalObjectHistory";
 import { isMintQuery, buildMintScript } from "./MotorIntentPanel";
 import { isIvrcQuery, buildIvrcScript } from "./InvestmentRiskCorrelator";
 import { isSwarmAlertQuery, buildSwarmAlertScript } from "./SwarmJobAlertCorrelator";
+import { isAdnaQuery, buildAdnaScript } from "./AssetDnaScanner";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2399,6 +2400,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjac-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwarmAlertScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F315 AssetDnaScanner — /v1/asset/list
+    // "asset dna / repo assets / asset health / stale assets / high risk assets /
+    //   adna / asset scanner / asset registry / which assets are stale / asset quality /
+    //   file health / repo health scan"
+    if (isAdnaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:adna-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAdnaScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
