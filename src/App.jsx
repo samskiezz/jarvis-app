@@ -333,6 +333,7 @@ import SecretsVaultPanel, { isVltxQuery, buildVltxScript } from '@/components/ci
 import LiveIntelSwarmAlignPanel, { isLiswrmQuery, buildLiswrmScript } from '@/components/cinematic/LiveIntelSwarmAlignPanel';
 import SavedSearchConsole, { isSpslQuery, buildSpslScript } from '@/components/cinematic/SavedSearchConsole';
 import BrainThinkWorkbench, { BrainThinkWorkbenchBtn, isBrtwQuery, buildBrtwScript } from '@/components/cinematic/BrainThinkWorkbench';
+import Ue5PipelineMonitor, { isUe5pQuery, buildUe5pScript } from '@/components/cinematic/Ue5PipelineMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1518,6 +1519,12 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence vault-workbench brief + TTS;
                 isBrtwQuery+buildBrtwScript wired in JarvisBrain; build EXIT:0. */}
             <BrainThinkWorkbench />
+            {/* F305 Ue5PipelineMonitor — polls GET /v1/pipeline (30 s) for UE5 render pipeline
+                status (status/steps/overall_pct/eta_s); progress bar + per-step chips;
+                ▶ LAUNCH (POST /v1/pipeline/start) + ▶ DEPLOY (POST /v1/pipeline/deploy);
+                ▶ ASSESS → /v1/jarvis/agent/chat; ⚙ UE5P button left:406560 bottom:8 zIndex:182;
+                isUe5pQuery+buildUe5pScript wired in JarvisBrain; build EXIT:0. */}
+            <Ue5PipelineMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

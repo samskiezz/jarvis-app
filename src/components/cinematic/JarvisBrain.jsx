@@ -192,6 +192,7 @@ import { isVltxQuery, buildVltxScript } from "./SecretsVaultPanel";
 import { isLiswrmQuery, buildLiswrmScript } from "./LiveIntelSwarmAlignPanel";
 import { isSpslQuery, buildSpslScript } from "./SavedSearchConsole";
 import { isBrtwQuery, buildBrtwScript } from "./BrainThinkWorkbench";
+import { isUe5pQuery, buildUe5pScript } from "./Ue5PipelineMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2260,6 +2261,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:brtw-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildBrtwScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F305 — "ue5 / pipeline / render pipeline / pipeline status / ue5 pipeline /
+    //   unreal engine / render status / pipeline launch / pipeline steps /
+    //   render steps / deploy pipeline / ue5p"
+    if (isUe5pQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ue5p-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildUe5pScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
