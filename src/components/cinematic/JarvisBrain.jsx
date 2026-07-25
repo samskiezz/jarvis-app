@@ -200,6 +200,7 @@ import { isIgapQuery, buildIgapScript } from "./IntelDecisionGapFinder";
 import { isBcrmQuery, buildBcrmScript } from "./BrainCrmDirectory";
 import { isTobjQuery, buildTobjScript } from "./TemporalObjectHistory";
 import { isMintQuery, buildMintScript } from "./MotorIntentPanel";
+import { isIvrcQuery, buildIvrcScript } from "./InvestmentRiskCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2371,6 +2372,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:mint-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildMintScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F313 InvestmentRiskCorrelator — /entities/Investment + /entities/RiskSignal
+    // "investment risk / risk signals / ivrc / exposed investments /
+    //   investment alerts / invest risk signals / risky investments /
+    //   which investments have risks / investment coverage / risk invest"
+    if (isIvrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ivrc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIvrcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

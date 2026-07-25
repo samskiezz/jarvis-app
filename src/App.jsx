@@ -341,6 +341,7 @@ import IntelDecisionGapFinder from '@/components/cinematic/IntelDecisionGapFinde
 import BrainCrmDirectory, { isBcrmQuery, buildBcrmScript } from '@/components/cinematic/BrainCrmDirectory';
 import TemporalObjectHistory, { isTobjQuery, buildTobjScript } from '@/components/cinematic/TemporalObjectHistory';
 import MotorIntentPanel, { isMintQuery, buildMintScript } from '@/components/cinematic/MotorIntentPanel';
+import InvestmentRiskCorrelator, { isIvrcQuery, buildIvrcScript } from '@/components/cinematic/InvestmentRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1582,6 +1583,15 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isMintQuery+buildMintScript wired JarvisBrain; build EXIT:0. */}
             <MotorIntentPanel />
+            {/* F313: InvestmentRiskCorrelator — ◈ IVRC button (left:443040, bottom:8, zIndex:190);
+                parallel-fetches /entities/Investment + /entities/RiskSignal every 90 s;
+                keyword-correlates investments against active risk signals;
+                EXPOSED (match found) vs CLEAR; stat tiles (investments/risk-signals/exposed/clear);
+                expand investment → matched signal chips with severity + score bar;
+                badge red=exposed count, green=all-clear;
+                ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isIvrcQuery+buildIvrcScript wired JarvisBrain; build EXIT:0. */}
+            <InvestmentRiskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
