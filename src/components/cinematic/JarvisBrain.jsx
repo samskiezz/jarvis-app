@@ -180,6 +180,7 @@ import { isSimlQuery, buildSimlScript } from "./SimulationIntelPanel";
 import { isWkspQuery, buildWkspScript } from "./WorkshopAnalyticsPanel";
 import { isGannQuery, buildGannScript } from "./GraphAnnotationBoard";
 import { isSrchQuery, buildSrchScript } from "./SemanticSearchConsole";
+import { isAlacQuery, buildAlacScript } from "./AlertAnomalyCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2113,6 +2114,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:srch-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSrchScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "alert anomaly / anomaly alert / alac / alert correlator / linked alerts /
+    //  orphan alerts / alert anomaly match / correlated alerts / alert correlation /
+    //  which alerts have anomalies"
+    if (isAlacQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:alac-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAlacScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

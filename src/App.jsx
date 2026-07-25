@@ -321,6 +321,7 @@ import WorkshopAnalyticsPanel, { isWkspQuery, buildWkspScript } from '@/componen
 import GraphAnnotationBoard from '@/components/cinematic/GraphAnnotationBoard';
 import SemanticSearchConsole from '@/components/cinematic/SemanticSearchConsole';
 import OpsDatasetCoverage from '@/components/cinematic/OpsDatasetCoverage';
+import AlertAnomalyCorrelator from '@/components/cinematic/AlertAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1412,6 +1413,11 @@ function App() {
                 event against dataset catalog; DOCUMENTED vs BLIND; amber badge on blind count;
                 ▶ ASSESS → /v1/jarvis/agent/chat + TTS; 90-s auto-refresh */}
             <OpsDatasetCoverage />
+            {/* F293: AlertAnomalyCorrelator — ◈ ALAC button (left:351840, bottom:8, zIndex:170);
+                parallel-fetches /v1/alerts + /v1/jarvis/analytics/anomalies?limit=30; keyword-
+                correlates each alert against anomaly metrics; LINKED vs ORPHAN; amber badge on
+                orphan count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; 90-s auto-refresh */}
+            <AlertAnomalyCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
