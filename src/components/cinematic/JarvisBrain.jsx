@@ -184,6 +184,7 @@ import { isAlacQuery, buildAlacScript } from "./AlertAnomalyCorrelator";
 import { isCscrQuery, buildCscrScript } from "./CrossStoreCorrelator";
 import { isKgpfQuery, buildKgpfScript } from "./KnowledgeGraphPathFinder";
 import { isCopQuery, buildCopScript } from "./CopFusionDashboard";
+import { isSclrQuery, buildSclrScript } from "./SecurityClearancePanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2163,6 +2164,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cop-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCopScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "security clearance / acl / who am i / my role / audit chain / compliance status /
+    //  sclr / clearance level / access control / permission check / security audit / data classification"
+    if (isSclrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sclr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSclrScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

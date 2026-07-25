@@ -325,6 +325,7 @@ import AlertAnomalyCorrelator from '@/components/cinematic/AlertAnomalyCorrelato
 import CrossStoreCorrelator from '@/components/cinematic/CrossStoreCorrelator';
 import KnowledgeGraphPathFinder from '@/components/cinematic/KnowledgeGraphPathFinder';
 import CopFusionDashboard from '@/components/cinematic/CopFusionDashboard';
+import SecurityClearancePanel, { isSclrQuery, buildSclrScript } from '@/components/cinematic/SecurityClearancePanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1441,6 +1442,14 @@ function App() {
                 isCopQuery+buildCopScript wired in JarvisBrain;
                 "cop fusion/common operating picture/cop snapshot/cop layers/cop panel" voice triggers */}
             <CopFusionDashboard />
+            {/* F297 SecurityClearancePanel — polls GET /v1/security/acl (60 s) + GET /v1/security/compliance/status (120 s);
+                loads GET /v1/security/audit?n=50 on AUDIT tab open; POST /v1/security/acl/check on CHECK tab;
+                ACL tab: role + clearance marks + visibility matrix (PUBLIC/INTERNAL/FINANCIAL/PII/RESTRICTED);
+                COMPLIANCE tab: scorecard cards (audit-chain/revdb/tenancy/cross-org/clearance-model);
+                AUDIT tab: merged audit_chain + revdb commit history; CHECK tab: inline ACL check form;
+                stat tiles (role/clearance/chain-len/overall); ◈ SCLR left:370080 bottom:8 zIndex:174;
+                jarvis:sclr-toggle; isSclrQuery+buildSclrScript wired JarvisBrain; build EXIT:0. */}
+            <SecurityClearancePanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
