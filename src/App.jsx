@@ -334,6 +334,7 @@ import LiveIntelSwarmAlignPanel, { isLiswrmQuery, buildLiswrmScript } from '@/co
 import SavedSearchConsole, { isSpslQuery, buildSpslScript } from '@/components/cinematic/SavedSearchConsole';
 import BrainThinkWorkbench, { BrainThinkWorkbenchBtn, isBrtwQuery, buildBrtwScript } from '@/components/cinematic/BrainThinkWorkbench';
 import Ue5PipelineMonitor, { isUe5pQuery, buildUe5pScript } from '@/components/cinematic/Ue5PipelineMonitor';
+import WorldTaxonomyExplorer, { isWtxnQuery, buildWtxnScript } from '@/components/cinematic/WorldTaxonomyExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1525,6 +1526,12 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat; ⚙ UE5P button left:406560 bottom:8 zIndex:182;
                 isUe5pQuery+buildUe5pScript wired in JarvisBrain; build EXIT:0. */}
             <Ue5PipelineMonitor />
+            {/* F306 WorldTaxonomyExplorer — polls GET /v1/jarvis/taxonomy/summary (120 s);
+                SUMMARY/CELLS/FAMILIES/FRONTIER tabs; lazy-loads cells+families+frontier on
+                tab open; POST /v1/jarvis/taxonomy/load seeds DB; ▶ ASSESS → /v1/jarvis/agent/chat;
+                ⊕ WTXN button left:411120 bottom:8 zIndex:183;
+                isWtxnQuery+buildWtxnScript wired in JarvisBrain; build EXIT:0. */}
+            <WorldTaxonomyExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

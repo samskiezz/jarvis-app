@@ -193,6 +193,7 @@ import { isLiswrmQuery, buildLiswrmScript } from "./LiveIntelSwarmAlignPanel";
 import { isSpslQuery, buildSpslScript } from "./SavedSearchConsole";
 import { isBrtwQuery, buildBrtwScript } from "./BrainThinkWorkbench";
 import { isUe5pQuery, buildUe5pScript } from "./Ue5PipelineMonitor";
+import { isWtxnQuery, buildWtxnScript } from "./WorldTaxonomyExplorer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2273,6 +2274,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ue5p-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildUe5pScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F306 WorldTaxonomyExplorer — /v1/jarvis/taxonomy/*
+    // "world taxonomy / taxonomy explorer / ontology cells / acquisition families /
+    //   world topics / taxonomy map / wtxn / knowledge map / world model /
+    //   world ontology / topic cells / taxonomy browser"
+    if (isWtxnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wtxn-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildWtxnScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
