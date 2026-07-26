@@ -352,6 +352,7 @@ import TaskSpecCoverage from '@/components/cinematic/TaskSpecCoverage';
 import InvestmentDecisionCoverage from '@/components/cinematic/InvestmentDecisionCoverage';
 import VoiceForgeStudio, { isVfstQuery, buildVfstScript } from '@/components/cinematic/VoiceForgeStudio';
 import HistoryLakeBrowser, { isHlbQuery, buildHlbScript } from '@/components/cinematic/HistoryLakeBrowser';
+import EntityResolutionConsole from '@/components/cinematic/EntityResolutionConsole';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1678,6 +1679,16 @@ function App() {
                 badge green=series count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isHlbQuery+buildHlbScript wired JarvisBrain; build EXIT:0. */}
             <HistoryLakeBrowser />
+            {/* F324 (overnight 2026-07-26): EntityResolutionConsole — ⊟ ERCN button (left:488640, bottom:8, zIndex:200);
+                polls GET /v1/jarvis/er/stats every 90 s (amber badge=pending count, green=all-clear);
+                GET /v1/jarvis/er/queue on QUEUE tab (pending adjudication pairs; ✓ MERGE + ✗ REJECT via
+                POST /v1/jarvis/er/resolve); FIND tab: object_type + threshold slider →
+                POST /v1/jarvis/er/find-duplicates → candidate list with score bars;
+                GOLDEN tab: object_id → GET /v1/jarvis/er/golden/{id} → canonical + merged_ids chips
+                + ↩ UNMERGE per merged via POST /v1/jarvis/er/unmerge;
+                stat tiles (pending/merged/queue/types); ▶ ASSESS → /v1/jarvis/agent/chat + TTS;
+                isErcnQuery+buildErcnScript wired JarvisBrain; build EXIT:0. */}
+            <EntityResolutionConsole />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

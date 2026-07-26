@@ -210,6 +210,7 @@ import { isTaskSpecQuery, buildTaskSpecScript } from "./TaskSpecCoverage";
 import { isIvdcQuery, buildIvdcScript } from "./InvestmentDecisionCoverage";
 import { isVfstQuery, buildVfstScript } from "./VoiceForgeStudio";
 import { isHlbQuery, buildHlbScript } from "./HistoryLakeBrowser";
+import { isErcnQuery, buildErcnScript } from "./EntityResolutionConsole";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2507,6 +2508,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:hlb-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildHlbScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F324: EntityResolutionConsole — "entity resolution / duplicate entities / master data /
+    //   ercn / entity dedup / duplicate records / merge entities / resolve duplicates /
+    //   golden record / canonical entity / find duplicates / entity merge"
+    if (isErcnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ercn-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildErcnScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
