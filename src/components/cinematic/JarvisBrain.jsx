@@ -209,6 +209,7 @@ import { isRsscQuery, buildRsscScript } from "./RiskSpecCoverage";
 import { isTaskSpecQuery, buildTaskSpecScript } from "./TaskSpecCoverage";
 import { isIvdcQuery, buildIvdcScript } from "./InvestmentDecisionCoverage";
 import { isVfstQuery, buildVfstScript } from "./VoiceForgeStudio";
+import { isHlbQuery, buildHlbScript } from "./HistoryLakeBrowser";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2494,6 +2495,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:vfst-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildVfstScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F323: HistoryLakeBrowser — "history lake / pattern oracle / series catalog / hlb /
+    //   skill metrics / forecast skill / history series / observation data / data series /
+    //   history lake browser / predict skill / skill score"
+    if (isHlbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:hlb-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildHlbScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

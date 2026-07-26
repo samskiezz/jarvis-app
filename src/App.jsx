@@ -351,6 +351,7 @@ import RiskSpecCoverage from '@/components/cinematic/RiskSpecCoverage';
 import TaskSpecCoverage from '@/components/cinematic/TaskSpecCoverage';
 import InvestmentDecisionCoverage from '@/components/cinematic/InvestmentDecisionCoverage';
 import VoiceForgeStudio, { isVfstQuery, buildVfstScript } from '@/components/cinematic/VoiceForgeStudio';
+import HistoryLakeBrowser, { isHlbQuery, buildHlbScript } from '@/components/cinematic/HistoryLakeBrowser';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1670,6 +1671,13 @@ function App() {
                 badge green=profile count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isVfstQuery+buildVfstScript wired JarvisBrain; build EXIT:0. */}
             <VoiceForgeStudio />
+            {/* F323 (overnight 2026-07-26): HistoryLakeBrowser — ◷ HLB button (left:484080, bottom:8, zIndex:199);
+                polls GET /v1/history/series every 120 s; SERIES tab: list with source/entity/metric/obs-count chips
+                + expand → GET /v1/history/series/{id} observations sparkline; SKILL tab: GET /v1/predict/skill
+                showing MAE/RMSE/coverage/mean-skill tiles; stat tiles (series/total-obs/n-scored/mean-skill);
+                badge green=series count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isHlbQuery+buildHlbScript wired JarvisBrain; build EXIT:0. */}
+            <HistoryLakeBrowser />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
