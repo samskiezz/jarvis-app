@@ -349,6 +349,7 @@ import InvestigationsPanel, { isInvestigationsQuery } from '@/components/cinemat
 import IntelSpecCoverage from '@/components/cinematic/IntelSpecCoverage';
 import RiskSpecCoverage from '@/components/cinematic/RiskSpecCoverage';
 import TaskSpecCoverage from '@/components/cinematic/TaskSpecCoverage';
+import InvestmentDecisionCoverage from '@/components/cinematic/InvestmentDecisionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1653,6 +1654,13 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isTaskSpecQuery+buildTaskSpecScript wired JarvisBrain; build EXIT:0. */}
             <TaskSpecCoverage />
+            {/* F321 (overnight 2026-07-26): InvestmentDecisionCoverage — ◈ IVDC button (left:474960, bottom:8, zIndex:197);
+                parallel-fetches /entities/Investment + /v1/decision/list; keyword-correlates investments against decisions
+                to surface COVERED vs UNCOVERED; stat tiles (investments/decisions/covered/uncovered); ALL/COVERED/UNCOVERED
+                filter tabs + text search; expand → matched decision chips with status badge + score bars;
+                amber badge=uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isIvdcQuery+buildIvdcScript wired JarvisBrain; build EXIT:0. */}
+            <InvestmentDecisionCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -207,6 +207,7 @@ import { isCgcpQuery, buildCgcpScript } from "./ContactGraphCentralityPanel";
 import { isIspcQuery, buildIspcScript } from "./IntelSpecCoverage";
 import { isRsscQuery, buildRsscScript } from "./RiskSpecCoverage";
 import { isTaskSpecQuery, buildTaskSpecScript } from "./TaskSpecCoverage";
+import { isIvdcQuery, buildIvdcScript } from "./InvestmentDecisionCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2469,6 +2470,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tspc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTaskSpecScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "investment decision / decision invest / ivdc / investment coverage / uncovered investments /
+    //   investment decisions / investment decision coverage / which investments have decisions /
+    //   investment governance / decision coverage invest"
+    if (isIvdcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ivdc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIvdcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
