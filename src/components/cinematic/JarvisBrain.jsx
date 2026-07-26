@@ -224,6 +224,7 @@ import { isCtbdQuery, buildCtbdScript } from "./ContactTaskBoard";
 import { isCdcvQuery, buildCdcvScript } from "./ContactDecisionCoverage";
 import { isSwarmDecisionQuery, buildSwarmDecisionScript } from "./SwarmJobDecisionCoverage";
 import { isCspcQuery, buildCspcScript } from "./ContactSpecCoverage";
+import { isTinvQuery, buildTinvScript } from "./TaskInvestigationCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2650,6 +2651,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cspc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCspcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tinv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTinvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -366,6 +366,7 @@ import ContactTaskBoard, { isCtbdQuery, buildCtbdScript } from '@/components/cin
 import ContactDecisionCoverage, { isCdcvQuery, buildCdcvScript } from '@/components/cinematic/ContactDecisionCoverage';
 import SwarmJobDecisionCoverage from '@/components/cinematic/SwarmJobDecisionCoverage';
 import ContactSpecCoverage from '@/components/cinematic/ContactSpecCoverage';
+import TaskInvestigationCorrelator from '@/components/cinematic/TaskInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1780,6 +1781,12 @@ function App() {
                 COVERED vs UNCOVERED; stat tiles, filter tabs, expand → matched spec chips + status badge + score bars;
                 amber badge=uncovered count; isCspcQuery+buildCspcScript wired JarvisBrain; build EXIT:0. */}
             <ContactSpecCoverage />
+            {/* F338 (overnight 2026-07-26): TaskInvestigationCorrelator — ◈ TINV button (left:552480, bottom:8, zIndex:214);
+                parallel-fetches /entities/Task + /v1/investigations every 90s; keyword-correlates
+                task title/name/description/type/status against investigation titles/descriptions;
+                LINKED vs UNLINKED; stat tiles, filter tabs, expand → matched investigation chips + seed/annotation counts + score bars;
+                amber badge=unlinked count; isTinvQuery+buildTinvScript wired JarvisBrain; build EXIT:0. */}
+            <TaskInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
