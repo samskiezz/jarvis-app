@@ -353,6 +353,7 @@ import InvestmentDecisionCoverage from '@/components/cinematic/InvestmentDecisio
 import VoiceForgeStudio, { isVfstQuery, buildVfstScript } from '@/components/cinematic/VoiceForgeStudio';
 import HistoryLakeBrowser, { isHlbQuery, buildHlbScript } from '@/components/cinematic/HistoryLakeBrowser';
 import EntityResolutionConsole from '@/components/cinematic/EntityResolutionConsole';
+import ContactRiskSignalCorrelator from '@/components/cinematic/ContactRiskSignalCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1689,6 +1690,12 @@ function App() {
                 stat tiles (pending/merged/queue/types); ▶ ASSESS → /v1/jarvis/agent/chat + TTS;
                 isErcnQuery+buildErcnScript wired JarvisBrain; build EXIT:0. */}
             <EntityResolutionConsole />
+            {/* F325 (overnight 2026-07-26): ContactRiskSignalCorrelator — ◈ CRSC button (left:493200, bottom:8, zIndex:201);
+                parallel-fetches /entities/Contact + /entities/RiskSignal every 90s; keyword-correlates
+                contacts against risk signals to surface EXPOSED vs CLEAR; stat tiles, filter tabs,
+                expand → matched signal chips with severity + score bars; ▶ ASSESS + TTS;
+                isCrscQuery+buildCrscScript wired JarvisBrain; build EXIT:0. */}
+            <ContactRiskSignalCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
