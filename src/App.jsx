@@ -357,6 +357,7 @@ import ContactRiskSignalCorrelator from '@/components/cinematic/ContactRiskSigna
 import ScrapeIntelStudio from '@/components/cinematic/ScrapeIntelStudio';
 import SwarmJobSpecCoverage from '@/components/cinematic/SwarmJobSpecCoverage';
 import InvestmentSpecCoverage, { isIvscQuery, buildIvscScript } from '@/components/cinematic/InvestmentSpecCoverage';
+import TaskRiskSignalCorrelator, { isTrscQuery, buildTrscScript } from '@/components/cinematic/TaskRiskSignalCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1715,6 +1716,12 @@ function App() {
                 COVERED vs UNCOVERED; stat tiles, filter tabs, expand → matched spec chips + score bars;
                 amber badge=uncovered count; isIvscQuery+buildIvscScript wired JarvisBrain; build EXIT:0. */}
             <InvestmentSpecCoverage />
+            {/* F329 (overnight 2026-07-26): TaskRiskSignalCorrelator — ◈ TRSC button (left:511440, bottom:8, zIndex:205);
+                parallel-fetches /entities/Task + /entities/RiskSignal every 90s; keyword-correlates
+                task title/name/description/type/status against risk signal name/title/category/sector/description;
+                EXPOSED vs CLEAR; stat tiles, filter tabs, expand → matched signal chips + severity badge + score bars;
+                red badge=exposed count; isTrscQuery+buildTrscScript wired JarvisBrain; build EXIT:0. */}
+            <TaskRiskSignalCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
