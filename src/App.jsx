@@ -359,6 +359,7 @@ import SwarmJobSpecCoverage from '@/components/cinematic/SwarmJobSpecCoverage';
 import InvestmentSpecCoverage, { isIvscQuery, buildIvscScript } from '@/components/cinematic/InvestmentSpecCoverage';
 import TaskRiskSignalCorrelator, { isTrscQuery, buildTrscScript } from '@/components/cinematic/TaskRiskSignalCorrelator';
 import InvestmentAlertCorrelator, { isIacrQuery, buildIacrScript } from '@/components/cinematic/InvestmentAlertCorrelator';
+import IntelProfileAlertCorrelator, { isIapcQuery, buildIapcScript } from '@/components/cinematic/IntelProfileAlertCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1729,6 +1730,12 @@ function App() {
                 EXPOSED vs CLEAR; stat tiles, filter tabs, expand → matched alert chips + severity badge + score bars;
                 red badge=exposed count; isIacrQuery+buildIacrScript wired JarvisBrain; build EXIT:0. */}
             <InvestmentAlertCorrelator />
+            {/* F331 (overnight 2026-07-26): IntelProfileAlertCorrelator — ◈ IAPC button (left:520560, bottom:8, zIndex:207);
+                parallel-fetches /entities/IntelProfile + /v1/alerts every 90s; keyword-correlates
+                intel profile name/subject/description/category against alert type/category/message/source;
+                FLAGGED vs CLEAR; stat tiles, filter tabs, expand → matched alert chips + severity badge + score bars;
+                red badge=flagged count; isIapcQuery+buildIapcScript wired JarvisBrain; build EXIT:0. */}
+            <IntelProfileAlertCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

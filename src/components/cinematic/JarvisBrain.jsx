@@ -217,6 +217,7 @@ import { isSjscQuery, buildSjscScript } from "./SwarmJobSpecCoverage";
 import { isIvscQuery, buildIvscScript } from "./InvestmentSpecCoverage";
 import { isTrscQuery, buildTrscScript } from "./TaskRiskSignalCorrelator";
 import { isIacrQuery, buildIacrScript } from "./InvestmentAlertCorrelator";
+import { isIapcQuery, buildIapcScript } from "./IntelProfileAlertCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2580,6 +2581,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iacr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIacrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIapcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iapc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIapcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
