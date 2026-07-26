@@ -347,6 +347,7 @@ import AssetDnaScanner, { isAdnaQuery, buildAdnaScript } from '@/components/cine
 import ContactGraphCentralityPanel, { isCgcpQuery, buildCgcpScript } from '@/components/cinematic/ContactGraphCentralityPanel';
 import InvestigationsPanel, { isInvestigationsQuery } from '@/components/cinematic/InvestigationsPanel';
 import IntelSpecCoverage from '@/components/cinematic/IntelSpecCoverage';
+import RiskSpecCoverage from '@/components/cinematic/RiskSpecCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1635,6 +1636,14 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isIspcQuery+buildIspcScript wired JarvisBrain; build EXIT:0. */}
             <IntelSpecCoverage />
+            {/* F319 (overnight 2026-07-26): RiskSpecCoverage — ◈ RSSC button (left:465840, bottom:8, zIndex:195);
+                parallel-fetches GET /entities/RiskSignal + GET /v1/spec/list every 90 s;
+                keyword-correlates risk signal name/category/sector/description against spec titles/descriptions;
+                COVERED (spec backing found) vs UNCOVERED (no spec backing); stat tiles (risk-signals/specs/covered/uncovered);
+                amber badge=uncovered count, green=all covered; expand → matched spec chips with status+score bars;
+                ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isRsscQuery+buildRsscScript wired JarvisBrain; build EXIT:0. */}
+            <RiskSpecCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

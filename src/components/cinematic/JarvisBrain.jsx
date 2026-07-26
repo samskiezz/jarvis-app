@@ -205,6 +205,7 @@ import { isSwarmAlertQuery, buildSwarmAlertScript } from "./SwarmJobAlertCorrela
 import { isAdnaQuery, buildAdnaScript } from "./AssetDnaScanner";
 import { isCgcpQuery, buildCgcpScript } from "./ContactGraphCentralityPanel";
 import { isIspcQuery, buildIspcScript } from "./IntelSpecCoverage";
+import { isRsscQuery, buildRsscScript } from "./RiskSpecCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2441,6 +2442,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ispc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIspcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F319 RiskSpecCoverage — /entities/RiskSignal + /v1/spec/list
+    // "risk spec / spec risk / rssc / risk coverage / uncovered risk /
+    //   risk specification / risk spec gaps / spec backed risk / risk to spec /
+    //   spec for risk / which risks have specs"
+    if (isRsscQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rssc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRsscScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
