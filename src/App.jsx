@@ -356,6 +356,7 @@ import EntityResolutionConsole from '@/components/cinematic/EntityResolutionCons
 import ContactRiskSignalCorrelator from '@/components/cinematic/ContactRiskSignalCorrelator';
 import ScrapeIntelStudio from '@/components/cinematic/ScrapeIntelStudio';
 import SwarmJobSpecCoverage from '@/components/cinematic/SwarmJobSpecCoverage';
+import InvestmentSpecCoverage, { isIvscQuery, buildIvscScript } from '@/components/cinematic/InvestmentSpecCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1708,6 +1709,12 @@ function App() {
                 against spec titles/descriptions; COVERED vs UNCOVERED; amber badge=uncovered count;
                 isSjscQuery+buildSjscScript wired JarvisBrain; build EXIT:0. */}
             <SwarmJobSpecCoverage />
+            {/* F328 (overnight 2026-07-26): InvestmentSpecCoverage — ◈ IVSC button (left:506880, bottom:8, zIndex:204);
+                parallel-fetches /entities/Investment + /v1/spec/list every 90s; keyword-correlates
+                investment name/title/description/sector/type/ticker against spec titles/descriptions;
+                COVERED vs UNCOVERED; stat tiles, filter tabs, expand → matched spec chips + score bars;
+                amber badge=uncovered count; isIvscQuery+buildIvscScript wired JarvisBrain; build EXIT:0. */}
+            <InvestmentSpecCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

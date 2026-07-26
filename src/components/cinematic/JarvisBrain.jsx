@@ -214,6 +214,7 @@ import { isErcnQuery, buildErcnScript } from "./EntityResolutionConsole";
 import { isCrscQuery, buildCrscScript } from "./ContactRiskSignalCorrelator";
 import { isScrpQuery, buildScrpScript } from "./ScrapeIntelStudio";
 import { isSjscQuery, buildSjscScript } from "./SwarmJobSpecCoverage";
+import { isIvscQuery, buildIvscScript } from "./InvestmentSpecCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2550,6 +2551,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjsc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSjscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIvscQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ivsc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIvscScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
