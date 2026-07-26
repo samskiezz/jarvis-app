@@ -365,6 +365,7 @@ import WorldIntelPanel, { isWinpQuery, buildWinpScript } from '@/components/cine
 import ContactTaskBoard, { isCtbdQuery, buildCtbdScript } from '@/components/cinematic/ContactTaskBoard';
 import ContactDecisionCoverage, { isCdcvQuery, buildCdcvScript } from '@/components/cinematic/ContactDecisionCoverage';
 import SwarmJobDecisionCoverage from '@/components/cinematic/SwarmJobDecisionCoverage';
+import ContactSpecCoverage from '@/components/cinematic/ContactSpecCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1773,6 +1774,12 @@ function App() {
                 COVERED vs UNCOVERED; stat tiles, filter tabs, expand → matched decision chips + status badge + quality score + score bars;
                 amber badge=uncovered count; isSwarmDecisionQuery+buildSwarmDecisionScript wired JarvisBrain; build EXIT:0. */}
             <SwarmJobDecisionCoverage />
+            {/* F337 (overnight 2026-07-26): ContactSpecCoverage — ◈ CSPC button (left:547920, bottom:8, zIndex:213);
+                parallel-fetches /entities/Contact + /v1/spec/list every 90s; keyword-correlates
+                contact name/title/email/company/description against spec titles/descriptions;
+                COVERED vs UNCOVERED; stat tiles, filter tabs, expand → matched spec chips + status badge + score bars;
+                amber badge=uncovered count; isCspcQuery+buildCspcScript wired JarvisBrain; build EXIT:0. */}
+            <ContactSpecCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
