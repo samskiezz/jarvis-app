@@ -208,6 +208,7 @@ import { isIspcQuery, buildIspcScript } from "./IntelSpecCoverage";
 import { isRsscQuery, buildRsscScript } from "./RiskSpecCoverage";
 import { isTaskSpecQuery, buildTaskSpecScript } from "./TaskSpecCoverage";
 import { isIvdcQuery, buildIvdcScript } from "./InvestmentDecisionCoverage";
+import { isVfstQuery, buildVfstScript } from "./VoiceForgeStudio";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2482,6 +2483,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ivdc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIvdcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F322: VoiceForgeStudio — "voice forge / voice profile / voice cloning / vfst /
+    //   clone voice / voice studio / active voice / which voice / voice settings / voice profiles"
+    if (isVfstQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:vfst-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildVfstScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

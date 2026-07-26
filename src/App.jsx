@@ -350,6 +350,7 @@ import IntelSpecCoverage from '@/components/cinematic/IntelSpecCoverage';
 import RiskSpecCoverage from '@/components/cinematic/RiskSpecCoverage';
 import TaskSpecCoverage from '@/components/cinematic/TaskSpecCoverage';
 import InvestmentDecisionCoverage from '@/components/cinematic/InvestmentDecisionCoverage';
+import VoiceForgeStudio, { isVfstQuery, buildVfstScript } from '@/components/cinematic/VoiceForgeStudio';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1661,6 +1662,14 @@ function App() {
                 amber badge=uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isIvdcQuery+buildIvdcScript wired JarvisBrain; build EXIT:0. */}
             <InvestmentDecisionCoverage />
+            {/* F322 (overnight 2026-07-26): VoiceForgeStudio — ◉ VFST button (left:479520, bottom:8, zIndex:198);
+                polls GET /v1/voiceforge/profiles every 60 s; PROFILES tab: list profiles with active chip +
+                ▶ ACTIVATE (POST /v1/voiceforge/activate/{id}) + ◆ BUILD (POST /v1/voiceforge/profiles/{id}/build) +
+                ✕ DELETE (DELETE /v1/voiceforge/profiles/{id}); TEST tab: text input → POST /v1/voiceforge/test;
+                NEW tab: name+description → POST /v1/voiceforge/profile; stat tiles (profiles/active/no-ref/built);
+                badge green=profile count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isVfstQuery+buildVfstScript wired JarvisBrain; build EXIT:0. */}
+            <VoiceForgeStudio />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
