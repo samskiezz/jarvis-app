@@ -367,6 +367,7 @@ import ContactDecisionCoverage, { isCdcvQuery, buildCdcvScript } from '@/compone
 import SwarmJobDecisionCoverage from '@/components/cinematic/SwarmJobDecisionCoverage';
 import ContactSpecCoverage from '@/components/cinematic/ContactSpecCoverage';
 import TaskInvestigationCorrelator from '@/components/cinematic/TaskInvestigationCorrelator';
+import WatchtowerRulesPanel, { isWtwrQuery, buildWtwrScript } from '@/components/cinematic/WatchtowerRulesPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1787,6 +1788,12 @@ function App() {
                 LINKED vs UNLINKED; stat tiles, filter tabs, expand → matched investigation chips + seed/annotation counts + score bars;
                 amber badge=unlinked count; isTinvQuery+buildTinvScript wired JarvisBrain; build EXIT:0. */}
             <TaskInvestigationCorrelator />
+            {/* F339 (overnight 2026-07-26): WatchtowerRulesPanel — ◈ WTWR button (left:557040, bottom:8, zIndex:215);
+                polls GET /v1/rules every 60s; RULES tab: list with name/severity bar/enabled dot;
+                EVALUATE tab: context JSON input → POST /v1/rules/evaluate → fired alerts;
+                CREATE tab: name + severity slider + target → POST /v1/rules;
+                green badge=enabled count, amber=any disabled; isWtwrQuery+buildWtwrScript wired JarvisBrain; build EXIT:0. */}
+            <WatchtowerRulesPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

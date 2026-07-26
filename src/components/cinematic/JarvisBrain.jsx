@@ -225,6 +225,7 @@ import { isCdcvQuery, buildCdcvScript } from "./ContactDecisionCoverage";
 import { isSwarmDecisionQuery, buildSwarmDecisionScript } from "./SwarmJobDecisionCoverage";
 import { isCspcQuery, buildCspcScript } from "./ContactSpecCoverage";
 import { isTinvQuery, buildTinvScript } from "./TaskInvestigationCorrelator";
+import { isWtwrQuery, buildWtwrScript } from "./WatchtowerRulesPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2660,6 +2661,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tinv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTinvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isWtwrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wtwr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildWtwrScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
