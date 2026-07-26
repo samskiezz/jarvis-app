@@ -219,6 +219,7 @@ import { isTrscQuery, buildTrscScript } from "./TaskRiskSignalCorrelator";
 import { isIacrQuery, buildIacrScript } from "./InvestmentAlertCorrelator";
 import { isIapcQuery, buildIapcScript } from "./IntelProfileAlertCorrelator";
 import { isPolpQuery, buildPolpScript } from "./PolicyDecisionPanel";
+import { isWinpQuery, buildWinpScript } from "./WorldIntelPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2600,6 +2601,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:polp-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildPolpScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isWinpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:winp-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildWinpScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -361,6 +361,7 @@ import TaskRiskSignalCorrelator, { isTrscQuery, buildTrscScript } from '@/compon
 import InvestmentAlertCorrelator, { isIacrQuery, buildIacrScript } from '@/components/cinematic/InvestmentAlertCorrelator';
 import IntelProfileAlertCorrelator, { isIapcQuery, buildIapcScript } from '@/components/cinematic/IntelProfileAlertCorrelator';
 import PolicyDecisionPanel, { isPolpQuery, buildPolpScript } from '@/components/cinematic/PolicyDecisionPanel';
+import WorldIntelPanel, { isWinpQuery, buildWinpScript } from '@/components/cinematic/WorldIntelPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1744,6 +1745,13 @@ function App() {
                 VIEW tab: object_id+subject_id → GET /v1/jarvis/policy/view/{id} → policy-filtered props;
                 badge green=enforcing/amber=partial; isPolpQuery+buildPolpScript wired JarvisBrain; build EXIT:0. */}
             <PolicyDecisionPanel />
+            {/* F333 (overnight 2026-07-26): WorldIntelPanel — ◉ WINP button (left:529680, bottom:8, zIndex:209);
+                polls /v1/jarvis/world/summary every 120s; SUMMARY: availability chip + count grid;
+                SUBJECTS: 100 domain subjects with master_topic filter + text search;
+                ENDPOINTS: 100 ingestion endpoint candidates with access_method + connector chips + URL;
+                TARGETS: 50 research target phrases; badge green=subjects>0/amber=unseeded;
+                isWinpQuery+buildWinpScript wired JarvisBrain; build EXIT:0. */}
+            <WorldIntelPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
