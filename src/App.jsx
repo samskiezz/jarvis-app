@@ -360,6 +360,7 @@ import InvestmentSpecCoverage, { isIvscQuery, buildIvscScript } from '@/componen
 import TaskRiskSignalCorrelator, { isTrscQuery, buildTrscScript } from '@/components/cinematic/TaskRiskSignalCorrelator';
 import InvestmentAlertCorrelator, { isIacrQuery, buildIacrScript } from '@/components/cinematic/InvestmentAlertCorrelator';
 import IntelProfileAlertCorrelator, { isIapcQuery, buildIapcScript } from '@/components/cinematic/IntelProfileAlertCorrelator';
+import PolicyDecisionPanel, { isPolpQuery, buildPolpScript } from '@/components/cinematic/PolicyDecisionPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1736,6 +1737,13 @@ function App() {
                 FLAGGED vs CLEAR; stat tiles, filter tabs, expand → matched alert chips + severity badge + score bars;
                 red badge=flagged count; isIapcQuery+buildIapcScript wired JarvisBrain; build EXIT:0. */}
             <IntelProfileAlertCorrelator />
+            {/* F332 (overnight 2026-07-26): PolicyDecisionPanel — ◈ POLP button (left:525120, bottom:8, zIndex:208);
+                polls /v1/jarvis/policy/summary every 90s; SUMMARY tab: clearance levels + subject/label counts;
+                DECIDE tab: subject+action+resource → POST /v1/jarvis/policy/decide → PERMITTED/DENIED + reason;
+                CLASSIFY tab: resource+level+compartment → POST /v1/jarvis/policy/classify;
+                VIEW tab: object_id+subject_id → GET /v1/jarvis/policy/view/{id} → policy-filtered props;
+                badge green=enforcing/amber=partial; isPolpQuery+buildPolpScript wired JarvisBrain; build EXIT:0. */}
+            <PolicyDecisionPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
