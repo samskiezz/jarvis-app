@@ -204,6 +204,7 @@ import { isIvrcQuery, buildIvrcScript } from "./InvestmentRiskCorrelator";
 import { isSwarmAlertQuery, buildSwarmAlertScript } from "./SwarmJobAlertCorrelator";
 import { isAdnaQuery, buildAdnaScript } from "./AssetDnaScanner";
 import { isCgcpQuery, buildCgcpScript } from "./ContactGraphCentralityPanel";
+import { isIspcQuery, buildIspcScript } from "./IntelSpecCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2427,6 +2428,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cgcp-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCgcpScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F318 IntelSpecCoverage — /entities/IntelProfile + /v1/spec/list
+    // "intel spec / spec coverage / ispc / intel coverage / uncovered intel spec /
+    //   intel specifications / intel spec gaps / spec backed intel / intel to spec /
+    //   spec for intel / which intel has specs"
+    if (isIspcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ispc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIspcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

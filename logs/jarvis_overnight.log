@@ -189,3 +189,4 @@
 [2026-07-25] F315 AssetDnaScanner — polls /v1/asset/list (120s), expand → /v1/asset/{id} deps+recommendations; ALL/OK/WARN/STALE/HIGH-RISK tabs; isAdnaQuery+buildAdnaScript wired JarvisBrain; build EXIT:0.
 [2026-07-25] F316 ContactGraphCentralityPanel.jsx — parallel-fetches /entities/Contact + /v1/graph/centrality; HIGH-CENTRALITY vs PERIPHERAL tabs; isCgcpQuery+buildCgcpScript wired JarvisBrain; ◈ CGCP button left:456720 zIndex:193; build EXIT:0.
 2026-07-26 | F317 InvestigationsPanel — mounted pre-existing InvestigationsPanel.jsx into App.jsx; polls /v1/investigations every 90 s; open-case cards with priority/status badges; isInvestigationsQuery exported; build EXIT:0
+2026-07-26 | F318 IntelSpecCoverage — parallel-fetches /entities/IntelProfile + /v1/spec/list; COVERED vs UNCOVERED; ALL/COVERED/UNCOVERED tabs; isIspcQuery+buildIspcScript wired JarvisBrain; ◈ ISPC button left:461280 zIndex:194; build EXIT:0

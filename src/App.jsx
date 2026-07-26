@@ -346,6 +346,7 @@ import SwarmJobAlertCorrelator, { isSwarmAlertQuery, buildSwarmAlertScript } fro
 import AssetDnaScanner, { isAdnaQuery, buildAdnaScript } from '@/components/cinematic/AssetDnaScanner';
 import ContactGraphCentralityPanel, { isCgcpQuery, buildCgcpScript } from '@/components/cinematic/ContactGraphCentralityPanel';
 import InvestigationsPanel, { isInvestigationsQuery } from '@/components/cinematic/InvestigationsPanel';
+import IntelSpecCoverage from '@/components/cinematic/IntelSpecCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1626,6 +1627,14 @@ function App() {
                 "investigations/cases/open case/active case/dossier list" voice triggers;
                 isInvestigationsQuery exported for JarvisBrain wiring. */}
             <InvestigationsPanel />
+            {/* F318 (overnight 2026-07-26): IntelSpecCoverage — ◈ ISPC button (left:461280, bottom:8, zIndex:194);
+                parallel-fetches GET /entities/IntelProfile + GET /v1/spec/list every 90 s;
+                keyword-correlates intel profile names/subjects against spec titles/descriptions;
+                COVERED (spec backing found) vs UNCOVERED (no spec backing); stat tiles (intel/specs/covered/uncovered);
+                amber badge=uncovered count, green=all covered; expand → matched spec chips with status+score bars;
+                ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isIspcQuery+buildIspcScript wired JarvisBrain; build EXIT:0. */}
+            <IntelSpecCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
