@@ -348,6 +348,7 @@ import ContactGraphCentralityPanel, { isCgcpQuery, buildCgcpScript } from '@/com
 import InvestigationsPanel, { isInvestigationsQuery } from '@/components/cinematic/InvestigationsPanel';
 import IntelSpecCoverage from '@/components/cinematic/IntelSpecCoverage';
 import RiskSpecCoverage from '@/components/cinematic/RiskSpecCoverage';
+import TaskSpecCoverage from '@/components/cinematic/TaskSpecCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1644,6 +1645,14 @@ function App() {
                 ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isRsscQuery+buildRsscScript wired JarvisBrain; build EXIT:0. */}
             <RiskSpecCoverage />
+            {/* F320 (overnight 2026-07-26): TaskSpecCoverage — ◈ TSPC button (left:470400, bottom:8, zIndex:196);
+                parallel-fetches GET /entities/Task + GET /v1/spec/list every 90 s;
+                keyword-correlates task title/name/description/type/status against spec titles/descriptions;
+                COVERED (spec backing found) vs UNCOVERED (no spec — planning gap); stat tiles (tasks/specs/covered/uncovered);
+                amber badge=uncovered count, green=all covered; expand → matched spec chips with status+score bars;
+                ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
+                isTaskSpecQuery+buildTaskSpecScript wired JarvisBrain; build EXIT:0. */}
+            <TaskSpecCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

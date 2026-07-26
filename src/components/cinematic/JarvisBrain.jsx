@@ -206,6 +206,7 @@ import { isAdnaQuery, buildAdnaScript } from "./AssetDnaScanner";
 import { isCgcpQuery, buildCgcpScript } from "./ContactGraphCentralityPanel";
 import { isIspcQuery, buildIspcScript } from "./IntelSpecCoverage";
 import { isRsscQuery, buildRsscScript } from "./RiskSpecCoverage";
+import { isTaskSpecQuery, buildTaskSpecScript } from "./TaskSpecCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2455,6 +2456,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rssc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F320 TaskSpecCoverage — /entities/Task + /v1/spec/list
+    // "task spec / spec task / tspc / task coverage / which tasks have specs /
+    //   uncovered tasks / spec for tasks / task specification / task spec gap /
+    //   tasks without specs / spec backed task"
+    if (isTaskSpecQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tspc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTaskSpecScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
