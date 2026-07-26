@@ -358,6 +358,7 @@ import ScrapeIntelStudio from '@/components/cinematic/ScrapeIntelStudio';
 import SwarmJobSpecCoverage from '@/components/cinematic/SwarmJobSpecCoverage';
 import InvestmentSpecCoverage, { isIvscQuery, buildIvscScript } from '@/components/cinematic/InvestmentSpecCoverage';
 import TaskRiskSignalCorrelator, { isTrscQuery, buildTrscScript } from '@/components/cinematic/TaskRiskSignalCorrelator';
+import InvestmentAlertCorrelator, { isIacrQuery, buildIacrScript } from '@/components/cinematic/InvestmentAlertCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1722,6 +1723,12 @@ function App() {
                 EXPOSED vs CLEAR; stat tiles, filter tabs, expand → matched signal chips + severity badge + score bars;
                 red badge=exposed count; isTrscQuery+buildTrscScript wired JarvisBrain; build EXIT:0. */}
             <TaskRiskSignalCorrelator />
+            {/* F330 (overnight 2026-07-26): InvestmentAlertCorrelator — ◈ IACR button (left:516000, bottom:8, zIndex:206);
+                parallel-fetches /entities/Investment + /v1/alerts every 90s; keyword-correlates
+                investment name/title/description/sector/type/ticker against alert type/category/message/source;
+                EXPOSED vs CLEAR; stat tiles, filter tabs, expand → matched alert chips + severity badge + score bars;
+                red badge=exposed count; isIacrQuery+buildIacrScript wired JarvisBrain; build EXIT:0. */}
+            <InvestmentAlertCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
