@@ -355,6 +355,7 @@ import HistoryLakeBrowser, { isHlbQuery, buildHlbScript } from '@/components/cin
 import EntityResolutionConsole from '@/components/cinematic/EntityResolutionConsole';
 import ContactRiskSignalCorrelator from '@/components/cinematic/ContactRiskSignalCorrelator';
 import ScrapeIntelStudio from '@/components/cinematic/ScrapeIntelStudio';
+import SwarmJobSpecCoverage from '@/components/cinematic/SwarmJobSpecCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1702,6 +1703,11 @@ function App() {
                 → /v1/jarvis/scrape/search + /v1/jarvis/scrape/document/{id}; badge=stored docs;
                 ASSESS + TTS; isScrpQuery+buildScrpScript wired JarvisBrain; build EXIT:0. */}
             <ScrapeIntelStudio />
+            {/* F327 (overnight 2026-07-26): SwarmJobSpecCoverage — ◈ SJSC button (left:502320, bottom:8, zIndex:203);
+                parallel-fetches /entities/SwarmJob + /v1/spec/list every 90s; correlates job names/kinds/targets
+                against spec titles/descriptions; COVERED vs UNCOVERED; amber badge=uncovered count;
+                isSjscQuery+buildSjscScript wired JarvisBrain; build EXIT:0. */}
+            <SwarmJobSpecCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
