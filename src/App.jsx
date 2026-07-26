@@ -363,6 +363,7 @@ import IntelProfileAlertCorrelator, { isIapcQuery, buildIapcScript } from '@/com
 import PolicyDecisionPanel, { isPolpQuery, buildPolpScript } from '@/components/cinematic/PolicyDecisionPanel';
 import WorldIntelPanel, { isWinpQuery, buildWinpScript } from '@/components/cinematic/WorldIntelPanel';
 import ContactTaskBoard, { isCtbdQuery, buildCtbdScript } from '@/components/cinematic/ContactTaskBoard';
+import ContactDecisionCoverage, { isCdcvQuery, buildCdcvScript } from '@/components/cinematic/ContactDecisionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1759,6 +1760,12 @@ function App() {
                 ASSIGNED vs UNASSIGNED; stat tiles, filter tabs, expand → matched task chips + status/priority badges + score bars;
                 green badge=assigned count; isCtbdQuery+buildCtbdScript wired JarvisBrain; build EXIT:0. */}
             <ContactTaskBoard />
+            {/* F335 (overnight 2026-07-26): ContactDecisionCoverage — ◈ CDCV button (left:538800, bottom:8, zIndex:211);
+                parallel-fetches /entities/Contact + /v1/decision/list?limit=50 every 90s; keyword-correlates
+                contact name/title/email/company against decision titles/body_md;
+                LINKED vs UNLINKED; stat tiles, filter tabs, expand → matched decision chips + status badge + quality score + score bars;
+                amber badge=unlinked count; isCdcvQuery+buildCdcvScript wired JarvisBrain; build EXIT:0. */}
+            <ContactDecisionCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -221,6 +221,7 @@ import { isIapcQuery, buildIapcScript } from "./IntelProfileAlertCorrelator";
 import { isPolpQuery, buildPolpScript } from "./PolicyDecisionPanel";
 import { isWinpQuery, buildWinpScript } from "./WorldIntelPanel";
 import { isCtbdQuery, buildCtbdScript } from "./ContactTaskBoard";
+import { isCdcvQuery, buildCdcvScript } from "./ContactDecisionCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2620,6 +2621,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctbd-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCtbdScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCdcvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cdcv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCdcvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
