@@ -222,6 +222,7 @@ import { isPolpQuery, buildPolpScript } from "./PolicyDecisionPanel";
 import { isWinpQuery, buildWinpScript } from "./WorldIntelPanel";
 import { isCtbdQuery, buildCtbdScript } from "./ContactTaskBoard";
 import { isCdcvQuery, buildCdcvScript } from "./ContactDecisionCoverage";
+import { isSwarmDecisionQuery, buildSwarmDecisionScript } from "./SwarmJobDecisionCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2630,6 +2631,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cdcv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCdcvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSwarmDecisionQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjdc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwarmDecisionScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

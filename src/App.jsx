@@ -364,6 +364,7 @@ import PolicyDecisionPanel, { isPolpQuery, buildPolpScript } from '@/components/
 import WorldIntelPanel, { isWinpQuery, buildWinpScript } from '@/components/cinematic/WorldIntelPanel';
 import ContactTaskBoard, { isCtbdQuery, buildCtbdScript } from '@/components/cinematic/ContactTaskBoard';
 import ContactDecisionCoverage, { isCdcvQuery, buildCdcvScript } from '@/components/cinematic/ContactDecisionCoverage';
+import SwarmJobDecisionCoverage from '@/components/cinematic/SwarmJobDecisionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1766,6 +1767,12 @@ function App() {
                 LINKED vs UNLINKED; stat tiles, filter tabs, expand → matched decision chips + status badge + quality score + score bars;
                 amber badge=unlinked count; isCdcvQuery+buildCdcvScript wired JarvisBrain; build EXIT:0. */}
             <ContactDecisionCoverage />
+            {/* F336 (overnight 2026-07-26): SwarmJobDecisionCoverage — ◈ SJDC button (left:543360, bottom:8, zIndex:212);
+                parallel-fetches /entities/SwarmJob + /v1/decision/list?limit=50 every 90s; keyword-correlates
+                job name/kind/target/description against decision titles/body_md;
+                COVERED vs UNCOVERED; stat tiles, filter tabs, expand → matched decision chips + status badge + quality score + score bars;
+                amber badge=uncovered count; isSwarmDecisionQuery+buildSwarmDecisionScript wired JarvisBrain; build EXIT:0. */}
+            <SwarmJobDecisionCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
