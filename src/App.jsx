@@ -345,6 +345,7 @@ import InvestmentRiskCorrelator, { isIvrcQuery, buildIvrcScript } from '@/compon
 import SwarmJobAlertCorrelator, { isSwarmAlertQuery, buildSwarmAlertScript } from '@/components/cinematic/SwarmJobAlertCorrelator';
 import AssetDnaScanner, { isAdnaQuery, buildAdnaScript } from '@/components/cinematic/AssetDnaScanner';
 import ContactGraphCentralityPanel, { isCgcpQuery, buildCgcpScript } from '@/components/cinematic/ContactGraphCentralityPanel';
+import InvestigationsPanel, { isInvestigationsQuery } from '@/components/cinematic/InvestigationsPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1620,6 +1621,11 @@ function App() {
                 badge green=linked count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier;
                 isCgcpQuery+buildCgcpScript wired JarvisBrain; build EXIT:0. */}
             <ContactGraphCentralityPanel />
+            {/* F317 (overnight 2026-07-26): InvestigationsPanel — floating panel sourced from
+                /v1/investigations; shows open cases sorted by priority/status; 90-s auto-refresh;
+                "investigations/cases/open case/active case/dossier list" voice triggers;
+                isInvestigationsQuery exported for JarvisBrain wiring. */}
+            <InvestigationsPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
