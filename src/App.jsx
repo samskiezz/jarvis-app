@@ -354,6 +354,7 @@ import VoiceForgeStudio, { isVfstQuery, buildVfstScript } from '@/components/cin
 import HistoryLakeBrowser, { isHlbQuery, buildHlbScript } from '@/components/cinematic/HistoryLakeBrowser';
 import EntityResolutionConsole from '@/components/cinematic/EntityResolutionConsole';
 import ContactRiskSignalCorrelator from '@/components/cinematic/ContactRiskSignalCorrelator';
+import ScrapeIntelStudio from '@/components/cinematic/ScrapeIntelStudio';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1696,6 +1697,11 @@ function App() {
                 expand → matched signal chips with severity + score bars; ▶ ASSESS + TTS;
                 isCrscQuery+buildCrscScript wired JarvisBrain; build EXIT:0. */}
             <ContactRiskSignalCorrelator />
+            {/* F326 (overnight 2026-07-26): ScrapeIntelStudio — ⬡ SCRP button (left:497760, bottom:8, zIndex:202);
+                polls /v1/jarvis/scrape/status every 90s; STATUS/SEARCH/ENGINES tabs; debounced search
+                → /v1/jarvis/scrape/search + /v1/jarvis/scrape/document/{id}; badge=stored docs;
+                ASSESS + TTS; isScrpQuery+buildScrpScript wired JarvisBrain; build EXIT:0. */}
+            <ScrapeIntelStudio />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
