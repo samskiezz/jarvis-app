@@ -362,6 +362,7 @@ import InvestmentAlertCorrelator, { isIacrQuery, buildIacrScript } from '@/compo
 import IntelProfileAlertCorrelator, { isIapcQuery, buildIapcScript } from '@/components/cinematic/IntelProfileAlertCorrelator';
 import PolicyDecisionPanel, { isPolpQuery, buildPolpScript } from '@/components/cinematic/PolicyDecisionPanel';
 import WorldIntelPanel, { isWinpQuery, buildWinpScript } from '@/components/cinematic/WorldIntelPanel';
+import ContactTaskBoard, { isCtbdQuery, buildCtbdScript } from '@/components/cinematic/ContactTaskBoard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1752,6 +1753,12 @@ function App() {
                 TARGETS: 50 research target phrases; badge green=subjects>0/amber=unseeded;
                 isWinpQuery+buildWinpScript wired JarvisBrain; build EXIT:0. */}
             <WorldIntelPanel />
+            {/* F334 (overnight 2026-07-26): ContactTaskBoard — ◈ CTBD button (left:534240, bottom:8, zIndex:210);
+                parallel-fetches /entities/Contact + /entities/Task every 90s; keyword-correlates
+                contact name/title/email/company against task assignees/titles/descriptions;
+                ASSIGNED vs UNASSIGNED; stat tiles, filter tabs, expand → matched task chips + status/priority badges + score bars;
+                green badge=assigned count; isCtbdQuery+buildCtbdScript wired JarvisBrain; build EXIT:0. */}
+            <ContactTaskBoard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
