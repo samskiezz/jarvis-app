@@ -385,6 +385,7 @@ import ContactInvestigationCorrelator from '@/components/cinematic/ContactInvest
 import RiskSignalInvestigationCorrelator from '@/components/cinematic/RiskSignalInvestigationCorrelator';
 import RiskSignalAnomalyCorrelator from '@/components/cinematic/RiskSignalAnomalyCorrelator';
 import SwarmJobAnomalyCorrelator from '@/components/cinematic/SwarmJobAnomalyCorrelator';
+import InvestmentInvestigationCorrelator from '@/components/cinematic/InvestmentInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1917,6 +1918,13 @@ function App() {
                 ALL/EXPOSED/CLEAR filter tabs + text search; expand → matched anomaly chips with severity badge + z-score + score bars;
                 red badge=exposed count, green=all-clear; isSwarmAnomalyQuery+buildSwarmAnomalyScript wired JarvisBrain; build EXIT:0. */}
             <SwarmJobAnomalyCorrelator />
+            {/* F357 (overnight 2026-07-27): InvestmentInvestigationCorrelator — ◈ IVIN button (left:634614, bottom:8, zIndex:233);
+                parallel-fetches /entities/Investment + /v1/investigations every 90 s;
+                keyword-correlates each investment (name/ticker/type/sector/description) against investigation titles/categories
+                to surface LINKED (case match found) vs CLEAR; stat tiles (investments/cases/linked/clear);
+                ALL/LINKED/CLEAR filter tabs + text search; expand → matched case chips with status badge + score bars;
+                amber badge=linked count, green=all-clear; isIvinQuery+buildIvinScript wired JarvisBrain; build EXIT:0. */}
+            <InvestmentInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
