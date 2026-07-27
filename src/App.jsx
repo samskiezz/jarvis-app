@@ -371,6 +371,7 @@ import WatchtowerRulesPanel, { isWtwrQuery, buildWtwrScript } from '@/components
 import IntelDecisionCoverage, { isIpdcQuery, buildIpdcScript } from '@/components/cinematic/IntelDecisionCoverage';
 import GraphNodeAlertCoverage, { isGnacQuery, buildGnacScript } from '@/components/cinematic/GraphNodeAlertCoverage';
 import IntelProfileGraphCentrality, { isIgcpQuery, buildIgcpScript } from '@/components/cinematic/IntelProfileGraphCentrality';
+import InvestmentGraphCentrality, { isIvgcQuery, buildIvgcScript } from '@/components/cinematic/InvestmentGraphCentrality';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1814,6 +1815,11 @@ function App() {
                 HIGH-PROFILE (graph-linked) vs PERIPHERAL; stat tiles, filter tabs, expand → matched centrality node chips + score bars;
                 green badge=high-profile count; isIgcpQuery+buildIgcpScript wired JarvisBrain; build EXIT:0. */}
             <IntelProfileGraphCentrality />
+            {/* F343 (overnight 2026-07-27): InvestmentGraphCentrality — ◈ IVGC button (left:575280, bottom:8, zIndex:219);
+                parallel-fetches /entities/Investment + /v1/graph/centrality; keyword-correlates investments vs central nodes;
+                HIGH-CENTRALITY (graph-linked) vs PERIPHERAL; stat tiles, filter tabs, expand → matched centrality node chips + score bars;
+                green badge=high-centrality count; isIvgcQuery+buildIvgcScript wired JarvisBrain; build EXIT:0. */}
+            <InvestmentGraphCentrality />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
