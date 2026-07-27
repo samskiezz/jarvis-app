@@ -378,6 +378,7 @@ import ContactAnomalyCorrelator from '@/components/cinematic/ContactAnomalyCorre
 import TaskAnomalyCorrelator from '@/components/cinematic/TaskAnomalyCorrelator';
 import SwarmJobRiskCorrelator from '@/components/cinematic/SwarmJobRiskCorrelator';
 import InvestmentAnomalyCorrelator from '@/components/cinematic/InvestmentAnomalyCorrelator';
+import IntelProfileRiskCorrelator from '@/components/cinematic/IntelProfileRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1865,6 +1866,13 @@ function App() {
                 expand → matched anomaly chips with severity badge + z-score + score bars;
                 red badge=exposed count, green=all-clear; isIvacQuery+buildIvacScript wired JarvisBrain; build EXIT:0. */}
             <InvestmentAnomalyCorrelator />
+            {/* F350 (overnight 2026-07-27): IntelProfileRiskCorrelator — ◈ IPRSC button (left:607200, bottom:8, zIndex:226);
+                parallel-fetches /entities/IntelProfile + /entities/RiskSignal every 90 s; keyword-correlates
+                each intel profile (name/subject/description/category/nationality) against risk signals to surface FLAGGED vs CLEAR;
+                stat tiles (intel-profiles/risk-signals/flagged/clear); ALL/FLAGGED/CLEAR filter tabs + text search;
+                expand → matched risk signal chips with severity badge + category chip + score bars;
+                red badge=flagged count, green=all-clear; isIprscQuery+buildIprscScript wired JarvisBrain; build EXIT:0. */}
+            <IntelProfileRiskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
