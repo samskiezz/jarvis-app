@@ -373,6 +373,7 @@ import GraphNodeAlertCoverage, { isGnacQuery, buildGnacScript } from '@/componen
 import IntelProfileGraphCentrality, { isIgcpQuery, buildIgcpScript } from '@/components/cinematic/IntelProfileGraphCentrality';
 import InvestmentGraphCentrality, { isIvgcQuery, buildIvgcScript } from '@/components/cinematic/InvestmentGraphCentrality';
 import SwarmJobInvestigationCorrelator from '@/components/cinematic/SwarmJobInvestigationCorrelator';
+import JarvisAssetLibrary from '@/components/cinematic/JarvisAssetLibrary';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1827,6 +1828,12 @@ function App() {
                 expand → matched swarm job chips with kind/status/score bars; amber badge=unmonitored count;
                 isSjinvQuery+buildSjinvScript wired JarvisBrain; build EXIT:0. */}
             <SwarmJobInvestigationCorrelator />
+            {/* F345 (overnight 2026-07-27): JarvisAssetLibrary — ◈ ASST button (left:584400, bottom:8, zIndex:221);
+                polls /v1/jarvis/assets/status every 60s + /v1/jarvis/assets/gaps; debounced LIBRARY search via
+                GET /v1/jarvis/assets/library?q=; ▶ WIRE per result → POST /v1/jarvis/assets/wire; STATUS|LIBRARY|GAPS
+                tab switcher; stat tiles (library/wired/gaps/tripo3d); purple accent; isAsstQuery+buildAsstScript
+                wired JarvisBrain; build EXIT:0. */}
+            <JarvisAssetLibrary />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
