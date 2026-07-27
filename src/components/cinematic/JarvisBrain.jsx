@@ -240,6 +240,7 @@ import { isIprscQuery, buildIprscScript } from "./IntelProfileRiskCorrelator";
 import { isIpacQuery, buildIpacScript } from "./IntelProfileAnomalyCorrelator";
 import { isEvlbQuery, buildEvlbScript } from "./AipEvalBenchmark";
 import { isCinvQuery, buildCinvScript } from "./ContactInvestigationCorrelator";
+import { isRsinvQuery, buildRsinvScript } from "./RiskSignalInvestigationCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2810,6 +2811,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cinv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCinvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRsinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsinv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRsinvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

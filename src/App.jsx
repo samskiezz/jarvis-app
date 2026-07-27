@@ -382,6 +382,7 @@ import IntelProfileRiskCorrelator from '@/components/cinematic/IntelProfileRiskC
 import IntelProfileAnomalyCorrelator from '@/components/cinematic/IntelProfileAnomalyCorrelator';
 import AipEvalBenchmark from '@/components/cinematic/AipEvalBenchmark';
 import ContactInvestigationCorrelator from '@/components/cinematic/ContactInvestigationCorrelator';
+import RiskSignalInvestigationCorrelator from '@/components/cinematic/RiskSignalInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1892,6 +1893,14 @@ function App() {
                 expand → matched investigation chips with seed/annotation counts + score bars;
                 amber badge=linked count, green=all-clear; isCinvQuery+buildCinvScript wired JarvisBrain; build EXIT:0. */}
             <ContactInvestigationCorrelator />
+            {/* F354 (overnight 2026-07-27): RiskSignalInvestigationCorrelator — ◈ RSINV button (left:625440, bottom:8, zIndex:230);
+                parallel-fetches /entities/RiskSignal + /v1/investigations every 90 s; keyword-correlates
+                each risk signal (name/title/category/sector/description/source) against investigation titles/descriptions
+                to surface LINKED (investigation backing found) vs UNLINKED (no investigation tracking this risk);
+                stat tiles (risk-signals/investigations/linked/unlinked); ALL/LINKED/UNLINKED filter tabs + text search;
+                expand → matched investigation chips with seed/annotation counts + score bars;
+                amber badge=unlinked count, green=all-clear; isRsinvQuery+buildRsinvScript wired JarvisBrain; build EXIT:0. */}
+            <RiskSignalInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
