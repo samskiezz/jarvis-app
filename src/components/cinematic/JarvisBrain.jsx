@@ -247,6 +247,7 @@ import { isIvinQuery, buildIvinScript } from "./InvestmentInvestigationCorrelato
 import { isRsgcQuery, buildRsgcScript } from "./RiskSignalGraphCentrality";
 import { isIpinvQuery, buildIpinvScript } from "./IntelProfileInvestigationCorrelator";
 import { isTovsQuery, buildTovsScript } from "./OntologyTypeViewsStudio";
+import { isGtmxQuery, buildGtmxScript } from "./GraphTimeMachinePanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2880,6 +2881,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tovs-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTovsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGtmxQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gtmx-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGtmxScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

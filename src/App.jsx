@@ -389,6 +389,7 @@ import InvestmentInvestigationCorrelator from '@/components/cinematic/Investment
 import RiskSignalGraphCentrality from '@/components/cinematic/RiskSignalGraphCentrality';
 import IntelProfileInvestigationCorrelator from '@/components/cinematic/IntelProfileInvestigationCorrelator';
 import OntologyTypeViewsStudio from '@/components/cinematic/OntologyTypeViewsStudio';
+import GraphTimeMachinePanel from '@/components/cinematic/GraphTimeMachinePanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1950,6 +1951,12 @@ function App() {
                 two-column layout: scrollable type list + view detail panel; violet accent (#A78BFA);
                 isTovsQuery+buildTovsScript wired JarvisBrain; build EXIT:0. */}
             <OntologyTypeViewsStudio />
+            {/* F361 (overnight 2026-07-27): GraphTimeMachinePanel — ◷ GTMX button (left:652800, bottom:8, zIndex:237);
+                AT tab: datetime picker → GET /v1/graph-time/at?ts= → node/edge counts + type breakdown at that instant;
+                GROWTH tab: t0/t1 pickers + frames slider → POST /v1/graph-time/playback → SVG node-growth sparkline;
+                stat tiles (snapshot-nodes/snapshot-edges/growth-frames/node-delta);
+                isGtmxQuery+buildGtmxScript wired JarvisBrain; build EXIT:0. */}
+            <GraphTimeMachinePanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
