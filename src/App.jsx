@@ -372,6 +372,7 @@ import IntelDecisionCoverage, { isIpdcQuery, buildIpdcScript } from '@/component
 import GraphNodeAlertCoverage, { isGnacQuery, buildGnacScript } from '@/components/cinematic/GraphNodeAlertCoverage';
 import IntelProfileGraphCentrality, { isIgcpQuery, buildIgcpScript } from '@/components/cinematic/IntelProfileGraphCentrality';
 import InvestmentGraphCentrality, { isIvgcQuery, buildIvgcScript } from '@/components/cinematic/InvestmentGraphCentrality';
+import SwarmJobInvestigationCorrelator from '@/components/cinematic/SwarmJobInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1820,6 +1821,12 @@ function App() {
                 HIGH-CENTRALITY (graph-linked) vs PERIPHERAL; stat tiles, filter tabs, expand → matched centrality node chips + score bars;
                 green badge=high-centrality count; isIvgcQuery+buildIvgcScript wired JarvisBrain; build EXIT:0. */}
             <InvestmentGraphCentrality />
+            {/* F344 (overnight 2026-07-27): SwarmJobInvestigationCorrelator — ◈ SJINV button (left:579840, bottom:8, zIndex:220);
+                parallel-fetches /entities/SwarmJob + /v1/investigations; keyword-correlates swarm jobs vs investigation titles;
+                MONITORING (swarm coverage found) vs UNMONITORED (no swarm tracks this case); stat tiles, filter tabs,
+                expand → matched swarm job chips with kind/status/score bars; amber badge=unmonitored count;
+                isSjinvQuery+buildSjinvScript wired JarvisBrain; build EXIT:0. */}
+            <SwarmJobInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
