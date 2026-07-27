@@ -374,6 +374,7 @@ import IntelProfileGraphCentrality, { isIgcpQuery, buildIgcpScript } from '@/com
 import InvestmentGraphCentrality, { isIvgcQuery, buildIvgcScript } from '@/components/cinematic/InvestmentGraphCentrality';
 import SwarmJobInvestigationCorrelator from '@/components/cinematic/SwarmJobInvestigationCorrelator';
 import JarvisAssetLibrary from '@/components/cinematic/JarvisAssetLibrary';
+import ContactAnomalyCorrelator from '@/components/cinematic/ContactAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1834,6 +1835,13 @@ function App() {
                 tab switcher; stat tiles (library/wired/gaps/tripo3d); purple accent; isAsstQuery+buildAsstScript
                 wired JarvisBrain; build EXIT:0. */}
             <JarvisAssetLibrary />
+            {/* F346 (overnight 2026-07-27): ContactAnomalyCorrelator — ◈ CACR button (left:588960, bottom:8, zIndex:222);
+                parallel-fetches /entities/Contact + /v1/jarvis/analytics/anomalies?limit=30 every 90s;
+                keyword-correlates contact name/title/email/company/description/category against anomaly metric names;
+                FLAGGED (anomaly match found) vs CLEAR; stat tiles (contacts/anomalies/flagged/clear);
+                ALL/FLAGGED/CLEAR filter tabs + text search; expand → matched anomaly chips with severity badge + z-score + score bars;
+                red badge=flagged count, green=all-clear; isContactAnomalyQuery+buildContactAnomalyScript wired JarvisBrain; build EXIT:0. */}
+            <ContactAnomalyCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

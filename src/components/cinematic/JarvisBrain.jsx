@@ -232,6 +232,7 @@ import { isIgcpQuery, buildIgcpScript } from "./IntelProfileGraphCentrality";
 import { isIvgcQuery, buildIvgcScript } from "./InvestmentGraphCentrality";
 import { isSjinvQuery, buildSjinvScript } from "./SwarmJobInvestigationCorrelator";
 import { isAsstQuery, buildAsstScript } from "./JarvisAssetLibrary";
+import { isContactAnomalyQuery, buildContactAnomalyScript } from "./ContactAnomalyCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2730,6 +2731,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:asst-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAsstScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isContactAnomalyQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cacr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildContactAnomalyScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
