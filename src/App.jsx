@@ -377,6 +377,7 @@ import JarvisAssetLibrary from '@/components/cinematic/JarvisAssetLibrary';
 import ContactAnomalyCorrelator from '@/components/cinematic/ContactAnomalyCorrelator';
 import TaskAnomalyCorrelator from '@/components/cinematic/TaskAnomalyCorrelator';
 import SwarmJobRiskCorrelator from '@/components/cinematic/SwarmJobRiskCorrelator';
+import InvestmentAnomalyCorrelator from '@/components/cinematic/InvestmentAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1857,6 +1858,13 @@ function App() {
                 ALL/EXPOSED/CLEAR filter tabs + text search; expand → matched risk signal chips with severity badge + score bars;
                 red badge=exposed count, green=all-clear; isSwarmRiskQuery+buildSwarmRiskScript wired JarvisBrain; build EXIT:0. */}
             <SwarmJobRiskCorrelator />
+            {/* F349 (overnight 2026-07-27): InvestmentAnomalyCorrelator — ◈ IVAC button (left:602640, bottom:8, zIndex:225);
+                parallel-fetches /entities/Investment + /v1/jarvis/analytics/anomalies?limit=30 every 90 s; keyword-correlates
+                each investment (name/title/description/sector/type/ticker) against anomaly metric names to surface EXPOSED vs CLEAR;
+                stat tiles (investments/anomalies/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search;
+                expand → matched anomaly chips with severity badge + z-score + score bars;
+                red badge=exposed count, green=all-clear; isIvacQuery+buildIvacScript wired JarvisBrain; build EXIT:0. */}
+            <InvestmentAnomalyCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
