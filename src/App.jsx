@@ -376,6 +376,7 @@ import SwarmJobInvestigationCorrelator from '@/components/cinematic/SwarmJobInve
 import JarvisAssetLibrary from '@/components/cinematic/JarvisAssetLibrary';
 import ContactAnomalyCorrelator from '@/components/cinematic/ContactAnomalyCorrelator';
 import TaskAnomalyCorrelator from '@/components/cinematic/TaskAnomalyCorrelator';
+import SwarmJobRiskCorrelator from '@/components/cinematic/SwarmJobRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1850,6 +1851,12 @@ function App() {
                 ALL/EXPOSED/CLEAR filter tabs + text search; expand → matched anomaly chips with severity badge + z-score + score bars;
                 red badge=exposed count, green=all-clear; isTaskAnomalyQuery+buildTaskAnomalyScript wired JarvisBrain; build EXIT:0. */}
             <TaskAnomalyCorrelator />
+            {/* F348 (overnight 2026-07-27): SwarmJobRiskCorrelator — ◈ SJRS button (left:598080, bottom:8, zIndex:224);
+                parallel-fetches /entities/SwarmJob + /entities/RiskSignal every 90 s; keyword-correlates each swarm job
+                against risk signals to surface EXPOSED vs CLEAR; stat tiles (jobs/risk-signals/exposed/clear);
+                ALL/EXPOSED/CLEAR filter tabs + text search; expand → matched risk signal chips with severity badge + score bars;
+                red badge=exposed count, green=all-clear; isSwarmRiskQuery+buildSwarmRiskScript wired JarvisBrain; build EXIT:0. */}
+            <SwarmJobRiskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
