@@ -370,6 +370,7 @@ import TaskInvestigationCorrelator from '@/components/cinematic/TaskInvestigatio
 import WatchtowerRulesPanel, { isWtwrQuery, buildWtwrScript } from '@/components/cinematic/WatchtowerRulesPanel';
 import IntelDecisionCoverage, { isIpdcQuery, buildIpdcScript } from '@/components/cinematic/IntelDecisionCoverage';
 import GraphNodeAlertCoverage, { isGnacQuery, buildGnacScript } from '@/components/cinematic/GraphNodeAlertCoverage';
+import IntelProfileGraphCentrality, { isIgcpQuery, buildIgcpScript } from '@/components/cinematic/IntelProfileGraphCentrality';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1808,6 +1809,11 @@ function App() {
                 ALERTED vs CLEAR; stat tiles, filter tabs, expand → matched alert chips + severity badge + category + score bars;
                 red badge=alerted count, green=all clear; isGnacQuery+buildGnacScript wired JarvisBrain; build EXIT:0. */}
             <GraphNodeAlertCoverage />
+            {/* F342 (overnight 2026-07-27): IntelProfileGraphCentrality — ◈ IGCP button (left:570720, bottom:8, zIndex:218);
+                parallel-fetches /entities/IntelProfile + /v1/graph/centrality; keyword-correlates profiles vs central nodes;
+                HIGH-PROFILE (graph-linked) vs PERIPHERAL; stat tiles, filter tabs, expand → matched centrality node chips + score bars;
+                green badge=high-profile count; isIgcpQuery+buildIgcpScript wired JarvisBrain; build EXIT:0. */}
+            <IntelProfileGraphCentrality />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
