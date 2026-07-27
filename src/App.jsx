@@ -369,6 +369,7 @@ import ContactSpecCoverage from '@/components/cinematic/ContactSpecCoverage';
 import TaskInvestigationCorrelator from '@/components/cinematic/TaskInvestigationCorrelator';
 import WatchtowerRulesPanel, { isWtwrQuery, buildWtwrScript } from '@/components/cinematic/WatchtowerRulesPanel';
 import IntelDecisionCoverage, { isIpdcQuery, buildIpdcScript } from '@/components/cinematic/IntelDecisionCoverage';
+import GraphNodeAlertCoverage, { isGnacQuery, buildGnacScript } from '@/components/cinematic/GraphNodeAlertCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1801,6 +1802,12 @@ function App() {
                 COVERED vs UNCOVERED; stat tiles, filter tabs, expand → matched decision chips + status badge + quality score + score bars;
                 amber badge=uncovered count; isIpdcQuery+buildIpdcScript wired JarvisBrain; build EXIT:0. */}
             <IntelDecisionCoverage />
+            {/* F341 (overnight 2026-07-27): GraphNodeAlertCoverage — ◈ GNAC button (left:566160, bottom:8, zIndex:217);
+                parallel-fetches /v1/graph/centrality + /v1/alerts every 90s;
+                keyword-correlates central node names/labels/types against alert type/category/message/source;
+                ALERTED vs CLEAR; stat tiles, filter tabs, expand → matched alert chips + severity badge + category + score bars;
+                red badge=alerted count, green=all clear; isGnacQuery+buildGnacScript wired JarvisBrain; build EXIT:0. */}
+            <GraphNodeAlertCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

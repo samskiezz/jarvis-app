@@ -227,6 +227,7 @@ import { isCspcQuery, buildCspcScript } from "./ContactSpecCoverage";
 import { isTinvQuery, buildTinvScript } from "./TaskInvestigationCorrelator";
 import { isWtwrQuery, buildWtwrScript } from "./WatchtowerRulesPanel";
 import { isIpdcQuery, buildIpdcScript } from "./IntelDecisionCoverage";
+import { isGnacQuery, buildGnacScript } from "./GraphNodeAlertCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2680,6 +2681,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipdc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpdcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGnacQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gnac-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGnacScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
