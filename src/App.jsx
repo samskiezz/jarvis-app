@@ -381,6 +381,7 @@ import InvestmentAnomalyCorrelator from '@/components/cinematic/InvestmentAnomal
 import IntelProfileRiskCorrelator from '@/components/cinematic/IntelProfileRiskCorrelator';
 import IntelProfileAnomalyCorrelator from '@/components/cinematic/IntelProfileAnomalyCorrelator';
 import AipEvalBenchmark from '@/components/cinematic/AipEvalBenchmark';
+import ContactInvestigationCorrelator from '@/components/cinematic/ContactInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1883,6 +1884,14 @@ function App() {
                 red badge=flagged count, green=all-clear; isIpacQuery+buildIpacScript wired JarvisBrain; build EXIT:0. */}
             <IntelProfileAnomalyCorrelator />
             <AipEvalBenchmark />
+            {/* F353 (overnight 2026-07-27): ContactInvestigationCorrelator — ◈ CINV button (left:620880, bottom:8, zIndex:229);
+                parallel-fetches /entities/Contact + /v1/investigations every 90 s; keyword-correlates
+                each contact (name/title/email/company/description) against investigation titles/descriptions
+                to surface LINKED (investigation connection found) vs UNLINKED (no investigative context);
+                stat tiles (contacts/investigations/linked/unlinked); ALL/LINKED/UNLINKED filter tabs + text search;
+                expand → matched investigation chips with seed/annotation counts + score bars;
+                amber badge=linked count, green=all-clear; isCinvQuery+buildCinvScript wired JarvisBrain; build EXIT:0. */}
+            <ContactInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
