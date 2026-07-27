@@ -386,6 +386,7 @@ import RiskSignalInvestigationCorrelator from '@/components/cinematic/RiskSignal
 import RiskSignalAnomalyCorrelator from '@/components/cinematic/RiskSignalAnomalyCorrelator';
 import SwarmJobAnomalyCorrelator from '@/components/cinematic/SwarmJobAnomalyCorrelator';
 import InvestmentInvestigationCorrelator from '@/components/cinematic/InvestmentInvestigationCorrelator';
+import RiskSignalGraphCentrality from '@/components/cinematic/RiskSignalGraphCentrality';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1925,6 +1926,14 @@ function App() {
                 ALL/LINKED/CLEAR filter tabs + text search; expand → matched case chips with status badge + score bars;
                 amber badge=linked count, green=all-clear; isIvinQuery+buildIvinScript wired JarvisBrain; build EXIT:0. */}
             <InvestmentInvestigationCorrelator />
+            {/* F358 (overnight 2026-07-27): RiskSignalGraphCentrality — ◈ RSGC button (left:639120, bottom:8, zIndex:234);
+                parallel-fetches /entities/RiskSignal + /v1/graph/centrality every 90 s;
+                keyword-correlates each risk signal (name/title/category/sector/description/source) against centrality node
+                names/labels/types to surface HIGH-CENTRALITY (graph-linked) vs PERIPHERAL risk signals;
+                stat tiles (risk-signals/central-nodes/high-centrality/peripheral); ALL/HIGH-CENTRALITY/PERIPHERAL filter tabs
+                + text search; expand → matched centrality node chips with c= score display + score bars;
+                green badge=high-centrality count; isRsgcQuery+buildRsgcScript wired JarvisBrain; build EXIT:0. */}
+            <RiskSignalGraphCentrality />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
