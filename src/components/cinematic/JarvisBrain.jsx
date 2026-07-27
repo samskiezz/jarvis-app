@@ -246,6 +246,7 @@ import { isSwarmAnomalyQuery, buildSwarmAnomalyScript } from "./SwarmJobAnomalyC
 import { isIvinQuery, buildIvinScript } from "./InvestmentInvestigationCorrelator";
 import { isRsgcQuery, buildRsgcScript } from "./RiskSignalGraphCentrality";
 import { isIpinvQuery, buildIpinvScript } from "./IntelProfileInvestigationCorrelator";
+import { isTovsQuery, buildTovsScript } from "./OntologyTypeViewsStudio";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2870,6 +2871,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipinv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpinvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTovsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tovs-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTovsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

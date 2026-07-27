@@ -388,6 +388,7 @@ import SwarmJobAnomalyCorrelator from '@/components/cinematic/SwarmJobAnomalyCor
 import InvestmentInvestigationCorrelator from '@/components/cinematic/InvestmentInvestigationCorrelator';
 import RiskSignalGraphCentrality from '@/components/cinematic/RiskSignalGraphCentrality';
 import IntelProfileInvestigationCorrelator from '@/components/cinematic/IntelProfileInvestigationCorrelator';
+import OntologyTypeViewsStudio from '@/components/cinematic/OntologyTypeViewsStudio';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1943,6 +1944,12 @@ function App() {
                 expand → matched investigation chips with seed/annotation counts + score bars;
                 amber badge=linked count, green=all-clear; isIpinvQuery+buildIpinvScript wired JarvisBrain; build EXIT:0. */}
             <IntelProfileInvestigationCorrelator />
+            {/* F360 (overnight 2026-07-27): OntologyTypeViewsStudio — ◈ TOVS button (left:648240, bottom:8, zIndex:236);
+                polls /v1/ontology/types every 120 s; lazy-fetches /v1/ontology-ext/views/{type_id} on selection;
+                VIEW tab shows summary/detail/related field chips; EDIT tab saves custom layout via POST;
+                two-column layout: scrollable type list + view detail panel; violet accent (#A78BFA);
+                isTovsQuery+buildTovsScript wired JarvisBrain; build EXIT:0. */}
+            <OntologyTypeViewsStudio />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
