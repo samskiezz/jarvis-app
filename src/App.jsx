@@ -380,6 +380,7 @@ import SwarmJobRiskCorrelator from '@/components/cinematic/SwarmJobRiskCorrelato
 import InvestmentAnomalyCorrelator from '@/components/cinematic/InvestmentAnomalyCorrelator';
 import IntelProfileRiskCorrelator from '@/components/cinematic/IntelProfileRiskCorrelator';
 import IntelProfileAnomalyCorrelator from '@/components/cinematic/IntelProfileAnomalyCorrelator';
+import AipEvalBenchmark from '@/components/cinematic/AipEvalBenchmark';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1881,6 +1882,7 @@ function App() {
                 ALL/FLAGGED/CLEAR filter tabs + text search; expand → matched anomaly chips with severity badge + z-score + score bars;
                 red badge=flagged count, green=all-clear; isIpacQuery+buildIpacScript wired JarvisBrain; build EXIT:0. */}
             <IntelProfileAnomalyCorrelator />
+            <AipEvalBenchmark />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
