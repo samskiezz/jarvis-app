@@ -375,6 +375,7 @@ import InvestmentGraphCentrality, { isIvgcQuery, buildIvgcScript } from '@/compo
 import SwarmJobInvestigationCorrelator from '@/components/cinematic/SwarmJobInvestigationCorrelator';
 import JarvisAssetLibrary from '@/components/cinematic/JarvisAssetLibrary';
 import ContactAnomalyCorrelator from '@/components/cinematic/ContactAnomalyCorrelator';
+import TaskAnomalyCorrelator from '@/components/cinematic/TaskAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1842,6 +1843,13 @@ function App() {
                 ALL/FLAGGED/CLEAR filter tabs + text search; expand → matched anomaly chips with severity badge + z-score + score bars;
                 red badge=flagged count, green=all-clear; isContactAnomalyQuery+buildContactAnomalyScript wired JarvisBrain; build EXIT:0. */}
             <ContactAnomalyCorrelator />
+            {/* F347 (overnight 2026-07-27): TaskAnomalyCorrelator — ◈ TACR button (left:593520, bottom:8, zIndex:223);
+                parallel-fetches /entities/Task + /v1/jarvis/analytics/anomalies?limit=30 every 90s;
+                keyword-correlates task title/name/description/type/status/assignee against anomaly metric names;
+                EXPOSED (anomaly match found) vs CLEAR; stat tiles (tasks/anomalies/exposed/clear);
+                ALL/EXPOSED/CLEAR filter tabs + text search; expand → matched anomaly chips with severity badge + z-score + score bars;
+                red badge=exposed count, green=all-clear; isTaskAnomalyQuery+buildTaskAnomalyScript wired JarvisBrain; build EXIT:0. */}
+            <TaskAnomalyCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
