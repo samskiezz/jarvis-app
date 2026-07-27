@@ -237,6 +237,7 @@ import { isTaskAnomalyQuery, buildTaskAnomalyScript } from "./TaskAnomalyCorrela
 import { isSwarmRiskQuery, buildSwarmRiskScript } from "./SwarmJobRiskCorrelator";
 import { isIvacQuery, buildIvacScript } from "./InvestmentAnomalyCorrelator";
 import { isIprscQuery, buildIprscScript } from "./IntelProfileRiskCorrelator";
+import { isIpacQuery, buildIpacScript } from "./IntelProfileAnomalyCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2780,6 +2781,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iprsc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIprscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIpacQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipac-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpacScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
