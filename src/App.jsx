@@ -384,6 +384,7 @@ import AipEvalBenchmark from '@/components/cinematic/AipEvalBenchmark';
 import ContactInvestigationCorrelator from '@/components/cinematic/ContactInvestigationCorrelator';
 import RiskSignalInvestigationCorrelator from '@/components/cinematic/RiskSignalInvestigationCorrelator';
 import RiskSignalAnomalyCorrelator from '@/components/cinematic/RiskSignalAnomalyCorrelator';
+import SwarmJobAnomalyCorrelator from '@/components/cinematic/SwarmJobAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1909,6 +1910,13 @@ function App() {
                 ALL/EXPOSED/CLEAR filter tabs + text search; expand → matched anomaly chips with severity badge + z-score + score bars;
                 red badge=exposed count, green=all-clear; isRsacQuery+buildRsacScript wired JarvisBrain; build EXIT:0. */}
             <RiskSignalAnomalyCorrelator />
+            {/* F356 (overnight 2026-07-27): SwarmJobAnomalyCorrelator — ◈ SJAN button (left:634560, bottom:8, zIndex:232);
+                parallel-fetches /entities/SwarmJob + /v1/jarvis/analytics/anomalies?limit=30 every 90 s;
+                keyword-correlates each swarm job (name/kind/target/description/type/status) against anomaly metric names
+                to surface EXPOSED (anomaly match found) vs CLEAR; stat tiles (swarm-jobs/anomalies/exposed/clear);
+                ALL/EXPOSED/CLEAR filter tabs + text search; expand → matched anomaly chips with severity badge + z-score + score bars;
+                red badge=exposed count, green=all-clear; isSwarmAnomalyQuery+buildSwarmAnomalyScript wired JarvisBrain; build EXIT:0. */}
+            <SwarmJobAnomalyCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
