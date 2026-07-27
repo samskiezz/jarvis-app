@@ -368,6 +368,7 @@ import SwarmJobDecisionCoverage from '@/components/cinematic/SwarmJobDecisionCov
 import ContactSpecCoverage from '@/components/cinematic/ContactSpecCoverage';
 import TaskInvestigationCorrelator from '@/components/cinematic/TaskInvestigationCorrelator';
 import WatchtowerRulesPanel, { isWtwrQuery, buildWtwrScript } from '@/components/cinematic/WatchtowerRulesPanel';
+import IntelDecisionCoverage, { isIpdcQuery, buildIpdcScript } from '@/components/cinematic/IntelDecisionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1794,6 +1795,12 @@ function App() {
                 CREATE tab: name + severity slider + target → POST /v1/rules;
                 green badge=enabled count, amber=any disabled; isWtwrQuery+buildWtwrScript wired JarvisBrain; build EXIT:0. */}
             <WatchtowerRulesPanel />
+            {/* F340 (overnight 2026-07-27): IntelDecisionCoverage — ◈ IPDC button (left:561600, bottom:8, zIndex:216);
+                parallel-fetches /entities/IntelProfile + /v1/decision/list?limit=50 every 90s;
+                keyword-correlates intel profile name/subject/description/category/nationality against decision titles/body_md;
+                COVERED vs UNCOVERED; stat tiles, filter tabs, expand → matched decision chips + status badge + quality score + score bars;
+                amber badge=uncovered count; isIpdcQuery+buildIpdcScript wired JarvisBrain; build EXIT:0. */}
+            <IntelDecisionCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

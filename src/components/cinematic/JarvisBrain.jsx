@@ -226,6 +226,7 @@ import { isSwarmDecisionQuery, buildSwarmDecisionScript } from "./SwarmJobDecisi
 import { isCspcQuery, buildCspcScript } from "./ContactSpecCoverage";
 import { isTinvQuery, buildTinvScript } from "./TaskInvestigationCorrelator";
 import { isWtwrQuery, buildWtwrScript } from "./WatchtowerRulesPanel";
+import { isIpdcQuery, buildIpdcScript } from "./IntelDecisionCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2670,6 +2671,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:wtwr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildWtwrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIpdcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipdc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpdcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
