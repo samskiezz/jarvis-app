@@ -409,6 +409,7 @@ import DatasetSpecCoverage, { isDspcQuery, buildDspcScript } from '@/components/
 import DatasetAlertCorrelator, { isDsalQuery, buildDsalScript } from '@/components/cinematic/DatasetAlertCorrelator';
 import OpsEventInvestmentCorrelator, { isOeiaQuery, buildOeiaScript } from '@/components/cinematic/OpsEventInvestmentCorrelator';
 import DatasetAnomalyCorrelator, { isDsanQuery, buildDsanScript } from '@/components/cinematic/DatasetAnomalyCorrelator';
+import OpsEventSpecCoverage from '@/components/cinematic/OpsEventSpecCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2126,6 +2127,18 @@ function App() {
                 "dataset anomaly/anomaly dataset/dsan/datasets with anomalies/exposed datasets anomaly" voice triggers;
                 build EXIT:0. */}
             <DatasetAnomalyCorrelator />
+            {/* F381 (overnight 2026-07-28): OpsEventSpecCoverage — ◈ OESC button (left:743440, bottom:8, zIndex:257);
+                parallel-fetches /v1/ops/events + /v1/spec/list every 90 s;
+                keyword-correlates each ops event (event_type/title/service/severity/source/message/description)
+                against spec titles/descriptions to surface DOCUMENTED (spec backing found) vs UNDOCUMENTED (no spec);
+                stat tiles (ops-events/specs/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search;
+                expand event → matched spec chips with status badge (approved=green/draft=amber) + score bars;
+                amber badge=undocumented count, green=all documented; ▶ ASSESS → /v1/jarvis/agent/chat
+                2-sentence ops-spec coverage brief + TTS via jarvis:speak-dossier;
+                isOescQuery+buildOescScript wired JarvisBrain;
+                "ops spec/spec ops/oesc/ops events spec/documented ops/ops event coverage/which ops events have specs" voice triggers;
+                build EXIT:0. */}
+            <OpsEventSpecCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +

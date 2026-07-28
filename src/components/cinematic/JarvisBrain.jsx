@@ -267,6 +267,7 @@ import { isDspcQuery, buildDspcScript } from "./DatasetSpecCoverage";
 import { isDsalQuery, buildDsalScript } from "./DatasetAlertCorrelator";
 import { isOeiaQuery, buildOeiaScript } from "./OpsEventInvestmentCorrelator";
 import { isDsanQuery, buildDsanScript } from "./DatasetAnomalyCorrelator";
+import { isOescQuery, buildOescScript } from "./OpsEventSpecCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3080,6 +3081,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dsan-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDsanScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isOescQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oesc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOescScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
