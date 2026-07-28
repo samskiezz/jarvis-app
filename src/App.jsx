@@ -397,6 +397,7 @@ import TaskDecisionCoverage, { isTdcvQuery, buildTdcvScript } from '@/components
 import IntelProfileDatasetCorrelator, { isIpdsQuery, buildIpdsScript } from '@/components/cinematic/IntelProfileDatasetCorrelator';
 import ContactDatasetCoverage, { isCdstQuery, buildCdstScript } from '@/components/cinematic/ContactDatasetCoverage';
 import SciDomainConsolePanel, { isSdmcQuery, buildSdmcScript } from '@/components/cinematic/SciDomainConsolePanel';
+import ScenarioAnomalyCorrelator, { isScanQuery, buildScanScript } from '@/components/cinematic/ScenarioAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2006,6 +2007,14 @@ function App() {
                 expand contact → matched dataset chips with kind chip + row count + score bars;
                 amber badge=blind count, green=all documented; isCdstQuery+buildCdstScript wired JarvisBrain; build EXIT:0. */}
             <ContactDatasetCoverage />
+            {/* F369 (overnight 2026-07-28): ScenarioAnomalyCorrelator — ◈ SCAN button (left:689280, bottom:8, zIndex:245);
+                parallel-fetches /v1/scenario/list + /v1/jarvis/analytics/anomalies?limit=30 every 90 s;
+                keyword-correlates each scenario (name/title/description/type/category/tags) against anomaly metric names
+                to surface EXPOSED (anomaly match found) vs CLEAR (no anomalous conditions);
+                stat tiles (scenarios/anomalies/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search;
+                expand → type chip + category chip + matched anomaly chips with severity badge + z-score + score bars;
+                red badge=exposed count, green=all-clear; isScanQuery+buildScanScript wired JarvisBrain; build EXIT:0. */}
+            <ScenarioAnomalyCorrelator />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
