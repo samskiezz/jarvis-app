@@ -248,6 +248,7 @@ import { isRsgcQuery, buildRsgcScript } from "./RiskSignalGraphCentrality";
 import { isIpinvQuery, buildIpinvScript } from "./IntelProfileInvestigationCorrelator";
 import { isTovsQuery, buildTovsScript } from "./OntologyTypeViewsStudio";
 import { isGtmxQuery, buildGtmxScript } from "./GraphTimeMachinePanel";
+import { isCsjcQuery, buildCsjcScript } from "./ContactSwarmJobCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2890,6 +2891,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gtmx-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGtmxScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCsjcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csjc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCsjcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

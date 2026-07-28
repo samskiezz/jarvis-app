@@ -390,6 +390,7 @@ import RiskSignalGraphCentrality from '@/components/cinematic/RiskSignalGraphCen
 import IntelProfileInvestigationCorrelator from '@/components/cinematic/IntelProfileInvestigationCorrelator';
 import OntologyTypeViewsStudio from '@/components/cinematic/OntologyTypeViewsStudio';
 import GraphTimeMachinePanel from '@/components/cinematic/GraphTimeMachinePanel';
+import ContactSwarmJobCoverage, { isCsjcQuery, buildCsjcScript } from '@/components/cinematic/ContactSwarmJobCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1957,6 +1958,14 @@ function App() {
                 stat tiles (snapshot-nodes/snapshot-edges/growth-frames/node-delta);
                 isGtmxQuery+buildGtmxScript wired JarvisBrain; build EXIT:0. */}
             <GraphTimeMachinePanel />
+            {/* F362 (overnight 2026-07-28): ContactSwarmJobCoverage — ◈ CSJC button (left:657360, bottom:8, zIndex:238);
+                parallel-fetches /entities/Contact + /entities/SwarmJob every 90 s;
+                keyword-correlates each contact (name/title/email/company/description) against swarm job fields
+                to surface MONITORED (swarm coverage found) vs UNMONITORED (automation gap);
+                stat tiles (contacts/swarm-jobs/monitored/unmonitored); ALL/MONITORED/UNMONITORED filter tabs
+                + text search; expand → matched swarm job chips with kind/status/score bars;
+                amber badge=unmonitored count, green=all-monitored; isCsjcQuery+buildCsjcScript wired JarvisBrain; build EXIT:0. */}
+            <ContactSwarmJobCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
