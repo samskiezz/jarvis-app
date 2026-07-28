@@ -394,6 +394,7 @@ import ContactSwarmJobCoverage, { isCsjcQuery, buildCsjcScript } from '@/compone
 import FoundryPipelineBrowser, { isFndpQuery, buildFndpScript } from '@/components/cinematic/FoundryPipelineBrowser';
 import CollabNotesPanel, { isNotesQuery, buildNotesScript } from '@/components/cinematic/CollabNotesPanel';
 import TaskDecisionCoverage, { isTdcvQuery, buildTdcvScript } from '@/components/cinematic/TaskDecisionCoverage';
+import IntelProfileDatasetCorrelator, { isIpdsQuery, buildIpdsScript } from '@/components/cinematic/IntelProfileDatasetCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1987,6 +1988,14 @@ function App() {
                 expand → matched decision chips with status badge (final=green/draft=amber) + quality score + score bars;
                 amber badge=uncovered count, green=all covered; isTdcvQuery+buildTdcvScript wired JarvisBrain; build EXIT:0. */}
             <TaskDecisionCoverage />
+            {/* F366 (overnight 2026-07-28): IntelProfileDatasetCorrelator — ◈ IPDS button (left:675600, bottom:8, zIndex:242);
+                parallel-fetches /entities/IntelProfile + /v1/datasets every 90 s;
+                keyword-correlates each intel profile (name/subject/description/category/nationality) against dataset catalog;
+                DOCUMENTED (dataset coverage found) vs BLIND (no data backing for this intel profile);
+                stat tiles (intel-profiles/datasets/documented/blind); ALL/DOCUMENTED/BLIND filter tabs + text search;
+                expand → matched dataset chips with kind chip + row count + score bars;
+                amber badge=blind count, green=all documented; isIpdsQuery+buildIpdsScript wired JarvisBrain; build EXIT:0. */}
+            <IntelProfileDatasetCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

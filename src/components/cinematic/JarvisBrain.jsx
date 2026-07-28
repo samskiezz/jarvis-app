@@ -252,6 +252,7 @@ import { isCsjcQuery, buildCsjcScript } from "./ContactSwarmJobCoverage";
 import { isFndpQuery, buildFndpScript } from "./FoundryPipelineBrowser";
 import { isNotesQuery, buildNotesScript } from "./CollabNotesPanel";
 import { isTdcvQuery, buildTdcvScript } from "./TaskDecisionCoverage";
+import { isIpdsQuery, buildIpdsScript } from "./IntelProfileDatasetCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2930,6 +2931,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tdcv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTdcvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIpdsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipds-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpdsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
