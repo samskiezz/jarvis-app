@@ -399,6 +399,7 @@ import ContactDatasetCoverage, { isCdstQuery, buildCdstScript } from '@/componen
 import SciDomainConsolePanel, { isSdmcQuery, buildSdmcScript } from '@/components/cinematic/SciDomainConsolePanel';
 import ScenarioAnomalyCorrelator, { isScanQuery, buildScanScript } from '@/components/cinematic/ScenarioAnomalyCorrelator';
 import Sci3dStudio, { isSci3dQuery, buildSci3dScript } from '@/components/cinematic/Sci3dStudio';
+import TenantRegistryPanel, { isTnrpQuery, buildTnrpScript } from '@/components/cinematic/TenantRegistryPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2021,6 +2022,13 @@ function App() {
                 CATALOG|MOLECULE|TRAJECTORY|ORBITAL tabs; preset picker + SVG visualizations;
                 green badge=dataset count; isSci3dQuery+buildSci3dScript wired JarvisBrain; build EXIT:0. */}
             <Sci3dStudio />
+            {/* F371 (overnight 2026-07-28): TenantRegistryPanel — ◈ TNRP button (left:698400, bottom:8, zIndex:247);
+                polls GET /v1/tenants every 90 s + GET /v1/tenants/whoami on mount;
+                stat tiles (tenants/my-tenant/my-role/principal); TENANTS|WHOAMI|ADD tab switcher;
+                TENANTS: expand → lazy GET /v1/tenants/{id}/members (principal/role chips);
+                WHOAMI: resolved identity display; ADD: POST /v1/tenants form;
+                green badge=tenant count; isTnrpQuery+buildTnrpScript wired JarvisBrain; build EXIT:0. */}
+            <TenantRegistryPanel />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
