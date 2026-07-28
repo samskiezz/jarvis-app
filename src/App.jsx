@@ -404,6 +404,7 @@ import MultiEntityCoverageMatrix, { isMecmQuery, buildMecmScript } from '@/compo
 import UnderworldBridgeConsole, { isUwbrQuery, buildUwbrScript } from '@/components/cinematic/UnderworldBridgeConsole';
 import RiskSignalDecisionCoverage, { isRsdcQuery, buildRsdcScript } from '@/components/cinematic/RiskSignalDecisionCoverage';
 import OpsEventAnomalyCorrelator, { isOeanQuery, buildOeanScript } from '@/components/cinematic/OpsEventAnomalyCorrelator';
+import ContactAlertCorrelator, { isCaclQuery, buildCaclScript } from '@/components/cinematic/ContactAlertCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2063,6 +2064,16 @@ function App() {
                 "ops anomaly/anomaly ops/oean/ops events anomaly/anomalous ops/ops event anomaly correlator" voice triggers;
                 build EXIT:0. */}
             <OpsEventAnomalyCorrelator />
+            {/* F376 (overnight 2026-07-28): ContactAlertCorrelator — ◈ CACL button (left:720640, bottom:8, zIndex:252);
+                parallel-fetches /entities/Contact + /v1/alerts every 90 s;
+                keyword-correlates each contact (name/email/company/title/category) against alert fields
+                to surface FLAGGED (alert match found) vs CLEAR; stat tiles (contacts/alerts/flagged/clear);
+                ALL/FLAGGED/CLEAR filter tabs + text search; expand contact → matched alert chips with severity badge
+                + score bars; red badge=flagged count, green=all-clear; ▶ ASSESS → /v1/jarvis/agent/chat
+                2-sentence contact alert brief + TTS via jarvis:speak-dossier; isCaclQuery+buildCaclScript wired JarvisBrain;
+                "contact alert/alert contact/cacl/contacts with alerts/flagged contacts/contact alert correlator" voice triggers;
+                build EXIT:0. */}
+            <ContactAlertCorrelator />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
