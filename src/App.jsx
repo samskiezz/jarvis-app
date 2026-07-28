@@ -398,6 +398,7 @@ import IntelProfileDatasetCorrelator, { isIpdsQuery, buildIpdsScript } from '@/c
 import ContactDatasetCoverage, { isCdstQuery, buildCdstScript } from '@/components/cinematic/ContactDatasetCoverage';
 import SciDomainConsolePanel, { isSdmcQuery, buildSdmcScript } from '@/components/cinematic/SciDomainConsolePanel';
 import ScenarioAnomalyCorrelator, { isScanQuery, buildScanScript } from '@/components/cinematic/ScenarioAnomalyCorrelator';
+import Sci3dStudio, { isSci3dQuery, buildSci3dScript } from '@/components/cinematic/Sci3dStudio';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2015,6 +2016,11 @@ function App() {
                 expand → type chip + category chip + matched anomaly chips with severity badge + z-score + score bars;
                 red badge=exposed count, green=all-clear; isScanQuery+buildScanScript wired JarvisBrain; build EXIT:0. */}
             <ScenarioAnomalyCorrelator />
+            {/* F370 (overnight 2026-07-28): Sci3dStudio — ⬡ SCI3D button (left:693840, bottom:8, zIndex:246);
+                GET /v1/sci/3d/catalog + POST /v1/sci/3d/molecule + /trajectory + /orbital;
+                CATALOG|MOLECULE|TRAJECTORY|ORBITAL tabs; preset picker + SVG visualizations;
+                green badge=dataset count; isSci3dQuery+buildSci3dScript wired JarvisBrain; build EXIT:0. */}
+            <Sci3dStudio />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
