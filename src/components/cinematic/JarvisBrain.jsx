@@ -263,6 +263,7 @@ import { isUwbrQuery, buildUwbrScript } from "./UnderworldBridgeConsole";
 import { isRsdcQuery, buildRsdcScript } from "./RiskSignalDecisionCoverage";
 import { isOeanQuery, buildOeanScript } from "./OpsEventAnomalyCorrelator";
 import { isCaclQuery, buildCaclScript } from "./ContactAlertCorrelator";
+import { isDspcQuery, buildDspcScript } from "./DatasetSpecCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3040,6 +3041,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cacl-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCaclScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isDspcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dspc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDspcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

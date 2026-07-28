@@ -405,6 +405,7 @@ import UnderworldBridgeConsole, { isUwbrQuery, buildUwbrScript } from '@/compone
 import RiskSignalDecisionCoverage, { isRsdcQuery, buildRsdcScript } from '@/components/cinematic/RiskSignalDecisionCoverage';
 import OpsEventAnomalyCorrelator, { isOeanQuery, buildOeanScript } from '@/components/cinematic/OpsEventAnomalyCorrelator';
 import ContactAlertCorrelator, { isCaclQuery, buildCaclScript } from '@/components/cinematic/ContactAlertCorrelator';
+import DatasetSpecCoverage, { isDspcQuery, buildDspcScript } from '@/components/cinematic/DatasetSpecCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2074,6 +2075,18 @@ function App() {
                 "contact alert/alert contact/cacl/contacts with alerts/flagged contacts/contact alert correlator" voice triggers;
                 build EXIT:0. */}
             <ContactAlertCorrelator />
+            {/* F377 (overnight 2026-07-28): DatasetSpecCoverage — ◈ DSPC button (left:725200, bottom:8, zIndex:253);
+                parallel-fetches /v1/datasets + /v1/spec/list every 90 s;
+                keyword-correlates each dataset (name/description/kind/source) against spec entries (title/body_md/kind)
+                to surface DOCUMENTED (spec found) vs UNDOCUMENTED (no spec backing);
+                stat tiles (datasets/specs/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search;
+                expand dataset → matched spec chips with status badge + score bars;
+                amber badge=undocumented count, green=all documented; ▶ ASSESS → /v1/jarvis/agent/chat
+                2-sentence dataset-spec coverage brief + TTS via jarvis:speak-dossier;
+                isDspcQuery+buildDspcScript wired JarvisBrain;
+                "dataset spec/spec dataset/dspc/dataset coverage/undocumented datasets/spec dataset coverage" voice triggers;
+                build EXIT:0. */}
+            <DatasetSpecCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
