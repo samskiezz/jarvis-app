@@ -264,6 +264,7 @@ import { isRsdcQuery, buildRsdcScript } from "./RiskSignalDecisionCoverage";
 import { isOeanQuery, buildOeanScript } from "./OpsEventAnomalyCorrelator";
 import { isCaclQuery, buildCaclScript } from "./ContactAlertCorrelator";
 import { isDspcQuery, buildDspcScript } from "./DatasetSpecCoverage";
+import { isDsalQuery, buildDsalScript } from "./DatasetAlertCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3050,6 +3051,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dspc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDspcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isDsalQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dsal-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDsalScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

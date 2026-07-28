@@ -406,6 +406,7 @@ import RiskSignalDecisionCoverage, { isRsdcQuery, buildRsdcScript } from '@/comp
 import OpsEventAnomalyCorrelator, { isOeanQuery, buildOeanScript } from '@/components/cinematic/OpsEventAnomalyCorrelator';
 import ContactAlertCorrelator, { isCaclQuery, buildCaclScript } from '@/components/cinematic/ContactAlertCorrelator';
 import DatasetSpecCoverage, { isDspcQuery, buildDspcScript } from '@/components/cinematic/DatasetSpecCoverage';
+import DatasetAlertCorrelator, { isDsalQuery, buildDsalScript } from '@/components/cinematic/DatasetAlertCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2087,6 +2088,18 @@ function App() {
                 "dataset spec/spec dataset/dspc/dataset coverage/undocumented datasets/spec dataset coverage" voice triggers;
                 build EXIT:0. */}
             <DatasetSpecCoverage />
+            {/* F378 (overnight 2026-07-28): DatasetAlertCorrelator — ◈ DSAL button (left:729760, bottom:8, zIndex:254);
+                parallel-fetches /v1/datasets + /v1/alerts every 90 s;
+                keyword-correlates each dataset (name/key/description/kind/source) against alert fields
+                to surface EXPOSED (active alert match) vs CLEAR;
+                stat tiles (datasets/alerts/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + search;
+                expand dataset → matched alert chips with severity badge + category chip + score bars;
+                red badge=exposed count, green=all-clear; ▶ ASSESS → /v1/jarvis/agent/chat
+                2-sentence dataset alert coverage brief + TTS via jarvis:speak-dossier;
+                isDsalQuery+buildDsalScript wired JarvisBrain;
+                "dataset alert/alert dataset/dsal/datasets with alerts/exposed datasets" voice triggers;
+                build EXIT:0. */}
+            <DatasetAlertCorrelator />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
