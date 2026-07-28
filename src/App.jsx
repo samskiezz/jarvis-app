@@ -395,6 +395,7 @@ import FoundryPipelineBrowser, { isFndpQuery, buildFndpScript } from '@/componen
 import CollabNotesPanel, { isNotesQuery, buildNotesScript } from '@/components/cinematic/CollabNotesPanel';
 import TaskDecisionCoverage, { isTdcvQuery, buildTdcvScript } from '@/components/cinematic/TaskDecisionCoverage';
 import IntelProfileDatasetCorrelator, { isIpdsQuery, buildIpdsScript } from '@/components/cinematic/IntelProfileDatasetCorrelator';
+import ContactDatasetCoverage, { isCdstQuery, buildCdstScript } from '@/components/cinematic/ContactDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1996,6 +1997,14 @@ function App() {
                 expand → matched dataset chips with kind chip + row count + score bars;
                 amber badge=blind count, green=all documented; isIpdsQuery+buildIpdsScript wired JarvisBrain; build EXIT:0. */}
             <IntelProfileDatasetCorrelator />
+            {/* F367 (overnight 2026-07-28): ContactDatasetCoverage — ◈ CDST button (left:680160, bottom:8, zIndex:243);
+                parallel-fetches /entities/Contact + /v1/datasets every 90 s; keyword-correlates each contact
+                (name/title/email/company/description) against dataset catalog (name/key/description/kind/source)
+                to surface DOCUMENTED (dataset coverage found) vs BLIND (no data backing);
+                stat tiles (contacts/datasets/documented/blind); ALL/DOCUMENTED/BLIND filter tabs + text search;
+                expand contact → matched dataset chips with kind chip + row count + score bars;
+                amber badge=blind count, green=all documented; isCdstQuery+buildCdstScript wired JarvisBrain; build EXIT:0. */}
+            <ContactDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
