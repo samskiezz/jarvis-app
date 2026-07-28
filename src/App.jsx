@@ -401,6 +401,7 @@ import ScenarioAnomalyCorrelator, { isScanQuery, buildScanScript } from '@/compo
 import Sci3dStudio, { isSci3dQuery, buildSci3dScript } from '@/components/cinematic/Sci3dStudio';
 import TenantRegistryPanel, { isTnrpQuery, buildTnrpScript } from '@/components/cinematic/TenantRegistryPanel';
 import MultiEntityCoverageMatrix, { isMecmQuery, buildMecmScript } from '@/components/cinematic/MultiEntityCoverageMatrix';
+import UnderworldBridgeConsole, { isUwbrQuery, buildUwbrScript } from '@/components/cinematic/UnderworldBridgeConsole';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2038,6 +2039,11 @@ function App() {
                 col-avg footer row; row-avg column; 90 s auto-refresh;
                 isMecmQuery+buildMecmScript wired JarvisBrain; build EXIT:0. */}
             <MultiEntityCoverageMatrix />
+            {/* F373 (overnight 2026-07-28): UnderworldBridgeConsole — ⬡ UWBR button (left:707520, bottom:8, zIndex:249);
+                polls GET /v1/bridge/status every 60 s; 5 tabs: STATUS | COUNTERFACTUAL | OPTIMIZE | TEMPORAL | GRAPH;
+                real /v1/bridge/* endpoints (counterfactual, optimize, temporal, graph analytics);
+                isUwbrQuery+buildUwbrScript wired JarvisBrain; build EXIT:0. */}
+            <UnderworldBridgeConsole />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
