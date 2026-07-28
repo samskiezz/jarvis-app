@@ -393,6 +393,7 @@ import GraphTimeMachinePanel from '@/components/cinematic/GraphTimeMachinePanel'
 import ContactSwarmJobCoverage, { isCsjcQuery, buildCsjcScript } from '@/components/cinematic/ContactSwarmJobCoverage';
 import FoundryPipelineBrowser, { isFndpQuery, buildFndpScript } from '@/components/cinematic/FoundryPipelineBrowser';
 import CollabNotesPanel, { isNotesQuery, buildNotesScript } from '@/components/cinematic/CollabNotesPanel';
+import TaskDecisionCoverage, { isTdcvQuery, buildTdcvScript } from '@/components/cinematic/TaskDecisionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1978,6 +1979,14 @@ function App() {
                 GET /v1/activity?limit=50 (60-s poll); NOTES tab: resource picker + threaded note list + compose form;
                 ACTIVITY tab: unified feed with search; green badge=activity count; isNotesQuery+buildNotesScript wired JarvisBrain; build EXIT:0. */}
             <CollabNotesPanel />
+            {/* F365 (overnight 2026-07-28): TaskDecisionCoverage — ◈ TDCV button (left:671040, bottom:8, zIndex:241);
+                parallel-fetches /entities/Task + /v1/decision/list?limit=50 every 90 s;
+                keyword-correlates each task (title/name/description/type/status/assignee) against decision titles/body_md
+                to surface COVERED (decision backing found) vs UNCOVERED (no decision — governance gap);
+                stat tiles (tasks/decisions/covered/uncovered); ALL/COVERED/UNCOVERED filter tabs + text search;
+                expand → matched decision chips with status badge (final=green/draft=amber) + quality score + score bars;
+                amber badge=uncovered count, green=all covered; isTdcvQuery+buildTdcvScript wired JarvisBrain; build EXIT:0. */}
+            <TaskDecisionCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

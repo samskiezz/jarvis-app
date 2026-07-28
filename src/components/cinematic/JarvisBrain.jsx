@@ -251,6 +251,7 @@ import { isGtmxQuery, buildGtmxScript } from "./GraphTimeMachinePanel";
 import { isCsjcQuery, buildCsjcScript } from "./ContactSwarmJobCoverage";
 import { isFndpQuery, buildFndpScript } from "./FoundryPipelineBrowser";
 import { isNotesQuery, buildNotesScript } from "./CollabNotesPanel";
+import { isTdcvQuery, buildTdcvScript } from "./TaskDecisionCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2920,6 +2921,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:notes-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildNotesScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTdcvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tdcv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTdcvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
