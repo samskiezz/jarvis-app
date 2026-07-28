@@ -265,6 +265,7 @@ import { isOeanQuery, buildOeanScript } from "./OpsEventAnomalyCorrelator";
 import { isCaclQuery, buildCaclScript } from "./ContactAlertCorrelator";
 import { isDspcQuery, buildDspcScript } from "./DatasetSpecCoverage";
 import { isDsalQuery, buildDsalScript } from "./DatasetAlertCorrelator";
+import { isOeiaQuery, buildOeiaScript } from "./OpsEventInvestmentCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3060,6 +3061,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dsal-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDsalScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isOeiaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oeia-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOeiaScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -407,6 +407,7 @@ import OpsEventAnomalyCorrelator, { isOeanQuery, buildOeanScript } from '@/compo
 import ContactAlertCorrelator, { isCaclQuery, buildCaclScript } from '@/components/cinematic/ContactAlertCorrelator';
 import DatasetSpecCoverage, { isDspcQuery, buildDspcScript } from '@/components/cinematic/DatasetSpecCoverage';
 import DatasetAlertCorrelator, { isDsalQuery, buildDsalScript } from '@/components/cinematic/DatasetAlertCorrelator';
+import OpsEventInvestmentCorrelator, { isOeiaQuery, buildOeiaScript } from '@/components/cinematic/OpsEventInvestmentCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2100,6 +2101,18 @@ function App() {
                 "dataset alert/alert dataset/dsal/datasets with alerts/exposed datasets" voice triggers;
                 build EXIT:0. */}
             <DatasetAlertCorrelator />
+            {/* F379 (overnight 2026-07-28): OpsEventInvestmentCorrelator — ◈ OEIA button (left:734320, bottom:8, zIndex:255);
+                parallel-fetches /v1/ops/events + /entities/Investment every 90 s;
+                keyword-correlates each ops event against investment fields (name/ticker/sector/region)
+                to surface EXPOSED (investment match) vs CLEAR;
+                stat tiles (ops-events/investments/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + search;
+                expand event → matched investment chips with sector chip + score bars;
+                red badge=exposed count, green=all-clear; ▶ ASSESS → /v1/jarvis/agent/chat
+                2-sentence ops-investment correlation brief + TTS via jarvis:speak-dossier;
+                isOeiaQuery+buildOeiaScript wired JarvisBrain;
+                "ops event invest/invest ops event/oeia/ops invest/invest ops/investment operations" voice triggers;
+                build EXIT:0. */}
+            <OpsEventInvestmentCorrelator />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
