@@ -402,6 +402,7 @@ import Sci3dStudio, { isSci3dQuery, buildSci3dScript } from '@/components/cinema
 import TenantRegistryPanel, { isTnrpQuery, buildTnrpScript } from '@/components/cinematic/TenantRegistryPanel';
 import MultiEntityCoverageMatrix, { isMecmQuery, buildMecmScript } from '@/components/cinematic/MultiEntityCoverageMatrix';
 import UnderworldBridgeConsole, { isUwbrQuery, buildUwbrScript } from '@/components/cinematic/UnderworldBridgeConsole';
+import RiskSignalDecisionCoverage, { isRsdcQuery, buildRsdcScript } from '@/components/cinematic/RiskSignalDecisionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2044,6 +2045,13 @@ function App() {
                 real /v1/bridge/* endpoints (counterfactual, optimize, temporal, graph analytics);
                 isUwbrQuery+buildUwbrScript wired JarvisBrain; build EXIT:0. */}
             <UnderworldBridgeConsole />
+            {/* F374 (overnight 2026-07-28): RiskSignalDecisionCoverage — ◈ RSDC button (left:711520, bottom:8, zIndex:250);
+                parallel-fetches /entities/RiskSignal + /v1/decision/list?limit=50 every 90 s;
+                keyword-correlates each risk signal against decisions to surface COVERED vs UNCOVERED;
+                stat tiles (risk-signals/decisions/covered/uncovered); ALL/COVERED/UNCOVERED filter tabs + search;
+                expand signal → category/severity chips + matched decision chips with status badge + score bars;
+                isRsdcQuery+buildRsdcScript wired JarvisBrain; build EXIT:0. */}
+            <RiskSignalDecisionCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +

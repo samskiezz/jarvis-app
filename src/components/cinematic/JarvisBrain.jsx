@@ -260,6 +260,7 @@ import { isSci3dQuery, buildSci3dScript } from "./Sci3dStudio";
 import { isTnrpQuery, buildTnrpScript } from "./TenantRegistryPanel";
 import { isMecmQuery, buildMecmScript } from "./MultiEntityCoverageMatrix";
 import { isUwbrQuery, buildUwbrScript } from "./UnderworldBridgeConsole";
+import { isRsdcQuery, buildRsdcScript } from "./RiskSignalDecisionCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3010,6 +3011,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:uwbr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildUwbrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRsdcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsdc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRsdcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
