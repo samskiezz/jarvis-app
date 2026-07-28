@@ -400,6 +400,7 @@ import SciDomainConsolePanel, { isSdmcQuery, buildSdmcScript } from '@/component
 import ScenarioAnomalyCorrelator, { isScanQuery, buildScanScript } from '@/components/cinematic/ScenarioAnomalyCorrelator';
 import Sci3dStudio, { isSci3dQuery, buildSci3dScript } from '@/components/cinematic/Sci3dStudio';
 import TenantRegistryPanel, { isTnrpQuery, buildTnrpScript } from '@/components/cinematic/TenantRegistryPanel';
+import MultiEntityCoverageMatrix, { isMecmQuery, buildMecmScript } from '@/components/cinematic/MultiEntityCoverageMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2029,6 +2030,14 @@ function App() {
                 WHOAMI: resolved identity display; ADD: POST /v1/tenants form;
                 green badge=tenant count; isTnrpQuery+buildTnrpScript wired JarvisBrain; build EXIT:0. */}
             <TenantRegistryPanel />
+            {/* F372 (overnight 2026-07-28): MultiEntityCoverageMatrix — ◈ MECM button (left:702960, bottom:8, zIndex:248);
+                parallel-fetches 6 entity types (/entities/Task|RiskSignal|IntelProfile|SwarmJob|Investment|Contact) +
+                4 signal sources (/v1/alerts, /v1/jarvis/analytics/anomalies, /v1/investigations, /v1/decision/list);
+                computes keyword-overlap coverage% for each entity×signal pair; 6×4 heat-coloured matrix
+                (green≥66/amber33-65/red<33) with minibar; stat tiles (entities/signals/avg-cov/min-cov);
+                col-avg footer row; row-avg column; 90 s auto-refresh;
+                isMecmQuery+buildMecmScript wired JarvisBrain; build EXIT:0. */}
+            <MultiEntityCoverageMatrix />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
