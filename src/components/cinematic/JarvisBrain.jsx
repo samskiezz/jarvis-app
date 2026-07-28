@@ -250,6 +250,7 @@ import { isTovsQuery, buildTovsScript } from "./OntologyTypeViewsStudio";
 import { isGtmxQuery, buildGtmxScript } from "./GraphTimeMachinePanel";
 import { isCsjcQuery, buildCsjcScript } from "./ContactSwarmJobCoverage";
 import { isFndpQuery, buildFndpScript } from "./FoundryPipelineBrowser";
+import { isNotesQuery, buildNotesScript } from "./CollabNotesPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2910,6 +2911,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:fndp-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildFndpScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isNotesQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:notes-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildNotesScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

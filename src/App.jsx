@@ -392,6 +392,7 @@ import OntologyTypeViewsStudio from '@/components/cinematic/OntologyTypeViewsStu
 import GraphTimeMachinePanel from '@/components/cinematic/GraphTimeMachinePanel';
 import ContactSwarmJobCoverage, { isCsjcQuery, buildCsjcScript } from '@/components/cinematic/ContactSwarmJobCoverage';
 import FoundryPipelineBrowser, { isFndpQuery, buildFndpScript } from '@/components/cinematic/FoundryPipelineBrowser';
+import CollabNotesPanel, { isNotesQuery, buildNotesScript } from '@/components/cinematic/CollabNotesPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1972,6 +1973,11 @@ function App() {
                 text search on name/file; expand → preview excerpt + lazy GET /v1/foundry/lineage/{file} status chip;
                 green badge=pipeline count, dim=empty; isFndpQuery+buildFndpScript wired JarvisBrain; build EXIT:0. */}
             <FoundryPipelineBrowser />
+            {/* F364 (overnight 2026-07-28): CollabNotesPanel — ✏ NOTES button (left:666480, bottom:8, zIndex:240);
+                GET /v1/notes?resource_type=&resource_id= (load on demand) + POST/PATCH/DELETE /v1/notes/{id};
+                GET /v1/activity?limit=50 (60-s poll); NOTES tab: resource picker + threaded note list + compose form;
+                ACTIVITY tab: unified feed with search; green badge=activity count; isNotesQuery+buildNotesScript wired JarvisBrain; build EXIT:0. */}
+            <CollabNotesPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
