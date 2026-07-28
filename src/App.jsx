@@ -396,6 +396,7 @@ import CollabNotesPanel, { isNotesQuery, buildNotesScript } from '@/components/c
 import TaskDecisionCoverage, { isTdcvQuery, buildTdcvScript } from '@/components/cinematic/TaskDecisionCoverage';
 import IntelProfileDatasetCorrelator, { isIpdsQuery, buildIpdsScript } from '@/components/cinematic/IntelProfileDatasetCorrelator';
 import ContactDatasetCoverage, { isCdstQuery, buildCdstScript } from '@/components/cinematic/ContactDatasetCoverage';
+import SciDomainConsolePanel, { isSdmcQuery, buildSdmcScript } from '@/components/cinematic/SciDomainConsolePanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2005,6 +2006,13 @@ function App() {
                 expand contact → matched dataset chips with kind chip + row count + score bars;
                 amber badge=blind count, green=all documented; isCdstQuery+buildCdstScript wired JarvisBrain; build EXIT:0. */}
             <ContactDatasetCoverage />
+            {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
+                polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
+                domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
+                GET /v1/sci/domains/{id}/examples; ▶ RUN per example → POST /v1/sci/domains/{id}/run → inline result;
+                ALL/WITH METHODS/NO METHODS filter tabs + text search; green badge=domain count;
+                isSdmcQuery+buildSdmcScript wired JarvisBrain; build EXIT:0. */}
+            <SciDomainConsolePanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
