@@ -408,6 +408,7 @@ import ContactAlertCorrelator, { isCaclQuery, buildCaclScript } from '@/componen
 import DatasetSpecCoverage, { isDspcQuery, buildDspcScript } from '@/components/cinematic/DatasetSpecCoverage';
 import DatasetAlertCorrelator, { isDsalQuery, buildDsalScript } from '@/components/cinematic/DatasetAlertCorrelator';
 import OpsEventInvestmentCorrelator, { isOeiaQuery, buildOeiaScript } from '@/components/cinematic/OpsEventInvestmentCorrelator';
+import DatasetAnomalyCorrelator, { isDsanQuery, buildDsanScript } from '@/components/cinematic/DatasetAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2113,6 +2114,18 @@ function App() {
                 "ops event invest/invest ops event/oeia/ops invest/invest ops/investment operations" voice triggers;
                 build EXIT:0. */}
             <OpsEventInvestmentCorrelator />
+            {/* F380 (overnight 2026-07-28): DatasetAnomalyCorrelator — ◈ DSAN button (left:738880, bottom:8, zIndex:256);
+                parallel-fetches /v1/datasets + /v1/jarvis/analytics/anomalies?limit=30 every 90 s;
+                keyword-correlates each dataset (name/key/description/kind/source) against anomaly metric names
+                to surface EXPOSED (anomaly match found) vs CLEAR;
+                stat tiles (datasets/anomalies/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + search;
+                expand dataset → kind chip + source chip + matched anomaly chips with severity badge + z-score + score bars;
+                red badge=exposed count, green=all-clear; ▶ ASSESS → /v1/jarvis/agent/chat
+                2-sentence dataset anomaly correlation brief + TTS via jarvis:speak-dossier;
+                isDsanQuery+buildDsanScript wired JarvisBrain;
+                "dataset anomaly/anomaly dataset/dsan/datasets with anomalies/exposed datasets anomaly" voice triggers;
+                build EXIT:0. */}
+            <DatasetAnomalyCorrelator />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
