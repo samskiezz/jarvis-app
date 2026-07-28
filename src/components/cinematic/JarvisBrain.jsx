@@ -249,6 +249,7 @@ import { isIpinvQuery, buildIpinvScript } from "./IntelProfileInvestigationCorre
 import { isTovsQuery, buildTovsScript } from "./OntologyTypeViewsStudio";
 import { isGtmxQuery, buildGtmxScript } from "./GraphTimeMachinePanel";
 import { isCsjcQuery, buildCsjcScript } from "./ContactSwarmJobCoverage";
+import { isFndpQuery, buildFndpScript } from "./FoundryPipelineBrowser";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2900,6 +2901,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:csjc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCsjcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isFndpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:fndp-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildFndpScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

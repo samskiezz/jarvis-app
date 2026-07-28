@@ -391,6 +391,7 @@ import IntelProfileInvestigationCorrelator from '@/components/cinematic/IntelPro
 import OntologyTypeViewsStudio from '@/components/cinematic/OntologyTypeViewsStudio';
 import GraphTimeMachinePanel from '@/components/cinematic/GraphTimeMachinePanel';
 import ContactSwarmJobCoverage, { isCsjcQuery, buildCsjcScript } from '@/components/cinematic/ContactSwarmJobCoverage';
+import FoundryPipelineBrowser, { isFndpQuery, buildFndpScript } from '@/components/cinematic/FoundryPipelineBrowser';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1966,6 +1967,11 @@ function App() {
                 + text search; expand → matched swarm job chips with kind/status/score bars;
                 amber badge=unmonitored count, green=all-monitored; isCsjcQuery+buildCsjcScript wired JarvisBrain; build EXIT:0. */}
             <ContactSwarmJobCoverage />
+            {/* F363 (overnight 2026-07-28): FoundryPipelineBrowser — ⊞ FNDP button (left:661920, bottom:8, zIndex:239);
+                polls GET /v1/foundry/pipelines every 120 s; stat tiles (templates/total-kb/avg-kb/largest-kb);
+                text search on name/file; expand → preview excerpt + lazy GET /v1/foundry/lineage/{file} status chip;
+                green badge=pipeline count, dim=empty; isFndpQuery+buildFndpScript wired JarvisBrain; build EXIT:0. */}
+            <FoundryPipelineBrowser />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

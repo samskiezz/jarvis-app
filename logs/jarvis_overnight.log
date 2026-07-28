@@ -234,3 +234,4 @@
 [2026-07-27] F360 OntologyTypeViewsStudio — polls /v1/ontology/types + lazy GET/POST /v1/ontology-ext/views/{type_id}; VIEW/EDIT tabs; two-column layout; violet accent; ◈ TOVS left:648240 zIndex:236; isTovsQuery+buildTovsScript wired JarvisBrain; build EXIT:0.
 [2026-07-27] F361 GraphTimeMachinePanel: AT-tab point-in-time snapshot (GET /v1/graph-time/at) + GROWTH-tab playback sparkline (POST /v1/graph-time/playback); isGtmxQuery+buildGtmxScript wired JarvisBrain; build EXIT:0; committed jarvis-overnight.
 [2026-07-28] F362 ContactSwarmJobCoverage.jsx — Contact × SwarmJob Coverage Tracer; parallel-fetches /entities/Contact + /entities/SwarmJob; MONITORED/UNMONITORED keyword-correlator; ◈ CSJC button left:657360; isCsjcQuery+buildCsjcScript wired JarvisBrain; mounted App.jsx; build EXIT:0.
+[2026-07-28] F363 FoundryPipelineBrowser — polls /v1/foundry/pipelines + lazy /v1/foundry/lineage/{file}; ⊞ FNDP button left:661920; isFndpQuery wired JarvisBrain; build EXIT:0.
