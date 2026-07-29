@@ -415,6 +415,7 @@ import IntelProfileReportCoverage from '@/components/cinematic/IntelProfileRepor
 import InvestmentReportCoverage, { isInvRptQuery, buildInvRptScript } from '@/components/cinematic/InvestmentReportCoverage';
 import RiskSignalReportCoverage, { isRsrptQuery, buildRsrptScript } from '@/components/cinematic/RiskSignalReportCoverage';
 import OpsEventDecisionCoverage, { isOedcQuery, buildOedcScript } from '@/components/cinematic/OpsEventDecisionCoverage';
+import InvestigationAnomalyCorrelator, { isIavrQuery, buildIavrScript } from '@/components/cinematic/InvestigationAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2201,6 +2202,16 @@ function App() {
                 "ops decision/decision ops events/oedc/ops event decisions/ops event decision coverage/ops governance" voice triggers;
                 build EXIT:0. */}
             <OpsEventDecisionCoverage />
+            {/* F387 (overnight 2026-07-29): InvestigationAnomalyCorrelator — ⊠ IAVR button (left:770800, bottom:8, zIndex:263);
+                parallel-fetches /v1/investigations + /v1/jarvis/analytics/anomalies?limit=30 every 90 s;
+                keyword-correlates each investigation against anomaly metric names to surface BACKED vs UNBACKED cases;
+                stat tiles (cases/anomalies/backed/unbacked); ALL/BACKED/UNBACKED filter tabs + search;
+                expand case → description excerpt + matched anomaly chips with severity badge + z-score + score bars;
+                amber badge=unbacked count, green=all backed; ▶ ASSESS → /v1/jarvis/agent/chat;
+                isIavrQuery+buildIavrScript wired JarvisBrain;
+                "investigation anomaly/anomaly investigation/iavr/case anomaly/unbacked investigation" voice triggers;
+                build EXIT:0. */}
+            <InvestigationAnomalyCorrelator />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
