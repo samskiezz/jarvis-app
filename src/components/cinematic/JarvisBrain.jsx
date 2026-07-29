@@ -272,6 +272,7 @@ import { isAlscQuery, buildAlscScript } from "./AlertSpecCoverage";
 import { isIprcQuery, buildIprcScript } from "./IntelProfileReportCoverage";
 import { isInvRptQuery, buildInvRptScript } from "./InvestmentReportCoverage";
 import { isRsrptQuery, buildRsrptScript } from "./RiskSignalReportCoverage";
+import { isOedcQuery, buildOedcScript } from "./OpsEventDecisionCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3130,6 +3131,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsrpt-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsrptScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isOedcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oedc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOedcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

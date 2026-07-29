@@ -414,6 +414,7 @@ import AlertSpecCoverage from '@/components/cinematic/AlertSpecCoverage';
 import IntelProfileReportCoverage from '@/components/cinematic/IntelProfileReportCoverage';
 import InvestmentReportCoverage, { isInvRptQuery, buildInvRptScript } from '@/components/cinematic/InvestmentReportCoverage';
 import RiskSignalReportCoverage, { isRsrptQuery, buildRsrptScript } from '@/components/cinematic/RiskSignalReportCoverage';
+import OpsEventDecisionCoverage, { isOedcQuery, buildOedcScript } from '@/components/cinematic/OpsEventDecisionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2188,6 +2189,18 @@ function App() {
                 "risk report/rsrpt/risk signal reports/undocumented risks/risk intelligence report" voice triggers;
                 build EXIT:0. */}
             <RiskSignalReportCoverage />
+            {/* F386 (overnight 2026-07-29): OpsEventDecisionCoverage — ◈ OEDC button (left:766240, bottom:8, zIndex:262);
+                parallel-fetches /v1/ops/events + /v1/decision/list?limit=50 every 90 s;
+                keyword-correlates each ops event (event_type/title/service/severity/source/message/description)
+                against decision titles/body_md to surface DOCUMENTED (decision backing found) vs UNDOCUMENTED (no governance);
+                stat tiles (ops-events/decisions/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search;
+                expand event → severity chip + service chip + matched decision chips with status badge + quality score + score bars;
+                amber badge=undocumented count, green=all documented; ▶ ASSESS → /v1/jarvis/agent/chat
+                2-sentence ops-decision governance brief + TTS via jarvis:speak-dossier;
+                isOedcQuery+buildOedcScript wired JarvisBrain;
+                "ops decision/decision ops events/oedc/ops event decisions/ops event decision coverage/ops governance" voice triggers;
+                build EXIT:0. */}
+            <OpsEventDecisionCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
