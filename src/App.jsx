@@ -418,6 +418,7 @@ import OpsEventDecisionCoverage, { isOedcQuery, buildOedcScript } from '@/compon
 import InvestigationAnomalyCorrelator, { isIavrQuery, buildIavrScript } from '@/components/cinematic/InvestigationAnomalyCorrelator';
 import DatasetDecisionCoverage, { isDdcvQuery, buildDdcvScript } from '@/components/cinematic/DatasetDecisionCoverage';
 import AlertDecisionCoverage, { isAldcQuery, buildAldcScript } from '@/components/cinematic/AlertDecisionCoverage';
+import TaskReportCoverage, { isTkrpQuery, buildTkrpScript } from '@/components/cinematic/TaskReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2234,6 +2235,16 @@ function App() {
                 "alert decision/decision alert/aldc/governed alerts/alerts with decisions/alert governance/which alerts have decisions/alert decision coverage/ungoverned alerts/alert backed by decisions" voice triggers;
                 build EXIT:0. */}
             <AlertDecisionCoverage />
+            {/* F390 (overnight 2026-07-29): TaskReportCoverage — ◈ TKRP button (left:784480, bottom:8, zIndex:266);
+                parallel-fetches /entities/Task + /v1/reports every 90 s;
+                keyword-correlates each task against report titles/body/summary to surface COVERED vs UNDOCUMENTED;
+                stat tiles (tasks/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + search;
+                expand task → status chip + type chip + matched report chips with status badge + score bars;
+                amber badge=undocumented count, green=all covered; ▶ ASSESS → /v1/jarvis/agent/chat;
+                isTkrpQuery+buildTkrpScript wired JarvisBrain;
+                "task report/report task/tkrp/task coverage report/tasks with reports/undocumented tasks/task report coverage/which tasks have reports/task documentation coverage" voice triggers;
+                build EXIT:0. */}
+            <TaskReportCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
