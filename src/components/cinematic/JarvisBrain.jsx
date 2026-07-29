@@ -269,6 +269,7 @@ import { isOeiaQuery, buildOeiaScript } from "./OpsEventInvestmentCorrelator";
 import { isDsanQuery, buildDsanScript } from "./DatasetAnomalyCorrelator";
 import { isOescQuery, buildOescScript } from "./OpsEventSpecCoverage";
 import { isAlscQuery, buildAlscScript } from "./AlertSpecCoverage";
+import { isIprcQuery, buildIprcScript } from "./IntelProfileReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3100,6 +3101,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:alsc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAlscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIprcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iprc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIprcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
