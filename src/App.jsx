@@ -413,6 +413,7 @@ import OpsEventSpecCoverage from '@/components/cinematic/OpsEventSpecCoverage';
 import AlertSpecCoverage from '@/components/cinematic/AlertSpecCoverage';
 import IntelProfileReportCoverage from '@/components/cinematic/IntelProfileReportCoverage';
 import InvestmentReportCoverage, { isInvRptQuery, buildInvRptScript } from '@/components/cinematic/InvestmentReportCoverage';
+import RiskSignalReportCoverage, { isRsrptQuery, buildRsrptScript } from '@/components/cinematic/RiskSignalReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2178,6 +2179,15 @@ function App() {
                 "investment report/report invest/ivrc/invest coverage/undocumented investments/investment governance" voice triggers;
                 build EXIT:0. */}
             <InvestmentReportCoverage />
+            {/* F385 (overnight 2026-07-29): RiskSignalReportCoverage — ◈ RSRPT button (left:761680, bottom:8, zIndex:261);
+                parallel-fetches /entities/RiskSignal + /v1/reports every 90 s; keyword-correlates each risk signal
+                (name/title/category/sector/description/source/type) against report titles/content/summary/tags;
+                surfaces COVERED (report-documented) vs UNDOCUMENTED (intelligence gap); amber badge=undocumented count;
+                severity chip (high/critical=red, medium=amber, low=green); expand → matched reports + scorebars;
+                ▶ ASSESS → /v1/jarvis/agent/chat coverage brief; isRsrptQuery+buildRsrptScript wired JarvisBrain;
+                "risk report/rsrpt/risk signal reports/undocumented risks/risk intelligence report" voice triggers;
+                build EXIT:0. */}
+            <RiskSignalReportCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
