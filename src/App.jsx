@@ -416,6 +416,7 @@ import InvestmentReportCoverage, { isInvRptQuery, buildInvRptScript } from '@/co
 import RiskSignalReportCoverage, { isRsrptQuery, buildRsrptScript } from '@/components/cinematic/RiskSignalReportCoverage';
 import OpsEventDecisionCoverage, { isOedcQuery, buildOedcScript } from '@/components/cinematic/OpsEventDecisionCoverage';
 import InvestigationAnomalyCorrelator, { isIavrQuery, buildIavrScript } from '@/components/cinematic/InvestigationAnomalyCorrelator';
+import DatasetDecisionCoverage, { isDdcvQuery, buildDdcvScript } from '@/components/cinematic/DatasetDecisionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2212,6 +2213,16 @@ function App() {
                 "investigation anomaly/anomaly investigation/iavr/case anomaly/unbacked investigation" voice triggers;
                 build EXIT:0. */}
             <InvestigationAnomalyCorrelator />
+            {/* F388 (overnight 2026-07-29): DatasetDecisionCoverage — ◈ DDCV button (left:775360, bottom:8, zIndex:264);
+                parallel-fetches /v1/datasets + /v1/decision/list?limit=50 every 90 s;
+                keyword-correlates each dataset against decision titles/body_md to surface DOCUMENTED vs UNDOCUMENTED;
+                stat tiles (datasets/decisions/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search;
+                expand dataset → matched decision chips with status badge + score bars;
+                amber badge=undocumented count, green=all documented; ▶ ASSESS → /v1/jarvis/agent/chat;
+                isDdcvQuery+buildDdcvScript wired JarvisBrain;
+                "dataset decision/decision dataset/ddcv/datasets with decisions/undocumented datasets/dataset decision coverage/which datasets have decisions/dataset governance" voice triggers;
+                build EXIT:0. */}
+            <DatasetDecisionCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
