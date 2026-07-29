@@ -278,6 +278,7 @@ import { isDdcvQuery, buildDdcvScript } from "./DatasetDecisionCoverage";
 import { isAldcQuery, buildAldcScript } from "./AlertDecisionCoverage";
 import { isTkrpQuery, buildTkrpScript } from "./TaskReportCoverage";
 import { isInvscQuery, buildInvscScript } from "./InvestigationSpecCoverage";
+import { isInvdcQuery, buildInvdcScript } from "./InvestigationDecisionCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3190,6 +3191,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invsc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isInvdcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invdc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvdcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

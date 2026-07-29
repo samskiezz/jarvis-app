@@ -420,6 +420,7 @@ import DatasetDecisionCoverage, { isDdcvQuery, buildDdcvScript } from '@/compone
 import AlertDecisionCoverage, { isAldcQuery, buildAldcScript } from '@/components/cinematic/AlertDecisionCoverage';
 import TaskReportCoverage, { isTkrpQuery, buildTkrpScript } from '@/components/cinematic/TaskReportCoverage';
 import InvestigationSpecCoverage, { isInvscQuery, buildInvscScript } from '@/components/cinematic/InvestigationSpecCoverage';
+import InvestigationDecisionCoverage, { isInvdcQuery, buildInvdcScript } from '@/components/cinematic/InvestigationDecisionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2256,6 +2257,16 @@ function App() {
                 "investigation spec/spec investigation/invsc/case spec/which investigations have specs/investigation specification/investigation spec gap/cases without specs/spec backed investigation" voice triggers;
                 build EXIT:0. */}
             <InvestigationSpecCoverage />
+            {/* F392 (overnight 2026-07-29): InvestigationDecisionCoverage — ◈ INVDC button (left:793600, bottom:8, zIndex:268);
+                parallel-fetches /v1/investigations + /v1/decision/list?limit=50 every 90 s;
+                keyword-correlates each investigation against decision titles/body_md to surface COVERED vs UNCOVERED;
+                stat tiles (cases/decisions/covered/uncovered); ALL/COVERED/UNCOVERED filter tabs + search;
+                expand investigation → status chip + kind chip + matched decision chips with status badge + quality score + score bars;
+                amber badge=uncovered count, green=all covered; ▶ ASSESS → /v1/jarvis/agent/chat;
+                isInvdcQuery+buildInvdcScript wired JarvisBrain;
+                "investigation decision/decision investigation/invdc/case decision/which investigations have decisions/investigation governance/cases without decisions/decision backed investigation" voice triggers;
+                build EXIT:0. */}
+            <InvestigationDecisionCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
