@@ -421,6 +421,7 @@ import AlertDecisionCoverage, { isAldcQuery, buildAldcScript } from '@/component
 import TaskReportCoverage, { isTkrpQuery, buildTkrpScript } from '@/components/cinematic/TaskReportCoverage';
 import InvestigationSpecCoverage, { isInvscQuery, buildInvscScript } from '@/components/cinematic/InvestigationSpecCoverage';
 import InvestigationDecisionCoverage, { isInvdcQuery, buildInvdcScript } from '@/components/cinematic/InvestigationDecisionCoverage';
+import SwarmJobReportCoverage, { isSwarmJobRptQuery, buildSwarmJobRptScript } from '@/components/cinematic/SwarmJobReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2267,6 +2268,16 @@ function App() {
                 "investigation decision/decision investigation/invdc/case decision/which investigations have decisions/investigation governance/cases without decisions/decision backed investigation" voice triggers;
                 build EXIT:0. */}
             <InvestigationDecisionCoverage />
+            {/* F393 (overnight 2026-07-29): SwarmJobReportCoverage — ◈ SJRP button (left:798160, bottom:8, zIndex:269);
+                parallel-fetches /entities/SwarmJob + /v1/reports every 90 s;
+                keyword-correlates each swarm job against report titles/content/summary to surface COVERED vs UNDOCUMENTED;
+                stat tiles (swarm-jobs/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + search;
+                expand swarm job → kind chip + status chip + matched report chips with score bars;
+                amber badge=undocumented count, green=all covered; ▶ ASSESS → /v1/jarvis/agent/chat;
+                isSwarmJobRptQuery+buildSwarmJobRptScript wired JarvisBrain;
+                "swarm report/report swarm/sjrp/swarm job reports/undocumented swarm/swarm report coverage/which swarm jobs have reports/swarm job report gap/swarm documentation" voice triggers;
+                build EXIT:0. */}
+            <SwarmJobReportCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
