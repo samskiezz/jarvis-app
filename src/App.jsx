@@ -412,6 +412,7 @@ import DatasetAnomalyCorrelator, { isDsanQuery, buildDsanScript } from '@/compon
 import OpsEventSpecCoverage from '@/components/cinematic/OpsEventSpecCoverage';
 import AlertSpecCoverage from '@/components/cinematic/AlertSpecCoverage';
 import IntelProfileReportCoverage from '@/components/cinematic/IntelProfileReportCoverage';
+import InvestmentReportCoverage, { isInvRptQuery, buildInvRptScript } from '@/components/cinematic/InvestmentReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2165,6 +2166,18 @@ function App() {
                 "intel profile report/report intel/iprc/intel coverage/profile report coverage/which intel profiles have reports/intel report coverage/undocumented profiles/intel governance" voice triggers;
                 build EXIT:0. */}
             <IntelProfileReportCoverage />
+            {/* F384 (overnight 2026-07-29): InvestmentReportCoverage — ◈ IVRC button (left:757120, bottom:8, zIndex:260);
+                parallel-fetches /entities/Investment + /v1/reports every 90 s;
+                keyword-correlates each investment (name/ticker/sector/description/category/region/industry/type)
+                against report titles/content to surface COVERED (report-documented) vs UNDOCUMENTED (no report — intelligence gap);
+                stat tiles (investments/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + search;
+                expand investment → ticker chip + sector chip + matched report chips with score bars;
+                amber badge=undocumented count, green=all covered; ▶ ASSESS → /v1/jarvis/agent/chat
+                2-sentence investment-coverage brief + TTS via jarvis:speak-dossier;
+                isIvrcQuery+buildIvrcScript wired JarvisBrain;
+                "investment report/report invest/ivrc/invest coverage/undocumented investments/investment governance" voice triggers;
+                build EXIT:0. */}
+            <InvestmentReportCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
