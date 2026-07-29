@@ -419,6 +419,7 @@ import InvestigationAnomalyCorrelator, { isIavrQuery, buildIavrScript } from '@/
 import DatasetDecisionCoverage, { isDdcvQuery, buildDdcvScript } from '@/components/cinematic/DatasetDecisionCoverage';
 import AlertDecisionCoverage, { isAldcQuery, buildAldcScript } from '@/components/cinematic/AlertDecisionCoverage';
 import TaskReportCoverage, { isTkrpQuery, buildTkrpScript } from '@/components/cinematic/TaskReportCoverage';
+import InvestigationSpecCoverage, { isInvscQuery, buildInvscScript } from '@/components/cinematic/InvestigationSpecCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2245,6 +2246,16 @@ function App() {
                 "task report/report task/tkrp/task coverage report/tasks with reports/undocumented tasks/task report coverage/which tasks have reports/task documentation coverage" voice triggers;
                 build EXIT:0. */}
             <TaskReportCoverage />
+            {/* F391 (overnight 2026-07-29): InvestigationSpecCoverage — ◈ INVSC button (left:789040, bottom:8, zIndex:267);
+                polls GET /v1/investigations + GET /v1/spec/list every 90 s;
+                keyword-correlates each investigation against spec titles/description/body_md to surface COVERED vs UNSPECIFIED;
+                stat tiles (cases/specs/covered/unspecified); ALL/COVERED/UNSPECIFIED filter tabs + search;
+                expand investigation → status chip + kind chip + matched spec chips with status badge + score bars + description excerpt;
+                amber badge=unspecified count, green=all covered; ▶ ASSESS → /v1/jarvis/agent/chat;
+                isInvscQuery+buildInvscScript wired JarvisBrain;
+                "investigation spec/spec investigation/invsc/case spec/which investigations have specs/investigation specification/investigation spec gap/cases without specs/spec backed investigation" voice triggers;
+                build EXIT:0. */}
+            <InvestigationSpecCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
