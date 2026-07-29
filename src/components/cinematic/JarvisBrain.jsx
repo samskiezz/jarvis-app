@@ -275,6 +275,7 @@ import { isRsrptQuery, buildRsrptScript } from "./RiskSignalReportCoverage";
 import { isOedcQuery, buildOedcScript } from "./OpsEventDecisionCoverage";
 import { isIavrQuery, buildIavrScript } from "./InvestigationAnomalyCorrelator";
 import { isDdcvQuery, buildDdcvScript } from "./DatasetDecisionCoverage";
+import { isAldcQuery, buildAldcScript } from "./AlertDecisionCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3160,6 +3161,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ddcv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDdcvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isAldcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aldc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAldcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -417,6 +417,7 @@ import RiskSignalReportCoverage, { isRsrptQuery, buildRsrptScript } from '@/comp
 import OpsEventDecisionCoverage, { isOedcQuery, buildOedcScript } from '@/components/cinematic/OpsEventDecisionCoverage';
 import InvestigationAnomalyCorrelator, { isIavrQuery, buildIavrScript } from '@/components/cinematic/InvestigationAnomalyCorrelator';
 import DatasetDecisionCoverage, { isDdcvQuery, buildDdcvScript } from '@/components/cinematic/DatasetDecisionCoverage';
+import AlertDecisionCoverage, { isAldcQuery, buildAldcScript } from '@/components/cinematic/AlertDecisionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2223,6 +2224,16 @@ function App() {
                 "dataset decision/decision dataset/ddcv/datasets with decisions/undocumented datasets/dataset decision coverage/which datasets have decisions/dataset governance" voice triggers;
                 build EXIT:0. */}
             <DatasetDecisionCoverage />
+            {/* F389 (overnight 2026-07-29): AlertDecisionCoverage — ◈ ALDC button (left:779920, bottom:8, zIndex:265);
+                parallel-fetches /v1/alerts + /v1/decision/list?limit=50 every 90 s;
+                keyword-correlates each alert against decision titles/body_md to surface GOVERNED vs UNGOVERNED;
+                stat tiles (alerts/decisions/governed/ungoverned); ALL/GOVERNED/UNGOVERNED filter tabs + search;
+                expand alert → severity chip + source chip + matched decision chips with status badge + score bars;
+                amber badge=ungoverned count, green=all governed; ▶ ASSESS → /v1/jarvis/agent/chat;
+                isAldcQuery+buildAldcScript wired JarvisBrain;
+                "alert decision/decision alert/aldc/governed alerts/alerts with decisions/alert governance/which alerts have decisions/alert decision coverage/ungoverned alerts/alert backed by decisions" voice triggers;
+                build EXIT:0. */}
+            <AlertDecisionCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
