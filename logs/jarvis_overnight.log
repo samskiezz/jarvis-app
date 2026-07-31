@@ -1,2 +1,3 @@
 2026-07-31 F01 ⌘K command palette: mounted JarvisCommandPalette.jsx for cinematic routes (scenes+panels+ask); CommandPalette.jsx restricted to /apex; build OK
 2026-07-31 F02 "Hey JARVIS" wake word: HeyJarvisListener.jsx + WakeWordToggle.jsx — SpeechRecognition always-listening toggle; armed pill at bottom-right dispatches jarvis:ask; jarvisVoice.js + jarvisSound.js wired; build OK
+2026-07-31 F03 Live telemetry ticker: LiveTelemetryTicker.jsx — 30 s polls /v1/jarvis/system/status + /v1/cinematic/brain; colour-coded CPU/MEM/LOAD/NODES/SYNAPSES pills in fixed top-bar HUD; hides until first data; mounted in App.jsx; build OK
