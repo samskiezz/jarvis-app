@@ -423,6 +423,7 @@ import InvestigationSpecCoverage, { isInvscQuery, buildInvscScript } from '@/com
 import InvestigationDecisionCoverage, { isInvdcQuery, buildInvdcScript } from '@/components/cinematic/InvestigationDecisionCoverage';
 import SwarmJobReportCoverage, { isSwarmJobRptQuery, buildSwarmJobRptScript } from '@/components/cinematic/SwarmJobReportCoverage';
 import InvestigationReportCoverage, { isIrpcQuery, buildIrpcScript } from '@/components/cinematic/InvestigationReportCoverage';
+import TaskAlertCorrelator, { isTaskAlcQuery, buildTaskAlcScript } from '@/components/cinematic/TaskAlertCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2289,6 +2290,16 @@ function App() {
                 "investigation report/report investigation/irpc/cases with reports/covered investigations/undocumented cases/investigation report coverage" voice triggers;
                 build EXIT:0. */}
             <InvestigationReportCoverage />
+            {/* F395 (overnight 2026-07-31): TaskAlertCorrelator — ◈ TACL button (left:807280, bottom:8, zIndex:271);
+                parallel-fetches /entities/Task + /v1/alerts every 90 s;
+                keyword-correlates each task (title/name/description/type/status/assignee/category) against alert fields to surface EXPOSED vs CLEAR;
+                stat tiles (tasks/alerts/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + search;
+                expand task → matched alert chips with severity badge + category chip + score bars;
+                red badge=exposed count, green=all-clear; ▶ ASSESS → /v1/jarvis/agent/chat;
+                isTaskAlcQuery+buildTaskAlcScript wired JarvisBrain;
+                "task alert/alert task/tacl/tasks with alerts/exposed tasks" voice triggers;
+                build EXIT:0. */}
+            <TaskAlertCorrelator />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +

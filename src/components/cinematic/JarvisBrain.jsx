@@ -281,6 +281,7 @@ import { isInvscQuery, buildInvscScript } from "./InvestigationSpecCoverage";
 import { isInvdcQuery, buildInvdcScript } from "./InvestigationDecisionCoverage";
 import { isSwarmJobRptQuery, buildSwarmJobRptScript } from "./SwarmJobReportCoverage";
 import { isIrpcQuery, buildIrpcScript } from "./InvestigationReportCoverage";
+import { isTaskAlcQuery, buildTaskAlcScript } from "./TaskAlertCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3220,6 +3221,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:irpc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIrpcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTaskAlcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tacl-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTaskAlcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
