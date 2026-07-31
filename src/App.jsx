@@ -422,6 +422,7 @@ import TaskReportCoverage, { isTkrpQuery, buildTkrpScript } from '@/components/c
 import InvestigationSpecCoverage, { isInvscQuery, buildInvscScript } from '@/components/cinematic/InvestigationSpecCoverage';
 import InvestigationDecisionCoverage, { isInvdcQuery, buildInvdcScript } from '@/components/cinematic/InvestigationDecisionCoverage';
 import SwarmJobReportCoverage, { isSwarmJobRptQuery, buildSwarmJobRptScript } from '@/components/cinematic/SwarmJobReportCoverage';
+import InvestigationReportCoverage, { isIrpcQuery, buildIrpcScript } from '@/components/cinematic/InvestigationReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2278,6 +2279,16 @@ function App() {
                 "swarm report/report swarm/sjrp/swarm job reports/undocumented swarm/swarm report coverage/which swarm jobs have reports/swarm job report gap/swarm documentation" voice triggers;
                 build EXIT:0. */}
             <SwarmJobReportCoverage />
+            {/* F394 (overnight 2026-07-31): InvestigationReportCoverage — ◈ IRPC button (left:802720, bottom:8, zIndex:270);
+                parallel-fetches /v1/investigations + /v1/reports every 90 s;
+                keyword-correlates each investigation against report titles/body/summary/content to surface COVERED vs UNDOCUMENTED;
+                stat tiles (cases/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + search;
+                expand investigation → matched report chips with score bars;
+                amber badge=undocumented count, green=all covered; ▶ ASSESS → /v1/jarvis/agent/chat;
+                isIrpcQuery+buildIrpcScript wired JarvisBrain;
+                "investigation report/report investigation/irpc/cases with reports/covered investigations/undocumented cases/investigation report coverage" voice triggers;
+                build EXIT:0. */}
+            <InvestigationReportCoverage />
             {/* F368 (overnight 2026-07-28): SciDomainConsolePanel — ⚗ SDMC button (left:684720, bottom:8, zIndex:244);
                 polls GET /v1/sci/domains every 120 s; stat tiles (domains/methods/with-methods/available);
                 domain list with method count chips; expand → GET /v1/sci/domains/{id}/methods +
