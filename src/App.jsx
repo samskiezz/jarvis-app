@@ -199,6 +199,7 @@ import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivato
 import SkillLiveIntelDemand from '@/components/cinematic/SkillLiveIntelDemand';
 import ContactLiveIntelExposure from '@/components/cinematic/ContactLiveIntelExposure';
 import CryptoRiskCorrelator from '@/components/cinematic/CryptoRiskCorrelator';
+import ContactRiskSignalCorrelator from '@/components/cinematic/ContactRiskSignalCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -590,6 +591,8 @@ function App() {
             <ContactLiveIntelExposure />
             {/* F38 (overnight 2026-08-01): crypto × risk signal correlator — ◈ CRYPTORSK button (left:31000, bottom:8, zIndex:61); parallel-fetches /functions/getLiveIntel (crypto+FX) + /entities/RiskSignal; keyword-correlates each active risk signal against live crypto/FX asset names and tickers to surface EXPOSED (≥1 market keyword overlap) vs ISOLATED (no financial correlation); stat tiles (assets/signals/exposed/isolated); ALL/EXPOSED/ISOLATED filter tabs + text search; expand signal → matched assets with type badge + change_pct + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence financial-risk brief + TTS via jarvis:speak-dossier; isCryptorskQuery+buildCryptorskScript wired in JarvisBrain; "crypto risk"/"bitcoin risk"/"market risk signal"/"financial risk"/"crypto correlation"/"cryptorsk" voice trigger; jarvis:cryptorsk-toggle event; 5-min auto-refresh */}
             <CryptoRiskCorrelator />
+            {/* F39 (overnight 2026-08-01): contact × risk signal correlator — ◈ CRSC button; parallel-fetches /entities/Contact + /entities/RiskSignal; keyword-correlates each contact (name/org/role/email) against active risk signals to surface EXPOSED vs CLEAR; red badge on exposed count; expand contact → matched signals with severity + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence exposure brief + TTS; isCrscQuery+buildCrscScript already wired in JarvisBrain; "contact risk"/"crsc"/"exposed contacts"/"risky contacts"/"contacts with risk" voice trigger; jarvis:crsc-toggle event; 90s auto-refresh */}
+            <ContactRiskSignalCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
