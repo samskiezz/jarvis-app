@@ -284,6 +284,7 @@ import { isIrpcQuery, buildIrpcScript } from "./InvestigationReportCoverage";
 import { isTaskAlcQuery, buildTaskAlcScript } from "./TaskAlertCorrelator";
 import { isSevdashQuery, buildSevdashScript } from "./OpsEventSeverityDashboard";
 import { isLitaQuery, buildLitaScript } from "./LiveIntelTaskActivator";
+import { isSkildQuery, buildSkildScript } from "./SkillLiveIntelDemand";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3250,6 +3251,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:lita-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLitaScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSkildQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skild-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSkildScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

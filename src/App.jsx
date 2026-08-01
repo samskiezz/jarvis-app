@@ -196,6 +196,7 @@ import SceneRiskCoverageMap from '@/components/cinematic/SceneRiskCoverageMap';
 import OpsEventSeverityDashboard from '@/components/cinematic/OpsEventSeverityDashboard';
 import GraphNodeReportCoverage from '@/components/cinematic/GraphNodeReportCoverage';
 import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivator';
+import SkillLiveIntelDemand from '@/components/cinematic/SkillLiveIntelDemand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -581,6 +582,8 @@ function App() {
             <GraphNodeReportCoverage />
             {/* F35 (overnight 2026-08-01): live intel × task activator — ◈ LITA button (left:530240, bottom:8, zIndex:130); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /entities/Task; keyword-correlates each task against live world events to surface TRIGGERED (world event activates this task domain) vs DORMANT (no live alignment); red badge on triggered count; stat tiles (tasks/live events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand task → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-activation brief + TTS via jarvis:speak-dossier; isLitaQuery+buildLitaScript wired in JarvisBrain; "live intel task"/"world task"/"task trigger"/"triggered tasks"/"lita" voice trigger; jarvis:lita-toggle event; 60-s auto-refresh */}
             <LiveIntelTaskActivator />
+            {/* F36 (overnight 2026-08-01): skill × live intel world demand gauge — ◈ SKILD button (left:56200, bottom:8, zIndex:109); parallel-fetches /v1/aip/skill + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each skill's domain keywords against live world events to surface ACTIVATED (world currently demands this skill) vs IDLE (no world alignment); stat tiles (skills/live events/activated/idle); ALL/ACTIVATED/IDLE filter tabs + text search; expand skill → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; amber badge on activated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-world-demand brief + TTS via jarvis:speak-dossier; isSkildQuery+buildSkildScript wired in JarvisBrain; "skill demand"/"world skill"/"which skills"/"active skills"/"skill intel"/"skild"/"skills needed now" voice trigger; jarvis:skild-toggle event; 90-s auto-refresh */}
+            <SkillLiveIntelDemand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
