@@ -22,7 +22,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. (2026-07-31: HeyJarvisListener.jsx + WakeWordToggle.jsx + jarvisVoice.js — SpeechRecognition wake word; armed pill button at bottom-right; dispatches jarvis:ask; build OK)
 - [x] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing. (2026-07-31: LiveTelemetryTicker.jsx — 30 s polls both endpoints; colour-coded CPU/MEM/LOAD/NODES/SYNAPSES pills in fixed top-bar HUD; hides until first data; mounted in App.jsx; build OK)
 - [x] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector. (2026-08-01: SceneKeyboardNav.jsx — keydown listener maps 1–9→scenes 01–09, 0→scene 10, Esc→/; HUD badge flash on jump; ignores input/textarea focus; mounted in App.jsx; build OK)
-- [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).
+- [x] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS). (2026-08-01: SpokenStatusReport.jsx helper + StatusReporter.jsx HUD component; fetches /v1/jarvis/system/status + /v1/cinematic/brain in parallel; composes spoken script; plays audio via /v1/voice/tts; isStatusQuery() wired in JarvisBrain; StatusReporter mounted in App.jsx; build OK)
 - [ ] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins.
 - [ ] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers.
 - [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.
