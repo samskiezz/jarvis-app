@@ -194,6 +194,7 @@ import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage'
 import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
 import SceneRiskCoverageMap from '@/components/cinematic/SceneRiskCoverageMap';
 import OpsEventSeverityDashboard from '@/components/cinematic/OpsEventSeverityDashboard';
+import GraphNodeReportCoverage from '@/components/cinematic/GraphNodeReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -575,6 +576,8 @@ function App() {
             <SceneRiskCoverageMap />
             {/* F33 (backlog 2026-08-01): ops event severity dashboard — ◈ SEVDASH button (left:55080, bottom:8, zIndex:65); fetches /v1/ops/events every 45s; groups events by CRITICAL/WARNING/INFO severity with count tiles; shows most-recent event per severity level; red badge on critical count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence severity brief + TTS via jarvis:speak-dossier; "ops severity"/"event severity"/"severity dashboard"/"sevdash" voice trigger; jarvis:sevdash-toggle event */}
             <OpsEventSeverityDashboard />
+            {/* F34 (overnight 2026-08-01): graph node × report coverage — ◈ GPREP button (left:55640, bottom:8, zIndex:108); parallel-fetches /v1/graph/centrality + /v1/reports; keyword-correlates each top-influence node against report titles/summaries to surface REPORTED (node appears in intelligence reports) vs UNREPORTED (no report coverage — intelligence gap); amber badge on unreported count; stat tiles (nodes/reports/reported/unreported); ALL/REPORTED/UNREPORTED filter tabs + text search; expand node → matched reports with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-report coverage brief + TTS via jarvis:speak-dossier; "graph report"/"node report"/"gprep"/"unreported nodes"/"report coverage"/"graph report coverage" voice trigger; jarvis:gprep-toggle event; 90-s auto-refresh */}
+            <GraphNodeReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
