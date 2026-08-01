@@ -195,6 +195,7 @@ import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecke
 import SceneRiskCoverageMap from '@/components/cinematic/SceneRiskCoverageMap';
 import OpsEventSeverityDashboard from '@/components/cinematic/OpsEventSeverityDashboard';
 import GraphNodeReportCoverage from '@/components/cinematic/GraphNodeReportCoverage';
+import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -578,6 +579,8 @@ function App() {
             <OpsEventSeverityDashboard />
             {/* F34 (overnight 2026-08-01): graph node × report coverage — ◈ GPREP button (left:55640, bottom:8, zIndex:108); parallel-fetches /v1/graph/centrality + /v1/reports; keyword-correlates each top-influence node against report titles/summaries to surface REPORTED (node appears in intelligence reports) vs UNREPORTED (no report coverage — intelligence gap); amber badge on unreported count; stat tiles (nodes/reports/reported/unreported); ALL/REPORTED/UNREPORTED filter tabs + text search; expand node → matched reports with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-report coverage brief + TTS via jarvis:speak-dossier; "graph report"/"node report"/"gprep"/"unreported nodes"/"report coverage"/"graph report coverage" voice trigger; jarvis:gprep-toggle event; 90-s auto-refresh */}
             <GraphNodeReportCoverage />
+            {/* F35 (overnight 2026-08-01): live intel × task activator — ◈ LITA button (left:530240, bottom:8, zIndex:130); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /entities/Task; keyword-correlates each task against live world events to surface TRIGGERED (world event activates this task domain) vs DORMANT (no live alignment); red badge on triggered count; stat tiles (tasks/live events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand task → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-activation brief + TTS via jarvis:speak-dossier; isLitaQuery+buildLitaScript wired in JarvisBrain; "live intel task"/"world task"/"task trigger"/"triggered tasks"/"lita" voice trigger; jarvis:lita-toggle event; 60-s auto-refresh */}
+            <LiveIntelTaskActivator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
