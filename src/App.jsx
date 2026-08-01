@@ -193,6 +193,7 @@ import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRat
 import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage';
 import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
 import SceneRiskCoverageMap from '@/components/cinematic/SceneRiskCoverageMap';
+import OpsEventSeverityDashboard from '@/components/cinematic/OpsEventSeverityDashboard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -572,6 +573,8 @@ function App() {
             <OpsTaskCoverageChecker />
             {/* F32 (backlog 2026-08-01): scene-risk coverage map — ◈ SCRISK button (left:8604, bottom:8, zIndex:65); parallel-fetches all 10 /v1/cinematic/scene/{id} anchor sets + /entities/RiskSignal; keyword-correlates each risk signal against every scene's anchor texts to surface CAPTURED (represented in a scene) vs DARK (no scene coverage) risks; red badge on dark critical count; stat tiles (scenes/risks/captured/dark); ALL/CAPTURED/DARK filter tabs + text search; expand risk → matched scene chips; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-risk alignment brief + TTS via jarvis:speak-dossier; "scene risk"/"dark risks"/"risk scenes"/"uncaptured risks"/"scene risk coverage"/"scrisk" voice trigger; jarvis:scrisk-toggle event; 120-s auto-refresh */}
             <SceneRiskCoverageMap />
+            {/* F33 (backlog 2026-08-01): ops event severity dashboard — ◈ SEVDASH button (left:55080, bottom:8, zIndex:65); fetches /v1/ops/events every 45s; groups events by CRITICAL/WARNING/INFO severity with count tiles; shows most-recent event per severity level; red badge on critical count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence severity brief + TTS via jarvis:speak-dossier; "ops severity"/"event severity"/"severity dashboard"/"sevdash" voice trigger; jarvis:sevdash-toggle event */}
+            <OpsEventSeverityDashboard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
