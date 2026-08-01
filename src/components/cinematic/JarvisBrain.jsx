@@ -205,6 +205,7 @@ import { isSwarmAlertQuery, buildSwarmAlertScript } from "./SwarmJobAlertCorrela
 import { isAdnaQuery, buildAdnaScript } from "./AssetDnaScanner";
 import { isCgcpQuery, buildCgcpScript } from "./ContactGraphCentralityPanel";
 import { isIpliveQuery, buildIpliveScript } from "./IntelProfileLiveIntelExposure";
+import { isIlipQuery, buildIlipScript } from "./InvestigationLiveIntelPulse";
 import { isIspcQuery, buildIspcScript } from "./IntelSpecCoverage";
 import { isRsscQuery, buildRsscScript } from "./RiskSpecCoverage";
 import { isTaskSpecQuery, buildTaskSpecScript } from "./TaskSpecCoverage";
@@ -2524,6 +2525,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iplive-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpliveScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F44 InvestigationLiveIntelPulse — /v1/investigations + /functions/getLiveIntel
+    // "investigation intel / live cases / case pulse / ilip / cases active /
+    //   investigation live / case world / cases accelerating / open case intel /
+    //   which cases are live"
+    if (isIlipQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ilip-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIlipScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

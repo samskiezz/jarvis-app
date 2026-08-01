@@ -204,6 +204,7 @@ import SwarmJobRiskCorrelator from '@/components/cinematic/SwarmJobRiskCorrelato
 import LiveIntelGraphExposure from '@/components/cinematic/LiveIntelGraphExposure';
 import ContactGraphCentralityPanel from '@/components/cinematic/ContactGraphCentralityPanel';
 import IntelProfileLiveIntelExposure from '@/components/cinematic/IntelProfileLiveIntelExposure';
+import InvestigationLiveIntelPulse from '@/components/cinematic/InvestigationLiveIntelPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -605,6 +606,8 @@ function App() {
             <ContactGraphCentralityPanel />
             {/* F43 (overnight 2026-08-01): intel profile × live intel exposure — ◈ IPLIVE button (left:57320, bottom:8, zIndex:111); parallel-fetches /entities/IntelProfile + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each intel profile (name/title/description/type/location) against live world events to surface ACTIVATED (world event intersects profile domain) vs DORMANT (no live alignment); stat tiles (profiles/live events/activated/dormant); ALL/ACTIVATED/DORMANT filter tabs + text search; expand profile → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; amber badge on activated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-profile-world-exposure brief + TTS via jarvis:speak-dossier; isIpliveQuery+buildIpliveScript wired in JarvisBrain; "intel profile live"/"profile world"/"active profiles"/"iplive"/"profiles activated"/"profile world events" voice trigger; jarvis:iplive-toggle event; 60-s auto-refresh */}
             <IntelProfileLiveIntelExposure />
+            {/* F44 (overnight 2026-08-01): investigation × live intel pulse — ◈ ILIP button (left:57880, bottom:8, zIndex:112); parallel-fetches /v1/investigations + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each open investigation (title/name/description/type/location/tags) against live world events to surface ACCELERATING (world-event alignment) vs STALLED (no live signal); cyan badge on accelerating count; stat tiles (cases/live events/accelerating/stalled); ALL/ACCELERATING/STALLED filter tabs + text search; expand case → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence case-world pulse brief + TTS via jarvis:speak-dossier; isIlipQuery+buildIlipScript wired in JarvisBrain; "investigation intel"/"live cases"/"case pulse"/"ilip"/"cases active"/"investigation live"/"case world"/"cases accelerating"/"open case intel"/"which cases are live" voice trigger; jarvis:ilip-toggle event; 90-s auto-refresh */}
+            <InvestigationLiveIntelPulse />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
