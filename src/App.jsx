@@ -206,6 +206,7 @@ import ContactGraphCentralityPanel from '@/components/cinematic/ContactGraphCent
 import IntelProfileLiveIntelExposure from '@/components/cinematic/IntelProfileLiveIntelExposure';
 import InvestigationLiveIntelPulse from '@/components/cinematic/InvestigationLiveIntelPulse';
 import GraphNodeDatasetCoverage from '@/components/cinematic/GraphNodeDatasetCoverage';
+import DatasetRiskCoverage from '@/components/cinematic/DatasetRiskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -611,6 +612,8 @@ function App() {
             <InvestigationLiveIntelPulse />
             {/* F45 (overnight 2026-08-01): graph node × dataset coverage — ◈ GNDC button (left:58440, bottom:8, zIndex:113); parallel-fetches /v1/graph/centrality + /v1/datasets; keyword-correlates each top-influence graph node (label/name/type/category) against the dataset catalog to surface COVERED (at least one dataset supports the node domain) vs UNCHARTED (no dataset coverage — intelligence gap); amber badge on uncharted count; stat tiles (nodes/datasets/covered/uncharted); ALL/COVERED/UNCHARTED filter tabs + text search; expand node → matched datasets with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-data readiness brief + TTS via jarvis:speak-dossier; isGndcQuery+buildGndcScript wired in JarvisBrain; "graph dataset"/"dataset node"/"node data coverage"/"graph data cover"/"gndc"/"uncharted nodes"/"which nodes have data"/"node dataset gap" voice trigger; jarvis:gndc-toggle event; 90-s auto-refresh */}
             <GraphNodeDatasetCoverage />
+            {/* F46 (overnight 2026-08-01): dataset × risk signal coverage — ◈ DSRISK button (left:60120, bottom:8, zIndex:117); parallel-fetches /v1/datasets + /entities/RiskSignal; keyword-correlates each dataset against active risk signals to surface IMPLICATED (overlap with an active risk signal) vs CLEAR (no risk signal coverage); amber badge on implicated count; stat tiles (datasets/signals/implicated/clear); ALL/IMPLICATED/CLEAR filter tabs + text search; expand dataset → matched signals with severity badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-risk exposure brief + TTS via jarvis:speak-dossier; isDsriskQuery+buildDsriskScript already wired in JarvisBrain; "dataset risk"/"risk dataset"/"data risk coverage"/"dsrisk"/"risky datasets"/"dataset threat" voice trigger; jarvis:dsrisk-toggle event; 90-s auto-refresh */}
+            <DatasetRiskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
