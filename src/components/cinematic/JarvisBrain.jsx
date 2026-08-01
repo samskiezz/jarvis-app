@@ -290,6 +290,7 @@ import { isLitaQuery, buildLitaScript } from "./LiveIntelTaskActivator";
 import { isSkildQuery, buildSkildScript } from "./SkillLiveIntelDemand";
 import { isCxlintelQuery, buildCxlintelScript } from "./ContactLiveIntelExposure";
 import { isGndcQuery, buildGndcScript } from "./GraphNodeDatasetCoverage";
+import { isInvintelQuery, buildInvintelScript } from "./InvestmentIntelExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3318,6 +3319,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gndc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGndcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F47: investment × intel profile exposure — /entities/Investment + /entities/IntelProfile;
+    // EXPOSED vs CLEAR; "investment intel / intel investment / invintel /
+    // investment threat actor / portfolio threat exposure / exposed investments"
+    if (isInvintelQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invintel-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvintelScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

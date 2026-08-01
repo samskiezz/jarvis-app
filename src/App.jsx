@@ -207,6 +207,7 @@ import IntelProfileLiveIntelExposure from '@/components/cinematic/IntelProfileLi
 import InvestigationLiveIntelPulse from '@/components/cinematic/InvestigationLiveIntelPulse';
 import GraphNodeDatasetCoverage from '@/components/cinematic/GraphNodeDatasetCoverage';
 import DatasetRiskCoverage from '@/components/cinematic/DatasetRiskCoverage';
+import InvestmentIntelExposure from '@/components/cinematic/InvestmentIntelExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -614,6 +615,8 @@ function App() {
             <GraphNodeDatasetCoverage />
             {/* F46 (overnight 2026-08-01): dataset × risk signal coverage — ◈ DSRISK button (left:60120, bottom:8, zIndex:117); parallel-fetches /v1/datasets + /entities/RiskSignal; keyword-correlates each dataset against active risk signals to surface IMPLICATED (overlap with an active risk signal) vs CLEAR (no risk signal coverage); amber badge on implicated count; stat tiles (datasets/signals/implicated/clear); ALL/IMPLICATED/CLEAR filter tabs + text search; expand dataset → matched signals with severity badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-risk exposure brief + TTS via jarvis:speak-dossier; isDsriskQuery+buildDsriskScript already wired in JarvisBrain; "dataset risk"/"risk dataset"/"data risk coverage"/"dsrisk"/"risky datasets"/"dataset threat" voice trigger; jarvis:dsrisk-toggle event; 90-s auto-refresh */}
             <DatasetRiskCoverage />
+            {/* F47 (overnight 2026-08-01): investment × intel profile exposure — ◈ INVINTEL button (left:70200, bottom:8, zIndex:135); parallel-fetches /entities/Investment + /entities/IntelProfile; keyword-correlates each investment (name/sector/notes/tags) against tracked threat actor profiles (name/category/description/aliases/tags) to surface EXPOSED (intel profile alignment detected) vs CLEAR (no threat actor alignment); red badge on exposed count; stat tiles (investments/profiles/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched intel profiles with category badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment threat exposure brief + TTS via jarvis:speak-dossier; isInvintelQuery+buildInvintelScript wired in JarvisBrain; "investment intel"/"intel investment"/"invintel"/"investment threat actor"/"portfolio threat exposure"/"exposed investments" voice trigger; jarvis:invintel-toggle event; 90-s auto-refresh */}
+            <InvestmentIntelExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
