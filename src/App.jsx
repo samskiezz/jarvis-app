@@ -197,6 +197,7 @@ import OpsEventSeverityDashboard from '@/components/cinematic/OpsEventSeverityDa
 import GraphNodeReportCoverage from '@/components/cinematic/GraphNodeReportCoverage';
 import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivator';
 import SkillLiveIntelDemand from '@/components/cinematic/SkillLiveIntelDemand';
+import ContactLiveIntelExposure from '@/components/cinematic/ContactLiveIntelExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -584,6 +585,8 @@ function App() {
             <LiveIntelTaskActivator />
             {/* F36 (overnight 2026-08-01): skill × live intel world demand gauge — ◈ SKILD button (left:56200, bottom:8, zIndex:109); parallel-fetches /v1/aip/skill + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each skill's domain keywords against live world events to surface ACTIVATED (world currently demands this skill) vs IDLE (no world alignment); stat tiles (skills/live events/activated/idle); ALL/ACTIVATED/IDLE filter tabs + text search; expand skill → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; amber badge on activated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-world-demand brief + TTS via jarvis:speak-dossier; isSkildQuery+buildSkildScript wired in JarvisBrain; "skill demand"/"world skill"/"which skills"/"active skills"/"skill intel"/"skild"/"skills needed now" voice trigger; jarvis:skild-toggle event; 90-s auto-refresh */}
             <SkillLiveIntelDemand />
+            {/* F37 (overnight 2026-08-01): contact × live intel exposure monitor — ◈ CXLINTEL button (left:56760, bottom:8, zIndex:110); parallel-fetches /entities/Contact + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each contact (name/org/location/tags) against live world events to surface EXPOSED (live-world-event overlap) vs CLEAR; red badge on exposed count, escalated to red when seismic events match; stat tiles (contacts/live events/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand contact → matched events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-exposure brief + TTS via jarvis:speak-dossier; isCxlintelQuery+buildCxlintelScript wired in JarvisBrain; "contact intel"/"contact exposure"/"who is affected"/"cxlintel"/"contact world"/"people exposed"/"contacts affected" voice trigger; jarvis:cxlintel-toggle event; 60-s auto-refresh */}
+            <ContactLiveIntelExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
