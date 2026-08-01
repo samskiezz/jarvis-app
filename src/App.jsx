@@ -200,6 +200,7 @@ import SkillLiveIntelDemand from '@/components/cinematic/SkillLiveIntelDemand';
 import ContactLiveIntelExposure from '@/components/cinematic/ContactLiveIntelExposure';
 import CryptoRiskCorrelator from '@/components/cinematic/CryptoRiskCorrelator';
 import ContactRiskSignalCorrelator from '@/components/cinematic/ContactRiskSignalCorrelator';
+import SwarmJobRiskCorrelator from '@/components/cinematic/SwarmJobRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -593,6 +594,8 @@ function App() {
             <CryptoRiskCorrelator />
             {/* F39 (overnight 2026-08-01): contact × risk signal correlator — ◈ CRSC button; parallel-fetches /entities/Contact + /entities/RiskSignal; keyword-correlates each contact (name/org/role/email) against active risk signals to surface EXPOSED vs CLEAR; red badge on exposed count; expand contact → matched signals with severity + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence exposure brief + TTS; isCrscQuery+buildCrscScript already wired in JarvisBrain; "contact risk"/"crsc"/"exposed contacts"/"risky contacts"/"contacts with risk" voice trigger; jarvis:crsc-toggle event; 90s auto-refresh */}
             <ContactRiskSignalCorrelator />
+            {/* F40 (overnight 2026-08-01): swarm job × risk signal correlator — ◈ SJRS button; parallel-fetches /entities/SwarmJob + /entities/RiskSignal; keyword-correlates each swarm job against active risk signals to surface EXPOSED vs CLEAR jobs; red badge on exposed count; expand job → matched signals with severity + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-risk brief + TTS; isSwarmRiskQuery+buildSwarmRiskScript already wired in JarvisBrain; "swarm risk"/"sjrs"/"exposed swarm"/"risky swarm" voice trigger; 90s auto-refresh */}
+            <SwarmJobRiskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
