@@ -289,6 +289,7 @@ import { isSevdashQuery, buildSevdashScript } from "./OpsEventSeverityDashboard"
 import { isLitaQuery, buildLitaScript } from "./LiveIntelTaskActivator";
 import { isSkildQuery, buildSkildScript } from "./SkillLiveIntelDemand";
 import { isCxlintelQuery, buildCxlintelScript } from "./ContactLiveIntelExposure";
+import { isGndcQuery, buildGndcScript } from "./GraphNodeDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3308,6 +3309,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:lgce-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLgceScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGndcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gndc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGndcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

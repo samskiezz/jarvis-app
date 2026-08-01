@@ -205,6 +205,7 @@ import LiveIntelGraphExposure from '@/components/cinematic/LiveIntelGraphExposur
 import ContactGraphCentralityPanel from '@/components/cinematic/ContactGraphCentralityPanel';
 import IntelProfileLiveIntelExposure from '@/components/cinematic/IntelProfileLiveIntelExposure';
 import InvestigationLiveIntelPulse from '@/components/cinematic/InvestigationLiveIntelPulse';
+import GraphNodeDatasetCoverage from '@/components/cinematic/GraphNodeDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -608,6 +609,8 @@ function App() {
             <IntelProfileLiveIntelExposure />
             {/* F44 (overnight 2026-08-01): investigation × live intel pulse — ◈ ILIP button (left:57880, bottom:8, zIndex:112); parallel-fetches /v1/investigations + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each open investigation (title/name/description/type/location/tags) against live world events to surface ACCELERATING (world-event alignment) vs STALLED (no live signal); cyan badge on accelerating count; stat tiles (cases/live events/accelerating/stalled); ALL/ACCELERATING/STALLED filter tabs + text search; expand case → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence case-world pulse brief + TTS via jarvis:speak-dossier; isIlipQuery+buildIlipScript wired in JarvisBrain; "investigation intel"/"live cases"/"case pulse"/"ilip"/"cases active"/"investigation live"/"case world"/"cases accelerating"/"open case intel"/"which cases are live" voice trigger; jarvis:ilip-toggle event; 90-s auto-refresh */}
             <InvestigationLiveIntelPulse />
+            {/* F45 (overnight 2026-08-01): graph node × dataset coverage — ◈ GNDC button (left:58440, bottom:8, zIndex:113); parallel-fetches /v1/graph/centrality + /v1/datasets; keyword-correlates each top-influence graph node (label/name/type/category) against the dataset catalog to surface COVERED (at least one dataset supports the node domain) vs UNCHARTED (no dataset coverage — intelligence gap); amber badge on uncharted count; stat tiles (nodes/datasets/covered/uncharted); ALL/COVERED/UNCHARTED filter tabs + text search; expand node → matched datasets with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-data readiness brief + TTS via jarvis:speak-dossier; isGndcQuery+buildGndcScript wired in JarvisBrain; "graph dataset"/"dataset node"/"node data coverage"/"graph data cover"/"gndc"/"uncharted nodes"/"which nodes have data"/"node dataset gap" voice trigger; jarvis:gndc-toggle event; 90-s auto-refresh */}
+            <GraphNodeDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
