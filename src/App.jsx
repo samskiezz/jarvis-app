@@ -198,6 +198,7 @@ import GraphNodeReportCoverage from '@/components/cinematic/GraphNodeReportCover
 import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivator';
 import SkillLiveIntelDemand from '@/components/cinematic/SkillLiveIntelDemand';
 import ContactLiveIntelExposure from '@/components/cinematic/ContactLiveIntelExposure';
+import CryptoRiskCorrelator from '@/components/cinematic/CryptoRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -587,6 +588,8 @@ function App() {
             <SkillLiveIntelDemand />
             {/* F37 (overnight 2026-08-01): contact × live intel exposure monitor — ◈ CXLINTEL button (left:56760, bottom:8, zIndex:110); parallel-fetches /entities/Contact + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each contact (name/org/location/tags) against live world events to surface EXPOSED (live-world-event overlap) vs CLEAR; red badge on exposed count, escalated to red when seismic events match; stat tiles (contacts/live events/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand contact → matched events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-exposure brief + TTS via jarvis:speak-dossier; isCxlintelQuery+buildCxlintelScript wired in JarvisBrain; "contact intel"/"contact exposure"/"who is affected"/"cxlintel"/"contact world"/"people exposed"/"contacts affected" voice trigger; jarvis:cxlintel-toggle event; 60-s auto-refresh */}
             <ContactLiveIntelExposure />
+            {/* F38 (overnight 2026-08-01): crypto × risk signal correlator — ◈ CRYPTORSK button (left:31000, bottom:8, zIndex:61); parallel-fetches /functions/getLiveIntel (crypto+FX) + /entities/RiskSignal; keyword-correlates each active risk signal against live crypto/FX asset names and tickers to surface EXPOSED (≥1 market keyword overlap) vs ISOLATED (no financial correlation); stat tiles (assets/signals/exposed/isolated); ALL/EXPOSED/ISOLATED filter tabs + text search; expand signal → matched assets with type badge + change_pct + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence financial-risk brief + TTS via jarvis:speak-dossier; isCryptorskQuery+buildCryptorskScript wired in JarvisBrain; "crypto risk"/"bitcoin risk"/"market risk signal"/"financial risk"/"crypto correlation"/"cryptorsk" voice trigger; jarvis:cryptorsk-toggle event; 5-min auto-refresh */}
+            <CryptoRiskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
