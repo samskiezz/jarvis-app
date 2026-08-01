@@ -235,6 +235,7 @@ import { isAsstQuery, buildAsstScript } from "./JarvisAssetLibrary";
 import { isContactAnomalyQuery, buildContactAnomalyScript } from "./ContactAnomalyCorrelator";
 import { isTaskAnomalyQuery, buildTaskAnomalyScript } from "./TaskAnomalyCorrelator";
 import { isSwarmRiskQuery, buildSwarmRiskScript } from "./SwarmJobRiskCorrelator";
+import { isLgceQuery, buildLgceScript } from "./LiveIntelGraphExposure";
 import { isIvacQuery, buildIvacScript } from "./InvestmentAnomalyCorrelator";
 import { isIprscQuery, buildIprscScript } from "./IntelProfileRiskCorrelator";
 import { isIpacQuery, buildIpacScript } from "./IntelProfileAnomalyCorrelator";
@@ -3270,6 +3271,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cxlintel-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCxlintelScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isLgceQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lgce-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLgceScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

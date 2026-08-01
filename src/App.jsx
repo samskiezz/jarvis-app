@@ -201,6 +201,7 @@ import ContactLiveIntelExposure from '@/components/cinematic/ContactLiveIntelExp
 import CryptoRiskCorrelator from '@/components/cinematic/CryptoRiskCorrelator';
 import ContactRiskSignalCorrelator from '@/components/cinematic/ContactRiskSignalCorrelator';
 import SwarmJobRiskCorrelator from '@/components/cinematic/SwarmJobRiskCorrelator';
+import LiveIntelGraphExposure from '@/components/cinematic/LiveIntelGraphExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -596,6 +597,8 @@ function App() {
             <ContactRiskSignalCorrelator />
             {/* F40 (overnight 2026-08-01): swarm job × risk signal correlator — ◈ SJRS button; parallel-fetches /entities/SwarmJob + /entities/RiskSignal; keyword-correlates each swarm job against active risk signals to surface EXPOSED vs CLEAR jobs; red badge on exposed count; expand job → matched signals with severity + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-risk brief + TTS; isSwarmRiskQuery+buildSwarmRiskScript already wired in JarvisBrain; "swarm risk"/"sjrs"/"exposed swarm"/"risky swarm" voice trigger; 90s auto-refresh */}
             <SwarmJobRiskCorrelator />
+            {/* F41 (overnight 2026-08-01): live intel × graph centrality exposure — ◈ LGCE button (left:598640, bottom:8, zIndex:225); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/graph/centrality; keyword-correlates each top-influence graph node against live world events to surface ACTIVATED (world event intersects node domain) vs DORMANT (no live exposure); stat tiles (nodes/live events/activated/dormant); ALL/ACTIVATED/DORMANT filter tabs + text search; expand node → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; cyan badge on activated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-exposure brief + TTS via jarvis:speak-dossier; isLgceQuery+buildLgceScript wired in JarvisBrain; "live graph"/"graph exposure"/"active nodes"/"world graph"/"lgce"/"graph intel"/"network exposure" voice trigger; jarvis:lgce-toggle event; 60-s auto-refresh */}
+            <LiveIntelGraphExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
