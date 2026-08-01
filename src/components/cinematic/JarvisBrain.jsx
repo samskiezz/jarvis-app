@@ -204,6 +204,7 @@ import { isIvrcQuery, buildIvrcScript } from "./InvestmentRiskCorrelator";
 import { isSwarmAlertQuery, buildSwarmAlertScript } from "./SwarmJobAlertCorrelator";
 import { isAdnaQuery, buildAdnaScript } from "./AssetDnaScanner";
 import { isCgcpQuery, buildCgcpScript } from "./ContactGraphCentralityPanel";
+import { isIpliveQuery, buildIpliveScript } from "./IntelProfileLiveIntelExposure";
 import { isIspcQuery, buildIspcScript } from "./IntelSpecCoverage";
 import { isRsscQuery, buildRsscScript } from "./RiskSpecCoverage";
 import { isTaskSpecQuery, buildTaskSpecScript } from "./TaskSpecCoverage";
@@ -2510,6 +2511,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cgcp-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCgcpScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F43-backlog IntelProfileLiveIntelExposure — /entities/IntelProfile + /functions/getLiveIntel
+    // "intel profile live / profile world / active profiles / iplive /
+    //   profiles activated / profile world events / intel profile exposure /
+    //   world intel profile / which profiles are active / profile live intel"
+    if (isIpliveQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iplive-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpliveScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

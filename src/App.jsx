@@ -203,6 +203,7 @@ import ContactRiskSignalCorrelator from '@/components/cinematic/ContactRiskSigna
 import SwarmJobRiskCorrelator from '@/components/cinematic/SwarmJobRiskCorrelator';
 import LiveIntelGraphExposure from '@/components/cinematic/LiveIntelGraphExposure';
 import ContactGraphCentralityPanel from '@/components/cinematic/ContactGraphCentralityPanel';
+import IntelProfileLiveIntelExposure from '@/components/cinematic/IntelProfileLiveIntelExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -602,6 +603,8 @@ function App() {
             <LiveIntelGraphExposure />
             {/* F42 (overnight 2026-08-01): contact × graph centrality panel — ◈ CGCP button (left:456720, bottom:8, zIndex:193); parallel-fetches /entities/Contact + /v1/graph/centrality; keyword-correlates each contact (name/org/role/tags) against top-influence centrality nodes to surface HIGH-CENTRALITY contacts (network-aligned) vs PERIPHERAL (no graph node match); stat tiles (contacts/nodes/linked/peripheral); ALL/HIGH-CENTRALITY/PERIPHERAL filter tabs + text search; expand contact → matched centrality nodes with influence score + type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-network brief + TTS via jarvis:speak-dossier; isCgcpQuery+buildCgcpScript wired in JarvisBrain; "contact centrality"/"network contacts"/"cgcp"/"influential contacts"/"contacts by network" voice trigger; jarvis:cgcp-toggle event; 90-s auto-refresh */}
             <ContactGraphCentralityPanel />
+            {/* F43 (overnight 2026-08-01): intel profile × live intel exposure — ◈ IPLIVE button (left:57320, bottom:8, zIndex:111); parallel-fetches /entities/IntelProfile + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each intel profile (name/title/description/type/location) against live world events to surface ACTIVATED (world event intersects profile domain) vs DORMANT (no live alignment); stat tiles (profiles/live events/activated/dormant); ALL/ACTIVATED/DORMANT filter tabs + text search; expand profile → matched live events with type badge (SEISMIC/CRYPTO/FX) + relevance score bar; amber badge on activated count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-profile-world-exposure brief + TTS via jarvis:speak-dossier; isIpliveQuery+buildIpliveScript wired in JarvisBrain; "intel profile live"/"profile world"/"active profiles"/"iplive"/"profiles activated"/"profile world events" voice trigger; jarvis:iplive-toggle event; 60-s auto-refresh */}
+            <IntelProfileLiveIntelExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
