@@ -192,6 +192,7 @@ import SnapshotTracker from '@/components/cinematic/SnapshotTracker';
 import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRate';
 import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage';
 import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
+import SceneRiskCoverageMap from '@/components/cinematic/SceneRiskCoverageMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -569,6 +570,8 @@ function App() {
             <GraphNodeTaskCoverage />
             {/* F31 (backlog 2026-08-01): ops task coverage checker — ◎ OPSCOV button (left:6732, bottom:6, zIndex:65); parallel-fetches /v1/ops/events (critical+high) + /entities/Task; keyword-correlates each significant ops event against task titles/descriptions to surface COVERED vs UNCOVERED events; red badge on uncovered critical count; ▶ ASSESS → /v1/jarvis/agent/chat AI remediation recommendation + jarvis:speak-dossier TTS; "ops coverage"/"ops task coverage"/"uncovered events"/"task coverage"/"opscov"/"ops gaps" voice trigger; jarvis:ops-coverage-toggle event; 30-s auto-refresh */}
             <OpsTaskCoverageChecker />
+            {/* F32 (backlog 2026-08-01): scene-risk coverage map — ◈ SCRISK button (left:8604, bottom:8, zIndex:65); parallel-fetches all 10 /v1/cinematic/scene/{id} anchor sets + /entities/RiskSignal; keyword-correlates each risk signal against every scene's anchor texts to surface CAPTURED (represented in a scene) vs DARK (no scene coverage) risks; red badge on dark critical count; stat tiles (scenes/risks/captured/dark); ALL/CAPTURED/DARK filter tabs + text search; expand risk → matched scene chips; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-risk alignment brief + TTS via jarvis:speak-dossier; "scene risk"/"dark risks"/"risk scenes"/"uncaptured risks"/"scene risk coverage"/"scrisk" voice trigger; jarvis:scrisk-toggle event; 120-s auto-refresh */}
+            <SceneRiskCoverageMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

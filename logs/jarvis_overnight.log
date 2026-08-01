@@ -1,1 +1,2 @@
 2026-08-01 jarvis-overnight: F31 OpsTaskCoverageChecker — mounted /v1/ops/events × /entities/Task coverage checker in App.jsx; ◎ OPSCOV button at left:6732; marked F01-F30 done in backlog (all were already implemented pre-backlog)
+2026-08-01 jarvis-overnight: F32 SceneRiskCoverageMap — mounted all 10 /v1/cinematic/scene/{id} × /entities/RiskSignal coverage checker in App.jsx; CAPTURED vs DARK risk signals; ◈ SCRISK button at left:8604; build exit 0
