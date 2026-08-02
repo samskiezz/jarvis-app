@@ -291,6 +291,7 @@ import { isSkildQuery, buildSkildScript } from "./SkillLiveIntelDemand";
 import { isCxlintelQuery, buildCxlintelScript } from "./ContactLiveIntelExposure";
 import { isGndcQuery, buildGndcScript } from "./GraphNodeDatasetCoverage";
 import { isInvintelQuery, buildInvintelScript } from "./InvestmentIntelExposure";
+import { isRpipQuery, buildRpipScript } from "./ReportIntelProfileCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3331,6 +3332,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invintel-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvintelScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F48: report × intel profile coverage — /v1/reports + /entities/IntelProfile;
+    // PROFILED vs UNMONITORED; "report intel profile / intel profile report / rpip /
+    // profiled reports / unmonitored profiles / threat actor report coverage /
+    // intelligence gap / report gap"
+    if (isRpipQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rpip-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRpipScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

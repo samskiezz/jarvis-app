@@ -208,6 +208,7 @@ import InvestigationLiveIntelPulse from '@/components/cinematic/InvestigationLiv
 import GraphNodeDatasetCoverage from '@/components/cinematic/GraphNodeDatasetCoverage';
 import DatasetRiskCoverage from '@/components/cinematic/DatasetRiskCoverage';
 import InvestmentIntelExposure from '@/components/cinematic/InvestmentIntelExposure';
+import ReportIntelProfileCoverage from '@/components/cinematic/ReportIntelProfileCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -617,6 +618,8 @@ function App() {
             <DatasetRiskCoverage />
             {/* F47 (overnight 2026-08-01): investment × intel profile exposure — ◈ INVINTEL button (left:70200, bottom:8, zIndex:135); parallel-fetches /entities/Investment + /entities/IntelProfile; keyword-correlates each investment (name/sector/notes/tags) against tracked threat actor profiles (name/category/description/aliases/tags) to surface EXPOSED (intel profile alignment detected) vs CLEAR (no threat actor alignment); red badge on exposed count; stat tiles (investments/profiles/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched intel profiles with category badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment threat exposure brief + TTS via jarvis:speak-dossier; isInvintelQuery+buildInvintelScript wired in JarvisBrain; "investment intel"/"intel investment"/"invintel"/"investment threat actor"/"portfolio threat exposure"/"exposed investments" voice trigger; jarvis:invintel-toggle event; 90-s auto-refresh */}
             <InvestmentIntelExposure />
+            {/* F48 (overnight 2026-08-02): report × intel profile coverage — ◈ RPIP button (left:70760, bottom:8, zIndex:136); parallel-fetches /v1/reports + /entities/IntelProfile; keyword-correlates each tracked intel profile (name/category/description/aliases/tags) against the intelligence report corpus (title/summary/type/tags) to surface PROFILED (report coverage found) vs UNMONITORED (no report references this profile — intelligence gap); amber badge on unmonitored count; stat tiles (reports/profiles/profiled/unmonitored); ALL/PROFILED/UNMONITORED filter tabs + text search; expand profile → matched reports with type badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-profile report-coverage brief + TTS via jarvis:speak-dossier; isRpipQuery+buildRpipScript wired in JarvisBrain; "report intel profile"/"intel profile report"/"rpip"/"profiled reports"/"unmonitored profiles"/"threat actor report coverage"/"intelligence gap"/"report gap" voice trigger; jarvis:rpip-toggle event; 90-s auto-refresh */}
+            <ReportIntelProfileCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
