@@ -209,6 +209,7 @@ import GraphNodeDatasetCoverage from '@/components/cinematic/GraphNodeDatasetCov
 import DatasetRiskCoverage from '@/components/cinematic/DatasetRiskCoverage';
 import InvestmentIntelExposure from '@/components/cinematic/InvestmentIntelExposure';
 import ReportIntelProfileCoverage from '@/components/cinematic/ReportIntelProfileCoverage';
+import ScenarioIntelProfileCoverage from '@/components/cinematic/ScenarioIntelProfileCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -620,6 +621,8 @@ function App() {
             <InvestmentIntelExposure />
             {/* F48 (overnight 2026-08-02): report × intel profile coverage — ◈ RPIP button (left:70760, bottom:8, zIndex:136); parallel-fetches /v1/reports + /entities/IntelProfile; keyword-correlates each tracked intel profile (name/category/description/aliases/tags) against the intelligence report corpus (title/summary/type/tags) to surface PROFILED (report coverage found) vs UNMONITORED (no report references this profile — intelligence gap); amber badge on unmonitored count; stat tiles (reports/profiles/profiled/unmonitored); ALL/PROFILED/UNMONITORED filter tabs + text search; expand profile → matched reports with type badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-profile report-coverage brief + TTS via jarvis:speak-dossier; isRpipQuery+buildRpipScript wired in JarvisBrain; "report intel profile"/"intel profile report"/"rpip"/"profiled reports"/"unmonitored profiles"/"threat actor report coverage"/"intelligence gap"/"report gap" voice trigger; jarvis:rpip-toggle event; 90-s auto-refresh */}
             <ReportIntelProfileCoverage />
+            {/* F49 (overnight 2026-08-02): scenario × intel profile coverage — ◈ SCIP button (left:71320, bottom:8, zIndex:137); parallel-fetches /v1/scenario/list + /entities/IntelProfile; keyword-correlates each scenario against tracked threat actor intel profiles to surface THREATENED (adversarial alignment detected) vs CLEAR (no intel profile alignment); red badge on threatened count; stat tiles (scenarios/profiles/threatened/clear); ALL/THREATENED/CLEAR filter tabs + text search; expand scenario → matched intel profiles with category badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario threat landscape brief + TTS via jarvis:speak-dossier; isSCIPQuery+buildSCIPScript wired in JarvisBrain; "scenario intel"/"scenario threat"/"scenario profile"/"scip"/"threat scenario"/"intel scenario coverage"/"scenario intel profile"/"scenario threat actor" voice trigger; jarvis:scip-toggle event; 90-s auto-refresh */}
+            <ScenarioIntelProfileCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

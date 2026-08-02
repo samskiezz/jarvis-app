@@ -292,6 +292,7 @@ import { isCxlintelQuery, buildCxlintelScript } from "./ContactLiveIntelExposure
 import { isGndcQuery, buildGndcScript } from "./GraphNodeDatasetCoverage";
 import { isInvintelQuery, buildInvintelScript } from "./InvestmentIntelExposure";
 import { isRpipQuery, buildRpipScript } from "./ReportIntelProfileCoverage";
+import { isSCIPQuery, buildSCIPScript } from "./ScenarioIntelProfileCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3345,6 +3346,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rpip-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRpipScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F49: scenario × intel profile coverage — /v1/scenario/list + /entities/IntelProfile;
+    // THREATENED vs CLEAR; "scenario intel / scenario threat / scenario profile / scip /
+    // threat scenario / intel scenario coverage / scenario intel profile / scenario threat actor"
+    if (isSCIPQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scip-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSCIPScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
