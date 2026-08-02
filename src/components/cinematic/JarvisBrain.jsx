@@ -299,6 +299,7 @@ import { isSCIPQuery, buildSCIPScript } from "./ScenarioIntelProfileCoverage";
 import { isInvdataQuery, buildInvdataScript } from "./InvestigationDatasetCoverage";
 import { isSwjopsQuery, buildSwjopsScript } from "./SwarmJobOpsEventCoverage";
 import { isSkopsQuery, buildSkopsScript } from "./SkillOpsEventCoverage";
+import { isScoeQuery, buildScoeScript } from "./ScenarioOpsEventCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3428,6 +3429,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skops-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSkopsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F60: scenario × ops event coverage — /v1/scenario/list + /v1/ops/events;
+    // TRIGGERED (scenario activated by live ops) vs DORMANT (no ops event coverage);
+    // "scenario ops event / ops scenario / scoe / triggered scenarios /
+    // scenario ops coverage / live scenario / ops triggered scenario"
+    if (isScoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

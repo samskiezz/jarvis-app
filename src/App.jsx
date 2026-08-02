@@ -220,6 +220,7 @@ import InvestmentLiveIntelExposure from '@/components/cinematic/InvestmentLiveIn
 import SwarmJobOpsEventCoverage from '@/components/cinematic/SwarmJobOpsEventCoverage';
 import SkillOpsEventCoverage from '@/components/cinematic/SkillOpsEventCoverage';
 import ContactDatasetCoverage from '@/components/cinematic/ContactDatasetCoverage';
+import ScenarioOpsEventCoverage from '@/components/cinematic/ScenarioOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -653,6 +654,8 @@ function App() {
             <SkillOpsEventCoverage />
             {/* F59 (overnight 2026-08-02): contact × dataset coverage — ◈ CDST button (left:680160, bottom:8, zIndex:243); parallel-fetches /entities/Contact + /v1/datasets; keyword-correlates each contact (name/email/company/title/description) against the dataset catalog to surface DOCUMENTED (dataset backing found) vs BLIND (no data coverage — intelligence gap); amber badge on blind count; stat tiles (contacts/datasets/documented/blind); ALL/DOCUMENTED/BLIND filter tabs + text search; expand contact → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-data coverage brief + TTS via jarvis:speak-dossier; isCdstQuery+buildCdstScript already wired in JarvisBrain; "contact data"/"contact dataset"/"cdst"/"contact data coverage"/"blind contacts"/"data backed contact"/"which contact has dataset"/"contacts in dataset" voice trigger; jarvis:cdst-toggle event; 90-s auto-refresh */}
             <ContactDatasetCoverage />
+            {/* F60 (overnight 2026-08-02): scenario × ops event coverage — ◈ SCOE button (left:680720, bottom:8, zIndex:244); parallel-fetches /v1/scenario/list + /v1/ops/events; keyword-correlates each scenario (name/title/description/type/tags) against active ops events to surface TRIGGERED (live ops event alignment) vs DORMANT (no ops event coverage — readiness gap); amber badge on triggered count; stat tiles (scenarios/ops events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand scenario → matched ops events with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario-ops coverage brief + TTS via jarvis:speak-dossier; isScoeQuery+buildScoeScript wired in JarvisBrain; "scenario ops event"/"ops scenario"/"scoe"/"triggered scenarios"/"scenario ops coverage"/"live scenario"/"ops triggered scenario"/"scenario event match" voice trigger; jarvis:scoe-toggle event; 90-s auto-refresh */}
+            <ScenarioOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
