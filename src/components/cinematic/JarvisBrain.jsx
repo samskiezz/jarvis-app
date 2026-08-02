@@ -246,6 +246,7 @@ import { isEvlbQuery, buildEvlbScript } from "./AipEvalBenchmark";
 import { isCinvQuery, buildCinvScript } from "./ContactInvestigationCorrelator";
 import { isIpskQuery, buildIpskScript } from "./IntelProfileSkillCoverage";
 import { isRsinvQuery, buildRsinvScript } from "./RiskSignalInvestigationCorrelator";
+import { isInvliveQuery, buildInvliveScript } from "./InvestmentLiveIntelExposure";
 import { isRsacQuery, buildRsacScript } from "./RiskSignalAnomalyCorrelator";
 import { isSwarmAnomalyQuery, buildSwarmAnomalyScript } from "./SwarmJobAnomalyCorrelator";
 import { isIvinQuery, buildIvinScript } from "./InvestmentInvestigationCorrelator";
@@ -2919,6 +2920,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsinv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsinvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isInvliveQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invlive-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvliveScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

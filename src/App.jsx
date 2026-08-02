@@ -216,6 +216,7 @@ import InvestigationDatasetCoverage from '@/components/cinematic/InvestigationDa
 import SwarmJobInvestigationCorrelator from '@/components/cinematic/SwarmJobInvestigationCorrelator';
 import SceneTaskCoverage from '@/components/cinematic/SceneTaskCoverage';
 import RiskSignalInvestigationCorrelator from '@/components/cinematic/RiskSignalInvestigationCorrelator';
+import InvestmentLiveIntelExposure from '@/components/cinematic/InvestmentLiveIntelExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -641,6 +642,8 @@ function App() {
             <SceneTaskCoverage />
             {/* F55 (overnight 2026-08-02): risk signal × investigation correlator — ◈ RSINV button (left:625440, bottom:8, zIndex:230); parallel-fetches /entities/RiskSignal + /v1/investigations; keyword-correlates each risk signal (name/title/category/sector/description/source) against open investigations to surface LINKED (investigation coverage found) vs UNLINKED (no active investigation — accountability gap); amber badge on unlinked count; ALL/LINKED/UNLINKED filter tabs + text search; expand signal → matched investigations with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk investigation coverage brief + TTS via jarvis:speak-dossier; isRsinvQuery+buildRsinvScript wired in JarvisBrain; "risk signal invest"/"invest risk signal"/"rsinv"/"unlinked risks"/"risk cases"/"risk investigation coverage" voice trigger; jarvis:rsinv-toggle event; 90-s auto-refresh */}
             <RiskSignalInvestigationCorrelator />
+            {/* F56 (overnight 2026-08-02): investment × live intel exposure — ◈ INVLIVE button (left:626000, bottom:8, zIndex:231); parallel-fetches /entities/Investment + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each investment (name/sector/notes/tags/ticker) against live world events to surface EXPOSED (live world event overlaps investment domain) vs STABLE (no live alignment); red badge on exposed count; stat tiles (investments/live events/exposed/stable); ALL/EXPOSED/STABLE filter tabs + text search; expand investment → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-world-risk brief + TTS via jarvis:speak-dossier; isInvliveQuery+buildInvliveScript wired in JarvisBrain; "investment live"/"portfolio live"/"live portfolio"/"invlive"/"portfolio events"/"exposed portfolio"/"portfolio world" voice trigger; jarvis:invlive-toggle event; 60-s auto-refresh */}
+            <InvestmentLiveIntelExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
