@@ -211,6 +211,7 @@ import InvestmentIntelExposure from '@/components/cinematic/InvestmentIntelExpos
 import ReportIntelProfileCoverage from '@/components/cinematic/ReportIntelProfileCoverage';
 import ScenarioIntelProfileCoverage from '@/components/cinematic/ScenarioIntelProfileCoverage';
 import ContactInvestigationCorrelator from '@/components/cinematic/ContactInvestigationCorrelator';
+import IntelProfileSkillCoverage from '@/components/cinematic/IntelProfileSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -626,6 +627,8 @@ function App() {
             <ScenarioIntelProfileCoverage />
             {/* F50 (overnight 2026-08-02): contact × investigation correlator — ◈ CINV button; parallel-fetches /entities/Contact + /v1/investigations; keyword-correlates each contact (name/org/role/tags) against open investigations to surface LINKED (contact appears in an active investigation) vs CLEAR (no investigative tie); stat tiles; ALL/LINKED/CLEAR filter tabs + search; expand contact → matched investigations; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCinvQuery+buildCinvScript already wired in JarvisBrain; "contact invest"/"cinv"/"linked contacts"/"contacts with cases"/"investigation contacts" voice trigger; jarvis:cinv-toggle event; 90-s auto-refresh */}
             <ContactInvestigationCorrelator />
+            {/* F51 (overnight 2026-08-02): intel profile × skill coverage — ◈ IPSK button (left:622000, bottom:8, zIndex:230); parallel-fetches /entities/IntelProfile + /v1/aip/skill; keyword-correlates each intel profile (name/subject/description/category/nationality/aliases) against JARVIS skills (name/title/description/category/domain/tags) to surface SKILLED (at least one skill covers this profile domain) vs UNSUPPORTED (no skill addresses this intel profile — capability gap); amber badge on unsupported count; stat tiles (profiles/skills/skilled/unsupported); ALL/SKILLED/UNSUPPORTED filter tabs + text search; expand profile → matched skills with category badge + domain badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-gap brief + TTS via jarvis:speak-dossier; isIpskQuery+buildIpskScript wired in JarvisBrain; "intel profile skill"/"skill coverage"/"ipsk"/"intel skill gap"/"profile skill map"/"unsupported intel"/"skill intel profile" voice trigger; jarvis:ipsk-toggle event; 90-s auto-refresh */}
+            <IntelProfileSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

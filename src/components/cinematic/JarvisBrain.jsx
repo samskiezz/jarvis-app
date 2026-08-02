@@ -243,6 +243,7 @@ import { isIprscQuery, buildIprscScript } from "./IntelProfileRiskCorrelator";
 import { isIpacQuery, buildIpacScript } from "./IntelProfileAnomalyCorrelator";
 import { isEvlbQuery, buildEvlbScript } from "./AipEvalBenchmark";
 import { isCinvQuery, buildCinvScript } from "./ContactInvestigationCorrelator";
+import { isIpskQuery, buildIpskScript } from "./IntelProfileSkillCoverage";
 import { isRsinvQuery, buildRsinvScript } from "./RiskSignalInvestigationCorrelator";
 import { isRsacQuery, buildRsacScript } from "./RiskSignalAnomalyCorrelator";
 import { isSwarmAnomalyQuery, buildSwarmAnomalyScript } from "./SwarmJobAnomalyCorrelator";
@@ -2889,6 +2890,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cinv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCinvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIpskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipsk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
