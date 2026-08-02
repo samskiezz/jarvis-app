@@ -223,6 +223,7 @@ import ContactDatasetCoverage from '@/components/cinematic/ContactDatasetCoverag
 import ScenarioOpsEventCoverage from '@/components/cinematic/ScenarioOpsEventCoverage';
 import ReportDatasetCoverage from '@/components/cinematic/ReportDatasetCoverage';
 import TaskIntelProfileCoverage from '@/components/cinematic/TaskIntelProfileCoverage';
+import TaskOpsEventCoverage from '@/components/cinematic/TaskOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -662,6 +663,8 @@ function App() {
             <ReportDatasetCoverage />
             {/* F62 (overnight 2026-08-02): task × intel profile coverage — ◈ TINTEL button (left:681840, bottom:8, zIndex:246); parallel-fetches /entities/Task + /entities/IntelProfile; keyword-correlates each task (name/title/description/mission/priority/tags) against tracked threat actor intel profiles to surface THREAT-BACKED (adversarial alignment detected) vs CLEAN (no intel profile alignment); red badge on threat-backed count; stat tiles (tasks/profiles/threat-backed/clean); ALL/THREAT-BACKED/CLEAN filter tabs + text search; expand task → matched intel profiles with category badge + nationality + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence mission threat exposure brief + TTS via jarvis:speak-dossier; isTintelQuery+buildTintelScript wired in JarvisBrain; "task intel"/"intel task"/"tintel"/"task threat"/"threat backed task"/"task adversary"/"adversary task"/"mission threat" voice trigger; jarvis:tintel-toggle event; 90-s auto-refresh */}
             <TaskIntelProfileCoverage />
+            {/* F63 (overnight 2026-08-02): task × ops event coverage — ◈ TKOPS button (left:682400, bottom:8, zIndex:247); parallel-fetches /entities/Task + /v1/ops/events; keyword-correlates each active task against live ops events to surface RESPONDING (ops event alignment found) vs UNRESPONSIVE (no active ops coverage — execution gap); amber badge on unresponsive count; stat tiles (tasks/ops events/responding/unresponsive); ALL/RESPONDING/UNRESPONSIVE filter tabs + text search; expand task → matched ops events with severity chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-ops coverage brief + TTS via jarvis:speak-dossier; isTkopsQuery+buildTkopsScript wired in JarvisBrain; "task ops"/"ops task"/"tkops"/"responding tasks"/"task ops coverage"/"ops event task"/"unresponsive ops"/"task ops alignment" voice trigger; jarvis:tkops-toggle event; 90-s auto-refresh */}
+            <TaskOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -302,6 +302,7 @@ import { isSkopsQuery, buildSkopsScript } from "./SkillOpsEventCoverage";
 import { isScoeQuery, buildScoeScript } from "./ScenarioOpsEventCoverage";
 import { isRptdsQuery, buildRptdsScript } from "./ReportDatasetCoverage";
 import { isTintelQuery, buildTintelScript } from "./TaskIntelProfileCoverage";
+import { isTkopsQuery, buildTkopsScript } from "./TaskOpsEventCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3464,6 +3465,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tintel-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTintelScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // task × ops event coverage / responding tasks / task ops alignment / unresponsive ops
+    if (isTkopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tkops-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTkopsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
