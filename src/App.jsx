@@ -215,6 +215,7 @@ import IntelProfileSkillCoverage from '@/components/cinematic/IntelProfileSkillC
 import InvestigationDatasetCoverage from '@/components/cinematic/InvestigationDatasetCoverage';
 import SwarmJobInvestigationCorrelator from '@/components/cinematic/SwarmJobInvestigationCorrelator';
 import SceneTaskCoverage from '@/components/cinematic/SceneTaskCoverage';
+import RiskSignalInvestigationCorrelator from '@/components/cinematic/RiskSignalInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -638,6 +639,8 @@ function App() {
             <SwarmJobInvestigationCorrelator />
             {/* F54 (overnight 2026-08-02): scene × task coverage — ◈ SCTASK button (left:72440, bottom:8, zIndex:139); parallel-fetches all 10 /v1/cinematic/scene/{id} anchor sets + /entities/Task; keyword-correlates each scene's anchor texts against active tasks to surface TASKED (at least one task covers the scene's operational domain) vs UNATTENDED (no task — action gap); amber badge on unattended count; stat tiles (scenes/tasks/tasked/unattended); ALL/TASKED/UNATTENDED filter tabs + text search; expand scene → matched tasks with type badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene operational coverage brief + TTS via jarvis:speak-dossier; isScTaskQuery+buildScTaskScript wired in JarvisBrain; "scene task"/"task scene"/"sctask"/"scene operations"/"unattended scenes"/"scene coverage"/"scene task coverage"/"scene action gap" voice trigger; jarvis:sctask-toggle event; 120-s auto-refresh */}
             <SceneTaskCoverage />
+            {/* F55 (overnight 2026-08-02): risk signal × investigation correlator — ◈ RSINV button (left:625440, bottom:8, zIndex:230); parallel-fetches /entities/RiskSignal + /v1/investigations; keyword-correlates each risk signal (name/title/category/sector/description/source) against open investigations to surface LINKED (investigation coverage found) vs UNLINKED (no active investigation — accountability gap); amber badge on unlinked count; ALL/LINKED/UNLINKED filter tabs + text search; expand signal → matched investigations with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk investigation coverage brief + TTS via jarvis:speak-dossier; isRsinvQuery+buildRsinvScript wired in JarvisBrain; "risk signal invest"/"invest risk signal"/"rsinv"/"unlinked risks"/"risk cases"/"risk investigation coverage" voice trigger; jarvis:rsinv-toggle event; 90-s auto-refresh */}
+            <RiskSignalInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
