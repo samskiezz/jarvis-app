@@ -218,6 +218,7 @@ import SceneTaskCoverage from '@/components/cinematic/SceneTaskCoverage';
 import RiskSignalInvestigationCorrelator from '@/components/cinematic/RiskSignalInvestigationCorrelator';
 import InvestmentLiveIntelExposure from '@/components/cinematic/InvestmentLiveIntelExposure';
 import SwarmJobOpsEventCoverage from '@/components/cinematic/SwarmJobOpsEventCoverage';
+import SkillOpsEventCoverage from '@/components/cinematic/SkillOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -647,6 +648,8 @@ function App() {
             <InvestmentLiveIntelExposure />
             {/* F57 (overnight 2026-08-02): swarm job × ops event automation coverage — ◈ SWJOPS button (left:626560, bottom:8, zIndex:232); parallel-fetches /entities/SwarmJob + /v1/ops/events; keyword-correlates each ops event against swarm jobs to surface AUTOMATED (swarm backing found) vs MANUAL (no swarm coverage — automation gap); amber badge on manual count; stat tiles (ops events/swarm jobs/automated/manual gap); ALL/AUTOMATED/MANUAL filter tabs + text search; expand event → matched swarm jobs with type badge + relevance score bar (or gap warning if none); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence automation-gap brief + TTS via jarvis:speak-dossier; isSwjopsQuery+buildSwjopsScript wired in JarvisBrain; "swarm ops"/"ops swarm"/"swjops"/"automated ops"/"manual ops"/"ops automation gap"/"swarm ops coverage"/"unautomated ops"/"automation coverage" voice trigger; jarvis:swjops-toggle event; 90-s auto-refresh */}
             <SwarmJobOpsEventCoverage />
+            {/* F58 (overnight 2026-08-02): skill × ops event coverage — ◈ SKOPS button (left:627120, bottom:8, zIndex:233); parallel-fetches /v1/aip/skill + /v1/ops/events; keyword-correlates each JARVIS skill (name/title/description/category/domain) against active ops events to surface IN-DEMAND (skill matches active ops situation) vs DORMANT (no active ops relevance); amber badge on dormant count; stat tiles (skills/ops events/in-demand/dormant); ALL/IN-DEMAND/DORMANT filter tabs + text search; expand skill → matched ops events with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-ops readiness brief + TTS via jarvis:speak-dossier; isSkopsQuery+buildSkopsScript wired in JarvisBrain; "skill ops"/"ops skill"/"skops"/"in-demand skills"/"skill readiness"/"operational skill gap"/"dormant skills"/"skill ops alignment" voice trigger; jarvis:skops-toggle event; 90-s auto-refresh */}
+            <SkillOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

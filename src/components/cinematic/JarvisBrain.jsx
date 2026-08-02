@@ -298,6 +298,7 @@ import { isRpipQuery, buildRpipScript } from "./ReportIntelProfileCoverage";
 import { isSCIPQuery, buildSCIPScript } from "./ScenarioIntelProfileCoverage";
 import { isInvdataQuery, buildInvdataScript } from "./InvestigationDatasetCoverage";
 import { isSwjopsQuery, buildSwjopsScript } from "./SwarmJobOpsEventCoverage";
+import { isSkopsQuery, buildSkopsScript } from "./SkillOpsEventCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3414,6 +3415,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swjops-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwjopsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F58: skill × ops event coverage — /v1/aip/skill + /v1/ops/events;
+    // IN-DEMAND (skill matches active ops) vs DORMANT (no ops relevance);
+    // "skill ops / ops skill / skops / in-demand skills / skill readiness /
+    // operational skill gap / dormant skills / skill ops alignment"
+    if (isSkopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skops-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSkopsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
