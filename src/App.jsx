@@ -225,6 +225,7 @@ import ReportDatasetCoverage from '@/components/cinematic/ReportDatasetCoverage'
 import TaskIntelProfileCoverage from '@/components/cinematic/TaskIntelProfileCoverage';
 import TaskOpsEventCoverage from '@/components/cinematic/TaskOpsEventCoverage';
 import ContactSkillCoverage from '@/components/cinematic/ContactSkillCoverage';
+import GraphNodeSkillCoverage from '@/components/cinematic/GraphNodeSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -668,6 +669,8 @@ function App() {
             <TaskOpsEventCoverage />
             {/* F64 (overnight 2026-08-02): contact × skill coverage — ◈ CSKILL button (left:682960, bottom:8, zIndex:248); parallel-fetches /entities/Contact + /v1/aip/skill; keyword-correlates each contact (name/email/company/title/description) against JARVIS skills (name/title/description/category/domain/tags) to surface SKILLED (at least one skill covers this contact's domain) vs UNCOVERED (no skill addresses their domain — capability gap); amber badge on uncovered count; stat tiles (contacts/skills/skilled/uncovered); ALL/SKILLED/UNCOVERED filter tabs + text search; expand contact → matched skills with category badge + domain badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-skill coverage brief + TTS via jarvis:speak-dossier; isCskillQuery+buildCskillScript wired in JarvisBrain; "contact skill"/"skill contact"/"cskill"/"uncovered contacts"/"contact capability"/"contact skill gap"/"skilled contacts" voice trigger; jarvis:cskill-toggle event; 90-s auto-refresh */}
             <ContactSkillCoverage />
+            {/* F65 (overnight 2026-08-02): graph node × skill coverage — ◈ GNSK button (left:683520, bottom:8, zIndex:249); parallel-fetches /v1/graph/centrality + /v1/aip/skill; keyword-correlates each top-influence graph node (label/name/type/category) against JARVIS skills (name/title/description/category/domain/tags) to surface COVERED (at least one skill addresses the node's domain) vs UNSKILLED (no JARVIS skill covers this node's domain — capability gap); amber badge on unskilled count; stat tiles (nodes/skills/covered/unskilled); ALL/COVERED/UNSKILLED filter tabs + text search; expand node → matched skills with category badge + domain badge + influence score + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-skill readiness brief + TTS via jarvis:speak-dossier; isGnskQuery+buildGnskScript wired in JarvisBrain; "graph skill"/"skill node"/"gnsk"/"unskilled nodes"/"node skill coverage"/"graph capability gap"/"graph skill readiness"/"graph skill gap" voice trigger; jarvis:gnsk-toggle event; 90-s auto-refresh */}
+            <GraphNodeSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

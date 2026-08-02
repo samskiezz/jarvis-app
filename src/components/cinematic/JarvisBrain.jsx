@@ -304,6 +304,7 @@ import { isRptdsQuery, buildRptdsScript } from "./ReportDatasetCoverage";
 import { isTintelQuery, buildTintelScript } from "./TaskIntelProfileCoverage";
 import { isTkopsQuery, buildTkopsScript } from "./TaskOpsEventCoverage";
 import { isCskillQuery, buildCskillScript } from "./ContactSkillCoverage";
+import { isGnskQuery, buildGnskScript } from "./GraphNodeSkillCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3486,6 +3487,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cskill-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCskillScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // graph node × skill coverage / unskilled nodes / graph capability gap / graph skill readiness
+    if (isGnskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gnsk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGnskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
