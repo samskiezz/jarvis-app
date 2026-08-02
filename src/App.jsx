@@ -213,6 +213,7 @@ import ScenarioIntelProfileCoverage from '@/components/cinematic/ScenarioIntelPr
 import ContactInvestigationCorrelator from '@/components/cinematic/ContactInvestigationCorrelator';
 import IntelProfileSkillCoverage from '@/components/cinematic/IntelProfileSkillCoverage';
 import InvestigationDatasetCoverage from '@/components/cinematic/InvestigationDatasetCoverage';
+import SwarmJobInvestigationCorrelator from '@/components/cinematic/SwarmJobInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -632,6 +633,8 @@ function App() {
             <IntelProfileSkillCoverage />
             {/* F52 (overnight 2026-08-02): investigation × dataset coverage — ◈ INVDATA button (left:71880, bottom:8, zIndex:138); parallel-fetches /v1/investigations + /v1/datasets; keyword-correlates each open investigation (title/name/description/subject/kind/type) against the dataset catalog to surface SUPPORTED (dataset coverage found) vs UNSOURCED (no dataset backing — data gap); amber badge on unsourced count; stat tiles (investigations/datasets/supported/unsourced); ALL/SUPPORTED/UNSOURCED filter tabs + text search; expand investigation → matched datasets with type badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation data readiness brief + TTS via jarvis:speak-dossier; isInvdataQuery+buildInvdataScript wired in JarvisBrain; "inv data"/"investigation dataset"/"invdata"/"investigation data gap"/"case dataset"/"unsourced investigation"/"data backed"/"investigation data coverage" voice trigger; jarvis:invdata-toggle event; 90-s auto-refresh */}
             <InvestigationDatasetCoverage />
+            {/* F53 (overnight 2026-08-02): swarm job × investigation correlator — ◈ SJINV button (left:579840, bottom:8, zIndex:220); parallel-fetches /entities/SwarmJob + /v1/investigations; keyword-correlates each investigation (title/name/description/subject/kind/type) against swarm jobs to surface MONITORING (swarm automation coverage found) vs UNMONITORED (no swarm tracking this case); amber badge on unmonitored count; ALL/MONITORING/UNMONITORED filter tabs + search; expand investigation → matched swarm jobs with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSjinvQuery+buildSjinvScript wired in JarvisBrain; 90-s auto-refresh */}
+            <SwarmJobInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
