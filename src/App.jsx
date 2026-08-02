@@ -214,6 +214,7 @@ import ContactInvestigationCorrelator from '@/components/cinematic/ContactInvest
 import IntelProfileSkillCoverage from '@/components/cinematic/IntelProfileSkillCoverage';
 import InvestigationDatasetCoverage from '@/components/cinematic/InvestigationDatasetCoverage';
 import SwarmJobInvestigationCorrelator from '@/components/cinematic/SwarmJobInvestigationCorrelator';
+import SceneTaskCoverage from '@/components/cinematic/SceneTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -635,6 +636,8 @@ function App() {
             <InvestigationDatasetCoverage />
             {/* F53 (overnight 2026-08-02): swarm job × investigation correlator — ◈ SJINV button (left:579840, bottom:8, zIndex:220); parallel-fetches /entities/SwarmJob + /v1/investigations; keyword-correlates each investigation (title/name/description/subject/kind/type) against swarm jobs to surface MONITORING (swarm automation coverage found) vs UNMONITORED (no swarm tracking this case); amber badge on unmonitored count; ALL/MONITORING/UNMONITORED filter tabs + search; expand investigation → matched swarm jobs with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSjinvQuery+buildSjinvScript wired in JarvisBrain; 90-s auto-refresh */}
             <SwarmJobInvestigationCorrelator />
+            {/* F54 (overnight 2026-08-02): scene × task coverage — ◈ SCTASK button (left:72440, bottom:8, zIndex:139); parallel-fetches all 10 /v1/cinematic/scene/{id} anchor sets + /entities/Task; keyword-correlates each scene's anchor texts against active tasks to surface TASKED (at least one task covers the scene's operational domain) vs UNATTENDED (no task — action gap); amber badge on unattended count; stat tiles (scenes/tasks/tasked/unattended); ALL/TASKED/UNATTENDED filter tabs + text search; expand scene → matched tasks with type badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene operational coverage brief + TTS via jarvis:speak-dossier; isScTaskQuery+buildScTaskScript wired in JarvisBrain; "scene task"/"task scene"/"sctask"/"scene operations"/"unattended scenes"/"scene coverage"/"scene task coverage"/"scene action gap" voice trigger; jarvis:sctask-toggle event; 120-s auto-refresh */}
+            <SceneTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

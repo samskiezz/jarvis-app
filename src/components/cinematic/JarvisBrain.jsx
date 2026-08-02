@@ -233,6 +233,7 @@ import { isGnacQuery, buildGnacScript } from "./GraphNodeAlertCoverage";
 import { isIgcpQuery, buildIgcpScript } from "./IntelProfileGraphCentrality";
 import { isIvgcQuery, buildIvgcScript } from "./InvestmentGraphCentrality";
 import { isSjinvQuery, buildSjinvScript } from "./SwarmJobInvestigationCorrelator";
+import { isScTaskQuery, buildScTaskScript } from "./SceneTaskCoverage";
 import { isAsstQuery, buildAsstScript } from "./JarvisAssetLibrary";
 import { isContactAnomalyQuery, buildContactAnomalyScript } from "./ContactAnomalyCorrelator";
 import { isTaskAnomalyQuery, buildTaskAnomalyScript } from "./TaskAnomalyCorrelator";
@@ -3366,6 +3367,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rpip-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRpipScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F54: scene × task coverage — all 10 /v1/cinematic/scene/{id} + /entities/Task;
+    // TASKED vs UNATTENDED; "scene task / task scene / sctask / scene operations / unattended scenes / scene coverage"
+    if (isScTaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sctask-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScTaskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
