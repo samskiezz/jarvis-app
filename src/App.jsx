@@ -219,6 +219,7 @@ import RiskSignalInvestigationCorrelator from '@/components/cinematic/RiskSignal
 import InvestmentLiveIntelExposure from '@/components/cinematic/InvestmentLiveIntelExposure';
 import SwarmJobOpsEventCoverage from '@/components/cinematic/SwarmJobOpsEventCoverage';
 import SkillOpsEventCoverage from '@/components/cinematic/SkillOpsEventCoverage';
+import ContactDatasetCoverage from '@/components/cinematic/ContactDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -650,6 +651,8 @@ function App() {
             <SwarmJobOpsEventCoverage />
             {/* F58 (overnight 2026-08-02): skill × ops event coverage — ◈ SKOPS button (left:627120, bottom:8, zIndex:233); parallel-fetches /v1/aip/skill + /v1/ops/events; keyword-correlates each JARVIS skill (name/title/description/category/domain) against active ops events to surface IN-DEMAND (skill matches active ops situation) vs DORMANT (no active ops relevance); amber badge on dormant count; stat tiles (skills/ops events/in-demand/dormant); ALL/IN-DEMAND/DORMANT filter tabs + text search; expand skill → matched ops events with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-ops readiness brief + TTS via jarvis:speak-dossier; isSkopsQuery+buildSkopsScript wired in JarvisBrain; "skill ops"/"ops skill"/"skops"/"in-demand skills"/"skill readiness"/"operational skill gap"/"dormant skills"/"skill ops alignment" voice trigger; jarvis:skops-toggle event; 90-s auto-refresh */}
             <SkillOpsEventCoverage />
+            {/* F59 (overnight 2026-08-02): contact × dataset coverage — ◈ CDST button (left:680160, bottom:8, zIndex:243); parallel-fetches /entities/Contact + /v1/datasets; keyword-correlates each contact (name/email/company/title/description) against the dataset catalog to surface DOCUMENTED (dataset backing found) vs BLIND (no data coverage — intelligence gap); amber badge on blind count; stat tiles (contacts/datasets/documented/blind); ALL/DOCUMENTED/BLIND filter tabs + text search; expand contact → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-data coverage brief + TTS via jarvis:speak-dossier; isCdstQuery+buildCdstScript already wired in JarvisBrain; "contact data"/"contact dataset"/"cdst"/"contact data coverage"/"blind contacts"/"data backed contact"/"which contact has dataset"/"contacts in dataset" voice trigger; jarvis:cdst-toggle event; 90-s auto-refresh */}
+            <ContactDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
