@@ -212,6 +212,7 @@ import ReportIntelProfileCoverage from '@/components/cinematic/ReportIntelProfil
 import ScenarioIntelProfileCoverage from '@/components/cinematic/ScenarioIntelProfileCoverage';
 import ContactInvestigationCorrelator from '@/components/cinematic/ContactInvestigationCorrelator';
 import IntelProfileSkillCoverage from '@/components/cinematic/IntelProfileSkillCoverage';
+import InvestigationDatasetCoverage from '@/components/cinematic/InvestigationDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -629,6 +630,8 @@ function App() {
             <ContactInvestigationCorrelator />
             {/* F51 (overnight 2026-08-02): intel profile × skill coverage — ◈ IPSK button (left:622000, bottom:8, zIndex:230); parallel-fetches /entities/IntelProfile + /v1/aip/skill; keyword-correlates each intel profile (name/subject/description/category/nationality/aliases) against JARVIS skills (name/title/description/category/domain/tags) to surface SKILLED (at least one skill covers this profile domain) vs UNSUPPORTED (no skill addresses this intel profile — capability gap); amber badge on unsupported count; stat tiles (profiles/skills/skilled/unsupported); ALL/SKILLED/UNSUPPORTED filter tabs + text search; expand profile → matched skills with category badge + domain badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-gap brief + TTS via jarvis:speak-dossier; isIpskQuery+buildIpskScript wired in JarvisBrain; "intel profile skill"/"skill coverage"/"ipsk"/"intel skill gap"/"profile skill map"/"unsupported intel"/"skill intel profile" voice trigger; jarvis:ipsk-toggle event; 90-s auto-refresh */}
             <IntelProfileSkillCoverage />
+            {/* F52 (overnight 2026-08-02): investigation × dataset coverage — ◈ INVDATA button (left:71880, bottom:8, zIndex:138); parallel-fetches /v1/investigations + /v1/datasets; keyword-correlates each open investigation (title/name/description/subject/kind/type) against the dataset catalog to surface SUPPORTED (dataset coverage found) vs UNSOURCED (no dataset backing — data gap); amber badge on unsourced count; stat tiles (investigations/datasets/supported/unsourced); ALL/SUPPORTED/UNSOURCED filter tabs + text search; expand investigation → matched datasets with type badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation data readiness brief + TTS via jarvis:speak-dossier; isInvdataQuery+buildInvdataScript wired in JarvisBrain; "inv data"/"investigation dataset"/"invdata"/"investigation data gap"/"case dataset"/"unsourced investigation"/"data backed"/"investigation data coverage" voice trigger; jarvis:invdata-toggle event; 90-s auto-refresh */}
+            <InvestigationDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -294,6 +294,7 @@ import { isGndcQuery, buildGndcScript } from "./GraphNodeDatasetCoverage";
 import { isInvintelQuery, buildInvintelScript } from "./InvestmentIntelExposure";
 import { isRpipQuery, buildRpipScript } from "./ReportIntelProfileCoverage";
 import { isSCIPQuery, buildSCIPScript } from "./ScenarioIntelProfileCoverage";
+import { isInvdataQuery, buildInvdataScript } from "./InvestigationDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2881,6 +2882,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:evlb-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildEvlbScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isInvdataQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invdata-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvdataScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
