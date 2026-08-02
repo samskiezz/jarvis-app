@@ -31,3 +31,4 @@
 2026-08-02 F61 ReportDatasetCoverage.jsx — /v1/reports × /v1/datasets — BACKED vs UNSOURCED intelligence reports; amber badge; 90s refresh; voice: rptds/report dataset/report data gap; build exit 0
 2026-08-02 F62 Task × Intel Profile Coverage — TaskIntelProfileCoverage.jsx; /entities/Task × /entities/IntelProfile; THREAT-BACKED vs CLEAN; ◈ TINTEL left:681840; isTintelQuery+buildTintelScript in JarvisBrain; build exit 0
 2026-08-02 F63 TaskOpsEventCoverage: mounted TaskOpsEventCoverage.jsx in App.jsx; isTkopsQuery+buildTkopsScript wired in JarvisBrain.jsx; /entities/Task × /v1/ops/events; RESPONDING/UNRESPONSIVE tasks by ops event alignment; amber badge; ASSESS → agent/chat + TTS; ◈ TKOPS left:682400; build exit 0
+[2026-08-02] F64 ContactSkillCoverage.jsx — Contact × Skill Coverage (/entities/Contact × /v1/aip/skill); SKILLED/UNCOVERED; ◈ CSKILL left:682960 zIndex:248; isCskillQuery+buildCskillScript wired in JarvisBrain; build exit 0

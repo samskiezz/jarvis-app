@@ -224,6 +224,7 @@ import ScenarioOpsEventCoverage from '@/components/cinematic/ScenarioOpsEventCov
 import ReportDatasetCoverage from '@/components/cinematic/ReportDatasetCoverage';
 import TaskIntelProfileCoverage from '@/components/cinematic/TaskIntelProfileCoverage';
 import TaskOpsEventCoverage from '@/components/cinematic/TaskOpsEventCoverage';
+import ContactSkillCoverage from '@/components/cinematic/ContactSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -665,6 +666,8 @@ function App() {
             <TaskIntelProfileCoverage />
             {/* F63 (overnight 2026-08-02): task × ops event coverage — ◈ TKOPS button (left:682400, bottom:8, zIndex:247); parallel-fetches /entities/Task + /v1/ops/events; keyword-correlates each active task against live ops events to surface RESPONDING (ops event alignment found) vs UNRESPONSIVE (no active ops coverage — execution gap); amber badge on unresponsive count; stat tiles (tasks/ops events/responding/unresponsive); ALL/RESPONDING/UNRESPONSIVE filter tabs + text search; expand task → matched ops events with severity chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-ops coverage brief + TTS via jarvis:speak-dossier; isTkopsQuery+buildTkopsScript wired in JarvisBrain; "task ops"/"ops task"/"tkops"/"responding tasks"/"task ops coverage"/"ops event task"/"unresponsive ops"/"task ops alignment" voice trigger; jarvis:tkops-toggle event; 90-s auto-refresh */}
             <TaskOpsEventCoverage />
+            {/* F64 (overnight 2026-08-02): contact × skill coverage — ◈ CSKILL button (left:682960, bottom:8, zIndex:248); parallel-fetches /entities/Contact + /v1/aip/skill; keyword-correlates each contact (name/email/company/title/description) against JARVIS skills (name/title/description/category/domain/tags) to surface SKILLED (at least one skill covers this contact's domain) vs UNCOVERED (no skill addresses their domain — capability gap); amber badge on uncovered count; stat tiles (contacts/skills/skilled/uncovered); ALL/SKILLED/UNCOVERED filter tabs + text search; expand contact → matched skills with category badge + domain badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-skill coverage brief + TTS via jarvis:speak-dossier; isCskillQuery+buildCskillScript wired in JarvisBrain; "contact skill"/"skill contact"/"cskill"/"uncovered contacts"/"contact capability"/"contact skill gap"/"skilled contacts" voice trigger; jarvis:cskill-toggle event; 90-s auto-refresh */}
+            <ContactSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
