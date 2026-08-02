@@ -221,6 +221,7 @@ import SwarmJobOpsEventCoverage from '@/components/cinematic/SwarmJobOpsEventCov
 import SkillOpsEventCoverage from '@/components/cinematic/SkillOpsEventCoverage';
 import ContactDatasetCoverage from '@/components/cinematic/ContactDatasetCoverage';
 import ScenarioOpsEventCoverage from '@/components/cinematic/ScenarioOpsEventCoverage';
+import ReportDatasetCoverage from '@/components/cinematic/ReportDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -656,6 +657,8 @@ function App() {
             <ContactDatasetCoverage />
             {/* F60 (overnight 2026-08-02): scenario × ops event coverage — ◈ SCOE button (left:680720, bottom:8, zIndex:244); parallel-fetches /v1/scenario/list + /v1/ops/events; keyword-correlates each scenario (name/title/description/type/tags) against active ops events to surface TRIGGERED (live ops event alignment) vs DORMANT (no ops event coverage — readiness gap); amber badge on triggered count; stat tiles (scenarios/ops events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand scenario → matched ops events with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario-ops coverage brief + TTS via jarvis:speak-dossier; isScoeQuery+buildScoeScript wired in JarvisBrain; "scenario ops event"/"ops scenario"/"scoe"/"triggered scenarios"/"scenario ops coverage"/"live scenario"/"ops triggered scenario"/"scenario event match" voice trigger; jarvis:scoe-toggle event; 90-s auto-refresh */}
             <ScenarioOpsEventCoverage />
+            {/* F61 (overnight 2026-08-02): report × dataset coverage — ◈ RPTDS button (left:681280, bottom:8, zIndex:245); parallel-fetches /v1/reports + /v1/datasets; keyword-correlates each report (title/name/summary/type/tags/category) against the dataset catalog (name/title/description/kind/type/tags) to surface BACKED (dataset support found) vs UNSOURCED (no dataset backing — intelligence gap); amber badge on unsourced count; stat tiles (reports/datasets/backed/unsourced); ALL/BACKED/UNSOURCED filter tabs + text search; expand report → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence report-data readiness brief + TTS via jarvis:speak-dossier; isRptdsQuery+buildRptdsScript wired in JarvisBrain; "report dataset"/"dataset report"/"rptds"/"backed report"/"unsourced report"/"report data gap"/"report data coverage"/"datasource report" voice trigger; jarvis:rptds-toggle event; 90-s auto-refresh */}
+            <ReportDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -300,6 +300,7 @@ import { isInvdataQuery, buildInvdataScript } from "./InvestigationDatasetCovera
 import { isSwjopsQuery, buildSwjopsScript } from "./SwarmJobOpsEventCoverage";
 import { isSkopsQuery, buildSkopsScript } from "./SkillOpsEventCoverage";
 import { isScoeQuery, buildScoeScript } from "./ScenarioOpsEventCoverage";
+import { isRptdsQuery, buildRptdsScript } from "./ReportDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3442,6 +3443,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // report dataset coverage / backed report / unsourced report / report data gap
+    if (isRptdsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rptds-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRptdsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
