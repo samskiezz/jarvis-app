@@ -217,6 +217,7 @@ import SwarmJobInvestigationCorrelator from '@/components/cinematic/SwarmJobInve
 import SceneTaskCoverage from '@/components/cinematic/SceneTaskCoverage';
 import RiskSignalInvestigationCorrelator from '@/components/cinematic/RiskSignalInvestigationCorrelator';
 import InvestmentLiveIntelExposure from '@/components/cinematic/InvestmentLiveIntelExposure';
+import SwarmJobOpsEventCoverage from '@/components/cinematic/SwarmJobOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -644,6 +645,8 @@ function App() {
             <RiskSignalInvestigationCorrelator />
             {/* F56 (overnight 2026-08-02): investment × live intel exposure — ◈ INVLIVE button (left:626000, bottom:8, zIndex:231); parallel-fetches /entities/Investment + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each investment (name/sector/notes/tags/ticker) against live world events to surface EXPOSED (live world event overlaps investment domain) vs STABLE (no live alignment); red badge on exposed count; stat tiles (investments/live events/exposed/stable); ALL/EXPOSED/STABLE filter tabs + text search; expand investment → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-world-risk brief + TTS via jarvis:speak-dossier; isInvliveQuery+buildInvliveScript wired in JarvisBrain; "investment live"/"portfolio live"/"live portfolio"/"invlive"/"portfolio events"/"exposed portfolio"/"portfolio world" voice trigger; jarvis:invlive-toggle event; 60-s auto-refresh */}
             <InvestmentLiveIntelExposure />
+            {/* F57 (overnight 2026-08-02): swarm job × ops event automation coverage — ◈ SWJOPS button (left:626560, bottom:8, zIndex:232); parallel-fetches /entities/SwarmJob + /v1/ops/events; keyword-correlates each ops event against swarm jobs to surface AUTOMATED (swarm backing found) vs MANUAL (no swarm coverage — automation gap); amber badge on manual count; stat tiles (ops events/swarm jobs/automated/manual gap); ALL/AUTOMATED/MANUAL filter tabs + text search; expand event → matched swarm jobs with type badge + relevance score bar (or gap warning if none); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence automation-gap brief + TTS via jarvis:speak-dossier; isSwjopsQuery+buildSwjopsScript wired in JarvisBrain; "swarm ops"/"ops swarm"/"swjops"/"automated ops"/"manual ops"/"ops automation gap"/"swarm ops coverage"/"unautomated ops"/"automation coverage" voice trigger; jarvis:swjops-toggle event; 90-s auto-refresh */}
+            <SwarmJobOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

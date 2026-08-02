@@ -297,6 +297,7 @@ import { isInvintelQuery, buildInvintelScript } from "./InvestmentIntelExposure"
 import { isRpipQuery, buildRpipScript } from "./ReportIntelProfileCoverage";
 import { isSCIPQuery, buildSCIPScript } from "./ScenarioIntelProfileCoverage";
 import { isInvdataQuery, buildInvdataScript } from "./InvestigationDatasetCoverage";
+import { isSwjopsQuery, buildSwjopsScript } from "./SwarmJobOpsEventCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3400,6 +3401,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scip-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSCIPScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F57: swarm job × ops event automation coverage — /entities/SwarmJob + /v1/ops/events;
+    // AUTOMATED (swarm backing found) vs MANUAL (automation gap);
+    // "swarm ops / ops swarm / swjops / automated ops / manual ops / ops automation gap /
+    // swarm ops coverage / unautomated ops / automation coverage"
+    if (isSwjopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swjops-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwjopsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
