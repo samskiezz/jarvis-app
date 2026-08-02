@@ -301,6 +301,7 @@ import { isSwjopsQuery, buildSwjopsScript } from "./SwarmJobOpsEventCoverage";
 import { isSkopsQuery, buildSkopsScript } from "./SkillOpsEventCoverage";
 import { isScoeQuery, buildScoeScript } from "./ScenarioOpsEventCoverage";
 import { isRptdsQuery, buildRptdsScript } from "./ReportDatasetCoverage";
+import { isTintelQuery, buildTintelScript } from "./TaskIntelProfileCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3453,6 +3454,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rptds-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRptdsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // task intel profile coverage / threat-backed tasks / task adversary / task threat
+    if (isTintelQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tintel-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTintelScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

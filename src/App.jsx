@@ -222,6 +222,7 @@ import SkillOpsEventCoverage from '@/components/cinematic/SkillOpsEventCoverage'
 import ContactDatasetCoverage from '@/components/cinematic/ContactDatasetCoverage';
 import ScenarioOpsEventCoverage from '@/components/cinematic/ScenarioOpsEventCoverage';
 import ReportDatasetCoverage from '@/components/cinematic/ReportDatasetCoverage';
+import TaskIntelProfileCoverage from '@/components/cinematic/TaskIntelProfileCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -659,6 +660,8 @@ function App() {
             <ScenarioOpsEventCoverage />
             {/* F61 (overnight 2026-08-02): report × dataset coverage — ◈ RPTDS button (left:681280, bottom:8, zIndex:245); parallel-fetches /v1/reports + /v1/datasets; keyword-correlates each report (title/name/summary/type/tags/category) against the dataset catalog (name/title/description/kind/type/tags) to surface BACKED (dataset support found) vs UNSOURCED (no dataset backing — intelligence gap); amber badge on unsourced count; stat tiles (reports/datasets/backed/unsourced); ALL/BACKED/UNSOURCED filter tabs + text search; expand report → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence report-data readiness brief + TTS via jarvis:speak-dossier; isRptdsQuery+buildRptdsScript wired in JarvisBrain; "report dataset"/"dataset report"/"rptds"/"backed report"/"unsourced report"/"report data gap"/"report data coverage"/"datasource report" voice trigger; jarvis:rptds-toggle event; 90-s auto-refresh */}
             <ReportDatasetCoverage />
+            {/* F62 (overnight 2026-08-02): task × intel profile coverage — ◈ TINTEL button (left:681840, bottom:8, zIndex:246); parallel-fetches /entities/Task + /entities/IntelProfile; keyword-correlates each task (name/title/description/mission/priority/tags) against tracked threat actor intel profiles to surface THREAT-BACKED (adversarial alignment detected) vs CLEAN (no intel profile alignment); red badge on threat-backed count; stat tiles (tasks/profiles/threat-backed/clean); ALL/THREAT-BACKED/CLEAN filter tabs + text search; expand task → matched intel profiles with category badge + nationality + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence mission threat exposure brief + TTS via jarvis:speak-dossier; isTintelQuery+buildTintelScript wired in JarvisBrain; "task intel"/"intel task"/"tintel"/"task threat"/"threat backed task"/"task adversary"/"adversary task"/"mission threat" voice trigger; jarvis:tintel-toggle event; 90-s auto-refresh */}
+            <TaskIntelProfileCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

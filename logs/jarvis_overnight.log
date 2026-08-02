@@ -29,3 +29,4 @@
 2026-08-02 F59 Contact × Dataset Coverage: ContactDatasetCoverage.jsx mounted in App.jsx (◈ CDST left:680160 zIndex:243); isCdstQuery+buildCdstScript already wired in JarvisBrain; /entities/Contact × /v1/datasets; DOCUMENTED vs BLIND; amber badge; ASSESS → agent/chat + TTS; build exit 0
 [2026-08-02] F60 ScenarioOpsEventCoverage — /v1/scenario/list × /v1/ops/events; TRIGGERED vs DORMANT scenarios; amber badge; ASSESS+TTS; ◈ SCOE button; isScoeQuery+buildScoeScript wired in JarvisBrain; build exit 0
 2026-08-02 F61 ReportDatasetCoverage.jsx — /v1/reports × /v1/datasets — BACKED vs UNSOURCED intelligence reports; amber badge; 90s refresh; voice: rptds/report dataset/report data gap; build exit 0
+2026-08-02 F62 Task × Intel Profile Coverage — TaskIntelProfileCoverage.jsx; /entities/Task × /entities/IntelProfile; THREAT-BACKED vs CLEAN; ◈ TINTEL left:681840; isTintelQuery+buildTintelScript in JarvisBrain; build exit 0
