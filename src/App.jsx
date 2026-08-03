@@ -242,6 +242,7 @@ import KnowledgeInvestigationCoverage from '@/components/cinematic/KnowledgeInve
 import OpsEventLiveIntelCoverage from '@/components/cinematic/OpsEventLiveIntelCoverage';
 import ReportOpsEventCoverage from '@/components/cinematic/ReportOpsEventCoverage';
 import SceneOpsEventCoverage from '@/components/cinematic/SceneOpsEventCoverage';
+import InvestigationScenarioCoverage from '@/components/cinematic/InvestigationScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -719,6 +720,8 @@ function App() {
             <ReportOpsEventCoverage />
             {/* F81 (overnight 2026-08-03): scene × ops event coverage — ◈ SCOPS button (left:691360, bottom:8, zIndex:263); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/ops/events; keyword-correlates each scene's anchor texts against active ops events to surface ACTIVE (ops event domain coverage detected) vs QUIET (no ops event matches this scene — operational blind spot); cyan badge on active count; stat tiles (scenes/ops events/active/quiet); ALL/ACTIVE/QUIET filter tabs + text search; expand scene → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-ops coverage brief + TTS via jarvis:speak-dossier; isScopsQuery+buildScopsScript wired in JarvisBrain; "scene ops"/"ops scene"/"scops"/"active ops scene"/"live ops scene"/"scene operational"/"ops event scene"/"which scenes have ops events"/"operationally live scenes" voice trigger; jarvis:scops-toggle event; 90-s auto-refresh */}
             <SceneOpsEventCoverage />
+            {/* F83 (overnight 2026-08-03): investigation × scenario coverage — ◈ INVSCN button (left:691920, bottom:8, zIndex:264); parallel-fetches /v1/investigations + /v1/scenario/list; keyword-correlates each open investigation (title/name/description/kind/type) against the scenario catalog to surface SCRIPTED (scenario response planning found) vs UNPLANNED (no scenario alignment — response gap); amber badge on unplanned count; stat tiles (investigations/scenarios/scripted/unplanned); ALL/SCRIPTED/UNPLANNED filter tabs + text search; expand investigation → matched scenarios with status/category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-scenario readiness brief + TTS via jarvis:speak-dossier; isInvscnQuery+buildInvscnScript wired in JarvisBrain; "invest scenario"/"scenario invest"/"invscn"/"scripted investigation"/"unplanned investigation"/"investigation scenario coverage"/"case scenario"/"investigation response plan" voice trigger; jarvis:invscn-toggle event; 90-s auto-refresh */}
+            <InvestigationScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

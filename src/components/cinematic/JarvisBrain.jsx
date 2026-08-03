@@ -320,6 +320,7 @@ import { isOeliveQuery, buildOeliveScript } from "./OpsEventLiveIntelCoverage";
 import { isRpopsQuery, buildRpopsScript } from "./ReportOpsEventCoverage";
 import { isScopsQuery, buildScopsScript } from "./SceneOpsEventCoverage";
 import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
+import { isInvscnQuery, buildInvscnScript } from "./InvestigationScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3692,6 +3693,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctrpt-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCtrptScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F83 — "invest scenario / scenario invest / invscn / scripted investigation /
+    //  unplanned investigation / investigation scenario coverage / case scenario /
+    //  investigation response plan / scenario coverage invest"
+    if (isInvscnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invscn-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvscnScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
