@@ -240,6 +240,7 @@ import ContactSwarmJobCoverage from '@/components/cinematic/ContactSwarmJobCover
 import SceneLiveIntelExposure from '@/components/cinematic/SceneLiveIntelExposure';
 import KnowledgeInvestigationCoverage from '@/components/cinematic/KnowledgeInvestigationCoverage';
 import OpsEventLiveIntelCoverage from '@/components/cinematic/OpsEventLiveIntelCoverage';
+import ReportOpsEventCoverage from '@/components/cinematic/ReportOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -713,6 +714,8 @@ function App() {
             <KnowledgeInvestigationCoverage />
             {/* F79 (overnight 2026-08-03): ops event × live intel world trigger — ◈ OELIVE button (left:690240, bottom:8, zIndex:261); parallel-fetches /v1/ops/events + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each ops event (name/type/description/category/tags) against live world events to surface WORLD-TRIGGERED (live world signal aligns with this ops event's domain) vs ISOLATED (no external world event match — internally-sourced); amber badge on world-triggered count; stat tiles (ops events/live signals/world-triggered/isolated); ALL/WORLD-TRIGGERED/ISOLATED filter tabs + text search; expand event → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-world alignment brief + TTS via jarvis:speak-dossier; isOeliveQuery+buildOeliveScript wired in JarvisBrain; "ops live"/"live ops"/"oelive"/"world triggered ops"/"ops world event"/"world ops"/"ops live intel"/"live world ops"/"ops event live"/"ops world trigger"/"world triggered" voice trigger; jarvis:oelive-toggle event; 60-s auto-refresh */}
             <OpsEventLiveIntelCoverage />
+            {/* F80 (overnight 2026-08-03): report × ops event coverage — ◈ RPOPS button (left:690800, bottom:8, zIndex:262); parallel-fetches /v1/reports + /v1/ops/events; keyword-correlates each ops event (name/type/description/category/tags) against intelligence reports to surface REPORTED (report coverage found) vs UNREPORTED (no report addresses this event domain — intelligence lag); amber badge on unreported count; stat tiles (ops events/reports/reported/unreported); ALL/REPORTED/UNREPORTED filter tabs + text search; expand event → matched reports with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-reporting coverage brief + TTS via jarvis:speak-dossier; isRpopsQuery+buildRpopsScript wired in JarvisBrain; "report ops"/"ops report"/"rpops"/"unreported ops"/"ops reporting gap"/"ops report coverage" voice trigger; jarvis:rpops-toggle event; 90-s auto-refresh */}
+            <ReportOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
