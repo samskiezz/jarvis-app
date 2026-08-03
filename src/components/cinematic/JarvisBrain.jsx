@@ -312,6 +312,7 @@ import { isScKbQuery, buildScKbScript } from "./SceneKnowledgeCoverage";
 import { isScscenQuery, buildScscenScript } from "./SceneScenarioCoverage";
 import { isKbriskQuery, buildKbriskScript } from "./KnowledgeRiskSignalCoverage";
 import { isScdsQuery, buildScdsScript } from "./SceneDatasetCoverage";
+import { isSwkbQuery, buildSwkbScript } from "./KnowledgeSwarmJobCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3581,6 +3582,21 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scds-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScdsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F74: Knowledge × SwarmJob Coverage — /knowledge/ × /entities/SwarmJob;
+    // INFORMED (KB backing found) vs FLYING-BLIND (no KB coverage — operational knowledge gap);
+    // dispatches jarvis:swkb-toggle; ◈ SWKB left:688000 zIndex:257; 90-s auto-refresh;
+    // "swarm knowledge / knowledge swarm / swkb / swarm kb / informed swarm /
+    //  flying blind swarm / swarm intel base / swarm without knowledge / kb swarm /
+    //  swarm knowledge gap / which swarm jobs have knowledge"
+    if (isSwkbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swkb-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwkbScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
