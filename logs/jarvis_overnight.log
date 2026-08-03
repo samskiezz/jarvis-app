@@ -34,3 +34,4 @@
 [2026-08-02] F64 ContactSkillCoverage.jsx — Contact × Skill Coverage (/entities/Contact × /v1/aip/skill); SKILLED/UNCOVERED; ◈ CSKILL left:682960 zIndex:248; isCskillQuery+buildCskillScript wired in JarvisBrain; build exit 0
 [2026-08-02] F65 GraphNodeSkillCoverage.jsx — /v1/graph/centrality × /v1/aip/skill — COVERED vs UNSKILLED nodes; amber badge; ASSESS→agent/chat+TTS; ◈ GNSK left:683520; isGnskQuery+buildGnskScript wired in JarvisBrain; build exit 0
 [2026-08-03] BACKLOG EXHAUSTED — all 65 features (F01–F65) are marked done; no unchecked [ ] item found; overnight builder exited without implementing a feature — backlog needs extending before next run
+2026-08-03 F66 LiveIntelReportCoverage.jsx: /functions/getLiveIntel × /v1/reports; TRIGGERED vs STALE reports; ◈ RPLIVE left:684080 zIndex:250; isRpliveQuery+buildRpliveScript wired in JarvisBrain.jsx; build exit 0

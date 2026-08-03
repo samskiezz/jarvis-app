@@ -226,6 +226,7 @@ import TaskIntelProfileCoverage from '@/components/cinematic/TaskIntelProfileCov
 import TaskOpsEventCoverage from '@/components/cinematic/TaskOpsEventCoverage';
 import ContactSkillCoverage from '@/components/cinematic/ContactSkillCoverage';
 import GraphNodeSkillCoverage from '@/components/cinematic/GraphNodeSkillCoverage';
+import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -671,6 +672,8 @@ function App() {
             <ContactSkillCoverage />
             {/* F65 (overnight 2026-08-02): graph node × skill coverage — ◈ GNSK button (left:683520, bottom:8, zIndex:249); parallel-fetches /v1/graph/centrality + /v1/aip/skill; keyword-correlates each top-influence graph node (label/name/type/category) against JARVIS skills (name/title/description/category/domain/tags) to surface COVERED (at least one skill addresses the node's domain) vs UNSKILLED (no JARVIS skill covers this node's domain — capability gap); amber badge on unskilled count; stat tiles (nodes/skills/covered/unskilled); ALL/COVERED/UNSKILLED filter tabs + text search; expand node → matched skills with category badge + domain badge + influence score + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-skill readiness brief + TTS via jarvis:speak-dossier; isGnskQuery+buildGnskScript wired in JarvisBrain; "graph skill"/"skill node"/"gnsk"/"unskilled nodes"/"node skill coverage"/"graph capability gap"/"graph skill readiness"/"graph skill gap" voice trigger; jarvis:gnsk-toggle event; 90-s auto-refresh */}
             <GraphNodeSkillCoverage />
+            {/* F66 (overnight 2026-08-03): live intel × report coverage — ◈ RPLIVE button (left:684080, bottom:8, zIndex:250); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/reports; keyword-correlates each intelligence report (title/summary/type/category/tags) against live world events to surface TRIGGERED (live world event aligns with report topic — time-critical intelligence) vs STALE (no current live signal matches this report's domain); amber badge on triggered count; stat tiles (reports/live events/triggered/stale); ALL/TRIGGERED/STALE filter tabs + text search; expand report → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence report-world relevance brief + TTS via jarvis:speak-dossier; isRpliveQuery+buildRpliveScript wired in JarvisBrain; "report live"/"live report"/"rplive"/"triggered report"/"live triggered report"/"world report"/"report world event"/"intel report live"/"live intel report" voice trigger; jarvis:rplive-toggle event; 60-s auto-refresh */}
+            <LiveIntelReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

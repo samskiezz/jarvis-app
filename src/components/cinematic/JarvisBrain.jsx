@@ -305,6 +305,7 @@ import { isTintelQuery, buildTintelScript } from "./TaskIntelProfileCoverage";
 import { isTkopsQuery, buildTkopsScript } from "./TaskOpsEventCoverage";
 import { isCskillQuery, buildCskillScript } from "./ContactSkillCoverage";
 import { isGnskQuery, buildGnskScript } from "./GraphNodeSkillCoverage";
+import { isRpliveQuery, buildRpliveScript } from "./LiveIntelReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3497,6 +3498,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gnsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGnskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // live intel × report coverage / triggered reports / report world event / report live / rplive
+    if (isRpliveQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rplive-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRpliveScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
