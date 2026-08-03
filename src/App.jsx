@@ -230,6 +230,7 @@ import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCover
 import GraphNodeOpsEventCoverage from '@/components/cinematic/GraphNodeOpsEventCoverage';
 import KnowledgeContactCoverage from '@/components/cinematic/KnowledgeContactCoverage';
 import SceneKnowledgeCoverage from '@/components/cinematic/SceneKnowledgeCoverage';
+import SwarmJobSkillAlignment from '@/components/cinematic/SwarmJobSkillAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -683,6 +684,8 @@ function App() {
             <KnowledgeContactCoverage />
             {/* F69 (overnight 2026-08-03): scene × knowledge coverage — ◈ SCKB button (left:685760, bottom:8, zIndex:253); parallel-fetches all 10 /v1/cinematic/scene/{id} + /knowledge/; keyword-correlates each scene's anchor texts against KB articles to surface BACKED (KB coverage found) vs DARK (no knowledge base backing — intelligence gap); amber badge on dark count; stat tiles (scenes/KB articles/backed/dark); ALL/BACKED/DARK filter tabs + text search; expand scene → matched KB articles with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-knowledge coverage brief + TTS via jarvis:speak-dossier; isScKbQuery+buildScKbScript wired in JarvisBrain; "scene knowledge"/"knowledge scene"/"sckb"/"backed scenes"/"dark scenes"/"scene kb"/"scene knowledge coverage"/"scene knowledge gap"/"uncharted scene"/"scene intel base" voice trigger; jarvis:sckb-toggle event; 120-s auto-refresh */}
             <SceneKnowledgeCoverage />
+            {/* F70 (overnight 2026-08-03): swarm job × skill domain alignment — ◈ SWARMSKILL button (left:69640, bottom:8, zIndex:134); parallel-fetches /entities/SwarmJob + /v1/aip/skill; keyword-correlates each JARVIS skill domain against active swarm jobs to surface DEPLOYED (skill domain has swarm automation backing) vs DORMANT (skill domain not currently automated — deployment gap); lime badge on deployed count; stat tiles (skills/jobs/deployed/dormant); ALL/DEPLOYED/DORMANT filter tabs + text search; expand skill → matched swarm jobs with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-deployment coverage brief + TTS via jarvis:speak-dossier; isSwarmskillQuery+buildSwarmskillScript wired in JarvisBrain (line 106/1479); "swarm skill"/"swarmskill"/"skill deployment"/"deployed skills"/"dormant skills"/"swarm capability"/"which skills have swarm jobs"/"active skill deployment"/"skill swarm"/"swarm coverage" voice trigger; jarvis:swarmskill-toggle event; 90-s auto-refresh */}
+            <SwarmJobSkillAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
