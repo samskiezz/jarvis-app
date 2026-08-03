@@ -321,6 +321,7 @@ import { isRpopsQuery, buildRpopsScript } from "./ReportOpsEventCoverage";
 import { isScopsQuery, buildScopsScript } from "./SceneOpsEventCoverage";
 import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
 import { isInvscnQuery, buildInvscnScript } from "./InvestigationScenarioCoverage";
+import { isDsliveQuery, buildDsliveScript } from "./LiveIntelDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3705,6 +3706,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invscn-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvscnScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F84 — "live dataset / dataset live / dslive / reactive dataset / live data coverage /
+    //  active dataset / dataset live intel / live intel dataset / which datasets are live"
+    if (isDsliveQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dslive-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDsliveScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

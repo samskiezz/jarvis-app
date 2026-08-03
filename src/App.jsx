@@ -243,6 +243,7 @@ import OpsEventLiveIntelCoverage from '@/components/cinematic/OpsEventLiveIntelC
 import ReportOpsEventCoverage from '@/components/cinematic/ReportOpsEventCoverage';
 import SceneOpsEventCoverage from '@/components/cinematic/SceneOpsEventCoverage';
 import InvestigationScenarioCoverage from '@/components/cinematic/InvestigationScenarioCoverage';
+import LiveIntelDatasetCoverage from '@/components/cinematic/LiveIntelDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -722,6 +723,8 @@ function App() {
             <SceneOpsEventCoverage />
             {/* F83 (overnight 2026-08-03): investigation × scenario coverage — ◈ INVSCN button (left:691920, bottom:8, zIndex:264); parallel-fetches /v1/investigations + /v1/scenario/list; keyword-correlates each open investigation (title/name/description/kind/type) against the scenario catalog to surface SCRIPTED (scenario response planning found) vs UNPLANNED (no scenario alignment — response gap); amber badge on unplanned count; stat tiles (investigations/scenarios/scripted/unplanned); ALL/SCRIPTED/UNPLANNED filter tabs + text search; expand investigation → matched scenarios with status/category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-scenario readiness brief + TTS via jarvis:speak-dossier; isInvscnQuery+buildInvscnScript wired in JarvisBrain; "invest scenario"/"scenario invest"/"invscn"/"scripted investigation"/"unplanned investigation"/"investigation scenario coverage"/"case scenario"/"investigation response plan" voice trigger; jarvis:invscn-toggle event; 90-s auto-refresh */}
             <InvestigationScenarioCoverage />
+            {/* F84 (overnight 2026-08-03): live intel × dataset coverage — ◈ DSLIVE button (left:692480, bottom:8, zIndex:265); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/datasets; keyword-correlates each dataset (name/title/description/kind/type/category/domain/tags) against live world events to surface REACTIVE (live world event overlaps dataset domain — data is time-relevant) vs DORMANT (no current live signal matches this dataset's space); amber badge on reactive count; stat tiles (datasets/live events/reactive/dormant); ALL/REACTIVE/DORMANT filter tabs + text search; expand dataset → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence live-data readiness brief + TTS via jarvis:speak-dossier; isDsliveQuery+buildDsliveScript wired in JarvisBrain; "live dataset"/"dataset live"/"dslive"/"reactive dataset"/"live data coverage"/"active dataset"/"dataset live intel"/"live intel dataset"/"which datasets are live" voice trigger; jarvis:dslive-toggle event; 60-s auto-refresh */}
+            <LiveIntelDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
