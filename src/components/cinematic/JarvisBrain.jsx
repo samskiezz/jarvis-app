@@ -325,6 +325,7 @@ import { isDsliveQuery, buildDsliveScript } from "./LiveIntelDatasetCoverage";
 import { isGcinvQuery, buildGcinvScript } from "./GraphCommunityInvestmentCoverage";
 import { isGcontQuery, buildGcontScript } from "./GraphCommunityContactCoverage";
 import { isGcskQuery, buildGcskScript } from "./GraphCommunitySkillCoverage";
+import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3753,6 +3754,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F88 — "community scenario / graph community scenario / scenario community /
+    //  scenario gap / cluster scenario / gcscen"
+    if (isGcscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcscen-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcscenScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

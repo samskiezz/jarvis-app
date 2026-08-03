@@ -247,6 +247,7 @@ import LiveIntelDatasetCoverage from '@/components/cinematic/LiveIntelDatasetCov
 import GraphCommunityInvestmentCoverage from '@/components/cinematic/GraphCommunityInvestmentCoverage';
 import GraphCommunityContactCoverage from '@/components/cinematic/GraphCommunityContactCoverage';
 import GraphCommunitySkillCoverage from '@/components/cinematic/GraphCommunitySkillCoverage';
+import GraphCommunityScenarioCoverage from '@/components/cinematic/GraphCommunityScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -734,6 +735,8 @@ function App() {
             <GraphCommunityContactCoverage />
             {/* F87 (overnight 2026-08-03): graph community × skill coverage — ◈ GCSK button (left:693600, bottom:8, zIndex:267); parallel-fetches /v1/graph/communities + /v1/aip/skill; keyword-correlates each network cluster against JARVIS skills to surface SKILLED (skill covers community domain) vs UNSKILLED (capability gap); lime badge on skilled count; stat tiles (communities/skills/skilled/unskilled); ALL/SKILLED/UNSKILLED filter tabs + text search; expand cluster → matched skills with category + domain badge + relevance score; ASSESS → /v1/jarvis/agent/chat 2-sentence community-skill readiness brief + TTS; "community skill"/"skill community"/"gcsk"/"unskilled community"/"community capability gap" voice trigger; jarvis:gcsk-toggle event; 90-s auto-refresh */}
             <GraphCommunitySkillCoverage />
+            {/* F88 (overnight 2026-08-03): graph community × scenario coverage — ◈ GCSCEN button (left:694160, bottom:8, zIndex:268); parallel-fetches /v1/graph/communities + /v1/scenario/list; keyword-correlates each network cluster (label + member metadata) against active operational scenarios (name/description/objective) to surface SCENARIO (at least one scenario targets/involves this community) vs GAP (no operational scenario coverage — planning blind spot); red badge on gap count; stat tiles (clusters/scenarios/covered/gaps); ALL/SCENARIO/GAP filter tabs + text search; expand cluster → matched scenarios with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence cluster-scenario brief + TTS via jarvis:speak-dossier; isGcscenQuery+buildGcscenScript wired in JarvisBrain; "community scenario"/"graph community scenario"/"scenario community"/"scenario gap"/"cluster scenario"/"gcscen" voice trigger; jarvis:gcscen-toggle event; 90-s auto-refresh */}
+            <GraphCommunityScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
