@@ -239,6 +239,7 @@ import InvestmentScenarioCoverage from '@/components/cinematic/InvestmentScenari
 import ContactSwarmJobCoverage from '@/components/cinematic/ContactSwarmJobCoverage';
 import SceneLiveIntelExposure from '@/components/cinematic/SceneLiveIntelExposure';
 import KnowledgeInvestigationCoverage from '@/components/cinematic/KnowledgeInvestigationCoverage';
+import OpsEventLiveIntelCoverage from '@/components/cinematic/OpsEventLiveIntelCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -710,6 +711,8 @@ function App() {
             <SceneLiveIntelExposure />
             {/* F78 (overnight 2026-08-03): knowledge × investigation coverage — ◈ KBINV button (left:689680, bottom:8, zIndex:260); parallel-fetches /knowledge/ + /v1/investigations; keyword-correlates each open investigation against KB articles to surface INFORMED (KB article backing found) vs BLIND (no knowledge base coverage — intelligence gap); amber badge on blind count; stat tiles (investigations/KB articles/informed/blind); ALL/INFORMED/BLIND filter tabs + text search; expand case → matched KB articles with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-knowledge coverage brief + TTS via jarvis:speak-dossier; isKbinvQuery+buildKbinvScript wired in JarvisBrain; "knowledge invest"/"invest knowledge"/"kbinv"/"investigation kb"/"uninformed case"/"investigation knowledge gap"/"kb investigation"/"case knowledge"/"case kb"/"blind investigation" voice trigger; jarvis:kbinv-toggle event; 90-s auto-refresh */}
             <KnowledgeInvestigationCoverage />
+            {/* F79 (overnight 2026-08-03): ops event × live intel world trigger — ◈ OELIVE button (left:690240, bottom:8, zIndex:261); parallel-fetches /v1/ops/events + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each ops event (name/type/description/category/tags) against live world events to surface WORLD-TRIGGERED (live world signal aligns with this ops event's domain) vs ISOLATED (no external world event match — internally-sourced); amber badge on world-triggered count; stat tiles (ops events/live signals/world-triggered/isolated); ALL/WORLD-TRIGGERED/ISOLATED filter tabs + text search; expand event → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-world alignment brief + TTS via jarvis:speak-dossier; isOeliveQuery+buildOeliveScript wired in JarvisBrain; "ops live"/"live ops"/"oelive"/"world triggered ops"/"ops world event"/"world ops"/"ops live intel"/"live world ops"/"ops event live"/"ops world trigger"/"world triggered" voice trigger; jarvis:oelive-toggle event; 60-s auto-refresh */}
+            <OpsEventLiveIntelCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
