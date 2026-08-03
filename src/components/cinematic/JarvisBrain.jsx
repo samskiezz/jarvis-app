@@ -313,6 +313,7 @@ import { isScscenQuery, buildScscenScript } from "./SceneScenarioCoverage";
 import { isKbriskQuery, buildKbriskScript } from "./KnowledgeRiskSignalCoverage";
 import { isScdsQuery, buildScdsScript } from "./SceneDatasetCoverage";
 import { isSwkbQuery, buildSwkbScript } from "./KnowledgeSwarmJobCoverage";
+import { isInvscenQuery, buildInvscenScript } from "./InvestmentScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3597,6 +3598,21 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swkb-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwkbScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F75: Investment × Scenario Coverage — /entities/Investment × /v1/scenario/list;
+    // EXPOSED (scenario threat alignment) vs STABLE (no overlap);
+    // dispatches jarvis:invscen-toggle; ◈ INVSCEN left:688560 zIndex:258; 90-s auto-refresh;
+    // "investment scenario / scenario investment / invscen / exposed investments /
+    //  investment threat scenario / portfolio scenario / scenario portfolio /
+    //  scenario exposure / which investments have scenarios"
+    if (isInvscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invscen-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvscenScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

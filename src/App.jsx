@@ -235,6 +235,7 @@ import SceneScenarioCoverage from '@/components/cinematic/SceneScenarioCoverage'
 import KnowledgeRiskSignalCoverage from '@/components/cinematic/KnowledgeRiskSignalCoverage';
 import SceneDatasetCoverage from '@/components/cinematic/SceneDatasetCoverage';
 import KnowledgeSwarmJobCoverage from '@/components/cinematic/KnowledgeSwarmJobCoverage';
+import InvestmentScenarioCoverage from '@/components/cinematic/InvestmentScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -698,6 +699,8 @@ function App() {
             <KnowledgeSwarmJobCoverage />
             {/* F73 (overnight 2026-08-03): scene × dataset coverage — ◈ SCDS button (left:687440, bottom:8, zIndex:256); parallel-fetches all 10 /v1/cinematic/scene/{id} + /v1/datasets; keyword-correlates each scene's anchor texts against the dataset catalog to surface BACKED (dataset support found) vs UNCHARTED (no dataset coverage — intelligence gap); amber badge on uncharted count; stat tiles (scenes/datasets/backed/uncharted); ALL/BACKED/UNCHARTED filter tabs + text search; expand scene → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-dataset readiness brief + TTS via jarvis:speak-dossier; isScdsQuery+buildScdsScript wired in JarvisBrain; "scene dataset"/"dataset scene"/"scds"/"data backed scene"/"scene data gap"/"scene data coverage"/"scene dataset coverage"/"which scenes have datasets"/"uncharted scenes" voice trigger; jarvis:scds-toggle event; 120-s auto-refresh */}
             <SceneDatasetCoverage />
+            {/* F75 (overnight 2026-08-03): investment × scenario coverage — ◈ INVSCEN button (left:688560, bottom:8, zIndex:258); parallel-fetches /entities/Investment + /v1/scenario/list; keyword-correlates each investment (name/sector/notes/tags/ticker) against active scenarios to surface EXPOSED (scenario threat overlaps investment domain) vs STABLE (no scenario alignment); red badge on exposed count; stat tiles (investments/scenarios/exposed/stable); ALL/EXPOSED/STABLE filter tabs + text search; expand investment → matched scenarios with status badge + category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-scenario exposure brief + TTS via jarvis:speak-dossier; isInvscenQuery+buildInvscenScript wired in JarvisBrain; "investment scenario"/"scenario investment"/"invscen"/"exposed investments"/"investment threat scenario"/"portfolio scenario"/"scenario portfolio"/"scenario exposure" voice trigger; jarvis:invscen-toggle event; 90-s auto-refresh */}
+            <InvestmentScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
