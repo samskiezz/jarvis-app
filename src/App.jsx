@@ -245,6 +245,7 @@ import SceneOpsEventCoverage from '@/components/cinematic/SceneOpsEventCoverage'
 import InvestigationScenarioCoverage from '@/components/cinematic/InvestigationScenarioCoverage';
 import LiveIntelDatasetCoverage from '@/components/cinematic/LiveIntelDatasetCoverage';
 import GraphCommunityInvestmentCoverage from '@/components/cinematic/GraphCommunityInvestmentCoverage';
+import GraphCommunityContactCoverage from '@/components/cinematic/GraphCommunityContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -728,6 +729,8 @@ function App() {
             <LiveIntelDatasetCoverage />
             {/* F85 (overnight 2026-08-03): graph community × investment coverage — ◈ GCINV button (left:693040, bottom:8, zIndex:266); parallel-fetches /v1/graph/communities + /entities/Investment; keyword-correlates each network cluster (label/members/type) against portfolio investments (name/sector/notes/tags/ticker) to surface PORTFOLIO-LINKED (investment domain overlaps this network community) vs DARK (no investment alignment — portfolio-network blind spot); amber badge on dark count; stat tiles (clusters/investments/portfolio-linked/dark); ALL/PORTFOLIO-LINKED/DARK filter tabs + text search; expand cluster → matched investments with sector badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-community coverage brief + TTS via jarvis:speak-dossier; isGcinvQuery+buildGcinvScript wired in JarvisBrain; "graph community invest"/"community invest"/"gcinv"/"portfolio community"/"community portfolio"/"investment community"/"community investment alignment" voice trigger; jarvis:gcinv-toggle event; 90-s auto-refresh */}
             <GraphCommunityInvestmentCoverage />
+            {/* F86 (overnight 2026-08-03): graph community × contact coverage — ◈ GCONT button (left:66840, bottom:8, zIndex:129); parallel-fetches /v1/graph/communities + /entities/Contact; keyword-correlates each network cluster against contact records to surface REPRESENTED (contact aligns with community) vs UNREPRESENTED (coverage gap); teal badge on represented count; stat tiles; ALL/REPRESENTED/UNREPRESENTED filter tabs + search; expand cluster → matched contacts with role badge + relevance score; ASSESS → /v1/jarvis/agent/chat 2-sentence community-contact brief + TTS; "community contact"/"contact community"/"gcont"/"graph contact"/"unrepresented communities" voice trigger; jarvis:gcont-toggle event; 90-s auto-refresh */}
+            <GraphCommunityContactCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

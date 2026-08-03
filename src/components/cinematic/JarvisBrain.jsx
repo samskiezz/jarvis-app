@@ -323,6 +323,7 @@ import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
 import { isInvscnQuery, buildInvscnScript } from "./InvestigationScenarioCoverage";
 import { isDsliveQuery, buildDsliveScript } from "./LiveIntelDatasetCoverage";
 import { isGcinvQuery, buildGcinvScript } from "./GraphCommunityInvestmentCoverage";
+import { isGcontQuery, buildGcontScript } from "./GraphCommunityContactCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3729,6 +3730,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcinv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcinvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F86 — "community contact / contact community / gcont / graph contact /
+    //  which communities have contacts / unrepresented communities / community representation"
+    if (isGcontQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcont-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcontScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
