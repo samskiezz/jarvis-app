@@ -314,6 +314,7 @@ import { isKbriskQuery, buildKbriskScript } from "./KnowledgeRiskSignalCoverage"
 import { isScdsQuery, buildScdsScript } from "./SceneDatasetCoverage";
 import { isSwkbQuery, buildSwkbScript } from "./KnowledgeSwarmJobCoverage";
 import { isInvscenQuery, buildInvscenScript } from "./InvestmentScenarioCoverage";
+import { isSliveQuery, buildSliveScript } from "./SceneLiveIntelExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3613,6 +3614,20 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invscen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvscenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F77: Scene × Live Intel Exposure — /v1/cinematic/scene/{id} (all 10) × /functions/getLiveIntel;
+    // LIVE (live world event aligns with scene domain) vs QUIET (no current signal);
+    // dispatches jarvis:slive-toggle; ◈ SLIVE left:689120 zIndex:259; 60-s auto-refresh;
+    // "scene live / live scene / slive / scene intel live / live scene exposure /
+    //  scene world event / scene live intel / which scenes are live / active scenes"
+    if (isSliveQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:slive-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSliveScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -237,6 +237,7 @@ import SceneDatasetCoverage from '@/components/cinematic/SceneDatasetCoverage';
 import KnowledgeSwarmJobCoverage from '@/components/cinematic/KnowledgeSwarmJobCoverage';
 import InvestmentScenarioCoverage from '@/components/cinematic/InvestmentScenarioCoverage';
 import ContactSwarmJobCoverage from '@/components/cinematic/ContactSwarmJobCoverage';
+import SceneLiveIntelExposure from '@/components/cinematic/SceneLiveIntelExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -704,6 +705,8 @@ function App() {
             <InvestmentScenarioCoverage />
             {/* F76 (overnight 2026-08-03): contact × swarm job coverage — ◈ CSJC button (left:657360, bottom:8, zIndex:238); parallel-fetches /entities/Contact + /entities/SwarmJob; keyword-correlates each contact (name/title/email/company/description) against active swarm jobs to surface MONITORED (swarm automation coverage found) vs UNMONITORED (no swarm job tracks this contact — surveillance gap); amber badge on unmonitored count; stat tiles (contacts/swarm jobs/monitored/unmonitored); ALL/MONITORED/UNMONITORED filter tabs + text search; expand contact → matched swarm jobs with kind badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-automation coverage brief + TTS via jarvis:speak-dossier; isCsjcQuery+buildCsjcScript wired in JarvisBrain; "contact swarm"/"swarm contact"/"csjc"/"monitored contacts"/"contact automation"/"contacts without swarm" voice trigger; jarvis:csjc-toggle event; 90-s auto-refresh */}
             <ContactSwarmJobCoverage />
+            {/* F77 (overnight 2026-08-03): scene × live intel exposure — ◈ SLIVE button (left:689120, bottom:8, zIndex:259); parallel-fetches all 10 /v1/cinematic/scene/{id} anchor sets + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each scene's anchor text against live world events to surface LIVE (world event alignment detected — domain is operationally heightened) vs QUIET (no live signal in this scene's space); cyan badge on LIVE count; stat tiles (scenes/live events/live/quiet); ALL/LIVE/QUIET filter tabs + text search; expand scene → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-world exposure brief + TTS via jarvis:speak-dossier; isSliveQuery+buildSliveScript wired in JarvisBrain; "scene live"/"live scene"/"slive"/"scene intel live"/"live scene exposure"/"scene world event"/"scene live intel"/"which scenes are live"/"active scenes" voice trigger; jarvis:slive-toggle event; 60-s auto-refresh */}
+            <SceneLiveIntelExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
