@@ -322,6 +322,7 @@ import { isScopsQuery, buildScopsScript } from "./SceneOpsEventCoverage";
 import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
 import { isInvscnQuery, buildInvscnScript } from "./InvestigationScenarioCoverage";
 import { isDsliveQuery, buildDsliveScript } from "./LiveIntelDatasetCoverage";
+import { isGcinvQuery, buildGcinvScript } from "./GraphCommunityInvestmentCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3717,6 +3718,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dslive-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDsliveScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F85 — "graph community invest / community invest / gcinv / portfolio community /
+    //  community portfolio / investment community / community investment alignment"
+    if (isGcinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcinv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcinvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

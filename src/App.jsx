@@ -244,6 +244,7 @@ import ReportOpsEventCoverage from '@/components/cinematic/ReportOpsEventCoverag
 import SceneOpsEventCoverage from '@/components/cinematic/SceneOpsEventCoverage';
 import InvestigationScenarioCoverage from '@/components/cinematic/InvestigationScenarioCoverage';
 import LiveIntelDatasetCoverage from '@/components/cinematic/LiveIntelDatasetCoverage';
+import GraphCommunityInvestmentCoverage from '@/components/cinematic/GraphCommunityInvestmentCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -725,6 +726,8 @@ function App() {
             <InvestigationScenarioCoverage />
             {/* F84 (overnight 2026-08-03): live intel × dataset coverage — ◈ DSLIVE button (left:692480, bottom:8, zIndex:265); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/datasets; keyword-correlates each dataset (name/title/description/kind/type/category/domain/tags) against live world events to surface REACTIVE (live world event overlaps dataset domain — data is time-relevant) vs DORMANT (no current live signal matches this dataset's space); amber badge on reactive count; stat tiles (datasets/live events/reactive/dormant); ALL/REACTIVE/DORMANT filter tabs + text search; expand dataset → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence live-data readiness brief + TTS via jarvis:speak-dossier; isDsliveQuery+buildDsliveScript wired in JarvisBrain; "live dataset"/"dataset live"/"dslive"/"reactive dataset"/"live data coverage"/"active dataset"/"dataset live intel"/"live intel dataset"/"which datasets are live" voice trigger; jarvis:dslive-toggle event; 60-s auto-refresh */}
             <LiveIntelDatasetCoverage />
+            {/* F85 (overnight 2026-08-03): graph community × investment coverage — ◈ GCINV button (left:693040, bottom:8, zIndex:266); parallel-fetches /v1/graph/communities + /entities/Investment; keyword-correlates each network cluster (label/members/type) against portfolio investments (name/sector/notes/tags/ticker) to surface PORTFOLIO-LINKED (investment domain overlaps this network community) vs DARK (no investment alignment — portfolio-network blind spot); amber badge on dark count; stat tiles (clusters/investments/portfolio-linked/dark); ALL/PORTFOLIO-LINKED/DARK filter tabs + text search; expand cluster → matched investments with sector badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-community coverage brief + TTS via jarvis:speak-dossier; isGcinvQuery+buildGcinvScript wired in JarvisBrain; "graph community invest"/"community invest"/"gcinv"/"portfolio community"/"community portfolio"/"investment community"/"community investment alignment" voice trigger; jarvis:gcinv-toggle event; 90-s auto-refresh */}
+            <GraphCommunityInvestmentCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
