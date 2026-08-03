@@ -227,6 +227,7 @@ import TaskOpsEventCoverage from '@/components/cinematic/TaskOpsEventCoverage';
 import ContactSkillCoverage from '@/components/cinematic/ContactSkillCoverage';
 import GraphNodeSkillCoverage from '@/components/cinematic/GraphNodeSkillCoverage';
 import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCoverage';
+import GraphNodeOpsEventCoverage from '@/components/cinematic/GraphNodeOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -674,6 +675,8 @@ function App() {
             <GraphNodeSkillCoverage />
             {/* F66 (overnight 2026-08-03): live intel × report coverage — ◈ RPLIVE button (left:684080, bottom:8, zIndex:250); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/reports; keyword-correlates each intelligence report (title/summary/type/category/tags) against live world events to surface TRIGGERED (live world event aligns with report topic — time-critical intelligence) vs STALE (no current live signal matches this report's domain); amber badge on triggered count; stat tiles (reports/live events/triggered/stale); ALL/TRIGGERED/STALE filter tabs + text search; expand report → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence report-world relevance brief + TTS via jarvis:speak-dossier; isRpliveQuery+buildRpliveScript wired in JarvisBrain; "report live"/"live report"/"rplive"/"triggered report"/"live triggered report"/"world report"/"report world event"/"intel report live"/"live intel report" voice trigger; jarvis:rplive-toggle event; 60-s auto-refresh */}
             <LiveIntelReportCoverage />
+            {/* F67 (overnight 2026-08-03): graph node × ops event coverage — ◈ GNOPS button (left:684640, bottom:8, zIndex:251); parallel-fetches /v1/graph/centrality + /v1/ops/events; keyword-correlates each top-influence graph node (label/name/type/category) against active ops events to surface ACTIVE (ops event coverage detected) vs DORMANT (no ops event covers this node's domain — operational blind spot); cyan badge on active count; stat tiles (graph nodes/ops events/active/dormant); ALL/ACTIVE/DORMANT filter tabs + text search; expand node → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-operational coverage brief + TTS via jarvis:speak-dossier; isGnopsQuery+buildGnopsScript wired in JarvisBrain; "graph ops"/"ops graph"/"gnops"/"graph operational"/"node ops coverage"/"graph ops event"/"active graph nodes"/"operational nodes"/"graph event coverage" voice trigger; jarvis:gnops-toggle event; 90-s auto-refresh */}
+            <GraphNodeOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
