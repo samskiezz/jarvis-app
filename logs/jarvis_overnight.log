@@ -37,3 +37,4 @@
 2026-08-03 F66 LiveIntelReportCoverage.jsx: /functions/getLiveIntel × /v1/reports; TRIGGERED vs STALE reports; ◈ RPLIVE left:684080 zIndex:250; isRpliveQuery+buildRpliveScript wired in JarvisBrain.jsx; build exit 0
 [2026-08-03] F67 GraphNodeOpsEventCoverage.jsx — /v1/graph/centrality × /v1/ops/events; ACTIVE/DORMANT node coverage; ◈ GNOPS button; voice: gnops/graph ops; build exit 0
 2026-08-03 jarvis-overnight: F68 KnowledgeContactCoverage — mounted /knowledge/ × /entities/Contact KB coverage panel in App.jsx; REFERENCED vs UNKNOWN contacts; amber badge on unknown count; isCkbaseQuery+buildCkbaseScript wired in JarvisBrain.jsx; ◈ CKBASE left:685200 zIndex:252; build exit 0
+2026-08-03T04:15:15Z F69 SceneKnowledgeCoverage.jsx — /v1/cinematic/scene/{id}×/knowledge/ BACKED/DARK; ◈ SCKB; JarvisBrain wired; build exit 0

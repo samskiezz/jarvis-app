@@ -229,6 +229,7 @@ import GraphNodeSkillCoverage from '@/components/cinematic/GraphNodeSkillCoverag
 import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCoverage';
 import GraphNodeOpsEventCoverage from '@/components/cinematic/GraphNodeOpsEventCoverage';
 import KnowledgeContactCoverage from '@/components/cinematic/KnowledgeContactCoverage';
+import SceneKnowledgeCoverage from '@/components/cinematic/SceneKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -680,6 +681,8 @@ function App() {
             <GraphNodeOpsEventCoverage />
             {/* F68 (overnight 2026-08-03): knowledge × contact coverage — ◈ CKBASE button (left:685200, bottom:8, zIndex:252); parallel-fetches /knowledge/ + /entities/Contact; keyword-correlates each contact (name/email/company/title/description/role) against knowledge base articles to surface REFERENCED (KB article coverage found for this contact's domain) vs UNKNOWN (no knowledge backing — intelligence gap); amber badge on unknown count; stat tiles (contacts/KB articles/referenced/unknown); ALL/REFERENCED/UNKNOWN filter tabs + text search; expand contact → matched KB articles with type badge + category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-knowledge coverage brief + TTS via jarvis:speak-dossier; isCkbaseQuery+buildCkbaseScript wired in JarvisBrain; "contact knowledge"/"knowledge contact"/"ckbase"/"contact kb"/"knowledge backed contact"/"contact intel base"/"unknown contacts"/"contact knowledge gap"/"kb contact"/"contact knowledge coverage" voice trigger; jarvis:ckbase-toggle event; 90-s auto-refresh */}
             <KnowledgeContactCoverage />
+            {/* F69 (overnight 2026-08-03): scene × knowledge coverage — ◈ SCKB button (left:685760, bottom:8, zIndex:253); parallel-fetches all 10 /v1/cinematic/scene/{id} + /knowledge/; keyword-correlates each scene's anchor texts against KB articles to surface BACKED (KB coverage found) vs DARK (no knowledge base backing — intelligence gap); amber badge on dark count; stat tiles (scenes/KB articles/backed/dark); ALL/BACKED/DARK filter tabs + text search; expand scene → matched KB articles with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-knowledge coverage brief + TTS via jarvis:speak-dossier; isScKbQuery+buildScKbScript wired in JarvisBrain; "scene knowledge"/"knowledge scene"/"sckb"/"backed scenes"/"dark scenes"/"scene kb"/"scene knowledge coverage"/"scene knowledge gap"/"uncharted scene"/"scene intel base" voice trigger; jarvis:sckb-toggle event; 120-s auto-refresh */}
+            <SceneKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

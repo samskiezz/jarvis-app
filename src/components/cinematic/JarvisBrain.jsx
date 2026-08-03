@@ -308,6 +308,7 @@ import { isGnskQuery, buildGnskScript } from "./GraphNodeSkillCoverage";
 import { isRpliveQuery, buildRpliveScript } from "./LiveIntelReportCoverage";
 import { isGnopsQuery, buildGnopsScript } from "./GraphNodeOpsEventCoverage";
 import { isCkbaseQuery, buildCkbaseScript } from "./KnowledgeContactCoverage";
+import { isScKbQuery, buildScKbScript } from "./SceneKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3530,6 +3531,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ckbase-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCkbaseScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isScKbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sckb-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScKbScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
