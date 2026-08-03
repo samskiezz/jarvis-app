@@ -236,6 +236,7 @@ import KnowledgeRiskSignalCoverage from '@/components/cinematic/KnowledgeRiskSig
 import SceneDatasetCoverage from '@/components/cinematic/SceneDatasetCoverage';
 import KnowledgeSwarmJobCoverage from '@/components/cinematic/KnowledgeSwarmJobCoverage';
 import InvestmentScenarioCoverage from '@/components/cinematic/InvestmentScenarioCoverage';
+import ContactSwarmJobCoverage from '@/components/cinematic/ContactSwarmJobCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -701,6 +702,8 @@ function App() {
             <SceneDatasetCoverage />
             {/* F75 (overnight 2026-08-03): investment × scenario coverage — ◈ INVSCEN button (left:688560, bottom:8, zIndex:258); parallel-fetches /entities/Investment + /v1/scenario/list; keyword-correlates each investment (name/sector/notes/tags/ticker) against active scenarios to surface EXPOSED (scenario threat overlaps investment domain) vs STABLE (no scenario alignment); red badge on exposed count; stat tiles (investments/scenarios/exposed/stable); ALL/EXPOSED/STABLE filter tabs + text search; expand investment → matched scenarios with status badge + category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-scenario exposure brief + TTS via jarvis:speak-dossier; isInvscenQuery+buildInvscenScript wired in JarvisBrain; "investment scenario"/"scenario investment"/"invscen"/"exposed investments"/"investment threat scenario"/"portfolio scenario"/"scenario portfolio"/"scenario exposure" voice trigger; jarvis:invscen-toggle event; 90-s auto-refresh */}
             <InvestmentScenarioCoverage />
+            {/* F76 (overnight 2026-08-03): contact × swarm job coverage — ◈ CSJC button (left:657360, bottom:8, zIndex:238); parallel-fetches /entities/Contact + /entities/SwarmJob; keyword-correlates each contact (name/title/email/company/description) against active swarm jobs to surface MONITORED (swarm automation coverage found) vs UNMONITORED (no swarm job tracks this contact — surveillance gap); amber badge on unmonitored count; stat tiles (contacts/swarm jobs/monitored/unmonitored); ALL/MONITORED/UNMONITORED filter tabs + text search; expand contact → matched swarm jobs with kind badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-automation coverage brief + TTS via jarvis:speak-dossier; isCsjcQuery+buildCsjcScript wired in JarvisBrain; "contact swarm"/"swarm contact"/"csjc"/"monitored contacts"/"contact automation"/"contacts without swarm" voice trigger; jarvis:csjc-toggle event; 90-s auto-refresh */}
+            <ContactSwarmJobCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
