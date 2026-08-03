@@ -231,6 +231,7 @@ import GraphNodeOpsEventCoverage from '@/components/cinematic/GraphNodeOpsEventC
 import KnowledgeContactCoverage from '@/components/cinematic/KnowledgeContactCoverage';
 import SceneKnowledgeCoverage from '@/components/cinematic/SceneKnowledgeCoverage';
 import SwarmJobSkillAlignment from '@/components/cinematic/SwarmJobSkillAlignment';
+import SceneScenarioCoverage from '@/components/cinematic/SceneScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -686,6 +687,8 @@ function App() {
             <SceneKnowledgeCoverage />
             {/* F70 (overnight 2026-08-03): swarm job × skill domain alignment — ◈ SWARMSKILL button (left:69640, bottom:8, zIndex:134); parallel-fetches /entities/SwarmJob + /v1/aip/skill; keyword-correlates each JARVIS skill domain against active swarm jobs to surface DEPLOYED (skill domain has swarm automation backing) vs DORMANT (skill domain not currently automated — deployment gap); lime badge on deployed count; stat tiles (skills/jobs/deployed/dormant); ALL/DEPLOYED/DORMANT filter tabs + text search; expand skill → matched swarm jobs with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-deployment coverage brief + TTS via jarvis:speak-dossier; isSwarmskillQuery+buildSwarmskillScript wired in JarvisBrain (line 106/1479); "swarm skill"/"swarmskill"/"skill deployment"/"deployed skills"/"dormant skills"/"swarm capability"/"which skills have swarm jobs"/"active skill deployment"/"skill swarm"/"swarm coverage" voice trigger; jarvis:swarmskill-toggle event; 90-s auto-refresh */}
             <SwarmJobSkillAlignment />
+            {/* F71 (overnight 2026-08-03): scene × scenario coverage — ◈ SCSCEN button (left:686320, bottom:8, zIndex:254); parallel-fetches all 10 /v1/cinematic/scene/{id} + /v1/scenario/list; keyword-correlates each scene's anchor texts against active scenarios to surface SCRIPTED (scenario coverage found) vs UNPLANNED (no scenario covers this scene — action gap); amber badge on unplanned count; stat tiles (scenes/scenarios/scripted/unplanned); ALL/SCRIPTED/UNPLANNED filter tabs + text search; expand scene → matched scenarios with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-scenario readiness brief + TTS via jarvis:speak-dossier; isScscenQuery+buildScscenScript wired in JarvisBrain; "scene scenario"/"scenario scene"/"scscen"/"scripted scene"/"unplanned scene"/"scene coverage"/"scene scenario coverage" voice trigger; jarvis:scscen-toggle event; 120-s auto-refresh */}
+            <SceneScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

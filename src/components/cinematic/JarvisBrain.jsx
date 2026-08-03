@@ -309,6 +309,7 @@ import { isRpliveQuery, buildRpliveScript } from "./LiveIntelReportCoverage";
 import { isGnopsQuery, buildGnopsScript } from "./GraphNodeOpsEventCoverage";
 import { isCkbaseQuery, buildCkbaseScript } from "./KnowledgeContactCoverage";
 import { isScKbQuery, buildScKbScript } from "./SceneKnowledgeCoverage";
+import { isScscenQuery, buildScscenScript } from "./SceneScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1480,6 +1481,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swarmskill-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwarmskillScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F71: Scene × Scenario Coverage — /v1/cinematic/scene/{id} × /v1/scenario/list;
+    // SCRIPTED (scenario coverage found) vs UNPLANNED (no scenario — action gap);
+    // dispatches jarvis:scscen-toggle; ◈ SCSCEN left:686320 zIndex:254; 120-s auto-refresh;
+    // "scene scenario / scenario scene / scscen / scripted scene / unplanned scene / scene coverage"
+    if (isScscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scscen-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScscenScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
