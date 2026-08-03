@@ -318,6 +318,7 @@ import { isSliveQuery, buildSliveScript } from "./SceneLiveIntelExposure";
 import { isKbinvQuery, buildKbinvScript } from "./KnowledgeInvestigationCoverage";
 import { isOeliveQuery, buildOeliveScript } from "./OpsEventLiveIntelCoverage";
 import { isRpopsQuery, buildRpopsScript } from "./ReportOpsEventCoverage";
+import { isScopsQuery, buildScopsScript } from "./SceneOpsEventCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3666,6 +3667,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rpops-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRpopsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F81 — "scene ops / ops scene / scops / active ops scene / live ops scene /
+    //  scene operational / ops event scene / which scenes have ops events /
+    //  operationally live scenes"
+    if (isScopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scops-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScopsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

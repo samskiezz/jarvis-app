@@ -241,6 +241,7 @@ import SceneLiveIntelExposure from '@/components/cinematic/SceneLiveIntelExposur
 import KnowledgeInvestigationCoverage from '@/components/cinematic/KnowledgeInvestigationCoverage';
 import OpsEventLiveIntelCoverage from '@/components/cinematic/OpsEventLiveIntelCoverage';
 import ReportOpsEventCoverage from '@/components/cinematic/ReportOpsEventCoverage';
+import SceneOpsEventCoverage from '@/components/cinematic/SceneOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -716,6 +717,8 @@ function App() {
             <OpsEventLiveIntelCoverage />
             {/* F80 (overnight 2026-08-03): report × ops event coverage — ◈ RPOPS button (left:690800, bottom:8, zIndex:262); parallel-fetches /v1/reports + /v1/ops/events; keyword-correlates each ops event (name/type/description/category/tags) against intelligence reports to surface REPORTED (report coverage found) vs UNREPORTED (no report addresses this event domain — intelligence lag); amber badge on unreported count; stat tiles (ops events/reports/reported/unreported); ALL/REPORTED/UNREPORTED filter tabs + text search; expand event → matched reports with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-reporting coverage brief + TTS via jarvis:speak-dossier; isRpopsQuery+buildRpopsScript wired in JarvisBrain; "report ops"/"ops report"/"rpops"/"unreported ops"/"ops reporting gap"/"ops report coverage" voice trigger; jarvis:rpops-toggle event; 90-s auto-refresh */}
             <ReportOpsEventCoverage />
+            {/* F81 (overnight 2026-08-03): scene × ops event coverage — ◈ SCOPS button (left:691360, bottom:8, zIndex:263); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/ops/events; keyword-correlates each scene's anchor texts against active ops events to surface ACTIVE (ops event domain coverage detected) vs QUIET (no ops event matches this scene — operational blind spot); cyan badge on active count; stat tiles (scenes/ops events/active/quiet); ALL/ACTIVE/QUIET filter tabs + text search; expand scene → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-ops coverage brief + TTS via jarvis:speak-dossier; isScopsQuery+buildScopsScript wired in JarvisBrain; "scene ops"/"ops scene"/"scops"/"active ops scene"/"live ops scene"/"scene operational"/"ops event scene"/"which scenes have ops events"/"operationally live scenes" voice trigger; jarvis:scops-toggle event; 90-s auto-refresh */}
+            <SceneOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
