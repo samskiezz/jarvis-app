@@ -246,6 +246,7 @@ import InvestigationScenarioCoverage from '@/components/cinematic/InvestigationS
 import LiveIntelDatasetCoverage from '@/components/cinematic/LiveIntelDatasetCoverage';
 import GraphCommunityInvestmentCoverage from '@/components/cinematic/GraphCommunityInvestmentCoverage';
 import GraphCommunityContactCoverage from '@/components/cinematic/GraphCommunityContactCoverage';
+import GraphCommunitySkillCoverage from '@/components/cinematic/GraphCommunitySkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -731,6 +732,8 @@ function App() {
             <GraphCommunityInvestmentCoverage />
             {/* F86 (overnight 2026-08-03): graph community × contact coverage — ◈ GCONT button (left:66840, bottom:8, zIndex:129); parallel-fetches /v1/graph/communities + /entities/Contact; keyword-correlates each network cluster against contact records to surface REPRESENTED (contact aligns with community) vs UNREPRESENTED (coverage gap); teal badge on represented count; stat tiles; ALL/REPRESENTED/UNREPRESENTED filter tabs + search; expand cluster → matched contacts with role badge + relevance score; ASSESS → /v1/jarvis/agent/chat 2-sentence community-contact brief + TTS; "community contact"/"contact community"/"gcont"/"graph contact"/"unrepresented communities" voice trigger; jarvis:gcont-toggle event; 90-s auto-refresh */}
             <GraphCommunityContactCoverage />
+            {/* F87 (overnight 2026-08-03): graph community × skill coverage — ◈ GCSK button (left:693600, bottom:8, zIndex:267); parallel-fetches /v1/graph/communities + /v1/aip/skill; keyword-correlates each network cluster against JARVIS skills to surface SKILLED (skill covers community domain) vs UNSKILLED (capability gap); lime badge on skilled count; stat tiles (communities/skills/skilled/unskilled); ALL/SKILLED/UNSKILLED filter tabs + text search; expand cluster → matched skills with category + domain badge + relevance score; ASSESS → /v1/jarvis/agent/chat 2-sentence community-skill readiness brief + TTS; "community skill"/"skill community"/"gcsk"/"unskilled community"/"community capability gap" voice trigger; jarvis:gcsk-toggle event; 90-s auto-refresh */}
+            <GraphCommunitySkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

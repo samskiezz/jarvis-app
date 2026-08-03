@@ -324,6 +324,7 @@ import { isInvscnQuery, buildInvscnScript } from "./InvestigationScenarioCoverag
 import { isDsliveQuery, buildDsliveScript } from "./LiveIntelDatasetCoverage";
 import { isGcinvQuery, buildGcinvScript } from "./GraphCommunityInvestmentCoverage";
 import { isGcontQuery, buildGcontScript } from "./GraphCommunityContactCoverage";
+import { isGcskQuery, buildGcskScript } from "./GraphCommunitySkillCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3741,6 +3742,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcont-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcontScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F87 — "community skill / skill community / gcsk / graph skill community /
+    //  unskilled community / community capability gap / community skill coverage"
+    if (isGcskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcsk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
