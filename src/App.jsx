@@ -228,6 +228,7 @@ import ContactSkillCoverage from '@/components/cinematic/ContactSkillCoverage';
 import GraphNodeSkillCoverage from '@/components/cinematic/GraphNodeSkillCoverage';
 import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCoverage';
 import GraphNodeOpsEventCoverage from '@/components/cinematic/GraphNodeOpsEventCoverage';
+import KnowledgeContactCoverage from '@/components/cinematic/KnowledgeContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -677,6 +678,8 @@ function App() {
             <LiveIntelReportCoverage />
             {/* F67 (overnight 2026-08-03): graph node × ops event coverage — ◈ GNOPS button (left:684640, bottom:8, zIndex:251); parallel-fetches /v1/graph/centrality + /v1/ops/events; keyword-correlates each top-influence graph node (label/name/type/category) against active ops events to surface ACTIVE (ops event coverage detected) vs DORMANT (no ops event covers this node's domain — operational blind spot); cyan badge on active count; stat tiles (graph nodes/ops events/active/dormant); ALL/ACTIVE/DORMANT filter tabs + text search; expand node → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-operational coverage brief + TTS via jarvis:speak-dossier; isGnopsQuery+buildGnopsScript wired in JarvisBrain; "graph ops"/"ops graph"/"gnops"/"graph operational"/"node ops coverage"/"graph ops event"/"active graph nodes"/"operational nodes"/"graph event coverage" voice trigger; jarvis:gnops-toggle event; 90-s auto-refresh */}
             <GraphNodeOpsEventCoverage />
+            {/* F68 (overnight 2026-08-03): knowledge × contact coverage — ◈ CKBASE button (left:685200, bottom:8, zIndex:252); parallel-fetches /knowledge/ + /entities/Contact; keyword-correlates each contact (name/email/company/title/description/role) against knowledge base articles to surface REFERENCED (KB article coverage found for this contact's domain) vs UNKNOWN (no knowledge backing — intelligence gap); amber badge on unknown count; stat tiles (contacts/KB articles/referenced/unknown); ALL/REFERENCED/UNKNOWN filter tabs + text search; expand contact → matched KB articles with type badge + category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-knowledge coverage brief + TTS via jarvis:speak-dossier; isCkbaseQuery+buildCkbaseScript wired in JarvisBrain; "contact knowledge"/"knowledge contact"/"ckbase"/"contact kb"/"knowledge backed contact"/"contact intel base"/"unknown contacts"/"contact knowledge gap"/"kb contact"/"contact knowledge coverage" voice trigger; jarvis:ckbase-toggle event; 90-s auto-refresh */}
+            <KnowledgeContactCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
