@@ -315,6 +315,7 @@ import { isScdsQuery, buildScdsScript } from "./SceneDatasetCoverage";
 import { isSwkbQuery, buildSwkbScript } from "./KnowledgeSwarmJobCoverage";
 import { isInvscenQuery, buildInvscenScript } from "./InvestmentScenarioCoverage";
 import { isSliveQuery, buildSliveScript } from "./SceneLiveIntelExposure";
+import { isKbinvQuery, buildKbinvScript } from "./KnowledgeInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3628,6 +3629,20 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:slive-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSliveScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F78 — Knowledge × Investigation Coverage
+    // dispatches jarvis:kbinv-toggle; ◈ KBINV left:689680 zIndex:260; 90-s auto-refresh;
+    // "knowledge invest / invest knowledge / kbinv / investigation kb /
+    //  uninformed case / investigation knowledge gap / kb investigation /
+    //  case knowledge / case kb / blind investigation"
+    if (isKbinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kbinv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKbinvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

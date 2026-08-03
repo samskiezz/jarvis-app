@@ -238,6 +238,7 @@ import KnowledgeSwarmJobCoverage from '@/components/cinematic/KnowledgeSwarmJobC
 import InvestmentScenarioCoverage from '@/components/cinematic/InvestmentScenarioCoverage';
 import ContactSwarmJobCoverage from '@/components/cinematic/ContactSwarmJobCoverage';
 import SceneLiveIntelExposure from '@/components/cinematic/SceneLiveIntelExposure';
+import KnowledgeInvestigationCoverage from '@/components/cinematic/KnowledgeInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -707,6 +708,8 @@ function App() {
             <ContactSwarmJobCoverage />
             {/* F77 (overnight 2026-08-03): scene × live intel exposure — ◈ SLIVE button (left:689120, bottom:8, zIndex:259); parallel-fetches all 10 /v1/cinematic/scene/{id} anchor sets + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each scene's anchor text against live world events to surface LIVE (world event alignment detected — domain is operationally heightened) vs QUIET (no live signal in this scene's space); cyan badge on LIVE count; stat tiles (scenes/live events/live/quiet); ALL/LIVE/QUIET filter tabs + text search; expand scene → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-world exposure brief + TTS via jarvis:speak-dossier; isSliveQuery+buildSliveScript wired in JarvisBrain; "scene live"/"live scene"/"slive"/"scene intel live"/"live scene exposure"/"scene world event"/"scene live intel"/"which scenes are live"/"active scenes" voice trigger; jarvis:slive-toggle event; 60-s auto-refresh */}
             <SceneLiveIntelExposure />
+            {/* F78 (overnight 2026-08-03): knowledge × investigation coverage — ◈ KBINV button (left:689680, bottom:8, zIndex:260); parallel-fetches /knowledge/ + /v1/investigations; keyword-correlates each open investigation against KB articles to surface INFORMED (KB article backing found) vs BLIND (no knowledge base coverage — intelligence gap); amber badge on blind count; stat tiles (investigations/KB articles/informed/blind); ALL/INFORMED/BLIND filter tabs + text search; expand case → matched KB articles with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-knowledge coverage brief + TTS via jarvis:speak-dossier; isKbinvQuery+buildKbinvScript wired in JarvisBrain; "knowledge invest"/"invest knowledge"/"kbinv"/"investigation kb"/"uninformed case"/"investigation knowledge gap"/"kb investigation"/"case knowledge"/"case kb"/"blind investigation" voice trigger; jarvis:kbinv-toggle event; 90-s auto-refresh */}
+            <KnowledgeInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

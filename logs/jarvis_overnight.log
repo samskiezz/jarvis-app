@@ -46,3 +46,4 @@
 [2026-08-03] F75 Investment × Scenario Coverage — InvestmentScenarioCoverage.jsx; /entities/Investment × /v1/scenario/list; EXPOSED/STABLE; ◈ INVSCEN left:688560 zIndex:258; isInvscenQuery+buildInvscenScript wired in JarvisBrain; mounted in App.jsx; build exit 0
 [2026-08-03] F76 Contact × SwarmJob Coverage — ContactSwarmJobCoverage.jsx; /entities/Contact × /entities/SwarmJob; MONITORED/UNMONITORED; ◈ CSJC left:657360 zIndex:238; isCsjcQuery+buildCsjcScript already wired in JarvisBrain; mounted in App.jsx; build exit 0
 [2026-08-03] F77 Scene × Live Intel Exposure — SceneLiveIntelExposure.jsx; all 10 /v1/cinematic/scene/{id} × /functions/getLiveIntel (quakes/crypto/FX); LIVE/QUIET; cyan badge on LIVE count; ◈ SLIVE left:689120 zIndex:259; isSliveQuery+buildSliveScript wired in JarvisBrain.jsx; mounted in App.jsx; build exit 0
+2026-08-03 F78 KnowledgeInvestigationCoverage.jsx — /knowledge/ × /v1/investigations — INFORMED vs BLIND cases — KBINV panel — build exit 0
