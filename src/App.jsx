@@ -232,6 +232,7 @@ import KnowledgeContactCoverage from '@/components/cinematic/KnowledgeContactCov
 import SceneKnowledgeCoverage from '@/components/cinematic/SceneKnowledgeCoverage';
 import SwarmJobSkillAlignment from '@/components/cinematic/SwarmJobSkillAlignment';
 import SceneScenarioCoverage from '@/components/cinematic/SceneScenarioCoverage';
+import KnowledgeRiskSignalCoverage from '@/components/cinematic/KnowledgeRiskSignalCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -689,6 +690,8 @@ function App() {
             <SwarmJobSkillAlignment />
             {/* F71 (overnight 2026-08-03): scene × scenario coverage — ◈ SCSCEN button (left:686320, bottom:8, zIndex:254); parallel-fetches all 10 /v1/cinematic/scene/{id} + /v1/scenario/list; keyword-correlates each scene's anchor texts against active scenarios to surface SCRIPTED (scenario coverage found) vs UNPLANNED (no scenario covers this scene — action gap); amber badge on unplanned count; stat tiles (scenes/scenarios/scripted/unplanned); ALL/SCRIPTED/UNPLANNED filter tabs + text search; expand scene → matched scenarios with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-scenario readiness brief + TTS via jarvis:speak-dossier; isScscenQuery+buildScscenScript wired in JarvisBrain; "scene scenario"/"scenario scene"/"scscen"/"scripted scene"/"unplanned scene"/"scene coverage"/"scene scenario coverage" voice trigger; jarvis:scscen-toggle event; 120-s auto-refresh */}
             <SceneScenarioCoverage />
+            {/* F72 (overnight 2026-08-03): knowledge × risk signal coverage — ◈ KBRISK button (left:686880, bottom:8, zIndex:255); parallel-fetches /knowledge/ + /entities/RiskSignal; keyword-correlates each KB article (title/category/summary/tags) against active risk signals to surface RISK-TAGGED (threat signal domain overlap detected) vs CLEAR (no active risk signal alignment); amber badge on risk-tagged count; stat tiles (KB articles/risk signals/risk-tagged/clear); ALL/RISK-TAGGED/CLEAR filter tabs + text search; expand article → matched risk signals with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-risk brief + TTS via jarvis:speak-dossier; isKbriskQuery+buildKbriskScript wired in JarvisBrain; "knowledge risk"/"risk knowledge"/"kbrisk"/"risk kb"/"knowledge risk signal"/"risk tagged knowledge"/"risky knowledge"/"kb risk signal" voice trigger; jarvis:kbrisk-toggle event; 90-s auto-refresh */}
+            <KnowledgeRiskSignalCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

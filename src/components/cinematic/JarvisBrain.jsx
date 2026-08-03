@@ -310,6 +310,7 @@ import { isGnopsQuery, buildGnopsScript } from "./GraphNodeOpsEventCoverage";
 import { isCkbaseQuery, buildCkbaseScript } from "./KnowledgeContactCoverage";
 import { isScKbQuery, buildScKbScript } from "./SceneKnowledgeCoverage";
 import { isScscenQuery, buildScscenScript } from "./SceneScenarioCoverage";
+import { isKbriskQuery, buildKbriskScript } from "./KnowledgeRiskSignalCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3553,6 +3554,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sckb-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScKbScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F72: Knowledge × Risk Signal Coverage — /knowledge/ × /entities/RiskSignal;
+    // RISK-TAGGED (threat signal overlap) vs CLEAR (no active risk alignment);
+    // dispatches jarvis:kbrisk-toggle; ◈ KBRISK left:686880 zIndex:255; 90-s auto-refresh;
+    // "knowledge risk / risk knowledge / kbrisk / risk kb / knowledge risk signal"
+    if (isKbriskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kbrisk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKbriskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
