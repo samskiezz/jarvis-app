@@ -311,6 +311,7 @@ import { isCkbaseQuery, buildCkbaseScript } from "./KnowledgeContactCoverage";
 import { isScKbQuery, buildScKbScript } from "./SceneKnowledgeCoverage";
 import { isScscenQuery, buildScscenScript } from "./SceneScenarioCoverage";
 import { isKbriskQuery, buildKbriskScript } from "./KnowledgeRiskSignalCoverage";
+import { isScdsQuery, buildScdsScript } from "./SceneDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3566,6 +3567,20 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kbrisk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKbriskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F73: Scene × Dataset Coverage — /v1/cinematic/scene/{id} (all 10) × /v1/datasets;
+    // BACKED (dataset support found) vs UNCHARTED (no dataset coverage — intelligence gap);
+    // dispatches jarvis:scds-toggle; ◈ SCDS left:687440 zIndex:256; 120-s auto-refresh;
+    // "scene dataset / dataset scene / scds / data backed scene / scene data gap /
+    //  scene data coverage / scene dataset coverage / which scenes have datasets / uncharted scenes"
+    if (isScdsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scds-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScdsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
