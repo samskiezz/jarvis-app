@@ -62,3 +62,4 @@
 [2026-08-04] F91 GraphCommunityLiveIntelExposure — /v1/graph/communities × /functions/getLiveIntel; ACTIVATED/QUIET clusters; cyan badge; ◈ GCLIVE left:63480 zIndex:122; isGcliveQuery+buildGcliveScript wired in JarvisBrain; build exit 0
 2026-08-04 F92 GraphCommunityReportCoverage.jsx — /v1/graph/communities × /v1/reports; REPORTED vs UNCHARTED; amber badge; ◈ GCRPT left:64600 zIndex:123; build exit 0
 2026-08-04 F93 GraphCommunityRiskSignalCoverage.jsx — /v1/graph/communities × /entities/RiskSignal — EXPOSED vs CLEAR communities by risk signal overlap; red badge; ◈ GCRSK left:694720 zIndex:269; build exit 0
+2026-08-04 F94 TaskKnowledgeCoverage — /entities/Task × /knowledge/*; COVERED vs DARK tasks by KB article overlap; red badge on dark count; ◈ TKNOW left:28400 zIndex:64; isTaskKnowledgeQuery+buildTaskKnowledgeScript wired in JarvisBrain.jsx; build exit 0
