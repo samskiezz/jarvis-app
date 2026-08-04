@@ -252,6 +252,7 @@ import KnowledgeSkillCoverageGap from '@/components/cinematic/KnowledgeSkillCove
 import GraphCommunityTaskCoverage from '@/components/cinematic/GraphCommunityTaskCoverage';
 import GraphCommunityLiveIntelExposure from '@/components/cinematic/GraphCommunityLiveIntelExposure';
 import GraphCommunityReportCoverage from '@/components/cinematic/GraphCommunityReportCoverage';
+import GraphCommunityRiskSignalCoverage from '@/components/cinematic/GraphCommunityRiskSignalCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -749,6 +750,8 @@ function App() {
             <GraphCommunityLiveIntelExposure />
             {/* F92 (overnight 2026-08-04): graph community × report coverage — ◈ GCRPT button (left:64600, bottom:8, zIndex:123); parallel-fetches /v1/graph/communities + /v1/reports; keyword-correlates each network cluster (label/members/summary) against intelligence reports to surface REPORTED (report documentation found) vs UNCHARTED (no report coverage — intelligence gap); amber badge on uncharted count; stat tiles (communities/reports/reported/uncharted); ALL/REPORTED/UNCHARTED filter tabs + text search; expand cluster → matched reports with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-documentation brief + TTS via jarvis:speak-dossier; isGcrptQuery+buildGcrptScript wired in JarvisBrain.jsx; "community report"/"report community"/"gcrpt"/"reported community"/"uncharted community"/"community documentation"/"community report coverage"/"which communities have reports" voice trigger; jarvis:gcrpt-toggle event; 90-s auto-refresh */}
             <GraphCommunityReportCoverage />
+            {/* F93 (overnight 2026-08-04): graph community × risk signal coverage — ◈ GCRSK button (left:694720, bottom:8, zIndex:269); parallel-fetches /v1/graph/communities + /entities/RiskSignal; keyword-correlates each network cluster (label/members/summary) against active risk signals to surface EXPOSED (risk signal domain overlap detected) vs CLEAR (no active risk signal threatens this community); red badge on exposed count; stat tiles (communities/signals/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand cluster → matched risk signals with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-risk brief + TTS via jarvis:speak-dossier; isGcrskQuery+buildGcrskScript wired in JarvisBrain.jsx; "community risk"/"risk community"/"gcrsk"/"exposed community"/"community risk signal"/"which communities have risks"/"community threat signal" voice trigger; jarvis:gcrsk-toggle event; 90-s auto-refresh */}
+            <GraphCommunityRiskSignalCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
