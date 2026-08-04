@@ -249,6 +249,7 @@ import GraphCommunityContactCoverage from '@/components/cinematic/GraphCommunity
 import GraphCommunitySkillCoverage from '@/components/cinematic/GraphCommunitySkillCoverage';
 import GraphCommunityScenarioCoverage from '@/components/cinematic/GraphCommunityScenarioCoverage';
 import KnowledgeSkillCoverageGap from '@/components/cinematic/KnowledgeSkillCoverageGap';
+import GraphCommunityTaskCoverage from '@/components/cinematic/GraphCommunityTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -740,6 +741,8 @@ function App() {
             <GraphCommunityScenarioCoverage />
             {/* F89 (overnight 2026-08-04): knowledge × skill coverage gap — ◈ KSCOV button (left:58440, bottom:8, zIndex:114); parallel-fetches /v1/aip/skill + /knowledge/; keyword-correlates each skill dimension against KB articles to surface COVERED (at least one article has keyword overlap) vs GAP (no knowledge article covers this skill — learning blind spot); blue badge on gap count; stat tiles (skills/articles/covered/gaps); ALL/COVERED/GAP filter tabs + text search; expand skill → matched articles with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-skill coverage brief + TTS via jarvis:speak-dossier; isKscovQuery+buildKscovScript wired in JarvisBrain.jsx; "knowledge skills"/"skill knowledge"/"kscov"/"skill knowledge gap"/"knowledge skill audit" voice trigger; jarvis:kscov-toggle event; 90-s auto-refresh */}
             <KnowledgeSkillCoverageGap />
+            {/* F90 (overnight 2026-08-04): graph community × task coverage — ◈ GCTASK button (left:62360, bottom:8, zIndex:121); parallel-fetches /v1/graph/communities + /entities/Task; keyword-correlates each network cluster (label + member metadata) against the active task backlog to surface COVERED (task operational coverage found) vs GAP (no task targeting this community — planning blind spot); red badge on gap count; stat tiles (communities/tasks/covered/gaps); ALL/COVERED/GAP filter tabs + text search; expand cluster → matched tasks with status chip + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-task brief + TTS via jarvis:speak-dossier; isGctaskQuery+buildGctaskScript wired in JarvisBrain.jsx; "community task"/"graph community task"/"gctask"/"task community"/"untasked communities"/"community coverage" voice trigger; jarvis:gctask-toggle event; 90-s auto-refresh */}
+            <GraphCommunityTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
