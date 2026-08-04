@@ -257,6 +257,7 @@ import GraphCommunityIntelProfileCoverage from '@/components/cinematic/GraphComm
 import KnowledgeLiveIntelCoverage from '@/components/cinematic/KnowledgeLiveIntelCoverage';
 import GraphCommunityDatasetCoverage from '@/components/cinematic/GraphCommunityDatasetCoverage';
 import IntelProfileOpsEventCoverage from '@/components/cinematic/IntelProfileOpsEventCoverage';
+import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -764,6 +765,8 @@ function App() {
             <GraphCommunityDatasetCoverage />
             {/* F98 (overnight 2026-08-04): intel profile × ops event coverage — ◈ IPOEV button (left:696960, bottom:8, zIndex:273); parallel-fetches /entities/IntelProfile + /v1/ops/events; keyword-correlates each tracked threat actor profile against active ops events to surface COVERED (at least one ops event monitors this threat actor's domain) vs UNCOVERED (no operational coverage — blind spot); amber badge on uncovered count; stat tiles (profiles/ops events/covered/uncovered); ALL/COVERED/UNCOVERED filter tabs + text search; expand profile → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-ops coverage brief + TTS via jarvis:speak-dossier; isIpoevQuery+buildIpoevScript wired in JarvisBrain.jsx; "intel profile ops"/"ipoev"/"threat actor ops"/"ops coverage intel"/"profile ops coverage"/"uncovered threats"/"threat ops" voice trigger; jarvis:ipoev-toggle event; 90-s auto-refresh */}
             <IntelProfileOpsEventCoverage />
+            {/* F100 (overnight 2026-08-04): contact × investment coverage — ◈ CONVIN button (left:60680, bottom:8, zIndex:118); parallel-fetches /entities/Contact + /entities/Investment; keyword-correlates each contact (name/org/role/tags) against investment positions to surface MANAGED (contact keyword-linkage to at least one investment) vs UNMANAGED (no investment tie — relationship not mapped to assets); teal badge on unmanaged count; stat tiles (contacts/investments/managed/unmanaged); ALL/MANAGED/UNMANAGED filter tabs + text search; expand contact → matched investments with asset class badge + ticker + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-investment exposure brief + TTS via jarvis:speak-dossier; isConvinQuery+buildConvinScript wired in JarvisBrain.jsx; "contact investment"/"investor contact"/"convin"/"unmanaged contacts"/"contact wealth"/"contact portfolio"/"investment contact"/"which contacts have investments" voice trigger; jarvis:convin-toggle event; 90-s auto-refresh */}
+            <ContactInvestmentCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

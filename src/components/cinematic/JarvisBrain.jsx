@@ -337,6 +337,7 @@ import { isKbliveQuery, buildKbliveScript } from "./KnowledgeLiveIntelCoverage";
 import { isGcdsQuery, buildGcdsScript } from "./GraphCommunityDatasetCoverage";
 import { isIpoevQuery, buildIpoevScript } from "./IntelProfileOpsEventCoverage";
 import { isKbscenQuery, buildKbscenScript } from "./KnowledgeScenarioCoverage";
+import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3877,6 +3878,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kbscen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKbscenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isConvinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:convin-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildConvinScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
