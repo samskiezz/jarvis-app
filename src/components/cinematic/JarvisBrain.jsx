@@ -335,6 +335,7 @@ import { isGciplQuery, buildGciplScript } from "./GraphCommunityIntelProfileCove
 import { isTaskKnowledgeQuery, buildTaskKnowledgeScript } from "./TaskKnowledgeCoverage";
 import { isKbliveQuery, buildKbliveScript } from "./KnowledgeLiveIntelCoverage";
 import { isGcdsQuery, buildGcdsScript } from "./GraphCommunityDatasetCoverage";
+import { isIpoevQuery, buildIpoevScript } from "./IntelProfileOpsEventCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3857,6 +3858,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcds-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcdsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIpoevQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipoev-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpoevScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

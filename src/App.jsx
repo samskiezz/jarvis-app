@@ -256,6 +256,7 @@ import GraphCommunityRiskSignalCoverage from '@/components/cinematic/GraphCommun
 import GraphCommunityIntelProfileCoverage from '@/components/cinematic/GraphCommunityIntelProfileCoverage';
 import KnowledgeLiveIntelCoverage from '@/components/cinematic/KnowledgeLiveIntelCoverage';
 import GraphCommunityDatasetCoverage from '@/components/cinematic/GraphCommunityDatasetCoverage';
+import IntelProfileOpsEventCoverage from '@/components/cinematic/IntelProfileOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -761,6 +762,8 @@ function App() {
             <KnowledgeLiveIntelCoverage />
             {/* F97 (overnight 2026-08-04): graph community × dataset coverage — ◈ GCDS button (left:696400, bottom:8, zIndex:272); parallel-fetches /v1/graph/communities + /v1/datasets; keyword-correlates each network cluster against the dataset catalog to surface COVERED (at least one dataset backs this community's domain) vs UNCHARTED (no dataset coverage — intelligence gap); amber badge on UNCHARTED count; stat tiles (communities/datasets/covered/uncharted); ALL/COVERED/UNCHARTED filter tabs + text search; expand cluster → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-dataset readiness brief + TTS via jarvis:speak-dossier; isGcdsQuery+buildGcdsScript wired in JarvisBrain.jsx; "graph community dataset"/"community dataset"/"gcds"/"uncharted community"/"community data gap"/"community dataset coverage" voice trigger; jarvis:gcds-toggle event; 90-s auto-refresh */}
             <GraphCommunityDatasetCoverage />
+            {/* F98 (overnight 2026-08-04): intel profile × ops event coverage — ◈ IPOEV button (left:696960, bottom:8, zIndex:273); parallel-fetches /entities/IntelProfile + /v1/ops/events; keyword-correlates each tracked threat actor profile against active ops events to surface COVERED (at least one ops event monitors this threat actor's domain) vs UNCOVERED (no operational coverage — blind spot); amber badge on uncovered count; stat tiles (profiles/ops events/covered/uncovered); ALL/COVERED/UNCOVERED filter tabs + text search; expand profile → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-ops coverage brief + TTS via jarvis:speak-dossier; isIpoevQuery+buildIpoevScript wired in JarvisBrain.jsx; "intel profile ops"/"ipoev"/"threat actor ops"/"ops coverage intel"/"profile ops coverage"/"uncovered threats"/"threat ops" voice trigger; jarvis:ipoev-toggle event; 90-s auto-refresh */}
+            <IntelProfileOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
