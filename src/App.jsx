@@ -255,6 +255,7 @@ import GraphCommunityReportCoverage from '@/components/cinematic/GraphCommunityR
 import GraphCommunityRiskSignalCoverage from '@/components/cinematic/GraphCommunityRiskSignalCoverage';
 import GraphCommunityIntelProfileCoverage from '@/components/cinematic/GraphCommunityIntelProfileCoverage';
 import KnowledgeLiveIntelCoverage from '@/components/cinematic/KnowledgeLiveIntelCoverage';
+import GraphCommunityDatasetCoverage from '@/components/cinematic/GraphCommunityDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -758,6 +759,8 @@ function App() {
             <GraphCommunityIntelProfileCoverage />
             {/* F96 (overnight 2026-08-04): knowledge × live intel coverage — ◈ KBLIVE button (left:695840, bottom:8, zIndex:271); parallel-fetches /knowledge/ + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each KB article (title/category/summary/tags) against live world events to surface TRIGGERED (live world event aligns with article topic) vs DORMANT (no current live signal matches article domain); amber badge on triggered count; stat tiles (KB articles/live events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand article → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-world relevance brief + TTS via jarvis:speak-dossier; isKbliveQuery+buildKbliveScript wired in JarvisBrain.jsx; "knowledge live"/"live knowledge"/"kblive"/"triggered knowledge"/"live kb"/"kb world event"/"knowledge world event"/"active kb" voice trigger; jarvis:kblive-toggle event; 60-s auto-refresh */}
             <KnowledgeLiveIntelCoverage />
+            {/* F97 (overnight 2026-08-04): graph community × dataset coverage — ◈ GCDS button (left:696400, bottom:8, zIndex:272); parallel-fetches /v1/graph/communities + /v1/datasets; keyword-correlates each network cluster against the dataset catalog to surface COVERED (at least one dataset backs this community's domain) vs UNCHARTED (no dataset coverage — intelligence gap); amber badge on UNCHARTED count; stat tiles (communities/datasets/covered/uncharted); ALL/COVERED/UNCHARTED filter tabs + text search; expand cluster → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-dataset readiness brief + TTS via jarvis:speak-dossier; isGcdsQuery+buildGcdsScript wired in JarvisBrain.jsx; "graph community dataset"/"community dataset"/"gcds"/"uncharted community"/"community data gap"/"community dataset coverage" voice trigger; jarvis:gcds-toggle event; 90-s auto-refresh */}
+            <GraphCommunityDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
