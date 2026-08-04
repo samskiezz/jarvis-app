@@ -254,6 +254,7 @@ import GraphCommunityLiveIntelExposure from '@/components/cinematic/GraphCommuni
 import GraphCommunityReportCoverage from '@/components/cinematic/GraphCommunityReportCoverage';
 import GraphCommunityRiskSignalCoverage from '@/components/cinematic/GraphCommunityRiskSignalCoverage';
 import GraphCommunityIntelProfileCoverage from '@/components/cinematic/GraphCommunityIntelProfileCoverage';
+import KnowledgeLiveIntelCoverage from '@/components/cinematic/KnowledgeLiveIntelCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -755,6 +756,8 @@ function App() {
             <GraphCommunityRiskSignalCoverage />
             {/* F95 (overnight 2026-08-04): graph community × intel profile coverage — ◈ GCIPL button (left:695280, bottom:8, zIndex:270); parallel-fetches /v1/graph/communities + /entities/IntelProfile; keyword-correlates each network cluster (label/members/summary) against tracked threat actor intel profiles to surface INFILTRATED (threat actor profile aligns with community domain) vs CLEAN (no intel profile alignment); red badge on INFILTRATED count; stat tiles (communities/profiles/infiltrated/clean); ALL/INFILTRATED/CLEAN filter tabs + text search; expand cluster → matched intel profiles with category badge + nationality chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community threat-actor brief + TTS via jarvis:speak-dossier; isGciplQuery+buildGciplScript wired in JarvisBrain.jsx; "community intel"/"intel community"/"gcipl"/"infiltrated community"/"community threat actor"/"community adversary"/"which communities have threat actors"/"threat actor community" voice trigger; jarvis:gcipl-toggle event; 90-s auto-refresh */}
             <GraphCommunityIntelProfileCoverage />
+            {/* F96 (overnight 2026-08-04): knowledge × live intel coverage — ◈ KBLIVE button (left:695840, bottom:8, zIndex:271); parallel-fetches /knowledge/ + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each KB article (title/category/summary/tags) against live world events to surface TRIGGERED (live world event aligns with article topic) vs DORMANT (no current live signal matches article domain); amber badge on triggered count; stat tiles (KB articles/live events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand article → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-world relevance brief + TTS via jarvis:speak-dossier; isKbliveQuery+buildKbliveScript wired in JarvisBrain.jsx; "knowledge live"/"live knowledge"/"kblive"/"triggered knowledge"/"live kb"/"kb world event"/"knowledge world event"/"active kb" voice trigger; jarvis:kblive-toggle event; 60-s auto-refresh */}
+            <KnowledgeLiveIntelCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

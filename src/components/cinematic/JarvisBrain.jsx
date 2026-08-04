@@ -333,6 +333,7 @@ import { isGcrptQuery, buildGcrptScript } from "./GraphCommunityReportCoverage";
 import { isGcrskQuery, buildGcrskScript } from "./GraphCommunityRiskSignalCoverage";
 import { isGciplQuery, buildGciplScript } from "./GraphCommunityIntelProfileCoverage";
 import { isTaskKnowledgeQuery, buildTaskKnowledgeScript } from "./TaskKnowledgeCoverage";
+import { isKbliveQuery, buildKbliveScript } from "./KnowledgeLiveIntelCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3837,6 +3838,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tknow-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTaskKnowledgeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isKbliveQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kblive-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKbliveScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
