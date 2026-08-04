@@ -258,6 +258,7 @@ import KnowledgeLiveIntelCoverage from '@/components/cinematic/KnowledgeLiveInte
 import GraphCommunityDatasetCoverage from '@/components/cinematic/GraphCommunityDatasetCoverage';
 import IntelProfileOpsEventCoverage from '@/components/cinematic/IntelProfileOpsEventCoverage';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
+import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -767,6 +768,8 @@ function App() {
             <IntelProfileOpsEventCoverage />
             {/* F100 (overnight 2026-08-04): contact × investment coverage — ◈ CONVIN button (left:60680, bottom:8, zIndex:118); parallel-fetches /entities/Contact + /entities/Investment; keyword-correlates each contact (name/org/role/tags) against investment positions to surface MANAGED (contact keyword-linkage to at least one investment) vs UNMANAGED (no investment tie — relationship not mapped to assets); teal badge on unmanaged count; stat tiles (contacts/investments/managed/unmanaged); ALL/MANAGED/UNMANAGED filter tabs + text search; expand contact → matched investments with asset class badge + ticker + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-investment exposure brief + TTS via jarvis:speak-dossier; isConvinQuery+buildConvinScript wired in JarvisBrain.jsx; "contact investment"/"investor contact"/"convin"/"unmanaged contacts"/"contact wealth"/"contact portfolio"/"investment contact"/"which contacts have investments" voice trigger; jarvis:convin-toggle event; 90-s auto-refresh */}
             <ContactInvestmentCoverage />
+            {/* F101 (overnight 2026-08-04): graph node × intel profile coverage — ◈ GNINTEL button (left:59560, bottom:8, zIndex:116); parallel-fetches /v1/graph/centrality + /entities/IntelProfile; keyword-correlates each top-influence graph node against known threat actor intel profiles to surface ATTRIBUTED (threat actor profile aligns with node domain) vs UNTRACKED (no intel profile covers this high-influence node — intelligence blind spot); red badge on untracked count; stat tiles (nodes/profiles/attributed/untracked); ALL/ATTRIBUTED/UNTRACKED filter tabs + text search; expand node → matched intel profiles with actor-type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-intel attribution brief + TTS via jarvis:speak-dossier; isGnintelQuery+buildGnintelScript wired in JarvisBrain; "graph intel"/"node threat actor"/"graph profile"/"gnintel"/"untracked nodes"/"graph actor coverage"/"network actor"/"node actor"/"which nodes have actors"/"unattributed nodes" voice trigger; jarvis:gnintel-toggle event; 90-s auto-refresh */}
+            <GraphNodeIntelCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
