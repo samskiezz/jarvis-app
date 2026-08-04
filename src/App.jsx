@@ -259,6 +259,7 @@ import GraphCommunityDatasetCoverage from '@/components/cinematic/GraphCommunity
 import IntelProfileOpsEventCoverage from '@/components/cinematic/IntelProfileOpsEventCoverage';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
+import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -770,6 +771,8 @@ function App() {
             <ContactInvestmentCoverage />
             {/* F101 (overnight 2026-08-04): graph node × intel profile coverage — ◈ GNINTEL button (left:59560, bottom:8, zIndex:116); parallel-fetches /v1/graph/centrality + /entities/IntelProfile; keyword-correlates each top-influence graph node against known threat actor intel profiles to surface ATTRIBUTED (threat actor profile aligns with node domain) vs UNTRACKED (no intel profile covers this high-influence node — intelligence blind spot); red badge on untracked count; stat tiles (nodes/profiles/attributed/untracked); ALL/ATTRIBUTED/UNTRACKED filter tabs + text search; expand node → matched intel profiles with actor-type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-intel attribution brief + TTS via jarvis:speak-dossier; isGnintelQuery+buildGnintelScript wired in JarvisBrain; "graph intel"/"node threat actor"/"graph profile"/"gnintel"/"untracked nodes"/"graph actor coverage"/"network actor"/"node actor"/"which nodes have actors"/"unattributed nodes" voice trigger; jarvis:gnintel-toggle event; 90-s auto-refresh */}
             <GraphNodeIntelCoverage />
+            {/* F102 (overnight 2026-08-04): scene × intel profile coverage — ◈ SCINTEL button (left:697520, bottom:8, zIndex:274); parallel-fetches all 10 /v1/cinematic/scene/{id} + /entities/IntelProfile; keyword-correlates each scene's anchor texts against tracked threat actor intel profiles to surface INFILTRATED (intel profile domain aligns with scene) vs CLEAN (no threat actor coverage); red badge on infiltrated count; stat tiles (scenes/profiles/infiltrated/clean); ALL/INFILTRATED/CLEAN filter tabs + text search; expand scene → matched intel profiles with category badge + nationality chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene threat-actor coverage brief + TTS via jarvis:speak-dossier; isScIntelQuery+buildScIntelScript wired in JarvisBrain; "scene intel profile"/"scintel"/"scene threat actor"/"infiltrated scene"/"scene adversary"/"scene intel profile coverage" voice trigger; jarvis:scintel-toggle event; 90-s auto-refresh */}
+            <SceneIntelProfileCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

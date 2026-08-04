@@ -339,6 +339,7 @@ import { isIpoevQuery, buildIpoevScript } from "./IntelProfileOpsEventCoverage";
 import { isKbscenQuery, buildKbscenScript } from "./KnowledgeScenarioCoverage";
 import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
 import { isGnintelQuery, buildGnintelScript } from "./GraphNodeIntelCoverage";
+import { isScIntelQuery, buildScIntelScript } from "./SceneIntelProfileCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3897,6 +3898,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gnintel-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGnintelScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isScIntelQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scintel-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScIntelScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
