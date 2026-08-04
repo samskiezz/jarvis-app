@@ -328,6 +328,7 @@ import { isGcskQuery, buildGcskScript } from "./GraphCommunitySkillCoverage";
 import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCoverage";
 import { isKscovQuery, buildKscovScript } from "./KnowledgeSkillCoverageGap";
 import { isGctaskQuery, buildGctaskScript } from "./GraphCommunityTaskCoverage";
+import { isGcliveQuery, buildGcliveScript } from "./GraphCommunityLiveIntelExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3787,6 +3788,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gctask-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGctaskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGcliveQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gclive-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcliveScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

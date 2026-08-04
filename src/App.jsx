@@ -250,6 +250,7 @@ import GraphCommunitySkillCoverage from '@/components/cinematic/GraphCommunitySk
 import GraphCommunityScenarioCoverage from '@/components/cinematic/GraphCommunityScenarioCoverage';
 import KnowledgeSkillCoverageGap from '@/components/cinematic/KnowledgeSkillCoverageGap';
 import GraphCommunityTaskCoverage from '@/components/cinematic/GraphCommunityTaskCoverage';
+import GraphCommunityLiveIntelExposure from '@/components/cinematic/GraphCommunityLiveIntelExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -743,6 +744,8 @@ function App() {
             <KnowledgeSkillCoverageGap />
             {/* F90 (overnight 2026-08-04): graph community × task coverage — ◈ GCTASK button (left:62360, bottom:8, zIndex:121); parallel-fetches /v1/graph/communities + /entities/Task; keyword-correlates each network cluster (label + member metadata) against the active task backlog to surface COVERED (task operational coverage found) vs GAP (no task targeting this community — planning blind spot); red badge on gap count; stat tiles (communities/tasks/covered/gaps); ALL/COVERED/GAP filter tabs + text search; expand cluster → matched tasks with status chip + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-task brief + TTS via jarvis:speak-dossier; isGctaskQuery+buildGctaskScript wired in JarvisBrain.jsx; "community task"/"graph community task"/"gctask"/"task community"/"untasked communities"/"community coverage" voice trigger; jarvis:gctask-toggle event; 90-s auto-refresh */}
             <GraphCommunityTaskCoverage />
+            {/* F91 (overnight 2026-08-04): graph community × live intel exposure — ◈ GCLIVE button (left:63480, bottom:8, zIndex:122); parallel-fetches /v1/graph/communities + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each network cluster (label/members/summary) against live world events to surface ACTIVATED (live world event aligns with community domain) vs QUIET (no live signal in community space); cyan badge on activated count; stat tiles (clusters/live events/activated/quiet); ALL/ACTIVATED/QUIET filter tabs + text search; expand cluster → matched events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-world exposure brief + TTS via jarvis:speak-dossier; isGcliveQuery+buildGcliveScript wired in JarvisBrain.jsx; "community live"/"live community"/"gclive"/"activated community"/"community world event"/"live graph community"/"network world exposure" voice trigger; jarvis:gclive-toggle event; 60-s auto-refresh */}
+            <GraphCommunityLiveIntelExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
