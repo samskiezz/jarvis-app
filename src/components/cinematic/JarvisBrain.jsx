@@ -341,6 +341,7 @@ import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
 import { isGnintelQuery, buildGnintelScript } from "./GraphNodeIntelCoverage";
 import { isScIntelQuery, buildScIntelScript } from "./SceneIntelProfileCoverage";
 import { isRsktskQuery, buildRsktskScript } from "./RiskSignalTaskCoverage";
+import { isGcswjQuery, buildGcswjScript } from "./GraphCommunitySwarmJobCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3917,6 +3918,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsktsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsktskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGcswjQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcswj-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcswjScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

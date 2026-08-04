@@ -261,6 +261,7 @@ import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentC
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
 import RiskSignalTaskCoverage from '@/components/cinematic/RiskSignalTaskCoverage';
+import GraphCommunitySwarmJobCoverage from '@/components/cinematic/GraphCommunitySwarmJobCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -776,6 +777,8 @@ function App() {
             <SceneIntelProfileCoverage />
             {/* F103 (overnight 2026-08-04): risk signal × task coverage — ◈ RSKTSK button (left:61000, bottom:8, zIndex:120); fetches /entities/RiskSignal + /entities/Task; keyword-correlates each signal against tasks to surface COVERED (task response exists) vs EXPOSED (no task — operational gap); orange badge on exposed count; stat tiles (signals/tasks/covered/exposed); ALL/COVERED/EXPOSED filter tabs + text search; expand signal → matched tasks with status badge + priority chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-task gap brief + TTS via jarvis:speak-dossier; isRsktskQuery+buildRsktskScript wired in JarvisBrain; "risk task coverage"/"rsktsk"/"exposed risks"/"uncovered risks"/"risk task gap"/"signal task coverage" voice trigger; jarvis:rsktsk-toggle event; 90-s auto-refresh */}
             <RiskSignalTaskCoverage />
+            {/* F104 (overnight 2026-08-04): graph community × swarmjob coverage — ◈ GCSWJ button (left:698080, bottom:8, zIndex:275); parallel-fetches /v1/graph/communities + /entities/SwarmJob; keyword-correlates each network cluster against active swarm jobs to surface AUTOMATED (swarm backing found) vs UNAUTOMATED (no swarm coverage — automation gap); lime badge on automated count; stat tiles (communities/jobs/automated/unautomated); ALL/AUTOMATED/UNAUTOMATED filter tabs + text search; expand cluster → matched swarm jobs with type badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-automation coverage brief + TTS via jarvis:speak-dossier; isGcswjQuery+buildGcswjScript wired in JarvisBrain.jsx; "community swarm"/"swarm community"/"gcswj"/"automated community"/"community automation"/"community swarm coverage"/"which communities have swarm jobs"/"unautomated communities" voice trigger; jarvis:gcswj-toggle event; 90-s auto-refresh */}
+            <GraphCommunitySwarmJobCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
