@@ -60,3 +60,4 @@
 2026-08-04 F89 KnowledgeSkillCoverageGap.jsx mounted in App.jsx + wired in JarvisBrain.jsx (/v1/aip/skill × /knowledge/ → COVERED/GAP; ◈ KSCOV left:58440 zIndex:114; build exit 0)
 [2026-08-04] F90 GraphCommunityTaskCoverage: mounted pre-built component (369 lines) in App.jsx; isGctaskQuery+buildGctaskScript wired in JarvisBrain.jsx; /v1/graph/communities × /entities/Task; GCTASK toggle left:62360 zIndex:121; build exit 0
 [2026-08-04] F91 GraphCommunityLiveIntelExposure — /v1/graph/communities × /functions/getLiveIntel; ACTIVATED/QUIET clusters; cyan badge; ◈ GCLIVE left:63480 zIndex:122; isGcliveQuery+buildGcliveScript wired in JarvisBrain; build exit 0
+2026-08-04 F92 GraphCommunityReportCoverage.jsx — /v1/graph/communities × /v1/reports; REPORTED vs UNCHARTED; amber badge; ◈ GCRPT left:64600 zIndex:123; build exit 0

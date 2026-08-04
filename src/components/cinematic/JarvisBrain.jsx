@@ -329,6 +329,7 @@ import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCovera
 import { isKscovQuery, buildKscovScript } from "./KnowledgeSkillCoverageGap";
 import { isGctaskQuery, buildGctaskScript } from "./GraphCommunityTaskCoverage";
 import { isGcliveQuery, buildGcliveScript } from "./GraphCommunityLiveIntelExposure";
+import { isGcrptQuery, buildGcrptScript } from "./GraphCommunityReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3797,6 +3798,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gclive-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcliveScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGcrptQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcrpt-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcrptScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

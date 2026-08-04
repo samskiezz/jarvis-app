@@ -251,6 +251,7 @@ import GraphCommunityScenarioCoverage from '@/components/cinematic/GraphCommunit
 import KnowledgeSkillCoverageGap from '@/components/cinematic/KnowledgeSkillCoverageGap';
 import GraphCommunityTaskCoverage from '@/components/cinematic/GraphCommunityTaskCoverage';
 import GraphCommunityLiveIntelExposure from '@/components/cinematic/GraphCommunityLiveIntelExposure';
+import GraphCommunityReportCoverage from '@/components/cinematic/GraphCommunityReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -746,6 +747,8 @@ function App() {
             <GraphCommunityTaskCoverage />
             {/* F91 (overnight 2026-08-04): graph community × live intel exposure — ◈ GCLIVE button (left:63480, bottom:8, zIndex:122); parallel-fetches /v1/graph/communities + /functions/getLiveIntel (quakes/crypto/FX); keyword-correlates each network cluster (label/members/summary) against live world events to surface ACTIVATED (live world event aligns with community domain) vs QUIET (no live signal in community space); cyan badge on activated count; stat tiles (clusters/live events/activated/quiet); ALL/ACTIVATED/QUIET filter tabs + text search; expand cluster → matched events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-world exposure brief + TTS via jarvis:speak-dossier; isGcliveQuery+buildGcliveScript wired in JarvisBrain.jsx; "community live"/"live community"/"gclive"/"activated community"/"community world event"/"live graph community"/"network world exposure" voice trigger; jarvis:gclive-toggle event; 60-s auto-refresh */}
             <GraphCommunityLiveIntelExposure />
+            {/* F92 (overnight 2026-08-04): graph community × report coverage — ◈ GCRPT button (left:64600, bottom:8, zIndex:123); parallel-fetches /v1/graph/communities + /v1/reports; keyword-correlates each network cluster (label/members/summary) against intelligence reports to surface REPORTED (report documentation found) vs UNCHARTED (no report coverage — intelligence gap); amber badge on uncharted count; stat tiles (communities/reports/reported/uncharted); ALL/REPORTED/UNCHARTED filter tabs + text search; expand cluster → matched reports with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-documentation brief + TTS via jarvis:speak-dossier; isGcrptQuery+buildGcrptScript wired in JarvisBrain.jsx; "community report"/"report community"/"gcrpt"/"reported community"/"uncharted community"/"community documentation"/"community report coverage"/"which communities have reports" voice trigger; jarvis:gcrpt-toggle event; 90-s auto-refresh */}
+            <GraphCommunityReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
