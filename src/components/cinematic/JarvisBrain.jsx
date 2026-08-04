@@ -326,6 +326,7 @@ import { isGcinvQuery, buildGcinvScript } from "./GraphCommunityInvestmentCovera
 import { isGcontQuery, buildGcontScript } from "./GraphCommunityContactCoverage";
 import { isGcskQuery, buildGcskScript } from "./GraphCommunitySkillCoverage";
 import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCoverage";
+import { isKscovQuery, buildKscovScript } from "./KnowledgeSkillCoverageGap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3765,6 +3766,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcscen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcscenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F89 — "knowledge skills / skill knowledge / kscov /
+    //  skill knowledge gap / knowledge skill audit / skill learning gaps"
+    if (isKscovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kscov-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKscovScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
