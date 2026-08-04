@@ -253,6 +253,7 @@ import GraphCommunityTaskCoverage from '@/components/cinematic/GraphCommunityTas
 import GraphCommunityLiveIntelExposure from '@/components/cinematic/GraphCommunityLiveIntelExposure';
 import GraphCommunityReportCoverage from '@/components/cinematic/GraphCommunityReportCoverage';
 import GraphCommunityRiskSignalCoverage from '@/components/cinematic/GraphCommunityRiskSignalCoverage';
+import GraphCommunityIntelProfileCoverage from '@/components/cinematic/GraphCommunityIntelProfileCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -752,6 +753,8 @@ function App() {
             <GraphCommunityReportCoverage />
             {/* F93 (overnight 2026-08-04): graph community × risk signal coverage — ◈ GCRSK button (left:694720, bottom:8, zIndex:269); parallel-fetches /v1/graph/communities + /entities/RiskSignal; keyword-correlates each network cluster (label/members/summary) against active risk signals to surface EXPOSED (risk signal domain overlap detected) vs CLEAR (no active risk signal threatens this community); red badge on exposed count; stat tiles (communities/signals/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand cluster → matched risk signals with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-risk brief + TTS via jarvis:speak-dossier; isGcrskQuery+buildGcrskScript wired in JarvisBrain.jsx; "community risk"/"risk community"/"gcrsk"/"exposed community"/"community risk signal"/"which communities have risks"/"community threat signal" voice trigger; jarvis:gcrsk-toggle event; 90-s auto-refresh */}
             <GraphCommunityRiskSignalCoverage />
+            {/* F95 (overnight 2026-08-04): graph community × intel profile coverage — ◈ GCIPL button (left:695280, bottom:8, zIndex:270); parallel-fetches /v1/graph/communities + /entities/IntelProfile; keyword-correlates each network cluster (label/members/summary) against tracked threat actor intel profiles to surface INFILTRATED (threat actor profile aligns with community domain) vs CLEAN (no intel profile alignment); red badge on INFILTRATED count; stat tiles (communities/profiles/infiltrated/clean); ALL/INFILTRATED/CLEAN filter tabs + text search; expand cluster → matched intel profiles with category badge + nationality chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community threat-actor brief + TTS via jarvis:speak-dossier; isGciplQuery+buildGciplScript wired in JarvisBrain.jsx; "community intel"/"intel community"/"gcipl"/"infiltrated community"/"community threat actor"/"community adversary"/"which communities have threat actors"/"threat actor community" voice trigger; jarvis:gcipl-toggle event; 90-s auto-refresh */}
+            <GraphCommunityIntelProfileCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
