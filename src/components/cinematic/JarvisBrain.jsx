@@ -346,6 +346,7 @@ import { isTaskScenQuery, buildTaskScenScript } from "./TaskScenarioCoverage";
 import { isScnrptQuery, buildScnrptScript } from "./SceneReportCoverage";
 import { isInvdsQuery, buildInvdsScript } from "./InvestmentDatasetCoverage";
 import { isScskQuery, buildScskScript } from "./SceneSkillCoverage";
+import { isGcopsQuery, buildGcopsScript } from "./GraphCommunityOpsEventCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3967,6 +3968,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGcopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcops-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcopsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

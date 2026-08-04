@@ -265,6 +265,7 @@ import GraphCommunitySwarmJobCoverage from '@/components/cinematic/GraphCommunit
 import SceneReportCoverage from '@/components/cinematic/SceneReportCoverage';
 import InvestmentDatasetCoverage from '@/components/cinematic/InvestmentDatasetCoverage';
 import SceneSkillCoverage from '@/components/cinematic/SceneSkillCoverage';
+import GraphCommunityOpsEventCoverage from '@/components/cinematic/GraphCommunityOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -788,6 +789,8 @@ function App() {
             <InvestmentDatasetCoverage />
             {/* F108 (overnight 2026-08-04): scene × skill coverage — ◈ SCSK button (left:700320, bottom:8, zIndex:279); parallel-fetches all 10 /v1/cinematic/scene/{id} + /v1/aip/skill; keyword-correlates each scene's anchor texts against JARVIS skills to surface SKILLED (at least one skill addresses this scene's operational domain) vs UNSKILLED (no skill coverage — capability gap); lime badge on unskilled count; stat tiles (scenes/skills/skilled/unskilled); ALL/SKILLED/UNSKILLED filter tabs + text search; expand scene → matched skills with category badge + domain badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-skill readiness brief + TTS via jarvis:speak-dossier; isScskQuery+buildScskScript wired in JarvisBrain; "scene skill"/"skill scene"/"scsk"/"skilled scene"/"unskilled scene"/"scene skill coverage"/"scene capability" voice trigger; jarvis:scsk-toggle event; 120-s auto-refresh */}
             <SceneSkillCoverage />
+            {/* F109 (overnight 2026-08-04): graph community × ops event coverage — ◈ GCOPS button (left:700880, bottom:8, zIndex:280); parallel-fetches /v1/graph/communities + /v1/ops/events; keyword-correlates each network cluster against active ops events to surface ACTIVE (ops event domain overlap detected — community operationally live) vs QUIET (no ops event coverage — operational blind spot); cyan badge on active count; stat tiles (communities/ops events/active/quiet); ALL/ACTIVE/QUIET filter tabs + text search; expand cluster → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-ops coverage brief + TTS via jarvis:speak-dossier; isGcopsQuery+buildGcopsScript wired in JarvisBrain.jsx; "community ops"/"ops community"/"gcops"/"active ops community"/"community ops event"/"ops event community"/"community operational"/"which communities have ops events"/"operationally active communities"/"community ops coverage"/"network ops coverage" voice trigger; jarvis:gcops-toggle event; 90-s auto-refresh */}
+            <GraphCommunityOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
