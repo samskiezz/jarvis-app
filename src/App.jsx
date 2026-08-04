@@ -262,6 +262,7 @@ import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverag
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
 import RiskSignalTaskCoverage from '@/components/cinematic/RiskSignalTaskCoverage';
 import GraphCommunitySwarmJobCoverage from '@/components/cinematic/GraphCommunitySwarmJobCoverage';
+import SceneReportCoverage from '@/components/cinematic/SceneReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -779,6 +780,8 @@ function App() {
             <RiskSignalTaskCoverage />
             {/* F104 (overnight 2026-08-04): graph community × swarmjob coverage — ◈ GCSWJ button (left:698080, bottom:8, zIndex:275); parallel-fetches /v1/graph/communities + /entities/SwarmJob; keyword-correlates each network cluster against active swarm jobs to surface AUTOMATED (swarm backing found) vs UNAUTOMATED (no swarm coverage — automation gap); lime badge on automated count; stat tiles (communities/jobs/automated/unautomated); ALL/AUTOMATED/UNAUTOMATED filter tabs + text search; expand cluster → matched swarm jobs with type badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-automation coverage brief + TTS via jarvis:speak-dossier; isGcswjQuery+buildGcswjScript wired in JarvisBrain.jsx; "community swarm"/"swarm community"/"gcswj"/"automated community"/"community automation"/"community swarm coverage"/"which communities have swarm jobs"/"unautomated communities" voice trigger; jarvis:gcswj-toggle event; 90-s auto-refresh */}
             <GraphCommunitySwarmJobCoverage />
+            {/* F106 (overnight 2026-08-04): scene × report coverage — ◈ SCNRPT button (left:699200, bottom:8, zIndex:277); parallel-fetches all 10 /v1/cinematic/scene/{id} + /v1/reports; keyword-correlates each scene's anchor texts against the intelligence report corpus to surface REPORTED (at least one report covers this scene's domain) vs UNREPORTED (no documentation — coverage gap); amber badge on unreported count; stat tiles (scenes/reports/reported/unreported); ALL/REPORTED/UNREPORTED filter tabs + text search; expand scene → matched reports with type badge + date + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-report coverage brief + TTS via jarvis:speak-dossier; isScnrptQuery+buildScnrptScript wired in JarvisBrain; "scene report"/"report scene"/"scnrpt"/"unreported scenes"/"scenes with reports"/"scene documentation"/"scene report coverage" voice trigger; jarvis:scnrpt-toggle event; 120-s auto-refresh */}
+            <SceneReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
