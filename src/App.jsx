@@ -263,6 +263,7 @@ import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileC
 import RiskSignalTaskCoverage from '@/components/cinematic/RiskSignalTaskCoverage';
 import GraphCommunitySwarmJobCoverage from '@/components/cinematic/GraphCommunitySwarmJobCoverage';
 import SceneReportCoverage from '@/components/cinematic/SceneReportCoverage';
+import InvestmentDatasetCoverage from '@/components/cinematic/InvestmentDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -782,6 +783,8 @@ function App() {
             <GraphCommunitySwarmJobCoverage />
             {/* F106 (overnight 2026-08-04): scene × report coverage — ◈ SCNRPT button (left:699200, bottom:8, zIndex:277); parallel-fetches all 10 /v1/cinematic/scene/{id} + /v1/reports; keyword-correlates each scene's anchor texts against the intelligence report corpus to surface REPORTED (at least one report covers this scene's domain) vs UNREPORTED (no documentation — coverage gap); amber badge on unreported count; stat tiles (scenes/reports/reported/unreported); ALL/REPORTED/UNREPORTED filter tabs + text search; expand scene → matched reports with type badge + date + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-report coverage brief + TTS via jarvis:speak-dossier; isScnrptQuery+buildScnrptScript wired in JarvisBrain; "scene report"/"report scene"/"scnrpt"/"unreported scenes"/"scenes with reports"/"scene documentation"/"scene report coverage" voice trigger; jarvis:scnrpt-toggle event; 120-s auto-refresh */}
             <SceneReportCoverage />
+            {/* F107 (overnight 2026-08-04): investment × dataset coverage — ◈ INVDS button (left:699760, bottom:8, zIndex:278); parallel-fetches /entities/Investment + /v1/datasets; keyword-correlates each investment (name/sector/notes/tags/ticker) against the dataset catalog to surface COVERED (dataset backing found) vs BLIND (no dataset coverage — data gap); amber badge on blind count; stat tiles (investments/datasets/covered/blind); ALL/COVERED/BLIND filter tabs + text search; expand investment → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-data coverage brief + TTS via jarvis:speak-dossier; isInvdsQuery+buildInvdsScript wired in JarvisBrain; "investment dataset"/"dataset investment"/"invds"/"blind investment"/"investment data gap"/"covered investment"/"portfolio dataset" voice trigger; jarvis:invds-toggle event; 90-s auto-refresh */}
+            <InvestmentDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
