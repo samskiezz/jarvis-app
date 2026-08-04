@@ -260,6 +260,7 @@ import IntelProfileOpsEventCoverage from '@/components/cinematic/IntelProfileOps
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
+import RiskSignalTaskCoverage from '@/components/cinematic/RiskSignalTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -773,6 +774,8 @@ function App() {
             <GraphNodeIntelCoverage />
             {/* F102 (overnight 2026-08-04): scene × intel profile coverage — ◈ SCINTEL button (left:697520, bottom:8, zIndex:274); parallel-fetches all 10 /v1/cinematic/scene/{id} + /entities/IntelProfile; keyword-correlates each scene's anchor texts against tracked threat actor intel profiles to surface INFILTRATED (intel profile domain aligns with scene) vs CLEAN (no threat actor coverage); red badge on infiltrated count; stat tiles (scenes/profiles/infiltrated/clean); ALL/INFILTRATED/CLEAN filter tabs + text search; expand scene → matched intel profiles with category badge + nationality chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene threat-actor coverage brief + TTS via jarvis:speak-dossier; isScIntelQuery+buildScIntelScript wired in JarvisBrain; "scene intel profile"/"scintel"/"scene threat actor"/"infiltrated scene"/"scene adversary"/"scene intel profile coverage" voice trigger; jarvis:scintel-toggle event; 90-s auto-refresh */}
             <SceneIntelProfileCoverage />
+            {/* F103 (overnight 2026-08-04): risk signal × task coverage — ◈ RSKTSK button (left:61000, bottom:8, zIndex:120); fetches /entities/RiskSignal + /entities/Task; keyword-correlates each signal against tasks to surface COVERED (task response exists) vs EXPOSED (no task — operational gap); orange badge on exposed count; stat tiles (signals/tasks/covered/exposed); ALL/COVERED/EXPOSED filter tabs + text search; expand signal → matched tasks with status badge + priority chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-task gap brief + TTS via jarvis:speak-dossier; isRsktskQuery+buildRsktskScript wired in JarvisBrain; "risk task coverage"/"rsktsk"/"exposed risks"/"uncovered risks"/"risk task gap"/"signal task coverage" voice trigger; jarvis:rsktsk-toggle event; 90-s auto-refresh */}
+            <RiskSignalTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
