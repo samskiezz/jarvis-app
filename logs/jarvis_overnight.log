@@ -67,3 +67,4 @@
 2026-08-04 F96 KnowledgeLiveIntelCoverage.jsx — /knowledge/ × /functions/getLiveIntel; TRIGGERED vs DORMANT KB articles; ◈ KBLIVE left:695840 zIndex:271; build exit 0
 2026-08-04 F97 GraphCommunityDatasetCoverage.jsx — /v1/graph/communities × /v1/datasets; COVERED vs UNCHARTED communities by dataset overlap; amber badge on uncharted count; ◈ GCDS left:696400 zIndex:272; isGcdsQuery+buildGcdsScript wired in JarvisBrain.jsx; build exit 0
 [2026-08-04] F98: IntelProfileOpsEventCoverage.jsx — /entities/IntelProfile × /v1/ops/events; COVERED/UNCOVERED; amber badge; ASSESS→agent/chat+TTS; build exit 0; pushed jarvis-overnight
+2026-08-04 F99 KnowledgeScenarioCoverage — fixed isKscovQuery/buildKscovScript name collision with F89; renamed to isKbscenQuery/buildKbscenScript; toggle jarvis:kbscen-toggle; wired in JarvisBrain.jsx; build exit 0
