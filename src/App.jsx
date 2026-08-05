@@ -282,6 +282,7 @@ import SkillScenarioCoverage from '@/components/cinematic/SkillScenarioCoverage'
 import InvestigationSceneMapper from '@/components/cinematic/InvestigationSceneMapper';
 import SceneContactCoverage from '@/components/cinematic/SceneContactCoverage';
 import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
+import ContactScenarioCoverage from '@/components/cinematic/ContactScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -839,6 +840,8 @@ function App() {
             <SceneContactCoverage />
             {/* F128 (overnight 2026-08-05): dataset × knowledge coverage — ◈ DSKNOW button (left:30120, bottom:8, zIndex:60); parallel-fetches /v1/datasets + /knowledge/; keyword-correlates each dataset (name/description/type/tags) against knowledge article titles/content to surface DOCUMENTED (≥1 article backs the dataset) vs DARK (no documentation found — knowledge gap); amber badge on dark count; stat tiles (datasets/articles/documented/dark); ALL/DOCUMENTED/DARK tabs + text search; expand dataset → matched articles with relevance score + type badge; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-documentation brief + TTS via jarvis:speak-dossier; isDsknowQuery+buildDsknowScript wired in JarvisBrain; "dataset knowledge"/"dataset docs"/"which datasets have docs"/"undocumented datasets"/"data documentation gap"/"dsknow" voice trigger; jarvis:dsknow-toggle event; 120-s auto-refresh */}
             <DatasetKnowledgeCoverage />
+            {/* F129 (overnight 2026-08-05): contact × scenario coverage — ◈ CSCEN button (left:706480, bottom:8, zIndex:290); parallel-fetches /entities/Contact + /v1/scenario/list; keyword-correlates each contact against operational scenarios to surface ENGAGED (scenario alignment found) vs SIDELINED (no scenario coverage); amber badge on sidelined count; stat tiles (contacts/scenarios/engaged/sidelined); ALL/ENGAGED/SIDELINED filter tabs + text search; expand contact → matched scenarios with status + category chip + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence contact-scenario brief + TTS via jarvis:speak-dossier; isCscenQuery+buildCscenScript wired in JarvisBrain; "contact scenario"/"scenario contact"/"cscen"/"engaged contacts"/"sidelined contacts" voice trigger; jarvis:cscen-toggle event; 90-s auto-refresh */}
+            <ContactScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

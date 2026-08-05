@@ -360,6 +360,7 @@ import { isTaskSwjQuery, buildTaskSwjScript } from "./TaskSwarmJobCoverage";
 import { isSkscenQuery, buildSkscenScript } from "./SkillScenarioCoverage";
 import { isInvscnmapQuery, buildInvscnmapScript } from "./InvestigationSceneMapper";
 import { isScconQuery, buildScconScript } from "./SceneContactCoverage";
+import { isCscenQuery, buildCscenScript } from "./ContactScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4114,6 +4115,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sccon-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScconScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F129: Contact × Scenario Coverage — voice bridge for the ContactScenarioCoverage panel.
+    if (isCscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cscen-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCscenScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
