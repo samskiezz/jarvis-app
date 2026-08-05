@@ -283,6 +283,7 @@ import InvestigationSceneMapper from '@/components/cinematic/InvestigationSceneM
 import SceneContactCoverage from '@/components/cinematic/SceneContactCoverage';
 import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
 import ContactScenarioCoverage from '@/components/cinematic/ContactScenarioCoverage';
+import TaskInvestigationCorrelator from '@/components/cinematic/TaskInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -842,6 +843,8 @@ function App() {
             <DatasetKnowledgeCoverage />
             {/* F129 (overnight 2026-08-05): contact × scenario coverage — ◈ CSCEN button (left:706480, bottom:8, zIndex:290); parallel-fetches /entities/Contact + /v1/scenario/list; keyword-correlates each contact against operational scenarios to surface ENGAGED (scenario alignment found) vs SIDELINED (no scenario coverage); amber badge on sidelined count; stat tiles (contacts/scenarios/engaged/sidelined); ALL/ENGAGED/SIDELINED filter tabs + text search; expand contact → matched scenarios with status + category chip + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence contact-scenario brief + TTS via jarvis:speak-dossier; isCscenQuery+buildCscenScript wired in JarvisBrain; "contact scenario"/"scenario contact"/"cscen"/"engaged contacts"/"sidelined contacts" voice trigger; jarvis:cscen-toggle event; 90-s auto-refresh */}
             <ContactScenarioCoverage />
+            {/* F130 (overnight 2026-08-05): task × investigation correlator — ◈ TKINV button (left:707040, bottom:8, zIndex:291); parallel-fetches /entities/Task + /v1/investigations; keyword-correlates each task against open investigation cases to surface INVESTIGATED (investigation backing found) vs UNCHECKED (no investigation — oversight gap); violet badge on investigated count; stat tiles (tasks/investigations/investigated/unchecked); ALL/INVESTIGATED/UNCHECKED tabs + text search; expand task → matched cases with kind badge + seeds count + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-investigation brief + TTS via jarvis:speak-dossier; isTkinvQuery+buildTkinvScript wired in JarvisBrain; "task invest"/"invest task"/"tkinv"/"investigated task"/"task investigation coverage"/"task case coverage"/"unchecked tasks" voice trigger; jarvis:tkinv-toggle event; 90-s auto-refresh */}
+            <TaskInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
