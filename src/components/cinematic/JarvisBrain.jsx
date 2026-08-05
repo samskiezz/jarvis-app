@@ -358,6 +358,7 @@ import { isSwscenQuery, buildSwscenScript } from "./SwarmScenarioCoverage";
 import { isRsskQuery, buildRsskScript } from "./RiskSignalSkillCoverage";
 import { isTaskSwjQuery, buildTaskSwjScript } from "./TaskSwarmJobCoverage";
 import { isSkscenQuery, buildSkscenScript } from "./SkillScenarioCoverage";
+import { isInvscnmapQuery, buildInvscnmapScript } from "./InvestigationSceneMapper";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4092,6 +4093,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skscen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSkscenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F126: Investigation × Scene Mapper — voice bridge for the InvestigationSceneMapper panel.
+    if (isInvscnmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invscnmap-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvscnmapScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
