@@ -284,6 +284,7 @@ import SceneContactCoverage from '@/components/cinematic/SceneContactCoverage';
 import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
 import ContactScenarioCoverage from '@/components/cinematic/ContactScenarioCoverage';
 import TaskInvestigationCorrelator from '@/components/cinematic/TaskInvestigationCorrelator';
+import IntelProfileInvestigationCorrelator from '@/components/cinematic/IntelProfileInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -845,6 +846,8 @@ function App() {
             <ContactScenarioCoverage />
             {/* F130 (overnight 2026-08-05): task × investigation correlator — ◈ TKINV button (left:707040, bottom:8, zIndex:291); parallel-fetches /entities/Task + /v1/investigations; keyword-correlates each task against open investigation cases to surface INVESTIGATED (investigation backing found) vs UNCHECKED (no investigation — oversight gap); violet badge on investigated count; stat tiles (tasks/investigations/investigated/unchecked); ALL/INVESTIGATED/UNCHECKED tabs + text search; expand task → matched cases with kind badge + seeds count + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-investigation brief + TTS via jarvis:speak-dossier; isTkinvQuery+buildTkinvScript wired in JarvisBrain; "task invest"/"invest task"/"tkinv"/"investigated task"/"task investigation coverage"/"task case coverage"/"unchecked tasks" voice trigger; jarvis:tkinv-toggle event; 90-s auto-refresh */}
             <TaskInvestigationCorrelator />
+            {/* F131 (overnight 2026-08-05): intel profile × investigation correlator — ◈ IPINV button (left:643680, bottom:8, zIndex:235); parallel-fetches /entities/IntelProfile + /v1/investigations; keyword-correlates each tracked threat actor profile (name/subject/description/category/nationality/aliases) against open investigation cases to surface LINKED (investigation found for this profile) vs UNLINKED (no investigative coverage — intelligence gap); stat tiles (profiles/investigations/linked/unlinked); ALL/LINKED/UNLINKED filter tabs + text search; expand profile → matched investigations with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-profile investigation coverage brief + TTS via jarvis:speak-dossier; isIpinvQuery+buildIpinvScript already wired in JarvisBrain (line 254/3049); "intel invest"/"invest intel profile"/"ipinv"/"intel profile cases"/"linked intel profiles"/"intel investigation coverage" voice trigger; jarvis:ipinv-toggle event; 90-s auto-refresh */}
+            <IntelProfileInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
