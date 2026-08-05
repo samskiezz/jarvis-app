@@ -356,6 +356,7 @@ import { isGknowQuery, buildGknowScript } from "./GraphNodeKnowledgeCoverage";
 import { isGnswjQuery, buildGnswjScript } from "./GraphNodeSwarmJobCoverage";
 import { isSwscenQuery, buildSwscenScript } from "./SwarmScenarioCoverage";
 import { isRsskQuery, buildRsskScript } from "./RiskSignalSkillCoverage";
+import { isTaskSwjQuery, buildTaskSwjScript } from "./TaskSwarmJobCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4070,6 +4071,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rssk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F123: Task × SwarmJob Coverage — voice bridge for the TaskSwarmJobCoverage panel.
+    if (isTaskSwjQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tkswj-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTaskSwjScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

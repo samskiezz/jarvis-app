@@ -276,6 +276,7 @@ import IntelProfileReportCoverage from '@/components/cinematic/IntelProfileRepor
 import OpsEventInvestmentCorrelator from '@/components/cinematic/OpsEventInvestmentCorrelator';
 import SwarmJobReportCoverage from '@/components/cinematic/SwarmJobReportCoverage';
 import RiskSignalSkillCoverage from '@/components/cinematic/RiskSignalSkillCoverage';
+import TaskSwarmJobCoverage from '@/components/cinematic/TaskSwarmJobCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -821,6 +822,8 @@ function App() {
             <SwarmJobReportCoverage />
             {/* F122 (overnight 2026-08-05): risk signal × skill coverage — ◈ RSSK button (left:703680, bottom:8, zIndex:285); parallel-fetches /entities/RiskSignal + /v1/aip/skill; keyword-correlates each active risk signal (title/name/signal/description/category/type/sector/source/tags) against JARVIS skill definitions to surface MITIGATED (skill coverage found) vs UNMITIGATED (no skill covers this risk — capability gap); red badge on unmitigated count; stat tiles (signals/skills/mitigated/unmitigated); ALL/MITIGATED/UNMITIGATED filter tabs + text search; expand signal → matched skills with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-skill coverage brief + TTS via jarvis:speak-dossier; isRsskQuery+buildRsskScript wired in JarvisBrain; "risk signal skill"/"skill risk signal"/"rssk"/"unmitigated risk"/"risk skill coverage"/"which risks have skills"/"risk capability gap"/"risk mitigation skill"/"mitigated risk"/"signal skill coverage"/"unmitigated signal" voice trigger; jarvis:rssk-toggle event; 90-s auto-refresh */}
             <RiskSignalSkillCoverage />
+            {/* F123 (overnight 2026-08-05): task × swarm job coverage — ◈ TKSWJ button (left:704240, bottom:8, zIndex:286); parallel-fetches /entities/Task + /entities/SwarmJob; keyword-correlates each active task against swarm jobs to surface AUTOMATED (swarm backing found) vs MANUAL (no swarm coverage — execution gap); amber badge on manual count; stat tiles (tasks/swarm jobs/automated/manual gap); ALL/AUTOMATED/MANUAL filter tabs + text search; expand task → matched swarm jobs with kind badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-automation brief + TTS via jarvis:speak-dossier; isTaskSwjQuery+buildTaskSwjScript wired in JarvisBrain; "task swarm"/"swarm task"/"tkswj"/"automated task"/"manual task"/"task automation"/"unautomated task"/"task swarm job"/"swarm backed task"/"task execution gap" voice trigger; jarvis:tkswj-toggle event; 90-s auto-refresh */}
+            <TaskSwarmJobCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
