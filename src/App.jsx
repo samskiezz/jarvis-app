@@ -273,6 +273,7 @@ import GraphNodeScenarioCoverage from '@/components/cinematic/GraphNodeScenarioC
 import GraphNodeInvestmentCoverage from '@/components/cinematic/GraphNodeInvestmentCoverage';
 import GraphNodeSwarmJobCoverage from '@/components/cinematic/GraphNodeSwarmJobCoverage';
 import IntelProfileReportCoverage from '@/components/cinematic/IntelProfileReportCoverage';
+import OpsEventInvestmentCorrelator from '@/components/cinematic/OpsEventInvestmentCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -812,6 +813,8 @@ function App() {
             <GraphNodeSwarmJobCoverage />
             {/* F119 (overnight 2026-08-05): intel profile × report coverage — ◈ IPRC button (left:752560, bottom:8, zIndex:259); parallel-fetches /entities/IntelProfile + /v1/reports; keyword-correlates each tracked intel profile (name/description/sector/type/nationality/affiliation) against intelligence reports to surface DOCUMENTED (report coverage found) vs UNDOCUMENTED (no report references this profile — intelligence gap); amber badge on undocumented count; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + text search; expand profile → matched reports with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-profile documentation brief + TTS via jarvis:speak-dossier; isIprcQuery+buildIprcScript already wired in JarvisBrain.jsx (line 278); "intel profile report"/"report intel"/"iprc"/"intel coverage"/"profile report coverage"/"which intel profiles have reports"/"intel report coverage"/"undocumented profiles"/"intel governance" voice trigger; jarvis:iprc-toggle event; 90-s auto-refresh */}
             <IntelProfileReportCoverage />
+            {/* F120 (overnight 2026-08-05): ops event × investment correlator — ◈ OEIA button (left:734320, bottom:8, zIndex:255); parallel-fetches /v1/ops/events + /entities/Investment; keyword-correlates each ops event (type/title/service/severity/message/description) against investment positions (name/ticker/sector/description/category/region/industry) to surface EXPOSED (ops event overlaps investment domain) vs CLEAR (no investment alignment); red badge on exposed count; stat tiles (ops events/investments/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand event → matched investments with sector badge + ticker chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-investment correlation brief + TTS via jarvis:speak-dossier; isOeiaQuery+buildOeiaScript wired in JarvisBrain (line 3223); "ops event invest"/"invest ops event"/"oeia"/"ops invest correlat"/"investment ops"/"portfolio ops correlation" voice trigger; jarvis:oeia-toggle event; 90-s auto-refresh */}
+            <OpsEventInvestmentCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
