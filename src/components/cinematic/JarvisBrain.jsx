@@ -283,6 +283,7 @@ import { isIavrQuery, buildIavrScript } from "./InvestigationAnomalyCorrelator";
 import { isDdcvQuery, buildDdcvScript } from "./DatasetDecisionCoverage";
 import { isAldcQuery, buildAldcScript } from "./AlertDecisionCoverage";
 import { isTkrpQuery, buildTkrpScript } from "./TaskReportCoverage";
+import { isGnsrskQuery, buildGnsrskScript } from "./GraphNodeRiskSignalCoverage";
 import { isInvscQuery, buildInvscScript } from "./InvestigationSpecCoverage";
 import { isInvdcQuery, buildInvdcScript } from "./InvestigationDecisionCoverage";
 import { isSwarmJobRptQuery, buildSwarmJobRptScript } from "./SwarmJobReportCoverage";
@@ -3315,6 +3316,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tkrp-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTkrpScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGnsrskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gnsrsk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGnsrskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
