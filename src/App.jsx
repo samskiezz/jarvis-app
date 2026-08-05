@@ -271,6 +271,7 @@ import GraphNodeRiskSignalCoverage from '@/components/cinematic/GraphNodeRiskSig
 import RiskSignalLiveIntelCoverage from '@/components/cinematic/RiskSignalLiveIntelCoverage';
 import GraphNodeScenarioCoverage from '@/components/cinematic/GraphNodeScenarioCoverage';
 import GraphNodeInvestmentCoverage from '@/components/cinematic/GraphNodeInvestmentCoverage';
+import GraphNodeSwarmJobCoverage from '@/components/cinematic/GraphNodeSwarmJobCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -806,6 +807,8 @@ function App() {
             <GraphNodeScenarioCoverage />
             {/* F115 (overnight 2026-08-05): graph node × investment coverage — ◈ GNINV button (left:702560, bottom:8, zIndex:283); parallel-fetches /v1/graph/centrality + /entities/Investment; keyword-correlates each top-influence graph node (label/name/type/category) against portfolio investments (name/sector/ticker/notes/tags) to surface ALIGNED (investment position covers this node domain) vs BLIND (no investment coverage — portfolio-network gap); amber badge on aligned count; stat tiles (nodes/investments/aligned/blind); ALL/ALIGNED/BLIND filter tabs + text search; expand node → matched investments with sector badge + asset class badge + ticker + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-network coverage brief + TTS via jarvis:speak-dossier; isGninvQuery+buildGninvScript wired in JarvisBrain; "graph node invest"/"node invest"/"gninv"/"invest node"/"portfolio node"/"portfolio graph"/"which nodes have invest" voice trigger; jarvis:gninv-toggle event; 90-s auto-refresh */}
             <GraphNodeInvestmentCoverage />
+            {/* F117 (overnight 2026-08-05): graph node × swarmjob coverage — ◈ GNSWJ button (left:703120, bottom:8, zIndex:284); parallel-fetches /v1/graph/centrality + /entities/SwarmJob; keyword-correlates each top-influence graph node (label/name/type/category) against active swarm jobs (name/title/description/type/domain) to surface AUTOMATED (swarm job domain covers this node) vs UNAUTOMATED (no swarm coverage — automation gap); lime badge on automated count; stat tiles (nodes/jobs/automated/unautomated); ALL/AUTOMATED/UNAUTOMATED filter tabs + text search; expand node → matched swarm jobs with type + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-automation coverage brief + TTS via jarvis:speak-dossier; isGnswjQuery+buildGnswjScript wired in JarvisBrain; "graph swarm"/"swarm graph"/"gnswj"/"graph automation"/"automated nodes"/"unautomated nodes"/"swarm node"/"node swarm job"/"which nodes have swarm" voice trigger; jarvis:gnswj-toggle event; 90-s auto-refresh */}
+            <GraphNodeSwarmJobCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
