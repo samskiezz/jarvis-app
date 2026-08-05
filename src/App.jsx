@@ -266,6 +266,7 @@ import SceneReportCoverage from '@/components/cinematic/SceneReportCoverage';
 import InvestmentDatasetCoverage from '@/components/cinematic/InvestmentDatasetCoverage';
 import SceneSkillCoverage from '@/components/cinematic/SceneSkillCoverage';
 import GraphCommunityOpsEventCoverage from '@/components/cinematic/GraphCommunityOpsEventCoverage';
+import TaskReportCoverage from '@/components/cinematic/TaskReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -791,6 +792,8 @@ function App() {
             <SceneSkillCoverage />
             {/* F109 (overnight 2026-08-04): graph community × ops event coverage — ◈ GCOPS button (left:700880, bottom:8, zIndex:280); parallel-fetches /v1/graph/communities + /v1/ops/events; keyword-correlates each network cluster against active ops events to surface ACTIVE (ops event domain overlap detected — community operationally live) vs QUIET (no ops event coverage — operational blind spot); cyan badge on active count; stat tiles (communities/ops events/active/quiet); ALL/ACTIVE/QUIET filter tabs + text search; expand cluster → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-ops coverage brief + TTS via jarvis:speak-dossier; isGcopsQuery+buildGcopsScript wired in JarvisBrain.jsx; "community ops"/"ops community"/"gcops"/"active ops community"/"community ops event"/"ops event community"/"community operational"/"which communities have ops events"/"operationally active communities"/"community ops coverage"/"network ops coverage" voice trigger; jarvis:gcops-toggle event; 90-s auto-refresh */}
             <GraphCommunityOpsEventCoverage />
+            {/* F110 (overnight 2026-08-05): task × report coverage — ◈ TKRP button (left:784480, bottom:8, zIndex:266); parallel-fetches /entities/Task + /v1/reports; keyword-correlates each task (title/name/description/type/category/status) against the intelligence report corpus to surface COVERED (at least one report documents this task's operational domain) vs UNDOCUMENTED (no report coverage — intelligence gap); amber badge on undocumented count; stat tiles (tasks/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + text search; expand task → matched reports with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-documentation coverage brief + TTS via jarvis:speak-dossier; isTkrpQuery+buildTkrpScript wired in JarvisBrain; "task report"/"report task"/"tkrp"/"documented task"/"undocumented task"/"task report coverage"/"task documentation gap"/"which tasks have reports" voice trigger; jarvis:tkrp-toggle event; 90-s auto-refresh */}
+            <TaskReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
