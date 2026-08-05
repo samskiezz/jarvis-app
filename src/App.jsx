@@ -269,6 +269,7 @@ import GraphCommunityOpsEventCoverage from '@/components/cinematic/GraphCommunit
 import TaskReportCoverage from '@/components/cinematic/TaskReportCoverage';
 import GraphNodeRiskSignalCoverage from '@/components/cinematic/GraphNodeRiskSignalCoverage';
 import RiskSignalLiveIntelCoverage from '@/components/cinematic/RiskSignalLiveIntelCoverage';
+import GraphNodeScenarioCoverage from '@/components/cinematic/GraphNodeScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -800,6 +801,8 @@ function App() {
             <RiskSignalLiveIntelCoverage />
             {/* F110 (overnight 2026-08-05): task × report coverage — ◈ TKRP button (left:784480, bottom:8, zIndex:266); parallel-fetches /entities/Task + /v1/reports; keyword-correlates each task (title/name/description/type/category/status) against the intelligence report corpus to surface COVERED (at least one report documents this task's operational domain) vs UNDOCUMENTED (no report coverage — intelligence gap); amber badge on undocumented count; stat tiles (tasks/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + text search; expand task → matched reports with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-documentation coverage brief + TTS via jarvis:speak-dossier; isTkrpQuery+buildTkrpScript wired in JarvisBrain; "task report"/"report task"/"tkrp"/"documented task"/"undocumented task"/"task report coverage"/"task documentation gap"/"which tasks have reports" voice trigger; jarvis:tkrp-toggle event; 90-s auto-refresh */}
             <TaskReportCoverage />
+            {/* F113 (overnight 2026-08-05): graph node × scenario coverage — ◈ GNSCEN button (left:67960, bottom:8, zIndex:131); parallel-fetches /v1/graph/centrality + /v1/scenario/list; keyword-correlates each top-influence graph node against active operational scenarios to surface PLANNED (scenario coverage found) vs UNPLANNED (no scenario — strategic planning gap); red badge on unplanned count; stat tiles (nodes/scenarios/planned/unplanned); ALL/PLANNED/UNPLANNED tabs + search; expand node → matched scenarios with status badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence node-scenario planning brief + TTS; isGnscenQuery+buildGnscenScript wired in JarvisBrain; "graph node scenario"/"node scenario coverage"/"gnscen"/"high influence scenario"/"unplanned nodes"/"which nodes have scenarios" voice trigger; jarvis:gnscen-toggle event; 90-s auto-refresh */}
+            <GraphNodeScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
