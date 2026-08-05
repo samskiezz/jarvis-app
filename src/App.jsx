@@ -278,6 +278,7 @@ import SwarmJobReportCoverage from '@/components/cinematic/SwarmJobReportCoverag
 import RiskSignalSkillCoverage from '@/components/cinematic/RiskSignalSkillCoverage';
 import TaskSwarmJobCoverage from '@/components/cinematic/TaskSwarmJobCoverage';
 import InvestmentRiskCorrelator from '@/components/cinematic/InvestmentRiskCorrelator';
+import SkillScenarioCoverage from '@/components/cinematic/SkillScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -827,6 +828,8 @@ function App() {
             <TaskSwarmJobCoverage />
             {/* F124 (overnight 2026-08-05): investment × risk signal correlator — ◈ IVRC button; parallel-fetches /entities/Investment + /entities/RiskSignal; keyword-correlates each investment (name/title/description/sector/type/ticker) against active risk signals to surface EXPOSED (risk signal domain overlap) vs CLEAR (no alignment); red badge on exposed count; stat tiles (investments/risk signals/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + search; expand investment → matched risk signals with severity badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment risk correlation brief + TTS via jarvis:speak-dossier; isIvrcQuery+buildIvrcScript already wired in JarvisBrain line 203/2548; "investment risk"/"risk signal"/"ivrc"/"exposed invest"/"risk invest" voice triggers; jarvis:ivrc-toggle event; 90-s auto-refresh */}
             <InvestmentRiskCorrelator />
+            {/* F125 (overnight 2026-08-05): skill × scenario coverage — ◈ SKSCEN button (left:704800, bottom:8, zIndex:287); parallel-fetches /v1/aip/skill + /v1/scenario/list; keyword-correlates each JARVIS skill (name/title/description/category/domain/tags) against active scenarios to surface APPLIED (scenario exercises this skill domain) vs UNTESTED (no scenario coverage — readiness gap); amber/lime badge on untested count; stat tiles (skills/scenarios/applied/untested); ALL/APPLIED/UNTESTED filter tabs + text search; expand skill → matched scenarios with status + category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-readiness brief + TTS via jarvis:speak-dossier; isSkscenQuery+buildSkscenScript wired in JarvisBrain; "skill scenario"/"scenario skill"/"skscen"/"applied skills"/"untested skills"/"skill readiness scenario"/"scenario skill coverage"/"skill scenario coverage" voice trigger; jarvis:skscen-toggle event; 90-s auto-refresh */}
+            <SkillScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
