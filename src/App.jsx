@@ -280,6 +280,7 @@ import TaskSwarmJobCoverage from '@/components/cinematic/TaskSwarmJobCoverage';
 import InvestmentRiskCorrelator from '@/components/cinematic/InvestmentRiskCorrelator';
 import SkillScenarioCoverage from '@/components/cinematic/SkillScenarioCoverage';
 import InvestigationSceneMapper from '@/components/cinematic/InvestigationSceneMapper';
+import SceneContactCoverage from '@/components/cinematic/SceneContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -833,6 +834,8 @@ function App() {
             <SkillScenarioCoverage />
             {/* F126 (overnight 2026-08-05): investigation × scene mapper — ◈ INVSCNMAP button (left:705360, bottom:8, zIndex:288); parallel-fetches /v1/investigations + all 10 /v1/cinematic/scene/{id}; keyword-correlates each open investigation against scene anchor texts to surface SCENE-ALIGNED (investigation maps to an operational theatre) vs UNLOCATED (no scene found — context gap); amber badge on unlocated count; stat tiles (investigations/scenes/scene-aligned/unlocated); ALL/SCENE-ALIGNED/UNLOCATED filter tabs + text search; expand investigation → matched scene buttons with relevance score bar; click scene → navigate to /cinematic/{sceneId}; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-scene coverage brief + TTS via jarvis:speak-dossier; isInvscnmapQuery+buildInvscnmapScript wired in JarvisBrain; "investigation scene"/"scene investigation"/"invscnmap"/"which scene for investigation"/"scene case map" voice trigger; jarvis:invscnmap-toggle event; 90-s auto-refresh */}
             <InvestigationSceneMapper />
+            {/* F127 (overnight 2026-08-05): scene × contact coverage — ◈ SCCON button (left:705920, bottom:8, zIndex:289); parallel-fetches all 10 /v1/cinematic/scene/{id} + /entities/Contact; keyword-correlates each scene's anchor texts against contacts (name/role/org/desc/tags) to surface LINKED (contact found in scene domain) vs UNKNOWN (no contact — personnel gap); amber badge on unknown count; stat tiles (scenes/contacts/linked/unknown); ALL/LINKED/UNKNOWN tabs + search; expand scene → matched contacts with role + org chip + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence scene-personnel brief + TTS; isScconQuery+buildScconScript wired in JarvisBrain; "scene contact"/"contact scene"/"sccon"/"scene personnel"/"which scenes have contacts" voice trigger; jarvis:sccon-toggle event; 120-s auto-refresh */}
+            <SceneContactCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

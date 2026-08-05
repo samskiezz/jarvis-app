@@ -359,6 +359,7 @@ import { isRsskQuery, buildRsskScript } from "./RiskSignalSkillCoverage";
 import { isTaskSwjQuery, buildTaskSwjScript } from "./TaskSwarmJobCoverage";
 import { isSkscenQuery, buildSkscenScript } from "./SkillScenarioCoverage";
 import { isInvscnmapQuery, buildInvscnmapScript } from "./InvestigationSceneMapper";
+import { isScconQuery, buildScconScript } from "./SceneContactCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4103,6 +4104,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invscnmap-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvscnmapScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F127: Scene × Contact Coverage — voice bridge for the SceneContactCoverage panel.
+    if (isScconQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sccon-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScconScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
