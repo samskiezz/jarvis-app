@@ -281,6 +281,7 @@ import InvestmentRiskCorrelator from '@/components/cinematic/InvestmentRiskCorre
 import SkillScenarioCoverage from '@/components/cinematic/SkillScenarioCoverage';
 import InvestigationSceneMapper from '@/components/cinematic/InvestigationSceneMapper';
 import SceneContactCoverage from '@/components/cinematic/SceneContactCoverage';
+import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -836,6 +837,8 @@ function App() {
             <InvestigationSceneMapper />
             {/* F127 (overnight 2026-08-05): scene × contact coverage — ◈ SCCON button (left:705920, bottom:8, zIndex:289); parallel-fetches all 10 /v1/cinematic/scene/{id} + /entities/Contact; keyword-correlates each scene's anchor texts against contacts (name/role/org/desc/tags) to surface LINKED (contact found in scene domain) vs UNKNOWN (no contact — personnel gap); amber badge on unknown count; stat tiles (scenes/contacts/linked/unknown); ALL/LINKED/UNKNOWN tabs + search; expand scene → matched contacts with role + org chip + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence scene-personnel brief + TTS; isScconQuery+buildScconScript wired in JarvisBrain; "scene contact"/"contact scene"/"sccon"/"scene personnel"/"which scenes have contacts" voice trigger; jarvis:sccon-toggle event; 120-s auto-refresh */}
             <SceneContactCoverage />
+            {/* F128 (overnight 2026-08-05): dataset × knowledge coverage — ◈ DSKNOW button (left:30120, bottom:8, zIndex:60); parallel-fetches /v1/datasets + /knowledge/; keyword-correlates each dataset (name/description/type/tags) against knowledge article titles/content to surface DOCUMENTED (≥1 article backs the dataset) vs DARK (no documentation found — knowledge gap); amber badge on dark count; stat tiles (datasets/articles/documented/dark); ALL/DOCUMENTED/DARK tabs + text search; expand dataset → matched articles with relevance score + type badge; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-documentation brief + TTS via jarvis:speak-dossier; isDsknowQuery+buildDsknowScript wired in JarvisBrain; "dataset knowledge"/"dataset docs"/"which datasets have docs"/"undocumented datasets"/"data documentation gap"/"dsknow" voice trigger; jarvis:dsknow-toggle event; 120-s auto-refresh */}
+            <DatasetKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
