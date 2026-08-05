@@ -274,6 +274,7 @@ import GraphNodeInvestmentCoverage from '@/components/cinematic/GraphNodeInvestm
 import GraphNodeSwarmJobCoverage from '@/components/cinematic/GraphNodeSwarmJobCoverage';
 import IntelProfileReportCoverage from '@/components/cinematic/IntelProfileReportCoverage';
 import OpsEventInvestmentCorrelator from '@/components/cinematic/OpsEventInvestmentCorrelator';
+import SwarmJobReportCoverage from '@/components/cinematic/SwarmJobReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -815,6 +816,8 @@ function App() {
             <IntelProfileReportCoverage />
             {/* F120 (overnight 2026-08-05): ops event × investment correlator — ◈ OEIA button (left:734320, bottom:8, zIndex:255); parallel-fetches /v1/ops/events + /entities/Investment; keyword-correlates each ops event (type/title/service/severity/message/description) against investment positions (name/ticker/sector/description/category/region/industry) to surface EXPOSED (ops event overlaps investment domain) vs CLEAR (no investment alignment); red badge on exposed count; stat tiles (ops events/investments/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand event → matched investments with sector badge + ticker chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-investment correlation brief + TTS via jarvis:speak-dossier; isOeiaQuery+buildOeiaScript wired in JarvisBrain (line 3223); "ops event invest"/"invest ops event"/"oeia"/"ops invest correlat"/"investment ops"/"portfolio ops correlation" voice trigger; jarvis:oeia-toggle event; 90-s auto-refresh */}
             <OpsEventInvestmentCorrelator />
+            {/* F121 (overnight 2026-08-05): swarm job × report coverage — ◈ SJRP button; parallel-fetches /entities/SwarmJob + /v1/reports; keyword-correlates each swarm job (name/kind/target/description/type/status) against intelligence reports to surface COVERED (report documentation found) vs UNDOCUMENTED (no report backing — coverage gap); amber badge on undocumented count; stat tiles (swarm jobs/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + text search; expand job → matched reports with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-report documentation brief + TTS via jarvis:speak-dossier; isSwarmJobRptQuery+buildSwarmJobRptScript already wired in JarvisBrain (line 293/3394); "swarm report"/"report swarm"/"sjrp"/"swarm job report"/"undocumented swarm"/"swarm documentation" voice trigger; jarvis:sjrp-toggle event; 90-s auto-refresh */}
+            <SwarmJobReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
