@@ -272,6 +272,7 @@ import RiskSignalLiveIntelCoverage from '@/components/cinematic/RiskSignalLiveIn
 import GraphNodeScenarioCoverage from '@/components/cinematic/GraphNodeScenarioCoverage';
 import GraphNodeInvestmentCoverage from '@/components/cinematic/GraphNodeInvestmentCoverage';
 import GraphNodeSwarmJobCoverage from '@/components/cinematic/GraphNodeSwarmJobCoverage';
+import IntelProfileReportCoverage from '@/components/cinematic/IntelProfileReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -809,6 +810,8 @@ function App() {
             <GraphNodeInvestmentCoverage />
             {/* F117 (overnight 2026-08-05): graph node × swarmjob coverage — ◈ GNSWJ button (left:703120, bottom:8, zIndex:284); parallel-fetches /v1/graph/centrality + /entities/SwarmJob; keyword-correlates each top-influence graph node (label/name/type/category) against active swarm jobs (name/title/description/type/domain) to surface AUTOMATED (swarm job domain covers this node) vs UNAUTOMATED (no swarm coverage — automation gap); lime badge on automated count; stat tiles (nodes/jobs/automated/unautomated); ALL/AUTOMATED/UNAUTOMATED filter tabs + text search; expand node → matched swarm jobs with type + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-automation coverage brief + TTS via jarvis:speak-dossier; isGnswjQuery+buildGnswjScript wired in JarvisBrain; "graph swarm"/"swarm graph"/"gnswj"/"graph automation"/"automated nodes"/"unautomated nodes"/"swarm node"/"node swarm job"/"which nodes have swarm" voice trigger; jarvis:gnswj-toggle event; 90-s auto-refresh */}
             <GraphNodeSwarmJobCoverage />
+            {/* F119 (overnight 2026-08-05): intel profile × report coverage — ◈ IPRC button (left:752560, bottom:8, zIndex:259); parallel-fetches /entities/IntelProfile + /v1/reports; keyword-correlates each tracked intel profile (name/description/sector/type/nationality/affiliation) against intelligence reports to surface DOCUMENTED (report coverage found) vs UNDOCUMENTED (no report references this profile — intelligence gap); amber badge on undocumented count; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + text search; expand profile → matched reports with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-profile documentation brief + TTS via jarvis:speak-dossier; isIprcQuery+buildIprcScript already wired in JarvisBrain.jsx (line 278); "intel profile report"/"report intel"/"iprc"/"intel coverage"/"profile report coverage"/"which intel profiles have reports"/"intel report coverage"/"undocumented profiles"/"intel governance" voice trigger; jarvis:iprc-toggle event; 90-s auto-refresh */}
+            <IntelProfileReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
