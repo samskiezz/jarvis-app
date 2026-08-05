@@ -277,6 +277,7 @@ import OpsEventInvestmentCorrelator from '@/components/cinematic/OpsEventInvestm
 import SwarmJobReportCoverage from '@/components/cinematic/SwarmJobReportCoverage';
 import RiskSignalSkillCoverage from '@/components/cinematic/RiskSignalSkillCoverage';
 import TaskSwarmJobCoverage from '@/components/cinematic/TaskSwarmJobCoverage';
+import InvestmentRiskCorrelator from '@/components/cinematic/InvestmentRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -824,6 +825,8 @@ function App() {
             <RiskSignalSkillCoverage />
             {/* F123 (overnight 2026-08-05): task × swarm job coverage — ◈ TKSWJ button (left:704240, bottom:8, zIndex:286); parallel-fetches /entities/Task + /entities/SwarmJob; keyword-correlates each active task against swarm jobs to surface AUTOMATED (swarm backing found) vs MANUAL (no swarm coverage — execution gap); amber badge on manual count; stat tiles (tasks/swarm jobs/automated/manual gap); ALL/AUTOMATED/MANUAL filter tabs + text search; expand task → matched swarm jobs with kind badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-automation brief + TTS via jarvis:speak-dossier; isTaskSwjQuery+buildTaskSwjScript wired in JarvisBrain; "task swarm"/"swarm task"/"tkswj"/"automated task"/"manual task"/"task automation"/"unautomated task"/"task swarm job"/"swarm backed task"/"task execution gap" voice trigger; jarvis:tkswj-toggle event; 90-s auto-refresh */}
             <TaskSwarmJobCoverage />
+            {/* F124 (overnight 2026-08-05): investment × risk signal correlator — ◈ IVRC button; parallel-fetches /entities/Investment + /entities/RiskSignal; keyword-correlates each investment (name/title/description/sector/type/ticker) against active risk signals to surface EXPOSED (risk signal domain overlap) vs CLEAR (no alignment); red badge on exposed count; stat tiles (investments/risk signals/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + search; expand investment → matched risk signals with severity badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment risk correlation brief + TTS via jarvis:speak-dossier; isIvrcQuery+buildIvrcScript already wired in JarvisBrain line 203/2548; "investment risk"/"risk signal"/"ivrc"/"exposed invest"/"risk invest" voice triggers; jarvis:ivrc-toggle event; 90-s auto-refresh */}
+            <InvestmentRiskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
