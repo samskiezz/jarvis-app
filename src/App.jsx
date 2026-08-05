@@ -285,6 +285,7 @@ import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCov
 import ContactScenarioCoverage from '@/components/cinematic/ContactScenarioCoverage';
 import TaskInvestigationCorrelator from '@/components/cinematic/TaskInvestigationCorrelator';
 import IntelProfileInvestigationCorrelator from '@/components/cinematic/IntelProfileInvestigationCorrelator';
+import TaskDatasetCoverage from '@/components/cinematic/TaskDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -848,6 +849,8 @@ function App() {
             <TaskInvestigationCorrelator />
             {/* F131 (overnight 2026-08-05): intel profile × investigation correlator — ◈ IPINV button (left:643680, bottom:8, zIndex:235); parallel-fetches /entities/IntelProfile + /v1/investigations; keyword-correlates each tracked threat actor profile (name/subject/description/category/nationality/aliases) against open investigation cases to surface LINKED (investigation found for this profile) vs UNLINKED (no investigative coverage — intelligence gap); stat tiles (profiles/investigations/linked/unlinked); ALL/LINKED/UNLINKED filter tabs + text search; expand profile → matched investigations with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-profile investigation coverage brief + TTS via jarvis:speak-dossier; isIpinvQuery+buildIpinvScript already wired in JarvisBrain (line 254/3049); "intel invest"/"invest intel profile"/"ipinv"/"intel profile cases"/"linked intel profiles"/"intel investigation coverage" voice trigger; jarvis:ipinv-toggle event; 90-s auto-refresh */}
             <IntelProfileInvestigationCorrelator />
+            {/* F132 (overnight 2026-08-05): task × dataset coverage — ◈ TKDS button (left:707600, bottom:8, zIndex:292); parallel-fetches /entities/Task + /v1/datasets; keyword-correlates each task (name/title/description/priority/tags) against dataset catalog to surface DATA-BACKED (dataset support found) vs UNSOURCED (no dataset backing — data gap); amber badge on unsourced count; stat tiles (tasks/datasets/data-backed/unsourced); ALL/DATA-BACKED/UNSOURCED tabs + text search; expand task → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-data readiness brief + TTS via jarvis:speak-dossier; isTaskDsQuery+buildTaskDsScript wired in JarvisBrain; "task dataset"/"dataset task"/"tkds"/"data backed task"/"task data gap"/"unsourced task"/"task data coverage"/"which tasks have datasets" voice trigger; jarvis:tkds-toggle event; 90-s auto-refresh */}
+            <TaskDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

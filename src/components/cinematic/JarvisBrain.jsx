@@ -361,6 +361,7 @@ import { isSkscenQuery, buildSkscenScript } from "./SkillScenarioCoverage";
 import { isInvscnmapQuery, buildInvscnmapScript } from "./InvestigationSceneMapper";
 import { isScconQuery, buildScconScript } from "./SceneContactCoverage";
 import { isCscenQuery, buildCscenScript } from "./ContactScenarioCoverage";
+import { isTaskDsQuery, buildTaskDsScript } from "./TaskDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4125,6 +4126,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cscen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCscenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F132: Task × Dataset Coverage — voice bridge for the TaskDatasetCoverage panel.
+    if (isTaskDsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tkds-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTaskDsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
