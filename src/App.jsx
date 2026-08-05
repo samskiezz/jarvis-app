@@ -270,6 +270,7 @@ import TaskReportCoverage from '@/components/cinematic/TaskReportCoverage';
 import GraphNodeRiskSignalCoverage from '@/components/cinematic/GraphNodeRiskSignalCoverage';
 import RiskSignalLiveIntelCoverage from '@/components/cinematic/RiskSignalLiveIntelCoverage';
 import GraphNodeScenarioCoverage from '@/components/cinematic/GraphNodeScenarioCoverage';
+import GraphNodeInvestmentCoverage from '@/components/cinematic/GraphNodeInvestmentCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -803,6 +804,8 @@ function App() {
             <TaskReportCoverage />
             {/* F113 (overnight 2026-08-05): graph node × scenario coverage — ◈ GNSCEN button (left:67960, bottom:8, zIndex:131); parallel-fetches /v1/graph/centrality + /v1/scenario/list; keyword-correlates each top-influence graph node against active operational scenarios to surface PLANNED (scenario coverage found) vs UNPLANNED (no scenario — strategic planning gap); red badge on unplanned count; stat tiles (nodes/scenarios/planned/unplanned); ALL/PLANNED/UNPLANNED tabs + search; expand node → matched scenarios with status badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence node-scenario planning brief + TTS; isGnscenQuery+buildGnscenScript wired in JarvisBrain; "graph node scenario"/"node scenario coverage"/"gnscen"/"high influence scenario"/"unplanned nodes"/"which nodes have scenarios" voice trigger; jarvis:gnscen-toggle event; 90-s auto-refresh */}
             <GraphNodeScenarioCoverage />
+            {/* F115 (overnight 2026-08-05): graph node × investment coverage — ◈ GNINV button (left:702560, bottom:8, zIndex:283); parallel-fetches /v1/graph/centrality + /entities/Investment; keyword-correlates each top-influence graph node (label/name/type/category) against portfolio investments (name/sector/ticker/notes/tags) to surface ALIGNED (investment position covers this node domain) vs BLIND (no investment coverage — portfolio-network gap); amber badge on aligned count; stat tiles (nodes/investments/aligned/blind); ALL/ALIGNED/BLIND filter tabs + text search; expand node → matched investments with sector badge + asset class badge + ticker + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-network coverage brief + TTS via jarvis:speak-dossier; isGninvQuery+buildGninvScript wired in JarvisBrain; "graph node invest"/"node invest"/"gninv"/"invest node"/"portfolio node"/"portfolio graph"/"which nodes have invest" voice trigger; jarvis:gninv-toggle event; 90-s auto-refresh */}
+            <GraphNodeInvestmentCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
