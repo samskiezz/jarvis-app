@@ -284,6 +284,7 @@ import { isDdcvQuery, buildDdcvScript } from "./DatasetDecisionCoverage";
 import { isAldcQuery, buildAldcScript } from "./AlertDecisionCoverage";
 import { isTkrpQuery, buildTkrpScript } from "./TaskReportCoverage";
 import { isGnsrskQuery, buildGnsrskScript } from "./GraphNodeRiskSignalCoverage";
+import { isRsliveQuery, buildRsliveScript } from "./RiskSignalLiveIntelCoverage";
 import { isInvscQuery, buildInvscScript } from "./InvestigationSpecCoverage";
 import { isInvdcQuery, buildInvdcScript } from "./InvestigationDecisionCoverage";
 import { isSwarmJobRptQuery, buildSwarmJobRptScript } from "./SwarmJobReportCoverage";
@@ -3325,6 +3326,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gnsrsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGnsrskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRsliveQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rslive-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRsliveScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
