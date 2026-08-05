@@ -90,3 +90,4 @@
 2026-08-05 F119 IntelProfileReportCoverage.jsx mounted in App.jsx — /entities/IntelProfile × /v1/reports; DOCUMENTED vs UNDOCUMENTED; iprc voice trigger; build exit 0
 2026-08-05 F120 OpsEventInvestmentCorrelator mounted in App.jsx — OpsEvent × Investment Correlator wired to /v1/ops/events × /entities/Investment; isOeiaQuery+buildOeiaScript already in JarvisBrain line 3223; build exit 0
 2026-08-05 F121 SwarmJobReportCoverage mounted in App.jsx — /entities/SwarmJob × /v1/reports; COVERED vs UNDOCUMENTED; SJRP voice trigger; build exit 0
+2026-08-05 F122 RiskSignalSkillCoverage.jsx (new, ~300 lines) — /entities/RiskSignal × /v1/aip/skill; MITIGATED vs UNMITIGATED; ◈ RSSK left:703680 zIndex:285; isRsskQuery+buildRsskScript wired in JarvisBrain.jsx; jarvis:rssk-toggle; 90s auto-refresh; build exit 0

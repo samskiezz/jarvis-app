@@ -355,6 +355,7 @@ import { isGcopsQuery, buildGcopsScript } from "./GraphCommunityOpsEventCoverage
 import { isGknowQuery, buildGknowScript } from "./GraphNodeKnowledgeCoverage";
 import { isGnswjQuery, buildGnswjScript } from "./GraphNodeSwarmJobCoverage";
 import { isSwscenQuery, buildSwscenScript } from "./SwarmScenarioCoverage";
+import { isRsskQuery, buildRsskScript } from "./RiskSignalSkillCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4059,6 +4060,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swscen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwscenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F122: RiskSignal × Skill Coverage — voice bridge for the RiskSignalSkillCoverage panel.
+    if (isRsskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rssk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRsskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

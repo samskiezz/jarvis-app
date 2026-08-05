@@ -275,6 +275,7 @@ import GraphNodeSwarmJobCoverage from '@/components/cinematic/GraphNodeSwarmJobC
 import IntelProfileReportCoverage from '@/components/cinematic/IntelProfileReportCoverage';
 import OpsEventInvestmentCorrelator from '@/components/cinematic/OpsEventInvestmentCorrelator';
 import SwarmJobReportCoverage from '@/components/cinematic/SwarmJobReportCoverage';
+import RiskSignalSkillCoverage from '@/components/cinematic/RiskSignalSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -818,6 +819,8 @@ function App() {
             <OpsEventInvestmentCorrelator />
             {/* F121 (overnight 2026-08-05): swarm job × report coverage — ◈ SJRP button; parallel-fetches /entities/SwarmJob + /v1/reports; keyword-correlates each swarm job (name/kind/target/description/type/status) against intelligence reports to surface COVERED (report documentation found) vs UNDOCUMENTED (no report backing — coverage gap); amber badge on undocumented count; stat tiles (swarm jobs/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + text search; expand job → matched reports with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-report documentation brief + TTS via jarvis:speak-dossier; isSwarmJobRptQuery+buildSwarmJobRptScript already wired in JarvisBrain (line 293/3394); "swarm report"/"report swarm"/"sjrp"/"swarm job report"/"undocumented swarm"/"swarm documentation" voice trigger; jarvis:sjrp-toggle event; 90-s auto-refresh */}
             <SwarmJobReportCoverage />
+            {/* F122 (overnight 2026-08-05): risk signal × skill coverage — ◈ RSSK button (left:703680, bottom:8, zIndex:285); parallel-fetches /entities/RiskSignal + /v1/aip/skill; keyword-correlates each active risk signal (title/name/signal/description/category/type/sector/source/tags) against JARVIS skill definitions to surface MITIGATED (skill coverage found) vs UNMITIGATED (no skill covers this risk — capability gap); red badge on unmitigated count; stat tiles (signals/skills/mitigated/unmitigated); ALL/MITIGATED/UNMITIGATED filter tabs + text search; expand signal → matched skills with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-skill coverage brief + TTS via jarvis:speak-dossier; isRsskQuery+buildRsskScript wired in JarvisBrain; "risk signal skill"/"skill risk signal"/"rssk"/"unmitigated risk"/"risk skill coverage"/"which risks have skills"/"risk capability gap"/"risk mitigation skill"/"mitigated risk"/"signal skill coverage"/"unmitigated signal" voice trigger; jarvis:rssk-toggle event; 90-s auto-refresh */}
+            <RiskSignalSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
