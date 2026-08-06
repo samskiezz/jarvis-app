@@ -298,6 +298,7 @@ import RiskSignalReportCoverage from '@/components/cinematic/RiskSignalReportCov
 import ContactTaskCoverage from '@/components/cinematic/ContactTaskCoverage';
 import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowledgeCoverage';
 import SceneSwarmJobCoverage from '@/components/cinematic/SceneSwarmJobCoverage';
+import TaskRiskScenarioTripleCoverage from '@/components/cinematic/TaskRiskScenarioTripleCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -887,6 +888,8 @@ function App() {
             <InvestmentKnowledgeCoverage />
             {/* F144 (overnight 2026-08-06): scene × swarmjob coverage — ◈ SCSWJ button (left:710960, bottom:8, zIndex:298); parallel-fetches all 10 /v1/cinematic/scene/{id} + /entities/SwarmJob; keyword-correlates each scene's anchor texts against active swarm jobs to surface AUTOMATED (swarm backing found) vs UNMONITORED (no swarm automation — operational gap); lime badge on automated count; stat tiles (scenes/swarm jobs/automated/unmonitored); ALL/AUTOMATED/UNMONITORED filter tabs + text search; expand scene → matched swarm jobs with type badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-automation brief + TTS; isScswjQuery+buildScswjScript wired in JarvisBrain; "scene swarm"/"swarm scene"/"scswj"/"automated scene"/"scene swarm job"/"scene automation coverage" voice trigger; jarvis:scswj-toggle event; 120-s auto-refresh */}
             <SceneSwarmJobCoverage />
+            {/* F145 (overnight 2026-08-06): task × risk signal × scenario triple coverage — ◈ TRSSCEN button (left:711520, bottom:8, zIndex:299); parallel-fetches /entities/Task + /entities/RiskSignal + /v1/scenario/list; 3-way keyword-correlates each task to surface FULLY PREPARED (risk-aligned + scenario-backed), RISK-ALIGNED (no scenario), SCRIPTED (no risk signal), ISOLATED (no backing — full gap); red badge on isolated count; coverage breakdown bar; ALL/FULLY PREPARED/RISK-ALIGNED/SCRIPTED/ISOLATED tabs + search; expand task → matched risk signals with severity badge + relevance, matched scenarios with status badge + relevance; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence triple-coverage mission readiness brief + TTS via jarvis:speak-dossier; isTrsscenQuery+buildTrsscenScript wired in JarvisBrain; "task risk scenario"/"triple coverage"/"trsscen"/"task readiness matrix"/"mission readiness matrix"/"fully prepared tasks"/"task intel readiness" voice trigger; jarvis:trsscen-toggle event; 90-s auto-refresh */}
+            <TaskRiskScenarioTripleCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

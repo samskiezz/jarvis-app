@@ -369,6 +369,7 @@ import { isRskillQuery, buildRskillScript } from "./ReportSkillCoverage";
 import { isCtskQuery, buildCtskScript } from "./ContactTaskCoverage";
 import { isInvkbQuery, buildInvkbScript } from "./InvestmentKnowledgeCoverage";
 import { isScswjQuery, buildScswjScript } from "./SceneSwarmJobCoverage";
+import { isTrsscenQuery, buildTrsscenScript } from "./TaskRiskScenarioTripleCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4220,6 +4221,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scswj-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScswjScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F145: Task × Risk Signal × Scenario Triple Coverage — voice bridge for the TaskRiskScenarioTripleCoverage panel.
+    // "task risk scenario" / "triple coverage" / "trsscen" / "task readiness matrix" /
+    // "mission readiness matrix" / "fully prepared tasks" / "task intel readiness"
+    if (isTrsscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trsscen-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTrsscenScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
