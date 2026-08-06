@@ -2,9 +2,10 @@
  * CommandPalette — ⌘K / Ctrl+K global command search.
  * Lists every JARVIS page (from pageRegistry) + the 10 cinematic scenes.
  * Additive-only; mounted in App.jsx next to JarvisBrain.
+ * Restricted to /apex routes — cinematic routes use JarvisCommandPalette instead.
  */
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { PAGES } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
 
@@ -54,8 +55,12 @@ export default function CommandPalette() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const inputRef = useRef(null);
   const listRef = useRef(null);
+
+  // Restrict to /apex routes — cinematic routes use JarvisCommandPalette instead.
+  if (!pathname.startsWith("/apex")) return null;
 
   const filtered = query.trim()
     ? ALL_COMMANDS.filter(

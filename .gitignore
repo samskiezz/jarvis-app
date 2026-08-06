@@ -2,14 +2,15 @@
 .venv/
 venv/
 
-# Logs (overnight build log is tracked)
+# Logs — keep the overnight run log; ignore everything else
+/logs/*
 *.log
 npm-debug.log*
+!/logs/jarvis_overnight.log
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
-!logs/jarvis_overnight.log
 
 node_modules
 dist
