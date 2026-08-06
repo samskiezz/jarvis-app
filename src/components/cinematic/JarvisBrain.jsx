@@ -366,6 +366,7 @@ import { isCscenQuery, buildCscenScript } from "./ContactScenarioCoverage";
 import { isTaskDsQuery, buildTaskDsScript } from "./TaskDatasetCoverage";
 import { isCoecQuery, buildCoecScript } from "./ContactOpsEventCoverage";
 import { isRskillQuery, buildRskillScript } from "./ReportSkillCoverage";
+import { isCtskQuery, buildCtskScript } from "./ContactTaskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4186,6 +4187,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rskill-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRskillScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F142: Contact × Task Coverage — voice bridge for the ContactTaskCoverage panel.
+    if (isCtskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctsk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCtskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

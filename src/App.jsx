@@ -295,6 +295,7 @@ import IntelProfileDatasetCorrelator from '@/components/cinematic/IntelProfileDa
 import ContactOpsEventCoverage from '@/components/cinematic/ContactOpsEventCoverage';
 import ReportSkillCoverage from '@/components/cinematic/ReportSkillCoverage';
 import RiskSignalReportCoverage from '@/components/cinematic/RiskSignalReportCoverage';
+import ContactTaskCoverage from '@/components/cinematic/ContactTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -878,6 +879,8 @@ function App() {
             <ReportSkillCoverage />
             {/* F141 (overnight 2026-08-06): risk signal × report coverage — ◈ RSRPT button (left:761680, bottom:8, zIndex:261); parallel-fetches /entities/RiskSignal + /v1/reports; keyword-correlates each risk signal (name/title/category/sector/description/source/type) against the intelligence report corpus to surface COVERED (report documentation found) vs UNDOCUMENTED (no report backing — intelligence gap); amber badge on undocumented count; stat tiles (risk signals/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + text search; expand signal → matched reports with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-report coverage brief + TTS via jarvis:speak-dossier; isRsrptQuery+buildRsrptScript already wired in JarvisBrain (line 282/3314); "risk report"/"report risk signal"/"rsrpt"/"risk coverage report"/"risk signal reports"/"which risks have reports"/"undocumented risks report"/"risk report gap"/"risk intelligence report" voice trigger; jarvis:rsrpt-toggle event; 90-s auto-refresh */}
             <RiskSignalReportCoverage />
+            {/* F142 (overnight 2026-08-06): contact × task coverage — ◈ CTSK button (left:709840, bottom:8, zIndex:296); parallel-fetches /entities/Contact + /entities/Task; keyword-correlates each contact (name/org/role/description/email/tags) against active tasks to surface TASKED (task coverage found) vs UNTASKED (no task — contact not operationally engaged); teal badge on tasked count; stat tiles (contacts/tasks/tasked/untasked); ALL/TASKED/UNTASKED filter tabs + text search; expand contact → matched tasks with priority badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-task brief + TTS via jarvis:speak-dossier; isCtskQuery+buildCtskScript wired in JarvisBrain; "contact task"/"task contact"/"ctsk"/"tasked contacts"/"contact ops task"/"contacts with tasks" voice trigger; jarvis:ctsk-toggle event; 90-s auto-refresh */}
+            <ContactTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
