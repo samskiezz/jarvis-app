@@ -286,6 +286,7 @@ import ContactScenarioCoverage from '@/components/cinematic/ContactScenarioCover
 import TaskInvestigationCorrelator from '@/components/cinematic/TaskInvestigationCorrelator';
 import IntelProfileInvestigationCorrelator from '@/components/cinematic/IntelProfileInvestigationCorrelator';
 import TaskDatasetCoverage from '@/components/cinematic/TaskDatasetCoverage';
+import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -851,6 +852,8 @@ function App() {
             <IntelProfileInvestigationCorrelator />
             {/* F132 (overnight 2026-08-05): task × dataset coverage — ◈ TKDS button (left:707600, bottom:8, zIndex:292); parallel-fetches /entities/Task + /v1/datasets; keyword-correlates each task (name/title/description/priority/tags) against dataset catalog to surface DATA-BACKED (dataset support found) vs UNSOURCED (no dataset backing — data gap); amber badge on unsourced count; stat tiles (tasks/datasets/data-backed/unsourced); ALL/DATA-BACKED/UNSOURCED tabs + text search; expand task → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-data readiness brief + TTS via jarvis:speak-dossier; isTaskDsQuery+buildTaskDsScript wired in JarvisBrain; "task dataset"/"dataset task"/"tkds"/"data backed task"/"task data gap"/"unsourced task"/"task data coverage"/"which tasks have datasets" voice trigger; jarvis:tkds-toggle event; 90-s auto-refresh */}
             <TaskDatasetCoverage />
+            {/* F133 (overnight 2026-08-06): dataset × report cross-reference — ◈ DSREP button; parallel-fetches /v1/datasets + /v1/reports; keyword-correlates each dataset (name/description) against report titles to surface MATCHED (report documentation found) vs ORPHANED (no report links — data lineage gap); amber badge on orphaned count; stat tiles (datasets/reports/matched/orphaned); ALL/MATCHED/ORPHANED filter tabs + text search; expand dataset → matched reports with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-lineage brief + TTS via jarvis:speak-dossier; isDatasetReportQuery+buildDatasetReportScript wired in JarvisBrain (line 78/1238); "dataset report"/"data report"/"data lineage"/"report dataset"/"report coverage"/"dsrep" voice trigger; jarvis:dsrep-toggle event; 5-min auto-refresh */}
+            <DatasetReportCrossRef />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
