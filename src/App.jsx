@@ -299,6 +299,7 @@ import ContactTaskCoverage from '@/components/cinematic/ContactTaskCoverage';
 import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowledgeCoverage';
 import SceneSwarmJobCoverage from '@/components/cinematic/SceneSwarmJobCoverage';
 import TaskRiskScenarioTripleCoverage from '@/components/cinematic/TaskRiskScenarioTripleCoverage';
+import RiskSignalOpsEventCoverage from '@/components/cinematic/RiskSignalOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -890,6 +891,8 @@ function App() {
             <SceneSwarmJobCoverage />
             {/* F145 (overnight 2026-08-06): task × risk signal × scenario triple coverage — ◈ TRSSCEN button (left:711520, bottom:8, zIndex:299); parallel-fetches /entities/Task + /entities/RiskSignal + /v1/scenario/list; 3-way keyword-correlates each task to surface FULLY PREPARED (risk-aligned + scenario-backed), RISK-ALIGNED (no scenario), SCRIPTED (no risk signal), ISOLATED (no backing — full gap); red badge on isolated count; coverage breakdown bar; ALL/FULLY PREPARED/RISK-ALIGNED/SCRIPTED/ISOLATED tabs + search; expand task → matched risk signals with severity badge + relevance, matched scenarios with status badge + relevance; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence triple-coverage mission readiness brief + TTS via jarvis:speak-dossier; isTrsscenQuery+buildTrsscenScript wired in JarvisBrain; "task risk scenario"/"triple coverage"/"trsscen"/"task readiness matrix"/"mission readiness matrix"/"fully prepared tasks"/"task intel readiness" voice trigger; jarvis:trsscen-toggle event; 90-s auto-refresh */}
             <TaskRiskScenarioTripleCoverage />
+            {/* F147 (overnight 2026-08-06): risk signal × ops event coverage — ◈ RSOE button (left:712080, bottom:8, zIndex:300); parallel-fetches /entities/RiskSignal + /v1/ops/events; keyword-correlates each risk signal (name/category/sector/description/source/tags) against active ops events to surface MONITORED (ops event coverage detected) vs UNMONITORED (no ops tracking — operational gap); amber badge on unmonitored count; stat tiles (risk signals/ops events/monitored/unmonitored); ALL/MONITORED/UNMONITORED filter tabs + text search; expand signal → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-ops monitoring coverage brief + TTS via jarvis:speak-dossier; isRsoeQuery+buildRsoeScript wired in JarvisBrain; "risk signal ops"/"ops risk signal"/"rsoe"/"monitored risks"/"risk ops coverage"/"unmonitored risk signal"/"risk ops event"/"risk ops monitoring" voice trigger; jarvis:rsoe-toggle event; 90-s auto-refresh */}
+            <RiskSignalOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
