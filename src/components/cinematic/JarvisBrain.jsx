@@ -367,6 +367,7 @@ import { isTaskDsQuery, buildTaskDsScript } from "./TaskDatasetCoverage";
 import { isCoecQuery, buildCoecScript } from "./ContactOpsEventCoverage";
 import { isRskillQuery, buildRskillScript } from "./ReportSkillCoverage";
 import { isCtskQuery, buildCtskScript } from "./ContactTaskCoverage";
+import { isInvkbQuery, buildInvkbScript } from "./InvestmentKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4197,6 +4198,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCtskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isInvkbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invkb-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvkbScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

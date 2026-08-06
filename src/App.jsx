@@ -296,6 +296,7 @@ import ContactOpsEventCoverage from '@/components/cinematic/ContactOpsEventCover
 import ReportSkillCoverage from '@/components/cinematic/ReportSkillCoverage';
 import RiskSignalReportCoverage from '@/components/cinematic/RiskSignalReportCoverage';
 import ContactTaskCoverage from '@/components/cinematic/ContactTaskCoverage';
+import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -881,6 +882,8 @@ function App() {
             <RiskSignalReportCoverage />
             {/* F142 (overnight 2026-08-06): contact × task coverage — ◈ CTSK button (left:709840, bottom:8, zIndex:296); parallel-fetches /entities/Contact + /entities/Task; keyword-correlates each contact (name/org/role/description/email/tags) against active tasks to surface TASKED (task coverage found) vs UNTASKED (no task — contact not operationally engaged); teal badge on tasked count; stat tiles (contacts/tasks/tasked/untasked); ALL/TASKED/UNTASKED filter tabs + text search; expand contact → matched tasks with priority badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-task brief + TTS via jarvis:speak-dossier; isCtskQuery+buildCtskScript wired in JarvisBrain; "contact task"/"task contact"/"ctsk"/"tasked contacts"/"contact ops task"/"contacts with tasks" voice trigger; jarvis:ctsk-toggle event; 90-s auto-refresh */}
             <ContactTaskCoverage />
+            {/* F143 (overnight 2026-08-06): investment × knowledge coverage — ◈ INVKB button (left:710400, bottom:8, zIndex:297); parallel-fetches /entities/Investment + /knowledge/; keyword-correlates each investment (name/sector/notes/tags/ticker) against KB articles to surface INFORMED (KB article backing found) vs BLIND (no knowledge coverage — investment intelligence gap); amber badge on blind count; stat tiles (investments/KB articles/informed/blind); ALL/INFORMED/BLIND filter tabs + text search; expand investment → matched KB articles with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment-knowledge coverage brief + TTS via jarvis:speak-dossier; isInvkbQuery+buildInvkbScript wired in JarvisBrain; "investment knowledge"/"knowledge invest"/"invkb"/"investment kb"/"knowledge backed invest"/"invest knowledge gap"/"which investments have knowledge" voice trigger; jarvis:invkb-toggle event; 90-s auto-refresh */}
+            <InvestmentKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
