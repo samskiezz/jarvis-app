@@ -305,6 +305,7 @@ import InvestigationReportCoverage from '@/components/cinematic/InvestigationRep
 import GraphCommunityKnowledgeCoverage from '@/components/cinematic/GraphCommunityKnowledgeCoverage';
 import KnowledgeTaskCoverage from '@/components/cinematic/KnowledgeTaskCoverage';
 import InvestmentSwarmJobCoverage from '@/components/cinematic/InvestmentSwarmJobCoverage';
+import ReportInvestigationGap from '@/components/cinematic/ReportInvestigationGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -908,6 +909,8 @@ function App() {
             <KnowledgeTaskCoverage />
             {/* F152 (overnight 2026-08-06): investment × swarm job coverage — ◈ INVSWJ button (left:713760, bottom:8, zIndex:303); parallel-fetches /entities/Investment + /entities/SwarmJob; keyword-correlates each investment (name/sector/notes/tags/ticker) against active swarm jobs to surface MONITORED (swarm automation found) vs UNMONITORED (no coverage — portfolio surveillance gap); amber badge on unmonitored count; stat tiles (investments/swarm jobs/monitored/unmonitored); ALL/MONITORED/UNMONITORED filter tabs + text search; expand investment → matched swarm jobs with kind badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-automation coverage brief + TTS via jarvis:speak-dossier; isInvSwjQuery+buildInvSwjScript wired in JarvisBrain; "investment swarm"/"swarm investment"/"invswj"/"portfolio swarm"/"swarm portfolio"/"investment automation"/"portfolio automation"/"swarm coverage invest"/"which investments have swarm" voice trigger; jarvis:invswj-toggle event; 90-s auto-refresh */}
             <InvestmentSwarmJobCoverage />
+            {/* F153 (overnight 2026-08-06): report × investigation gap analyzer — ◈ RPINVG button (left:8604, bottom:8, zIndex:66); parallel-fetches /v1/reports + /v1/investigations; keyword-correlates each open case against the report catalog to surface BACKED (research documentation found) vs DARK (no report coverage — intelligence gap); stat tiles (cases/reports/backed/dark); ALL/BACKED/DARK filter tabs; expand investigation → matched reports with relevance score + date; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence research-coverage brief + TTS via jarvis:speak-dossier; "report investigation gap"/"research coverage"/"case reports"/"rpinvg" voice trigger; jarvis:rpinvg-toggle event; 90-s auto-refresh */}
+            <ReportInvestigationGap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
