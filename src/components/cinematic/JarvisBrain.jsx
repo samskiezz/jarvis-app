@@ -377,6 +377,7 @@ import { isGcknowQuery, buildGcknowScript } from "./GraphCommunityKnowledgeCover
 import { isKbtaskQuery, buildKbtaskScript } from "./KnowledgeTaskCoverage";
 import { isInvSwjQuery, buildInvSwjScript } from "./InvestmentSwarmJobCoverage";
 import { isSkscen3Query, buildSkscen3Script } from "./ScenarioSkillSwarmCoverage";
+import { isCorklQuery, buildCorklScript } from "./ContactKnowledgeRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4308,6 +4309,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skscen3-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSkscen3Script();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCorklQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:crkl-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCorklScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

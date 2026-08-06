@@ -307,6 +307,7 @@ import KnowledgeTaskCoverage from '@/components/cinematic/KnowledgeTaskCoverage'
 import InvestmentSwarmJobCoverage from '@/components/cinematic/InvestmentSwarmJobCoverage';
 import ReportInvestigationGap from '@/components/cinematic/ReportInvestigationGap';
 import ScenarioSkillSwarmCoverage from '@/components/cinematic/ScenarioSkillSwarmCoverage';
+import ContactKnowledgeRiskTriple from '@/components/cinematic/ContactKnowledgeRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -914,6 +915,8 @@ function App() {
             <ReportInvestigationGap />
             {/* F154 (overnight 2026-08-06): scenario × skill × swarm job triple coverage — ◈ SKSCEN3 button (left:714320, bottom:8, zIndex:304); parallel-fetches /v1/scenario/list + /v1/aip/skill + /entities/SwarmJob; keyword-correlates each scenario (name/description/tags) against skills and swarm jobs to surface FULLY ARMED (both skill + swarm coverage) vs SKILLED ONLY (skill found, no swarm) vs AUTOMATED ONLY (swarm found, no skill) vs UNARMED (no coverage); red badge on unarmed count; stat tiles (scenarios/skills/swarm jobs/fully armed/unarmed); coverage breakdown bar; ALL/FULLY ARMED/SKILLED ONLY/AUTOMATED ONLY/UNARMED filter tabs + text search; expand scenario → split pane left=matched skills (lime scorebars) right=matched swarm jobs (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence arsenal readiness brief + TTS via jarvis:speak-dossier; isSkscen3Query+buildSkscen3Script wired in JarvisBrain; "scenario skill swarm"/"skscen3"/"triple armed"/"armed scenario"/"scenario arsenal"/"fully armed"/"swarm skill scenario" voice trigger; jarvis:skscen3-toggle event; 90-s auto-refresh */}
             <ScenarioSkillSwarmCoverage />
+            {/* F155 (overnight 2026-08-06): contact × knowledge × risk triple coverage — ◈ CRKL button (left:714880, bottom:8, zIndex:305); parallel-fetches /entities/Contact + /knowledge/ + /entities/RiskSignal; three-way keyword-correlates each contact (name/org/role/description/tags) against KB articles AND risk signals to surface FULLY COVERED (knowledge-backed + risk-monitored) vs KNOWLEDGE-ONLY (no risk signal) vs RISK-ONLY (no KB article) vs BLIND (no coverage); red badge on blind count; stat tiles (contacts/fully covered/knowledge-only/risk-only/blind); coverage breakdown bar; ALL/FULLY COVERED/KNOWLEDGE-ONLY/RISK-ONLY/BLIND filter tabs + text search; expand contact → split pane left=matched KB articles (cyan scorebars) right=matched risk signals (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact intel-coverage brief + TTS via jarvis:speak-dossier; isCorklQuery+buildCorklScript wired in JarvisBrain; "contact knowledge risk"/"crkl"/"contact triple"/"blind contact"/"fully covered contact"/"crkltri"/"contact intel triple"/"contact coverage triple" voice trigger; jarvis:crkl-toggle event; 90-s auto-refresh */}
+            <ContactKnowledgeRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
