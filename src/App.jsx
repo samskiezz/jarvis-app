@@ -300,6 +300,7 @@ import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowle
 import SceneSwarmJobCoverage from '@/components/cinematic/SceneSwarmJobCoverage';
 import TaskRiskScenarioTripleCoverage from '@/components/cinematic/TaskRiskScenarioTripleCoverage';
 import RiskSignalOpsEventCoverage from '@/components/cinematic/RiskSignalOpsEventCoverage';
+import SwarmIntelProfileCoverage from '@/components/cinematic/SwarmIntelProfileCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -893,6 +894,8 @@ function App() {
             <TaskRiskScenarioTripleCoverage />
             {/* F147 (overnight 2026-08-06): risk signal × ops event coverage — ◈ RSOE button (left:712080, bottom:8, zIndex:300); parallel-fetches /entities/RiskSignal + /v1/ops/events; keyword-correlates each risk signal (name/category/sector/description/source/tags) against active ops events to surface MONITORED (ops event coverage detected) vs UNMONITORED (no ops tracking — operational gap); amber badge on unmonitored count; stat tiles (risk signals/ops events/monitored/unmonitored); ALL/MONITORED/UNMONITORED filter tabs + text search; expand signal → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-ops monitoring coverage brief + TTS via jarvis:speak-dossier; isRsoeQuery+buildRsoeScript wired in JarvisBrain; "risk signal ops"/"ops risk signal"/"rsoe"/"monitored risks"/"risk ops coverage"/"unmonitored risk signal"/"risk ops event"/"risk ops monitoring" voice trigger; jarvis:rsoe-toggle event; 90-s auto-refresh */}
             <RiskSignalOpsEventCoverage />
+            {/* F148 (overnight 2026-08-06): swarm job × intel profile operation coverage — ◈ SJINTEL button (left:67400, bottom:8, zIndex:130); parallel-fetches /entities/SwarmJob + /entities/IntelProfile; keyword-correlates each intel profile against active swarm jobs to surface HUNTING (swarm automation found) vs UNHUNTED (no coverage — operational gap); purple badge on hunting count; stat tiles (profiles/jobs/hunting/unhunted); ALL/HUNTING/UNHUNTED filter tabs + text search; expand profile → matched swarm jobs with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-hunting coverage brief + TTS via jarvis:speak-dossier; isSjintelQuery+buildSjintelScript wired in JarvisBrain; "swarm intel"/"intel hunt"/"sjintel"/"swarm hunter"/"active threat hunt"/"threat hunting coverage"/"which threats are being hunted"/"hunting status" voice trigger; jarvis:sjintel-toggle event; 60-s auto-refresh */}
+            <SwarmIntelProfileCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

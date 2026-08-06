@@ -372,6 +372,7 @@ import { isScswjQuery, buildScswjScript } from "./SceneSwarmJobCoverage";
 import { isTrsscenQuery, buildTrsscenScript } from "./TaskRiskScenarioTripleCoverage";
 import { isGcilQuery, buildGcilScript } from "./GraphCommunityInvestigationLinker";
 import { isRsoeQuery, buildRsoeScript } from "./RiskSignalOpsEventCoverage";
+import { isSjintelQuery, buildSjintelScript } from "./SwarmIntelProfileCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4257,6 +4258,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // "swarm intel" / "intel hunt" / "sjintel" / "threat hunting coverage" / "which threats are being hunted"
+    if (isSjintelQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjintel-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjintelScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
