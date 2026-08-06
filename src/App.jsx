@@ -292,6 +292,7 @@ import InvestmentReportCoverage from '@/components/cinematic/InvestmentReportCov
 import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
 import SceneInvestmentCoverage from '@/components/cinematic/SceneInvestmentCoverage';
 import IntelProfileDatasetCorrelator from '@/components/cinematic/IntelProfileDatasetCorrelator';
+import ContactOpsEventCoverage from '@/components/cinematic/ContactOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -869,6 +870,8 @@ function App() {
             <SceneInvestmentCoverage />
             {/* F138 (overnight 2026-08-06): intel profile × dataset correlator — ◈ IPDS button (left:675600, bottom:8, zIndex:242); parallel-fetches /entities/IntelProfile + /v1/datasets; keyword-correlates each intel profile (name/subject/description/category/nationality) against the dataset catalog to surface DOCUMENTED (dataset backing found) vs BLIND (no data coverage — intelligence gap); amber badge on blind count; stat tiles (intel/datasets/documented/blind); ALL/DOCUMENTED/BLIND filter tabs + text search; expand profile → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-data coverage brief + TTS via jarvis:speak-dossier; isIpdsQuery+buildIpdsScript already wired in JarvisBrain (line 263/3141); "intel profile dataset"/"dataset intel"/"ipds"/"data backed intel"/"intel data coverage"/"which intel has dataset" voice trigger; jarvis:ipds-toggle event; 90-s auto-refresh */}
             <IntelProfileDatasetCorrelator />
+            {/* F139 (overnight 2026-08-06): contact × ops event exposure — ◈ COEC button (left:709280, bottom:8, zIndex:295); parallel-fetches /entities/Contact + /v1/ops/events; keyword-correlates each contact (name/title/email/company/description) against active ops events to surface AT-RISK (ops event domain overlaps contact area) vs CLEAR (no alignment); amber badge on at-risk count; stat tiles (contacts/ops events/at-risk/clear); ALL/AT-RISK/CLEAR filter tabs + text search; expand contact → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-ops exposure brief + TTS via jarvis:speak-dossier; isCoecQuery+buildCoecScript wired in JarvisBrain; "contact ops"/"ops contact"/"coec"/"at-risk contacts"/"contact ops exposure"/"contact ops event"/"contact operational" voice trigger; jarvis:coec-toggle event; 90-s auto-refresh */}
+            <ContactOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

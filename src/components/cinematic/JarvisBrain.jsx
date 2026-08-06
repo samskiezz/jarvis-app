@@ -364,6 +364,7 @@ import { isInvscnmapQuery, buildInvscnmapScript } from "./InvestigationSceneMapp
 import { isScconQuery, buildScconScript } from "./SceneContactCoverage";
 import { isCscenQuery, buildCscenScript } from "./ContactScenarioCoverage";
 import { isTaskDsQuery, buildTaskDsScript } from "./TaskDatasetCoverage";
+import { isCoecQuery, buildCoecScript } from "./ContactOpsEventCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4164,6 +4165,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tkds-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTaskDsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F139: Contact × Ops Event Exposure — voice bridge for the ContactOpsEventCoverage panel.
+    if (isCoecQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:coec-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCoecScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
