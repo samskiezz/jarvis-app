@@ -294,6 +294,7 @@ import SceneInvestmentCoverage from '@/components/cinematic/SceneInvestmentCover
 import IntelProfileDatasetCorrelator from '@/components/cinematic/IntelProfileDatasetCorrelator';
 import ContactOpsEventCoverage from '@/components/cinematic/ContactOpsEventCoverage';
 import ReportSkillCoverage from '@/components/cinematic/ReportSkillCoverage';
+import RiskSignalReportCoverage from '@/components/cinematic/RiskSignalReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -875,6 +876,8 @@ function App() {
             <ContactOpsEventCoverage />
             {/* F140 (overnight 2026-08-06): report × skill domain coverage — ◈ RSKILL button (left:68520, bottom:8, zIndex:132); parallel-fetches /v1/reports + /v1/aip/skill; keyword-correlates each JARVIS skill domain (name/description/tags) against the intelligence report catalog to surface INFORMED (report documentation found for this skill) vs UNINFORMED (no report backing — knowledge-production gap); orange badge on uninformed count; stat tiles (skills/reports/informed/uninformed); ALL/INFORMED/UNINFORMED filter tabs + text search; expand skill → matched reports with topic badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-report knowledge-production coverage brief + TTS via jarvis:speak-dossier; isRskillQuery+buildRskillScript wired in JarvisBrain; "report skill"/"skill report"/"rskill"/"skill coverage reports"/"which skills have reports"/"skill documentation"/"uninformed skills"/"skill knowledge production" voice trigger; jarvis:rskill-toggle event; 90-s auto-refresh */}
             <ReportSkillCoverage />
+            {/* F141 (overnight 2026-08-06): risk signal × report coverage — ◈ RSRPT button (left:761680, bottom:8, zIndex:261); parallel-fetches /entities/RiskSignal + /v1/reports; keyword-correlates each risk signal (name/title/category/sector/description/source/type) against the intelligence report corpus to surface COVERED (report documentation found) vs UNDOCUMENTED (no report backing — intelligence gap); amber badge on undocumented count; stat tiles (risk signals/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + text search; expand signal → matched reports with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-report coverage brief + TTS via jarvis:speak-dossier; isRsrptQuery+buildRsrptScript already wired in JarvisBrain (line 282/3314); "risk report"/"report risk signal"/"rsrpt"/"risk coverage report"/"risk signal reports"/"which risks have reports"/"undocumented risks report"/"risk report gap"/"risk intelligence report" voice trigger; jarvis:rsrpt-toggle event; 90-s auto-refresh */}
+            <RiskSignalReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
