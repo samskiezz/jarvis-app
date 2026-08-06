@@ -365,6 +365,7 @@ import { isScconQuery, buildScconScript } from "./SceneContactCoverage";
 import { isCscenQuery, buildCscenScript } from "./ContactScenarioCoverage";
 import { isTaskDsQuery, buildTaskDsScript } from "./TaskDatasetCoverage";
 import { isCoecQuery, buildCoecScript } from "./ContactOpsEventCoverage";
+import { isRskillQuery, buildRskillScript } from "./ReportSkillCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4175,6 +4176,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:coec-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCoecScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F140: Report × Skill Domain Coverage — voice bridge for the ReportSkillCoverage panel.
+    if (isRskillQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rskill-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRskillScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

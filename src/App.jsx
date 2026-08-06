@@ -293,6 +293,7 @@ import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
 import SceneInvestmentCoverage from '@/components/cinematic/SceneInvestmentCoverage';
 import IntelProfileDatasetCorrelator from '@/components/cinematic/IntelProfileDatasetCorrelator';
 import ContactOpsEventCoverage from '@/components/cinematic/ContactOpsEventCoverage';
+import ReportSkillCoverage from '@/components/cinematic/ReportSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -872,6 +873,8 @@ function App() {
             <IntelProfileDatasetCorrelator />
             {/* F139 (overnight 2026-08-06): contact × ops event exposure — ◈ COEC button (left:709280, bottom:8, zIndex:295); parallel-fetches /entities/Contact + /v1/ops/events; keyword-correlates each contact (name/title/email/company/description) against active ops events to surface AT-RISK (ops event domain overlaps contact area) vs CLEAR (no alignment); amber badge on at-risk count; stat tiles (contacts/ops events/at-risk/clear); ALL/AT-RISK/CLEAR filter tabs + text search; expand contact → matched ops events with severity badge + type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-ops exposure brief + TTS via jarvis:speak-dossier; isCoecQuery+buildCoecScript wired in JarvisBrain; "contact ops"/"ops contact"/"coec"/"at-risk contacts"/"contact ops exposure"/"contact ops event"/"contact operational" voice trigger; jarvis:coec-toggle event; 90-s auto-refresh */}
             <ContactOpsEventCoverage />
+            {/* F140 (overnight 2026-08-06): report × skill domain coverage — ◈ RSKILL button (left:68520, bottom:8, zIndex:132); parallel-fetches /v1/reports + /v1/aip/skill; keyword-correlates each JARVIS skill domain (name/description/tags) against the intelligence report catalog to surface INFORMED (report documentation found for this skill) vs UNINFORMED (no report backing — knowledge-production gap); orange badge on uninformed count; stat tiles (skills/reports/informed/uninformed); ALL/INFORMED/UNINFORMED filter tabs + text search; expand skill → matched reports with topic badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-report knowledge-production coverage brief + TTS via jarvis:speak-dossier; isRskillQuery+buildRskillScript wired in JarvisBrain; "report skill"/"skill report"/"rskill"/"skill coverage reports"/"which skills have reports"/"skill documentation"/"uninformed skills"/"skill knowledge production" voice trigger; jarvis:rskill-toggle event; 90-s auto-refresh */}
+            <ReportSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
