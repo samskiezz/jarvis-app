@@ -289,6 +289,7 @@ import TaskDatasetCoverage from '@/components/cinematic/TaskDatasetCoverage';
 import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef';
 import KnowledgeOpsEventCoverage from '@/components/cinematic/KnowledgeOpsEventCoverage';
 import InvestmentReportCoverage from '@/components/cinematic/InvestmentReportCoverage';
+import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -860,6 +861,8 @@ function App() {
             <KnowledgeOpsEventCoverage />
             {/* F135 (overnight 2026-08-06): investment × report coverage — ◈ INVRPT button (left:757120, bottom:8, zIndex:260); parallel-fetches /entities/Investment + /v1/reports; keyword-correlates each investment (name/sector/notes/tags/ticker) against intelligence reports to surface COVERED (report documentation found) vs UNDOCUMENTED (no report backing — governance gap); amber badge on undocumented count; stat tiles (investments/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + text search; expand investment → matched reports with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment-documentation brief + TTS via jarvis:speak-dossier; isInvRptQuery+buildInvRptScript already wired in JarvisBrain (line 280/3289); "investment report"/"report invest"/"invrpt"/"investment governance report"/"undocumented investment"/"investment report gap" voice trigger; jarvis:invrpt-toggle event; 90-s auto-refresh */}
             <InvestmentReportCoverage />
+            {/* F136 (overnight 2026-08-06): task × skill alignment — ◈ TALIGN button (left:4652, bottom:18, zIndex:72); parallel-fetches /entities/Task + /v1/aip/skill; keyword-correlates active tasks against available JARVIS skills to surface COVERED (skill match found) vs UNCOVERED (no skill — readiness gap); amber badge on uncovered count; coverage ratio bar; top-utilised skills chips; stat tiles (total/active/covered/uncovered); ALL/COVERED/UNCOVERED tabs + text search; expand task → matched skill badges; ▶ ASSESS → /v1/jarvis/agent/chat 3-sentence British-butler team readiness brief + TTS via jarvis:speak-dossier; isTaskAlignQuery+buildTaskAlignScript already wired in JarvisBrain (line 61/1017); "task skill"/"skill coverage"/"mission align"/"team readiness"/"task align"/"taskalign" voice trigger; jarvis:taskalign-toggle event; 60-s auto-refresh */}
+            <TaskSkillAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
