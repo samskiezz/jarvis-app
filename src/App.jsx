@@ -303,6 +303,7 @@ import RiskSignalOpsEventCoverage from '@/components/cinematic/RiskSignalOpsEven
 import SwarmIntelProfileCoverage from '@/components/cinematic/SwarmIntelProfileCoverage';
 import InvestigationReportCoverage from '@/components/cinematic/InvestigationReportCoverage';
 import GraphCommunityKnowledgeCoverage from '@/components/cinematic/GraphCommunityKnowledgeCoverage';
+import KnowledgeTaskCoverage from '@/components/cinematic/KnowledgeTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -902,6 +903,8 @@ function App() {
             <InvestigationReportCoverage />
             {/* F150 (overnight 2026-08-06): graph community × knowledge coverage — ◈ GCKNOW button (left:712640, bottom:8, zIndex:301); parallel-fetches /v1/graph/communities + /knowledge/; keyword-correlates each network cluster (label/members/summary) against KB articles to surface BACKED (article coverage found) vs DARK (no knowledge-base documentation — intelligence gap); amber badge on dark count; stat tiles (communities/KB articles/backed/dark); ALL/BACKED/DARK filter tabs + text search; expand cluster → matched KB articles with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-knowledge coverage brief + TTS via jarvis:speak-dossier; isGcknowQuery+buildGcknowScript wired in JarvisBrain; "community knowledge"/"knowledge community"/"gcknow"/"backed community"/"dark community"/"community kb coverage"/"community knowledge gap"/"community knowledge coverage" voice trigger; jarvis:gcknow-toggle event; 90-s auto-refresh */}
             <GraphCommunityKnowledgeCoverage />
+            {/* F151 (overnight 2026-08-06): knowledge × task coverage — ◈ KBTASK button (left:713200, bottom:8, zIndex:302); parallel-fetches /knowledge/ + /entities/Task; keyword-correlates each KB article (title/category/summary/tags/content) against active tasks (title/description/priority/tags) to surface TASKED (active task engages this knowledge domain) vs ARCHIVAL (no task coverage — knowledge not operationally activated); purple badge on tasked count; stat tiles (KB articles/tasks/tasked/archival); ALL/TASKED/ARCHIVAL filter tabs + text search; expand article → matched tasks with priority badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-task activation brief + TTS via jarvis:speak-dossier; isKbtaskQuery+buildKbtaskScript wired in JarvisBrain; "knowledge task"/"task knowledge"/"kbtask"/"tasked knowledge"/"active knowledge"/"archival knowledge"/"operational knowledge"/"knowledge task coverage"/"which knowledge has tasks"/"knowledge domain task" voice trigger; jarvis:kbtask-toggle event; 90-s auto-refresh */}
+            <KnowledgeTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -374,6 +374,7 @@ import { isGcilQuery, buildGcilScript } from "./GraphCommunityInvestigationLinke
 import { isRsoeQuery, buildRsoeScript } from "./RiskSignalOpsEventCoverage";
 import { isSjintelQuery, buildSjintelScript } from "./SwarmIntelProfileCoverage";
 import { isGcknowQuery, buildGcknowScript } from "./GraphCommunityKnowledgeCoverage";
+import { isKbtaskQuery, buildKbtaskScript } from "./KnowledgeTaskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4278,6 +4279,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcknow-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcknowScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isKbtaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kbtask-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKbtaskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
