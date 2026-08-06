@@ -368,6 +368,7 @@ import { isCoecQuery, buildCoecScript } from "./ContactOpsEventCoverage";
 import { isRskillQuery, buildRskillScript } from "./ReportSkillCoverage";
 import { isCtskQuery, buildCtskScript } from "./ContactTaskCoverage";
 import { isInvkbQuery, buildInvkbScript } from "./InvestmentKnowledgeCoverage";
+import { isScswjQuery, buildScswjScript } from "./SceneSwarmJobCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4207,6 +4208,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invkb-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvkbScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F144: Scene × SwarmJob Coverage — voice bridge for the SceneSwarmJobCoverage panel.
+    // "scene swarm" / "swarm scene" / "scswj" / "automated scene" /
+    // "scene swarm job" / "scene automation coverage" / "which scenes have swarm"
+    if (isScswjQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scswj-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScswjScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

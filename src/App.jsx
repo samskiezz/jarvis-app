@@ -297,6 +297,7 @@ import ReportSkillCoverage from '@/components/cinematic/ReportSkillCoverage';
 import RiskSignalReportCoverage from '@/components/cinematic/RiskSignalReportCoverage';
 import ContactTaskCoverage from '@/components/cinematic/ContactTaskCoverage';
 import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowledgeCoverage';
+import SceneSwarmJobCoverage from '@/components/cinematic/SceneSwarmJobCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -884,6 +885,8 @@ function App() {
             <ContactTaskCoverage />
             {/* F143 (overnight 2026-08-06): investment × knowledge coverage — ◈ INVKB button (left:710400, bottom:8, zIndex:297); parallel-fetches /entities/Investment + /knowledge/; keyword-correlates each investment (name/sector/notes/tags/ticker) against KB articles to surface INFORMED (KB article backing found) vs BLIND (no knowledge coverage — investment intelligence gap); amber badge on blind count; stat tiles (investments/KB articles/informed/blind); ALL/INFORMED/BLIND filter tabs + text search; expand investment → matched KB articles with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment-knowledge coverage brief + TTS via jarvis:speak-dossier; isInvkbQuery+buildInvkbScript wired in JarvisBrain; "investment knowledge"/"knowledge invest"/"invkb"/"investment kb"/"knowledge backed invest"/"invest knowledge gap"/"which investments have knowledge" voice trigger; jarvis:invkb-toggle event; 90-s auto-refresh */}
             <InvestmentKnowledgeCoverage />
+            {/* F144 (overnight 2026-08-06): scene × swarmjob coverage — ◈ SCSWJ button (left:710960, bottom:8, zIndex:298); parallel-fetches all 10 /v1/cinematic/scene/{id} + /entities/SwarmJob; keyword-correlates each scene's anchor texts against active swarm jobs to surface AUTOMATED (swarm backing found) vs UNMONITORED (no swarm automation — operational gap); lime badge on automated count; stat tiles (scenes/swarm jobs/automated/unmonitored); ALL/AUTOMATED/UNMONITORED filter tabs + text search; expand scene → matched swarm jobs with type badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-automation brief + TTS; isScswjQuery+buildScswjScript wired in JarvisBrain; "scene swarm"/"swarm scene"/"scswj"/"automated scene"/"scene swarm job"/"scene automation coverage" voice trigger; jarvis:scswj-toggle event; 120-s auto-refresh */}
+            <SceneSwarmJobCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
