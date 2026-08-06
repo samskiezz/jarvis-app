@@ -288,6 +288,7 @@ import IntelProfileInvestigationCorrelator from '@/components/cinematic/IntelPro
 import TaskDatasetCoverage from '@/components/cinematic/TaskDatasetCoverage';
 import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef';
 import KnowledgeOpsEventCoverage from '@/components/cinematic/KnowledgeOpsEventCoverage';
+import InvestmentReportCoverage from '@/components/cinematic/InvestmentReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -857,6 +858,8 @@ function App() {
             <DatasetReportCrossRef />
             {/* F134 (overnight 2026-08-06): knowledge × ops event coverage — ◈ KBOPS button (left:708160, bottom:8, zIndex:293); parallel-fetches /knowledge/ + /v1/ops/events; keyword-correlates each ops event (name/type/description/category/tags) against KB articles to surface INFORMED (KB article found) vs BLIND (no KB backing — knowledge gap); amber badge on blind count; stat tiles (ops events/KB articles/informed/blind); ALL/INFORMED/BLIND filter tabs + search; expand event → matched articles with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-knowledge brief + TTS via jarvis:speak-dossier; isKbopsQuery+buildKbopsScript wired in JarvisBrain; "ops knowledge"/"knowledge ops"/"kbops"/"informed ops"/"blind ops"/"ops knowledge gap" voice trigger; jarvis:kbops-toggle event; 90-s auto-refresh */}
             <KnowledgeOpsEventCoverage />
+            {/* F135 (overnight 2026-08-06): investment × report coverage — ◈ INVRPT button (left:757120, bottom:8, zIndex:260); parallel-fetches /entities/Investment + /v1/reports; keyword-correlates each investment (name/sector/notes/tags/ticker) against intelligence reports to surface COVERED (report documentation found) vs UNDOCUMENTED (no report backing — governance gap); amber badge on undocumented count; stat tiles (investments/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + text search; expand investment → matched reports with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment-documentation brief + TTS via jarvis:speak-dossier; isInvRptQuery+buildInvRptScript already wired in JarvisBrain (line 280/3289); "investment report"/"report invest"/"invrpt"/"investment governance report"/"undocumented investment"/"investment report gap" voice trigger; jarvis:invrpt-toggle event; 90-s auto-refresh */}
+            <InvestmentReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
