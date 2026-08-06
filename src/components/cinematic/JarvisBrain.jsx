@@ -370,6 +370,7 @@ import { isCtskQuery, buildCtskScript } from "./ContactTaskCoverage";
 import { isInvkbQuery, buildInvkbScript } from "./InvestmentKnowledgeCoverage";
 import { isScswjQuery, buildScswjScript } from "./SceneSwarmJobCoverage";
 import { isTrsscenQuery, buildTrsscenScript } from "./TaskRiskScenarioTripleCoverage";
+import { isGcilQuery, buildGcilScript } from "./GraphCommunityInvestigationLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4233,6 +4234,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:trsscen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTrsscenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F146: Graph Community × Investigation Coverage — voice bridge for the GraphCommunityInvestigationLinker panel.
+    // "graph community investigation" / "cluster investigation" / "which clusters have cases" /
+    // "blind clusters" / "gcil"
+    if (isGcilQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcil-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcilScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
