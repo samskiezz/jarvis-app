@@ -301,6 +301,7 @@ import SceneSwarmJobCoverage from '@/components/cinematic/SceneSwarmJobCoverage'
 import TaskRiskScenarioTripleCoverage from '@/components/cinematic/TaskRiskScenarioTripleCoverage';
 import RiskSignalOpsEventCoverage from '@/components/cinematic/RiskSignalOpsEventCoverage';
 import SwarmIntelProfileCoverage from '@/components/cinematic/SwarmIntelProfileCoverage';
+import InvestigationReportCoverage from '@/components/cinematic/InvestigationReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -896,6 +897,8 @@ function App() {
             <RiskSignalOpsEventCoverage />
             {/* F148 (overnight 2026-08-06): swarm job × intel profile operation coverage — ◈ SJINTEL button (left:67400, bottom:8, zIndex:130); parallel-fetches /entities/SwarmJob + /entities/IntelProfile; keyword-correlates each intel profile against active swarm jobs to surface HUNTING (swarm automation found) vs UNHUNTED (no coverage — operational gap); purple badge on hunting count; stat tiles (profiles/jobs/hunting/unhunted); ALL/HUNTING/UNHUNTED filter tabs + text search; expand profile → matched swarm jobs with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-hunting coverage brief + TTS via jarvis:speak-dossier; isSjintelQuery+buildSjintelScript wired in JarvisBrain; "swarm intel"/"intel hunt"/"sjintel"/"swarm hunter"/"active threat hunt"/"threat hunting coverage"/"which threats are being hunted"/"hunting status" voice trigger; jarvis:sjintel-toggle event; 60-s auto-refresh */}
             <SwarmIntelProfileCoverage />
+            {/* F149 (overnight 2026-08-06): investigation × report coverage — ◈ IRPC button (left:802720, bottom:8, zIndex:270); parallel-fetches /v1/investigations + /v1/reports; keyword-correlates each open investigation case (title/name/description/subject/kind/status) against the intelligence report corpus to surface COVERED (report documentation found) vs UNDOCUMENTED (no report backing — intelligence gap); amber badge on undocumented count; stat tiles (investigations/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + text search; expand investigation → matched reports with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-documentation coverage brief + TTS; isIrpcQuery+buildIrpcScript already wired in JarvisBrain (line 296/3447); "investigation report"/"report investigation"/"irpc"/"cases with reports"/"covered investigations"/"undocumented cases"/"investigation report coverage"/"which investigations have reports"/"case documentation coverage" voice trigger; jarvis:irpc-toggle event; 90-s auto-refresh */}
+            <InvestigationReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
