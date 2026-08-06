@@ -304,6 +304,7 @@ import SwarmIntelProfileCoverage from '@/components/cinematic/SwarmIntelProfileC
 import InvestigationReportCoverage from '@/components/cinematic/InvestigationReportCoverage';
 import GraphCommunityKnowledgeCoverage from '@/components/cinematic/GraphCommunityKnowledgeCoverage';
 import KnowledgeTaskCoverage from '@/components/cinematic/KnowledgeTaskCoverage';
+import InvestmentSwarmJobCoverage from '@/components/cinematic/InvestmentSwarmJobCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -905,6 +906,8 @@ function App() {
             <GraphCommunityKnowledgeCoverage />
             {/* F151 (overnight 2026-08-06): knowledge × task coverage — ◈ KBTASK button (left:713200, bottom:8, zIndex:302); parallel-fetches /knowledge/ + /entities/Task; keyword-correlates each KB article (title/category/summary/tags/content) against active tasks (title/description/priority/tags) to surface TASKED (active task engages this knowledge domain) vs ARCHIVAL (no task coverage — knowledge not operationally activated); purple badge on tasked count; stat tiles (KB articles/tasks/tasked/archival); ALL/TASKED/ARCHIVAL filter tabs + text search; expand article → matched tasks with priority badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-task activation brief + TTS via jarvis:speak-dossier; isKbtaskQuery+buildKbtaskScript wired in JarvisBrain; "knowledge task"/"task knowledge"/"kbtask"/"tasked knowledge"/"active knowledge"/"archival knowledge"/"operational knowledge"/"knowledge task coverage"/"which knowledge has tasks"/"knowledge domain task" voice trigger; jarvis:kbtask-toggle event; 90-s auto-refresh */}
             <KnowledgeTaskCoverage />
+            {/* F152 (overnight 2026-08-06): investment × swarm job coverage — ◈ INVSWJ button (left:713760, bottom:8, zIndex:303); parallel-fetches /entities/Investment + /entities/SwarmJob; keyword-correlates each investment (name/sector/notes/tags/ticker) against active swarm jobs to surface MONITORED (swarm automation found) vs UNMONITORED (no coverage — portfolio surveillance gap); amber badge on unmonitored count; stat tiles (investments/swarm jobs/monitored/unmonitored); ALL/MONITORED/UNMONITORED filter tabs + text search; expand investment → matched swarm jobs with kind badge + status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-automation coverage brief + TTS via jarvis:speak-dossier; isInvSwjQuery+buildInvSwjScript wired in JarvisBrain; "investment swarm"/"swarm investment"/"invswj"/"portfolio swarm"/"swarm portfolio"/"investment automation"/"portfolio automation"/"swarm coverage invest"/"which investments have swarm" voice trigger; jarvis:invswj-toggle event; 90-s auto-refresh */}
+            <InvestmentSwarmJobCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
