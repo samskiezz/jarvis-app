@@ -306,6 +306,7 @@ import GraphCommunityKnowledgeCoverage from '@/components/cinematic/GraphCommuni
 import KnowledgeTaskCoverage from '@/components/cinematic/KnowledgeTaskCoverage';
 import InvestmentSwarmJobCoverage from '@/components/cinematic/InvestmentSwarmJobCoverage';
 import ReportInvestigationGap from '@/components/cinematic/ReportInvestigationGap';
+import ScenarioSkillSwarmCoverage from '@/components/cinematic/ScenarioSkillSwarmCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -911,6 +912,8 @@ function App() {
             <InvestmentSwarmJobCoverage />
             {/* F153 (overnight 2026-08-06): report × investigation gap analyzer — ◈ RPINVG button (left:8604, bottom:8, zIndex:66); parallel-fetches /v1/reports + /v1/investigations; keyword-correlates each open case against the report catalog to surface BACKED (research documentation found) vs DARK (no report coverage — intelligence gap); stat tiles (cases/reports/backed/dark); ALL/BACKED/DARK filter tabs; expand investigation → matched reports with relevance score + date; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence research-coverage brief + TTS via jarvis:speak-dossier; "report investigation gap"/"research coverage"/"case reports"/"rpinvg" voice trigger; jarvis:rpinvg-toggle event; 90-s auto-refresh */}
             <ReportInvestigationGap />
+            {/* F154 (overnight 2026-08-06): scenario × skill × swarm job triple coverage — ◈ SKSCEN3 button (left:714320, bottom:8, zIndex:304); parallel-fetches /v1/scenario/list + /v1/aip/skill + /entities/SwarmJob; keyword-correlates each scenario (name/description/tags) against skills and swarm jobs to surface FULLY ARMED (both skill + swarm coverage) vs SKILLED ONLY (skill found, no swarm) vs AUTOMATED ONLY (swarm found, no skill) vs UNARMED (no coverage); red badge on unarmed count; stat tiles (scenarios/skills/swarm jobs/fully armed/unarmed); coverage breakdown bar; ALL/FULLY ARMED/SKILLED ONLY/AUTOMATED ONLY/UNARMED filter tabs + text search; expand scenario → split pane left=matched skills (lime scorebars) right=matched swarm jobs (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence arsenal readiness brief + TTS via jarvis:speak-dossier; isSkscen3Query+buildSkscen3Script wired in JarvisBrain; "scenario skill swarm"/"skscen3"/"triple armed"/"armed scenario"/"scenario arsenal"/"fully armed"/"swarm skill scenario" voice trigger; jarvis:skscen3-toggle event; 90-s auto-refresh */}
+            <ScenarioSkillSwarmCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
