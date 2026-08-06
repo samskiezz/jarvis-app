@@ -76,6 +76,7 @@ import { isInvScenPlanQuery, buildInvScenPlanScript } from "./InvestmentScenario
 import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
 import { isRiskRepQuery, buildRiskRepScript } from "./RiskReportMapper";
 import { isDatasetReportQuery, buildDatasetReportScript } from "./DatasetReportCrossRef";
+import { isKbopsQuery, buildKbopsScript } from "./KnowledgeOpsEventCoverage";
 import { isSceneHealthQuery, buildSceneHealthScript } from "./SceneHealthHeatmap";
 import { isSceneCompareQuery, buildSceneCompareScript } from "./SceneCompareView";
 import { isSceneDataDiffQuery, buildSceneDataDiffScript } from "./SceneDataDiff";
@@ -1239,6 +1240,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dsrep-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDatasetReportScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F134: knowledge × ops event coverage — "ops knowledge / knowledge ops / kbops /
+    // informed ops / blind ops / ops knowledge gap"
+    // Opens KnowledgeOpsEventCoverage panel (jarvis:kbops-toggle) and speaks a 2-sentence
+    // ops-knowledge coverage brief from /knowledge/ + /v1/ops/events.
+    if (isKbopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kbops-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKbopsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

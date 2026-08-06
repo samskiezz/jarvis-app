@@ -287,6 +287,7 @@ import TaskInvestigationCorrelator from '@/components/cinematic/TaskInvestigatio
 import IntelProfileInvestigationCorrelator from '@/components/cinematic/IntelProfileInvestigationCorrelator';
 import TaskDatasetCoverage from '@/components/cinematic/TaskDatasetCoverage';
 import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef';
+import KnowledgeOpsEventCoverage from '@/components/cinematic/KnowledgeOpsEventCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -854,6 +855,8 @@ function App() {
             <TaskDatasetCoverage />
             {/* F133 (overnight 2026-08-06): dataset × report cross-reference — ◈ DSREP button; parallel-fetches /v1/datasets + /v1/reports; keyword-correlates each dataset (name/description) against report titles to surface MATCHED (report documentation found) vs ORPHANED (no report links — data lineage gap); amber badge on orphaned count; stat tiles (datasets/reports/matched/orphaned); ALL/MATCHED/ORPHANED filter tabs + text search; expand dataset → matched reports with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-lineage brief + TTS via jarvis:speak-dossier; isDatasetReportQuery+buildDatasetReportScript wired in JarvisBrain (line 78/1238); "dataset report"/"data report"/"data lineage"/"report dataset"/"report coverage"/"dsrep" voice trigger; jarvis:dsrep-toggle event; 5-min auto-refresh */}
             <DatasetReportCrossRef />
+            {/* F134 (overnight 2026-08-06): knowledge × ops event coverage — ◈ KBOPS button (left:708160, bottom:8, zIndex:293); parallel-fetches /knowledge/ + /v1/ops/events; keyword-correlates each ops event (name/type/description/category/tags) against KB articles to surface INFORMED (KB article found) vs BLIND (no KB backing — knowledge gap); amber badge on blind count; stat tiles (ops events/KB articles/informed/blind); ALL/INFORMED/BLIND filter tabs + search; expand event → matched articles with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-knowledge brief + TTS via jarvis:speak-dossier; isKbopsQuery+buildKbopsScript wired in JarvisBrain; "ops knowledge"/"knowledge ops"/"kbops"/"informed ops"/"blind ops"/"ops knowledge gap" voice trigger; jarvis:kbops-toggle event; 90-s auto-refresh */}
+            <KnowledgeOpsEventCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
