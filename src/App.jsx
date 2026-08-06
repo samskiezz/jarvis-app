@@ -291,6 +291,7 @@ import KnowledgeOpsEventCoverage from '@/components/cinematic/KnowledgeOpsEventC
 import InvestmentReportCoverage from '@/components/cinematic/InvestmentReportCoverage';
 import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
 import SceneInvestmentCoverage from '@/components/cinematic/SceneInvestmentCoverage';
+import IntelProfileDatasetCorrelator from '@/components/cinematic/IntelProfileDatasetCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -866,6 +867,8 @@ function App() {
             <TaskSkillAlignment />
             {/* F137 (overnight 2026-08-06): scene × investment coverage — ◈ SCINV button (left:708720, bottom:8, zIndex:294); parallel-fetches all 10 /v1/cinematic/scene/{id} + /entities/Investment; keyword-correlates each scene's anchor texts against investment positions (name/sector/notes/tags/ticker) to surface POSITIONED (investment overlap found) vs UNPOSITIONED (no portfolio alignment — portfolio-scene blind spot); teal badge on positioned count; stat tiles (scenes/investments/positioned/unpositioned); ALL/POSITIONED/UNPOSITIONED tabs + text search; expand scene → matched investments with sector badge + ticker chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-portfolio brief + TTS; isScInvQuery+buildScInvScript wired in JarvisBrain; "scene invest"/"invest scene"/"scinv"/"scene portfolio"/"portfolio scene"/"which scenes have investments" voice trigger; jarvis:scinv-toggle event; 120-s auto-refresh */}
             <SceneInvestmentCoverage />
+            {/* F138 (overnight 2026-08-06): intel profile × dataset correlator — ◈ IPDS button (left:675600, bottom:8, zIndex:242); parallel-fetches /entities/IntelProfile + /v1/datasets; keyword-correlates each intel profile (name/subject/description/category/nationality) against the dataset catalog to surface DOCUMENTED (dataset backing found) vs BLIND (no data coverage — intelligence gap); amber badge on blind count; stat tiles (intel/datasets/documented/blind); ALL/DOCUMENTED/BLIND filter tabs + text search; expand profile → matched datasets with kind badge + row count + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-data coverage brief + TTS via jarvis:speak-dossier; isIpdsQuery+buildIpdsScript already wired in JarvisBrain (line 263/3141); "intel profile dataset"/"dataset intel"/"ipds"/"data backed intel"/"intel data coverage"/"which intel has dataset" voice trigger; jarvis:ipds-toggle event; 90-s auto-refresh */}
+            <IntelProfileDatasetCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
