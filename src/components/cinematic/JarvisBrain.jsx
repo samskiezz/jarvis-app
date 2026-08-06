@@ -77,6 +77,7 @@ import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTrac
 import { isRiskRepQuery, buildRiskRepScript } from "./RiskReportMapper";
 import { isDatasetReportQuery, buildDatasetReportScript } from "./DatasetReportCrossRef";
 import { isKbopsQuery, buildKbopsScript } from "./KnowledgeOpsEventCoverage";
+import { isScInvQuery, buildScInvScript } from "./SceneInvestmentCoverage";
 import { isSceneHealthQuery, buildSceneHealthScript } from "./SceneHealthHeatmap";
 import { isSceneCompareQuery, buildSceneCompareScript } from "./SceneCompareView";
 import { isSceneDataDiffQuery, buildSceneDataDiffScript } from "./SceneDataDiff";
@@ -1253,6 +1254,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kbops-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKbopsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F137: scene × investment coverage — "scene invest / invest scene / scinv /
+    // scene portfolio / portfolio scene / which scenes have investments"
+    // Opens SceneInvestmentCoverage panel (jarvis:scinv-toggle) and speaks a 2-sentence
+    // scene-portfolio coverage brief from /v1/cinematic/scene/{id} + /entities/Investment.
+    if (isScInvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scinv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScInvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

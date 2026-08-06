@@ -290,6 +290,7 @@ import DatasetReportCrossRef from '@/components/cinematic/DatasetReportCrossRef'
 import KnowledgeOpsEventCoverage from '@/components/cinematic/KnowledgeOpsEventCoverage';
 import InvestmentReportCoverage from '@/components/cinematic/InvestmentReportCoverage';
 import TaskSkillAlignment from '@/components/cinematic/TaskSkillAlignment';
+import SceneInvestmentCoverage from '@/components/cinematic/SceneInvestmentCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -863,6 +864,8 @@ function App() {
             <InvestmentReportCoverage />
             {/* F136 (overnight 2026-08-06): task × skill alignment — ◈ TALIGN button (left:4652, bottom:18, zIndex:72); parallel-fetches /entities/Task + /v1/aip/skill; keyword-correlates active tasks against available JARVIS skills to surface COVERED (skill match found) vs UNCOVERED (no skill — readiness gap); amber badge on uncovered count; coverage ratio bar; top-utilised skills chips; stat tiles (total/active/covered/uncovered); ALL/COVERED/UNCOVERED tabs + text search; expand task → matched skill badges; ▶ ASSESS → /v1/jarvis/agent/chat 3-sentence British-butler team readiness brief + TTS via jarvis:speak-dossier; isTaskAlignQuery+buildTaskAlignScript already wired in JarvisBrain (line 61/1017); "task skill"/"skill coverage"/"mission align"/"team readiness"/"task align"/"taskalign" voice trigger; jarvis:taskalign-toggle event; 60-s auto-refresh */}
             <TaskSkillAlignment />
+            {/* F137 (overnight 2026-08-06): scene × investment coverage — ◈ SCINV button (left:708720, bottom:8, zIndex:294); parallel-fetches all 10 /v1/cinematic/scene/{id} + /entities/Investment; keyword-correlates each scene's anchor texts against investment positions (name/sector/notes/tags/ticker) to surface POSITIONED (investment overlap found) vs UNPOSITIONED (no portfolio alignment — portfolio-scene blind spot); teal badge on positioned count; stat tiles (scenes/investments/positioned/unpositioned); ALL/POSITIONED/UNPOSITIONED tabs + text search; expand scene → matched investments with sector badge + ticker chip + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene-portfolio brief + TTS; isScInvQuery+buildScInvScript wired in JarvisBrain; "scene invest"/"invest scene"/"scinv"/"scene portfolio"/"portfolio scene"/"which scenes have investments" voice trigger; jarvis:scinv-toggle event; 120-s auto-refresh */}
+            <SceneInvestmentCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
