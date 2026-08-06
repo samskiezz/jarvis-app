@@ -302,6 +302,7 @@ import TaskRiskScenarioTripleCoverage from '@/components/cinematic/TaskRiskScena
 import RiskSignalOpsEventCoverage from '@/components/cinematic/RiskSignalOpsEventCoverage';
 import SwarmIntelProfileCoverage from '@/components/cinematic/SwarmIntelProfileCoverage';
 import InvestigationReportCoverage from '@/components/cinematic/InvestigationReportCoverage';
+import GraphCommunityKnowledgeCoverage from '@/components/cinematic/GraphCommunityKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -899,6 +900,8 @@ function App() {
             <SwarmIntelProfileCoverage />
             {/* F149 (overnight 2026-08-06): investigation × report coverage — ◈ IRPC button (left:802720, bottom:8, zIndex:270); parallel-fetches /v1/investigations + /v1/reports; keyword-correlates each open investigation case (title/name/description/subject/kind/status) against the intelligence report corpus to surface COVERED (report documentation found) vs UNDOCUMENTED (no report backing — intelligence gap); amber badge on undocumented count; stat tiles (investigations/reports/covered/undocumented); ALL/COVERED/UNDOCUMENTED filter tabs + text search; expand investigation → matched reports with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-documentation coverage brief + TTS; isIrpcQuery+buildIrpcScript already wired in JarvisBrain (line 296/3447); "investigation report"/"report investigation"/"irpc"/"cases with reports"/"covered investigations"/"undocumented cases"/"investigation report coverage"/"which investigations have reports"/"case documentation coverage" voice trigger; jarvis:irpc-toggle event; 90-s auto-refresh */}
             <InvestigationReportCoverage />
+            {/* F150 (overnight 2026-08-06): graph community × knowledge coverage — ◈ GCKNOW button (left:712640, bottom:8, zIndex:301); parallel-fetches /v1/graph/communities + /knowledge/; keyword-correlates each network cluster (label/members/summary) against KB articles to surface BACKED (article coverage found) vs DARK (no knowledge-base documentation — intelligence gap); amber badge on dark count; stat tiles (communities/KB articles/backed/dark); ALL/BACKED/DARK filter tabs + text search; expand cluster → matched KB articles with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community-knowledge coverage brief + TTS via jarvis:speak-dossier; isGcknowQuery+buildGcknowScript wired in JarvisBrain; "community knowledge"/"knowledge community"/"gcknow"/"backed community"/"dark community"/"community kb coverage"/"community knowledge gap"/"community knowledge coverage" voice trigger; jarvis:gcknow-toggle event; 90-s auto-refresh */}
+            <GraphCommunityKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
