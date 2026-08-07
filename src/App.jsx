@@ -328,6 +328,7 @@ import ContactTaskOpsTriple from '@/components/cinematic/ContactTaskOpsTriple';
 import OpsEventContactRiskTriple from '@/components/cinematic/OpsEventContactRiskTriple';
 import InvestigationIntelDatasetTriple from '@/components/cinematic/InvestigationIntelDatasetTriple';
 import DatasetContactBridge from '@/components/cinematic/DatasetContactBridge';
+import GraphCommunityContactInvestTriple from '@/components/cinematic/GraphCommunityContactInvestTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -979,6 +980,8 @@ function App() {
             <InvestigationIntelDatasetTriple />
             {/* F176 (overnight 2026-08-07): dataset × contact intelligence bridge — ◈ DSCONT button (left:725520, bottom:8, zIndex:324); parallel-fetches /v1/datasets + /entities/Contact; keyword-correlates each dataset (name/description/tags/owner) against contact records to surface REFERENCED (contact-backed) vs UNREFERENCED (no contact alignment — data ownership gap); teal badge on referenced count; stat tiles (datasets/contacts/referenced/unreferenced); ALL/REFERENCED/UNREFERENCED filter tabs + text search; expand dataset → matched contacts with role badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-ownership brief + TTS; isDscontQuery+buildDscontScript wired in JarvisBrain; "dataset contact"/"dscont"/"contact dataset"/"data owner"/"which contacts are in datasets"/"dataset ownership" voice trigger; jarvis:dscont-toggle event; 90-s auto-refresh */}
             <DatasetContactBridge />
+            {/* F177 (overnight 2026-08-07): graph community × contact × investigation triple coverage — ◈ GCCITP button (left:726080, bottom:8, zIndex:325); parallel-fetches /v1/graph/communities + /entities/Contact + /v1/investigations; three-way keyword-correlates each network cluster against contacts AND open investigations to surface FULLY PROFILED (contact-aligned + investigation-backed) vs CONTACT-ONLY (people found, no case) vs INVESTIGATED (investigation found, no contact alignment) vs DARK (no human or case coverage); red badge on dark count; stat tiles (clusters/contacts/investigations/fully profiled/dark); ALL/FULLY PROFILED/CONTACT-ONLY/INVESTIGATED/DARK filter tabs + search; expand cluster → split pane left=contacts (cyan) right=investigations (amber); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community human-intelligence brief + TTS via jarvis:speak-dossier; isGccitpQuery+buildGccitpScript wired in JarvisBrain; "gccitp"/"community contact invest"/"dark community"/"profiled community"/"community people cases"/"community human intel"/"which communities have contacts and cases"/"community case contact" voice trigger; jarvis:gccitp-toggle event; 90-s auto-refresh */}
+            <GraphCommunityContactInvestTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
