@@ -395,6 +395,7 @@ import { isRtswtriQuery, buildRtswtriScript } from "./ReportTaskSwarmTriple";
 import { isGcipswjQuery, buildGcipswjScript } from "./GraphCommunityIntelSwarmTriple";
 import { isKirstriQuery, buildKirstriScript } from "./KnowledgeInvestmentRiskTriple";
 import { isCtoptQuery, buildCtoptScript } from "./ContactTaskOpsTriple";
+import { isOcrstriQuery, buildOcrstriScript } from "./OpsEventContactRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4497,6 +4498,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctopt-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCtoptScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isOcrstriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ocrstri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOcrstriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

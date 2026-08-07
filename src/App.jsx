@@ -325,6 +325,7 @@ import ReportTaskSwarmTriple from '@/components/cinematic/ReportTaskSwarmTriple'
 import GraphCommunityIntelSwarmTriple from '@/components/cinematic/GraphCommunityIntelSwarmTriple';
 import KnowledgeInvestmentRiskTriple from '@/components/cinematic/KnowledgeInvestmentRiskTriple';
 import ContactTaskOpsTriple from '@/components/cinematic/ContactTaskOpsTriple';
+import OpsEventContactRiskTriple from '@/components/cinematic/OpsEventContactRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -970,6 +971,8 @@ function App() {
             <KnowledgeInvestmentRiskTriple />
             {/* F173 (overnight 2026-08-07): contact × task × ops event triple coverage — ◈ CTOPT button (left:723840, bottom:8, zIndex:321); parallel-fetches /entities/Contact + /entities/Task + /v1/ops/events; three-way keyword-correlates each contact against tasks AND ops events to surface FULLY ACTIVE (both task + ops event alignment — operationally engaged) vs TASKED (task found, no ops event) vs OPS-TRIGGERED (ops event, no task) vs IDLE (no alignment); red badge on FULLY ACTIVE count; "ctopt"/"contact task ops"/"operationally engaged contacts" voice trigger; jarvis:ctopt-toggle event; 90-s auto-refresh */}
             <ContactTaskOpsTriple />
+            {/* F174 (overnight 2026-08-07): ops event × contact × risk signal triple coverage — ◈ OCRSTRI button (left:724400, bottom:8, zIndex:322); parallel-fetches /v1/ops/events + /entities/Contact + /entities/RiskSignal; three-way keyword-correlates each ops event against contacts AND risk signals to surface FULLY EXPOSED (contact alignment + risk signal — people and threats identified) vs CONTACT-LINKED (contact affected, no risk signal) vs RISK-FLAGGED (risk signal present, no contact alignment) vs ISOLATED (no contact or risk signal — no human or threat context); red badge on FULLY EXPOSED count; stat tiles (ops events/fully exposed/contact-linked/risk-flagged/isolated); coverage breakdown bar; ALL/FULLY EXPOSED/CONTACT-LINKED/RISK-FLAGGED/ISOLATED filter tabs + text search; expand event → split pane left=matched contacts (cyan scorebars) right=matched risk signals (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-event exposure brief + TTS via jarvis:speak-dossier; isOcrstriQuery+buildOcrstriScript wired in JarvisBrain; "ops event contact risk"/"ocrstri"/"contact ops risk"/"ops contact risk signal"/"ops risk contact"/"fully exposed ops"/"ops exposure triple"/"ops contact signal" voice trigger; jarvis:ocrstri-toggle event; 90-s auto-refresh */}
+            <OpsEventContactRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
