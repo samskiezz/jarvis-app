@@ -321,6 +321,7 @@ import ContactSwarmInvestTriple from '@/components/cinematic/ContactSwarmInvestT
 import InvestmentScenarioRiskTriple from '@/components/cinematic/InvestmentScenarioRiskTriple';
 import SwarmJobContactScenarioTriple from '@/components/cinematic/SwarmJobContactScenarioTriple';
 import GraphNodeRiskSwarmTriple from '@/components/cinematic/GraphNodeRiskSwarmTriple';
+import ReportTaskSwarmTriple from '@/components/cinematic/ReportTaskSwarmTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -958,6 +959,8 @@ function App() {
             <SwarmJobContactScenarioTriple />
             {/* F169 (overnight 2026-08-07): graph node × risk signal × swarm job triple coverage — ◈ GNRSTP button (left:721600, bottom:8, zIndex:317); parallel-fetches /v1/graph/centrality + /entities/RiskSignal + /entities/SwarmJob; three-way keyword-correlates each top-influence graph node against active risk signals AND active swarm jobs to surface FULLY DEFENDED (risk-monitored + swarm-automated) vs RISK-ONLY (risk signal found, no swarm) vs SWARM-ONLY (swarm coverage, no risk signal) vs DARK (neither — high-influence node with no monitoring); red badge on dark count; stat tiles (nodes/fully defended/risk-only/swarm-only/dark); coverage breakdown bar; ALL/FULLY DEFENDED/RISK-ONLY/SWARM-ONLY/DARK filter tabs + text search; expand node → split pane left=matched risk signals (amber scorebars) right=matched swarm jobs (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network defence coverage brief + TTS via jarvis:speak-dossier; isGnrstpQuery+buildGnrstpScript wired in JarvisBrain; "graph node risk swarm"/"gnrstp"/"dark nodes"/"defended nodes"/"node defence coverage"/"node swarm risk"/"node triple"/"network defence gap" voice trigger; jarvis:gnrstp-toggle event; 90-s auto-refresh */}
             <GraphNodeRiskSwarmTriple />
+            {/* F170 (overnight 2026-08-07): report × task × swarm job triple coverage — ◈ RTSWTRI button (left:722160, bottom:8, zIndex:318); parallel-fetches /v1/reports + /entities/Task + /entities/SwarmJob; keyword-correlates each intelligence report against tasks AND swarm jobs to surface FULLY ACTIONED (task-backed + swarm-automated) vs TASK-ONLY (task response exists, no swarm) vs AUTOMATED (swarm job found, no task tracking) vs SHELVED (no operational response — intelligence gap); red badge on shelved count; stat tiles (reports/fully actioned/task-only/automated/shelved); coverage breakdown bar; ALL/FULLY ACTIONED/TASK-ONLY/AUTOMATED/SHELVED filter tabs + text search; expand report → split pane left=matched tasks (green scorebars) right=matched swarm jobs (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intelligence operational response assessment + TTS via jarvis:speak-dossier; isRtswtriQuery+buildRtswtriScript wired in JarvisBrain; "report task swarm"/"rtswtri"/"shelved report"/"actioned report"/"report triple"/"intel actioned"/"report action coverage"/"intel response gap" voice trigger; jarvis:rtswtri-toggle event; 90-s auto-refresh */}
+            <ReportTaskSwarmTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

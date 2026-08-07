@@ -391,6 +391,7 @@ import { isCsjitriQuery, buildCsjitriScript } from "./ContactSwarmInvestTriple";
 import { isInsrisiQuery, buildInsrisiScript } from "./InvestmentScenarioRiskTriple";
 import { isSjcstriQuery, buildSjcstriScript } from "./SwarmJobContactScenarioTriple";
 import { isGnrstpQuery, buildGnrstpScript } from "./GraphNodeRiskSwarmTriple";
+import { isRtswtriQuery, buildRtswtriScript } from "./ReportTaskSwarmTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4457,6 +4458,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gnrstp-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGnrstpScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRtswtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rtswtri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRtswtriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
