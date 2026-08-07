@@ -393,6 +393,7 @@ import { isSjcstriQuery, buildSjcstriScript } from "./SwarmJobContactScenarioTri
 import { isGnrstpQuery, buildGnrstpScript } from "./GraphNodeRiskSwarmTriple";
 import { isRtswtriQuery, buildRtswtriScript } from "./ReportTaskSwarmTriple";
 import { isGcipswjQuery, buildGcipswjScript } from "./GraphCommunityIntelSwarmTriple";
+import { isKirstriQuery, buildKirstriScript } from "./KnowledgeInvestmentRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4477,6 +4478,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcipswj-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcipswjScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isKirstriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kirstri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKirstriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
