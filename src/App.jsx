@@ -308,6 +308,7 @@ import InvestmentSwarmJobCoverage from '@/components/cinematic/InvestmentSwarmJo
 import ReportInvestigationGap from '@/components/cinematic/ReportInvestigationGap';
 import ScenarioSkillSwarmCoverage from '@/components/cinematic/ScenarioSkillSwarmCoverage';
 import ContactKnowledgeRiskTriple from '@/components/cinematic/ContactKnowledgeRiskTriple';
+import InvestmentGraphRiskTriple from '@/components/cinematic/InvestmentGraphRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -917,6 +918,8 @@ function App() {
             <ScenarioSkillSwarmCoverage />
             {/* F155 (overnight 2026-08-06): contact × knowledge × risk triple coverage — ◈ CRKL button (left:714880, bottom:8, zIndex:305); parallel-fetches /entities/Contact + /knowledge/ + /entities/RiskSignal; three-way keyword-correlates each contact (name/org/role/description/tags) against KB articles AND risk signals to surface FULLY COVERED (knowledge-backed + risk-monitored) vs KNOWLEDGE-ONLY (no risk signal) vs RISK-ONLY (no KB article) vs BLIND (no coverage); red badge on blind count; stat tiles (contacts/fully covered/knowledge-only/risk-only/blind); coverage breakdown bar; ALL/FULLY COVERED/KNOWLEDGE-ONLY/RISK-ONLY/BLIND filter tabs + text search; expand contact → split pane left=matched KB articles (cyan scorebars) right=matched risk signals (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact intel-coverage brief + TTS via jarvis:speak-dossier; isCorklQuery+buildCorklScript wired in JarvisBrain; "contact knowledge risk"/"crkl"/"contact triple"/"blind contact"/"fully covered contact"/"crkltri"/"contact intel triple"/"contact coverage triple" voice trigger; jarvis:crkl-toggle event; 90-s auto-refresh */}
             <ContactKnowledgeRiskTriple />
+            {/* F156 (overnight 2026-08-07): investment × graph node × risk signal triple coverage — ◈ IGNTRI button (left:715440, bottom:8, zIndex:306); parallel-fetches /entities/Investment + /v1/graph/centrality + /entities/RiskSignal; three-way keyword-correlates each investment (name/sector/ticker/notes/tags/region) against top-influence graph nodes AND active risk signals to surface FULLY EXPOSED (graph-connected + risk-signal alignment) vs GRAPH-LINKED (network presence, no risk) vs RISK-FLAGGED (risk, no network node) vs ISOLATED (no coverage — portfolio intelligence gap); red badge on fully exposed count; stat tiles (investments/fully exposed/graph-linked/risk-flagged/isolated); coverage breakdown bar; ALL/FULLY EXPOSED/GRAPH-LINKED/RISK-FLAGGED/ISOLATED filter tabs + text search; expand investment → split pane left=matched graph nodes (teal scorebars) right=matched risk signals (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio triple exposure brief + TTS via jarvis:speak-dossier; isIgntriQuery+buildIgntriScript wired in JarvisBrain; "investment graph risk"/"igntri"/"portfolio triple"/"triple exposure"/"invest triple"/"graph risk invest"/"portfolio graph risk"/"invest node risk" voice trigger; jarvis:igntri-toggle event; 90-s auto-refresh */}
+            <InvestmentGraphRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
