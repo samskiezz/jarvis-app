@@ -379,6 +379,7 @@ import { isInvSwjQuery, buildInvSwjScript } from "./InvestmentSwarmJobCoverage";
 import { isSkscen3Query, buildSkscen3Script } from "./ScenarioSkillSwarmCoverage";
 import { isCorklQuery, buildCorklScript } from "./ContactKnowledgeRiskTriple";
 import { isIgntriQuery, buildIgntriScript } from "./InvestmentGraphRiskTriple";
+import { isSwjdsQuery, buildSwjdsScript } from "./SwarmDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4328,6 +4329,17 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igntri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIgntriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F157: SwarmJob × Dataset Coverage — voice bridge for the pre-built SwarmDatasetCoverage panel.
+    // Opens ◈ SWJDS (jarvis:swjds-toggle) + speaks a 2-sentence swarm-data coverage brief.
+    if (isSwjdsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swjds-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwjdsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
