@@ -315,6 +315,7 @@ import InvestigationRiskTaskTriple from '@/components/cinematic/InvestigationRis
 import SceneRiskTaskTriple from '@/components/cinematic/SceneRiskTaskTriple';
 import KnowledgeGraphCommunityTaskTriple from '@/components/cinematic/KnowledgeGraphCommunityTaskTriple';
 import DatasetInvestigationRiskTriple from '@/components/cinematic/DatasetInvestigationRiskTriple';
+import IntelProfileScenarioTaskTriple from '@/components/cinematic/IntelProfileScenarioTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -940,6 +941,8 @@ function App() {
             <KnowledgeGraphCommunityTaskTriple />
             {/* F163 (overnight 2026-08-07): Dataset × Investigation × RiskSignal triple coverage — ◈ DIRSIG button (left:718240, bottom:8, zIndex:311); parallel-fetches /v1/datasets + /v1/investigations + /entities/RiskSignal; keyword-correlates each dataset against investigations AND risk signals to surface FULLY ARMED (investigation + risk) vs INVESTIGATED (investigation only) vs RISK-FLAGGED (risk only) vs UNCOVERED (data blindspot); red badge on uncovered count; stat tiles (datasets/fully armed/investigated/risk-flagged/uncovered); coverage bar; ALL/FULLY ARMED/INVESTIGATED/RISK-FLAGGED/UNCOVERED tabs + search; expand dataset → split pane investigations (cyan) | risk signals (amber); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; "dataset investigation risk"/"dirsig"/"data blindspot"/"uncovered dataset" voice trigger; jarvis:dirsig-toggle event; 90-s auto-refresh */}
             <DatasetInvestigationRiskTriple />
+            {/* F164 (overnight 2026-08-07): intel profile × scenario × task triple coverage — ◈ IPSTRI button (left:718800, bottom:8, zIndex:312); parallel-fetches /entities/IntelProfile + /v1/scenario/list + /entities/Task; three-way keyword-correlates each threat actor intel profile against scenarios AND tasks to surface FULLY COUNTERED (scenario-planned + task-backed) vs PLANNED (scenario exists, no task) vs TRACKED (task exists, no scenario) vs UNCOUNTERED (no scenario or task — threat response gap); red badge on uncountered count; stat tiles (profiles/fully countered/planned/tracked/uncountered); coverage breakdown bar; ALL/FULLY COUNTERED/PLANNED/TRACKED/UNCOUNTERED filter tabs + text search; expand profile → split pane left=matched scenarios (amber scorebars) right=matched tasks (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat response brief + TTS via jarvis:speak-dossier; isIpstriQuery+buildIpstriScript wired in JarvisBrain; "intel profile scenario task"/"ipstri"/"threat counter"/"threat response plan"/"fully countered"/"uncountered threat"/"profile response"/"scenario intel task" voice trigger; jarvis:ipstri-toggle event; 90-s auto-refresh */}
+            <IntelProfileScenarioTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
