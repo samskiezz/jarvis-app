@@ -320,6 +320,7 @@ import GraphNodeContactScenarioTriple from '@/components/cinematic/GraphNodeCont
 import ContactSwarmInvestTriple from '@/components/cinematic/ContactSwarmInvestTriple';
 import InvestmentScenarioRiskTriple from '@/components/cinematic/InvestmentScenarioRiskTriple';
 import SwarmJobContactScenarioTriple from '@/components/cinematic/SwarmJobContactScenarioTriple';
+import GraphNodeRiskSwarmTriple from '@/components/cinematic/GraphNodeRiskSwarmTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -955,6 +956,8 @@ function App() {
             <InvestmentScenarioRiskTriple />
             {/* F168 (overnight 2026-08-07): swarm job × contact × scenario triple coverage — ◈ SJCSTRI button (left:721040, bottom:8, zIndex:316); parallel-fetches /entities/SwarmJob + /entities/Contact + /v1/scenario/list; three-way keyword-correlates each swarm job against contacts AND scenarios to surface FULLY INTEGRATED (contact-managed + scenario-planned) vs CONTACTLESS (scenario exists, no contact owner) vs UNPLANNED (contact found, no scenario plan) vs AUTONOMOUS (neither — isolated automation); red badge on autonomous count; stat tiles (swarm jobs/fully integrated/contactless/unplanned/autonomous); coverage breakdown bar; ALL/FULLY INTEGRATED/CONTACTLESS/UNPLANNED/AUTONOMOUS filter tabs + text search; expand job → split pane left=matched contacts (cyan scorebars) right=matched scenarios (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm integration assessment + TTS via jarvis:speak-dossier; isSjcstriQuery+buildSjcstriScript wired in JarvisBrain; "swarm job contact scenario"/"sjcstri"/"autonomous swarm"/"contactless swarm"/"unplanned swarm"/"swarm integration"/"swarm staff"/"staffed swarm"/"swarm coverage triple"/"swarm triple" voice trigger; jarvis:sjcstri-toggle event; 90-s auto-refresh */}
             <SwarmJobContactScenarioTriple />
+            {/* F169 (overnight 2026-08-07): graph node × risk signal × swarm job triple coverage — ◈ GNRSTP button (left:721600, bottom:8, zIndex:317); parallel-fetches /v1/graph/centrality + /entities/RiskSignal + /entities/SwarmJob; three-way keyword-correlates each top-influence graph node against active risk signals AND active swarm jobs to surface FULLY DEFENDED (risk-monitored + swarm-automated) vs RISK-ONLY (risk signal found, no swarm) vs SWARM-ONLY (swarm coverage, no risk signal) vs DARK (neither — high-influence node with no monitoring); red badge on dark count; stat tiles (nodes/fully defended/risk-only/swarm-only/dark); coverage breakdown bar; ALL/FULLY DEFENDED/RISK-ONLY/SWARM-ONLY/DARK filter tabs + text search; expand node → split pane left=matched risk signals (amber scorebars) right=matched swarm jobs (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network defence coverage brief + TTS via jarvis:speak-dossier; isGnrstpQuery+buildGnrstpScript wired in JarvisBrain; "graph node risk swarm"/"gnrstp"/"dark nodes"/"defended nodes"/"node defence coverage"/"node swarm risk"/"node triple"/"network defence gap" voice trigger; jarvis:gnrstp-toggle event; 90-s auto-refresh */}
+            <GraphNodeRiskSwarmTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
