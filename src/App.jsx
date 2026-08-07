@@ -310,7 +310,7 @@ import ReportInvestigationGap from '@/components/cinematic/ReportInvestigationGa
 import ScenarioSkillSwarmCoverage from '@/components/cinematic/ScenarioSkillSwarmCoverage';
 import ContactKnowledgeRiskTriple from '@/components/cinematic/ContactKnowledgeRiskTriple';
 import InvestmentGraphRiskTriple from '@/components/cinematic/InvestmentGraphRiskTriple';
-import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
+import ScenarioContactTaskTriple from '@/components/cinematic/ScenarioContactTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -926,6 +926,8 @@ function App() {
             <InvestmentGraphRiskTriple />
             {/* F158 (overnight 2026-08-07): skill gap advisor — ◈ GAPS button; sources /v1/aip/skill; identifies bottom-3 weakest skills + generates AI development plans via /v1/jarvis/agent/chat per gap; score bars + urgency labels (CRITICAL GAP/NEEDS WORK/DEVELOPING); red badge on critical-gap count; "skill gap"/"training plan"/"weakest skill"/"capability gap" voice trigger; jarvis:skillgap-toggle event; 5-min auto-refresh */}
             <SkillGapAdvisor />
+            {/* F159 (overnight 2026-08-07): scenario × contact × task triple coverage — ◈ SCCTRI button (left:716000, bottom:8, zIndex:307); parallel-fetches /v1/scenario/list + /entities/Contact + /entities/Task; three-way keyword-correlates each scenario against contacts AND tasks to surface FULLY STAFFED (contact-assigned + task-backed) vs CONTACT-ONLY (people identified, no task) vs TASK-ONLY (task exists, no contact) vs UNMANAGED (no coverage); red badge on unmanaged count; stat tiles; coverage breakdown bar; ALL/FULLY STAFFED/CONTACT-ONLY/TASK-ONLY/UNMANAGED filter tabs + search; expand scenario → split pane left=matched contacts (cyan scorebars) right=matched tasks (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario staffing brief + TTS; isScctriQuery+buildScctriScript wired in JarvisBrain; "scenario staff"/"scctri"/"scenario contact task"/"staffed scenario" voice trigger; jarvis:scctri-toggle event; 90-s auto-refresh */}
+            <ScenarioContactTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

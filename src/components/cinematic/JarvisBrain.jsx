@@ -380,6 +380,7 @@ import { isSkscen3Query, buildSkscen3Script } from "./ScenarioSkillSwarmCoverage
 import { isCorklQuery, buildCorklScript } from "./ContactKnowledgeRiskTriple";
 import { isIgntriQuery, buildIgntriScript } from "./InvestmentGraphRiskTriple";
 import { isSwjdsQuery, buildSwjdsScript } from "./SwarmDatasetCoverage";
+import { isScctriQuery, buildScctriScript } from "./ScenarioContactTaskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4342,6 +4343,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swjds-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwjdsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F159: Scenario × Contact × Task Triple Coverage — opens ◈ SCCTRI + speaks staffing brief.
+    if (isScctriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scctri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScctriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
