@@ -309,6 +309,7 @@ import ReportInvestigationGap from '@/components/cinematic/ReportInvestigationGa
 import ScenarioSkillSwarmCoverage from '@/components/cinematic/ScenarioSkillSwarmCoverage';
 import ContactKnowledgeRiskTriple from '@/components/cinematic/ContactKnowledgeRiskTriple';
 import InvestmentGraphRiskTriple from '@/components/cinematic/InvestmentGraphRiskTriple';
+import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -920,6 +921,8 @@ function App() {
             <ContactKnowledgeRiskTriple />
             {/* F156 (overnight 2026-08-07): investment × graph node × risk signal triple coverage — ◈ IGNTRI button (left:715440, bottom:8, zIndex:306); parallel-fetches /entities/Investment + /v1/graph/centrality + /entities/RiskSignal; three-way keyword-correlates each investment (name/sector/ticker/notes/tags/region) against top-influence graph nodes AND active risk signals to surface FULLY EXPOSED (graph-connected + risk-signal alignment) vs GRAPH-LINKED (network presence, no risk) vs RISK-FLAGGED (risk, no network node) vs ISOLATED (no coverage — portfolio intelligence gap); red badge on fully exposed count; stat tiles (investments/fully exposed/graph-linked/risk-flagged/isolated); coverage breakdown bar; ALL/FULLY EXPOSED/GRAPH-LINKED/RISK-FLAGGED/ISOLATED filter tabs + text search; expand investment → split pane left=matched graph nodes (teal scorebars) right=matched risk signals (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio triple exposure brief + TTS via jarvis:speak-dossier; isIgntriQuery+buildIgntriScript wired in JarvisBrain; "investment graph risk"/"igntri"/"portfolio triple"/"triple exposure"/"invest triple"/"graph risk invest"/"portfolio graph risk"/"invest node risk" voice trigger; jarvis:igntri-toggle event; 90-s auto-refresh */}
             <InvestmentGraphRiskTriple />
+            {/* F158 (overnight 2026-08-07): skill gap advisor — ◈ GAPS button; sources /v1/aip/skill; identifies bottom-3 weakest skills + generates AI development plans via /v1/jarvis/agent/chat per gap; score bars + urgency labels (CRITICAL GAP/NEEDS WORK/DEVELOPING); red badge on critical-gap count; "skill gap"/"training plan"/"weakest skill"/"capability gap" voice trigger; jarvis:skillgap-toggle event; 5-min auto-refresh */}
+            <SkillGapAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

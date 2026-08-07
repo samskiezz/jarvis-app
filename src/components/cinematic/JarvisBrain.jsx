@@ -454,6 +454,8 @@ export default function JarvisBrain() {
     }, 18);
   }
 
+  const SKILLGAP_RE = /\b(skill.gap|gap.advisor|training.plan|learning.plan|development.plan|improve.skill|skill.improve|growth.plan|upskill|weakest.skill|skill.deficit|capability.gap)\b/i;
+
   async function ask(q) {
     if (!q || !q.trim()) return;
     // F20: "show me X / open X / view X" → normalize and re-dispatch so the
@@ -4349,6 +4351,7 @@ export default function JarvisBrain() {
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
+    if (SKILLGAP_RE.test(q)) window.dispatchEvent(new CustomEvent("jarvis:skillgap-toggle"));
     let answer = "";
     if (!answer) {
       try {
