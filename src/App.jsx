@@ -317,6 +317,7 @@ import KnowledgeGraphCommunityTaskTriple from '@/components/cinematic/KnowledgeG
 import DatasetInvestigationRiskTriple from '@/components/cinematic/DatasetInvestigationRiskTriple';
 import IntelProfileScenarioTaskTriple from '@/components/cinematic/IntelProfileScenarioTaskTriple';
 import GraphNodeContactScenarioTriple from '@/components/cinematic/GraphNodeContactScenarioTriple';
+import ContactSwarmInvestTriple from '@/components/cinematic/ContactSwarmInvestTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -946,6 +947,8 @@ function App() {
             <IntelProfileScenarioTaskTriple />
             {/* F165 (overnight 2026-08-07): graph node × contact × scenario triple coverage — ◈ GNCSTP button (left:719360, bottom:8, zIndex:313); parallel-fetches /v1/graph/centrality + /entities/Contact + /v1/scenario/list; three-way keyword-correlates each top-influence graph node against contacts AND scenarios to surface FULLY MAPPED (contact-represented + scenario-planned) vs CONTACT-ONLY (people found, no plan) vs PLANNED-ONLY (scenario found, no contact owner) vs DARK (no coverage — strategic gap); red badge on dark count; stat tiles (nodes/fully mapped/contact-only/planned-only/dark); coverage breakdown bar; ALL/FULLY MAPPED/CONTACT-ONLY/PLANNED-ONLY/DARK filter tabs + text search; expand node → split pane left=matched contacts (cyan scorebars) right=matched scenarios (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-strategic coverage brief + TTS; isGncstpQuery+buildGncstpScript wired in JarvisBrain; "graph node contact scenario"/"gncstp"/"dark nodes"/"strategic node coverage"/"network staffing"/"node strategy"/"node mapping"/"unmapped node"/"strategic network gap" voice trigger; jarvis:gncstp-toggle event; 90-s auto-refresh */}
             <GraphNodeContactScenarioTriple />
+            {/* F166 (overnight 2026-08-07): contact × swarmjob × investigation triple coverage — ◈ CSJITRI button (left:719920, bottom:8, zIndex:314); parallel-fetches /entities/Contact + /entities/SwarmJob + /v1/investigations; three-way keyword-correlates each contact against swarm jobs AND open investigations to surface FULLY TRACKED (swarm + investigation backing) vs SWARM-ONLY (swarm coverage, no investigation) vs INVESTIGATED (investigation found, no swarm) vs UNTRACKED (neither — surveillance gap); red badge on untracked count; stat tiles (contacts/fully tracked/swarm-only/investigated/untracked); coverage breakdown bar; ALL/FULLY TRACKED/SWARM-ONLY/INVESTIGATED/UNTRACKED filter tabs + text search; expand contact → split pane left=matched swarm jobs (lime scorebars) right=matched investigations (cyan scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact surveillance coverage brief + TTS via jarvis:speak-dossier; isCsjitriQuery+buildCsjitriScript wired in JarvisBrain; "contact swarm invest"/"csjitri"/"fully tracked contact"/"untracked contact"/"swarm investigated contact"/"contact hunt invest"/"who is tracked" voice trigger; jarvis:csjitri-toggle event; 90-s auto-refresh */}
+            <ContactSwarmInvestTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
