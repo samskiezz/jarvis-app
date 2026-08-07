@@ -314,6 +314,7 @@ import ScenarioContactTaskTriple from '@/components/cinematic/ScenarioContactTas
 import InvestigationRiskTaskTriple from '@/components/cinematic/InvestigationRiskTaskTriple';
 import SceneRiskTaskTriple from '@/components/cinematic/SceneRiskTaskTriple';
 import KnowledgeGraphCommunityTaskTriple from '@/components/cinematic/KnowledgeGraphCommunityTaskTriple';
+import DatasetInvestigationRiskTriple from '@/components/cinematic/DatasetInvestigationRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -937,6 +938,8 @@ function App() {
             <SceneRiskTaskTriple />
             {/* F162 (overnight 2026-08-07): knowledge × graph community × task triple coverage — ◈ KGCTRI button (left:717680, bottom:8, zIndex:310); parallel-fetches /knowledge/ + /v1/graph/communities + /entities/Task; three-way keyword-correlates each KB article (title/category/summary/tags) against network communities AND tasks to surface FULLY ACTIVATED (community-backed + task-driven) vs COMMUNITY-LINKED (community match, no task) vs TASK-DRIVEN (task found, no community) vs DORMANT (no coverage — knowledge not operationally activated); red badge on dormant count; stat tiles (KB articles/fully activated/community-linked/task-driven/dormant); coverage breakdown bar; ALL/FULLY ACTIVATED/COMMUNITY-LINKED/TASK-DRIVEN/DORMANT filter tabs + text search; expand article → split pane left=matched communities (teal scorebars) right=matched tasks (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-operational readiness brief + TTS via jarvis:speak-dossier; isKgctriQuery+buildKgctriScript wired in JarvisBrain; "knowledge graph community"/"graph community knowledge"/"kgctri"/"community knowledge task"/"activated knowledge"/"dormant knowledge"/"knowledge triple" voice trigger; jarvis:kgctri-toggle event; 90-s auto-refresh */}
             <KnowledgeGraphCommunityTaskTriple />
+            {/* F163 (overnight 2026-08-07): Dataset × Investigation × RiskSignal triple coverage — ◈ DIRSIG button (left:718240, bottom:8, zIndex:311); parallel-fetches /v1/datasets + /v1/investigations + /entities/RiskSignal; keyword-correlates each dataset against investigations AND risk signals to surface FULLY ARMED (investigation + risk) vs INVESTIGATED (investigation only) vs RISK-FLAGGED (risk only) vs UNCOVERED (data blindspot); red badge on uncovered count; stat tiles (datasets/fully armed/investigated/risk-flagged/uncovered); coverage bar; ALL/FULLY ARMED/INVESTIGATED/RISK-FLAGGED/UNCOVERED tabs + search; expand dataset → split pane investigations (cyan) | risk signals (amber); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; "dataset investigation risk"/"dirsig"/"data blindspot"/"uncovered dataset" voice trigger; jarvis:dirsig-toggle event; 90-s auto-refresh */}
+            <DatasetInvestigationRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

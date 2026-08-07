@@ -384,6 +384,7 @@ import { isScctriQuery, buildScctriScript } from "./ScenarioContactTaskTriple";
 import { isIrttriQuery, buildIrttriScript } from "./InvestigationRiskTaskTriple";
 import { isScrtriQuery, buildScrtriScript } from "./SceneRiskTaskTriple";
 import { isKgctriQuery, buildKgctriScript } from "./KnowledgeGraphCommunityTaskTriple";
+import { isDirsigQuery, buildDirsigScript } from "./DatasetInvestigationRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4385,6 +4386,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kgctri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKgctriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F163: Dataset × Investigation × RiskSignal Triple Coverage — opens ◈ DIRSIG + speaks data blindspot brief.
+    if (isDirsigQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dirsig-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDirsigScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
