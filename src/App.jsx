@@ -311,6 +311,7 @@ import ScenarioSkillSwarmCoverage from '@/components/cinematic/ScenarioSkillSwar
 import ContactKnowledgeRiskTriple from '@/components/cinematic/ContactKnowledgeRiskTriple';
 import InvestmentGraphRiskTriple from '@/components/cinematic/InvestmentGraphRiskTriple';
 import ScenarioContactTaskTriple from '@/components/cinematic/ScenarioContactTaskTriple';
+import InvestigationRiskTaskTriple from '@/components/cinematic/InvestigationRiskTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -928,6 +929,8 @@ function App() {
             <SkillGapAdvisor />
             {/* F159 (overnight 2026-08-07): scenario × contact × task triple coverage — ◈ SCCTRI button (left:716000, bottom:8, zIndex:307); parallel-fetches /v1/scenario/list + /entities/Contact + /entities/Task; three-way keyword-correlates each scenario against contacts AND tasks to surface FULLY STAFFED (contact-assigned + task-backed) vs CONTACT-ONLY (people identified, no task) vs TASK-ONLY (task exists, no contact) vs UNMANAGED (no coverage); red badge on unmanaged count; stat tiles; coverage breakdown bar; ALL/FULLY STAFFED/CONTACT-ONLY/TASK-ONLY/UNMANAGED filter tabs + search; expand scenario → split pane left=matched contacts (cyan scorebars) right=matched tasks (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario staffing brief + TTS; isScctriQuery+buildScctriScript wired in JarvisBrain; "scenario staff"/"scctri"/"scenario contact task"/"staffed scenario" voice trigger; jarvis:scctri-toggle event; 90-s auto-refresh */}
             <ScenarioContactTaskTriple />
+            {/* F160 (overnight 2026-08-07): investigation × risk signal × task triple coverage — ◈ IRTTRI button (left:716560, bottom:8, zIndex:308); parallel-fetches /v1/investigations + /entities/RiskSignal + /entities/Task; three-way keyword-correlates each open investigation against risk signals AND tasks to surface FULLY ARMED (risk-aligned + task-backed) vs RISK-FLAGGED (risk found, no task) vs TASK-DRIVEN (task exists, no risk signal) vs ADRIFT (no coverage — accountability gap); red badge on adrift count; stat tiles; coverage breakdown bar; ALL/FULLY ARMED/RISK-FLAGGED/TASK-DRIVEN/ADRIFT filter tabs + text search; expand investigation → split pane left=matched risk signals (amber scorebars) right=matched tasks (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation accountability brief + TTS; isIrttriQuery+buildIrttriScript wired in JarvisBrain; "investigation risk task"/"irttri"/"adrift investigation"/"fully armed investigation"/"investigation triple"/"case triple" voice trigger; jarvis:irttri-toggle event; 90-s auto-refresh */}
+            <InvestigationRiskTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

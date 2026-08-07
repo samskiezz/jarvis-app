@@ -381,6 +381,7 @@ import { isCorklQuery, buildCorklScript } from "./ContactKnowledgeRiskTriple";
 import { isIgntriQuery, buildIgntriScript } from "./InvestmentGraphRiskTriple";
 import { isSwjdsQuery, buildSwjdsScript } from "./SwarmDatasetCoverage";
 import { isScctriQuery, buildScctriScript } from "./ScenarioContactTaskTriple";
+import { isIrttriQuery, buildIrttriScript } from "./InvestigationRiskTaskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4353,6 +4354,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scctri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScctriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F160: Investigation × RiskSignal × Task Triple Coverage — opens ◈ IRTTRI + speaks accountability brief.
+    if (isIrttriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:irttri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIrttriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
