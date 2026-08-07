@@ -324,6 +324,7 @@ import GraphNodeRiskSwarmTriple from '@/components/cinematic/GraphNodeRiskSwarmT
 import ReportTaskSwarmTriple from '@/components/cinematic/ReportTaskSwarmTriple';
 import GraphCommunityIntelSwarmTriple from '@/components/cinematic/GraphCommunityIntelSwarmTriple';
 import KnowledgeInvestmentRiskTriple from '@/components/cinematic/KnowledgeInvestmentRiskTriple';
+import ContactTaskOpsTriple from '@/components/cinematic/ContactTaskOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -967,6 +968,8 @@ function App() {
             <GraphCommunityIntelSwarmTriple />
             {/* F172 (overnight 2026-08-07): knowledge × investment × risk signal triple coverage — ◈ KIRSTRI button (left:723280, bottom:8, zIndex:320); parallel-fetches /knowledge/ + /entities/Investment + /entities/RiskSignal; three-way keyword-correlates each KB article (title/category/summary/tags) against investments AND risk signals to surface FULLY CRITICAL (investment-aligned + risk-flagged — knowledge is operationally hot) vs INVESTED (portfolio backing found, no active risk signal) vs RISK-FLAGGED (risk signal alignment, no investment) vs ARCHIVAL (no investment or risk signal — knowledge not operationally active); red badge on fully critical count; stat tiles (KB articles/fully critical/invested/risk-flagged/archival); coverage breakdown bar; ALL/FULLY CRITICAL/INVESTED/RISK-FLAGGED/ARCHIVAL filter tabs + text search; expand article → split pane left=matched investments (teal scorebars) right=matched risk signals (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational knowledge-investment-risk assessment + TTS via jarvis:speak-dossier; isKirstriQuery+buildKirstriScript wired in JarvisBrain; "knowledge invest risk"/"kirstri"/"critical knowledge"/"hot knowledge"/"portfolio risk knowledge"/"investment risk knowledge"/"knowledge portfolio risk"/"risk invest knowledge" voice trigger; jarvis:kirstri-toggle event; 90-s auto-refresh */}
             <KnowledgeInvestmentRiskTriple />
+            {/* F173 (overnight 2026-08-07): contact × task × ops event triple coverage — ◈ CTOPT button (left:723840, bottom:8, zIndex:321); parallel-fetches /entities/Contact + /entities/Task + /v1/ops/events; three-way keyword-correlates each contact against tasks AND ops events to surface FULLY ACTIVE (both task + ops event alignment — operationally engaged) vs TASKED (task found, no ops event) vs OPS-TRIGGERED (ops event, no task) vs IDLE (no alignment); red badge on FULLY ACTIVE count; "ctopt"/"contact task ops"/"operationally engaged contacts" voice trigger; jarvis:ctopt-toggle event; 90-s auto-refresh */}
+            <ContactTaskOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
