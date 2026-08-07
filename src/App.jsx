@@ -329,6 +329,7 @@ import OpsEventContactRiskTriple from '@/components/cinematic/OpsEventContactRis
 import InvestigationIntelDatasetTriple from '@/components/cinematic/InvestigationIntelDatasetTriple';
 import DatasetContactBridge from '@/components/cinematic/DatasetContactBridge';
 import GraphCommunityContactInvestTriple from '@/components/cinematic/GraphCommunityContactInvestTriple';
+import TaskOperationalReadinessMatrix from '@/components/cinematic/TaskOperationalReadinessMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -982,6 +983,8 @@ function App() {
             <DatasetContactBridge />
             {/* F177 (overnight 2026-08-07): graph community × contact × investigation triple coverage — ◈ GCCITP button (left:726080, bottom:8, zIndex:325); parallel-fetches /v1/graph/communities + /entities/Contact + /v1/investigations; three-way keyword-correlates each network cluster against contacts AND open investigations to surface FULLY PROFILED (contact-aligned + investigation-backed) vs CONTACT-ONLY (people found, no case) vs INVESTIGATED (investigation found, no contact alignment) vs DARK (no human or case coverage); red badge on dark count; stat tiles (clusters/contacts/investigations/fully profiled/dark); ALL/FULLY PROFILED/CONTACT-ONLY/INVESTIGATED/DARK filter tabs + search; expand cluster → split pane left=contacts (cyan) right=investigations (amber); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community human-intelligence brief + TTS via jarvis:speak-dossier; isGccitpQuery+buildGccitpScript wired in JarvisBrain; "gccitp"/"community contact invest"/"dark community"/"profiled community"/"community people cases"/"community human intel"/"which communities have contacts and cases"/"community case contact" voice trigger; jarvis:gccitp-toggle event; 90-s auto-refresh */}
             <GraphCommunityContactInvestTriple />
+            {/* F178 (overnight 2026-08-07): task × contact × dataset × skill operational readiness matrix — ◈ TCDSOM button (left:726640, bottom:8, zIndex:326); parallel-fetches /entities/Task + /entities/Contact + /v1/datasets + /v1/aip/skill; 4-way keyword-correlates each task against contacts, datasets, and JARVIS skills to surface FULLY EQUIPPED (all 3 aligned) vs RESOURCED (2 of 3) vs SPARSE (1 of 3) vs ISOLATED (none — no contact owner, no data, no skill coverage); red badge on isolated count; stat tiles (tasks/fully equipped/resourced/sparse/isolated); coverage breakdown bar; ALL/FULLY EQUIPPED/RESOURCED/SPARSE/ISOLATED filter tabs + text search; expand task → 3-pane (contacts teal | datasets amber | skills lime) with scorebars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence mission-readiness evaluation + TTS via jarvis:speak-dossier; isTcdsomQuery+buildTcdsomScript wired in JarvisBrain; "task readiness"/"tcdsom"/"operational readiness"/"task equipped"/"fully equipped tasks"/"isolated tasks"/"task resource matrix"/"task coverage matrix" voice trigger; jarvis:tcdsom-toggle event; 90-s auto-refresh */}
+            <TaskOperationalReadinessMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
