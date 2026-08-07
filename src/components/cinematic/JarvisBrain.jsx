@@ -396,6 +396,7 @@ import { isGcipswjQuery, buildGcipswjScript } from "./GraphCommunityIntelSwarmTr
 import { isKirstriQuery, buildKirstriScript } from "./KnowledgeInvestmentRiskTriple";
 import { isCtoptQuery, buildCtoptScript } from "./ContactTaskOpsTriple";
 import { isOcrstriQuery, buildOcrstriScript } from "./OpsEventContactRiskTriple";
+import { isIipdQuery, buildIipdScript } from "./InvestigationIntelDatasetTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4507,6 +4508,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ocrstri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildOcrstriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIipdQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iipd-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIipdScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
