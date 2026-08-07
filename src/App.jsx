@@ -313,6 +313,7 @@ import InvestmentGraphRiskTriple from '@/components/cinematic/InvestmentGraphRis
 import ScenarioContactTaskTriple from '@/components/cinematic/ScenarioContactTaskTriple';
 import InvestigationRiskTaskTriple from '@/components/cinematic/InvestigationRiskTaskTriple';
 import SceneRiskTaskTriple from '@/components/cinematic/SceneRiskTaskTriple';
+import KnowledgeGraphCommunityTaskTriple from '@/components/cinematic/KnowledgeGraphCommunityTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -934,6 +935,8 @@ function App() {
             <InvestigationRiskTaskTriple />
             {/* F161 (overnight 2026-08-07): scene × risk signal × task triple coverage — ◈ SRTRI button (left:717120, bottom:8, zIndex:309); fetches all 10 /v1/cinematic/scene/{id} + /entities/RiskSignal + /entities/Task; three-way keyword-correlates each scene's anchor texts against risk signals AND tasks to surface FULLY DEFENDED (risk-aligned + task-backed) vs RISK-EXPOSED (risk found, no task) vs TASKED (task exists, no risk signal) vs UNPROTECTED (no coverage — operational gap); red badge on unprotected count; stat tiles; coverage breakdown bar; ALL/FULLY DEFENDED/RISK-EXPOSED/TASKED/UNPROTECTED filter tabs + text search; expand scene → split pane left=matched risk signals (amber scorebars) right=matched tasks (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene defence brief + TTS; isScrtriQuery+buildScrtriScript wired in JarvisBrain; "scene risk task"/"srtri"/"scene defence"/"unprotected scene"/"defended scene"/"scene triple"/"scene task risk" voice trigger; jarvis:srtri-toggle event; 120-s auto-refresh */}
             <SceneRiskTaskTriple />
+            {/* F162 (overnight 2026-08-07): knowledge × graph community × task triple coverage — ◈ KGCTRI button (left:717680, bottom:8, zIndex:310); parallel-fetches /knowledge/ + /v1/graph/communities + /entities/Task; three-way keyword-correlates each KB article (title/category/summary/tags) against network communities AND tasks to surface FULLY ACTIVATED (community-backed + task-driven) vs COMMUNITY-LINKED (community match, no task) vs TASK-DRIVEN (task found, no community) vs DORMANT (no coverage — knowledge not operationally activated); red badge on dormant count; stat tiles (KB articles/fully activated/community-linked/task-driven/dormant); coverage breakdown bar; ALL/FULLY ACTIVATED/COMMUNITY-LINKED/TASK-DRIVEN/DORMANT filter tabs + text search; expand article → split pane left=matched communities (teal scorebars) right=matched tasks (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-operational readiness brief + TTS via jarvis:speak-dossier; isKgctriQuery+buildKgctriScript wired in JarvisBrain; "knowledge graph community"/"graph community knowledge"/"kgctri"/"community knowledge task"/"activated knowledge"/"dormant knowledge"/"knowledge triple" voice trigger; jarvis:kgctri-toggle event; 90-s auto-refresh */}
+            <KnowledgeGraphCommunityTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

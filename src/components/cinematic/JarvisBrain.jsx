@@ -383,6 +383,7 @@ import { isSwjdsQuery, buildSwjdsScript } from "./SwarmDatasetCoverage";
 import { isScctriQuery, buildScctriScript } from "./ScenarioContactTaskTriple";
 import { isIrttriQuery, buildIrttriScript } from "./InvestigationRiskTaskTriple";
 import { isScrtriQuery, buildScrtriScript } from "./SceneRiskTaskTriple";
+import { isKgctriQuery, buildKgctriScript } from "./KnowledgeGraphCommunityTaskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4374,6 +4375,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:srtri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScrtriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F162: Knowledge × Graph Community × Task Triple Coverage — opens ◈ KGCTRI + speaks knowledge-operational readiness brief.
+    if (isKgctriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kgctri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKgctriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
