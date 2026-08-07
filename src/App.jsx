@@ -316,6 +316,7 @@ import SceneRiskTaskTriple from '@/components/cinematic/SceneRiskTaskTriple';
 import KnowledgeGraphCommunityTaskTriple from '@/components/cinematic/KnowledgeGraphCommunityTaskTriple';
 import DatasetInvestigationRiskTriple from '@/components/cinematic/DatasetInvestigationRiskTriple';
 import IntelProfileScenarioTaskTriple from '@/components/cinematic/IntelProfileScenarioTaskTriple';
+import GraphNodeContactScenarioTriple from '@/components/cinematic/GraphNodeContactScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -943,6 +944,8 @@ function App() {
             <DatasetInvestigationRiskTriple />
             {/* F164 (overnight 2026-08-07): intel profile × scenario × task triple coverage — ◈ IPSTRI button (left:718800, bottom:8, zIndex:312); parallel-fetches /entities/IntelProfile + /v1/scenario/list + /entities/Task; three-way keyword-correlates each threat actor intel profile against scenarios AND tasks to surface FULLY COUNTERED (scenario-planned + task-backed) vs PLANNED (scenario exists, no task) vs TRACKED (task exists, no scenario) vs UNCOUNTERED (no scenario or task — threat response gap); red badge on uncountered count; stat tiles (profiles/fully countered/planned/tracked/uncountered); coverage breakdown bar; ALL/FULLY COUNTERED/PLANNED/TRACKED/UNCOUNTERED filter tabs + text search; expand profile → split pane left=matched scenarios (amber scorebars) right=matched tasks (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat response brief + TTS via jarvis:speak-dossier; isIpstriQuery+buildIpstriScript wired in JarvisBrain; "intel profile scenario task"/"ipstri"/"threat counter"/"threat response plan"/"fully countered"/"uncountered threat"/"profile response"/"scenario intel task" voice trigger; jarvis:ipstri-toggle event; 90-s auto-refresh */}
             <IntelProfileScenarioTaskTriple />
+            {/* F165 (overnight 2026-08-07): graph node × contact × scenario triple coverage — ◈ GNCSTP button (left:719360, bottom:8, zIndex:313); parallel-fetches /v1/graph/centrality + /entities/Contact + /v1/scenario/list; three-way keyword-correlates each top-influence graph node against contacts AND scenarios to surface FULLY MAPPED (contact-represented + scenario-planned) vs CONTACT-ONLY (people found, no plan) vs PLANNED-ONLY (scenario found, no contact owner) vs DARK (no coverage — strategic gap); red badge on dark count; stat tiles (nodes/fully mapped/contact-only/planned-only/dark); coverage breakdown bar; ALL/FULLY MAPPED/CONTACT-ONLY/PLANNED-ONLY/DARK filter tabs + text search; expand node → split pane left=matched contacts (cyan scorebars) right=matched scenarios (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-strategic coverage brief + TTS; isGncstpQuery+buildGncstpScript wired in JarvisBrain; "graph node contact scenario"/"gncstp"/"dark nodes"/"strategic node coverage"/"network staffing"/"node strategy"/"node mapping"/"unmapped node"/"strategic network gap" voice trigger; jarvis:gncstp-toggle event; 90-s auto-refresh */}
+            <GraphNodeContactScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

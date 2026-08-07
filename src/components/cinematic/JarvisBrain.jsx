@@ -386,6 +386,7 @@ import { isScrtriQuery, buildScrtriScript } from "./SceneRiskTaskTriple";
 import { isKgctriQuery, buildKgctriScript } from "./KnowledgeGraphCommunityTaskTriple";
 import { isDirsigQuery, buildDirsigScript } from "./DatasetInvestigationRiskTriple";
 import { isIpstriQuery, buildIpstriScript } from "./IntelProfileScenarioTaskTriple";
+import { isGncstpQuery, buildGncstpScript } from "./GraphNodeContactScenarioTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4407,6 +4408,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipstri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpstriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGncstpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gncstp-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGncstpScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
