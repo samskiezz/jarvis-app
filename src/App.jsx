@@ -327,6 +327,7 @@ import KnowledgeInvestmentRiskTriple from '@/components/cinematic/KnowledgeInves
 import ContactTaskOpsTriple from '@/components/cinematic/ContactTaskOpsTriple';
 import OpsEventContactRiskTriple from '@/components/cinematic/OpsEventContactRiskTriple';
 import InvestigationIntelDatasetTriple from '@/components/cinematic/InvestigationIntelDatasetTriple';
+import DatasetContactBridge from '@/components/cinematic/DatasetContactBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -976,6 +977,8 @@ function App() {
             <OpsEventContactRiskTriple />
             {/* F175 (overnight 2026-08-07): investigation × intel profile × dataset triple coverage — ◈ IIPD button (left:724960, bottom:8, zIndex:323); parallel-fetches /v1/investigations + /entities/IntelProfile + /v1/datasets; three-way keyword-correlates each investigation against intel profiles AND datasets to surface FULLY SOURCED (intel profile + dataset found) vs PROFILED (intel profile, no dataset) vs DATA-BACKED (dataset, no intel profile) vs UNSOURCED (no intel profile or dataset — critical intelligence gap); amber badge on UNSOURCED count; stat tiles (investigations/fully sourced/profiled/data-backed/unsourced); coverage breakdown bar; ALL/FULLY SOURCED/PROFILED/DATA-BACKED/UNSOURCED filter tabs + text search; expand investigation → split pane left=matched intel profiles (amber scorebars) right=matched datasets with kind badge + row count (cyan scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation sourcing brief + TTS via jarvis:speak-dossier; isIipdQuery+buildIipdScript wired in JarvisBrain; "investigation intel dataset"/"iipd"/"sourced investigation"/"unsourced case"/"case intel data"/"investigation data profile"/"intel backed case"/"dataset backed case"/"investigation sourcing" voice trigger; jarvis:iipd-toggle event; 90-s auto-refresh */}
             <InvestigationIntelDatasetTriple />
+            {/* F176 (overnight 2026-08-07): dataset × contact intelligence bridge — ◈ DSCONT button (left:725520, bottom:8, zIndex:324); parallel-fetches /v1/datasets + /entities/Contact; keyword-correlates each dataset (name/description/tags/owner) against contact records to surface REFERENCED (contact-backed) vs UNREFERENCED (no contact alignment — data ownership gap); teal badge on referenced count; stat tiles (datasets/contacts/referenced/unreferenced); ALL/REFERENCED/UNREFERENCED filter tabs + text search; expand dataset → matched contacts with role badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-ownership brief + TTS; isDscontQuery+buildDscontScript wired in JarvisBrain; "dataset contact"/"dscont"/"contact dataset"/"data owner"/"which contacts are in datasets"/"dataset ownership" voice trigger; jarvis:dscont-toggle event; 90-s auto-refresh */}
+            <DatasetContactBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
