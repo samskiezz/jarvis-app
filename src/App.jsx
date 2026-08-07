@@ -312,6 +312,7 @@ import ContactKnowledgeRiskTriple from '@/components/cinematic/ContactKnowledgeR
 import InvestmentGraphRiskTriple from '@/components/cinematic/InvestmentGraphRiskTriple';
 import ScenarioContactTaskTriple from '@/components/cinematic/ScenarioContactTaskTriple';
 import InvestigationRiskTaskTriple from '@/components/cinematic/InvestigationRiskTaskTriple';
+import SceneRiskTaskTriple from '@/components/cinematic/SceneRiskTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -931,6 +932,8 @@ function App() {
             <ScenarioContactTaskTriple />
             {/* F160 (overnight 2026-08-07): investigation × risk signal × task triple coverage — ◈ IRTTRI button (left:716560, bottom:8, zIndex:308); parallel-fetches /v1/investigations + /entities/RiskSignal + /entities/Task; three-way keyword-correlates each open investigation against risk signals AND tasks to surface FULLY ARMED (risk-aligned + task-backed) vs RISK-FLAGGED (risk found, no task) vs TASK-DRIVEN (task exists, no risk signal) vs ADRIFT (no coverage — accountability gap); red badge on adrift count; stat tiles; coverage breakdown bar; ALL/FULLY ARMED/RISK-FLAGGED/TASK-DRIVEN/ADRIFT filter tabs + text search; expand investigation → split pane left=matched risk signals (amber scorebars) right=matched tasks (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation accountability brief + TTS; isIrttriQuery+buildIrttriScript wired in JarvisBrain; "investigation risk task"/"irttri"/"adrift investigation"/"fully armed investigation"/"investigation triple"/"case triple" voice trigger; jarvis:irttri-toggle event; 90-s auto-refresh */}
             <InvestigationRiskTaskTriple />
+            {/* F161 (overnight 2026-08-07): scene × risk signal × task triple coverage — ◈ SRTRI button (left:717120, bottom:8, zIndex:309); fetches all 10 /v1/cinematic/scene/{id} + /entities/RiskSignal + /entities/Task; three-way keyword-correlates each scene's anchor texts against risk signals AND tasks to surface FULLY DEFENDED (risk-aligned + task-backed) vs RISK-EXPOSED (risk found, no task) vs TASKED (task exists, no risk signal) vs UNPROTECTED (no coverage — operational gap); red badge on unprotected count; stat tiles; coverage breakdown bar; ALL/FULLY DEFENDED/RISK-EXPOSED/TASKED/UNPROTECTED filter tabs + text search; expand scene → split pane left=matched risk signals (amber scorebars) right=matched tasks (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene defence brief + TTS; isScrtriQuery+buildScrtriScript wired in JarvisBrain; "scene risk task"/"srtri"/"scene defence"/"unprotected scene"/"defended scene"/"scene triple"/"scene task risk" voice trigger; jarvis:srtri-toggle event; 120-s auto-refresh */}
+            <SceneRiskTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
