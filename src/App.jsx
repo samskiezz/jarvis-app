@@ -344,6 +344,7 @@ import GraphNodeReportOpsTriple from '@/components/cinematic/GraphNodeReportOpsT
 import LiveIntelKnowledgeRiskTriple from '@/components/cinematic/LiveIntelKnowledgeRiskTriple';
 import ScenarioSwarmDatasetTriple from '@/components/cinematic/ScenarioSwarmDatasetTriple';
 import ContactIntelReportTriple from '@/components/cinematic/ContactIntelReportTriple';
+import GraphNodeContactTaskTriple from '@/components/cinematic/GraphNodeContactTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1027,6 +1028,8 @@ function App() {
             <ScenarioSwarmDatasetTriple />
             {/* F192 (overnight 2026-08-08): contact × intel profile × report triple coverage — ◈ CIPRTRI button (left:734480, bottom:8, zIndex:340); parallel-fetches /entities/Contact + /entities/IntelProfile + /v1/reports; keyword-correlates each contact against intel profiles AND reports to surface FULLY PROFILED (intel profile + report) vs PROFILED (intel profile only) vs REPORTED (report only) vs UNCHARTED (neither — no intelligence documentation); amber badge on uncharted count; stat tiles (contacts/fully profiled/profiled/reported/uncharted); coverage breakdown bar; ALL/FULLY PROFILED/PROFILED/REPORTED/UNCHARTED filter tabs + text search; expand contact → split pane left=matched intel profiles (amber scorebars) right=matched reports (cyan scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact intelligence coverage brief + TTS via jarvis:speak-dossier; isCiprtriQuery+buildCiprtriScript wired in JarvisBrain; "ciprtri"/"contact intel report"/"profiled contact"/"uncharted contact"/"contact report intel" voice trigger; jarvis:ciprtri-toggle event; 90-s auto-refresh */}
             <ContactIntelReportTriple />
+            {/* F193 (overnight 2026-08-08): graph node × contact × task triple coverage — ◈ GNCTRI button (left:735040, bottom:8, zIndex:341); parallel-fetches /v1/graph/centrality + /entities/Contact + /entities/Task; keyword-correlates each top-influence node against contacts AND tasks to surface FULLY MANAGED (contact + task) vs STAFFED (contact, no task) vs TASKED (task, no contact) vs UNMANAGED (neither — high-influence node with no human or operational backing); violet badge on unmanaged count; isGnctriQuery+buildGnctriScript wired in JarvisBrain; "gnctri"/"graph node contact task"/"managed nodes"/"unmanaged nodes"/"node staffing" voice trigger; jarvis:gnctri-toggle event; 90-s auto-refresh */}
+            <GraphNodeContactTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
