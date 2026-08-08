@@ -342,6 +342,7 @@ import GraphCommunityLiveIntelRiskTriple from '@/components/cinematic/GraphCommu
 import InvestmentTaskOpsTriple from '@/components/cinematic/InvestmentTaskOpsTriple';
 import GraphNodeReportOpsTriple from '@/components/cinematic/GraphNodeReportOpsTriple';
 import LiveIntelKnowledgeRiskTriple from '@/components/cinematic/LiveIntelKnowledgeRiskTriple';
+import ScenarioSwarmDatasetTriple from '@/components/cinematic/ScenarioSwarmDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1021,6 +1022,8 @@ function App() {
             <GraphNodeReportOpsTriple />
             {/* F190 (overnight 2026-08-08): live intel × knowledge × risk signal triple coverage — ◈ LKRSTRI button (left:733360, bottom:8, zIndex:338); parallel-fetches /functions/getLiveIntel + /knowledge/ + /entities/RiskSignal; three-way keyword-correlates each live intel event against KB articles AND risk signals to surface FULLY KNOWN (KB-documented + risk signal — event with context and threat linkage) vs KB-BACKED (KB article coverage, no risk signal) vs RISK-FLAGGED (risk signal detected, no KB documentation) vs UNCHARTED (neither — live intel with no context or threat record); amber badge on uncharted count; stat tiles (live intel/fully known/kb-backed/risk-flagged/uncharted); coverage breakdown bar; ALL/FULLY KNOWN/KB-BACKED/RISK-FLAGGED/UNCHARTED filter tabs + text search; expand intel event → split pane left=matched KB articles (cyan scorebars) right=matched risk signals (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence live intelligence coverage brief + TTS via jarvis:speak-dossier; isLkrstriQuery+buildLkrstriScript wired in JarvisBrain; "lkrstri"/"live intel knowledge"/"live knowledge risk"/"intel kb risk"/"fully known intel"/"uncharted intel"/"kb risk intel" voice trigger; jarvis:lkrstri-toggle event; 60-s auto-refresh */}
             <LiveIntelKnowledgeRiskTriple />
+            {/* F191 (overnight 2026-08-08): scenario × swarm job × dataset triple coverage — ◈ SSJDTRI button (left:733920, bottom:8, zIndex:339); parallel-fetches /v1/scenario/list + /entities/SwarmJob + /v1/datasets; keyword-correlates each scenario against swarm jobs AND datasets to surface FULLY AUTOMATED (swarm + dataset backing) vs SWARM-ONLY (automation found, no dataset) vs DATA-BACKED (dataset found, no swarm) vs MANUAL (neither — no automation or data); amber badge on manual count; stat tiles (scenarios/fully automated/swarm-only/data-backed/manual); coverage breakdown bar; ALL/FULLY AUTOMATED/SWARM-ONLY/DATA-BACKED/MANUAL filter tabs + text search; expand scenario → split pane left=matched swarm jobs (lime scorebars) right=matched datasets (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario automation readiness brief + TTS via jarvis:speak-dossier; isSsjdtriQuery+buildSsjdtriScript wired in JarvisBrain; "ssjdtri"/"scenario swarm dataset"/"scenario automation"/"manual scenario"/"automated scenario"/"scenario swarm data" voice trigger; jarvis:ssjdtri-toggle event; 90-s auto-refresh */}
+            <ScenarioSwarmDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
