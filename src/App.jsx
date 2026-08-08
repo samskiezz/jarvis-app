@@ -352,6 +352,7 @@ import ScenarioKnowledgeContactTriple from '@/components/cinematic/ScenarioKnowl
 import InvestigationContactKnowledgeTaskQuad from '@/components/cinematic/InvestigationContactKnowledgeTaskQuad';
 import KnowledgeReportScenarioTaskQuad from '@/components/cinematic/KnowledgeReportScenarioTaskQuad';
 import RiskSignalGraphCommunityTaskMatrix from '@/components/cinematic/RiskSignalGraphCommunityTaskMatrix';
+import SystemStatusRiskMonitor from '@/components/cinematic/SystemStatusRiskMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1058,6 +1059,11 @@ function App() {
             {/* Coverage states: FULLY RESPONDED | COMMUNITY-LINKED | TASK-DRIVEN | UNADDRESSED */}
             {/* Voice trigger: "rgctorm" / "risk graph community task" / "network risk response" */}
             <RiskSignalGraphCommunityTaskMatrix />
+            {/* F201: System Status × Risk Signal Alert Monitor (SYSRSK) */}
+            {/* Cross-correlates /v1/jarvis/system/status × /entities/RiskSignal */}
+            {/* Coverage states: COMPROMISED | DEGRADED | THREATENED | SECURE */}
+            {/* Voice trigger: "sysrsk" / "system risk" / "service risk" / "compromised service" */}
+            <SystemStatusRiskMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
