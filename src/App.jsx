@@ -350,6 +350,7 @@ import KnowledgeContactScenarioTriple from '@/components/cinematic/KnowledgeCont
 import GraphNodeInvestmentKnowledgeTriple from '@/components/cinematic/GraphNodeInvestmentKnowledgeTriple';
 import ScenarioKnowledgeContactTriple from '@/components/cinematic/ScenarioKnowledgeContactTriple';
 import InvestigationContactKnowledgeTaskQuad from '@/components/cinematic/InvestigationContactKnowledgeTaskQuad';
+import KnowledgeReportScenarioTaskQuad from '@/components/cinematic/KnowledgeReportScenarioTaskQuad';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1050,6 +1051,7 @@ function App() {
             {/* Coverage states: FULLY MANAGED | RESOURCED | SPARSE | UNSUPPORTED */}
             {/* Voice trigger: "icktq" / "investigation contact knowledge task" / "case quad" */}
             <InvestigationContactKnowledgeTaskQuad />
+            <KnowledgeReportScenarioTaskQuad />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

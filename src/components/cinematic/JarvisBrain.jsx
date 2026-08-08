@@ -420,6 +420,7 @@ import { isKcstpQuery, buildKcstpScript } from "./KnowledgeContactScenarioTriple
 import { isGniktrQuery, buildGniktrScript } from "./GraphNodeInvestmentKnowledgeTriple";
 import { isSkctriQuery, buildSkctriScript } from "./ScenarioKnowledgeContactTriple";
 import { isIcktqQuery, buildIcktqScript } from "./InvestigationContactKnowledgeTaskQuad";
+import { isKrstqQuery, buildKrstqScript } from "./KnowledgeReportScenarioTaskQuad";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4747,6 +4748,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:icktq-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIcktqScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isKrstqQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:krstq-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKrstqScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
