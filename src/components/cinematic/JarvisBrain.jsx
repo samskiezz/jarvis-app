@@ -416,6 +416,7 @@ import { isSsjdtriQuery, buildSsjdtriScript } from "./ScenarioSwarmDatasetTriple
 import { isCiprtriQuery, buildCiprtriScript } from "./ContactIntelReportTriple";
 import { isGnctriQuery, buildGnctriScript } from "./GraphNodeContactTaskTriple";
 import { isSjrskQuery, buildSjrskScript } from "./SwarmJobReportSkillTriple";
+import { isKcstpQuery, buildKcstpScript } from "./KnowledgeContactScenarioTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4707,6 +4708,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjrsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSjrskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isKcstpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kcstp-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKcstpScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
