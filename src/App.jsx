@@ -332,6 +332,7 @@ import GraphCommunityContactInvestTriple from '@/components/cinematic/GraphCommu
 import TaskOperationalReadinessMatrix from '@/components/cinematic/TaskOperationalReadinessMatrix';
 import GraphCommunityOpsTaskTriple from '@/components/cinematic/GraphCommunityOpsTaskTriple';
 import GraphCommunityReportKnowledgeTriple from '@/components/cinematic/GraphCommunityReportKnowledgeTriple';
+import ScenarioIntelDatasetTriple from '@/components/cinematic/ScenarioIntelDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -991,6 +992,8 @@ function App() {
             <GraphCommunityOpsTaskTriple />
             {/* F180 (overnight 2026-08-08): graph community × report × knowledge triple coverage — ◈ GCRKTRI button (left:727760, bottom:8, zIndex:328); parallel-fetches /v1/graph/communities + /v1/reports + /knowledge/; three-way keyword-correlates each network cluster against intelligence reports AND KB articles to surface FULLY DOCUMENTED (report + KB backing) vs REPORT-ONLY vs KB-ONLY vs DARK (no report or KB — community intelligence gap); amber badge on dark count; stat tiles (communities/reports/KB articles/fully documented/dark); coverage breakdown bar; ALL/FULLY DOCUMENTED/REPORT-ONLY/KB-ONLY/DARK filter tabs + text search; expand cluster → split pane left=matched reports (amber scorebars) right=matched KB articles (teal scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community intelligence coverage brief + TTS via jarvis:speak-dossier; isGcrktriQuery+buildGcrktriScript wired in JarvisBrain; "gcrktri"/"community report knowledge"/"documented community"/"dark community knowledge"/"community intel knowledge" voice trigger; jarvis:gcrktri-toggle event; 90-s auto-refresh */}
             <GraphCommunityReportKnowledgeTriple />
+            {/* F181 (overnight 2026-08-08): scenario × intel profile × dataset intelligence readiness — ◈ SIDTRI button (left:728320, bottom:8, zIndex:329); parallel-fetches /v1/scenario/list + /entities/IntelProfile + /v1/datasets; three-way keyword-correlates each scenario against intel profiles AND datasets to surface INTELLIGENCE-READY (profile + dataset backing) vs PROFILE-ONLY (intel coverage, no data) vs DATA-ONLY (dataset found, no intel profile) vs DARK (neither — scenario unresourced); red badge on dark count; stat tiles (scenarios/intel profiles/datasets/intel-ready/dark); coverage breakdown bar; ALL/INTELLIGENCE-READY/PROFILE-ONLY/DATA-ONLY/DARK filter tabs + text search; expand scenario → split pane left=matched intel profiles (green scorebars) right=matched datasets (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario intelligence readiness brief + TTS via jarvis:speak-dossier; isSidtriQuery+buildSidtriScript wired in JarvisBrain; "sidtri"/"scenario intel dataset"/"scenario dataset intel"/"intelligence ready scenario"/"dark scenario intel"/"scenario intel readiness"/"scenario dataset readiness"/"intel ready scenarios"/"dataset ready scenarios" voice trigger; jarvis:sidtri-toggle event; 90-s auto-refresh */}
+            <ScenarioIntelDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
