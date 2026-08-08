@@ -334,6 +334,7 @@ import GraphCommunityOpsTaskTriple from '@/components/cinematic/GraphCommunityOp
 import GraphCommunityReportKnowledgeTriple from '@/components/cinematic/GraphCommunityReportKnowledgeTriple';
 import ScenarioIntelDatasetTriple from '@/components/cinematic/ScenarioIntelDatasetTriple';
 import SwarmJobContactSkillTriple from '@/components/cinematic/SwarmJobContactSkillTriple';
+import KnowledgeScenarioTaskTriple from '@/components/cinematic/KnowledgeScenarioTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -997,6 +998,8 @@ function App() {
             <ScenarioIntelDatasetTriple />
             {/* F182 (overnight 2026-08-08): swarm job × contact × skill triple coverage — ◈ SJCSK button (left:728880, bottom:8, zIndex:330); parallel-fetches /entities/SwarmJob + /entities/Contact + /v1/aip/skill; three-way keyword-correlates each swarm job against contacts AND JARVIS skills to surface FULLY SUPPORTED (contact + skill backing) vs STAFFED (contact found, no skill alignment) vs SKILLED (skill found, no contact) vs UNSUPPORTED (neither — automation gap); amber badge on unsupported count; stat tiles (jobs/contacts/skills/fully supported/staffed/skilled/unsupported); coverage breakdown bar; ALL/FULLY SUPPORTED/STAFFED/SKILLED/UNSUPPORTED filter tabs + text search; expand job → split pane left=matched contacts (cyan scorebars) right=matched skills (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm staffing and capability coverage brief + TTS via jarvis:speak-dossier; isSjcskQuery+buildSjcskScript wired in JarvisBrain; "sjcsk"/"swarm staffing"/"swarm job contact skill"/"swarm support triple"/"swarm skill staffing"/"unsupported swarm"/"staffed swarm"/"swarm capability coverage" voice trigger; jarvis:sjcsk-toggle event; 90-s auto-refresh */}
             <SwarmJobContactSkillTriple />
+            {/* F183 (overnight 2026-08-08): knowledge × scenario × task triple coverage — ◈ KSTRI button (left:729440, bottom:8, zIndex:331); parallel-fetches /knowledge/ + /v1/scenario/list + /entities/Task; three-way keyword-correlates each KB article against scenarios AND tasks to surface FULLY ACTIONABLE (scenario-planned + task-assigned) vs PLANNED (scenario only, no task) vs TASKED (task only, no scenario plan) vs ARCHIVAL (neither — knowledge not operationally deployed); amber badge on archival count; stat tiles (KB articles/scenarios/tasks/fully actionable/planned/tasked/archival); coverage breakdown bar; ALL/FULLY ACTIONABLE/PLANNED/TASKED/ARCHIVAL filter tabs + text search; expand article → split pane left=matched scenarios (amber scorebars) right=matched tasks (cyan scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge operational deployment brief + TTS via jarvis:speak-dossier; isKstriQuery+buildKstriScript wired in JarvisBrain; "kstri"/"knowledge scenario task"/"deployed knowledge"/"archival knowledge"/"knowledge deployment"/"knowledge action coverage"/"knowledge ops task" voice trigger; jarvis:kstri-toggle event; 90-s auto-refresh */}
+            <KnowledgeScenarioTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
