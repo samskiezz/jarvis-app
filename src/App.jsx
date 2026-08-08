@@ -336,6 +336,7 @@ import ScenarioIntelDatasetTriple from '@/components/cinematic/ScenarioIntelData
 import SwarmJobContactSkillTriple from '@/components/cinematic/SwarmJobContactSkillTriple';
 import KnowledgeScenarioTaskTriple from '@/components/cinematic/KnowledgeScenarioTaskTriple';
 import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventKnowledgeScenarioReadiness';
+import RiskSignalQuadCoverage from '@/components/cinematic/RiskSignalQuadCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1003,6 +1004,8 @@ function App() {
             <KnowledgeScenarioTaskTriple />
             {/* F184 (overnight 2026-08-08): ops event × knowledge × scenario readiness — ◈ OKSRDY button (left:730000, bottom:8, zIndex:332); parallel-fetches /v1/ops/events + /knowledge/ + /v1/scenario/list; three-way keyword-correlates each ops event against KB articles AND scenarios to classify as READY (both KB + scenario coverage), KB-ONLY (knowledge exists but no scenario), SCENARIO-ONLY (scenario planned but no KB backing), or BLIND (no coverage at all — operational blind spot); amber badge on blind count; stat tiles (events/KB articles/scenarios/ready/kb-only/scenario-only/blind); coverage breakdown bar; ALL/READY/KB-ONLY/SCENARIO-ONLY/BLIND filter tabs + text search; expand event → split pane left=matched KB articles (cyan scorebars) right=matched scenarios (purple scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops readiness brief + TTS via jarvis:speak-dossier; isOksrdyQuery+buildOksrdyScript exported; "oksrdy"/"ops ready"/"ops readiness"/"ops knowledge scenario"/"ops event readiness"/"ops coverage check" voice trigger; jarvis:oksrdy-toggle event; 90-s auto-refresh */}
             <OpsEventKnowledgeScenarioReadiness />
+            {/* F185 (overnight 2026-08-08): risk signal × contact × dataset × scenario quad coverage — ◈ RCDTRI button (left:730560, bottom:8, zIndex:333); parallel-fetches /entities/RiskSignal + /entities/Contact + /v1/datasets + /v1/scenario/list; 4-way keyword-correlates each active risk signal against contacts (responsible parties), datasets (evidence base), and scenarios (response plans) to surface FULLY MITIGATED (all 3 backing sources found) vs RESOURCED (2 of 3) vs MINIMAL (1 of 3) vs UNMITIGATED (none); red badge on unmitigated count; stat tiles (risk signals/contacts/datasets/scenarios/fully mitigated/resourced/minimal/unmitigated); coverage breakdown bar; ALL/FULLY MITIGATED/RESOURCED/MINIMAL/UNMITIGATED filter tabs + text search; expand signal → 3-pane (contacts teal scorebars | datasets amber scorebars | scenarios purple scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk resource coverage brief + TTS via jarvis:speak-dossier; isRcdtriQuery+buildRcdtriScript wired in JarvisBrain; "rcdtri"/"risk quad"/"quad risk"/"fully mitigated"/"unmitigated risk"/"risk resource coverage"/"risk coverage quad" voice trigger; jarvis:rcdtri-toggle event; 90-s auto-refresh */}
+            <RiskSignalQuadCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -406,6 +406,7 @@ import { isSidtriQuery, buildSidtriScript } from "./ScenarioIntelDatasetTriple";
 import { isSjcskQuery, buildSjcskScript } from "./SwarmJobContactSkillTriple";
 import { isKstriQuery, buildKstriScript } from "./KnowledgeScenarioTaskTriple";
 import { isOksrdyQuery, buildOksrdyScript } from "./OpsEventKnowledgeScenarioReadiness";
+import { isRcdtriQuery, buildRcdtriScript } from "./RiskSignalQuadCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4607,6 +4608,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:oksrdy-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildOksrdyScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRcdtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rcdtri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRcdtriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
