@@ -339,6 +339,7 @@ import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventK
 import RiskSignalQuadCoverage from '@/components/cinematic/RiskSignalQuadCoverage';
 import GraphNodeLiveIntelTaskTriple from '@/components/cinematic/GraphNodeLiveIntelTaskTriple';
 import GraphCommunityLiveIntelRiskTriple from '@/components/cinematic/GraphCommunityLiveIntelRiskTriple';
+import InvestmentTaskOpsTriple from '@/components/cinematic/InvestmentTaskOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1012,6 +1013,8 @@ function App() {
             <GraphNodeLiveIntelTaskTriple />
             {/* F187 (overnight 2026-08-08): graph community × live intel × risk signal triple coverage — ◈ GCLRSTRI button (left:731680, bottom:8, zIndex:335); parallel-fetches /v1/graph/communities + /functions/getLiveIntel + /entities/RiskSignal; keyword-correlates each community against live intel events AND risk signals to surface FULLY ALARMED (live event + risk signal) vs LIVE-ONLY (live event, no risk signal) vs RISK-ONLY (risk signal, no live event) vs QUIET (no coverage); red badge on fully alarmed count; stat tiles (communities/live events/risk signals/fully alarmed/live-only/risk-only/quiet); coverage breakdown bar; ALL/FULLY ALARMED/LIVE-ONLY/RISK-ONLY/QUIET filter tabs + text search; expand community → split pane left=matched live events (amber scorebars) right=matched risk signals (red scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community alarm status brief + TTS via jarvis:speak-dossier; isGclrstriQuery+buildGclrstriScript wired in JarvisBrain; "gclrstri"/"community alarm"/"network alarm"/"live risk community"/"community live risk"/"graph community live risk"/"fully alarmed community"/"alarmed community"/"community risk live"/"network live risk" voice trigger; jarvis:gclrstri-toggle event; 60-s auto-refresh */}
             <GraphCommunityLiveIntelRiskTriple />
+            {/* F188 (overnight 2026-08-08): investment × task × ops event triple coverage — ◈ ITTRI button (left:732240, bottom:8, zIndex:336); parallel-fetches /entities/Investment + /entities/Task + /v1/ops/events; keyword-correlates each investment against tasks AND ops events to surface FULLY ENGAGED (task + ops coverage) vs TASKED-ONLY (task found, no ops event) vs OPS-TRIGGERED (ops event found, no task) vs DORMANT (neither); cyan badge on fully engaged count; stat tiles (investments/tasks/ops events/fully engaged/tasked-only/ops-triggered/dormant); coverage breakdown bar; ALL/FULLY ENGAGED/TASKED-ONLY/OPS-TRIGGERED/DORMANT filter tabs + text search; expand investment → split pane left=matched tasks (green scorebars) right=matched ops events (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment operational coverage brief + TTS via jarvis:speak-dossier; isIttriQuery+buildIttriScript wired in JarvisBrain; "ittri"/"investment ops"/"ops investment"/"investment task ops"/"engaged investment"/"dormant investment" voice trigger; jarvis:ittri-toggle event; 90-s auto-refresh */}
+            <InvestmentTaskOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
