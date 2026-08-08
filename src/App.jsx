@@ -349,6 +349,7 @@ import SwarmJobReportSkillTriple from '@/components/cinematic/SwarmJobReportSkil
 import KnowledgeContactScenarioTriple from '@/components/cinematic/KnowledgeContactScenarioTriple';
 import GraphNodeInvestmentKnowledgeTriple from '@/components/cinematic/GraphNodeInvestmentKnowledgeTriple';
 import ScenarioKnowledgeContactTriple from '@/components/cinematic/ScenarioKnowledgeContactTriple';
+import InvestigationContactKnowledgeTaskQuad from '@/components/cinematic/InvestigationContactKnowledgeTaskQuad';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1045,6 +1046,10 @@ function App() {
             {/* Coverage states: FULLY BRIEFED | BRIEFED | STAFFED | UNRESOURCED */}
             {/* Voice trigger: "skctri" / "scenario knowledge contact" / "unresourced scenario" */}
             <ScenarioKnowledgeContactTriple />
+            {/* Cross-correlates /v1/investigations × /entities/Contact × /knowledge/ × /entities/Task */}
+            {/* Coverage states: FULLY MANAGED | RESOURCED | SPARSE | UNSUPPORTED */}
+            {/* Voice trigger: "icktq" / "investigation contact knowledge task" / "case quad" */}
+            <InvestigationContactKnowledgeTaskQuad />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
