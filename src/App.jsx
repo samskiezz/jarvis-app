@@ -337,6 +337,7 @@ import SwarmJobContactSkillTriple from '@/components/cinematic/SwarmJobContactSk
 import KnowledgeScenarioTaskTriple from '@/components/cinematic/KnowledgeScenarioTaskTriple';
 import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventKnowledgeScenarioReadiness';
 import RiskSignalQuadCoverage from '@/components/cinematic/RiskSignalQuadCoverage';
+import GraphNodeLiveIntelTaskTriple from '@/components/cinematic/GraphNodeLiveIntelTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1006,6 +1007,8 @@ function App() {
             <OpsEventKnowledgeScenarioReadiness />
             {/* F185 (overnight 2026-08-08): risk signal × contact × dataset × scenario quad coverage — ◈ RCDTRI button (left:730560, bottom:8, zIndex:333); parallel-fetches /entities/RiskSignal + /entities/Contact + /v1/datasets + /v1/scenario/list; 4-way keyword-correlates each active risk signal against contacts (responsible parties), datasets (evidence base), and scenarios (response plans) to surface FULLY MITIGATED (all 3 backing sources found) vs RESOURCED (2 of 3) vs MINIMAL (1 of 3) vs UNMITIGATED (none); red badge on unmitigated count; stat tiles (risk signals/contacts/datasets/scenarios/fully mitigated/resourced/minimal/unmitigated); coverage breakdown bar; ALL/FULLY MITIGATED/RESOURCED/MINIMAL/UNMITIGATED filter tabs + text search; expand signal → 3-pane (contacts teal scorebars | datasets amber scorebars | scenarios purple scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk resource coverage brief + TTS via jarvis:speak-dossier; isRcdtriQuery+buildRcdtriScript wired in JarvisBrain; "rcdtri"/"risk quad"/"quad risk"/"fully mitigated"/"unmitigated risk"/"risk resource coverage"/"risk coverage quad" voice trigger; jarvis:rcdtri-toggle event; 90-s auto-refresh */}
             <RiskSignalQuadCoverage />
+            {/* F186 (overnight 2026-08-08): graph node × live intel × task triple coverage — ◈ GNLIT button (left:731120, bottom:8, zIndex:334); parallel-fetches /v1/graph/centrality + /functions/getLiveIntel + /entities/Task; keyword-correlates each graph node against live intel events AND tasks to surface FULLY REACTIVE (live event + task assigned) vs LIVE-ONLY (live event but no task) vs TASKED (task assigned, no live event) vs DORMANT (neither); cyan badge on fully reactive count; stat tiles (graph nodes/live events/tasks/fully reactive/live-only/tasked/dormant); coverage breakdown bar; ALL/FULLY REACTIVE/LIVE-ONLY/TASKED/DORMANT filter tabs + text search; expand node → split pane left=matched live events (amber scorebars) right=matched tasks (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph operational reactivity brief + TTS via jarvis:speak-dossier; isGnlitQuery+buildGnlitScript wired in JarvisBrain; "gnlit"/"graph live task"/"live node task"/"graph reactivity"/"reactive node"/"fully reactive node" voice trigger; jarvis:gnlit-toggle event; 60-s auto-refresh */}
+            <GraphNodeLiveIntelTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
