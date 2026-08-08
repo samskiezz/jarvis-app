@@ -348,6 +348,7 @@ import GraphNodeContactTaskTriple from '@/components/cinematic/GraphNodeContactT
 import SwarmJobReportSkillTriple from '@/components/cinematic/SwarmJobReportSkillTriple';
 import KnowledgeContactScenarioTriple from '@/components/cinematic/KnowledgeContactScenarioTriple';
 import GraphNodeInvestmentKnowledgeTriple from '@/components/cinematic/GraphNodeInvestmentKnowledgeTriple';
+import ScenarioKnowledgeContactTriple from '@/components/cinematic/ScenarioKnowledgeContactTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1039,6 +1040,11 @@ function App() {
             <KnowledgeContactScenarioTriple />
             {/* F196 (overnight 2026-08-08): graph node × investment × knowledge triple coverage — ◈ GNIKTR button (left:736720, bottom:8, zIndex:344); parallel-fetches /v1/graph/centrality + /entities/Investment + /knowledge/; three-way keyword-correlates each top-influence graph node against investment positions AND KB articles to surface FULLY MAPPED (investment-aligned + knowledge-backed) vs INVESTED (portfolio connection found, no KB backing) vs DOCUMENTED (KB article found, no investment position) vs BLIND (neither — high-influence node with no financial or knowledge coverage); amber badge on blind count; stat tiles (graph nodes/fully mapped/invested/documented/blind); coverage breakdown bar; ALL/FULLY MAPPED/INVESTED/DOCUMENTED/BLIND filter tabs + text search; expand node → split pane left=matched investments (cyan scorebars) right=matched KB articles (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network investment-knowledge brief + TTS via jarvis:speak-dossier; isGniktrQuery+buildGniktrScript wired in JarvisBrain; "graph node invest know"/"gniktr"/"node invest knowledge"/"graph invest knowledge"/"invest knowledge node"/"network invest knowledge" voice trigger; jarvis:gniktr-toggle event; 90-s auto-refresh */}
             <GraphNodeInvestmentKnowledgeTriple />
+            {/* F197 — Scenario × Knowledge × Contact Triple Coverage (SKCTRI) */}
+            {/* Cross-correlates /v1/scenario/list × /knowledge/ × /entities/Contact */}
+            {/* Coverage states: FULLY BRIEFED | BRIEFED | STAFFED | UNRESOURCED */}
+            {/* Voice trigger: "skctri" / "scenario knowledge contact" / "unresourced scenario" */}
+            <ScenarioKnowledgeContactTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
