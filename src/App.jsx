@@ -340,6 +340,7 @@ import RiskSignalQuadCoverage from '@/components/cinematic/RiskSignalQuadCoverag
 import GraphNodeLiveIntelTaskTriple from '@/components/cinematic/GraphNodeLiveIntelTaskTriple';
 import GraphCommunityLiveIntelRiskTriple from '@/components/cinematic/GraphCommunityLiveIntelRiskTriple';
 import InvestmentTaskOpsTriple from '@/components/cinematic/InvestmentTaskOpsTriple';
+import GraphNodeReportOpsTriple from '@/components/cinematic/GraphNodeReportOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1015,6 +1016,8 @@ function App() {
             <GraphCommunityLiveIntelRiskTriple />
             {/* F188 (overnight 2026-08-08): investment × task × ops event triple coverage — ◈ ITTRI button (left:732240, bottom:8, zIndex:336); parallel-fetches /entities/Investment + /entities/Task + /v1/ops/events; keyword-correlates each investment against tasks AND ops events to surface FULLY ENGAGED (task + ops coverage) vs TASKED-ONLY (task found, no ops event) vs OPS-TRIGGERED (ops event found, no task) vs DORMANT (neither); cyan badge on fully engaged count; stat tiles (investments/tasks/ops events/fully engaged/tasked-only/ops-triggered/dormant); coverage breakdown bar; ALL/FULLY ENGAGED/TASKED-ONLY/OPS-TRIGGERED/DORMANT filter tabs + text search; expand investment → split pane left=matched tasks (green scorebars) right=matched ops events (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment operational coverage brief + TTS via jarvis:speak-dossier; isIttriQuery+buildIttriScript wired in JarvisBrain; "ittri"/"investment ops"/"ops investment"/"investment task ops"/"engaged investment"/"dormant investment" voice trigger; jarvis:ittri-toggle event; 90-s auto-refresh */}
             <InvestmentTaskOpsTriple />
+            {/* F189 (overnight 2026-08-08): graph node × report × ops event triple coverage — ◈ GNROET button (left:732800, bottom:8, zIndex:337); parallel-fetches /v1/graph/centrality + /v1/reports + /v1/ops/events; keyword-correlates each top-influence graph node against intelligence reports AND active ops events to surface FULLY EXPOSED (report documentation + ops event coverage) vs DOCUMENTED (report only) vs OPS-ACTIVE (ops event only) vs DARK (neither — no intelligence or operational coverage); amber badge on dark count; stat tiles (nodes/fully exposed/documented/ops-active/dark); coverage breakdown bar; ALL/FULLY EXPOSED/DOCUMENTED/OPS-ACTIVE/DARK filter tabs + text search; expand node → split pane left=matched reports (amber scorebars) right=matched ops events (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network intelligence status brief + TTS via jarvis:speak-dossier; isGnroetQuery+buildGnroetScript wired in JarvisBrain; "graph node report ops"/"gnroet"/"documented node"/"ops active node"/"dark network node"/"node intelligence status"/"graph network coverage"/"node report ops event" voice trigger; jarvis:gnroet-toggle event; 90-s auto-refresh */}
+            <GraphNodeReportOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

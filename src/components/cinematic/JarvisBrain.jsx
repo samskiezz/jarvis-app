@@ -410,6 +410,7 @@ import { isRcdtriQuery, buildRcdtriScript } from "./RiskSignalQuadCoverage";
 import { isGnlitQuery, buildGnlitScript } from "./GraphNodeLiveIntelTaskTriple";
 import { isGclrstriQuery, buildGclrstriScript } from "./GraphCommunityLiveIntelRiskTriple";
 import { isIttriQuery, buildIttriScript } from "./InvestmentTaskOpsTriple";
+import { isGnroetQuery, buildGnroetScript } from "./GraphNodeReportOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4647,6 +4648,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ittri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIttriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGnroetQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gnroet-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGnroetScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
