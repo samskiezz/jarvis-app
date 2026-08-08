@@ -338,6 +338,7 @@ import KnowledgeScenarioTaskTriple from '@/components/cinematic/KnowledgeScenari
 import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventKnowledgeScenarioReadiness';
 import RiskSignalQuadCoverage from '@/components/cinematic/RiskSignalQuadCoverage';
 import GraphNodeLiveIntelTaskTriple from '@/components/cinematic/GraphNodeLiveIntelTaskTriple';
+import GraphCommunityLiveIntelRiskTriple from '@/components/cinematic/GraphCommunityLiveIntelRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1009,6 +1010,8 @@ function App() {
             <RiskSignalQuadCoverage />
             {/* F186 (overnight 2026-08-08): graph node × live intel × task triple coverage — ◈ GNLIT button (left:731120, bottom:8, zIndex:334); parallel-fetches /v1/graph/centrality + /functions/getLiveIntel + /entities/Task; keyword-correlates each graph node against live intel events AND tasks to surface FULLY REACTIVE (live event + task assigned) vs LIVE-ONLY (live event but no task) vs TASKED (task assigned, no live event) vs DORMANT (neither); cyan badge on fully reactive count; stat tiles (graph nodes/live events/tasks/fully reactive/live-only/tasked/dormant); coverage breakdown bar; ALL/FULLY REACTIVE/LIVE-ONLY/TASKED/DORMANT filter tabs + text search; expand node → split pane left=matched live events (amber scorebars) right=matched tasks (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph operational reactivity brief + TTS via jarvis:speak-dossier; isGnlitQuery+buildGnlitScript wired in JarvisBrain; "gnlit"/"graph live task"/"live node task"/"graph reactivity"/"reactive node"/"fully reactive node" voice trigger; jarvis:gnlit-toggle event; 60-s auto-refresh */}
             <GraphNodeLiveIntelTaskTriple />
+            {/* F187 (overnight 2026-08-08): graph community × live intel × risk signal triple coverage — ◈ GCLRSTRI button (left:731680, bottom:8, zIndex:335); parallel-fetches /v1/graph/communities + /functions/getLiveIntel + /entities/RiskSignal; keyword-correlates each community against live intel events AND risk signals to surface FULLY ALARMED (live event + risk signal) vs LIVE-ONLY (live event, no risk signal) vs RISK-ONLY (risk signal, no live event) vs QUIET (no coverage); red badge on fully alarmed count; stat tiles (communities/live events/risk signals/fully alarmed/live-only/risk-only/quiet); coverage breakdown bar; ALL/FULLY ALARMED/LIVE-ONLY/RISK-ONLY/QUIET filter tabs + text search; expand community → split pane left=matched live events (amber scorebars) right=matched risk signals (red scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community alarm status brief + TTS via jarvis:speak-dossier; isGclrstriQuery+buildGclrstriScript wired in JarvisBrain; "gclrstri"/"community alarm"/"network alarm"/"live risk community"/"community live risk"/"graph community live risk"/"fully alarmed community"/"alarmed community"/"community risk live"/"network live risk" voice trigger; jarvis:gclrstri-toggle event; 60-s auto-refresh */}
+            <GraphCommunityLiveIntelRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
