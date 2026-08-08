@@ -345,6 +345,7 @@ import LiveIntelKnowledgeRiskTriple from '@/components/cinematic/LiveIntelKnowle
 import ScenarioSwarmDatasetTriple from '@/components/cinematic/ScenarioSwarmDatasetTriple';
 import ContactIntelReportTriple from '@/components/cinematic/ContactIntelReportTriple';
 import GraphNodeContactTaskTriple from '@/components/cinematic/GraphNodeContactTaskTriple';
+import SwarmJobReportSkillTriple from '@/components/cinematic/SwarmJobReportSkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1030,6 +1031,8 @@ function App() {
             <ContactIntelReportTriple />
             {/* F193 (overnight 2026-08-08): graph node × contact × task triple coverage — ◈ GNCTRI button (left:735040, bottom:8, zIndex:341); parallel-fetches /v1/graph/centrality + /entities/Contact + /entities/Task; keyword-correlates each top-influence node against contacts AND tasks to surface FULLY MANAGED (contact + task) vs STAFFED (contact, no task) vs TASKED (task, no contact) vs UNMANAGED (neither — high-influence node with no human or operational backing); violet badge on unmanaged count; isGnctriQuery+buildGnctriScript wired in JarvisBrain; "gnctri"/"graph node contact task"/"managed nodes"/"unmanaged nodes"/"node staffing" voice trigger; jarvis:gnctri-toggle event; 90-s auto-refresh */}
             <GraphNodeContactTaskTriple />
+            {/* F194 (overnight 2026-08-08): swarm job × report × skill triple coverage — ◈ SJRSK button (left:735600, bottom:8, zIndex:342); parallel-fetches /entities/SwarmJob + /v1/reports + /v1/aip/skill; keyword-correlates each swarm job against intelligence reports AND JARVIS skills to surface FULLY EQUIPPED (report-documented + skill-backed) vs DOCUMENTED (report only, no skill) vs SKILLED (skill only, no report) vs UNSUPPORTED (neither — automation without intelligence or capability backing); amber badge on unsupported count; stat tiles (swarm jobs/fully equipped/documented/skilled/unsupported); coverage breakdown bar; ALL/FULLY EQUIPPED/DOCUMENTED/SKILLED/UNSUPPORTED filter tabs + text search; expand job → split pane left=matched reports (amber scorebars) right=matched skills (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm intelligence-capability coverage brief + TTS via jarvis:speak-dossier; isSjrskQuery+buildSjrskScript wired in JarvisBrain; "sjrsk"/"swarm report skill"/"swarm intel capability"/"equipped swarm"/"unsupported swarm"/"swarm report skill coverage"/"swarm capability report" voice trigger; jarvis:sjrsk-toggle event; 90-s auto-refresh */}
+            <SwarmJobReportSkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
