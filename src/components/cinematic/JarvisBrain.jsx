@@ -403,6 +403,7 @@ import { isTcdsomQuery, buildTcdsomScript } from "./TaskOperationalReadinessMatr
 import { isGcoetriQuery, buildGcoetriScript } from "./GraphCommunityOpsTaskTriple";
 import { isGcrktriQuery, buildGcrktriScript } from "./GraphCommunityReportKnowledgeTriple";
 import { isSidtriQuery, buildSidtriScript } from "./ScenarioIntelDatasetTriple";
+import { isSjcskQuery, buildSjcskScript } from "./SwarmJobContactSkillTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4577,6 +4578,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sidtri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSidtriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSjcskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjcsk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjcskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
