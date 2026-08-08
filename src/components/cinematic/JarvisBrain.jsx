@@ -421,6 +421,7 @@ import { isGniktrQuery, buildGniktrScript } from "./GraphNodeInvestmentKnowledge
 import { isSkctriQuery, buildSkctriScript } from "./ScenarioKnowledgeContactTriple";
 import { isIcktqQuery, buildIcktqScript } from "./InvestigationContactKnowledgeTaskQuad";
 import { isKrstqQuery, buildKrstqScript } from "./KnowledgeReportScenarioTaskQuad";
+import { isRgctormQuery, buildRgctormScript } from "./RiskSignalGraphCommunityTaskMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4757,6 +4758,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:krstq-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKrstqScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRgctormQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rgctorm-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRgctormScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

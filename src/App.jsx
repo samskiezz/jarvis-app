@@ -351,6 +351,7 @@ import GraphNodeInvestmentKnowledgeTriple from '@/components/cinematic/GraphNode
 import ScenarioKnowledgeContactTriple from '@/components/cinematic/ScenarioKnowledgeContactTriple';
 import InvestigationContactKnowledgeTaskQuad from '@/components/cinematic/InvestigationContactKnowledgeTaskQuad';
 import KnowledgeReportScenarioTaskQuad from '@/components/cinematic/KnowledgeReportScenarioTaskQuad';
+import RiskSignalGraphCommunityTaskMatrix from '@/components/cinematic/RiskSignalGraphCommunityTaskMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1052,6 +1053,11 @@ function App() {
             {/* Voice trigger: "icktq" / "investigation contact knowledge task" / "case quad" */}
             <InvestigationContactKnowledgeTaskQuad />
             <KnowledgeReportScenarioTaskQuad />
+            {/* F200: Risk Signal × Graph Community × Task Operational Response Matrix (RGCTORM) */}
+            {/* Cross-correlates /entities/RiskSignal × /v1/graph/communities × /entities/Task */}
+            {/* Coverage states: FULLY RESPONDED | COMMUNITY-LINKED | TASK-DRIVEN | UNADDRESSED */}
+            {/* Voice trigger: "rgctorm" / "risk graph community task" / "network risk response" */}
+            <RiskSignalGraphCommunityTaskMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
