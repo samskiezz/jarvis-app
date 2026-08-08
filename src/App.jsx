@@ -343,6 +343,7 @@ import InvestmentTaskOpsTriple from '@/components/cinematic/InvestmentTaskOpsTri
 import GraphNodeReportOpsTriple from '@/components/cinematic/GraphNodeReportOpsTriple';
 import LiveIntelKnowledgeRiskTriple from '@/components/cinematic/LiveIntelKnowledgeRiskTriple';
 import ScenarioSwarmDatasetTriple from '@/components/cinematic/ScenarioSwarmDatasetTriple';
+import ContactIntelReportTriple from '@/components/cinematic/ContactIntelReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1024,6 +1025,8 @@ function App() {
             <LiveIntelKnowledgeRiskTriple />
             {/* F191 (overnight 2026-08-08): scenario × swarm job × dataset triple coverage — ◈ SSJDTRI button (left:733920, bottom:8, zIndex:339); parallel-fetches /v1/scenario/list + /entities/SwarmJob + /v1/datasets; keyword-correlates each scenario against swarm jobs AND datasets to surface FULLY AUTOMATED (swarm + dataset backing) vs SWARM-ONLY (automation found, no dataset) vs DATA-BACKED (dataset found, no swarm) vs MANUAL (neither — no automation or data); amber badge on manual count; stat tiles (scenarios/fully automated/swarm-only/data-backed/manual); coverage breakdown bar; ALL/FULLY AUTOMATED/SWARM-ONLY/DATA-BACKED/MANUAL filter tabs + text search; expand scenario → split pane left=matched swarm jobs (lime scorebars) right=matched datasets (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario automation readiness brief + TTS via jarvis:speak-dossier; isSsjdtriQuery+buildSsjdtriScript wired in JarvisBrain; "ssjdtri"/"scenario swarm dataset"/"scenario automation"/"manual scenario"/"automated scenario"/"scenario swarm data" voice trigger; jarvis:ssjdtri-toggle event; 90-s auto-refresh */}
             <ScenarioSwarmDatasetTriple />
+            {/* F192 (overnight 2026-08-08): contact × intel profile × report triple coverage — ◈ CIPRTRI button (left:734480, bottom:8, zIndex:340); parallel-fetches /entities/Contact + /entities/IntelProfile + /v1/reports; keyword-correlates each contact against intel profiles AND reports to surface FULLY PROFILED (intel profile + report) vs PROFILED (intel profile only) vs REPORTED (report only) vs UNCHARTED (neither — no intelligence documentation); amber badge on uncharted count; stat tiles (contacts/fully profiled/profiled/reported/uncharted); coverage breakdown bar; ALL/FULLY PROFILED/PROFILED/REPORTED/UNCHARTED filter tabs + text search; expand contact → split pane left=matched intel profiles (amber scorebars) right=matched reports (cyan scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact intelligence coverage brief + TTS via jarvis:speak-dossier; isCiprtriQuery+buildCiprtriScript wired in JarvisBrain; "ciprtri"/"contact intel report"/"profiled contact"/"uncharted contact"/"contact report intel" voice trigger; jarvis:ciprtri-toggle event; 90-s auto-refresh */}
+            <ContactIntelReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
