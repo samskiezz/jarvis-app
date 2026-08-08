@@ -330,6 +330,7 @@ import InvestigationIntelDatasetTriple from '@/components/cinematic/Investigatio
 import DatasetContactBridge from '@/components/cinematic/DatasetContactBridge';
 import GraphCommunityContactInvestTriple from '@/components/cinematic/GraphCommunityContactInvestTriple';
 import TaskOperationalReadinessMatrix from '@/components/cinematic/TaskOperationalReadinessMatrix';
+import GraphCommunityOpsTaskTriple from '@/components/cinematic/GraphCommunityOpsTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -985,6 +986,8 @@ function App() {
             <GraphCommunityContactInvestTriple />
             {/* F178 (overnight 2026-08-07): task × contact × dataset × skill operational readiness matrix — ◈ TCDSOM button (left:726640, bottom:8, zIndex:326); parallel-fetches /entities/Task + /entities/Contact + /v1/datasets + /v1/aip/skill; 4-way keyword-correlates each task against contacts, datasets, and JARVIS skills to surface FULLY EQUIPPED (all 3 aligned) vs RESOURCED (2 of 3) vs SPARSE (1 of 3) vs ISOLATED (none — no contact owner, no data, no skill coverage); red badge on isolated count; stat tiles (tasks/fully equipped/resourced/sparse/isolated); coverage breakdown bar; ALL/FULLY EQUIPPED/RESOURCED/SPARSE/ISOLATED filter tabs + text search; expand task → 3-pane (contacts teal | datasets amber | skills lime) with scorebars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence mission-readiness evaluation + TTS via jarvis:speak-dossier; isTcdsomQuery+buildTcdsomScript wired in JarvisBrain; "task readiness"/"tcdsom"/"operational readiness"/"task equipped"/"fully equipped tasks"/"isolated tasks"/"task resource matrix"/"task coverage matrix" voice trigger; jarvis:tcdsom-toggle event; 90-s auto-refresh */}
             <TaskOperationalReadinessMatrix />
+            {/* F179 (overnight 2026-08-08): graph community × ops event × task triple coverage — ◈ GCOETRI button (left:727200, bottom:8, zIndex:327); parallel-fetches /v1/graph/communities + /v1/ops/events + /entities/Task; three-way keyword-correlates each network cluster against active ops events AND active tasks to surface FULLY OPERATIONAL (ops-event-triggered + task-backed) vs OPS-TRIGGERED (ops event found, no task) vs TASKED (task found, no ops event) vs IDLE (no ops event or task — community has no operational coverage); cyan badge on fully operational count; stat tiles (communities/ops events/tasks/fully operational/idle); coverage breakdown bar; ALL/FULLY OPERATIONAL/OPS-TRIGGERED/TASKED/IDLE filter tabs + text search; expand cluster → split pane left=matched ops events with severity badge + relevance scorebars, right=matched tasks with status + priority badge + scorebars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community operational coverage brief + TTS via jarvis:speak-dossier; isGcoetriQuery+buildGcoetriScript wired in JarvisBrain; "gcoetri"/"community ops task"/"graph ops task"/"operational community"/"idle community"/"community ops coverage"/"community task ops" voice trigger; jarvis:gcoetri-toggle event; 90-s auto-refresh */}
+            <GraphCommunityOpsTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
