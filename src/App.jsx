@@ -335,6 +335,7 @@ import GraphCommunityReportKnowledgeTriple from '@/components/cinematic/GraphCom
 import ScenarioIntelDatasetTriple from '@/components/cinematic/ScenarioIntelDatasetTriple';
 import SwarmJobContactSkillTriple from '@/components/cinematic/SwarmJobContactSkillTriple';
 import KnowledgeScenarioTaskTriple from '@/components/cinematic/KnowledgeScenarioTaskTriple';
+import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventKnowledgeScenarioReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1000,6 +1001,8 @@ function App() {
             <SwarmJobContactSkillTriple />
             {/* F183 (overnight 2026-08-08): knowledge × scenario × task triple coverage — ◈ KSTRI button (left:729440, bottom:8, zIndex:331); parallel-fetches /knowledge/ + /v1/scenario/list + /entities/Task; three-way keyword-correlates each KB article against scenarios AND tasks to surface FULLY ACTIONABLE (scenario-planned + task-assigned) vs PLANNED (scenario only, no task) vs TASKED (task only, no scenario plan) vs ARCHIVAL (neither — knowledge not operationally deployed); amber badge on archival count; stat tiles (KB articles/scenarios/tasks/fully actionable/planned/tasked/archival); coverage breakdown bar; ALL/FULLY ACTIONABLE/PLANNED/TASKED/ARCHIVAL filter tabs + text search; expand article → split pane left=matched scenarios (amber scorebars) right=matched tasks (cyan scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge operational deployment brief + TTS via jarvis:speak-dossier; isKstriQuery+buildKstriScript wired in JarvisBrain; "kstri"/"knowledge scenario task"/"deployed knowledge"/"archival knowledge"/"knowledge deployment"/"knowledge action coverage"/"knowledge ops task" voice trigger; jarvis:kstri-toggle event; 90-s auto-refresh */}
             <KnowledgeScenarioTaskTriple />
+            {/* F184 (overnight 2026-08-08): ops event × knowledge × scenario readiness — ◈ OKSRDY button (left:730000, bottom:8, zIndex:332); parallel-fetches /v1/ops/events + /knowledge/ + /v1/scenario/list; three-way keyword-correlates each ops event against KB articles AND scenarios to classify as READY (both KB + scenario coverage), KB-ONLY (knowledge exists but no scenario), SCENARIO-ONLY (scenario planned but no KB backing), or BLIND (no coverage at all — operational blind spot); amber badge on blind count; stat tiles (events/KB articles/scenarios/ready/kb-only/scenario-only/blind); coverage breakdown bar; ALL/READY/KB-ONLY/SCENARIO-ONLY/BLIND filter tabs + text search; expand event → split pane left=matched KB articles (cyan scorebars) right=matched scenarios (purple scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops readiness brief + TTS via jarvis:speak-dossier; isOksrdyQuery+buildOksrdyScript exported; "oksrdy"/"ops ready"/"ops readiness"/"ops knowledge scenario"/"ops event readiness"/"ops coverage check" voice trigger; jarvis:oksrdy-toggle event; 90-s auto-refresh */}
+            <OpsEventKnowledgeScenarioReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
