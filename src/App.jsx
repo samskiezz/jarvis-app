@@ -347,6 +347,7 @@ import ContactIntelReportTriple from '@/components/cinematic/ContactIntelReportT
 import GraphNodeContactTaskTriple from '@/components/cinematic/GraphNodeContactTaskTriple';
 import SwarmJobReportSkillTriple from '@/components/cinematic/SwarmJobReportSkillTriple';
 import KnowledgeContactScenarioTriple from '@/components/cinematic/KnowledgeContactScenarioTriple';
+import GraphNodeInvestmentKnowledgeTriple from '@/components/cinematic/GraphNodeInvestmentKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1036,6 +1037,8 @@ function App() {
             <SwarmJobReportSkillTriple />
             {/* F195 (overnight 2026-08-08): knowledge × contact × scenario triple coverage — ◈ KCSTP button (left:736160, bottom:8, zIndex:343); parallel-fetches /knowledge/ + /entities/Contact + /v1/scenario/list; three-way keyword-correlates each KB article against contacts AND scenarios to surface FULLY DEPLOYED (contact-aligned + scenario-planned) vs STAFFED (contact found, no scenario) vs SCRIPTED (scenario found, no contact) vs ARCHIVAL (neither — knowledge not operationally activated); amber badge on archival count; stat tiles (KB articles/fully deployed/staffed/scripted/archival); coverage breakdown bar; ALL/FULLY DEPLOYED/STAFFED/SCRIPTED/ARCHIVAL filter tabs + text search; expand article → split pane left=matched contacts (cyan scorebars) right=matched scenarios (purple scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge operational deployment brief + TTS via jarvis:speak-dossier; isKcstpQuery+buildKcstpScript wired in JarvisBrain; "knowledge contact scenario"/"kcstp"/"deployed kb"/"archival kb"/"staffed kb"/"scripted kb"/"knowledge deployment triple" voice trigger; jarvis:kcstp-toggle event; 90-s auto-refresh */}
             <KnowledgeContactScenarioTriple />
+            {/* F196 (overnight 2026-08-08): graph node × investment × knowledge triple coverage — ◈ GNIKTR button (left:736720, bottom:8, zIndex:344); parallel-fetches /v1/graph/centrality + /entities/Investment + /knowledge/; three-way keyword-correlates each top-influence graph node against investment positions AND KB articles to surface FULLY MAPPED (investment-aligned + knowledge-backed) vs INVESTED (portfolio connection found, no KB backing) vs DOCUMENTED (KB article found, no investment position) vs BLIND (neither — high-influence node with no financial or knowledge coverage); amber badge on blind count; stat tiles (graph nodes/fully mapped/invested/documented/blind); coverage breakdown bar; ALL/FULLY MAPPED/INVESTED/DOCUMENTED/BLIND filter tabs + text search; expand node → split pane left=matched investments (cyan scorebars) right=matched KB articles (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network investment-knowledge brief + TTS via jarvis:speak-dossier; isGniktrQuery+buildGniktrScript wired in JarvisBrain; "graph node invest know"/"gniktr"/"node invest knowledge"/"graph invest knowledge"/"invest knowledge node"/"network invest knowledge" voice trigger; jarvis:gniktr-toggle event; 90-s auto-refresh */}
+            <GraphNodeInvestmentKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
