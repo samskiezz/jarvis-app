@@ -423,6 +423,7 @@ import { isIcktqQuery, buildIcktqScript } from "./InvestigationContactKnowledgeT
 import { isKrstqQuery, buildKrstqScript } from "./KnowledgeReportScenarioTaskQuad";
 import { isRgctormQuery, buildRgctormScript } from "./RiskSignalGraphCommunityTaskMatrix";
 import { isSysrskQuery, buildSysrskScript } from "./SystemStatusRiskMonitor";
+import { isSscstpQuery, buildSscstpScript } from "./SystemContactScenarioTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4777,6 +4778,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sysrsk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSysrskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSscstpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sscstp-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSscstpScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
