@@ -364,6 +364,7 @@ import SceneGraphKnowledgeTriple from '@/components/cinematic/SceneGraphKnowledg
 import GraphCommunityReportOpsTriple from '@/components/cinematic/GraphCommunityReportOpsTriple';
 import InvestmentRiskScenarioCoverage from '@/components/cinematic/InvestmentRiskScenarioCoverage';
 import ReportKnowledgeTaskTriple from '@/components/cinematic/ReportKnowledgeTaskTriple';
+import SceneContactInvestmentTriple from '@/components/cinematic/SceneContactInvestmentTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1126,6 +1127,11 @@ function App() {
             {/* Coverage states: FULLY OPERATIONALISED | DOCUMENTED | TASKED | ARCHIVAL */}
             {/* Voice trigger: "rktri" / "report knowledge task" / "archival report" / "operationalised report" */}
             <ReportKnowledgeTaskTriple />
+            {/* F213: Scene × Contact × Investment Triple Coverage (SCIVTRI) */}
+            {/* Cross-correlates /v1/cinematic/scene/{id} × /entities/Contact × /entities/Investment */}
+            {/* Coverage states: FULLY POSITIONED | STAFFED | INVESTED | UNMAPPED */}
+            {/* Voice trigger: "scivtri" / "scene contact invest" / "mapped scene" / "scene resource triple" */}
+            <SceneContactInvestmentTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
