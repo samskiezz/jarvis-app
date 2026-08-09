@@ -355,6 +355,7 @@ import RiskSignalGraphCommunityTaskMatrix from '@/components/cinematic/RiskSigna
 import SystemStatusRiskMonitor from '@/components/cinematic/SystemStatusRiskMonitor';
 import SystemContactScenarioTriple from '@/components/cinematic/SystemContactScenarioTriple';
 import TaskGraphCommunityCoverage from '@/components/cinematic/TaskGraphCommunityCoverage';
+import IntelProfileTaskOpsTriple from '@/components/cinematic/IntelProfileTaskOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1076,6 +1077,11 @@ function App() {
             {/* Coverage states: FULLY NETWORKED | COMMUNITY-BACKED | WEAKLY LINKED | ORPHANED */}
             {/* Voice trigger: "tgcov" / "task community" / "community backed task" / "orphaned task" / "task network context" */}
             <TaskGraphCommunityCoverage />
+            {/* F204: Intel Profile × Task × Ops Event Triple Coverage (IPTRI) */}
+            {/* Cross-correlates /entities/IntelProfile × /entities/Task × /v1/ops/events */}
+            {/* Coverage states: FULLY COUNTERED | TASK-ONLY | OPS-MONITORED | UNCOUNTERED */}
+            {/* Voice trigger: "iptri" / "intel profile task ops" / "uncountered intel" / "threat actor task ops" */}
+            <IntelProfileTaskOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

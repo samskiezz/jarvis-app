@@ -425,6 +425,7 @@ import { isRgctormQuery, buildRgctormScript } from "./RiskSignalGraphCommunityTa
 import { isSysrskQuery, buildSysrskScript } from "./SystemStatusRiskMonitor";
 import { isSscstpQuery, buildSscstpScript } from "./SystemContactScenarioTriple";
 import { isTgcovQuery, buildTgcovScript } from "./TaskGraphCommunityCoverage";
+import { isIptriQuery, buildIptriScript } from "./IntelProfileTaskOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4797,6 +4798,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tgcov-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTgcovScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIptriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iptri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIptriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
