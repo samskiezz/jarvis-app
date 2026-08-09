@@ -354,6 +354,7 @@ import KnowledgeReportScenarioTaskQuad from '@/components/cinematic/KnowledgeRep
 import RiskSignalGraphCommunityTaskMatrix from '@/components/cinematic/RiskSignalGraphCommunityTaskMatrix';
 import SystemStatusRiskMonitor from '@/components/cinematic/SystemStatusRiskMonitor';
 import SystemContactScenarioTriple from '@/components/cinematic/SystemContactScenarioTriple';
+import TaskGraphCommunityCoverage from '@/components/cinematic/TaskGraphCommunityCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1070,6 +1071,11 @@ function App() {
             {/* Coverage states: FULLY MANAGED | STAFFED | SCRIPTED | UNMANAGED */}
             {/* Voice trigger: "sscstp" / "system contact scenario" / "service staffing" / "unmanaged service" */}
             <SystemContactScenarioTriple />
+            {/* F203: Task × Graph Community Coverage (TGCOV) */}
+            {/* Cross-correlates /entities/Task × /v1/graph/communities */}
+            {/* Coverage states: FULLY NETWORKED | COMMUNITY-BACKED | WEAKLY LINKED | ORPHANED */}
+            {/* Voice trigger: "tgcov" / "task community" / "community backed task" / "orphaned task" / "task network context" */}
+            <TaskGraphCommunityCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
