@@ -366,6 +366,7 @@ import InvestmentRiskScenarioCoverage from '@/components/cinematic/InvestmentRis
 import ReportKnowledgeTaskTriple from '@/components/cinematic/ReportKnowledgeTaskTriple';
 import SceneContactInvestmentTriple from '@/components/cinematic/SceneContactInvestmentTriple';
 import SwarmJobSkillKnowledgeTriple from '@/components/cinematic/SwarmJobSkillKnowledgeTriple';
+import ContactDatasetSwarmTriple from '@/components/cinematic/ContactDatasetSwarmTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1137,6 +1138,11 @@ function App() {
             {/* Coverage states: FULLY COVERED | SKILLED | DOCUMENTED | DARK */}
             {/* Voice trigger: "sjsktri" / "swarm skill kb" / "dark swarm" / "swarm capability knowledge" */}
             <SwarmJobSkillKnowledgeTriple />
+            {/* F215: Contact × Dataset × SwarmJob Triple Coverage (CDSWTRI) */}
+            {/* /entities/Contact × /v1/datasets × /entities/SwarmJob */}
+            {/* Coverage states: FULLY COVERED | DOCUMENTED | HUNTED | INVISIBLE */}
+            {/* Voice trigger: "cdswtri" / "contact dataset swarm" / "invisible contacts" / "contact coverage triple" */}
+            <ContactDatasetSwarmTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

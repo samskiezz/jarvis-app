@@ -435,6 +435,7 @@ import { isIrsecovQuery, buildIrsecovScript } from "./InvestmentRiskScenarioCove
 import { isRktriQuery, buildRktriScript } from "./ReportKnowledgeTaskTriple";
 import { isScivtriQuery, buildScivtriScript } from "./SceneContactInvestmentTriple";
 import { isSjsktriQuery, buildSjsktriScript } from "./SwarmJobSkillKnowledgeTriple";
+import { isCdswtriQuery, buildCdswtriScript } from "./ContactDatasetSwarmTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4897,6 +4898,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjsktri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSjsktriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCdswtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cdswtri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCdswtriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
