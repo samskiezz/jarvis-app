@@ -369,6 +369,7 @@ import SwarmJobSkillKnowledgeTriple from '@/components/cinematic/SwarmJobSkillKn
 import ContactDatasetSwarmTriple from '@/components/cinematic/ContactDatasetSwarmTriple';
 import IntelProfileGraphCommOpsTriple from '@/components/cinematic/IntelProfileGraphCommOpsTriple';
 import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverage';
+import InvestigationSwarmScenarioTriple from '@/components/cinematic/InvestigationSwarmScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1155,6 +1156,11 @@ function App() {
             {/* Coverage states: NETWORK-BACKED | DISCONNECTED */}
             {/* Voice trigger: "scgn" / "scene graph node" / "network backed scene" / "disconnected scene" */}
             <SceneGraphNodeCoverage />
+            {/* F218: Investigation × SwarmJob × Scenario Triple Coverage (INVSWSC) */}
+            {/* /v1/investigations × /entities/SwarmJob × /v1/scenario/list */}
+            {/* Coverage states: FULLY AUTOMATED & PLANNED | AUTOMATED-ONLY | PLANNED-ONLY | UNATTENDED */}
+            {/* Voice trigger: "invswsc" / "invest swarm scenario" / "investigation triple" / "unattended investigation" */}
+            <InvestigationSwarmScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
