@@ -359,6 +359,7 @@ import IntelProfileTaskOpsTriple from '@/components/cinematic/IntelProfileTaskOp
 import ScenarioContactInvestTriple from '@/components/cinematic/ScenarioContactInvestTriple';
 import ContactReportOpsTriple from '@/components/cinematic/ContactReportOpsTriple';
 import DatasetTaskContactCoverage from '@/components/cinematic/DatasetTaskContactCoverage';
+import LiveIntelSwarmContactCoverage from '@/components/cinematic/LiveIntelSwarmContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1100,6 +1101,11 @@ function App() {
             {/* Coverage states: FULLY DEPLOYED | TASKED | ASSIGNED | ORPHANED */}
             {/* Voice trigger: "dtcov" / "dataset task contact" / "dataset governance" / "orphaned dataset" */}
             <DatasetTaskContactCoverage />
+            {/* F208: Live Intel × SwarmJob × Contact Triple Coverage (LSCOV) */}
+            {/* Cross-correlates /functions/getLiveIntel × /entities/SwarmJob × /entities/Contact */}
+            {/* Coverage states: FULLY TRACKED | AUTOMATED | HUMAN-MONITORED | UNMONITORED */}
+            {/* Voice trigger: "lscov" / "live intel swarm contact" / "world swarm contact" */}
+            <LiveIntelSwarmContactCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
