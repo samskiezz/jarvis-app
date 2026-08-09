@@ -372,6 +372,7 @@ import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverag
 import InvestigationSwarmScenarioTriple from '@/components/cinematic/InvestigationSwarmScenarioTriple';
 import GraphNodeContactIntelTriple from '@/components/cinematic/GraphNodeContactIntelTriple';
 import RiskSignalSceneKnowledgeTriple from '@/components/cinematic/RiskSignalSceneKnowledgeTriple';
+import LiveIntelGraphCommunityScenarioTriple from '@/components/cinematic/LiveIntelGraphCommunityScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1173,6 +1174,11 @@ function App() {
             {/* Coverage states: FULLY CONTEXTUALIZED | SCENE-ONLY | KB-ONLY | BLIND */}
             {/* Voice trigger: "rskscn" / "risk scene knowledge" / "blind risk signal" */}
             <RiskSignalSceneKnowledgeTriple />
+            {/* F221: Live Intel × Graph Community × Scenario Triple Coverage (LGCSTRI) */}
+            {/* /functions/getLiveIntel × /v1/graph/communities × /v1/scenario/list */}
+            {/* Coverage states: FULLY PLANNED | COMMUNITY-ONLY | SCENARIO-PLANNED | UNPLANNED */}
+            {/* Voice trigger: "lgcstri" / "live intel community scenario" / "unplanned world event" */}
+            <LiveIntelGraphCommunityScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
