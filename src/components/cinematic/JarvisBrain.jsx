@@ -445,6 +445,7 @@ import { isLgcstriQuery, buildLgcstriScript } from "./LiveIntelGraphCommunitySce
 import { isIdrtriQuery, buildIdrtriScript } from "./InvestigationDatasetReportTriple";
 import { isTkrptriQuery, buildTkrptriScript } from "./TaskKnowledgeReportTriple";
 import { isScstsQuery, buildScstsScript } from "./SceneSystemStatusCoverage";
+import { isIgcsklQuery, buildIgcsklScript } from "./InvestigationGraphCommunitySkillTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4997,6 +4998,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scsts-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScstsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIgcsklQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:igcskl-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIgcsklScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

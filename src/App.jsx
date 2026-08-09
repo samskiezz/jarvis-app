@@ -376,6 +376,7 @@ import LiveIntelGraphCommunityScenarioTriple from '@/components/cinematic/LiveIn
 import InvestigationDatasetReportTriple from '@/components/cinematic/InvestigationDatasetReportTriple';
 import TaskKnowledgeReportTriple from '@/components/cinematic/TaskKnowledgeReportTriple';
 import SceneSystemStatusCoverage from '@/components/cinematic/SceneSystemStatusCoverage';
+import InvestigationGraphCommunitySkillTriple from '@/components/cinematic/InvestigationGraphCommunitySkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1197,6 +1198,11 @@ function App() {
             {/* Coverage states: MONITORED | UNMONITORED */}
             {/* Voice trigger: "scsts" / "scene system" / "scene infrastructure" / "unmonitored scene" */}
             <SceneSystemStatusCoverage />
+            {/* F225: Investigation × Graph Community × Skill Triple Coverage (IGCSKL) */}
+            {/* /v1/investigations × /v1/graph/communities × /v1/aip/skill */}
+            {/* Coverage states: FULLY SUPPORTED | NETWORKED | SKILLED | ISOLATED */}
+            {/* Voice trigger: "igcskl" / "investigation graph skill" / "isolated investigations" / "networked investigations" */}
+            <InvestigationGraphCommunitySkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
