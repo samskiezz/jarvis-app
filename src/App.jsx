@@ -374,6 +374,7 @@ import GraphNodeContactIntelTriple from '@/components/cinematic/GraphNodeContact
 import RiskSignalSceneKnowledgeTriple from '@/components/cinematic/RiskSignalSceneKnowledgeTriple';
 import LiveIntelGraphCommunityScenarioTriple from '@/components/cinematic/LiveIntelGraphCommunityScenarioTriple';
 import InvestigationDatasetReportTriple from '@/components/cinematic/InvestigationDatasetReportTriple';
+import TaskKnowledgeReportTriple from '@/components/cinematic/TaskKnowledgeReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1185,6 +1186,11 @@ function App() {
             {/* Coverage states: FULLY EVIDENCED | REPORT-BACKED | DATA-BACKED | UNCORROBORATED */}
             {/* Voice trigger: "idrtri" / "investigation dataset report" / "uncorroborated investigation" */}
             <InvestigationDatasetReportTriple />
+            {/* F223: Task × Knowledge × Report Triple Coverage (TKRPTRI) */}
+            {/* /entities/Task × /knowledge/ × /v1/reports */}
+            {/* Coverage states: FULLY BACKED | REPORT-BACKED | KB-BACKED | UNBACKED */}
+            {/* Voice trigger: "tkrptri" / "task knowledge report" / "task intel completeness" / "unbacked tasks" */}
+            <TaskKnowledgeReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
