@@ -370,6 +370,7 @@ import ContactDatasetSwarmTriple from '@/components/cinematic/ContactDatasetSwar
 import IntelProfileGraphCommOpsTriple from '@/components/cinematic/IntelProfileGraphCommOpsTriple';
 import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverage';
 import InvestigationSwarmScenarioTriple from '@/components/cinematic/InvestigationSwarmScenarioTriple';
+import GraphNodeContactIntelTriple from '@/components/cinematic/GraphNodeContactIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1161,6 +1162,11 @@ function App() {
             {/* Coverage states: FULLY AUTOMATED & PLANNED | AUTOMATED-ONLY | PLANNED-ONLY | UNATTENDED */}
             {/* Voice trigger: "invswsc" / "invest swarm scenario" / "investigation triple" / "unattended investigation" */}
             <InvestigationSwarmScenarioTriple />
+            {/* F219: Graph Node × Contact × Intel Profile Triple Coverage (GNCIP) */}
+            {/* /v1/graph/centrality × /entities/Contact × /entities/IntelProfile */}
+            {/* Coverage states: FULLY MAPPED | CONTACT-ONLY | PROFILED | DARK */}
+            {/* Voice trigger: "gncip" / "graph node contact intel" / "mapped nodes" / "dark nodes" */}
+            <GraphNodeContactIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

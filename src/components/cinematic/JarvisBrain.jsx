@@ -439,6 +439,7 @@ import { isCdswtriQuery, buildCdswtriScript } from "./ContactDatasetSwarmTriple"
 import { isIgcoeQuery, buildIgcoeScript } from "./IntelProfileGraphCommOpsTriple";
 import { isScgnQuery, buildScgnScript } from "./SceneGraphNodeCoverage";
 import { isInvswscQuery, buildInvswscScript } from "./InvestigationSwarmScenarioTriple";
+import { isGncipQuery, buildGncipScript } from "./GraphNodeContactIntelTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4937,6 +4938,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invswsc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvswscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGncipQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gncip-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGncipScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
