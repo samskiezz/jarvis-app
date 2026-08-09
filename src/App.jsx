@@ -356,6 +356,7 @@ import SystemStatusRiskMonitor from '@/components/cinematic/SystemStatusRiskMoni
 import SystemContactScenarioTriple from '@/components/cinematic/SystemContactScenarioTriple';
 import TaskGraphCommunityCoverage from '@/components/cinematic/TaskGraphCommunityCoverage';
 import IntelProfileTaskOpsTriple from '@/components/cinematic/IntelProfileTaskOpsTriple';
+import ScenarioContactInvestTriple from '@/components/cinematic/ScenarioContactInvestTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1082,6 +1083,11 @@ function App() {
             {/* Coverage states: FULLY COUNTERED | TASK-ONLY | OPS-MONITORED | UNCOUNTERED */}
             {/* Voice trigger: "iptri" / "intel profile task ops" / "uncountered intel" / "threat actor task ops" */}
             <IntelProfileTaskOpsTriple />
+            {/* F205: Scenario × Contact × Investment Triple Coverage (SCITRI) */}
+            {/* Cross-correlates /v1/scenario/list × /entities/Contact × /entities/Investment */}
+            {/* Coverage states: FULLY RESOURCED | STAFFED | INVESTED | UNSUPPORTED */}
+            {/* Voice trigger: "scitri" / "scenario contact invest" / "staffed funded scenario" / "unsupported scenario invest" */}
+            <ScenarioContactInvestTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

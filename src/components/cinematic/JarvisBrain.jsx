@@ -426,6 +426,7 @@ import { isSysrskQuery, buildSysrskScript } from "./SystemStatusRiskMonitor";
 import { isSscstpQuery, buildSscstpScript } from "./SystemContactScenarioTriple";
 import { isTgcovQuery, buildTgcovScript } from "./TaskGraphCommunityCoverage";
 import { isIptriQuery, buildIptriScript } from "./IntelProfileTaskOpsTriple";
+import { isScitriQuery, buildScitriScript } from "./ScenarioContactInvestTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4807,6 +4808,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iptri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIptriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isScitriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scitri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScitriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
