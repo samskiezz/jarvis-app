@@ -371,6 +371,7 @@ import IntelProfileGraphCommOpsTriple from '@/components/cinematic/IntelProfileG
 import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverage';
 import InvestigationSwarmScenarioTriple from '@/components/cinematic/InvestigationSwarmScenarioTriple';
 import GraphNodeContactIntelTriple from '@/components/cinematic/GraphNodeContactIntelTriple';
+import RiskSignalSceneKnowledgeTriple from '@/components/cinematic/RiskSignalSceneKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1167,6 +1168,11 @@ function App() {
             {/* Coverage states: FULLY MAPPED | CONTACT-ONLY | PROFILED | DARK */}
             {/* Voice trigger: "gncip" / "graph node contact intel" / "mapped nodes" / "dark nodes" */}
             <GraphNodeContactIntelTriple />
+            {/* F220: Risk Signal × Scene × Knowledge Triple Coverage (RSKSCN) */}
+            {/* /entities/RiskSignal × /v1/cinematic/scene/{id} × /knowledge/ */}
+            {/* Coverage states: FULLY CONTEXTUALIZED | SCENE-ONLY | KB-ONLY | BLIND */}
+            {/* Voice trigger: "rskscn" / "risk scene knowledge" / "blind risk signal" */}
+            <RiskSignalSceneKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
