@@ -368,6 +368,7 @@ import SceneContactInvestmentTriple from '@/components/cinematic/SceneContactInv
 import SwarmJobSkillKnowledgeTriple from '@/components/cinematic/SwarmJobSkillKnowledgeTriple';
 import ContactDatasetSwarmTriple from '@/components/cinematic/ContactDatasetSwarmTriple';
 import IntelProfileGraphCommOpsTriple from '@/components/cinematic/IntelProfileGraphCommOpsTriple';
+import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1149,6 +1150,11 @@ function App() {
             {/* Coverage states: FULLY TRACKED | COMMUNITY-LINKED | OPS-MONITORED | UNTRACKED */}
             {/* Voice trigger: "igcoe" / "intel community ops" / "threat community ops" / "profile ops community" */}
             <IntelProfileGraphCommOpsTriple />
+            {/* F217: Scene × Graph Node Coverage (SCGN) */}
+            {/* /v1/cinematic/scene/{id} × /v1/graph/centrality */}
+            {/* Coverage states: NETWORK-BACKED | DISCONNECTED */}
+            {/* Voice trigger: "scgn" / "scene graph node" / "network backed scene" / "disconnected scene" */}
+            <SceneGraphNodeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -437,6 +437,7 @@ import { isScivtriQuery, buildScivtriScript } from "./SceneContactInvestmentTrip
 import { isSjsktriQuery, buildSjsktriScript } from "./SwarmJobSkillKnowledgeTriple";
 import { isCdswtriQuery, buildCdswtriScript } from "./ContactDatasetSwarmTriple";
 import { isIgcoeQuery, buildIgcoeScript } from "./IntelProfileGraphCommOpsTriple";
+import { isScgnQuery, buildScgnScript } from "./SceneGraphNodeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4917,6 +4918,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igcoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIgcoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isScgnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scgn-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScgnScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
