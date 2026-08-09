@@ -428,6 +428,7 @@ import { isTgcovQuery, buildTgcovScript } from "./TaskGraphCommunityCoverage";
 import { isIptriQuery, buildIptriScript } from "./IntelProfileTaskOpsTriple";
 import { isScitriQuery, buildScitriScript } from "./ScenarioContactInvestTriple";
 import { isCroetriQuery, buildCroetriScript } from "./ContactReportOpsTriple";
+import { isDtcovQuery, buildDtcovScript } from "./DatasetTaskContactCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4827,6 +4828,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:croetri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCroetriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isDtcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dtcov-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDtcovScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

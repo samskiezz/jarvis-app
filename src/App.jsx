@@ -358,6 +358,7 @@ import TaskGraphCommunityCoverage from '@/components/cinematic/TaskGraphCommunit
 import IntelProfileTaskOpsTriple from '@/components/cinematic/IntelProfileTaskOpsTriple';
 import ScenarioContactInvestTriple from '@/components/cinematic/ScenarioContactInvestTriple';
 import ContactReportOpsTriple from '@/components/cinematic/ContactReportOpsTriple';
+import DatasetTaskContactCoverage from '@/components/cinematic/DatasetTaskContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1094,6 +1095,11 @@ function App() {
             {/* Coverage states: FULLY EXPOSED | REPORTED | OPS-TRIGGERED | DARK */}
             {/* Voice trigger: "croetri" / "contact report ops" / "fully exposed contact" / "dark contact doc" */}
             <ContactReportOpsTriple />
+            {/* F207: Dataset × Task × Contact Triple Coverage (DTCOV) */}
+            {/* Cross-correlates /v1/datasets × /entities/Task × /entities/Contact */}
+            {/* Coverage states: FULLY DEPLOYED | TASKED | ASSIGNED | ORPHANED */}
+            {/* Voice trigger: "dtcov" / "dataset task contact" / "dataset governance" / "orphaned dataset" */}
+            <DatasetTaskContactCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
