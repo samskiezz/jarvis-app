@@ -432,6 +432,7 @@ import { isDtcovQuery, buildDtcovScript } from "./DatasetTaskContactCoverage";
 import { isLscovQuery, buildLscovScript } from "./LiveIntelSwarmContactCoverage";
 import { isSgktriQuery, buildSgktriScript } from "./SceneGraphKnowledgeTriple";
 import { isIrsecovQuery, buildIrsecovScript } from "./InvestmentRiskScenarioCoverage";
+import { isRktriQuery, buildRktriScript } from "./ReportKnowledgeTaskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4867,6 +4868,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:irsecov-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIrsecovScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRktriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rktri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRktriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

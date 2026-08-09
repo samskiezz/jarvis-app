@@ -363,6 +363,7 @@ import LiveIntelSwarmContactCoverage from '@/components/cinematic/LiveIntelSwarm
 import SceneGraphKnowledgeTriple from '@/components/cinematic/SceneGraphKnowledgeTriple';
 import GraphCommunityReportOpsTriple from '@/components/cinematic/GraphCommunityReportOpsTriple';
 import InvestmentRiskScenarioCoverage from '@/components/cinematic/InvestmentRiskScenarioCoverage';
+import ReportKnowledgeTaskTriple from '@/components/cinematic/ReportKnowledgeTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1120,6 +1121,11 @@ function App() {
             {/* Voice trigger: "gcroe" / "community report ops" / "active community" / "dark community ops" */}
             <GraphCommunityReportOpsTriple />
             <InvestmentRiskScenarioCoverage />
+            {/* F212: Report × Knowledge × Task Triple Coverage (RKTRI) */}
+            {/* Cross-correlates /v1/reports × /knowledge/ × /entities/Task */}
+            {/* Coverage states: FULLY OPERATIONALISED | DOCUMENTED | TASKED | ARCHIVAL */}
+            {/* Voice trigger: "rktri" / "report knowledge task" / "archival report" / "operationalised report" */}
+            <ReportKnowledgeTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
