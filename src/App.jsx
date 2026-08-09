@@ -373,6 +373,7 @@ import InvestigationSwarmScenarioTriple from '@/components/cinematic/Investigati
 import GraphNodeContactIntelTriple from '@/components/cinematic/GraphNodeContactIntelTriple';
 import RiskSignalSceneKnowledgeTriple from '@/components/cinematic/RiskSignalSceneKnowledgeTriple';
 import LiveIntelGraphCommunityScenarioTriple from '@/components/cinematic/LiveIntelGraphCommunityScenarioTriple';
+import InvestigationDatasetReportTriple from '@/components/cinematic/InvestigationDatasetReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1179,6 +1180,11 @@ function App() {
             {/* Coverage states: FULLY PLANNED | COMMUNITY-ONLY | SCENARIO-PLANNED | UNPLANNED */}
             {/* Voice trigger: "lgcstri" / "live intel community scenario" / "unplanned world event" */}
             <LiveIntelGraphCommunityScenarioTriple />
+            {/* F222: Investigation × Dataset × Report Triple Coverage (IDRTRI) */}
+            {/* /v1/investigations × /v1/datasets × /v1/reports */}
+            {/* Coverage states: FULLY EVIDENCED | REPORT-BACKED | DATA-BACKED | UNCORROBORATED */}
+            {/* Voice trigger: "idrtri" / "investigation dataset report" / "uncorroborated investigation" */}
+            <InvestigationDatasetReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

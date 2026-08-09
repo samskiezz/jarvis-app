@@ -442,6 +442,7 @@ import { isInvswscQuery, buildInvswscScript } from "./InvestigationSwarmScenario
 import { isGncipQuery, buildGncipScript } from "./GraphNodeContactIntelTriple";
 import { isRskscnQuery, buildRskscnScript } from "./RiskSignalSceneKnowledgeTriple";
 import { isLgcstriQuery, buildLgcstriScript } from "./LiveIntelGraphCommunityScenarioTriple";
+import { isIdrtriQuery, buildIdrtriScript } from "./InvestigationDatasetReportTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -4967,6 +4968,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:lgcstri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLgcstriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIdrtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:idrtri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIdrtriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
