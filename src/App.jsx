@@ -357,6 +357,7 @@ import SystemContactScenarioTriple from '@/components/cinematic/SystemContactSce
 import TaskGraphCommunityCoverage from '@/components/cinematic/TaskGraphCommunityCoverage';
 import IntelProfileTaskOpsTriple from '@/components/cinematic/IntelProfileTaskOpsTriple';
 import ScenarioContactInvestTriple from '@/components/cinematic/ScenarioContactInvestTriple';
+import ContactReportOpsTriple from '@/components/cinematic/ContactReportOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1088,6 +1089,11 @@ function App() {
             {/* Coverage states: FULLY RESOURCED | STAFFED | INVESTED | UNSUPPORTED */}
             {/* Voice trigger: "scitri" / "scenario contact invest" / "staffed funded scenario" / "unsupported scenario invest" */}
             <ScenarioContactInvestTriple />
+            {/* F206: Contact × Report × Ops Event Triple Coverage (CROETRI) */}
+            {/* Cross-correlates /entities/Contact × /v1/reports × /v1/ops/events */}
+            {/* Coverage states: FULLY EXPOSED | REPORTED | OPS-TRIGGERED | DARK */}
+            {/* Voice trigger: "croetri" / "contact report ops" / "fully exposed contact" / "dark contact doc" */}
+            <ContactReportOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
