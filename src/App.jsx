@@ -375,6 +375,7 @@ import RiskSignalSceneKnowledgeTriple from '@/components/cinematic/RiskSignalSce
 import LiveIntelGraphCommunityScenarioTriple from '@/components/cinematic/LiveIntelGraphCommunityScenarioTriple';
 import InvestigationDatasetReportTriple from '@/components/cinematic/InvestigationDatasetReportTriple';
 import TaskKnowledgeReportTriple from '@/components/cinematic/TaskKnowledgeReportTriple';
+import SceneSystemStatusCoverage from '@/components/cinematic/SceneSystemStatusCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1191,6 +1192,11 @@ function App() {
             {/* Coverage states: FULLY BACKED | REPORT-BACKED | KB-BACKED | UNBACKED */}
             {/* Voice trigger: "tkrptri" / "task knowledge report" / "task intel completeness" / "unbacked tasks" */}
             <TaskKnowledgeReportTriple />
+            {/* F224: Scene × System Status Exposure (SCSTS) */}
+            {/* /v1/cinematic/scene/{id} (10 scenes) × /v1/jarvis/system/status */}
+            {/* Coverage states: MONITORED | UNMONITORED */}
+            {/* Voice trigger: "scsts" / "scene system" / "scene infrastructure" / "unmonitored scene" */}
+            <SceneSystemStatusCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
