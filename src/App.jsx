@@ -361,6 +361,7 @@ import ContactReportOpsTriple from '@/components/cinematic/ContactReportOpsTripl
 import DatasetTaskContactCoverage from '@/components/cinematic/DatasetTaskContactCoverage';
 import LiveIntelSwarmContactCoverage from '@/components/cinematic/LiveIntelSwarmContactCoverage';
 import SceneGraphKnowledgeTriple from '@/components/cinematic/SceneGraphKnowledgeTriple';
+import GraphCommunityReportOpsTriple from '@/components/cinematic/GraphCommunityReportOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1112,6 +1113,11 @@ function App() {
             {/* Coverage states: FULLY ILLUMINATED | COMMUNITY-ONLY | KB-ONLY | DARK */}
             {/* Voice trigger: "sgktri" / "scene graph knowledge" / "dark scene" / "illuminated scene" */}
             <SceneGraphKnowledgeTriple />
+            {/* F210: Graph Community × Report × Ops Event Triple Coverage (GCROE) */}
+            {/* Cross-correlates /v1/graph/communities × /v1/reports × /v1/ops/events */}
+            {/* Coverage states: FULLY ACTIVE | REPORTED | OPS-DRIVEN | DARK */}
+            {/* Voice trigger: "gcroe" / "community report ops" / "active community" / "dark community ops" */}
+            <GraphCommunityReportOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
