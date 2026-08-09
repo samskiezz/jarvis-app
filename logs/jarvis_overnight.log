@@ -184,3 +184,4 @@
 [2026-08-09] F213 Scene×Contact×Investment Triple Coverage (SCIVTRI) — SceneContactInvestmentTriple.jsx (new, ~310 lines); mounted in App.jsx; isScivtriQuery+buildScivtriScript wired in JarvisBrain.jsx; ◈ SCIVTRI left:746240 zIndex:361; build exit 0
 [2026-08-09] F214 SwarmJobSkillKnowledgeTriple.jsx — SwarmJob × Skill × Knowledge Triple Coverage (SJSKTRI); mounted in App.jsx; wired in JarvisBrain.jsx; build exit 0
 [2026-08-09] F215 Contact×Dataset×SwarmJob Triple Coverage (CDSWTRI) — ContactDatasetSwarmTriple.jsx (new, ~310 lines); mounted in App.jsx; isCdswtriQuery+buildCdswtriScript wired in JarvisBrain.jsx; ◈ CDSWTRI left:747360 zIndex:363; build exit 0
+[2026-08-09] F216 IGCOE — IntelProfileGraphCommOpsTriple.jsx: /entities/IntelProfile × /v1/graph/communities × /v1/ops/events triple coverage; FULLY TRACKED/COMMUNITY-LINKED/OPS-MONITORED/UNTRACKED states; isIgcoeQuery+buildIgcoeScript wired in JarvisBrain.jsx; mounted in App.jsx; build exit 0

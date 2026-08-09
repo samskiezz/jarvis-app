@@ -367,6 +367,7 @@ import ReportKnowledgeTaskTriple from '@/components/cinematic/ReportKnowledgeTas
 import SceneContactInvestmentTriple from '@/components/cinematic/SceneContactInvestmentTriple';
 import SwarmJobSkillKnowledgeTriple from '@/components/cinematic/SwarmJobSkillKnowledgeTriple';
 import ContactDatasetSwarmTriple from '@/components/cinematic/ContactDatasetSwarmTriple';
+import IntelProfileGraphCommOpsTriple from '@/components/cinematic/IntelProfileGraphCommOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1143,6 +1144,11 @@ function App() {
             {/* Coverage states: FULLY COVERED | DOCUMENTED | HUNTED | INVISIBLE */}
             {/* Voice trigger: "cdswtri" / "contact dataset swarm" / "invisible contacts" / "contact coverage triple" */}
             <ContactDatasetSwarmTriple />
+            {/* F216: Intel Profile × Graph Community × Ops Event Triple Coverage (IGCOE) */}
+            {/* /entities/IntelProfile × /v1/graph/communities × /v1/ops/events */}
+            {/* Coverage states: FULLY TRACKED | COMMUNITY-LINKED | OPS-MONITORED | UNTRACKED */}
+            {/* Voice trigger: "igcoe" / "intel community ops" / "threat community ops" / "profile ops community" */}
+            <IntelProfileGraphCommOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
