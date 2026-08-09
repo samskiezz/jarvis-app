@@ -377,6 +377,7 @@ import InvestigationDatasetReportTriple from '@/components/cinematic/Investigati
 import TaskKnowledgeReportTriple from '@/components/cinematic/TaskKnowledgeReportTriple';
 import SceneSystemStatusCoverage from '@/components/cinematic/SceneSystemStatusCoverage';
 import InvestigationGraphCommunitySkillTriple from '@/components/cinematic/InvestigationGraphCommunitySkillTriple';
+import ReportGraphCommunityTaskTriple from '@/components/cinematic/ReportGraphCommunityTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1203,6 +1204,11 @@ function App() {
             {/* Coverage states: FULLY SUPPORTED | NETWORKED | SKILLED | ISOLATED */}
             {/* Voice trigger: "igcskl" / "investigation graph skill" / "isolated investigations" / "networked investigations" */}
             <InvestigationGraphCommunitySkillTriple />
+            {/* F226: Report × Graph Community × Task Triple Coverage (RGCTRI) */}
+            {/* /v1/reports × /v1/graph/communities × /entities/Task */}
+            {/* Coverage states: FULLY OPERATIONAL | COMMUNITY-BACKED | TASKED | ARCHIVAL */}
+            {/* Voice trigger: "rgctri" / "report graph task" / "report community task" / "archival report" */}
+            <ReportGraphCommunityTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
