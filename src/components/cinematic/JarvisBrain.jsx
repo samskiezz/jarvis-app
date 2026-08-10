@@ -452,6 +452,7 @@ import { isScgoetriQuery, buildScgoetriScript } from "./SceneGraphCommunityOpsTr
 import { isSstknQuery, buildSstknScript } from "./SystemStatusTaskKnowledgeCoverage";
 import { isCscrsQuery, buildCscrsScript } from "./ContactSceneRiskTriple";
 import { isSiltriQuery, buildSiltriScript } from "./SkillInvestigationLiveIntelTriple";
+import { isRsitripQuery, buildRsitripScript } from "./ReportSwarmIntelTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5067,6 +5068,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:siltri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSiltriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRsitripQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsitrip-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRsitripScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

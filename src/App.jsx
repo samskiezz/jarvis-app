@@ -383,6 +383,7 @@ import SceneGraphCommunityOpsTriple from '@/components/cinematic/SceneGraphCommu
 import SystemStatusTaskKnowledgeCoverage from '@/components/cinematic/SystemStatusTaskKnowledgeCoverage';
 import ContactSceneRiskTriple from '@/components/cinematic/ContactSceneRiskTriple';
 import SkillInvestigationLiveIntelTriple from '@/components/cinematic/SkillInvestigationLiveIntelTriple';
+import ReportSwarmIntelTriple from '@/components/cinematic/ReportSwarmIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1238,6 +1239,11 @@ function App() {
             {/* Coverage states: FULLY DEPLOYED | CASE-RELEVANT | LIVE-TRIGGERED | DORMANT */}
             {/* Voice trigger: "siltri" / "skill investigation live" / "deployed skill" / "dormant skill" */}
             <SkillInvestigationLiveIntelTriple />
+            {/* F232: Report × SwarmJob × IntelProfile Triple Coverage (RSITRIP) */}
+            {/* /v1/reports × /entities/SwarmJob × /entities/IntelProfile */}
+            {/* Coverage states: FULLY COVERED | SWARM-ONLY | PROFILED | DARK */}
+            {/* Voice trigger: "rsitrip" / "report swarm intel" / "dark report" */}
+            <ReportSwarmIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

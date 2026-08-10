@@ -200,3 +200,4 @@
 [2026-08-10] F229 SystemStatusTaskKnowledgeCoverage.jsx — /v1/jarvis/system/status × /entities/Task × /knowledge/ triple coverage; FULLY COVERED/TASKED/DOCUMENTED/EXPOSED states; ◈ SSTKN left:755760 zIndex:378; build exit 0
 [2026-08-10] F230 ContactSceneRiskTriple.jsx — /entities/Contact × /v1/cinematic/scene/{id} (10) × /entities/RiskSignal triple coverage; FULLY EXPOSED/SCENE-ALIGNED/AT-RISK/CLEAR states; red badge; ◈ CSCRS left:756320 zIndex:379; build exit 0
 [2026-08-10] F231 SILTRI — SkillInvestigationLiveIntelTriple.jsx — /v1/aip/skill × /v1/investigations × /functions/getLiveIntel — FULLY DEPLOYED/CASE-RELEVANT/LIVE-TRIGGERED/DORMANT states — build exit 0
+[2026-08-10] F232 RSITRIP — ReportSwarmIntelTriple.jsx — /v1/reports × /entities/SwarmJob × /entities/IntelProfile — FULLY COVERED/SWARM-ONLY/PROFILED/DARK states — build exit 0
