@@ -381,6 +381,7 @@ import ReportGraphCommunityTaskTriple from '@/components/cinematic/ReportGraphCo
 import KnowledgeGraphNodeOpsTriple from '@/components/cinematic/KnowledgeGraphNodeOpsTriple';
 import SceneGraphCommunityOpsTriple from '@/components/cinematic/SceneGraphCommunityOpsTriple';
 import SystemStatusTaskKnowledgeCoverage from '@/components/cinematic/SystemStatusTaskKnowledgeCoverage';
+import ContactSceneRiskTriple from '@/components/cinematic/ContactSceneRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1226,6 +1227,11 @@ function App() {
             {/* Coverage states: FULLY COVERED | TASKED | DOCUMENTED | EXPOSED */}
             {/* Voice trigger: "sstkn" / "system task knowledge" / "service coverage" / "unprotected service" */}
             <SystemStatusTaskKnowledgeCoverage />
+            {/* F230: Contact × Scene × Risk Signal Triple Coverage (CSCRS) */}
+            {/* /entities/Contact × /v1/cinematic/scene/{id} (10) × /entities/RiskSignal */}
+            {/* Coverage states: FULLY EXPOSED | SCENE-ALIGNED | AT-RISK | CLEAR */}
+            {/* Voice trigger: "cscrs" / "contact scene risk" / "exposed contact scene" */}
+            <ContactSceneRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
