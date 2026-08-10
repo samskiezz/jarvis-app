@@ -397,6 +397,7 @@ import TaskGraphNodeOpsTriple from '@/components/cinematic/TaskGraphNodeOpsTripl
 import ContactGraphNodeSkillTriple from '@/components/cinematic/ContactGraphNodeSkillTriple';
 import InvestigationScenarioSkillTriple from '@/components/cinematic/InvestigationScenarioSkillTriple';
 import ContactScenarioDatasetTriple from '@/components/cinematic/ContactScenarioDatasetTriple';
+import SwarmJobIntelProfileOpsTriple from '@/components/cinematic/SwarmJobIntelProfileOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1289,6 +1290,8 @@ function App() {
             <InvestigationScenarioSkillTriple />
             {/* F245 (overnight 2026-08-10): contact × scenario × dataset triple coverage — ◈ CSDTRI button (left:764160, bottom:8, zIndex:393); parallel-fetches /entities/Contact + /v1/scenario/list + /v1/datasets; keyword-correlates each contact against scenario playbooks AND dataset catalog to surface FULLY EQUIPPED (scenario-backed + dataset-found) vs PLAYBOOK-ONLY (scenario match, no dataset) vs DATA-BACKED (dataset found, no scenario) vs UNCOVERED (neither — contact with no scenario or dataset coverage — intelligence gap); amber badge on uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "csdtri"/"contact scenario dataset"/"scenario contact data"/"contact equipped"/"contact data scenario" voice trigger; jarvis:csdtri-toggle event; 90-s auto-refresh */}
             <ContactScenarioDatasetTriple />
+            {/* F246 (overnight 2026-08-10): swarm job × intel profile × ops event triple coverage — ◈ SJIOE button (left:764720, bottom:8, zIndex:394); parallel-fetches /entities/SwarmJob + /entities/IntelProfile + /v1/ops/events; keyword-correlates each swarm job against tracked threat actor intel profiles AND live ops events to surface FULLY ARMED (intel-profiled + ops-triggered) vs INTEL-AWARE (intel only) vs OPS-TRIGGERED (ops only) vs BLIND (neither — automation gap); amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "sjioe"/"swarm intel ops"/"swarm profile ops"/"armed swarm"/"swarm adversary ops" voice trigger; jarvis:sjioe-toggle event; 90-s auto-refresh */}
+            <SwarmJobIntelProfileOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

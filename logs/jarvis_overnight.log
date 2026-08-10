@@ -214,3 +214,4 @@
 [2026-08-10] F243 Contact × Graph Node × Skill Triple Coverage (CGNSKTR) — ContactGraphNodeSkillTriple.jsx; /entities/Contact × /v1/graph/centrality × /v1/aip/skill; FULLY MAPPED/NODE-LINKED/SKILLED/DISCONNECTED; amber badge on DISCONNECTED; build exit 0
 [2026-08-10] F244 InvestigationScenarioSkillTriple.jsx — /v1/investigations × /v1/scenario/list × /v1/aip/skill; ISSKTRI triple coverage panel; build exit 0
 2026-08-10 F245 CSDTRI Contact × Scenario × Dataset Triple Coverage — ContactScenarioDatasetTriple.jsx mounted in App.jsx; isCsdtriQuery+buildCsdtriScript wired in JarvisBrain.jsx; ◈ CSDTRI left:764160 zIndex:393; build exit 0
+2026-08-10 F246 SJIOE SwarmJob × IntelProfile × Ops Event Triple Coverage — SwarmJobIntelProfileOpsTriple.jsx mounted in App.jsx; isSjioeQuery+buildSjioeScript wired in JarvisBrain.jsx; FULLY ARMED/INTEL-AWARE/OPS-TRIGGERED/BLIND states; amber badge on BLIND; ◈ SJIOE left:764720 zIndex:394; build exit 0
