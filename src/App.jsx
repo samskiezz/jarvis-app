@@ -400,6 +400,7 @@ import ContactScenarioDatasetTriple from '@/components/cinematic/ContactScenario
 import SwarmJobIntelProfileOpsTriple from '@/components/cinematic/SwarmJobIntelProfileOpsTriple';
 import ContactGraphCommunityOpsTriple from '@/components/cinematic/ContactGraphCommunityOpsTriple';
 import SceneIntelProfileTaskTriple from '@/components/cinematic/SceneIntelProfileTaskTriple';
+import IntelProfileGraphCommunityOpsTriple from '@/components/cinematic/IntelProfileGraphCommunityOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1298,6 +1299,8 @@ function App() {
             <ContactGraphCommunityOpsTriple />
             {/* F248 (overnight 2026-08-10): scene × intel profile × task triple coverage — ◈ SIPTRI button (left:765840, bottom:8, zIndex:396); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /entities/IntelProfile + /entities/Task; keyword-correlates each scene against intel profiles AND tasks to surface FULLY DEFENDED (profile + task match) vs PROFILED (intel only) vs TASKED (task only) vs UNDEFENDED (neither — scene with no intelligence or task coverage); red badge on undefended count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "siptri"/"scene intel task"/"scene intel profile task"/"defended scene"/"scene defence"/"undefended scene" voice trigger; jarvis:siptri-toggle event; 120-s auto-refresh */}
             <SceneIntelProfileTaskTriple />
+            {/* F249 (overnight 2026-08-10): intel profile × graph community × ops event triple coverage — ◈ IPGCOE button (left:766400, bottom:8, zIndex:397); parallel-fetches /entities/IntelProfile + /v1/graph/communities + /v1/ops/events; keyword-correlates each intel profile against graph network communities AND live ops events to surface FULLY TRACKED (community-aligned + ops-triggered) vs COMMUNITY-MAPPED (community match, no ops event) vs OPS-FLAGGED (ops event match, no community) vs UNMONITORED (neither — surveillance gap); amber badge on unmonitored count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "ipgcoe"/"intel profile graph ops"/"intel ops community"/"unmonitored intel profile"/"profile surveillance gap" voice trigger; jarvis:ipgcoe-toggle event; 90-s auto-refresh */}
+            <IntelProfileGraphCommunityOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
