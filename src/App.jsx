@@ -387,6 +387,7 @@ import ReportSwarmIntelTriple from '@/components/cinematic/ReportSwarmIntelTripl
 import OpsEventKnowledgeContactTriple from '@/components/cinematic/OpsEventKnowledgeContactTriple';
 import InvestmentKnowledgeOpsTriple from '@/components/cinematic/InvestmentKnowledgeOpsTriple';
 import DatasetScenarioRiskTriple from '@/components/cinematic/DatasetScenarioRiskTriple';
+import TaskGraphCommunityLiveIntelTriple from '@/components/cinematic/TaskGraphCommunityLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1259,6 +1260,8 @@ function App() {
             <InvestmentKnowledgeOpsTriple />
             {/* F235 (overnight 2026-08-10): dataset × scenario × risk signal triple coverage — ◈ DSSRTRI button (left:759120, bottom:8, zIndex:384); parallel-fetches /v1/datasets + /v1/scenario/list + /entities/RiskSignal; keyword-correlates each dataset against scenarios AND risk signals to surface FULLY MAPPED (scenario-backed + risk-flagged) vs SCENARIO-ONLY vs RISK-FLAGGED vs DARK; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "dssrtri"/"dataset scenario risk"/"dark dataset"/"dataset triple coverage" voice trigger; jarvis:dssrtri-toggle event; 90-s auto-refresh */}
             <DatasetScenarioRiskTriple />
+            {/* F236 (overnight 2026-08-10): task × graph community × live intel triple coverage — ◈ TGCLI button (left:759680, bottom:8, zIndex:385); parallel-fetches /entities/Task + /v1/graph/communities + /functions/getLiveIntel; keyword-correlates each task against graph communities AND live world events to surface FULLY ACTIVATED (community-backed + live-triggered) vs COMMUNITY-BACKED vs LIVE-TRIGGERED vs DORMANT; cyan badge on activated count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "tgcli"/"task graph live"/"task community live"/"activated task"/"dormant task triple" voice trigger; jarvis:tgcli-toggle event; 60-s auto-refresh */}
+            <TaskGraphCommunityLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
