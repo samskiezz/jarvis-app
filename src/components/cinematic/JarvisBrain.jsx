@@ -462,6 +462,7 @@ import { isIgrcovQuery, buildIgrcovScript } from "./InvestmentGraphReportTriple"
 import { isSccoskQuery, buildSccoskScript } from "./SceneContactSkillTriple";
 import { isSsdscovQuery, buildSsdscovScript } from "./SystemStatusDatasetCoverage";
 import { isRsdktriQuery, buildRsdktriScript } from "./RiskSignalDatasetKnowledgeTriple";
+import { isTgnoeQuery, buildTgnoeScript } from "./TaskGraphNodeOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5167,6 +5168,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsdktri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsdktriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTgnoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tgnoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTgnoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

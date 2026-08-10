@@ -393,6 +393,7 @@ import InvestmentGraphReportTriple from '@/components/cinematic/InvestmentGraphR
 import SceneContactSkillTriple from '@/components/cinematic/SceneContactSkillTriple';
 import SystemStatusDatasetCoverage from '@/components/cinematic/SystemStatusDatasetCoverage';
 import RiskSignalDatasetKnowledgeTriple from '@/components/cinematic/RiskSignalDatasetKnowledgeTriple';
+import TaskGraphNodeOpsTriple from '@/components/cinematic/TaskGraphNodeOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1277,6 +1278,8 @@ function App() {
             <SystemStatusDatasetCoverage />
             {/* F241 (overnight 2026-08-10): risk signal × dataset × knowledge triple coverage — ◈ RSDKTRI button (left:761920, bottom:8, zIndex:389); parallel-fetches /entities/RiskSignal + /v1/datasets + /knowledge/; keyword-correlates each risk signal against dataset catalog AND KB articles to surface FULLY GROUNDED (dataset + KB) vs DATA-BACKED vs KB-DOCUMENTED vs UNSUPPORTED; amber badge on unsupported count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "rsdktri"/"risk dataset knowledge"/"risk data kb" voice trigger; jarvis:rsdktri-toggle event; 90-s auto-refresh */}
             <RiskSignalDatasetKnowledgeTriple />
+            {/* F242 (overnight 2026-08-10): task × graph node × ops event triple coverage — ◈ TGNOE button (left:762480, bottom:8, zIndex:390); parallel-fetches /entities/Task + /v1/graph/centrality + /v1/ops/events; keyword-correlates each task against top-influence graph nodes AND live ops events to surface FULLY REACTIVE (node-backed + ops-triggered) vs NODE-BACKED vs OPS-TRIGGERED vs DORMANT; cyan badge on FULLY REACTIVE count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "tgnoe"/"task graph ops"/"task node ops"/"reactive task"/"dormant task triple" voice trigger; jarvis:tgnoe-toggle event; 90-s auto-refresh */}
+            <TaskGraphNodeOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
