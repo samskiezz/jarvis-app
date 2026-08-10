@@ -390,6 +390,7 @@ import DatasetScenarioRiskTriple from '@/components/cinematic/DatasetScenarioRis
 import TaskGraphCommunityLiveIntelTriple from '@/components/cinematic/TaskGraphCommunityLiveIntelTriple';
 import SwarmJobDatasetKnowledgeTriple from '@/components/cinematic/SwarmJobDatasetKnowledgeTriple';
 import InvestmentGraphReportTriple from '@/components/cinematic/InvestmentGraphReportTriple';
+import SceneContactSkillTriple from '@/components/cinematic/SceneContactSkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1268,6 +1269,8 @@ function App() {
             <SwarmJobDatasetKnowledgeTriple />
             {/* F238 (overnight 2026-08-10): investment × graph community × report triple coverage — ◈ IGRCOV button (left:760800, bottom:8, zIndex:387); parallel-fetches /entities/Investment + /v1/graph/communities + /v1/reports; keyword-correlates each investment against graph network communities AND intelligence reports to surface FULLY DOCUMENTED (community-backed + report found) vs COMMUNITY-BACKED vs REPORTED vs UNCOVERED; amber badge on uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "igrcov"/"invest graph community report"/"uncovered investment"/"portfolio community report" voice trigger; jarvis:igrcov-toggle event; 90-s auto-refresh */}
             <InvestmentGraphReportTriple />
+            {/* F239 (overnight 2026-08-10): scene × contact × skill triple coverage — ◈ SCCOSK button (left:761360, bottom:8, zIndex:388); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /entities/Contact + /v1/aip/skill; keyword-correlates each scene against contacts AND skills to surface FULLY CAPABLE (personnel + skill match) vs STAFFED (contact only) vs SKILLED (skill only) vs UNMAPPED; lime badge on FULLY CAPABLE count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "sccosk"/"scene contact skill"/"capable scene"/"scene fully capable" voice trigger; jarvis:sccosk-toggle event; 120-s auto-refresh */}
+            <SceneContactSkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
