@@ -379,6 +379,7 @@ import SceneSystemStatusCoverage from '@/components/cinematic/SceneSystemStatusC
 import InvestigationGraphCommunitySkillTriple from '@/components/cinematic/InvestigationGraphCommunitySkillTriple';
 import ReportGraphCommunityTaskTriple from '@/components/cinematic/ReportGraphCommunityTaskTriple';
 import KnowledgeGraphNodeOpsTriple from '@/components/cinematic/KnowledgeGraphNodeOpsTriple';
+import SceneGraphCommunityOpsTriple from '@/components/cinematic/SceneGraphCommunityOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1215,6 +1216,11 @@ function App() {
             {/* Coverage states: FULLY LIVE | NODE-ANCHORED | OPS-DRIVEN | DORMANT */}
             {/* Voice trigger: "kgnoe" / "knowledge graph ops" / "kb node ops" / "live kb ops" */}
             <KnowledgeGraphNodeOpsTriple />
+            {/* F228: Scene × Graph Community × Ops Event Triple Coverage (SCGOETRI) */}
+            {/* /v1/cinematic/scene/{id} × /v1/graph/communities × /v1/ops/events */}
+            {/* Coverage states: FULLY OPERATIONAL | COMMUNITY-BACKED | OPS-DRIVEN | QUIET */}
+            {/* Voice trigger: "scgoetri" / "scene community ops" / "community ops scene" / "scene ops community" */}
+            <SceneGraphCommunityOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
