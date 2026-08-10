@@ -398,6 +398,7 @@ import ContactGraphNodeSkillTriple from '@/components/cinematic/ContactGraphNode
 import InvestigationScenarioSkillTriple from '@/components/cinematic/InvestigationScenarioSkillTriple';
 import ContactScenarioDatasetTriple from '@/components/cinematic/ContactScenarioDatasetTriple';
 import SwarmJobIntelProfileOpsTriple from '@/components/cinematic/SwarmJobIntelProfileOpsTriple';
+import ContactGraphCommunityOpsTriple from '@/components/cinematic/ContactGraphCommunityOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1292,6 +1293,8 @@ function App() {
             <ContactScenarioDatasetTriple />
             {/* F246 (overnight 2026-08-10): swarm job × intel profile × ops event triple coverage — ◈ SJIOE button (left:764720, bottom:8, zIndex:394); parallel-fetches /entities/SwarmJob + /entities/IntelProfile + /v1/ops/events; keyword-correlates each swarm job against tracked threat actor intel profiles AND live ops events to surface FULLY ARMED (intel-profiled + ops-triggered) vs INTEL-AWARE (intel only) vs OPS-TRIGGERED (ops only) vs BLIND (neither — automation gap); amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "sjioe"/"swarm intel ops"/"swarm profile ops"/"armed swarm"/"swarm adversary ops" voice trigger; jarvis:sjioe-toggle event; 90-s auto-refresh */}
             <SwarmJobIntelProfileOpsTriple />
+            {/* F247 (overnight 2026-08-10): contact × graph community × ops event triple coverage — ◈ CGCOE button (left:765280, bottom:8, zIndex:395); parallel-fetches /entities/Contact + /v1/graph/communities + /v1/ops/events; keyword-correlates each contact against graph network communities AND live ops events to surface FULLY ACTIVE (community-backed + ops-triggered) vs COMMUNITY-LINKED (community match, no ops event) vs OPS-MONITORED (ops event match, no community) vs QUIET (neither — contact not operationally positioned); amber badge on quiet count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "cgcoe"/"contact graph community ops"/"contact community ops"/"contact ops community"/"active contact community"/"community monitored contact" voice trigger; jarvis:cgcoe-toggle event; 90-s auto-refresh */}
+            <ContactGraphCommunityOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
