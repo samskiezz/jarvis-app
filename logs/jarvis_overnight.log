@@ -212,3 +212,4 @@
 [2026-08-10] F241 RSDKTRI — RiskSignalDatasetKnowledgeTriple.jsx; /entities/RiskSignal × /v1/datasets × /knowledge/ triple coverage; isRsdktriQuery+buildRsdktriScript wired in JarvisBrain.jsx; ◈ RSDKTRI left:761920 zIndex:389; build exit 0
 [2026-08-10] F242 TGNOE — Task × Graph Node × Ops Event Triple Coverage: TaskGraphNodeOpsTriple.jsx (new, 235 lines) mounted in App.jsx; isTgnoeQuery+buildTgnoeScript wired in JarvisBrain.jsx; ◈ TGNOE left:762480 zIndex:390; build exit 0
 [2026-08-10] F243 Contact × Graph Node × Skill Triple Coverage (CGNSKTR) — ContactGraphNodeSkillTriple.jsx; /entities/Contact × /v1/graph/centrality × /v1/aip/skill; FULLY MAPPED/NODE-LINKED/SKILLED/DISCONNECTED; amber badge on DISCONNECTED; build exit 0
+[2026-08-10] F244 InvestigationScenarioSkillTriple.jsx — /v1/investigations × /v1/scenario/list × /v1/aip/skill; ISSKTRI triple coverage panel; build exit 0

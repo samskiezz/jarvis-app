@@ -395,6 +395,7 @@ import SystemStatusDatasetCoverage from '@/components/cinematic/SystemStatusData
 import RiskSignalDatasetKnowledgeTriple from '@/components/cinematic/RiskSignalDatasetKnowledgeTriple';
 import TaskGraphNodeOpsTriple from '@/components/cinematic/TaskGraphNodeOpsTriple';
 import ContactGraphNodeSkillTriple from '@/components/cinematic/ContactGraphNodeSkillTriple';
+import InvestigationScenarioSkillTriple from '@/components/cinematic/InvestigationScenarioSkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1283,6 +1284,8 @@ function App() {
             <TaskGraphNodeOpsTriple />
             {/* F243 (overnight 2026-08-10): contact × graph node × skill triple coverage — ◈ CGNSKTR button (left:763040, bottom:8, zIndex:391); parallel-fetches /entities/Contact + /v1/graph/centrality + /v1/aip/skill; keyword-correlates each contact against top-influence graph nodes AND skill catalog to surface FULLY MAPPED (node-linked + skill-backed) vs NODE-LINKED vs SKILLED vs DISCONNECTED; amber badge on disconnected count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "cgnsktr"/"contact graph node skill"/"contact node skill"/"graph skill contact" voice trigger; jarvis:cgnsktr-toggle event; 90-s auto-refresh */}
             <ContactGraphNodeSkillTriple />
+            {/* F244 (overnight 2026-08-10): investigation × scenario × skill triple coverage — ◈ ISSKTRI button (left:763600, bottom:8, zIndex:392); parallel-fetches /v1/investigations + /v1/scenario/list + /v1/aip/skill; keyword-correlates each investigation against scenario playbooks AND JARVIS skills to surface FULLY SUPPORTED (scenario-backed + skill-available) vs PLAYBOOK-ONLY vs SKILLED-ONLY vs UNSUPPORTED; amber badge on unsupported count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "issktri"/"investigation scenario skill"/"invest scenario"/"investigation skill gap" voice trigger; jarvis:issktri-toggle event; 90-s auto-refresh */}
+            <InvestigationScenarioSkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
