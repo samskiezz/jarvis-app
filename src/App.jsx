@@ -380,6 +380,7 @@ import InvestigationGraphCommunitySkillTriple from '@/components/cinematic/Inves
 import ReportGraphCommunityTaskTriple from '@/components/cinematic/ReportGraphCommunityTaskTriple';
 import KnowledgeGraphNodeOpsTriple from '@/components/cinematic/KnowledgeGraphNodeOpsTriple';
 import SceneGraphCommunityOpsTriple from '@/components/cinematic/SceneGraphCommunityOpsTriple';
+import SystemStatusTaskKnowledgeCoverage from '@/components/cinematic/SystemStatusTaskKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1221,6 +1222,10 @@ function App() {
             {/* Coverage states: FULLY OPERATIONAL | COMMUNITY-BACKED | OPS-DRIVEN | QUIET */}
             {/* Voice trigger: "scgoetri" / "scene community ops" / "community ops scene" / "scene ops community" */}
             <SceneGraphCommunityOpsTriple />
+            {/* F229: /v1/jarvis/system/status × /entities/Task × /knowledge/ */}
+            {/* Coverage states: FULLY COVERED | TASKED | DOCUMENTED | EXPOSED */}
+            {/* Voice trigger: "sstkn" / "system task knowledge" / "service coverage" / "unprotected service" */}
+            <SystemStatusTaskKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
