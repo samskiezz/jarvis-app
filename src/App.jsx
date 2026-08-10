@@ -385,6 +385,7 @@ import ContactSceneRiskTriple from '@/components/cinematic/ContactSceneRiskTripl
 import SkillInvestigationLiveIntelTriple from '@/components/cinematic/SkillInvestigationLiveIntelTriple';
 import ReportSwarmIntelTriple from '@/components/cinematic/ReportSwarmIntelTriple';
 import OpsEventKnowledgeContactTriple from '@/components/cinematic/OpsEventKnowledgeContactTriple';
+import InvestmentKnowledgeOpsTriple from '@/components/cinematic/InvestmentKnowledgeOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1250,6 +1251,11 @@ function App() {
             {/* Coverage states: FULLY CONTEXTUALIZED | KB-ONLY | CONTACT-LINKED | BLIND */}
             {/* Voice trigger: "oekctri" / "ops knowledge contact" / "blind ops event" */}
             <OpsEventKnowledgeContactTriple />
+            {/* F234: Investment × Knowledge × Ops Event Triple Coverage (IKOE) */}
+            {/* /entities/Investment × /knowledge/ × /v1/ops/events */}
+            {/* Coverage states: FULLY ALERTED | KB-ONLY | OPS-TRIGGERED | BLIND */}
+            {/* Voice trigger: "ikoe" / "investment knowledge ops" / "invest kb ops" */}
+            <InvestmentKnowledgeOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
