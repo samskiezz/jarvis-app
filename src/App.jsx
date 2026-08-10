@@ -399,6 +399,7 @@ import InvestigationScenarioSkillTriple from '@/components/cinematic/Investigati
 import ContactScenarioDatasetTriple from '@/components/cinematic/ContactScenarioDatasetTriple';
 import SwarmJobIntelProfileOpsTriple from '@/components/cinematic/SwarmJobIntelProfileOpsTriple';
 import ContactGraphCommunityOpsTriple from '@/components/cinematic/ContactGraphCommunityOpsTriple';
+import SceneIntelProfileTaskTriple from '@/components/cinematic/SceneIntelProfileTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1295,6 +1296,8 @@ function App() {
             <SwarmJobIntelProfileOpsTriple />
             {/* F247 (overnight 2026-08-10): contact × graph community × ops event triple coverage — ◈ CGCOE button (left:765280, bottom:8, zIndex:395); parallel-fetches /entities/Contact + /v1/graph/communities + /v1/ops/events; keyword-correlates each contact against graph network communities AND live ops events to surface FULLY ACTIVE (community-backed + ops-triggered) vs COMMUNITY-LINKED (community match, no ops event) vs OPS-MONITORED (ops event match, no community) vs QUIET (neither — contact not operationally positioned); amber badge on quiet count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "cgcoe"/"contact graph community ops"/"contact community ops"/"contact ops community"/"active contact community"/"community monitored contact" voice trigger; jarvis:cgcoe-toggle event; 90-s auto-refresh */}
             <ContactGraphCommunityOpsTriple />
+            {/* F248 (overnight 2026-08-10): scene × intel profile × task triple coverage — ◈ SIPTRI button (left:765840, bottom:8, zIndex:396); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /entities/IntelProfile + /entities/Task; keyword-correlates each scene against intel profiles AND tasks to surface FULLY DEFENDED (profile + task match) vs PROFILED (intel only) vs TASKED (task only) vs UNDEFENDED (neither — scene with no intelligence or task coverage); red badge on undefended count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "siptri"/"scene intel task"/"scene intel profile task"/"defended scene"/"scene defence"/"undefended scene" voice trigger; jarvis:siptri-toggle event; 120-s auto-refresh */}
+            <SceneIntelProfileTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

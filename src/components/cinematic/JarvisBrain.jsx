@@ -468,6 +468,7 @@ import { isIssktriQuery, buildIssktriScript } from "./InvestigationScenarioSkill
 import { isCsdtriQuery, buildCsdtriScript } from "./ContactScenarioDatasetTriple";
 import { isSjioeQuery, buildSjioeScript } from "./SwarmJobIntelProfileOpsTriple";
 import { isCgcoeQuery, buildCgcoeScript } from "./ContactGraphCommunityOpsTriple";
+import { isSiptriQuery, buildSiptriScript } from "./SceneIntelProfileTaskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5227,6 +5228,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cgcoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCgcoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSiptriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:siptri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSiptriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
