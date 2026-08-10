@@ -470,6 +470,7 @@ import { isSjioeQuery, buildSjioeScript } from "./SwarmJobIntelProfileOpsTriple"
 import { isCgcoeQuery, buildCgcoeScript } from "./ContactGraphCommunityOpsTriple";
 import { isSiptriQuery, buildSiptriScript } from "./SceneIntelProfileTaskTriple";
 import { isIpgcoeQuery, buildIpgcoeScript } from "./IntelProfileGraphCommunityOpsTriple";
+import { isGnkscenQuery, buildGnkscenScript } from "./GraphNodeKnowledgeScenarioTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5247,6 +5248,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipgcoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpgcoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGnkscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gnkscen-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGnkscenScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

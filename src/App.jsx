@@ -401,6 +401,7 @@ import SwarmJobIntelProfileOpsTriple from '@/components/cinematic/SwarmJobIntelP
 import ContactGraphCommunityOpsTriple from '@/components/cinematic/ContactGraphCommunityOpsTriple';
 import SceneIntelProfileTaskTriple from '@/components/cinematic/SceneIntelProfileTaskTriple';
 import IntelProfileGraphCommunityOpsTriple from '@/components/cinematic/IntelProfileGraphCommunityOpsTriple';
+import GraphNodeKnowledgeScenarioTriple from '@/components/cinematic/GraphNodeKnowledgeScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1301,6 +1302,8 @@ function App() {
             <SceneIntelProfileTaskTriple />
             {/* F249 (overnight 2026-08-10): intel profile × graph community × ops event triple coverage — ◈ IPGCOE button (left:766400, bottom:8, zIndex:397); parallel-fetches /entities/IntelProfile + /v1/graph/communities + /v1/ops/events; keyword-correlates each intel profile against graph network communities AND live ops events to surface FULLY TRACKED (community-aligned + ops-triggered) vs COMMUNITY-MAPPED (community match, no ops event) vs OPS-FLAGGED (ops event match, no community) vs UNMONITORED (neither — surveillance gap); amber badge on unmonitored count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "ipgcoe"/"intel profile graph ops"/"intel ops community"/"unmonitored intel profile"/"profile surveillance gap" voice trigger; jarvis:ipgcoe-toggle event; 90-s auto-refresh */}
             <IntelProfileGraphCommunityOpsTriple />
+            {/* F250 (overnight 2026-08-10): graph node × knowledge × scenario triple coverage — ◈ GNKSCEN button (left:766960, bottom:8, zIndex:398); parallel-fetches /v1/graph/centrality + /knowledge/* + /v1/scenario/list; keyword-correlates each top-influence graph node against KB articles AND scenario playbooks to surface FULLY PREPARED (kb-backed + scenario-covered — node has both knowledge and operational planning) vs KB-ONLY (knowledge article found, no scenario) vs SCENARIO-ONLY (scenario match, no KB article) vs UNPREPARED (neither — critical knowledge and planning gap); amber badge on unprepared count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "gnkscen"/"graph node knowledge scenario"/"node knowledge scenario"/"graph knowledge scenario"/"unprepared node"/"node readiness"/"graph readiness" voice trigger; jarvis:gnkscen-toggle event; 90-s auto-refresh */}
+            <GraphNodeKnowledgeScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
