@@ -389,6 +389,7 @@ import InvestmentKnowledgeOpsTriple from '@/components/cinematic/InvestmentKnowl
 import DatasetScenarioRiskTriple from '@/components/cinematic/DatasetScenarioRiskTriple';
 import TaskGraphCommunityLiveIntelTriple from '@/components/cinematic/TaskGraphCommunityLiveIntelTriple';
 import SwarmJobDatasetKnowledgeTriple from '@/components/cinematic/SwarmJobDatasetKnowledgeTriple';
+import InvestmentGraphReportTriple from '@/components/cinematic/InvestmentGraphReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1265,6 +1266,8 @@ function App() {
             <TaskGraphCommunityLiveIntelTriple />
             {/* F237 (overnight 2026-08-10): swarm job × dataset × knowledge triple coverage — ◈ SJDKN button (left:760240, bottom:8, zIndex:386); parallel-fetches /entities/SwarmJob + /v1/datasets + /knowledge/; keyword-correlates each swarm job against datasets AND KB articles to surface FULLY PROVISIONED (dataset backing + KB documented) vs DATA-BACKED vs KB-DOCUMENTED vs BLIND; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "sjdkn"/"swarm dataset knowledge"/"blind swarm job"/"swarm provisioned" voice trigger; jarvis:sjdkn-toggle event; 90-s auto-refresh */}
             <SwarmJobDatasetKnowledgeTriple />
+            {/* F238 (overnight 2026-08-10): investment × graph community × report triple coverage — ◈ IGRCOV button (left:760800, bottom:8, zIndex:387); parallel-fetches /entities/Investment + /v1/graph/communities + /v1/reports; keyword-correlates each investment against graph network communities AND intelligence reports to surface FULLY DOCUMENTED (community-backed + report found) vs COMMUNITY-BACKED vs REPORTED vs UNCOVERED; amber badge on uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "igrcov"/"invest graph community report"/"uncovered investment"/"portfolio community report" voice trigger; jarvis:igrcov-toggle event; 90-s auto-refresh */}
+            <InvestmentGraphReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

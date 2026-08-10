@@ -458,6 +458,7 @@ import { isIkoeQuery, buildIkoeScript } from "./InvestmentKnowledgeOpsTriple";
 import { isDssrtriQuery, buildDssrtriScript } from "./DatasetScenarioRiskTriple";
 import { isTgcliQuery, buildTgcliScript } from "./TaskGraphCommunityLiveIntelTriple";
 import { isSjdknQuery, buildSjdknScript } from "./SwarmJobDatasetKnowledgeTriple";
+import { isIgrcovQuery, buildIgrcovScript } from "./InvestmentGraphReportTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5127,6 +5128,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjdkn-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSjdknScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIgrcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:igrcov-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIgrcovScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
