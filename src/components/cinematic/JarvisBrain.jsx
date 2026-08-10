@@ -465,6 +465,7 @@ import { isRsdktriQuery, buildRsdktriScript } from "./RiskSignalDatasetKnowledge
 import { isTgnoeQuery, buildTgnoeScript } from "./TaskGraphNodeOpsTriple";
 import { isCgnsktrQuery, buildCgnsktrScript } from "./ContactGraphNodeSkillTriple";
 import { isIssktriQuery, buildIssktriScript } from "./InvestigationScenarioSkillTriple";
+import { isCsdtriQuery, buildCsdtriScript } from "./ContactScenarioDatasetTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5197,6 +5198,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:issktri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIssktriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCsdtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csdtri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCsdtriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
