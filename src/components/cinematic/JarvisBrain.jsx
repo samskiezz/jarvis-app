@@ -451,6 +451,7 @@ import { isKgnoeQuery, buildKgnoeScript } from "./KnowledgeGraphNodeOpsTriple";
 import { isScgoetriQuery, buildScgoetriScript } from "./SceneGraphCommunityOpsTriple";
 import { isSstknQuery, buildSstknScript } from "./SystemStatusTaskKnowledgeCoverage";
 import { isCscrsQuery, buildCscrsScript } from "./ContactSceneRiskTriple";
+import { isSiltriQuery, buildSiltriScript } from "./SkillInvestigationLiveIntelTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5057,6 +5058,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cscrs-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCscrsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSiltriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:siltri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSiltriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
