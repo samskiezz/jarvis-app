@@ -203,3 +203,4 @@
 [2026-08-10] F232 RSITRIP — ReportSwarmIntelTriple.jsx — /v1/reports × /entities/SwarmJob × /entities/IntelProfile — FULLY COVERED/SWARM-ONLY/PROFILED/DARK states — build exit 0
 [2026-08-10] F233 OEKCTRI — OpsEventKnowledgeContactTriple.jsx built and mounted; isOekctriQuery+buildOekctriScript wired; ◈ OEKCTRI left:758000 zIndex:382; 90-s auto-refresh; build exit 0; pushed to jarvis-overnight
 2026-08-10 F234 IKOE InvestmentKnowledgeOpsTriple.jsx — /entities/Investment × /knowledge/ × /v1/ops/events; FULLY ALERTED/KB-ONLY/OPS-TRIGGERED/BLIND; build exit 0
+2026-08-10 F235 DatasetScenarioRiskTriple.jsx — Dataset × Scenario × RiskSignal triple coverage (DSSRTRI); /v1/datasets × /v1/scenario/list × /entities/RiskSignal; FULLY MAPPED/SCENARIO-ONLY/RISK-FLAGGED/DARK states; ◈ DSSRTRI left:759120 zIndex:384; isDssrtriQuery+buildDssrtriScript wired in JarvisBrain.jsx; build exit 0; pushed to jarvis-overnight

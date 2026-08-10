@@ -386,6 +386,7 @@ import SkillInvestigationLiveIntelTriple from '@/components/cinematic/SkillInves
 import ReportSwarmIntelTriple from '@/components/cinematic/ReportSwarmIntelTriple';
 import OpsEventKnowledgeContactTriple from '@/components/cinematic/OpsEventKnowledgeContactTriple';
 import InvestmentKnowledgeOpsTriple from '@/components/cinematic/InvestmentKnowledgeOpsTriple';
+import DatasetScenarioRiskTriple from '@/components/cinematic/DatasetScenarioRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1256,6 +1257,8 @@ function App() {
             {/* Coverage states: FULLY ALERTED | KB-ONLY | OPS-TRIGGERED | BLIND */}
             {/* Voice trigger: "ikoe" / "investment knowledge ops" / "invest kb ops" */}
             <InvestmentKnowledgeOpsTriple />
+            {/* F235 (overnight 2026-08-10): dataset × scenario × risk signal triple coverage — ◈ DSSRTRI button (left:759120, bottom:8, zIndex:384); parallel-fetches /v1/datasets + /v1/scenario/list + /entities/RiskSignal; keyword-correlates each dataset against scenarios AND risk signals to surface FULLY MAPPED (scenario-backed + risk-flagged) vs SCENARIO-ONLY vs RISK-FLAGGED vs DARK; amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "dssrtri"/"dataset scenario risk"/"dark dataset"/"dataset triple coverage" voice trigger; jarvis:dssrtri-toggle event; 90-s auto-refresh */}
+            <DatasetScenarioRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
