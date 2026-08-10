@@ -388,6 +388,7 @@ import OpsEventKnowledgeContactTriple from '@/components/cinematic/OpsEventKnowl
 import InvestmentKnowledgeOpsTriple from '@/components/cinematic/InvestmentKnowledgeOpsTriple';
 import DatasetScenarioRiskTriple from '@/components/cinematic/DatasetScenarioRiskTriple';
 import TaskGraphCommunityLiveIntelTriple from '@/components/cinematic/TaskGraphCommunityLiveIntelTriple';
+import SwarmJobDatasetKnowledgeTriple from '@/components/cinematic/SwarmJobDatasetKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1262,6 +1263,8 @@ function App() {
             <DatasetScenarioRiskTriple />
             {/* F236 (overnight 2026-08-10): task × graph community × live intel triple coverage — ◈ TGCLI button (left:759680, bottom:8, zIndex:385); parallel-fetches /entities/Task + /v1/graph/communities + /functions/getLiveIntel; keyword-correlates each task against graph communities AND live world events to surface FULLY ACTIVATED (community-backed + live-triggered) vs COMMUNITY-BACKED vs LIVE-TRIGGERED vs DORMANT; cyan badge on activated count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "tgcli"/"task graph live"/"task community live"/"activated task"/"dormant task triple" voice trigger; jarvis:tgcli-toggle event; 60-s auto-refresh */}
             <TaskGraphCommunityLiveIntelTriple />
+            {/* F237 (overnight 2026-08-10): swarm job × dataset × knowledge triple coverage — ◈ SJDKN button (left:760240, bottom:8, zIndex:386); parallel-fetches /entities/SwarmJob + /v1/datasets + /knowledge/; keyword-correlates each swarm job against datasets AND KB articles to surface FULLY PROVISIONED (dataset backing + KB documented) vs DATA-BACKED vs KB-DOCUMENTED vs BLIND; amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "sjdkn"/"swarm dataset knowledge"/"blind swarm job"/"swarm provisioned" voice trigger; jarvis:sjdkn-toggle event; 90-s auto-refresh */}
+            <SwarmJobDatasetKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
