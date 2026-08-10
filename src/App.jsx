@@ -384,6 +384,7 @@ import SystemStatusTaskKnowledgeCoverage from '@/components/cinematic/SystemStat
 import ContactSceneRiskTriple from '@/components/cinematic/ContactSceneRiskTriple';
 import SkillInvestigationLiveIntelTriple from '@/components/cinematic/SkillInvestigationLiveIntelTriple';
 import ReportSwarmIntelTriple from '@/components/cinematic/ReportSwarmIntelTriple';
+import OpsEventKnowledgeContactTriple from '@/components/cinematic/OpsEventKnowledgeContactTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1244,6 +1245,11 @@ function App() {
             {/* Coverage states: FULLY COVERED | SWARM-ONLY | PROFILED | DARK */}
             {/* Voice trigger: "rsitrip" / "report swarm intel" / "dark report" */}
             <ReportSwarmIntelTriple />
+            {/* F233: Ops Event × Knowledge × Contact Triple Coverage (OEKCTRI) */}
+            {/* /v1/ops/events × /knowledge/ × /entities/Contact */}
+            {/* Coverage states: FULLY CONTEXTUALIZED | KB-ONLY | CONTACT-LINKED | BLIND */}
+            {/* Voice trigger: "oekctri" / "ops knowledge contact" / "blind ops event" */}
+            <OpsEventKnowledgeContactTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

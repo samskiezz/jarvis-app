@@ -453,6 +453,7 @@ import { isSstknQuery, buildSstknScript } from "./SystemStatusTaskKnowledgeCover
 import { isCscrsQuery, buildCscrsScript } from "./ContactSceneRiskTriple";
 import { isSiltriQuery, buildSiltriScript } from "./SkillInvestigationLiveIntelTriple";
 import { isRsitripQuery, buildRsitripScript } from "./ReportSwarmIntelTriple";
+import { isOekctriQuery, buildOekctriScript } from "./OpsEventKnowledgeContactTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5077,6 +5078,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsitrip-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsitripScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isOekctriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oekctri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOekctriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

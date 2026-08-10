@@ -201,3 +201,4 @@
 [2026-08-10] F230 ContactSceneRiskTriple.jsx — /entities/Contact × /v1/cinematic/scene/{id} (10) × /entities/RiskSignal triple coverage; FULLY EXPOSED/SCENE-ALIGNED/AT-RISK/CLEAR states; red badge; ◈ CSCRS left:756320 zIndex:379; build exit 0
 [2026-08-10] F231 SILTRI — SkillInvestigationLiveIntelTriple.jsx — /v1/aip/skill × /v1/investigations × /functions/getLiveIntel — FULLY DEPLOYED/CASE-RELEVANT/LIVE-TRIGGERED/DORMANT states — build exit 0
 [2026-08-10] F232 RSITRIP — ReportSwarmIntelTriple.jsx — /v1/reports × /entities/SwarmJob × /entities/IntelProfile — FULLY COVERED/SWARM-ONLY/PROFILED/DARK states — build exit 0
+[2026-08-10] F233 OEKCTRI — OpsEventKnowledgeContactTriple.jsx built and mounted; isOekctriQuery+buildOekctriScript wired; ◈ OEKCTRI left:758000 zIndex:382; 90-s auto-refresh; build exit 0; pushed to jarvis-overnight
