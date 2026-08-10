@@ -447,6 +447,7 @@ import { isTkrptriQuery, buildTkrptriScript } from "./TaskKnowledgeReportTriple"
 import { isScstsQuery, buildScstsScript } from "./SceneSystemStatusCoverage";
 import { isIgcsklQuery, buildIgcsklScript } from "./InvestigationGraphCommunitySkillTriple";
 import { isRgctriQuery, buildRgctriScript } from "./ReportGraphCommunityTaskTriple";
+import { isKgnoeQuery, buildKgnoeScript } from "./KnowledgeGraphNodeOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5017,6 +5018,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rgctri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRgctriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isKgnoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kgnoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKgnoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

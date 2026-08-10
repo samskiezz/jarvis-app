@@ -378,6 +378,7 @@ import TaskKnowledgeReportTriple from '@/components/cinematic/TaskKnowledgeRepor
 import SceneSystemStatusCoverage from '@/components/cinematic/SceneSystemStatusCoverage';
 import InvestigationGraphCommunitySkillTriple from '@/components/cinematic/InvestigationGraphCommunitySkillTriple';
 import ReportGraphCommunityTaskTriple from '@/components/cinematic/ReportGraphCommunityTaskTriple';
+import KnowledgeGraphNodeOpsTriple from '@/components/cinematic/KnowledgeGraphNodeOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1209,6 +1210,11 @@ function App() {
             {/* Coverage states: FULLY OPERATIONAL | COMMUNITY-BACKED | TASKED | ARCHIVAL */}
             {/* Voice trigger: "rgctri" / "report graph task" / "report community task" / "archival report" */}
             <ReportGraphCommunityTaskTriple />
+            {/* F227: Knowledge × Graph Node × Ops Event Triple Coverage (KGNOE) */}
+            {/* /knowledge/ × /v1/graph/centrality × /v1/ops/events */}
+            {/* Coverage states: FULLY LIVE | NODE-ANCHORED | OPS-DRIVEN | DORMANT */}
+            {/* Voice trigger: "kgnoe" / "knowledge graph ops" / "kb node ops" / "live kb ops" */}
+            <KnowledgeGraphNodeOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
