@@ -394,6 +394,7 @@ import SceneContactSkillTriple from '@/components/cinematic/SceneContactSkillTri
 import SystemStatusDatasetCoverage from '@/components/cinematic/SystemStatusDatasetCoverage';
 import RiskSignalDatasetKnowledgeTriple from '@/components/cinematic/RiskSignalDatasetKnowledgeTriple';
 import TaskGraphNodeOpsTriple from '@/components/cinematic/TaskGraphNodeOpsTriple';
+import ContactGraphNodeSkillTriple from '@/components/cinematic/ContactGraphNodeSkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1280,6 +1281,8 @@ function App() {
             <RiskSignalDatasetKnowledgeTriple />
             {/* F242 (overnight 2026-08-10): task × graph node × ops event triple coverage — ◈ TGNOE button (left:762480, bottom:8, zIndex:390); parallel-fetches /entities/Task + /v1/graph/centrality + /v1/ops/events; keyword-correlates each task against top-influence graph nodes AND live ops events to surface FULLY REACTIVE (node-backed + ops-triggered) vs NODE-BACKED vs OPS-TRIGGERED vs DORMANT; cyan badge on FULLY REACTIVE count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "tgnoe"/"task graph ops"/"task node ops"/"reactive task"/"dormant task triple" voice trigger; jarvis:tgnoe-toggle event; 90-s auto-refresh */}
             <TaskGraphNodeOpsTriple />
+            {/* F243 (overnight 2026-08-10): contact × graph node × skill triple coverage — ◈ CGNSKTR button (left:763040, bottom:8, zIndex:391); parallel-fetches /entities/Contact + /v1/graph/centrality + /v1/aip/skill; keyword-correlates each contact against top-influence graph nodes AND skill catalog to surface FULLY MAPPED (node-linked + skill-backed) vs NODE-LINKED vs SKILLED vs DISCONNECTED; amber badge on disconnected count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "cgnsktr"/"contact graph node skill"/"contact node skill"/"graph skill contact" voice trigger; jarvis:cgnsktr-toggle event; 90-s auto-refresh */}
+            <ContactGraphNodeSkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

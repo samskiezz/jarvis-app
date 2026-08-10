@@ -463,6 +463,7 @@ import { isSccoskQuery, buildSccoskScript } from "./SceneContactSkillTriple";
 import { isSsdscovQuery, buildSsdscovScript } from "./SystemStatusDatasetCoverage";
 import { isRsdktriQuery, buildRsdktriScript } from "./RiskSignalDatasetKnowledgeTriple";
 import { isTgnoeQuery, buildTgnoeScript } from "./TaskGraphNodeOpsTriple";
+import { isCgnsktrQuery, buildCgnsktrScript } from "./ContactGraphNodeSkillTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5177,6 +5178,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tgnoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTgnoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCgnsktrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cgnsktr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCgnsktrScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
