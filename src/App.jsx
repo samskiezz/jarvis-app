@@ -392,6 +392,7 @@ import SwarmJobDatasetKnowledgeTriple from '@/components/cinematic/SwarmJobDatas
 import InvestmentGraphReportTriple from '@/components/cinematic/InvestmentGraphReportTriple';
 import SceneContactSkillTriple from '@/components/cinematic/SceneContactSkillTriple';
 import SystemStatusDatasetCoverage from '@/components/cinematic/SystemStatusDatasetCoverage';
+import RiskSignalDatasetKnowledgeTriple from '@/components/cinematic/RiskSignalDatasetKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1274,6 +1275,8 @@ function App() {
             <SceneContactSkillTriple />
             {/* F240 (overnight 2026-08-10): system status × dataset coverage — ◈ SSDSCOV button (left:760100, bottom:8, zIndex:385); parallel-fetches /v1/jarvis/system/status + /v1/datasets; keyword-correlates each monitored service against dataset catalog to surface DATA-MONITORED (dataset backing found) vs DARK (no dataset coverage); amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "ssdscov"/"system status dataset"/"service dataset"/"service data coverage" voice trigger; jarvis:ssdscov-toggle event; 60-s auto-refresh */}
             <SystemStatusDatasetCoverage />
+            {/* F241 (overnight 2026-08-10): risk signal × dataset × knowledge triple coverage — ◈ RSDKTRI button (left:761920, bottom:8, zIndex:389); parallel-fetches /entities/RiskSignal + /v1/datasets + /knowledge/; keyword-correlates each risk signal against dataset catalog AND KB articles to surface FULLY GROUNDED (dataset + KB) vs DATA-BACKED vs KB-DOCUMENTED vs UNSUPPORTED; amber badge on unsupported count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "rsdktri"/"risk dataset knowledge"/"risk data kb" voice trigger; jarvis:rsdktri-toggle event; 90-s auto-refresh */}
+            <RiskSignalDatasetKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
