@@ -487,6 +487,7 @@ import { isSkillGraphNodeLiveQuery, buildSkillGraphNodeLiveScript } from "./Skil
 import { isRgntriQuery, buildRgntriScript } from "./ReportGraphNodeContactTriple";
 import { isDipseenQuery, buildDipseenScript } from "./DatasetIntelProfileSceneTriple";
 import { isIrscnQuery, buildIrscnScript } from "./InvRiskScenTriple";
+import { isSjcscnQuery, buildSjcscnScript } from "./SwarmJobContactSceneTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5417,6 +5418,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:irscn-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIrscnScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSjcscnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjcscn-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjcscnScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -418,6 +418,7 @@ import SkillGraphNodeLiveIntelTriple from '@/components/cinematic/SkillGraphNode
 import ReportGraphNodeContactTriple from '@/components/cinematic/ReportGraphNodeContactTriple';
 import DatasetIntelProfileSceneTriple from '@/components/cinematic/DatasetIntelProfileSceneTriple';
 import InvRiskScenTriple from '@/components/cinematic/InvRiskScenTriple';
+import SwarmJobContactSceneTriple from '@/components/cinematic/SwarmJobContactSceneTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1352,6 +1353,8 @@ function App() {
             <DatasetIntelProfileSceneTriple />
             {/* F266 (overnight 2026-08-11): investment × risk signal × scenario triple coverage — ◈ IRSCN button (left:775920, bottom:8, zIndex:414); parallel-fetches /entities/Investment + /entities/RiskSignal + /v1/scenario/list; keyword-correlates each investment (name/description/category/tags/status) against risk signals AND scenarios to surface FULLY MAPPED (risk+scenario) vs RISK-ASSESSED (risk signal, no scenario) vs SCENARIO-PLACED (scenario, no risk signal) vs UNASSESSED (neither — investment with no risk or scenario context); red badge on unassessed count; stat tiles + coverage bar; ALL/FULLY MAPPED/RISK-ASSESSED/SCENARIO-PLACED/UNASSESSED filter tabs + search; expand investment → split pane left=matched risk signals (red scorebars) right=matched scenarios (cyan scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence investment risk+scenario coverage brief + TTS; "irscn"/"investment risk scenario"/"unassessed investment"/"risk mapped invest" voice trigger; jarvis:irscn-toggle event; 120-s auto-refresh */}
             <InvRiskScenTriple />
+            {/* F267 (overnight 2026-08-11): swarm job × contact × scene triple coverage — ◈ SJCSCN button (left:776480, bottom:8, zIndex:415); parallel-fetches /entities/SwarmJob + /entities/Contact + /v1/cinematic/scene/{id} (10 scenes); keyword-correlates each swarm job against contacts AND scene anchor texts to surface FULLY LINKED (contact+scene) vs CONTACT-LINKED (contact match, no scene) vs SCENE-ANCHORED (scene match, no contact) vs UNMAPPED (neither); cyan/purple/green/gray state colouring; expand job → split pane left=matched contacts (cyan scorebars) right=matched scenes (purple scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; "sjcscn"/"swarm job contact scene"/"unmapped swarm" voice trigger; jarvis:sjcscn-toggle event; 90-s auto-refresh */}
+            <SwarmJobContactSceneTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
