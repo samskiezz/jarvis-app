@@ -410,6 +410,7 @@ import RiskContactScenarioTriple from '@/components/cinematic/RiskContactScenari
 import ContactKnowledgeLiveIntelTriple from '@/components/cinematic/ContactKnowledgeLiveIntelTriple';
 import LiveIntelGraphNodeSceneCoverage from '@/components/cinematic/LiveIntelGraphNodeSceneCoverage';
 import InvestigationReportKnowledgeTriple from '@/components/cinematic/InvestigationReportKnowledgeTriple';
+import SystemSwarmRiskTriple from '@/components/cinematic/SystemSwarmRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1328,6 +1329,8 @@ function App() {
             <LiveIntelGraphNodeSceneCoverage />
             {/* F258 (overnight 2026-08-11): investigation × report × knowledge triple coverage — ◈ IRKTRI button (left:771440, bottom:8, zIndex:406); parallel-fetches /v1/investigations + /v1/reports + /knowledge/; keyword-correlates each investigation against intelligence reports AND KB articles to surface FULLY DOCUMENTED (report found + KB article — investigation has both reporting and knowledge backing) vs REPORTED (report found, no KB article) vs KB-BACKED (KB article found, no report) vs DARK (neither — investigation with no report or KB coverage — intelligence documentation gap); amber badge on dark count; expand investigation → split pane left=matched report (purple scorebars) right=matched KB article (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation documentation gap brief + TTS via jarvis:speak-dossier; "irktri"/"investigation report knowledge"/"dark investigation"/"undocumented investigation"/"documented investigation" voice trigger; jarvis:irktri-toggle event; 90-s auto-refresh */}
             <InvestigationReportKnowledgeTriple />
+            {/* F259 (overnight 2026-08-11): system status × swarm job × risk signal triple coverage — ◈ SSSWRSK button (left:772000, bottom:8, zIndex:407); parallel-fetches /v1/jarvis/system/status + /entities/SwarmJob + /entities/RiskSignal; keyword-correlates each system service against swarm jobs AND risk signals to surface FULLY ALARMED (swarm coverage + active risk signal — triple operational alarm) vs AUTOMATED (swarm job found, no risk signal) vs RISK-FLAGGED (risk signal found, no swarm) vs BLIND (neither — service with no swarm or risk coverage); red badge on fully-alarmed count; expand service → split pane left=matched swarm job (cyan scorebars) right=matched risk signal (red scorebars + severity); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + TTS via jarvis:speak-dossier; "ssswrsk"/"system swarm risk"/"service swarm risk"/"system status swarm"/"triple service alarm" voice trigger; jarvis:ssswrsk-toggle event; 60-s auto-refresh */}
+            <SystemSwarmRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
