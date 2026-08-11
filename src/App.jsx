@@ -407,6 +407,7 @@ import InvestmentSkillReportTriple from '@/components/cinematic/InvestmentSkillR
 import OpsEventContactDatasetTriple from '@/components/cinematic/OpsEventContactDatasetTriple';
 import LiveIntelSystemRiskTriple from '@/components/cinematic/LiveIntelSystemRiskTriple';
 import RiskContactScenarioTriple from '@/components/cinematic/RiskContactScenarioTriple';
+import ContactKnowledgeLiveIntelTriple from '@/components/cinematic/ContactKnowledgeLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1319,6 +1320,8 @@ function App() {
             <LiveIntelSystemRiskTriple />
             {/* F255 (overnight 2026-08-11): risk signal × contact × scenario triple coverage — ◈ RCSTRI button (left:769760, bottom:8, zIndex:403); parallel-fetches /entities/RiskSignal + /entities/Contact + /v1/scenario/list; keyword-correlates each risk signal against contacts AND scenario playbooks to surface FULLY CONTAINED (contact-linked + scenario-planned) vs PERSON-ASSIGNED (contact found, no scenario) vs PLANNED (scenario exists, no contact) vs UNMANAGED (neither — active risk with no human accountability or response plan); red badge on unmanaged count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "rcstri"/"risk contact scenario"/"unmanaged risk"/"contained risk"/"risk accountability"/"risk playbook contact" voice trigger; jarvis:rcstri-toggle event; 90-s auto-refresh */}
             <RiskContactScenarioTriple />
+            {/* F256 (overnight 2026-08-11): contact × knowledge × live intel triple coverage — ◈ CKLITRI button (left:770320, bottom:8, zIndex:404); parallel-fetches /entities/Contact + /knowledge/ + /functions/getLiveIntel; keyword-correlates each contact against KB articles AND live world events to surface FULLY ACTIVE (KB-documented + live-triggered) vs KB-BACKED (KB article found, no live event) vs LIVE-TRACKED (live event match, no KB) vs DORMANT (neither — contact with no intelligence or live event coverage); amber badge on dormant count; expand contact → split pane left=matched KB articles (cyan scorebars) right=matched live events (yellow scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact intelligence gap brief + TTS via jarvis:speak-dossier; "cklitri"/"contact knowledge live"/"active contact kb"/"live contact intel"/"dormant contact triple"/"contact kb live intel" voice trigger; jarvis:cklitri-toggle event; 90-s auto-refresh */}
+            <ContactKnowledgeLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
