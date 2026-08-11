@@ -485,6 +485,7 @@ import { isGcsitrQuery, buildGcsitrScript } from "./GraphCommunityScenarioInvest
 import { isTaskContactLiveQuery, buildTaskContactLiveScript } from "./TaskContactLiveIntelTriple";
 import { isSkillGraphNodeLiveQuery, buildSkillGraphNodeLiveScript } from "./SkillGraphNodeLiveIntelTriple";
 import { isRgntriQuery, buildRgntriScript } from "./ReportGraphNodeContactTriple";
+import { isDipseenQuery, buildDipseenScript } from "./DatasetIntelProfileSceneTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5397,6 +5398,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rgntri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRgntriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isDipseenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dipseen-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDipseenScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

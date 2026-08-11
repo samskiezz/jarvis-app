@@ -416,6 +416,7 @@ import GraphCommunityScenarioInvestTriple from '@/components/cinematic/GraphComm
 import TaskContactLiveIntelTriple from '@/components/cinematic/TaskContactLiveIntelTriple';
 import SkillGraphNodeLiveIntelTriple from '@/components/cinematic/SkillGraphNodeLiveIntelTriple';
 import ReportGraphNodeContactTriple from '@/components/cinematic/ReportGraphNodeContactTriple';
+import DatasetIntelProfileSceneTriple from '@/components/cinematic/DatasetIntelProfileSceneTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1346,6 +1347,8 @@ function App() {
             <SkillGraphNodeLiveIntelTriple />
             {/* F264 (overnight 2026-08-11): report × graph node × contact triple coverage — ◈ RGNTRI button (left:774800, bottom:8, zIndex:412); parallel-fetches /v1/reports + /v1/graph/centrality + /entities/Contact; keyword-correlates each report against graph centrality nodes AND contacts to surface FULLY TRACED (node+contact) vs INTEL-GRAPHED (graph node, no contact) vs CONTACT-LINKED (contact, no graph node) vs UNTRACED (neither — intelligence gap); grey badge on untraced count; stat tiles + traceability bar; ALL/FULLY TRACED/INTEL-GRAPHED/CONTACT-LINKED/UNTRACED filter tabs + search; expand report → split pane left=matched graph nodes (cyan scorebars) right=matched contacts (purple scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence traceability brief + TTS; "rgntri"/"report graph contact"/"untraced report" voice trigger; jarvis:rgntri-toggle event; 90-s auto-refresh */}
             <ReportGraphNodeContactTriple />
+            {/* F265 (overnight 2026-08-11): dataset × intel profile × scene triple coverage — ◈ DIPSEEN button (left:775360, bottom:8, zIndex:413); parallel-fetches /v1/datasets + /entities/IntelProfile + /v1/cinematic/scene/{id} (10 scenes); keyword-correlates each dataset (name/description/category/tags) against threat actor intel profiles AND cinematic scene anchor texts to surface FULLY PROFILED (intel profile + scene match) vs INTEL-BACKED (intel profile found, no scene) vs SCENE-ANCHORED (scene match, no intel profile) vs UNCHARTED (neither — dataset with no threat actor or scene coverage — intelligence gap); amber badge on uncharted count; expand dataset → split pane left=matched intel profiles (violet scorebars) right=matched scenes (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence dataset intelligence coverage brief + TTS via jarvis:speak-dossier; "dipseen"/"dataset intel scene"/"uncharted dataset"/"profiled dataset" voice trigger; jarvis:dipseen-toggle event; 90-s auto-refresh */}
+            <DatasetIntelProfileSceneTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
