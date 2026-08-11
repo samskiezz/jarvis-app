@@ -413,6 +413,7 @@ import InvestigationReportKnowledgeTriple from '@/components/cinematic/Investiga
 import SystemSwarmRiskTriple from '@/components/cinematic/SystemSwarmRiskTriple';
 import GraphCommunityIntelDatasetTriple from '@/components/cinematic/GraphCommunityIntelDatasetTriple';
 import GraphCommunityScenarioInvestTriple from '@/components/cinematic/GraphCommunityScenarioInvestTriple';
+import TaskContactLiveIntelTriple from '@/components/cinematic/TaskContactLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1337,6 +1338,8 @@ function App() {
             <GraphCommunityIntelDatasetTriple />
             {/* F261 (overnight 2026-08-11): graph community × scenario × investigation triple coverage — ◈ GCSITR button (left:773120, bottom:8, zIndex:409); parallel-fetches /v1/graph/communities + /v1/scenario/list + /v1/investigations; keyword-correlates each network cluster against threat scenarios AND active investigations to surface FULLY TRACKED (scenario + investigation — community has both threat modelling and active investigation) vs SCENARIO-ONLY (scenario found, no investigation) vs INVESTIGATION-ONLY (investigation found, no scenario) vs UNTRACKED (neither — community with no scenario or investigation coverage — operational gap); amber badge on untracked count; expand community → split pane left=matched scenario (amber scorebars) right=matched investigation (violet scorebars + status); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community operational gap brief + TTS via jarvis:speak-dossier; "gcsitr"/"graph community scenario invest"/"community scenario investigation"/"graph scenario investigation"/"untracked community"/"community scenario gap"/"community fully tracked" voice trigger; jarvis:gcsitr-toggle event; 90-s auto-refresh */}
             <GraphCommunityScenarioInvestTriple />
+            {/* F262 (overnight 2026-08-11): task × contact × live intel triple coverage — ⊛ TCLIT button (left:773680, bottom:8, zIndex:410); parallel-fetches /entities/Task + /entities/Contact + /functions/getLiveIntel; keyword-correlates each task (name/title/description/priority/tags) against contacts AND live world events to surface FULLY REACTIVE (task backed + contact assigned + live event match) vs TASK-ASSIGNED (task + contact found, no live event) vs LIVE-ALERTED (live event matches, no task/contact) vs DORMANT (no coverage); red badge on FULLY REACTIVE count; stat tiles; ALL/FULLY REACTIVE/TASK-ASSIGNED/LIVE-ALERTED/DORMANT filter tabs + search; expand task → split pane left=matched contacts (cyan scorebars) right=matched live events (amber scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence operational engagement brief + TTS; "task contact live"/"tclit"/"live task contact"/"reactive task"/"task world event" voice trigger; jarvis:tclit-toggle event; 60-s auto-refresh */}
+            <TaskContactLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
