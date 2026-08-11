@@ -404,6 +404,7 @@ import IntelProfileGraphCommunityOpsTriple from '@/components/cinematic/IntelPro
 import GraphNodeKnowledgeScenarioTriple from '@/components/cinematic/GraphNodeKnowledgeScenarioTriple';
 import SwarmJobKnowledgeScenarioTriple from '@/components/cinematic/SwarmJobKnowledgeScenarioTriple';
 import InvestmentSkillReportTriple from '@/components/cinematic/InvestmentSkillReportTriple';
+import OpsEventContactDatasetTriple from '@/components/cinematic/OpsEventContactDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1310,6 +1311,8 @@ function App() {
             <SwarmJobKnowledgeScenarioTriple />
             {/* F252 (overnight 2026-08-11): investment × skill × report triple coverage — ◈ ISRTRI button (left:768080, bottom:8, zIndex:400); parallel-fetches /entities/Investment + /v1/aip/skill + /v1/reports; keyword-correlates each investment against JARVIS skills AND intelligence reports to surface FULLY ANALYZED (skill-backed + report-found — investment has both capability coverage and intelligence documentation) vs SKILL-BACKED (skill match found, no report) vs REPORTED (report found, no skill coverage) vs UNCOVERED (neither — investment intelligence gap); amber badge on uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "isrtri"/"investment skill report"/"invest skill report"/"investment coverage"/"skill backed investment"/"reported investment" voice trigger; jarvis:isrtri-toggle event; 90-s auto-refresh */}
             <InvestmentSkillReportTriple />
+            {/* F253 (overnight 2026-08-11): ops event × contact × dataset triple coverage — ◈ OECDTRI button (left:768640, bottom:8, zIndex:401); parallel-fetches /v1/ops/events + /entities/Contact + /v1/datasets; keyword-correlates each ops event against contacts AND datasets to surface FULLY EQUIPPED (contact assigned + dataset backing — event has both human accountability and data coverage) vs CONTACT-LINKED (contact found, no dataset — human assigned but no data backing) vs DATA-BACKED (dataset found, no contact — data exists but no human assigned) vs BLIND (neither — ops event with no contact or data coverage — accountability gap); amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "oecdtri"/"ops event contact dataset"/"ops contact data"/"ops dataset contact"/"blind ops event data"/"fully equipped ops" voice trigger; jarvis:oecdtri-toggle event; 90-s auto-refresh */}
+            <OpsEventContactDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
