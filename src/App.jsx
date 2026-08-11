@@ -408,6 +408,7 @@ import OpsEventContactDatasetTriple from '@/components/cinematic/OpsEventContact
 import LiveIntelSystemRiskTriple from '@/components/cinematic/LiveIntelSystemRiskTriple';
 import RiskContactScenarioTriple from '@/components/cinematic/RiskContactScenarioTriple';
 import ContactKnowledgeLiveIntelTriple from '@/components/cinematic/ContactKnowledgeLiveIntelTriple';
+import LiveIntelGraphNodeSceneCoverage from '@/components/cinematic/LiveIntelGraphNodeSceneCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1322,6 +1323,8 @@ function App() {
             <RiskContactScenarioTriple />
             {/* F256 (overnight 2026-08-11): contact × knowledge × live intel triple coverage — ◈ CKLITRI button (left:770320, bottom:8, zIndex:404); parallel-fetches /entities/Contact + /knowledge/ + /functions/getLiveIntel; keyword-correlates each contact against KB articles AND live world events to surface FULLY ACTIVE (KB-documented + live-triggered) vs KB-BACKED (KB article found, no live event) vs LIVE-TRACKED (live event match, no KB) vs DORMANT (neither — contact with no intelligence or live event coverage); amber badge on dormant count; expand contact → split pane left=matched KB articles (cyan scorebars) right=matched live events (yellow scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact intelligence gap brief + TTS via jarvis:speak-dossier; "cklitri"/"contact knowledge live"/"active contact kb"/"live contact intel"/"dormant contact triple"/"contact kb live intel" voice trigger; jarvis:cklitri-toggle event; 90-s auto-refresh */}
             <ContactKnowledgeLiveIntelTriple />
+            {/* F257 (overnight 2026-08-11): live intel × graph node × scene triple coverage — ◈ LGNS button (left:770880, bottom:8, zIndex:405); parallel-fetches /functions/getLiveIntel + /v1/graph/centrality + /v1/cinematic/scene/{id} (10 scenes); keyword-correlates each live world event against top-influence graph nodes AND cinematic scene anchors to surface FULLY MAPPED (node + scene — event has both graph-layer and cinematic-layer coverage) vs NODE-ONLY (graph node found, no scene anchor) vs SCENE-ONLY (scene anchor found, no graph node) vs UNMAPPED (neither — live world event with no graph or scene mapping — intelligence blind spot); amber badge on unmapped count; expand event → split pane left=matched graph nodes (green scorebars) right=matched scenes (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "lgns"/"live graph scene"/"live node scene"/"world graph scene"/"live event mapping"/"unmapped world event"/"live intel graph scene" voice trigger; jarvis:lgns-toggle event; 60-s auto-refresh */}
+            <LiveIntelGraphNodeSceneCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
