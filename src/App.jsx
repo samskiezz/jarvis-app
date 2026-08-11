@@ -422,6 +422,7 @@ import SwarmJobContactSceneTriple from '@/components/cinematic/SwarmJobContactSc
 import SceneSwarmDatasetTriple from '@/components/cinematic/SceneSwarmDatasetTriple';
 import ScenarioReportLiveIntelTriple from '@/components/cinematic/ScenarioReportLiveIntelTriple';
 import InvestigationSkillLiveIntelTriple from '@/components/cinematic/InvestigationSkillLiveIntelTriple';
+import KnowledgeContactRiskTriple from '@/components/cinematic/KnowledgeContactRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1364,6 +1365,8 @@ function App() {
             <ScenarioReportLiveIntelTriple />
             {/* F270 (overnight 2026-08-11): investigation × skill × live intel triple coverage — ◈ ISLTRI button (left:778160, bottom:8, zIndex:418); parallel-fetches /v1/investigations + /v1/aip/skill + /functions/getLiveIntel; keyword-correlates each investigation against skills AND live world events to surface FULLY ACTIVE (skill+live event) vs SKILL-BACKED (skill found, no live) vs LIVE-TRIGGERED (live event, no skill) vs DARK (neither — investigation with no skill alignment or live coverage); grey badge on dark count; expand investigation → split pane left=matched skills (violet scorebars) right=matched live events (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; "isltri"/"investigation skill live"/"invest skill live"/"dark investigation skill"/"fully active investigation" voice trigger; jarvis:isltri-toggle event; 60-s auto-refresh */}
             <InvestigationSkillLiveIntelTriple />
+            {/* F271 (overnight 2026-08-11): knowledge × contact × risk signal triple coverage — ◈ KCRSTRI button (left:778720, bottom:8, zIndex:419); parallel-fetches /knowledge/ + /entities/Contact + /entities/RiskSignal; keyword-correlates each knowledge article against contacts AND risk signals to surface FULLY ALARMED (contact+risk signal) vs CONTACT-LINKED (contact match, no risk) vs RISK-BACKED (risk signal, no contact) vs UNCOVERED (neither — knowledge article with no contact or risk signal linkage); red badge on uncovered count; expand article → split pane left=matched contacts (cyan scorebars) right=matched risk signals (amber scorebars + severity); ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; "kcrstri"/"knowledge contact risk"/"knowledge risk signal"/"uncovered knowledge"/"risk backed knowledge" voice trigger; jarvis:kcrstri-toggle event; 90-s auto-refresh */}
+            <KnowledgeContactRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
