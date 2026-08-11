@@ -411,6 +411,7 @@ import ContactKnowledgeLiveIntelTriple from '@/components/cinematic/ContactKnowl
 import LiveIntelGraphNodeSceneCoverage from '@/components/cinematic/LiveIntelGraphNodeSceneCoverage';
 import InvestigationReportKnowledgeTriple from '@/components/cinematic/InvestigationReportKnowledgeTriple';
 import SystemSwarmRiskTriple from '@/components/cinematic/SystemSwarmRiskTriple';
+import GraphCommunityIntelDatasetTriple from '@/components/cinematic/GraphCommunityIntelDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1331,6 +1332,8 @@ function App() {
             <InvestigationReportKnowledgeTriple />
             {/* F259 (overnight 2026-08-11): system status × swarm job × risk signal triple coverage — ◈ SSSWRSK button (left:772000, bottom:8, zIndex:407); parallel-fetches /v1/jarvis/system/status + /entities/SwarmJob + /entities/RiskSignal; keyword-correlates each system service against swarm jobs AND risk signals to surface FULLY ALARMED (swarm coverage + active risk signal — triple operational alarm) vs AUTOMATED (swarm job found, no risk signal) vs RISK-FLAGGED (risk signal found, no swarm) vs BLIND (neither — service with no swarm or risk coverage); red badge on fully-alarmed count; expand service → split pane left=matched swarm job (cyan scorebars) right=matched risk signal (red scorebars + severity); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + TTS via jarvis:speak-dossier; "ssswrsk"/"system swarm risk"/"service swarm risk"/"system status swarm"/"triple service alarm" voice trigger; jarvis:ssswrsk-toggle event; 60-s auto-refresh */}
             <SystemSwarmRiskTriple />
+            {/* F260 (overnight 2026-08-11): graph community × intel profile × dataset triple coverage — ◈ GCIPDS button (left:772560, bottom:8, zIndex:408); parallel-fetches /v1/graph/communities + /entities/IntelProfile + /v1/datasets; keyword-correlates each network cluster against threat actor intel profiles AND dataset catalog to surface FULLY ARMED (intel profile + dataset — community has both intelligence profiling and data backing) vs INTEL-ONLY (intel profile found, no dataset) vs DATA-BACKED (dataset found, no intel profile) vs BLIND (neither — community with no threat intel or data coverage — intelligence gap); amber badge on blind count; expand community → split pane left=matched intel profile (violet scorebars) right=matched dataset (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community intelligence gap brief + TTS via jarvis:speak-dossier; "gcipds"/"graph community intel dataset"/"community intel dataset"/"graph intel dataset"/"fully armed community"/"blind community triple"/"community intelligence gap" voice trigger; jarvis:gcipds-toggle event; 90-s auto-refresh */}
+            <GraphCommunityIntelDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
