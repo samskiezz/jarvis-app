@@ -409,6 +409,7 @@ import LiveIntelSystemRiskTriple from '@/components/cinematic/LiveIntelSystemRis
 import RiskContactScenarioTriple from '@/components/cinematic/RiskContactScenarioTriple';
 import ContactKnowledgeLiveIntelTriple from '@/components/cinematic/ContactKnowledgeLiveIntelTriple';
 import LiveIntelGraphNodeSceneCoverage from '@/components/cinematic/LiveIntelGraphNodeSceneCoverage';
+import InvestigationReportKnowledgeTriple from '@/components/cinematic/InvestigationReportKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1325,6 +1326,8 @@ function App() {
             <ContactKnowledgeLiveIntelTriple />
             {/* F257 (overnight 2026-08-11): live intel × graph node × scene triple coverage — ◈ LGNS button (left:770880, bottom:8, zIndex:405); parallel-fetches /functions/getLiveIntel + /v1/graph/centrality + /v1/cinematic/scene/{id} (10 scenes); keyword-correlates each live world event against top-influence graph nodes AND cinematic scene anchors to surface FULLY MAPPED (node + scene — event has both graph-layer and cinematic-layer coverage) vs NODE-ONLY (graph node found, no scene anchor) vs SCENE-ONLY (scene anchor found, no graph node) vs UNMAPPED (neither — live world event with no graph or scene mapping — intelligence blind spot); amber badge on unmapped count; expand event → split pane left=matched graph nodes (green scorebars) right=matched scenes (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "lgns"/"live graph scene"/"live node scene"/"world graph scene"/"live event mapping"/"unmapped world event"/"live intel graph scene" voice trigger; jarvis:lgns-toggle event; 60-s auto-refresh */}
             <LiveIntelGraphNodeSceneCoverage />
+            {/* F258 (overnight 2026-08-11): investigation × report × knowledge triple coverage — ◈ IRKTRI button (left:771440, bottom:8, zIndex:406); parallel-fetches /v1/investigations + /v1/reports + /knowledge/; keyword-correlates each investigation against intelligence reports AND KB articles to surface FULLY DOCUMENTED (report found + KB article — investigation has both reporting and knowledge backing) vs REPORTED (report found, no KB article) vs KB-BACKED (KB article found, no report) vs DARK (neither — investigation with no report or KB coverage — intelligence documentation gap); amber badge on dark count; expand investigation → split pane left=matched report (purple scorebars) right=matched KB article (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation documentation gap brief + TTS via jarvis:speak-dossier; "irktri"/"investigation report knowledge"/"dark investigation"/"undocumented investigation"/"documented investigation" voice trigger; jarvis:irktri-toggle event; 90-s auto-refresh */}
+            <InvestigationReportKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
