@@ -405,6 +405,7 @@ import GraphNodeKnowledgeScenarioTriple from '@/components/cinematic/GraphNodeKn
 import SwarmJobKnowledgeScenarioTriple from '@/components/cinematic/SwarmJobKnowledgeScenarioTriple';
 import InvestmentSkillReportTriple from '@/components/cinematic/InvestmentSkillReportTriple';
 import OpsEventContactDatasetTriple from '@/components/cinematic/OpsEventContactDatasetTriple';
+import LiveIntelSystemRiskTriple from '@/components/cinematic/LiveIntelSystemRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1313,6 +1314,8 @@ function App() {
             <InvestmentSkillReportTriple />
             {/* F253 (overnight 2026-08-11): ops event × contact × dataset triple coverage — ◈ OECDTRI button (left:768640, bottom:8, zIndex:401); parallel-fetches /v1/ops/events + /entities/Contact + /v1/datasets; keyword-correlates each ops event against contacts AND datasets to surface FULLY EQUIPPED (contact assigned + dataset backing — event has both human accountability and data coverage) vs CONTACT-LINKED (contact found, no dataset — human assigned but no data backing) vs DATA-BACKED (dataset found, no contact — data exists but no human assigned) vs BLIND (neither — ops event with no contact or data coverage — accountability gap); amber badge on blind count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "oecdtri"/"ops event contact dataset"/"ops contact data"/"ops dataset contact"/"blind ops event data"/"fully equipped ops" voice trigger; jarvis:oecdtri-toggle event; 90-s auto-refresh */}
             <OpsEventContactDatasetTriple />
+            {/* F254 (overnight 2026-08-11): live intel × system status × risk signal triple coverage — ◈ LSRTRI button (left:769200, bottom:8, zIndex:402); parallel-fetches /functions/getLiveIntel + /v1/jarvis/system/status + /entities/RiskSignal; keyword-correlates each live intel event against system service health AND risk signals to surface FULLY CRITICAL (live event + degraded service + risk signal — triple alarm) vs LIVE+RISK vs LIVE+DEGRADED vs RISK+DEGRADED vs NORMAL; red badge on fully critical count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "lsrtri"/"live system risk"/"triple critical"/"system risk live"/"triple alarm" voice trigger; jarvis:lsrtri-toggle event; 60-s auto-refresh */}
+            <LiveIntelSystemRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

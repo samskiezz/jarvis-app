@@ -474,6 +474,7 @@ import { isGnkscenQuery, buildGnkscenScript } from "./GraphNodeKnowledgeScenario
 import { isSjkstriQuery, buildSjkstriScript } from "./SwarmJobKnowledgeScenarioTriple";
 import { isIsrtriQuery, buildIsrtriScript } from "./InvestmentSkillReportTriple";
 import { isOecdtriQuery, buildOecdtriScript } from "./OpsEventContactDatasetTriple";
+import { isLsrtriQuery, buildLsrtriScript } from "./LiveIntelSystemRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5287,6 +5288,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:oecdtri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildOecdtriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isLsrtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lsrtri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = buildLsrtriScript(null);
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
