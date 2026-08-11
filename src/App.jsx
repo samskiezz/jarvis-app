@@ -421,6 +421,7 @@ import InvRiskScenTriple from '@/components/cinematic/InvRiskScenTriple';
 import SwarmJobContactSceneTriple from '@/components/cinematic/SwarmJobContactSceneTriple';
 import SceneSwarmDatasetTriple from '@/components/cinematic/SceneSwarmDatasetTriple';
 import ScenarioReportLiveIntelTriple from '@/components/cinematic/ScenarioReportLiveIntelTriple';
+import InvestigationSkillLiveIntelTriple from '@/components/cinematic/InvestigationSkillLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1361,6 +1362,8 @@ function App() {
             <SceneSwarmDatasetTriple />
             {/* F269 (overnight 2026-08-11): scenario × report × live intel triple coverage — ◈ SCRLIVE button (left:777600, bottom:8, zIndex:417); parallel-fetches /v1/scenario/list + /v1/reports + /functions/getLiveIntel; keyword-correlates each scenario against intelligence reports AND live world events to surface FULLY BRIEFED (report+live event) vs REPORTED (report only) vs LIVE-TRIGGERED (live event, no report — gap) vs DARK (neither); red badge on live-triggered count; expand scenario → split pane left=matched reports (purple scorebars) right=matched live events (red scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; "scrlive"/"scenario report live"/"live scenario report"/"briefed scenario live"/"live triggered scenario" voice trigger; jarvis:scrlive-toggle event; 60-s auto-refresh */}
             <ScenarioReportLiveIntelTriple />
+            {/* F270 (overnight 2026-08-11): investigation × skill × live intel triple coverage — ◈ ISLTRI button (left:778160, bottom:8, zIndex:418); parallel-fetches /v1/investigations + /v1/aip/skill + /functions/getLiveIntel; keyword-correlates each investigation against skills AND live world events to surface FULLY ACTIVE (skill+live event) vs SKILL-BACKED (skill found, no live) vs LIVE-TRIGGERED (live event, no skill) vs DARK (neither — investigation with no skill alignment or live coverage); grey badge on dark count; expand investigation → split pane left=matched skills (violet scorebars) right=matched live events (amber scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; "isltri"/"investigation skill live"/"invest skill live"/"dark investigation skill"/"fully active investigation" voice trigger; jarvis:isltri-toggle event; 60-s auto-refresh */}
+            <InvestigationSkillLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
