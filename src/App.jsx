@@ -403,6 +403,7 @@ import SceneIntelProfileTaskTriple from '@/components/cinematic/SceneIntelProfil
 import IntelProfileGraphCommunityOpsTriple from '@/components/cinematic/IntelProfileGraphCommunityOpsTriple';
 import GraphNodeKnowledgeScenarioTriple from '@/components/cinematic/GraphNodeKnowledgeScenarioTriple';
 import SwarmJobKnowledgeScenarioTriple from '@/components/cinematic/SwarmJobKnowledgeScenarioTriple';
+import InvestmentSkillReportTriple from '@/components/cinematic/InvestmentSkillReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1307,6 +1308,8 @@ function App() {
             <GraphNodeKnowledgeScenarioTriple />
             {/* F251 (overnight 2026-08-11): swarm job × knowledge × scenario triple coverage — ◈ SJKSTRI button (left:767520, bottom:8, zIndex:399); parallel-fetches /entities/SwarmJob + /knowledge/ + /v1/scenario/list; keyword-correlates each swarm job against KB articles AND scenario playbooks to surface FULLY PREPARED (KB-backed + scenario-covered — job has both knowledge and operational planning) vs KB-ONLY (knowledge article found, no scenario playbook) vs SCRIPTED (scenario match found, no KB article) vs DARK (neither — automation without knowledge or planning support); amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "sjkstri"/"swarm knowledge scenario"/"swarm job knowledge scenario"/"fully prepared swarm"/"dark swarm"/"swarm readiness" voice trigger; jarvis:sjkstri-toggle event; 90-s auto-refresh */}
             <SwarmJobKnowledgeScenarioTriple />
+            {/* F252 (overnight 2026-08-11): investment × skill × report triple coverage — ◈ ISRTRI button (left:768080, bottom:8, zIndex:400); parallel-fetches /entities/Investment + /v1/aip/skill + /v1/reports; keyword-correlates each investment against JARVIS skills AND intelligence reports to surface FULLY ANALYZED (skill-backed + report-found — investment has both capability coverage and intelligence documentation) vs SKILL-BACKED (skill match found, no report) vs REPORTED (report found, no skill coverage) vs UNCOVERED (neither — investment intelligence gap); amber badge on uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "isrtri"/"investment skill report"/"invest skill report"/"investment coverage"/"skill backed investment"/"reported investment" voice trigger; jarvis:isrtri-toggle event; 90-s auto-refresh */}
+            <InvestmentSkillReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
