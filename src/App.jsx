@@ -414,6 +414,7 @@ import SystemSwarmRiskTriple from '@/components/cinematic/SystemSwarmRiskTriple'
 import GraphCommunityIntelDatasetTriple from '@/components/cinematic/GraphCommunityIntelDatasetTriple';
 import GraphCommunityScenarioInvestTriple from '@/components/cinematic/GraphCommunityScenarioInvestTriple';
 import TaskContactLiveIntelTriple from '@/components/cinematic/TaskContactLiveIntelTriple';
+import SkillGraphNodeLiveIntelTriple from '@/components/cinematic/SkillGraphNodeLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1340,6 +1341,8 @@ function App() {
             <GraphCommunityScenarioInvestTriple />
             {/* F262 (overnight 2026-08-11): task × contact × live intel triple coverage — ⊛ TCLIT button (left:773680, bottom:8, zIndex:410); parallel-fetches /entities/Task + /entities/Contact + /functions/getLiveIntel; keyword-correlates each task (name/title/description/priority/tags) against contacts AND live world events to surface FULLY REACTIVE (task backed + contact assigned + live event match) vs TASK-ASSIGNED (task + contact found, no live event) vs LIVE-ALERTED (live event matches, no task/contact) vs DORMANT (no coverage); red badge on FULLY REACTIVE count; stat tiles; ALL/FULLY REACTIVE/TASK-ASSIGNED/LIVE-ALERTED/DORMANT filter tabs + search; expand task → split pane left=matched contacts (cyan scorebars) right=matched live events (amber scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence operational engagement brief + TTS; "task contact live"/"tclit"/"live task contact"/"reactive task"/"task world event" voice trigger; jarvis:tclit-toggle event; 60-s auto-refresh */}
             <TaskContactLiveIntelTriple />
+            {/* F263 (overnight 2026-08-11): skill × graph node × live intel triple coverage — ◈ SGNITRI button (left:774240, bottom:8, zIndex:411); parallel-fetches /v1/aip/skill + /v1/graph/centrality + /functions/getLiveIntel; keyword-correlates each skill (name/description/category/tags) against graph network nodes AND live world events to surface FULLY ACTIVE (skill+node+live event match) vs NODE-ALIGNED (skill + graph node found, no live event) vs LIVE-TRIGGERED (live event matches, no graph node) vs DORMANT (no coverage); red badge on FULLY ACTIVE count; stat tiles; ALL/FULLY ACTIVE/NODE-ALIGNED/LIVE-TRIGGERED/DORMANT filter tabs + search; expand skill → split pane left=matched graph nodes (cyan scorebars + centrality score) right=matched live events (amber scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence operational readiness brief + TTS; "sgnitri"/"skill graph live"/"skill node live"/"live skill node"/"graph skill intel"/"skill network live" voice trigger; jarvis:sgnitri-toggle event; 60-s auto-refresh */}
+            <SkillGraphNodeLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
