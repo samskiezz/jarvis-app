@@ -417,6 +417,7 @@ import TaskContactLiveIntelTriple from '@/components/cinematic/TaskContactLiveIn
 import SkillGraphNodeLiveIntelTriple from '@/components/cinematic/SkillGraphNodeLiveIntelTriple';
 import ReportGraphNodeContactTriple from '@/components/cinematic/ReportGraphNodeContactTriple';
 import DatasetIntelProfileSceneTriple from '@/components/cinematic/DatasetIntelProfileSceneTriple';
+import InvRiskScenTriple from '@/components/cinematic/InvRiskScenTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1349,6 +1350,8 @@ function App() {
             <ReportGraphNodeContactTriple />
             {/* F265 (overnight 2026-08-11): dataset × intel profile × scene triple coverage — ◈ DIPSEEN button (left:775360, bottom:8, zIndex:413); parallel-fetches /v1/datasets + /entities/IntelProfile + /v1/cinematic/scene/{id} (10 scenes); keyword-correlates each dataset (name/description/category/tags) against threat actor intel profiles AND cinematic scene anchor texts to surface FULLY PROFILED (intel profile + scene match) vs INTEL-BACKED (intel profile found, no scene) vs SCENE-ANCHORED (scene match, no intel profile) vs UNCHARTED (neither — dataset with no threat actor or scene coverage — intelligence gap); amber badge on uncharted count; expand dataset → split pane left=matched intel profiles (violet scorebars) right=matched scenes (lime scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence dataset intelligence coverage brief + TTS via jarvis:speak-dossier; "dipseen"/"dataset intel scene"/"uncharted dataset"/"profiled dataset" voice trigger; jarvis:dipseen-toggle event; 90-s auto-refresh */}
             <DatasetIntelProfileSceneTriple />
+            {/* F266 (overnight 2026-08-11): investment × risk signal × scenario triple coverage — ◈ IRSCN button (left:775920, bottom:8, zIndex:414); parallel-fetches /entities/Investment + /entities/RiskSignal + /v1/scenario/list; keyword-correlates each investment (name/description/category/tags/status) against risk signals AND scenarios to surface FULLY MAPPED (risk+scenario) vs RISK-ASSESSED (risk signal, no scenario) vs SCENARIO-PLACED (scenario, no risk signal) vs UNASSESSED (neither — investment with no risk or scenario context); red badge on unassessed count; stat tiles + coverage bar; ALL/FULLY MAPPED/RISK-ASSESSED/SCENARIO-PLACED/UNASSESSED filter tabs + search; expand investment → split pane left=matched risk signals (red scorebars) right=matched scenarios (cyan scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence investment risk+scenario coverage brief + TTS; "irscn"/"investment risk scenario"/"unassessed investment"/"risk mapped invest" voice trigger; jarvis:irscn-toggle event; 120-s auto-refresh */}
+            <InvRiskScenTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
