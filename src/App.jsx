@@ -424,6 +424,7 @@ import ScenarioReportLiveIntelTriple from '@/components/cinematic/ScenarioReport
 import InvestigationSkillLiveIntelTriple from '@/components/cinematic/InvestigationSkillLiveIntelTriple';
 import KnowledgeContactRiskTriple from '@/components/cinematic/KnowledgeContactRiskTriple';
 import GraphCommunityKnowledgeLiveIntelTriple from '@/components/cinematic/GraphCommunityKnowledgeLiveIntelTriple';
+import RiskSignalKnowledgeCommunityTriple from '@/components/cinematic/RiskSignalKnowledgeCommunityTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1370,6 +1371,8 @@ function App() {
             <KnowledgeContactRiskTriple />
             {/* F272 (overnight 2026-08-11): graph community × knowledge × live intel triple coverage — ◈ GCKLIVE button (left:779280, bottom:8, zIndex:420); parallel-fetches /v1/graph/communities + /knowledge/ + /functions/getLiveIntel; keyword-correlates each graph community against KB articles AND live world events to surface FULLY ILLUMINATED (KB+live event) vs KB-BACKED (KB only) vs LIVE-TRIGGERED (live event, no KB — emerging gap) vs DARK (neither); cyan/violet/amber/gray colouring; expand community → split pane left=matched KB articles (violet scorebars) right=matched live events (amber scorebars + SEISMIC/CRYPTO/FX type badge); ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; "gcklive"/"graph community knowledge live"/"dark community triple"/"illuminated community"/"community live kb" voice trigger; jarvis:gcklive-toggle event; 60-s auto-refresh */}
             <GraphCommunityKnowledgeLiveIntelTriple />
+            {/* F273 (overnight 2026-08-11): risk signal × knowledge × graph community triple coverage — ◈ RSKGCTRI button (left:779840, bottom:8, zIndex:421); parallel-fetches /entities/RiskSignal + /knowledge/ + /v1/graph/communities; keyword-correlates each risk signal against KB articles AND network communities to surface FULLY GROUNDED (KB+community) vs KB-BACKED (KB only) vs COMMUNITY-MAPPED (community only) vs EXPOSED (neither — no knowledge or network coverage); red badge on EXPOSED count; expand signal → split pane left=matched KB articles (purple scorebars) right=matched graph communities (cyan scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence risk brief + TTS via jarvis:speak-dossier; "rskgctri"/"risk signal knowledge community"/"grounded risk"/"exposed risk signal triple" voice trigger; jarvis:rskgctri-toggle event; 90-s auto-refresh */}
+            <RiskSignalKnowledgeCommunityTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
