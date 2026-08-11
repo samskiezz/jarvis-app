@@ -415,6 +415,7 @@ import GraphCommunityIntelDatasetTriple from '@/components/cinematic/GraphCommun
 import GraphCommunityScenarioInvestTriple from '@/components/cinematic/GraphCommunityScenarioInvestTriple';
 import TaskContactLiveIntelTriple from '@/components/cinematic/TaskContactLiveIntelTriple';
 import SkillGraphNodeLiveIntelTriple from '@/components/cinematic/SkillGraphNodeLiveIntelTriple';
+import ReportGraphNodeContactTriple from '@/components/cinematic/ReportGraphNodeContactTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1343,6 +1344,8 @@ function App() {
             <TaskContactLiveIntelTriple />
             {/* F263 (overnight 2026-08-11): skill × graph node × live intel triple coverage — ◈ SGNITRI button (left:774240, bottom:8, zIndex:411); parallel-fetches /v1/aip/skill + /v1/graph/centrality + /functions/getLiveIntel; keyword-correlates each skill (name/description/category/tags) against graph network nodes AND live world events to surface FULLY ACTIVE (skill+node+live event match) vs NODE-ALIGNED (skill + graph node found, no live event) vs LIVE-TRIGGERED (live event matches, no graph node) vs DORMANT (no coverage); red badge on FULLY ACTIVE count; stat tiles; ALL/FULLY ACTIVE/NODE-ALIGNED/LIVE-TRIGGERED/DORMANT filter tabs + search; expand skill → split pane left=matched graph nodes (cyan scorebars + centrality score) right=matched live events (amber scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence operational readiness brief + TTS; "sgnitri"/"skill graph live"/"skill node live"/"live skill node"/"graph skill intel"/"skill network live" voice trigger; jarvis:sgnitri-toggle event; 60-s auto-refresh */}
             <SkillGraphNodeLiveIntelTriple />
+            {/* F264 (overnight 2026-08-11): report × graph node × contact triple coverage — ◈ RGNTRI button (left:774800, bottom:8, zIndex:412); parallel-fetches /v1/reports + /v1/graph/centrality + /entities/Contact; keyword-correlates each report against graph centrality nodes AND contacts to surface FULLY TRACED (node+contact) vs INTEL-GRAPHED (graph node, no contact) vs CONTACT-LINKED (contact, no graph node) vs UNTRACED (neither — intelligence gap); grey badge on untraced count; stat tiles + traceability bar; ALL/FULLY TRACED/INTEL-GRAPHED/CONTACT-LINKED/UNTRACED filter tabs + search; expand report → split pane left=matched graph nodes (cyan scorebars) right=matched contacts (purple scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence traceability brief + TTS; "rgntri"/"report graph contact"/"untraced report" voice trigger; jarvis:rgntri-toggle event; 90-s auto-refresh */}
+            <ReportGraphNodeContactTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
