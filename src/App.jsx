@@ -420,6 +420,7 @@ import DatasetIntelProfileSceneTriple from '@/components/cinematic/DatasetIntelP
 import InvRiskScenTriple from '@/components/cinematic/InvRiskScenTriple';
 import SwarmJobContactSceneTriple from '@/components/cinematic/SwarmJobContactSceneTriple';
 import SceneSwarmDatasetTriple from '@/components/cinematic/SceneSwarmDatasetTriple';
+import ScenarioReportLiveIntelTriple from '@/components/cinematic/ScenarioReportLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1358,6 +1359,8 @@ function App() {
             <SwarmJobContactSceneTriple />
             {/* F268 (overnight 2026-08-11): scene × swarm job × dataset triple coverage — ◈ SCSWDS button (left:777040, bottom:8, zIndex:416); parallel-fetches /v1/cinematic/scene/{id} (10 scenes) + /entities/SwarmJob + /v1/datasets; keyword-correlates each scene against swarm jobs AND datasets to surface FULLY AUTOMATED (swarm+dataset) vs SWARM-ONLY vs DATA-ONLY vs DARK; lime/cyan/green/gray colouring; expand scene → split pane left=matched swarm jobs (cyan scorebars) right=matched datasets (green scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; "scswds"/"scene swarm dataset"/"automated scene data"/"dark scene triple" voice trigger; jarvis:scswds-toggle event; 120-s auto-refresh */}
             <SceneSwarmDatasetTriple />
+            {/* F269 (overnight 2026-08-11): scenario × report × live intel triple coverage — ◈ SCRLIVE button (left:777600, bottom:8, zIndex:417); parallel-fetches /v1/scenario/list + /v1/reports + /functions/getLiveIntel; keyword-correlates each scenario against intelligence reports AND live world events to surface FULLY BRIEFED (report+live event) vs REPORTED (report only) vs LIVE-TRIGGERED (live event, no report — gap) vs DARK (neither); red badge on live-triggered count; expand scenario → split pane left=matched reports (purple scorebars) right=matched live events (red scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; "scrlive"/"scenario report live"/"live scenario report"/"briefed scenario live"/"live triggered scenario" voice trigger; jarvis:scrlive-toggle event; 60-s auto-refresh */}
+            <ScenarioReportLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
