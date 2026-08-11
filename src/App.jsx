@@ -425,6 +425,7 @@ import InvestigationSkillLiveIntelTriple from '@/components/cinematic/Investigat
 import KnowledgeContactRiskTriple from '@/components/cinematic/KnowledgeContactRiskTriple';
 import GraphCommunityKnowledgeLiveIntelTriple from '@/components/cinematic/GraphCommunityKnowledgeLiveIntelTriple';
 import RiskSignalKnowledgeCommunityTriple from '@/components/cinematic/RiskSignalKnowledgeCommunityTriple';
+import TaskInvestigationReportTriple from '@/components/cinematic/TaskInvestigationReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1373,6 +1374,8 @@ function App() {
             <GraphCommunityKnowledgeLiveIntelTriple />
             {/* F273 (overnight 2026-08-11): risk signal × knowledge × graph community triple coverage — ◈ RSKGCTRI button (left:779840, bottom:8, zIndex:421); parallel-fetches /entities/RiskSignal + /knowledge/ + /v1/graph/communities; keyword-correlates each risk signal against KB articles AND network communities to surface FULLY GROUNDED (KB+community) vs KB-BACKED (KB only) vs COMMUNITY-MAPPED (community only) vs EXPOSED (neither — no knowledge or network coverage); red badge on EXPOSED count; expand signal → split pane left=matched KB articles (purple scorebars) right=matched graph communities (cyan scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence risk brief + TTS via jarvis:speak-dossier; "rskgctri"/"risk signal knowledge community"/"grounded risk"/"exposed risk signal triple" voice trigger; jarvis:rskgctri-toggle event; 90-s auto-refresh */}
             <RiskSignalKnowledgeCommunityTriple />
+            {/* F274 (overnight 2026-08-11): task × investigation × report triple coverage — ◈ TIRREP button (left:780400, bottom:8, zIndex:422); parallel-fetches /entities/Task + /v1/investigations + /v1/reports; keyword-correlates each task against investigations AND reports to surface FULLY TRACKED (both investigation-linked + report-referenced) vs INVESTIGATED (investigation only) vs REPORTED (report only) vs ORPHANED (neither — task with no investigation or report link); red badge on orphaned count; expand task → split pane left=matched investigations (blue scorebars) right=matched reports (amber scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; "tirrep"/"task investigation report"/"orphaned task"/"tracked task triple" voice trigger; jarvis:tirrep-toggle event; 90-s auto-refresh */}
+            <TaskInvestigationReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
