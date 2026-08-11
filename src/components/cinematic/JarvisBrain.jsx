@@ -492,6 +492,7 @@ import { isScswdsQuery, buildScswdsScript } from "./SceneSwarmDatasetTriple";
 import { isScrliveQuery, buildScrliveScript } from "./ScenarioReportLiveIntelTriple";
 import { isIsltriQuery, buildIsltriScript } from "./InvestigationSkillLiveIntelTriple";
 import { isKcrstriQuery, buildKcrstriScript } from "./KnowledgeContactRiskTriple";
+import { isGckliveQuery, buildGckliveScript } from "./GraphCommunityKnowledgeLiveIntelTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5467,6 +5468,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kcrstri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKcrstriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGckliveQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcklive-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGckliveScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

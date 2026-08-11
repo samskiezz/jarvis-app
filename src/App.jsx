@@ -423,6 +423,7 @@ import SceneSwarmDatasetTriple from '@/components/cinematic/SceneSwarmDatasetTri
 import ScenarioReportLiveIntelTriple from '@/components/cinematic/ScenarioReportLiveIntelTriple';
 import InvestigationSkillLiveIntelTriple from '@/components/cinematic/InvestigationSkillLiveIntelTriple';
 import KnowledgeContactRiskTriple from '@/components/cinematic/KnowledgeContactRiskTriple';
+import GraphCommunityKnowledgeLiveIntelTriple from '@/components/cinematic/GraphCommunityKnowledgeLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1367,6 +1368,8 @@ function App() {
             <InvestigationSkillLiveIntelTriple />
             {/* F271 (overnight 2026-08-11): knowledge × contact × risk signal triple coverage — ◈ KCRSTRI button (left:778720, bottom:8, zIndex:419); parallel-fetches /knowledge/ + /entities/Contact + /entities/RiskSignal; keyword-correlates each knowledge article against contacts AND risk signals to surface FULLY ALARMED (contact+risk signal) vs CONTACT-LINKED (contact match, no risk) vs RISK-BACKED (risk signal, no contact) vs UNCOVERED (neither — knowledge article with no contact or risk signal linkage); red badge on uncovered count; expand article → split pane left=matched contacts (cyan scorebars) right=matched risk signals (amber scorebars + severity); ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; "kcrstri"/"knowledge contact risk"/"knowledge risk signal"/"uncovered knowledge"/"risk backed knowledge" voice trigger; jarvis:kcrstri-toggle event; 90-s auto-refresh */}
             <KnowledgeContactRiskTriple />
+            {/* F272 (overnight 2026-08-11): graph community × knowledge × live intel triple coverage — ◈ GCKLIVE button (left:779280, bottom:8, zIndex:420); parallel-fetches /v1/graph/communities + /knowledge/ + /functions/getLiveIntel; keyword-correlates each graph community against KB articles AND live world events to surface FULLY ILLUMINATED (KB+live event) vs KB-BACKED (KB only) vs LIVE-TRIGGERED (live event, no KB — emerging gap) vs DARK (neither); cyan/violet/amber/gray colouring; expand community → split pane left=matched KB articles (violet scorebars) right=matched live events (amber scorebars + SEISMIC/CRYPTO/FX type badge); ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; "gcklive"/"graph community knowledge live"/"dark community triple"/"illuminated community"/"community live kb" voice trigger; jarvis:gcklive-toggle event; 60-s auto-refresh */}
+            <GraphCommunityKnowledgeLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
