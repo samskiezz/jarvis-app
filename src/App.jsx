@@ -412,6 +412,7 @@ import LiveIntelGraphNodeSceneCoverage from '@/components/cinematic/LiveIntelGra
 import InvestigationReportKnowledgeTriple from '@/components/cinematic/InvestigationReportKnowledgeTriple';
 import SystemSwarmRiskTriple from '@/components/cinematic/SystemSwarmRiskTriple';
 import GraphCommunityIntelDatasetTriple from '@/components/cinematic/GraphCommunityIntelDatasetTriple';
+import GraphCommunityScenarioInvestTriple from '@/components/cinematic/GraphCommunityScenarioInvestTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1334,6 +1335,8 @@ function App() {
             <SystemSwarmRiskTriple />
             {/* F260 (overnight 2026-08-11): graph community × intel profile × dataset triple coverage — ◈ GCIPDS button (left:772560, bottom:8, zIndex:408); parallel-fetches /v1/graph/communities + /entities/IntelProfile + /v1/datasets; keyword-correlates each network cluster against threat actor intel profiles AND dataset catalog to surface FULLY ARMED (intel profile + dataset — community has both intelligence profiling and data backing) vs INTEL-ONLY (intel profile found, no dataset) vs DATA-BACKED (dataset found, no intel profile) vs BLIND (neither — community with no threat intel or data coverage — intelligence gap); amber badge on blind count; expand community → split pane left=matched intel profile (violet scorebars) right=matched dataset (green scorebars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community intelligence gap brief + TTS via jarvis:speak-dossier; "gcipds"/"graph community intel dataset"/"community intel dataset"/"graph intel dataset"/"fully armed community"/"blind community triple"/"community intelligence gap" voice trigger; jarvis:gcipds-toggle event; 90-s auto-refresh */}
             <GraphCommunityIntelDatasetTriple />
+            {/* F261 (overnight 2026-08-11): graph community × scenario × investigation triple coverage — ◈ GCSITR button (left:773120, bottom:8, zIndex:409); parallel-fetches /v1/graph/communities + /v1/scenario/list + /v1/investigations; keyword-correlates each network cluster against threat scenarios AND active investigations to surface FULLY TRACKED (scenario + investigation — community has both threat modelling and active investigation) vs SCENARIO-ONLY (scenario found, no investigation) vs INVESTIGATION-ONLY (investigation found, no scenario) vs UNTRACKED (neither — community with no scenario or investigation coverage — operational gap); amber badge on untracked count; expand community → split pane left=matched scenario (amber scorebars) right=matched investigation (violet scorebars + status); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence community operational gap brief + TTS via jarvis:speak-dossier; "gcsitr"/"graph community scenario invest"/"community scenario investigation"/"graph scenario investigation"/"untracked community"/"community scenario gap"/"community fully tracked" voice trigger; jarvis:gcsitr-toggle event; 90-s auto-refresh */}
+            <GraphCommunityScenarioInvestTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
