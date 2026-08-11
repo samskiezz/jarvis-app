@@ -402,6 +402,7 @@ import ContactGraphCommunityOpsTriple from '@/components/cinematic/ContactGraphC
 import SceneIntelProfileTaskTriple from '@/components/cinematic/SceneIntelProfileTaskTriple';
 import IntelProfileGraphCommunityOpsTriple from '@/components/cinematic/IntelProfileGraphCommunityOpsTriple';
 import GraphNodeKnowledgeScenarioTriple from '@/components/cinematic/GraphNodeKnowledgeScenarioTriple';
+import SwarmJobKnowledgeScenarioTriple from '@/components/cinematic/SwarmJobKnowledgeScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1304,6 +1305,8 @@ function App() {
             <IntelProfileGraphCommunityOpsTriple />
             {/* F250 (overnight 2026-08-10): graph node × knowledge × scenario triple coverage — ◈ GNKSCEN button (left:766960, bottom:8, zIndex:398); parallel-fetches /v1/graph/centrality + /knowledge/* + /v1/scenario/list; keyword-correlates each top-influence graph node against KB articles AND scenario playbooks to surface FULLY PREPARED (kb-backed + scenario-covered — node has both knowledge and operational planning) vs KB-ONLY (knowledge article found, no scenario) vs SCENARIO-ONLY (scenario match, no KB article) vs UNPREPARED (neither — critical knowledge and planning gap); amber badge on unprepared count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "gnkscen"/"graph node knowledge scenario"/"node knowledge scenario"/"graph knowledge scenario"/"unprepared node"/"node readiness"/"graph readiness" voice trigger; jarvis:gnkscen-toggle event; 90-s auto-refresh */}
             <GraphNodeKnowledgeScenarioTriple />
+            {/* F251 (overnight 2026-08-11): swarm job × knowledge × scenario triple coverage — ◈ SJKSTRI button (left:767520, bottom:8, zIndex:399); parallel-fetches /entities/SwarmJob + /knowledge/ + /v1/scenario/list; keyword-correlates each swarm job against KB articles AND scenario playbooks to surface FULLY PREPARED (KB-backed + scenario-covered — job has both knowledge and operational planning) vs KB-ONLY (knowledge article found, no scenario playbook) vs SCRIPTED (scenario match found, no KB article) vs DARK (neither — automation without knowledge or planning support); amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; "sjkstri"/"swarm knowledge scenario"/"swarm job knowledge scenario"/"fully prepared swarm"/"dark swarm"/"swarm readiness" voice trigger; jarvis:sjkstri-toggle event; 90-s auto-refresh */}
+            <SwarmJobKnowledgeScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
