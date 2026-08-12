@@ -436,6 +436,7 @@ import ReportScenarioCoverage from '@/components/cinematic/ReportScenarioCoverag
 import OpsEventScenarioReportTriple from '@/components/cinematic/OpsEventScenarioReportTriple';
 import IntelProfileDatasetScenarioTriple from '@/components/cinematic/IntelProfileDatasetScenarioTriple';
 import TaskRiskSignalCoverage from '@/components/cinematic/TaskRiskSignalCoverage';
+import ContactOpsKnowledgeTriple from '@/components/cinematic/ContactOpsKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1406,6 +1407,8 @@ function App() {
             <IntelProfileDatasetScenarioTriple />
             {/* F284 (overnight 2026-08-12): task × risk signal coverage — ◈ TRSCOV button (left:786000, bottom:8, zIndex:432); parallel-fetches /entities/Task + /entities/RiskSignal; keyword-correlates each task (name/description/type/priority) against risk signals to surface AT-RISK (matching risk signal found) vs CLEAR (no risk signal — may indicate blind spot); red badge on at-risk count; stat tiles (tasks/signals/at-risk/clear); at-risk coverage bar; ALL/AT-RISK/CLEAR filter tabs + search; expand task → matched risk signals with severity badge + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence task risk assessment brief + TTS via jarvis:speak-dossier; "trscov"/"task risk signal"/"task risk coverage"/"task at risk"/"risky task"/"risk signal task"/"task risk scan"/"task risk check" voice trigger; jarvis:trscov-toggle event; 90-s auto-refresh */}
             <TaskRiskSignalCoverage />
+            {/* F285 (overnight 2026-08-12): contact × ops event × knowledge triple coverage — ◈ COEKNOW button (left:786560, bottom:8, zIndex:433); parallel-fetches /entities/Contact + /v1/ops/events + /knowledge/; keyword-correlates each contact (name/email/company/title/description) against ops events AND KB articles to surface FULLY INFORMED (ops event + KB coverage) vs OPS-ASSIGNED (ops event match, no KB — operationally placed but undocumented) vs KB-BACKED (KB article match, no ops event — documented but not operationally engaged) vs DARK (neither — contact with no ops event or knowledge coverage — intelligence gap); amber badge on DARK count; stat tiles (contacts/fully-informed/ops-assigned/kb-backed/dark); coverage bar; ALL/FULLY INFORMED/OPS-ASSIGNED/KB-BACKED/DARK filter tabs + search; expand contact → split pane left=matched ops events (orange scorebars + severity badge) right=matched KB articles (violet scorebars + category badge); ASSESS → /v1/jarvis/agent/chat 2-sentence contact intelligence coverage brief + TTS via jarvis:speak-dossier; "coeknow"/"contact ops knowledge"/"contact ops event kb"/"contact knowledge ops"/"dark contact triple"/"ops knowledge contact"/"contact ops kb"/"fully informed contact" voice trigger; jarvis:coeknow-toggle event; 90-s auto-refresh */}
+            <ContactOpsKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
