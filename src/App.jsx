@@ -427,6 +427,7 @@ import GraphCommunityKnowledgeLiveIntelTriple from '@/components/cinematic/Graph
 import RiskSignalKnowledgeCommunityTriple from '@/components/cinematic/RiskSignalKnowledgeCommunityTriple';
 import TaskInvestigationReportTriple from '@/components/cinematic/TaskInvestigationReportTriple';
 import SystemStatusInvestigationCoverage from '@/components/cinematic/SystemStatusInvestigationCoverage';
+import SystemStatusGraphNodeCoverage from '@/components/cinematic/SystemStatusGraphNodeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1379,6 +1380,8 @@ function App() {
             <TaskInvestigationReportTriple />
             {/* F275 (overnight 2026-08-12): system status × investigation coverage — ◈ SSIVCO button (left:780960, bottom:8, zIndex:423); parallel-fetches /v1/jarvis/system/status + /v1/investigations; keyword-correlates each open investigation (title/description/type/subject) against live system service names to surface MONITORED (system service aligns with investigation domain) vs UNTRACKED (no system service coverage — operational gap); amber badge on untracked count; stat tiles + coverage bar; ALL/MONITORED/UNTRACKED filter tabs + search; expand investigation → matched services with status badge + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-system coverage brief + TTS via jarvis:speak-dossier; "ssivco"/"system invest"/"investigation system"/"system monitored investigation"/"untracked investigation system"/"investigation service coverage" voice trigger; jarvis:ssivco-toggle event; 90-s auto-refresh */}
             <SystemStatusInvestigationCoverage />
+            {/* F276 (overnight 2026-08-12): system status × graph node coverage — ◈ SSGNCO button (left:781520, bottom:8, zIndex:424); parallel-fetches /v1/jarvis/system/status + /v1/graph/centrality; keyword-correlates each high-influence centrality node (id/name/label) against live system service names to surface NETWORKED (system service alignment found) vs ISOLATED (no system service monitors this graph node — coverage gap); amber badge on isolated count; stat tiles + coverage bar; ALL/NETWORKED/ISOLATED filter tabs + search; expand node → matched services with status badge + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence node-system coverage brief + TTS via jarvis:speak-dossier; "ssgnco"/"system graph node"/"service graph node"/"system network coverage"/"service centrality"/"graph node system"/"node service coverage"/"system centrality coverage" voice trigger; jarvis:ssgnco-toggle event; 60-s auto-refresh */}
+            <SystemStatusGraphNodeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
