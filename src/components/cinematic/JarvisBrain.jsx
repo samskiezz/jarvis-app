@@ -512,6 +512,7 @@ import { isGcitriQuery, buildGcitriScript } from "./GraphCommunityInvestTaskTrip
 import { isSjcktriQuery, buildSjcktriScript } from "./SwarmJobContactKnowledgeTriple";
 import { isGnoestriQuery, buildGnoestriScript } from "./GraphNodeOpsScenarioTriple";
 import { isIpeotriQuery, buildIpeotriScript } from "./IntelProfileOpsTaskTriple";
+import { isRiknowQuery, buildRiknowScript } from "./RiskSignalInvestKnowledge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5667,6 +5668,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipeotri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpeotriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRiknowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:riknow-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRiknowScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
