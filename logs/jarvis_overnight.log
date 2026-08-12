@@ -251,3 +251,4 @@
 2026-08-12 05:17:45 UTC — F280 ISOETRI — Investment × System Status × Ops Event Triple Coverage — InvestSystemOpsTriple.jsx (new, ~290 lines); mounted App.jsx; isIsoetriQuery+buildIsoetriScript wired JarvisBrain.jsx; ◈ ISOETRI left:783760 zIndex:428; build exit 0
 2026-08-12 F281 ReportScenarioCoverage.jsx — /v1/reports × /v1/scenario/list; SCENARIO-BACKED vs UNPLANNED; isRpscnQuery+buildRpscnScript in JarvisBrain; ◈ RPSCN left:784320 zIndex:429; build exit 0
 [2026-08-12] F282 OpsEventScenarioReportTriple (OESRTRI) — /v1/ops/events × /v1/scenario/list × /v1/reports; FULLY COVERED/SCENARIO-BACKED/REPORT-TAGGED/UNADDRESSED states; split-pane expand; 60-s refresh; ASSESS+TTS; build exit 0
+2026-08-12 F283 IntelProfileDatasetScenarioTriple.jsx — /entities/IntelProfile × /v1/datasets × /v1/scenario/list — FULLY ARMED/DATASET-BACKED/SCENARIO-PLANNED/UNARMED — left:785440 zIndex:431 — build exit 0

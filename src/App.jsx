@@ -434,6 +434,7 @@ import ContactInvestKnowledgeTriple from '@/components/cinematic/ContactInvestKn
 import InvestSystemOpsTriple from '@/components/cinematic/InvestSystemOpsTriple';
 import ReportScenarioCoverage from '@/components/cinematic/ReportScenarioCoverage';
 import OpsEventScenarioReportTriple from '@/components/cinematic/OpsEventScenarioReportTriple';
+import IntelProfileDatasetScenarioTriple from '@/components/cinematic/IntelProfileDatasetScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1400,6 +1401,8 @@ function App() {
             <ReportScenarioCoverage />
             {/* F282 (overnight 2026-08-12): ops event × scenario × report triple coverage — ◈ OESRTRI button (left:784880, bottom:8, zIndex:430); parallel-fetches /v1/ops/events + /v1/scenario/list + /v1/reports; keyword-correlates each ops event (name/title/type/severity) against scenario plans AND intelligence reports to surface FULLY COVERED (scenario+report) vs SCENARIO-BACKED (scenario only) vs REPORT-TAGGED (report only, no scenario) vs UNADDRESSED (neither — operational gap); red badge on unaddressed count; stat tiles (events/fully-covered/scen-backed/rpt-tagged/unaddressed); segmented coverage bar (green/violet/amber); ALL/FULLY COVERED/SCENARIO-BACKED/REPORT-TAGGED/UNADDRESSED filter tabs + search; expand event → split pane left=matched scenarios (violet scorebars) right=matched reports (amber scorebars + type badge); ASSESS → /v1/jarvis/agent/chat 2-sentence coverage risk brief + TTS via jarvis:speak-dossier; "oesrtri"/"ops event scenario report"/"unaddressed ops event"/"scenario backed ops event"/"report tagged ops"/"ops event coverage triple"/"ops triple coverage" voice trigger; jarvis:oesrtri-toggle event; 60-s auto-refresh */}
             <OpsEventScenarioReportTriple />
+            {/* F283 (overnight 2026-08-12): intel profile × dataset × scenario triple coverage — ◈ IDSCTRI button (left:785440, bottom:8, zIndex:431); parallel-fetches /entities/IntelProfile + /v1/datasets + /v1/scenario/list; keyword-correlates each intel profile (name/company/role/sector/tags) against datasets AND scenarios to surface FULLY ARMED (dataset+scenario) vs DATASET-BACKED (dataset only) vs SCENARIO-PLANNED (scenario only) vs UNARMED (neither — no data or scenario coverage — intelligence gap); red badge on unarmed count; stat tiles (profiles/fully-armed/dataset-backed/scenario-planned/unarmed); coverage bar; ALL/FULLY ARMED/DATASET-BACKED/SCENARIO-PLANNED/UNARMED filter tabs + search; expand profile → split pane left=matched datasets (emerald scorebars + type badge) right=matched scenarios (violet scorebars + category badge); ASSESS → /v1/jarvis/agent/chat 2-sentence intel coverage brief + TTS via jarvis:speak-dossier; "idsctri"/"intel profile dataset scenario"/"intel dataset scenario"/"unarmed intel profile"/"intel fully armed"/"intel profile unarmed triple"/"intel data scenario"/"intel profile scenario dataset"/"intel profile dataset triple" voice trigger; jarvis:idsctri-toggle event; 90-s auto-refresh */}
+            <IntelProfileDatasetScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
