@@ -500,6 +500,7 @@ import { isSsgncoQuery, buildSsgncoScript } from "./SystemStatusGraphNodeCoverag
 import { isSsscenQuery, buildSsscenScript } from "./SystemStatusScenarioCoverage";
 import { isSwjdcQuery, buildSwjdcScript } from "./SwarmJobDatasetCoverage";
 import { isCivktriQuery, buildCivktriScript } from "./ContactInvestKnowledgeTriple";
+import { isIsoetriQuery, buildIsoetriScript } from "./InvestSystemOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5547,6 +5548,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:civktri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCivktriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIsoetriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:isoetri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIsoetriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
