@@ -495,6 +495,7 @@ import { isKcrstriQuery, buildKcrstriScript } from "./KnowledgeContactRiskTriple
 import { isGckliveQuery, buildGckliveScript } from "./GraphCommunityKnowledgeLiveIntelTriple";
 import { isRskgctriQuery, buildRskgctriScript } from "./RiskSignalKnowledgeCommunityTriple";
 import { isTirrepQuery, buildTirrepScript } from "./TaskInvestigationReportTriple";
+import { isSsivcoQuery, buildSsivcoScript } from "./SystemStatusInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5497,6 +5498,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tirrep-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTirrepScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSsivcoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssivco-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSsivcoScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

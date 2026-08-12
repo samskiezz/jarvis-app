@@ -426,6 +426,7 @@ import KnowledgeContactRiskTriple from '@/components/cinematic/KnowledgeContactR
 import GraphCommunityKnowledgeLiveIntelTriple from '@/components/cinematic/GraphCommunityKnowledgeLiveIntelTriple';
 import RiskSignalKnowledgeCommunityTriple from '@/components/cinematic/RiskSignalKnowledgeCommunityTriple';
 import TaskInvestigationReportTriple from '@/components/cinematic/TaskInvestigationReportTriple';
+import SystemStatusInvestigationCoverage from '@/components/cinematic/SystemStatusInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1376,6 +1377,8 @@ function App() {
             <RiskSignalKnowledgeCommunityTriple />
             {/* F274 (overnight 2026-08-11): task × investigation × report triple coverage — ◈ TIRREP button (left:780400, bottom:8, zIndex:422); parallel-fetches /entities/Task + /v1/investigations + /v1/reports; keyword-correlates each task against investigations AND reports to surface FULLY TRACKED (both investigation-linked + report-referenced) vs INVESTIGATED (investigation only) vs REPORTED (report only) vs ORPHANED (neither — task with no investigation or report link); red badge on orphaned count; expand task → split pane left=matched investigations (blue scorebars) right=matched reports (amber scorebars); ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; "tirrep"/"task investigation report"/"orphaned task"/"tracked task triple" voice trigger; jarvis:tirrep-toggle event; 90-s auto-refresh */}
             <TaskInvestigationReportTriple />
+            {/* F275 (overnight 2026-08-12): system status × investigation coverage — ◈ SSIVCO button (left:780960, bottom:8, zIndex:423); parallel-fetches /v1/jarvis/system/status + /v1/investigations; keyword-correlates each open investigation (title/description/type/subject) against live system service names to surface MONITORED (system service aligns with investigation domain) vs UNTRACKED (no system service coverage — operational gap); amber badge on untracked count; stat tiles + coverage bar; ALL/MONITORED/UNTRACKED filter tabs + search; expand investigation → matched services with status badge + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-system coverage brief + TTS via jarvis:speak-dossier; "ssivco"/"system invest"/"investigation system"/"system monitored investigation"/"untracked investigation system"/"investigation service coverage" voice trigger; jarvis:ssivco-toggle event; 90-s auto-refresh */}
+            <SystemStatusInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
