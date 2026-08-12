@@ -448,6 +448,7 @@ import ContactInvestRiskTriple from '@/components/cinematic/ContactInvestRiskTri
 import ReportOpsTaskTriple from '@/components/cinematic/ReportOpsTaskTriple';
 import DatasetKnowledgeRiskTriple from '@/components/cinematic/DatasetKnowledgeRiskTriple';
 import AipSkillKnowledgeRiskTriple from '@/components/cinematic/AipSkillKnowledgeRiskTriple';
+import SceneSystemRiskTriple from '@/components/cinematic/SceneSystemRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1442,6 +1443,8 @@ function App() {
             <DatasetKnowledgeRiskTriple />
             {/* F296 (overnight 2026-08-12): AIP skill × knowledge × risk signal triple coverage — ◈ AIPKRSTRI button (left:792720, bottom:8, zIndex:444); parallel-fetches /v1/aip/skill + /knowledge/ + /entities/RiskSignal; keyword-correlates each AIP skill (name/description/category/tags) against KB articles AND risk signals to surface FULLY ARMED (KB + risk signal — skill has knowledge backing and active risk context) vs KB-BACKED (KB article found, no risk signal) vs RISK-LINKED (risk signal overlap, no KB backing) vs DORMANT (neither — capability gap); gray badge on DORMANT count; stat tiles (skills/kb articles/risk signals/fully-armed/kb-backed/risk-linked/dormant); segmented coverage bar (green/blue/orange); ALL/FULLY ARMED/KB-BACKED/RISK-LINKED/DORMANT filter tabs + search; expand skill → split pane left=matched KB articles (blue scorebars + category badge) right=matched risk signals (orange scorebars + severity badge); ASSESS → /v1/jarvis/agent/chat 2-sentence skill capability coverage brief + TTS via jarvis:speak-dossier; "aipkrstri"/"aip skill knowledge risk"/"skill knowledge risk"/"dormant skill"/"fully armed skill"/"skill risk kb" voice trigger; jarvis:aipkrstri-toggle event; 90-s auto-refresh */}
             <AipSkillKnowledgeRiskTriple />
+            {/* F297 (overnight 2026-08-12): scene × system status × risk signal triple coverage — ◈ SCSRISK button (left:793280, bottom:8, zIndex:445); parallel-fetches /v1/cinematic/scene/{id} × 10 + /v1/jarvis/system/status + /entities/RiskSignal; keyword-correlates each scene (anchor labels/titles) against live service checks AND risk signals to surface FULLY ALARMED (service unhealthy + risk signal — scene has infrastructure failure with active threat) vs SVC-BACKED (unhealthy service match, no risk signal) vs RISK-TRIGGERED (risk signal overlap, no service failure) vs CLEAR (no alerts); red badge on FULLY ALARMED count; stat tiles (scenes/services/risk signals/fully-alarmed/svc-backed/risk-triggered/clear); segmented coverage bar (red/cyan/orange); ALL/FULLY ALARMED/SVC-BACKED/RISK-TRIGGERED/CLEAR filter tabs + search; expand scene → split pane left=matched service checks (cyan scorebars + status badge) right=matched risk signals (red scorebars + severity badge); ASSESS → /v1/jarvis/agent/chat 2-sentence scene infrastructure risk brief + TTS via jarvis:speak-dossier; "scsrisk"/"scene system risk"/"alarmed scene"/"scene risk system"/"scene threat system"/"system backed scene" voice trigger; jarvis:scsrisk-toggle event; 90-s auto-refresh */}
+            <SceneSystemRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
