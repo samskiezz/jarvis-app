@@ -429,6 +429,7 @@ import TaskInvestigationReportTriple from '@/components/cinematic/TaskInvestigat
 import SystemStatusInvestigationCoverage from '@/components/cinematic/SystemStatusInvestigationCoverage';
 import SystemStatusGraphNodeCoverage from '@/components/cinematic/SystemStatusGraphNodeCoverage';
 import SystemStatusScenarioCoverage from '@/components/cinematic/SystemStatusScenarioCoverage';
+import SwarmJobDatasetCoverage from '@/components/cinematic/SwarmJobDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1385,6 +1386,8 @@ function App() {
             <SystemStatusGraphNodeCoverage />
             {/* F277 (overnight 2026-08-12): system status × scenario coverage — ◈ SSSCEN button (left:782080, bottom:8, zIndex:425); parallel-fetches /v1/jarvis/system/status + /v1/scenario/list; keyword-correlates each live system service (name/id/status) against scenario playbooks to surface SCRIPTED (at least one scenario response plan covers this service domain) vs UNSCRIPTED (no scenario coverage — incident response gap); amber badge on unscripted count; stat tiles + coverage bar; ALL/SCRIPTED/UNSCRIPTED filter tabs + search; expand service → matched scenarios with type+category badge + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence service incident-plan readiness brief + TTS via jarvis:speak-dossier; "ssscen"/"system scenario"/"service scenario"/"service incident plan"/"unscripted service"/"scripted service"/"service playbook" voice trigger; jarvis:ssscen-toggle event; 60-s auto-refresh */}
             <SystemStatusScenarioCoverage />
+            {/* F278 (overnight 2026-08-12): swarm job × dataset coverage — ◈ SWJDC button (left:782640, bottom:8, zIndex:426); parallel-fetches /entities/SwarmJob + /v1/datasets; keyword-correlates each swarm job (name/id/type) against datasets to surface SOURCED (dataset intelligence source found) vs UNSOURCED (no dataset coverage — intelligence gap); amber badge on unsourced count; stat tiles + coverage bar; ALL/SOURCED/UNSOURCED filter tabs + search; expand job → matched datasets with type+category badge + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence data sourcing completeness brief + TTS via jarvis:speak-dossier; "swjdc"/"swarm job dataset coverage"/"swarm job dataset link"/"swarm job unsourced"/"unsourced swarm job"/"swarm dataset link"/"swarm data link" voice trigger; jarvis:swjdc-toggle event; 90-s auto-refresh */}
+            <SwarmJobDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
