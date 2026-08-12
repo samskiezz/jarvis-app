@@ -502,6 +502,7 @@ import { isSwjdcQuery, buildSwjdcScript } from "./SwarmJobDatasetCoverage";
 import { isCivktriQuery, buildCivktriScript } from "./ContactInvestKnowledgeTriple";
 import { isIsoetriQuery, buildIsoetriScript } from "./InvestSystemOpsTriple";
 import { isRpscnQuery, buildRpscnScript } from "./ReportScenarioCoverage";
+import { isOesrtriQuery, buildOesrtriScript } from "./OpsEventScenarioReportTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5567,6 +5568,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rpscn-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRpscnScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isOesrtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oesrtri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildOesrtriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
