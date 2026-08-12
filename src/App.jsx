@@ -446,6 +446,7 @@ import IntelProfileOpsTaskTriple from '@/components/cinematic/IntelProfileOpsTas
 import RiskSignalInvestKnowledge from '@/components/cinematic/RiskSignalInvestKnowledge';
 import ContactInvestRiskTriple from '@/components/cinematic/ContactInvestRiskTriple';
 import ReportOpsTaskTriple from '@/components/cinematic/ReportOpsTaskTriple';
+import DatasetKnowledgeRiskTriple from '@/components/cinematic/DatasetKnowledgeRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1436,6 +1437,8 @@ function App() {
             <ContactInvestRiskTriple />
             {/* F294 (overnight 2026-08-12): report × ops event × task triple coverage — ◈ ROETRI (left:791600, bottom:8, zIndex:442); parallel-fetches /v1/reports + /v1/ops/events + /entities/Task; keyword-correlates each report (name/title/description/type/category) against active ops events AND tasks to surface FULLY ACTIVE (ops event triggered + task assigned) vs OPS-TRIGGERED (ops event found, no task) vs TASK-BACKED (task found, no ops event) vs ARCHIVED (neither); gray badge on ARCHIVED count; stat tiles (reports/ops events/tasks/fully active/ops-triggered/task-backed/archived); coverage bar (green/orange/amber); ALL/FULLY ACTIVE/OPS-TRIGGERED/TASK-BACKED/ARCHIVED filter tabs + search; expand report → split pane left=matched ops events (orange scorebars + severity badge) right=matched tasks (amber scorebars + priority badge); ASSESS → /v1/jarvis/agent/chat 2-sentence report-ops-task brief + TTS via jarvis:speak-dossier; "roetri"/"report ops task"/"report event task"/"archived report"/"report ops event task"/"fully active report" voice trigger; jarvis:roetri-toggle event; 90-s auto-refresh */}
             <ReportOpsTaskTriple />
+            {/* F295 (overnight 2026-08-12): dataset × knowledge × risk signal triple coverage — ◈ DKRSTRI (left:792160, bottom:8, zIndex:443); parallel-fetches /v1/datasets + /knowledge/ + /entities/RiskSignal; keyword-correlates each dataset (name/description/kind/tags) against KB articles AND risk signals to surface FLAGGED (KB coverage + risk signal — data source with threat context and documented knowledge) vs KB-BACKED (knowledge article found, no risk flag) vs RISK-EXPOSED (risk signal overlap, no KB backing) vs DARK (neither — no knowledge or risk coverage — intelligence blind spot); red badge on FLAGGED count; stat tiles (datasets/KB articles/risk signals/flagged/kb-backed/risk-exposed/dark); segmented coverage bar (red/blue/orange); ALL/FLAGGED/KB-BACKED/RISK-EXPOSED/DARK filter tabs + search; expand dataset → split pane left=matched KB articles (blue scorebars + category badge) right=matched risk signals (red scorebars + severity badge); ASSESS → /v1/jarvis/agent/chat 2-sentence data-intelligence-risk brief + TTS via jarvis:speak-dossier; "dkrstri"/"dataset knowledge risk"/"dataset risk knowledge"/"dark dataset"/"flagged dataset"/"dataset intel risk"/"data risk knowledge" voice trigger; jarvis:dkrstri-toggle event; 90-s auto-refresh */}
+            <DatasetKnowledgeRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

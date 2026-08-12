@@ -515,6 +515,7 @@ import { isIpeotriQuery, buildIpeotriScript } from "./IntelProfileOpsTaskTriple"
 import { isRiknowQuery, buildRiknowScript } from "./RiskSignalInvestKnowledge";
 import { isCirsktriQuery, buildCirsktriScript } from "./ContactInvestRiskTriple";
 import { isRoetriQuery, buildRoetriScript } from "./ReportOpsTaskTriple";
+import { isDkrstriQuery, buildDkrstriScript } from "./DatasetKnowledgeRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5695,6 +5696,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:roetri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRoetriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDkrstriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dkrstri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDkrstriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
