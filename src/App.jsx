@@ -438,6 +438,7 @@ import IntelProfileDatasetScenarioTriple from '@/components/cinematic/IntelProfi
 import TaskRiskSignalCoverage from '@/components/cinematic/TaskRiskSignalCoverage';
 import ContactOpsKnowledgeTriple from '@/components/cinematic/ContactOpsKnowledgeTriple';
 import LiveIntelSystemTaskTriple from '@/components/cinematic/LiveIntelSystemTaskTriple';
+import InvestScenarioReportTriple from '@/components/cinematic/InvestScenarioReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1412,6 +1413,8 @@ function App() {
             <ContactOpsKnowledgeTriple />
             {/* F286 (overnight 2026-08-12): live intel × system status × task triple coverage — ◈ LSTTRI button (left:787120, bottom:8, zIndex:434); parallel-fetches /functions/getLiveIntel + /v1/jarvis/system/status + /entities/Task; keyword-correlates each live world event (quakes/crypto/FX type/name/location/symbol) against system services AND active tasks to surface FULLY REACTIVE (service + task coverage) vs SVC-ONLY (service match, no task) vs TASKED (task match, no service) vs UNTRACKED (neither — operational gap); cyan badge on FULLY REACTIVE count; stat tiles (live-events/services/tasks/fully-reactive/svc-only/tasked/untracked); coverage bar; ALL/FULLY REACTIVE/SVC-ONLY/TASKED/UNTRACKED filter tabs + search; expand event → split pane left=matched services (green scorebars + status badge) right=matched tasks (amber scorebars + priority badge); ASSESS → /v1/jarvis/agent/chat 2-sentence operational gap brief + TTS via jarvis:speak-dossier; "lsttri"/"live system task"/"live intel task system"/"world event task system"/"fully reactive event"/"untracked world event" voice trigger; jarvis:lsttri-toggle event; 60-s auto-refresh */}
             <LiveIntelSystemTaskTriple />
+            {/* F287 (overnight 2026-08-12): investment × scenario × report triple coverage — ◈ ISRTRI button (left:787680, bottom:8, zIndex:435); parallel-fetches /entities/Investment + /v1/scenario/list + /v1/reports; keyword-correlates each investment (name/description/category/ticker) against scenario plans AND reports to surface FULLY COVERED (scenario+report) vs SCENARIO-PLANNED (scenario only) vs REPORT-TAGGED (report only) vs BLIND (neither — governance gap); amber/orange badge on BLIND count; stat tiles (investments/scenarios/reports/fully-covered/scen-planned/rpt-tagged/blind); segmented coverage bar (green/violet/amber); ALL/FULLY COVERED/SCENARIO-PLANNED/REPORT-TAGGED/BLIND filter tabs + search; expand investment → split pane left=matched scenarios (violet scorebars + category badge) right=matched reports (amber scorebars + type badge); ASSESS → /v1/jarvis/agent/chat 2-sentence governance coverage brief + TTS via jarvis:speak-dossier; "isrtri"/"investment scenario report"/"invest scenario report"/"blind investment"/"uncovered investment"/"investment coverage triple"/"investment plan report" voice trigger; jarvis:isrtri-toggle event; 90-s auto-refresh */}
+            <InvestScenarioReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
