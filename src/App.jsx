@@ -430,6 +430,7 @@ import SystemStatusInvestigationCoverage from '@/components/cinematic/SystemStat
 import SystemStatusGraphNodeCoverage from '@/components/cinematic/SystemStatusGraphNodeCoverage';
 import SystemStatusScenarioCoverage from '@/components/cinematic/SystemStatusScenarioCoverage';
 import SwarmJobDatasetCoverage from '@/components/cinematic/SwarmJobDatasetCoverage';
+import ContactInvestKnowledgeTriple from '@/components/cinematic/ContactInvestKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1388,6 +1389,8 @@ function App() {
             <SystemStatusScenarioCoverage />
             {/* F278 (overnight 2026-08-12): swarm job × dataset coverage — ◈ SWJDC button (left:782640, bottom:8, zIndex:426); parallel-fetches /entities/SwarmJob + /v1/datasets; keyword-correlates each swarm job (name/id/type) against datasets to surface SOURCED (dataset intelligence source found) vs UNSOURCED (no dataset coverage — intelligence gap); amber badge on unsourced count; stat tiles + coverage bar; ALL/SOURCED/UNSOURCED filter tabs + search; expand job → matched datasets with type+category badge + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence data sourcing completeness brief + TTS via jarvis:speak-dossier; "swjdc"/"swarm job dataset coverage"/"swarm job dataset link"/"swarm job unsourced"/"unsourced swarm job"/"swarm dataset link"/"swarm data link" voice trigger; jarvis:swjdc-toggle event; 90-s auto-refresh */}
             <SwarmJobDatasetCoverage />
+            {/* F279 (overnight 2026-08-12): contact × investment × knowledge triple coverage — ◈ CIVKTRI button (left:783200, bottom:8, zIndex:427); parallel-fetches /entities/Contact + /entities/Investment + /knowledge/; keyword-correlates each contact (name/email/company/title) against investments AND KB articles to surface FULLY CONNECTED (investment + KB article — contact has both financial ties and knowledge backing) vs INVESTED (investment found, no KB — financially linked but undocumented) vs KB-BACKED (KB article found, no investment — documented but no financial context) vs UNCOVERED (neither — contact with no investment or knowledge linkage — intelligence gap); gray badge on uncovered count; stat tiles (contacts/fully connected/invested/kb-backed/uncovered); fully-connected coverage bar; ALL/FULLY CONNECTED/INVESTED/KB-BACKED/UNCOVERED filter tabs + search; expand contact → split pane left=matched investments (indigo scorebars + category) right=matched KB articles (emerald scorebars + category); ASSESS → /v1/jarvis/agent/chat 2-sentence contact coverage brief + TTS via jarvis:speak-dossier; "civktri"/"contact invest knowledge"/"contact investment kb"/"contact financial kb"/"knowledge backed contact"/"uncovered contact triple"/"invest contact kb"/"contact invest triple"/"contact financial knowledge"/"contact kb investment" voice trigger; jarvis:civktri-toggle event; 90-s auto-refresh */}
+            <ContactInvestKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
