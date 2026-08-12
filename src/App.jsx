@@ -445,6 +445,7 @@ import GraphNodeOpsScenarioTriple from '@/components/cinematic/GraphNodeOpsScena
 import IntelProfileOpsTaskTriple from '@/components/cinematic/IntelProfileOpsTaskTriple';
 import RiskSignalInvestKnowledge from '@/components/cinematic/RiskSignalInvestKnowledge';
 import ContactInvestRiskTriple from '@/components/cinematic/ContactInvestRiskTriple';
+import ReportOpsTaskTriple from '@/components/cinematic/ReportOpsTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1433,6 +1434,8 @@ function App() {
             <RiskSignalInvestKnowledge />
             {/* F293 (overnight 2026-08-12): contact × investment × risk signal triple coverage — ◈ CIRSKTRI (left:791040, bottom:8, zIndex:441); parallel-fetches /entities/Contact + /entities/Investment + /entities/RiskSignal; keyword-correlates each contact (name/email/company/title/description) against investments AND risk signals to surface FULLY EXPOSED (investment match + risk signal — financial exposure with active risk) vs INVESTED (financially linked, no risk flag) vs FLAGGED (risk-flagged, no investment exposure) vs CLEAR (neither); red badge on FULLY EXPOSED count; stat tiles (contacts/fully-exposed/invested/flagged/clear); segmented coverage bar (red/amber/orange); ALL/FULLY EXPOSED/INVESTED/FLAGGED/CLEAR filter tabs + search; expand contact → split pane left=matched investments (amber scorebars + category badge) right=matched risk signals (red scorebars + severity badge); ASSESS → /v1/jarvis/agent/chat 2-sentence contact financial risk brief + TTS via jarvis:speak-dossier; "cirsktri"/"contact investment risk"/"contact invest risk signal"/"fully exposed contact"/"contact risk exposure"/"invest risk contact"/"contact financial risk" voice trigger; jarvis:cirsktri-toggle event; 90-s auto-refresh */}
             <ContactInvestRiskTriple />
+            {/* F294 (overnight 2026-08-12): report × ops event × task triple coverage — ◈ ROETRI (left:791600, bottom:8, zIndex:442); parallel-fetches /v1/reports + /v1/ops/events + /entities/Task; keyword-correlates each report (name/title/description/type/category) against active ops events AND tasks to surface FULLY ACTIVE (ops event triggered + task assigned) vs OPS-TRIGGERED (ops event found, no task) vs TASK-BACKED (task found, no ops event) vs ARCHIVED (neither); gray badge on ARCHIVED count; stat tiles (reports/ops events/tasks/fully active/ops-triggered/task-backed/archived); coverage bar (green/orange/amber); ALL/FULLY ACTIVE/OPS-TRIGGERED/TASK-BACKED/ARCHIVED filter tabs + search; expand report → split pane left=matched ops events (orange scorebars + severity badge) right=matched tasks (amber scorebars + priority badge); ASSESS → /v1/jarvis/agent/chat 2-sentence report-ops-task brief + TTS via jarvis:speak-dossier; "roetri"/"report ops task"/"report event task"/"archived report"/"report ops event task"/"fully active report" voice trigger; jarvis:roetri-toggle event; 90-s auto-refresh */}
+            <ReportOpsTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
