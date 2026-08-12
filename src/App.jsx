@@ -437,6 +437,7 @@ import OpsEventScenarioReportTriple from '@/components/cinematic/OpsEventScenari
 import IntelProfileDatasetScenarioTriple from '@/components/cinematic/IntelProfileDatasetScenarioTriple';
 import TaskRiskSignalCoverage from '@/components/cinematic/TaskRiskSignalCoverage';
 import ContactOpsKnowledgeTriple from '@/components/cinematic/ContactOpsKnowledgeTriple';
+import LiveIntelSystemTaskTriple from '@/components/cinematic/LiveIntelSystemTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1409,6 +1410,8 @@ function App() {
             <TaskRiskSignalCoverage />
             {/* F285 (overnight 2026-08-12): contact × ops event × knowledge triple coverage — ◈ COEKNOW button (left:786560, bottom:8, zIndex:433); parallel-fetches /entities/Contact + /v1/ops/events + /knowledge/; keyword-correlates each contact (name/email/company/title/description) against ops events AND KB articles to surface FULLY INFORMED (ops event + KB coverage) vs OPS-ASSIGNED (ops event match, no KB — operationally placed but undocumented) vs KB-BACKED (KB article match, no ops event — documented but not operationally engaged) vs DARK (neither — contact with no ops event or knowledge coverage — intelligence gap); amber badge on DARK count; stat tiles (contacts/fully-informed/ops-assigned/kb-backed/dark); coverage bar; ALL/FULLY INFORMED/OPS-ASSIGNED/KB-BACKED/DARK filter tabs + search; expand contact → split pane left=matched ops events (orange scorebars + severity badge) right=matched KB articles (violet scorebars + category badge); ASSESS → /v1/jarvis/agent/chat 2-sentence contact intelligence coverage brief + TTS via jarvis:speak-dossier; "coeknow"/"contact ops knowledge"/"contact ops event kb"/"contact knowledge ops"/"dark contact triple"/"ops knowledge contact"/"contact ops kb"/"fully informed contact" voice trigger; jarvis:coeknow-toggle event; 90-s auto-refresh */}
             <ContactOpsKnowledgeTriple />
+            {/* F286 (overnight 2026-08-12): live intel × system status × task triple coverage — ◈ LSTTRI button (left:787120, bottom:8, zIndex:434); parallel-fetches /functions/getLiveIntel + /v1/jarvis/system/status + /entities/Task; keyword-correlates each live world event (quakes/crypto/FX type/name/location/symbol) against system services AND active tasks to surface FULLY REACTIVE (service + task coverage) vs SVC-ONLY (service match, no task) vs TASKED (task match, no service) vs UNTRACKED (neither — operational gap); cyan badge on FULLY REACTIVE count; stat tiles (live-events/services/tasks/fully-reactive/svc-only/tasked/untracked); coverage bar; ALL/FULLY REACTIVE/SVC-ONLY/TASKED/UNTRACKED filter tabs + search; expand event → split pane left=matched services (green scorebars + status badge) right=matched tasks (amber scorebars + priority badge); ASSESS → /v1/jarvis/agent/chat 2-sentence operational gap brief + TTS via jarvis:speak-dossier; "lsttri"/"live system task"/"live intel task system"/"world event task system"/"fully reactive event"/"untracked world event" voice trigger; jarvis:lsttri-toggle event; 60-s auto-refresh */}
+            <LiveIntelSystemTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
