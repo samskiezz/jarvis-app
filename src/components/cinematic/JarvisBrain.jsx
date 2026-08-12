@@ -497,6 +497,7 @@ import { isRskgctriQuery, buildRskgctriScript } from "./RiskSignalKnowledgeCommu
 import { isTirrepQuery, buildTirrepScript } from "./TaskInvestigationReportTriple";
 import { isSsivcoQuery, buildSsivcoScript } from "./SystemStatusInvestigationCoverage";
 import { isSsgncoQuery, buildSsgncoScript } from "./SystemStatusGraphNodeCoverage";
+import { isSsscenQuery, buildSsscenScript } from "./SystemStatusScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5517,6 +5518,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ssgnco-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSsgncoScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSsscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssscen-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSsscenScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

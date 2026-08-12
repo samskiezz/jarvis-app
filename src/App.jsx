@@ -428,6 +428,7 @@ import RiskSignalKnowledgeCommunityTriple from '@/components/cinematic/RiskSigna
 import TaskInvestigationReportTriple from '@/components/cinematic/TaskInvestigationReportTriple';
 import SystemStatusInvestigationCoverage from '@/components/cinematic/SystemStatusInvestigationCoverage';
 import SystemStatusGraphNodeCoverage from '@/components/cinematic/SystemStatusGraphNodeCoverage';
+import SystemStatusScenarioCoverage from '@/components/cinematic/SystemStatusScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1382,6 +1383,8 @@ function App() {
             <SystemStatusInvestigationCoverage />
             {/* F276 (overnight 2026-08-12): system status × graph node coverage — ◈ SSGNCO button (left:781520, bottom:8, zIndex:424); parallel-fetches /v1/jarvis/system/status + /v1/graph/centrality; keyword-correlates each high-influence centrality node (id/name/label) against live system service names to surface NETWORKED (system service alignment found) vs ISOLATED (no system service monitors this graph node — coverage gap); amber badge on isolated count; stat tiles + coverage bar; ALL/NETWORKED/ISOLATED filter tabs + search; expand node → matched services with status badge + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence node-system coverage brief + TTS via jarvis:speak-dossier; "ssgnco"/"system graph node"/"service graph node"/"system network coverage"/"service centrality"/"graph node system"/"node service coverage"/"system centrality coverage" voice trigger; jarvis:ssgnco-toggle event; 60-s auto-refresh */}
             <SystemStatusGraphNodeCoverage />
+            {/* F277 (overnight 2026-08-12): system status × scenario coverage — ◈ SSSCEN button (left:782080, bottom:8, zIndex:425); parallel-fetches /v1/jarvis/system/status + /v1/scenario/list; keyword-correlates each live system service (name/id/status) against scenario playbooks to surface SCRIPTED (at least one scenario response plan covers this service domain) vs UNSCRIPTED (no scenario coverage — incident response gap); amber badge on unscripted count; stat tiles + coverage bar; ALL/SCRIPTED/UNSCRIPTED filter tabs + search; expand service → matched scenarios with type+category badge + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence service incident-plan readiness brief + TTS via jarvis:speak-dossier; "ssscen"/"system scenario"/"service scenario"/"service incident plan"/"unscripted service"/"scripted service"/"service playbook" voice trigger; jarvis:ssscen-toggle event; 60-s auto-refresh */}
+            <SystemStatusScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
