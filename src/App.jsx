@@ -435,6 +435,7 @@ import InvestSystemOpsTriple from '@/components/cinematic/InvestSystemOpsTriple'
 import ReportScenarioCoverage from '@/components/cinematic/ReportScenarioCoverage';
 import OpsEventScenarioReportTriple from '@/components/cinematic/OpsEventScenarioReportTriple';
 import IntelProfileDatasetScenarioTriple from '@/components/cinematic/IntelProfileDatasetScenarioTriple';
+import TaskRiskSignalCoverage from '@/components/cinematic/TaskRiskSignalCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1403,6 +1404,8 @@ function App() {
             <OpsEventScenarioReportTriple />
             {/* F283 (overnight 2026-08-12): intel profile × dataset × scenario triple coverage — ◈ IDSCTRI button (left:785440, bottom:8, zIndex:431); parallel-fetches /entities/IntelProfile + /v1/datasets + /v1/scenario/list; keyword-correlates each intel profile (name/company/role/sector/tags) against datasets AND scenarios to surface FULLY ARMED (dataset+scenario) vs DATASET-BACKED (dataset only) vs SCENARIO-PLANNED (scenario only) vs UNARMED (neither — no data or scenario coverage — intelligence gap); red badge on unarmed count; stat tiles (profiles/fully-armed/dataset-backed/scenario-planned/unarmed); coverage bar; ALL/FULLY ARMED/DATASET-BACKED/SCENARIO-PLANNED/UNARMED filter tabs + search; expand profile → split pane left=matched datasets (emerald scorebars + type badge) right=matched scenarios (violet scorebars + category badge); ASSESS → /v1/jarvis/agent/chat 2-sentence intel coverage brief + TTS via jarvis:speak-dossier; "idsctri"/"intel profile dataset scenario"/"intel dataset scenario"/"unarmed intel profile"/"intel fully armed"/"intel profile unarmed triple"/"intel data scenario"/"intel profile scenario dataset"/"intel profile dataset triple" voice trigger; jarvis:idsctri-toggle event; 90-s auto-refresh */}
             <IntelProfileDatasetScenarioTriple />
+            {/* F284 (overnight 2026-08-12): task × risk signal coverage — ◈ TRSCOV button (left:786000, bottom:8, zIndex:432); parallel-fetches /entities/Task + /entities/RiskSignal; keyword-correlates each task (name/description/type/priority) against risk signals to surface AT-RISK (matching risk signal found) vs CLEAR (no risk signal — may indicate blind spot); red badge on at-risk count; stat tiles (tasks/signals/at-risk/clear); at-risk coverage bar; ALL/AT-RISK/CLEAR filter tabs + search; expand task → matched risk signals with severity badge + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence task risk assessment brief + TTS via jarvis:speak-dossier; "trscov"/"task risk signal"/"task risk coverage"/"task at risk"/"risky task"/"risk signal task"/"task risk scan"/"task risk check" voice trigger; jarvis:trscov-toggle event; 90-s auto-refresh */}
+            <TaskRiskSignalCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
