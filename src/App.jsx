@@ -432,6 +432,7 @@ import SystemStatusScenarioCoverage from '@/components/cinematic/SystemStatusSce
 import SwarmJobDatasetCoverage from '@/components/cinematic/SwarmJobDatasetCoverage';
 import ContactInvestKnowledgeTriple from '@/components/cinematic/ContactInvestKnowledgeTriple';
 import InvestSystemOpsTriple from '@/components/cinematic/InvestSystemOpsTriple';
+import ReportScenarioCoverage from '@/components/cinematic/ReportScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1394,6 +1395,8 @@ function App() {
             <ContactInvestKnowledgeTriple />
             {/* F280 (overnight 2026-08-12): investment × system status × ops event triple coverage — ◈ ISOETRI button (left:783760, bottom:8, zIndex:428); parallel-fetches /entities/Investment + /v1/jarvis/system/status + /v1/ops/events; keyword-correlates each investment (name/description/category/ticker) against live system services AND ops events to surface FULLY MONITORED (service alignment + ops event — investment has both infrastructure coverage and live operational event) vs SVC-LINKED (service found, no ops event — infrastructure coverage but no live trigger) vs OPS-FLAGGED (ops event found, no service alignment — live trigger but no service coverage) vs UNMONITORED (neither — monitoring gap); amber badge on unmonitored count; stat tiles (investments/fully-monitored/svc-linked/ops-flagged/unmonitored); fully-monitored coverage bar; ALL/FULLY MONITORED/SVC-LINKED/OPS-FLAGGED/UNMONITORED filter tabs + search; expand investment → split pane left=matched services (cyan scorebars + status badge) right=matched ops events (orange scorebars + severity badge); ASSESS → /v1/jarvis/agent/chat 2-sentence investment monitoring coverage brief + TTS via jarvis:speak-dossier; "isoetri"/"investment system ops"/"invest system ops"/"investment ops event"/"unmonitored investment"/"investment service ops"/"invest ops service"/"monitored investment"/"investment ops coverage"/"service ops invest" voice trigger; jarvis:isoetri-toggle event; 60-s auto-refresh */}
             <InvestSystemOpsTriple />
+            {/* F281 (overnight 2026-08-12): report × scenario coverage — ◈ RPSCN button (left:784320, bottom:8, zIndex:429); parallel-fetches /v1/reports + /v1/scenario/list; keyword-correlates each report (name/title/description/type/category) against scenario plans to surface SCENARIO-BACKED (scenario coverage found) vs UNPLANNED (no scenario — planning gap); amber badge on unplanned count; stat tiles (reports/scenarios/scenario-backed/unplanned); scenario-backed coverage bar; ALL/SCENARIO-BACKED/UNPLANNED filter tabs + search; expand report → matched scenarios with description snippet + relevance score bar; ASSESS → /v1/jarvis/agent/chat 2-sentence report-scenario planning brief + TTS via jarvis:speak-dossier; "rpscn"/"report scenario"/"scenario report"/"unplanned reports"/"report plan coverage"/"scenario backed report"/"scenario coverage report" voice trigger; jarvis:rpscn-toggle event; 90-s auto-refresh */}
+            <ReportScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
