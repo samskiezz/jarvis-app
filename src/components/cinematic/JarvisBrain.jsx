@@ -528,6 +528,7 @@ import { isLkstriQuery, buildLkstriScript } from "./LiveIntelKnowledgeSkillTripl
 import { isCascntriQuery, buildCascntriScript } from "./ContactAipScenarioTriple";
 import { isCirskQuery, buildCirskScript } from "./ContactInvestigationRiskTriple";
 import { isCgcdsQuery, buildCgcdsScript } from "./ContactGraphCommunityDatasetTriple";
+import { isSjaskcoQuery, buildSjaskcoScript } from "./SwarmJobAipSkillKnowledgeTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5817,6 +5818,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cgcds-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCgcdsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSjaskcoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjaskco-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjaskcoScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

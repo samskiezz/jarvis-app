@@ -459,6 +459,7 @@ import LiveIntelKnowledgeSkillTriple from '@/components/cinematic/LiveIntelKnowl
 import ContactAipScenarioTriple from '@/components/cinematic/ContactAipScenarioTriple';
 import ContactInvestigationRiskTriple from '@/components/cinematic/ContactInvestigationRiskTriple';
 import ContactGraphCommunityDatasetTriple from '@/components/cinematic/ContactGraphCommunityDatasetTriple';
+import SwarmJobAipSkillKnowledgeTriple from '@/components/cinematic/SwarmJobAipSkillKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1475,6 +1476,7 @@ function App() {
             <ContactGraphCommunityDatasetTriple />
             {/* F304 (overnight 2026-08-13): live intel × knowledge × AIP skill triple coverage — ◈ LKSTRI button (left:797200, bottom:8, zIndex:452); parallel-fetches /functions/getLiveIntel + /knowledge/ + /v1/aip/skill; keyword-correlates each live world event (quakes/crypto/FX type/name/location/symbol) against KB articles AND AIP skills to surface FULLY ARMED (KB article+skill — event has documented knowledge and response capability) vs KB-BACKED (KB article found, no skill — documented but no response tool) vs SKILL-LINKED (skill found, no KB — response tool without intelligence context) vs UNADDRESSED (neither — live event with no knowledge or skill coverage — operational gap); red badge on UNADDRESSED count; stat tiles (live-events/kb-articles/aip-skills/fully-armed/kb-backed/skill-linked/unaddressed); segmented coverage bar (green/blue/amber/red); ALL/FULLY ARMED/KB-BACKED/SKILL-LINKED/UNADDRESSED filter tabs + text search; expand event → split pane left=matched KB articles (blue scorebars + category badge) right=matched AIP skills (amber scorebars + category badge); ASSESS → /v1/jarvis/agent/chat 2-sentence live event coverage brief + TTS via jarvis:speak-dossier; "lkstri"/"live intel knowledge skill"/"live event skill"/"armed live event"/"unaddressed live event"/"live event coverage triple" voice trigger; jarvis:lkstri-toggle event; 60-s auto-refresh */}
             <LiveIntelKnowledgeSkillTriple />
+            <SwarmJobAipSkillKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
