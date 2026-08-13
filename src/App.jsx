@@ -472,6 +472,7 @@ import GraphAnnotationTaskOpsTriple from '@/components/cinematic/GraphAnnotation
 import GraphAnnotationSwarmInvestTriple from '@/components/cinematic/GraphAnnotationSwarmInvestTriple';
 import GraphAnnotationDatasetKnowledgeTriple from '@/components/cinematic/GraphAnnotationDatasetKnowledgeTriple';
 import ContactTaskSkillTriple from '@/components/cinematic/ContactTaskSkillTriple';
+import InvestGraphCommunityKnowledgeTriple from '@/components/cinematic/InvestGraphCommunityKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1513,6 +1514,8 @@ function App() {
             <GraphAnnotationDatasetKnowledgeTriple />
             {/* F320 (overnight 2026-08-13): contact × task × skill triple coverage — ◈ CTSKILL button (left:806160, bottom:8, zIndex:468); parallel-fetches /entities/Contact + /entities/Task + /v1/aip/skill; keyword-correlates each contact against tasks AND skills to surface FULLY EQUIPPED (task+skill) vs TASKED (task found, no skill) vs SKILLED (skill found, no task) vs DARK (neither — capability gap); lime badge on equipped count; stat tiles (contacts/tasks/skills/equipped/tasked/skilled/dark); segmented coverage bar; ALL/FULLY EQUIPPED/TASKED/SKILLED/DARK filter tabs + text search; expand contact → split pane left=matched tasks (lime scorebars + priority badge) right=matched skills (amber scorebars + category badge); ASSESS → /v1/jarvis/agent/chat 2-sentence contact capability coverage brief + TTS via jarvis:speak-dossier; "ctskill"/"contact task skill"/"equipped contacts"/"fully equipped contact"/"contact skill task" voice trigger; jarvis:ctskill-toggle event; 90-s auto-refresh */}
             <ContactTaskSkillTriple />
+            {/* F321 (overnight 2026-08-13): investment × graph community × knowledge triple coverage — ◈ IGCKCO button (left:806720, bottom:8, zIndex:469); parallel-fetches /entities/Investment + /v1/graph/communities + /knowledge/; keyword-correlates each investment (name/description/category/ticker) against graph network communities AND KB articles to surface FULLY GROUNDED (community+KB — investment has both network intelligence context and documented knowledge) vs COMMUNITY-BACKED (community found, no KB) vs KB-ONLY (KB article found, no community) vs DARK (neither — investment with no graph or knowledge coverage — intelligence grounding gap); emerald badge on FULLY GROUNDED count; stat tiles (invest/comms/kb/grounded/comm-bknd/kb-only/dark); segmented coverage bar (green/emerald/indigo/gray); ALL/FULLY GROUNDED/COMMUNITY-BACKED/KB-ONLY/DARK filter tabs + text search; expand investment → split pane left=matched communities (emerald scorebars + type badge) right=matched KB articles (indigo scorebars + category badge); ASSESS → /v1/jarvis/agent/chat 2-sentence investment grounding brief + TTS via jarvis:speak-dossier; "igckco"/"invest graph community"/"investment community knowledge"/"grounded investment"/"dark investment community"/"investment kb community"/"investment knowledge graph" voice trigger; jarvis:igckco-toggle event; 90-s auto-refresh */}
+            <InvestGraphCommunityKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -541,6 +541,7 @@ import { isGatoeQuery, buildGatoeScript } from "./GraphAnnotationTaskOpsTriple";
 import { isGasjinvQuery, buildGasjinvScript } from "./GraphAnnotationSwarmInvestTriple";
 import { isGadkcoQuery, buildGadkcoScript } from "./GraphAnnotationDatasetKnowledgeTriple";
 import { isCtskillQuery, buildCtskillScript } from "./ContactTaskSkillTriple";
+import { isIgckcoQuery, buildIgckcoScript } from "./InvestGraphCommunityKnowledgeTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5947,6 +5948,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctskill-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCtskillScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIgckcoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:igckco-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIgckcoScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
