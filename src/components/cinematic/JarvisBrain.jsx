@@ -526,6 +526,7 @@ import { isSwjoestriQuery, buildSwjoestriScript } from "./SwarmJobOpsScenarioTri
 import { isRdasTriQuery, buildRdasTriScript } from "./RiskSignalDatasetSkillTriple";
 import { isLkstriQuery, buildLkstriScript } from "./LiveIntelKnowledgeSkillTriple";
 import { isCascntriQuery, buildCascntriScript } from "./ContactAipScenarioTriple";
+import { isCirskQuery, buildCirskScript } from "./ContactInvestigationRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5797,6 +5798,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cascntri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCascntriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCirskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cirsk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCirskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
