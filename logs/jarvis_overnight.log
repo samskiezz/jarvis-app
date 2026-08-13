@@ -279,3 +279,4 @@
 2026-08-13 | F308 SwarmJobAipSkillKnowledgeTriple.jsx | SJASKCO | SwarmJob × AIP Skill × Knowledge triple coverage; zIndex:456 left:799440; build exit 0
 2026-08-13 F309 TDASKCO — TaskDatasetSkillTriple.jsx: Task × Dataset × AIP Skill triple coverage panel; ◈ TDASKCO left:800000 zIndex:457; 90s refresh; build exit 0; all 308 prior features already checked, F309 added as new entry.
 2026-08-13 F310 IPASKDS IntelProfileAipDatasetTriple.jsx — IntelProfile × AIP Skill × Dataset triple coverage; isIpaskdsQuery+buildIpaskdsScript wired in JarvisBrain.jsx; ◈ IPASKDS left:800560 zIndex:458; build exit 0
+2026-08-13 F311 GNASC GraphAnnotationSkillScenarioTriple.jsx — /v1/graph/annotations × /v1/aip/skill × /v1/scenario/list — FULLY COVERED/SKILL-BACKED/SCENARIO-BACKED/DARK states; amber DARK badge; stat tiles + coverage bar + filter tabs + expand split-pane; ASSESS→/v1/jarvis/agent/chat; jarvis:gnasc-toggle; ◈ GNASC left:801120 zIndex:459; build exit 0
