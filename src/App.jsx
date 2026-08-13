@@ -454,6 +454,7 @@ import ContactScenarioKnowledgeTriple from '@/components/cinematic/ContactScenar
 import TaskInvestigationKnowledgeTriple from '@/components/cinematic/TaskInvestigationKnowledgeTriple';
 import ReportContactScenarioTriple from '@/components/cinematic/ReportContactScenarioTriple';
 import SwarmJobOpsScenarioTriple from '@/components/cinematic/SwarmJobOpsScenarioTriple';
+import RiskSignalDatasetSkillTriple from '@/components/cinematic/RiskSignalDatasetSkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1460,6 +1461,8 @@ function App() {
             <ReportContactScenarioTriple />
             {/* F302 (overnight 2026-08-13): swarm job × ops event × scenario triple coverage — ◈ SJOETRI (left:796080, bottom:8, zIndex:450); parallel-fetches /entities/SwarmJob + /v1/ops/events + /v1/scenario/list; keyword-correlates each swarm job against ops events AND scenarios to surface FULLY COVERED (ops event + scenario) vs OPS-TRIGGERED (ops event, no scenario) vs SCENARIO-BACKED (scenario, no ops event) vs UNADDRESSED (neither); red badge on UNADDRESSED count; 90-s auto-refresh */}
             <SwarmJobOpsScenarioTriple />
+            {/* F303 (overnight 2026-08-13): risk signal × dataset × AIP skill triple coverage — ◈ RDASTRI button (left:796640, bottom:8, zIndex:451); parallel-fetches /entities/RiskSignal + /v1/datasets + /v1/aip/skill; keyword-correlates each risk signal (name/title/type/severity/description) against datasets AND AIP skills to surface FULLY ARMED (dataset+skill — both evidence and response capability) vs DATASET-BACKED (dataset found, no skill — evidence but no response tool) vs SKILL-COVERED (skill found, no dataset — response tool but no evidence backing) vs UNADDRESSED (neither — risk signal with no dataset or skill coverage — intelligence gap); red badge on UNADDRESSED count; stat tiles (signals/datasets/skills/fully-armed/dataset/skill/unaddressed); segmented coverage bar (green/emerald/violet/red); ALL/FULLY ARMED/DATASET-BACKED/SKILL-COVERED/UNADDRESSED filter tabs + text search; expand signal → split pane left=matched datasets (emerald scorebars + type badge) right=matched AIP skills (violet scorebars + category badge); ASSESS → /v1/jarvis/agent/chat 2-sentence risk coverage brief + TTS via jarvis:speak-dossier; "rdastri"/"risk signal dataset skill"/"risk dataset aip"/"unaddressed risk signal"/"risk fully armed"/"risk signal skill"/"risk aip skill"/"dataset risk skill"/"risk signal triple"/"risk coverage triple" voice trigger; jarvis:rdastri-toggle event; 60-s auto-refresh */}
+            <RiskSignalDatasetSkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
