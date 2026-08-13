@@ -290,3 +290,4 @@
 [2026-08-13] F319 GADKCO — GraphAnnotationDatasetKnowledgeTriple.jsx: /v1/graph/annotations × /v1/datasets × /knowledge/ triple coverage; FULLY GROUNDED/DATA-BACKED/KB-BACKED/DARK; ◈ GADKCO left:805600 zIndex:467; build exit 0; pushed to jarvis-overnight
 2026-08-13 F320 ContactTaskSkillTriple — /entities/Contact × /entities/Task × /v1/aip/skill triple coverage; ◈ CTSKILL left:806160 zIndex:468; build exit 0
 2026-08-13 F321 IGCKCO Investment×GraphCommunity×Knowledge Triple Coverage — InvestGraphCommunityKnowledgeTriple.jsx (new ~280 lines); mounted App.jsx; voice wired JarvisBrain.jsx; left:806720 zIndex:469; build exit 0
+2026-08-13 F322 IGOETRI Investment×GraphCommunity×OpsEvent Triple Coverage — InvestGraphCommunityOpsTriple.jsx (new ~270 lines); mounted App.jsx; isIgoetriQuery+buildIgoetriScript wired JarvisBrain.jsx; ◈ IGOETRI left:807280 zIndex:470; build exit 0
