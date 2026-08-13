@@ -535,6 +535,7 @@ import { isGnascQuery, buildGnascScript } from "./GraphAnnotationSkillScenarioTr
 import { isRskliscQuery, buildRskliscScript } from "./RiskSignalLiveIntelScenarioTriple";
 import { isGalieQuery, buildGalieScript } from "./GraphAnnotationLiveIntelExposure";
 import { isGaricQuery, buildGaricScript } from "./GraphAnnotationReportInvestigationTriple";
+import { isIpgarepQuery, buildIpgarepScript } from "./IntelProfileAnnotationReportTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5887,6 +5888,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:garic-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGaricScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIpgarepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipgarep-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpgarepScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
