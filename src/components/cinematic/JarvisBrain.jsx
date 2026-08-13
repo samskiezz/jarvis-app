@@ -520,6 +520,7 @@ import { isAipkrstriQuery, buildAipkrstriScript } from "./AipSkillKnowledgeRiskT
 import { isScsriskQuery, buildScsriskScript } from "./SceneSystemRiskTriple";
 import { isSoektriQuery, buildSoektriScript } from "./ScenarioOpsKnowledgeTriple";
 import { isCskntriQuery, buildCskntriScript } from "./ContactScenarioKnowledgeTriple";
+import { isTikvtriQuery, buildTikvtriScript } from "./TaskInvestigationKnowledgeTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5740,6 +5741,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cskntri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCskntriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTikvtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tikvtri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTikvtriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
