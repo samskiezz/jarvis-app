@@ -539,6 +539,7 @@ import { isIpgarepQuery, buildIpgarepScript } from "./IntelProfileAnnotationRepo
 import { isGacrtriQuery, buildGacrtriScript } from "./GraphAnnotationContactRiskTriple";
 import { isGatoeQuery, buildGatoeScript } from "./GraphAnnotationTaskOpsTriple";
 import { isGasjinvQuery, buildGasjinvScript } from "./GraphAnnotationSwarmInvestTriple";
+import { isGadkcoQuery, buildGadkcoScript } from "./GraphAnnotationDatasetKnowledgeTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5927,6 +5928,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gasjinv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGasjinvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGadkcoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gadkco-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGadkcoScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
