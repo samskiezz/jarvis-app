@@ -453,6 +453,7 @@ import ScenarioOpsKnowledgeTriple from '@/components/cinematic/ScenarioOpsKnowle
 import ContactScenarioKnowledgeTriple from '@/components/cinematic/ContactScenarioKnowledgeTriple';
 import TaskInvestigationKnowledgeTriple from '@/components/cinematic/TaskInvestigationKnowledgeTriple';
 import ReportContactScenarioTriple from '@/components/cinematic/ReportContactScenarioTriple';
+import SwarmJobOpsScenarioTriple from '@/components/cinematic/SwarmJobOpsScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1457,6 +1458,8 @@ function App() {
             <TaskInvestigationKnowledgeTriple />
             {/* F301 (overnight 2026-08-13): report × contact × scenario triple coverage — ◈ RCSCEN button (left:795520, bottom:8, zIndex:449); parallel-fetches /v1/reports + /entities/Contact + /v1/scenario/list; keyword-correlates each report (name/title/description/type/category) against contacts AND scenarios to surface FULLY GOVERNED (contact + scenario match — report has both personnel and planning coverage) vs CONTACT-LINKED (contact found, no scenario — staffed but no response plan) vs SCENARIO-BACKED (scenario found, no contact — planned but unstaffed) vs UNMANAGED (neither — governance gap); amber badge on UNMANAGED count; stat tiles (reports/contacts/scenarios/governed/con-link/scn-back/unmanaged); segmented coverage bar (green/cyan/violet); ALL/FULLY GOVERNED/CONTACT-LINKED/SCENARIO-BACKED/UNMANAGED filter tabs + search; expand report → split pane left=matched contacts (cyan scorebars + title badge) right=matched scenarios (violet scorebars + category badge); ASSESS → /v1/jarvis/agent/chat 2-sentence report governance brief + TTS via jarvis:speak-dossier; "rcscen"/"report contact scenario"/"governed report"/"unmanaged report"/"report governance scenario" voice trigger; jarvis:rcscen-toggle event; 90-s auto-refresh */}
             <ReportContactScenarioTriple />
+            {/* F302 (overnight 2026-08-13): swarm job × ops event × scenario triple coverage — ◈ SJOETRI (left:796080, bottom:8, zIndex:450); parallel-fetches /entities/SwarmJob + /v1/ops/events + /v1/scenario/list; keyword-correlates each swarm job against ops events AND scenarios to surface FULLY COVERED (ops event + scenario) vs OPS-TRIGGERED (ops event, no scenario) vs SCENARIO-BACKED (scenario, no ops event) vs UNADDRESSED (neither); red badge on UNADDRESSED count; 90-s auto-refresh */}
+            <SwarmJobOpsScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
