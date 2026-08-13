@@ -533,6 +533,7 @@ import { isTdaskcoQuery, buildTdaskcoScript } from "./TaskDatasetSkillTriple";
 import { isIpaskdsQuery, buildIpaskdsScript } from "./IntelProfileAipDatasetTriple";
 import { isGnascQuery, buildGnascScript } from "./GraphAnnotationSkillScenarioTriple";
 import { isRskliscQuery, buildRskliscScript } from "./RiskSignalLiveIntelScenarioTriple";
+import { isGalieQuery, buildGalieScript } from "./GraphAnnotationLiveIntelExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5867,6 +5868,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsklisc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRskliscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGalieQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:galie-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGalieScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
