@@ -560,6 +560,7 @@ import { isGairtripQuery, buildGairtripScript } from "./GraphAnnotationIntelRepo
 import { isGccntriQuery, buildGccntriScript } from "./GraphCentralityContactInvestTriple";
 import { isScinopsQuery, buildScinopsScript } from "./SceneIntelProfileOpsTriple";
 import { isTsjscQuery, buildTsjscScript } from "./TaskSwarmScenarioTriple";
+import { isIpgckcoQuery, buildIpgckcoScript } from "./IntelProfileCentralityKnowledgeTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6137,6 +6138,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tsjsc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTsjscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIpgckcoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipgckco-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpgckcoScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
