@@ -550,6 +550,7 @@ import { isTaskipinvQuery, buildTaskipinvScript } from "./TaskIntelInvestigation
 import { isSjipinvQuery, buildSjipinvScript } from "./SwarmJobIntelInvestTriple";
 import { isIpgcscQuery, buildIpgcscScript } from "./IntelProfileGraphCommunityScenarioTriple";
 import { isInvkscQuery, buildInvkscScript } from "./InvestmentKnowledgeScenarioTriple";
+import { isCgcskcoQuery, buildCgcskcoScript } from "./ContactGraphCommunitySkillTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6037,6 +6038,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invksc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvkscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCgcskcoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cgcskco-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCgcskcoScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
