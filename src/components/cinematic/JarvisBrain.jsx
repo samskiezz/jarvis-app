@@ -552,6 +552,7 @@ import { isIpgcscQuery, buildIpgcscScript } from "./IntelProfileGraphCommunitySc
 import { isInvkscQuery, buildInvkscScript } from "./InvestmentKnowledgeScenarioTriple";
 import { isCgcskcoQuery, buildCgcskcoScript } from "./ContactGraphCommunitySkillTriple";
 import { isGasoeQuery, buildGasoeScript } from "./GraphAnnotationSkillOpsTriple";
+import { isTrrskQuery, buildTrrskScript } from "./TaskReportRiskSignalTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6057,6 +6058,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gasoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGasoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTrrskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trrsk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTrrskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
