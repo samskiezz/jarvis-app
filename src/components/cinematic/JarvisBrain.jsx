@@ -561,6 +561,7 @@ import { isGccntriQuery, buildGccntriScript } from "./GraphCentralityContactInve
 import { isScinopsQuery, buildScinopsScript } from "./SceneIntelProfileOpsTriple";
 import { isTsjscQuery, buildTsjscScript } from "./TaskSwarmScenarioTriple";
 import { isIpgckcoQuery, buildIpgckcoScript } from "./IntelProfileCentralityKnowledgeTriple";
+import { isRcsjQuery, buildRcsjScript } from "./ReportContactSwarmTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6147,6 +6148,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipgckco-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpgckcoScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRcsjQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rcsj-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRcsjScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
