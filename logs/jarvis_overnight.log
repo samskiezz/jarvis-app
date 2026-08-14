@@ -304,3 +304,4 @@
 2026-08-14T09:26:10Z BACKLOG EXHAUSTED — all 332 features (F01–F332) marked [x] done; no unchecked features remain; overnight builder exited cleanly — add new entries to docs/JARVIS_FEATURE_BACKLOG.md to resume automation
 2026-08-14 F333 SJOEKB SwarmJobOpsKnowledgeTriple.jsx — /entities/SwarmJob × /v1/ops/events × /knowledge/ triple coverage; FULLY ACTIVATED/OPS-TRIGGERED/KB-BACKED/DORMANT states; red badge on DORMANT; isSjoekbQuery+buildSjoekbScript wired in JarvisBrain.jsx; ◈ SJOEKB left:813440 zIndex:481; 90-s auto-refresh; build exit 0
 2026-08-14 F334 ISRTRIP: InvestigationScenarioRiskTriple.jsx — /v1/investigations × /v1/scenario/list × /entities/RiskSignal triple coverage; FULLY ACTIVATED/SCENARIO-BACKED/RISK-FLAGGED/UNACTIVATED; build exit 0
+2026-08-14T12:34:12Z BACKLOG EXHAUSTED — all features F01–F334 marked [x] done; no unchecked features remain; overnight builder exited cleanly — add new entries to docs/JARVIS_FEATURE_BACKLOG.md to resume automation
