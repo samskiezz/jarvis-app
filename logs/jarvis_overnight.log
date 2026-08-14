@@ -313,3 +313,4 @@
 2026-08-14T18:20:34Z F339 TSJSC TaskSwarmScenarioTriple.jsx — Task × SwarmJob × Scenario triple coverage; build exit 0; pushed to jarvis-overnight
 [2026-08-14] F340 IPGCKCO — IntelProfile × Graph Centrality × Knowledge Triple Coverage — IntelProfileCentralityKnowledgeTriple.jsx (new, ~310 lines) mounted in App.jsx; voice trigger wired in JarvisBrain.jsx; ◈ IPGCKCO left:817360 zIndex:488; build exit 0
 2026-08-14 F341 ReportContactSwarmTriple.jsx — Report × Contact × SwarmJob triple coverage (RCSJ); ◈ RCSJ left:817920 zIndex:489; build exit 0
+2026-08-14 F342 InvestContactOpsTriple.jsx — Investment×Contact×OpsEvent triple coverage (IVCOE); /entities/Investment × /entities/Contact × /v1/ops/events; left:818480 zIndex:490; build exit 0
