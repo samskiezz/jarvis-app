@@ -546,6 +546,7 @@ import { isIgoetriQuery, buildIgoetriScript } from "./InvestGraphCommunityOpsTri
 import { isSjgcriskQuery, buildSjgcriskScript } from "./SwarmJobGraphCommunityRiskTriple";
 import { isCgascQuery, buildCgascScript } from "./ContactGraphAnnotationScenarioTriple";
 import { isRsgakcoQuery, buildRsgakcoScript } from "./RiskSignalGraphAnnotationKnowledgeTriple";
+import { isTaskipinvQuery, buildTaskipinvScript } from "./TaskIntelInvestigationTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5997,6 +5998,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsgakco-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsgakcoScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTaskipinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:taskipinv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTaskipinvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
