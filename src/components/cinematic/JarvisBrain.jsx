@@ -551,6 +551,7 @@ import { isSjipinvQuery, buildSjipinvScript } from "./SwarmJobIntelInvestTriple"
 import { isIpgcscQuery, buildIpgcscScript } from "./IntelProfileGraphCommunityScenarioTriple";
 import { isInvkscQuery, buildInvkscScript } from "./InvestmentKnowledgeScenarioTriple";
 import { isCgcskcoQuery, buildCgcskcoScript } from "./ContactGraphCommunitySkillTriple";
+import { isGasoeQuery, buildGasoeScript } from "./GraphAnnotationSkillOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6047,6 +6048,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cgcskco-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCgcskcoScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGasoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gasoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGasoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
