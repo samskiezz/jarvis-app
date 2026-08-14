@@ -314,3 +314,4 @@
 [2026-08-14] F340 IPGCKCO — IntelProfile × Graph Centrality × Knowledge Triple Coverage — IntelProfileCentralityKnowledgeTriple.jsx (new, ~310 lines) mounted in App.jsx; voice trigger wired in JarvisBrain.jsx; ◈ IPGCKCO left:817360 zIndex:488; build exit 0
 2026-08-14 F341 ReportContactSwarmTriple.jsx — Report × Contact × SwarmJob triple coverage (RCSJ); ◈ RCSJ left:817920 zIndex:489; build exit 0
 2026-08-14 F342 InvestContactOpsTriple.jsx — Investment×Contact×OpsEvent triple coverage (IVCOE); /entities/Investment × /entities/Contact × /v1/ops/events; left:818480 zIndex:490; build exit 0
+[2026-08-14] F343 GCRRISK — GraphCommunityReportRiskTriple.jsx mounted in App.jsx; isGcrriskQuery+buildGcrriskScript wired in JarvisBrain.jsx; endpoints: /v1/graph/communities × /v1/reports × /entities/RiskSignal; build exit 0

@@ -494,6 +494,7 @@ import TaskSwarmScenarioTriple from '@/components/cinematic/TaskSwarmScenarioTri
 import IntelProfileCentralityKnowledgeTriple from '@/components/cinematic/IntelProfileCentralityKnowledgeTriple';
 import ReportContactSwarmTriple from '@/components/cinematic/ReportContactSwarmTriple';
 import InvestContactOpsTriple from '@/components/cinematic/InvestContactOpsTriple';
+import GraphCommunityReportRiskTriple from '@/components/cinematic/GraphCommunityReportRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1579,6 +1580,7 @@ function App() {
             <InvestContactOpsTriple />
             {/* F341 (overnight 2026-08-14): report × contact × swarm job triple coverage — ◈ RCSJ button (left:817920 bottom:8 zIndex:489); parallel-fetches /v1/reports + /entities/Contact + /entities/SwarmJob; keyword-correlates each report (title/type/summary/tags/category) against contacts AND swarm jobs to surface FULLY SUPPORTED (contact+swarm — report has both personnel link and automation backing) vs CONTACT-BACKED (contact found, no swarm — personnel without automation) vs SWARM-BACKED (swarm found, no contact — automation without personnel) vs DARK (neither — report with no contact or swarm coverage — operational blind spot); gray badge on DARK count; stat tiles (reports/contacts/swarm/fully-supported/contact-backed/swarm-backed/dark); segmented coverage bar (green/cyan/violet/gray); ALL/FULLY SUPPORTED/CONTACT-BACKED/SWARM-BACKED/DARK filter tabs + text search; expand report → split pane left=matched contacts (cyan scorebars + title/company) right=matched swarm jobs (violet scorebars + type/status badge); ASSESS → /v1/jarvis/agent/chat 2-sentence report personnel and automation coverage brief + TTS via jarvis:speak-dossier; "rcsj"/"report contact swarm"/"contact swarm report"/"swarm report contact"/"report personnel swarm"/"contact automation report"/"swarm backed report"/"contact backed report"/"fully supported report"/"dark report swarm" voice trigger; jarvis:rcsj-toggle event; 90-s auto-refresh */}
             <ReportContactSwarmTriple />
+            <GraphCommunityReportRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
