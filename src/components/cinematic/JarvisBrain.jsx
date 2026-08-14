@@ -544,6 +544,7 @@ import { isCtskillQuery, buildCtskillScript } from "./ContactTaskSkillTriple";
 import { isIgckcoQuery, buildIgckcoScript } from "./InvestGraphCommunityKnowledgeTriple";
 import { isIgoetriQuery, buildIgoetriScript } from "./InvestGraphCommunityOpsTriple";
 import { isSjgcriskQuery, buildSjgcriskScript } from "./SwarmJobGraphCommunityRiskTriple";
+import { isCgascQuery, buildCgascScript } from "./ContactGraphAnnotationScenarioTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -5977,6 +5978,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjgcrisk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSjgcriskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCgascQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cgasc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCgascScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

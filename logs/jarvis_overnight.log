@@ -292,3 +292,4 @@
 2026-08-13 F321 IGCKCO Investment×GraphCommunity×Knowledge Triple Coverage — InvestGraphCommunityKnowledgeTriple.jsx (new ~280 lines); mounted App.jsx; voice wired JarvisBrain.jsx; left:806720 zIndex:469; build exit 0
 2026-08-13 F322 IGOETRI Investment×GraphCommunity×OpsEvent Triple Coverage — InvestGraphCommunityOpsTriple.jsx (new ~270 lines); mounted App.jsx; isIgoetriQuery+buildIgoetriScript wired JarvisBrain.jsx; ◈ IGOETRI left:807280 zIndex:470; build exit 0
 2026-08-13 F323 SwarmJobGraphCommunityRiskTriple.jsx — swarm job × graph community × risk signal triple coverage (SJGCRISK); left:807840 zIndex:471; build exit 0
+2026-08-14 F324 ContactGraphAnnotationScenarioTriple.jsx — Contact × Graph Annotation × Scenario Triple Coverage (CGASC); /entities/Contact × /v1/graph/annotations × /v1/scenario/list; FULLY PLANNED/ANNOTATED/SCENARIO-LINKED/DARK states; amber DARK badge; 90-s refresh; isCgascQuery+buildCgascScript wired in JarvisBrain.jsx; build exit 0
