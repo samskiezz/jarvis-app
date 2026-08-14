@@ -558,6 +558,7 @@ import { isIsrtripQuery, buildIsrtripScript } from "./InvestigationScenarioRiskT
 import { isDrinvcoQuery, buildDrinvcoScript } from "./DatasetReportInvestTriple";
 import { isGairtripQuery, buildGairtripScript } from "./GraphAnnotationIntelReportTriple";
 import { isGccntriQuery, buildGccntriScript } from "./GraphCentralityContactInvestTriple";
+import { isScinopsQuery, buildScinopsScript } from "./SceneIntelProfileOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6117,6 +6118,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gccntri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGccntriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isScinopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scinops-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScinopsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
