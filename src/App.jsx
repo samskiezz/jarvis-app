@@ -511,6 +511,7 @@ import TaskGraphCentralityReportTriple from '@/components/cinematic/TaskGraphCen
 import ContactGraphAnnotationOpsTriple from '@/components/cinematic/ContactGraphAnnotationOpsTriple';
 import SceneContactKnowledgeTriple from '@/components/cinematic/SceneContactKnowledgeTriple';
 import SceneInvestigationSkillTriple from '@/components/cinematic/SceneInvestigationSkillTriple';
+import GraphAnnotationDatasetSwarmTriple from '@/components/cinematic/GraphAnnotationDatasetSwarmTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1627,6 +1628,8 @@ function App() {
             <SceneContactKnowledgeTriple />
             {/* F360 (overnight 2026-08-15): scene × investigation × skill triple coverage — ◈ SISC button (left:828000 bottom:8 zIndex:507); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/investigations + /v1/aip/skill; keyword-correlates each cinematic scene (name/description/anchors/tags) against open investigations AND JARVIS skills to surface FULLY COVERED (investigation+skill — scene has both case backing and capability support) vs INVESTIGATED (case found, no skill — scene has an open case but no skill support) vs SKILLED (skill found, no investigation — capability exists but no open case) vs UNADDRESSED (neither — operational blind spot requiring immediate case assignment and capability development); red badge on UNADDRESSED count; lime badge on FULLY COVERED count; stat tiles (scenes/cases/skills/covered/investigated/skilled/unaddressed); segmented coverage bar (lime/amber/cyan/dark); ALL/FULLY COVERED/INVESTIGATED/SKILLED/UNADDRESSED filter tabs + text search; expand scene → split pane left=matched investigations (amber scorebars + kind/status badge) right=matched skills (cyan scorebars + category/domain badge); ASSESS → /v1/jarvis/agent/chat 2-sentence scene investigation-skill coverage brief + TTS via jarvis:speak-dossier; "sisc"/"scene investigation skill"/"scene skill investigation"/"investigation skill scene"/"scene case skill"/"unaddressed scene"/"scene skill case"/"scene case capability" voice trigger; jarvis:sisc-toggle event; 90-s auto-refresh */}
             <SceneInvestigationSkillTriple />
+            {/* F361 (overnight 2026-08-15): graph annotation × dataset × swarm job triple coverage — ◈ GADSJ button (left:828560 bottom:8 zIndex:508); parallel-fetches /v1/graph/annotations + /v1/datasets + /entities/SwarmJob; keyword-correlates each graph annotation (label/content/tags) against datasets AND active swarm jobs to surface FULLY_POWERED (dataset+swarm) vs DATA_BACKED vs SWARM_ACTIVE vs DARK; isGadsjQuery+buildGadsjScript wired in JarvisBrain; jarvis:gadsj-toggle event; 90-s auto-refresh */}
+            <GraphAnnotationDatasetSwarmTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

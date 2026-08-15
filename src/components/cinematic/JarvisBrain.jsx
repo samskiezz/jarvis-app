@@ -580,6 +580,7 @@ import { isTgcrepQuery, buildTgcrepScript } from "./TaskGraphCentralityReportTri
 import { isCgaoeQuery, buildCgaoeScript } from "./ContactGraphAnnotationOpsTriple";
 import { isScckcoQuery, buildScckcoScript } from "./SceneContactKnowledgeTriple";
 import { isSiscQuery, buildSiscScript } from "./SceneInvestigationSkillTriple";
+import { isGadsjQuery, buildGadsjScript } from "./GraphAnnotationDatasetSwarmTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6331,6 +6332,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sisc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSiscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isGadsjQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gadsj-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGadsjScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
