@@ -512,6 +512,7 @@ import ContactGraphAnnotationOpsTriple from '@/components/cinematic/ContactGraph
 import SceneContactKnowledgeTriple from '@/components/cinematic/SceneContactKnowledgeTriple';
 import SceneInvestigationSkillTriple from '@/components/cinematic/SceneInvestigationSkillTriple';
 import GraphAnnotationDatasetSwarmTriple from '@/components/cinematic/GraphAnnotationDatasetSwarmTriple';
+import RiskSignalIntelOpsTriple from '@/components/cinematic/RiskSignalIntelOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1630,6 +1631,8 @@ function App() {
             <SceneInvestigationSkillTriple />
             {/* F361 (overnight 2026-08-15): graph annotation × dataset × swarm job triple coverage — ◈ GADSJ button (left:828560 bottom:8 zIndex:508); parallel-fetches /v1/graph/annotations + /v1/datasets + /entities/SwarmJob; keyword-correlates each graph annotation (label/content/tags) against datasets AND active swarm jobs to surface FULLY_POWERED (dataset+swarm) vs DATA_BACKED vs SWARM_ACTIVE vs DARK; isGadsjQuery+buildGadsjScript wired in JarvisBrain; jarvis:gadsj-toggle event; 90-s auto-refresh */}
             <GraphAnnotationDatasetSwarmTriple />
+            {/* F362 (overnight 2026-08-15): risk signal × intel profile × ops event triple coverage — ◈ RISOE button (left:829120 bottom:8 zIndex:509); parallel-fetches /entities/RiskSignal + /entities/IntelProfile + /v1/ops/events; keyword-correlates each risk signal against intel profiles AND ops events to surface FULLY_ACTIVE (intel+ops) vs INTEL_BACKED vs OPS_TRIGGERED vs BLIND; isRisoeQuery+buildRisoeScript wired in JarvisBrain; jarvis:risoe-toggle event; 90-s auto-refresh */}
+            <RiskSignalIntelOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
