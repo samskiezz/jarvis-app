@@ -509,6 +509,7 @@ import SceneDatasetInvestigationTriple from '@/components/cinematic/SceneDataset
 import SceneAnnotationScenarioTriple from '@/components/cinematic/SceneAnnotationScenarioTriple';
 import TaskGraphCentralityReportTriple from '@/components/cinematic/TaskGraphCentralityReportTriple';
 import ContactGraphAnnotationOpsTriple from '@/components/cinematic/ContactGraphAnnotationOpsTriple';
+import SceneContactKnowledgeTriple from '@/components/cinematic/SceneContactKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1621,6 +1622,8 @@ function App() {
             <TaskGraphCentralityReportTriple />
             {/* F358 (overnight 2026-08-15): contact × graph annotation × ops event triple coverage — ◈ CGAOE button (left:826880 bottom:8 zIndex:505); parallel-fetches /entities/Contact + /v1/graph/annotations + /v1/ops/events; keyword-correlates each contact against graph annotations AND live ops events to surface FULLY ALARMED (annotation+ops) vs ANNOTATED (annotation, no ops) vs OPS FLAGGED (ops, no annotation) vs CLEAR (neither); amber badge on FULLY ALARMED count; "cgaoe"/"contact annotation ops"/"contact graph annotation ops"/"contact ops annotation"/"alarmed contact"/"annotation ops contact"/"contact graph ops"/"contact ops alert" voice trigger; jarvis:cgaoe-toggle event; 90-s auto-refresh */}
             <ContactGraphAnnotationOpsTriple />
+            {/* F359 (overnight 2026-08-15): scene × contact × knowledge triple coverage — ◈ SCCKCO button (left:827440 bottom:8 zIndex:506); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /entities/Contact + /knowledge/; keyword-correlates each cinematic scene (name/description/anchors/tags) against contacts AND KB articles to surface FULLY INFORMED (contact+KB — scene has both personnel backing and knowledge coverage) vs CONTACT LINKED (contact found, no KB — personnel without knowledge) vs KB BACKED (KB found, no contact — knowledge without personnel) vs DARK (neither — scene with no contact or knowledge coverage — operational blind spot); green badge on FULLY INFORMED count; gray badge on DARK count; stat tiles (scenes/contacts/kb-articles/informed/contact-linked/kb-backed/dark); segmented coverage bar (green/cyan/indigo/gray); ALL/FULLY INFORMED/CONTACT LINKED/KB BACKED/DARK filter tabs + text search; expand scene → split pane left=matched contacts (cyan scorebars + role badge) right=matched KB articles (indigo scorebars + category badge); ASSESS → /v1/jarvis/agent/chat 2-sentence scene personnel-knowledge coverage brief + TTS via jarvis:speak-dossier; "scckco"/"scene contact knowledge"/"scene personnel knowledge"/"scene knowledge contact"/"cinematic contact knowledge"/"dark scene contact"/"informed scene"/"scene contact kb" voice trigger; jarvis:scckco-toggle event; 90-s auto-refresh */}
+            <SceneContactKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
