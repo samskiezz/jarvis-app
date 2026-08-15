@@ -508,6 +508,7 @@ import RiskSignalCommunityKnowledgeTriple from '@/components/cinematic/RiskSigna
 import SceneDatasetInvestigationTriple from '@/components/cinematic/SceneDatasetInvestigationTriple';
 import SceneAnnotationScenarioTriple from '@/components/cinematic/SceneAnnotationScenarioTriple';
 import TaskGraphCentralityReportTriple from '@/components/cinematic/TaskGraphCentralityReportTriple';
+import ContactGraphAnnotationOpsTriple from '@/components/cinematic/ContactGraphAnnotationOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1618,6 +1619,8 @@ function App() {
             <SceneAnnotationScenarioTriple />
             {/* F357 (overnight 2026-08-15): task × graph centrality × report triple coverage — ◈ TGCREP button (left:826320 bottom:8 zIndex:504); parallel-fetches /entities/Task + /v1/graph/centrality + /v1/reports; keyword-correlates each task against high-influence centrality nodes AND intelligence reports to surface FULLY COVERED (node+report) vs NODE LINKED (graph context, no report) vs REPORT BACKED (report, no node) vs UNTRACKED (neither — documentation and network intelligence gap); amber badge on UNTRACKED count; "tgcrep"/"task graph centrality report"/"task centrality report"/"task node report"/"untracked task" voice trigger; jarvis:tgcrep-toggle event; 90-s auto-refresh */}
             <TaskGraphCentralityReportTriple />
+            {/* F358 (overnight 2026-08-15): contact × graph annotation × ops event triple coverage — ◈ CGAOE button (left:826880 bottom:8 zIndex:505); parallel-fetches /entities/Contact + /v1/graph/annotations + /v1/ops/events; keyword-correlates each contact against graph annotations AND live ops events to surface FULLY ALARMED (annotation+ops) vs ANNOTATED (annotation, no ops) vs OPS FLAGGED (ops, no annotation) vs CLEAR (neither); amber badge on FULLY ALARMED count; "cgaoe"/"contact annotation ops"/"contact graph annotation ops"/"contact ops annotation"/"alarmed contact"/"annotation ops contact"/"contact graph ops"/"contact ops alert" voice trigger; jarvis:cgaoe-toggle event; 90-s auto-refresh */}
+            <ContactGraphAnnotationOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
