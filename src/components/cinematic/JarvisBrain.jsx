@@ -564,6 +564,7 @@ import { isIpgckcoQuery, buildIpgckcoScript } from "./IntelProfileCentralityKnow
 import { isRcsjQuery, buildRcsjScript } from "./ReportContactSwarmTriple";
 import { isIvcoeQuery, buildIvcoeScript } from "./InvestContactOpsTriple";
 import { isGcrriskQuery, buildGcrriskScript } from "./GraphCommunityReportRiskTriple";
+import { isKgcoeQuery, buildKgcoeScript } from "./KnowledgeCentralityOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6177,6 +6178,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcrrisk-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcrriskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isKgcoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kgcoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKgcoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
