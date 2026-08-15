@@ -514,6 +514,7 @@ import SceneInvestigationSkillTriple from '@/components/cinematic/SceneInvestiga
 import GraphAnnotationDatasetSwarmTriple from '@/components/cinematic/GraphAnnotationDatasetSwarmTriple';
 import RiskSignalIntelOpsTriple from '@/components/cinematic/RiskSignalIntelOpsTriple';
 import SwarmJobCentralityScenarioTriple from '@/components/cinematic/SwarmJobCentralityScenarioTriple';
+import ContactSkillInvestigationTriple from '@/components/cinematic/ContactSkillInvestigationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1636,6 +1637,8 @@ function App() {
             <RiskSignalIntelOpsTriple />
             {/* F363 (overnight 2026-08-15): swarm job × graph centrality × scenario triple coverage — ◈ SJGCSC button (left:829680 bottom:8 zIndex:510); parallel-fetches /entities/SwarmJob + /v1/graph/centrality + /v1/scenario/list; keyword-correlates each swarm job against centrality nodes AND scenarios to surface FULLY_PLANNED (node+scenario) vs CENTRALITY_MAPPED vs SCENARIO_LINKED vs UNPLANNED; isSjgcscQuery+buildSjgcscScript wired in JarvisBrain; jarvis:sjgcsc-toggle event; 90-s auto-refresh */}
             <SwarmJobCentralityScenarioTriple />
+            {/* F364 (overnight 2026-08-15): contact × AIP skill × investigation triple coverage — ◈ CASITRI button (left:830240 bottom:8 zIndex:511); parallel-fetches /entities/Contact + /v1/aip/skill + /v1/investigations; keyword-correlates each contact against skills AND investigations to surface FULLY_TRACKED (skill+investigation) vs SKILLED vs INVESTIGATED vs BLIND; isCasitriQuery+buildCasitriScript wired in JarvisBrain; jarvis:casitri-toggle event; 90-s auto-refresh */}
+            <ContactSkillInvestigationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
