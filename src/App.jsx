@@ -503,6 +503,7 @@ import SceneSwarmKnowledgeTriple from '@/components/cinematic/SceneSwarmKnowledg
 import GraphCentralityDatasetScenarioTriple from '@/components/cinematic/GraphCentralityDatasetScenarioTriple';
 import ContactGraphCentralityOpsTriple from '@/components/cinematic/ContactGraphCentralityOpsTriple';
 import InvestmentSwarmReportTriple from '@/components/cinematic/InvestmentSwarmReportTriple';
+import KnowledgeAipCentralityTriple from '@/components/cinematic/KnowledgeAipCentralityTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1605,6 +1606,8 @@ function App() {
             <ContactGraphCentralityOpsTriple />
             {/* F352 (overnight 2026-08-15): investment × swarnjob × report triple coverage — ◈ ISJREP button (left:823520 bottom:8 zIndex:499); parallel-fetches /entities/Investment + /entities/SwarmJob + /v1/reports; keyword-correlates each investment against swarm automation AND intelligence reports to surface FULLY DOCUMENTED (swarm+report) vs AUTOMATED (swarm only — no report) vs REPORTED (report only — no swarm) vs UNTRACKED (neither — intelligence and automation gap); gray badge on untracked count; "isjrep"/"investment swarm report"/"invest swarm report"/"portfolio swarm report"/"untracked investment" voice trigger; jarvis:isjrep-toggle event; 90-s auto-refresh */}
             <InvestmentSwarmReportTriple />
+            {/* F353 (overnight 2026-08-15): knowledge × AIP skill × graph centrality triple coverage — ◈ KGCASK button (left:824080 bottom:8 zIndex:500); parallel-fetches /knowledge/ + /v1/aip/skill + /v1/graph/centrality; keyword-correlates each KB article against AIP skills AND centrality nodes to surface FULLY ARMED (skill+node) vs SKILL-BACKED (skill only) vs NODE-LINKED (node only) vs DORMANT (neither — knowledge isolation gap); purple badge on dormant count; "kgcask"/"knowledge aip skill"/"kb skill centrality"/"knowledge skill graph"/"dormant knowledge" voice trigger; jarvis:kgcask-toggle event; 90-s auto-refresh */}
+            <KnowledgeAipCentralityTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

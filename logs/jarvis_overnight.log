@@ -324,3 +324,4 @@
 2026-08-15 [overnight] F350 GCDSSC: GraphCentralityDatasetScenarioTriple.jsx — graph centrality × dataset × scenario triple coverage; left:822400 zIndex:497; build exit 0
 2026-08-15 [overnight] F351 CGNTOE: ContactGraphCentralityOpsTriple.jsx — contact × graph centrality × ops event triple coverage; /entities/Contact × /v1/graph/centrality × /v1/ops/events; FULLY_ALARMED/NODE_LINKED/OPS_TRIGGERED/CLEAR; amber badge on alarmed; left:822960 zIndex:498; build exit 0
 [2026-08-15] F352 InvestmentSwarmReportTriple.jsx — Investment × SwarmJob × Report Triple Coverage (ISJREP); /entities/Investment × /entities/SwarmJob × /v1/reports; mounted in App.jsx; wired in JarvisBrain.jsx; build exit 0
+2026-08-15 F353 Knowledge × AIP Skill × Graph Centrality Triple Coverage (KGCASK) — KnowledgeAipCentralityTriple.jsx; isKgcaskQuery+buildKgcaskScript in JarvisBrain.jsx; ◈ KGCASK left:824080 zIndex:500; build exit 0
