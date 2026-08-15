@@ -568,6 +568,7 @@ import { isKgcoeQuery, buildKgcoeScript } from "./KnowledgeCentralityOpsTriple";
 import { isGcskliQuery, buildGcskliScript } from "./GraphCommunitySkillLiveTriple";
 import { isDictriQuery, buildDictriScript } from "./DatasetInvestContactTriple";
 import { isKrsctriQuery, buildKrsctriScript } from "./KnowledgeReportScenarioTriple";
+import { isScswtriQuery, buildScswtriScript } from "./SceneSwarmKnowledgeTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6217,6 +6218,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:krsctri-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKrsctriScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isScswtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scswtri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScswtriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

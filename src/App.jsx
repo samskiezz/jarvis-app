@@ -499,6 +499,7 @@ import KnowledgeCentralityOpsTriple from '@/components/cinematic/KnowledgeCentra
 import GraphCommunitySkillLiveTriple from '@/components/cinematic/GraphCommunitySkillLiveTriple';
 import DatasetInvestContactTriple from '@/components/cinematic/DatasetInvestContactTriple';
 import KnowledgeReportScenarioTriple from '@/components/cinematic/KnowledgeReportScenarioTriple';
+import SceneSwarmKnowledgeTriple from '@/components/cinematic/SceneSwarmKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1593,6 +1594,8 @@ function App() {
             <DatasetInvestContactTriple />
             {/* F347 (overnight 2026-08-15): knowledge × report × scenario triple coverage — ◈ KRSCTRI button (left:821280 bottom:8 zIndex:495); parallel-fetches /knowledge/ + /v1/reports + /v1/scenario/list; keyword-correlates each KB article against reports AND scenarios to surface FULLY INFORMED (report+scenario) vs REPORT BACKED (report only) vs SCENARIO LINKED (scenario only) vs DORMANT (neither — intelligence gap); gray badge on DORMANT count; "krsctri"/"knowledge report scenario" voice trigger; jarvis:krsctri-toggle event; 90-s auto-refresh */}
             <KnowledgeReportScenarioTriple />
+            {/* F348 (overnight 2026-08-15): scene × swarm job × knowledge triple coverage — ◈ SCSWTRI button (left:821840 bottom:8 zIndex:496); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /entities/SwarmJob + /knowledge/; keyword-correlates each cinematic scene (name/description/anchors) against swarm jobs AND KB articles to surface FULLY GROUNDED (swarm+KB — scene has both automation backing and knowledge coverage) vs SWARM BACKED (swarm only — scene has automation but no KB) vs KB BACKED (KB only — scene has knowledge but no automation) vs DARK (neither — scene with no swarm or KB coverage — operational blind spot); gray badge on DARK count + green badge on FULLY GROUNDED count; "scswtri"/"scene swarm knowledge"/"scene swarm kb"/"scene knowledge swarm"/"scene automation knowledge"/"cinematic swarm knowledge"/"scene swarm intel base" voice trigger; jarvis:scswtri-toggle event; 120-s auto-refresh */}
+            <SceneSwarmKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
