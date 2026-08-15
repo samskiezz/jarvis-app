@@ -501,6 +501,7 @@ import DatasetInvestContactTriple from '@/components/cinematic/DatasetInvestCont
 import KnowledgeReportScenarioTriple from '@/components/cinematic/KnowledgeReportScenarioTriple';
 import SceneSwarmKnowledgeTriple from '@/components/cinematic/SceneSwarmKnowledgeTriple';
 import GraphCentralityDatasetScenarioTriple from '@/components/cinematic/GraphCentralityDatasetScenarioTriple';
+import ContactGraphCentralityOpsTriple from '@/components/cinematic/ContactGraphCentralityOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1599,6 +1600,8 @@ function App() {
             <SceneSwarmKnowledgeTriple />
             {/* F350 (overnight 2026-08-15): graph centrality × dataset × scenario triple coverage — ◈ GCDSSC button (left:822400 bottom:8 zIndex:497); parallel-fetches /v1/graph/centrality + /v1/datasets + /v1/scenario/list; keyword-correlates each top-influence graph node against datasets AND scenario plans to surface FULLY PLANNED (dataset+scenario) vs DATA BACKED (dataset only) vs SCENARIO LINKED (scenario only) vs UNPLANNED (neither — strategic gap); gray badge on unplanned count; "gcdssc"/"graph centrality dataset scenario"/"centrality dataset scenario" voice trigger; jarvis:gcdssc-toggle event; 90-s auto-refresh */}
             <GraphCentralityDatasetScenarioTriple />
+            {/* F351 (overnight 2026-08-15): contact × graph centrality × ops event triple coverage — ◈ CGNTOE button (left:822960 bottom:8 zIndex:498); parallel-fetches /entities/Contact + /v1/graph/centrality + /v1/ops/events; keyword-correlates each contact against high-influence graph centrality nodes AND live ops events to surface FULLY ALARMED (node+ops — both network presence and live trigger) vs NODE LINKED (node only — graph link without ops trigger) vs OPS TRIGGERED (ops only — live trigger without node) vs CLEAR (neither); amber badge on FULLY ALARMED count; "cgntoe"/"contact centrality ops"/"contact graph centrality ops"/"contact node ops" voice trigger; jarvis:cgntoe-toggle event; 90-s auto-refresh */}
+            <ContactGraphCentralityOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
