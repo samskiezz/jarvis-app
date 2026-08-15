@@ -502,6 +502,7 @@ import KnowledgeReportScenarioTriple from '@/components/cinematic/KnowledgeRepor
 import SceneSwarmKnowledgeTriple from '@/components/cinematic/SceneSwarmKnowledgeTriple';
 import GraphCentralityDatasetScenarioTriple from '@/components/cinematic/GraphCentralityDatasetScenarioTriple';
 import ContactGraphCentralityOpsTriple from '@/components/cinematic/ContactGraphCentralityOpsTriple';
+import InvestmentSwarmReportTriple from '@/components/cinematic/InvestmentSwarmReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1602,6 +1603,8 @@ function App() {
             <GraphCentralityDatasetScenarioTriple />
             {/* F351 (overnight 2026-08-15): contact × graph centrality × ops event triple coverage — ◈ CGNTOE button (left:822960 bottom:8 zIndex:498); parallel-fetches /entities/Contact + /v1/graph/centrality + /v1/ops/events; keyword-correlates each contact against high-influence graph centrality nodes AND live ops events to surface FULLY ALARMED (node+ops — both network presence and live trigger) vs NODE LINKED (node only — graph link without ops trigger) vs OPS TRIGGERED (ops only — live trigger without node) vs CLEAR (neither); amber badge on FULLY ALARMED count; "cgntoe"/"contact centrality ops"/"contact graph centrality ops"/"contact node ops" voice trigger; jarvis:cgntoe-toggle event; 90-s auto-refresh */}
             <ContactGraphCentralityOpsTriple />
+            {/* F352 (overnight 2026-08-15): investment × swarnjob × report triple coverage — ◈ ISJREP button (left:823520 bottom:8 zIndex:499); parallel-fetches /entities/Investment + /entities/SwarmJob + /v1/reports; keyword-correlates each investment against swarm automation AND intelligence reports to surface FULLY DOCUMENTED (swarm+report) vs AUTOMATED (swarm only — no report) vs REPORTED (report only — no swarm) vs UNTRACKED (neither — intelligence and automation gap); gray badge on untracked count; "isjrep"/"investment swarm report"/"invest swarm report"/"portfolio swarm report"/"untracked investment" voice trigger; jarvis:isjrep-toggle event; 90-s auto-refresh */}
+            <InvestmentSwarmReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
