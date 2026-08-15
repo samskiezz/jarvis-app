@@ -500,6 +500,7 @@ import GraphCommunitySkillLiveTriple from '@/components/cinematic/GraphCommunity
 import DatasetInvestContactTriple from '@/components/cinematic/DatasetInvestContactTriple';
 import KnowledgeReportScenarioTriple from '@/components/cinematic/KnowledgeReportScenarioTriple';
 import SceneSwarmKnowledgeTriple from '@/components/cinematic/SceneSwarmKnowledgeTriple';
+import GraphCentralityDatasetScenarioTriple from '@/components/cinematic/GraphCentralityDatasetScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1596,6 +1597,8 @@ function App() {
             <KnowledgeReportScenarioTriple />
             {/* F348 (overnight 2026-08-15): scene × swarm job × knowledge triple coverage — ◈ SCSWTRI button (left:821840 bottom:8 zIndex:496); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /entities/SwarmJob + /knowledge/; keyword-correlates each cinematic scene (name/description/anchors) against swarm jobs AND KB articles to surface FULLY GROUNDED (swarm+KB — scene has both automation backing and knowledge coverage) vs SWARM BACKED (swarm only — scene has automation but no KB) vs KB BACKED (KB only — scene has knowledge but no automation) vs DARK (neither — scene with no swarm or KB coverage — operational blind spot); gray badge on DARK count + green badge on FULLY GROUNDED count; "scswtri"/"scene swarm knowledge"/"scene swarm kb"/"scene knowledge swarm"/"scene automation knowledge"/"cinematic swarm knowledge"/"scene swarm intel base" voice trigger; jarvis:scswtri-toggle event; 120-s auto-refresh */}
             <SceneSwarmKnowledgeTriple />
+            {/* F350 (overnight 2026-08-15): graph centrality × dataset × scenario triple coverage — ◈ GCDSSC button (left:822400 bottom:8 zIndex:497); parallel-fetches /v1/graph/centrality + /v1/datasets + /v1/scenario/list; keyword-correlates each top-influence graph node against datasets AND scenario plans to surface FULLY PLANNED (dataset+scenario) vs DATA BACKED (dataset only) vs SCENARIO LINKED (scenario only) vs UNPLANNED (neither — strategic gap); gray badge on unplanned count; "gcdssc"/"graph centrality dataset scenario"/"centrality dataset scenario" voice trigger; jarvis:gcdssc-toggle event; 90-s auto-refresh */}
+            <GraphCentralityDatasetScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
