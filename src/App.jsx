@@ -498,6 +498,7 @@ import GraphCommunityReportRiskTriple from '@/components/cinematic/GraphCommunit
 import KnowledgeCentralityOpsTriple from '@/components/cinematic/KnowledgeCentralityOpsTriple';
 import GraphCommunitySkillLiveTriple from '@/components/cinematic/GraphCommunitySkillLiveTriple';
 import DatasetInvestContactTriple from '@/components/cinematic/DatasetInvestContactTriple';
+import KnowledgeReportScenarioTriple from '@/components/cinematic/KnowledgeReportScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1590,6 +1591,8 @@ function App() {
             <GraphCommunitySkillLiveTriple />
             {/* F346 (overnight 2026-08-15): dataset × investigation × contact triple coverage — ◈ DICTRI button (left:820720 bottom:8 zIndex:494); parallel-fetches /v1/datasets + /v1/investigations + /entities/Contact; keyword-correlates each dataset (name/kind/description/tags) against open investigations AND contacts to surface FULLY TRACKED (investigation+contact — dataset has both active case and personnel coverage) vs CASE LINKED (investigation matched, no contact — case without personnel) vs PERSON LINKED (contact matched, no investigation — personnel without case) vs DARK (neither — dataset with no case or person coverage — intelligence gap); red badge on DARK count; stat tiles (datasets/investigations/contacts/fully-tracked/case-linked/person-linked/dark); segmented coverage bar (cyan/amber/indigo/red); ALL/FULLY TRACKED/CASE LINKED/PERSON LINKED/DARK filter tabs + text search; expand dataset → split pane left=matched investigations (amber scorebars + status badge) right=matched contacts (indigo scorebars + role badge); ASSESS → /v1/jarvis/agent/chat 2-sentence dataset investigation and contact coverage brief + TTS via jarvis:speak-dossier; "dictri"/"dataset invest contact"/"dataset investigation contact"/"dark dataset"/"dataset coverage triple"/"dataset case"/"dataset personnel"/"fully tracked dataset"/"case linked dataset"/"person linked dataset" voice trigger; jarvis:dictri-toggle event; 90-s auto-refresh */}
             <DatasetInvestContactTriple />
+            {/* F347 (overnight 2026-08-15): knowledge × report × scenario triple coverage — ◈ KRSCTRI button (left:821280 bottom:8 zIndex:495); parallel-fetches /knowledge/ + /v1/reports + /v1/scenario/list; keyword-correlates each KB article against reports AND scenarios to surface FULLY INFORMED (report+scenario) vs REPORT BACKED (report only) vs SCENARIO LINKED (scenario only) vs DORMANT (neither — intelligence gap); gray badge on DORMANT count; "krsctri"/"knowledge report scenario" voice trigger; jarvis:krsctri-toggle event; 90-s auto-refresh */}
+            <KnowledgeReportScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
