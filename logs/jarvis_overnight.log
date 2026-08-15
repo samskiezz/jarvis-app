@@ -328,3 +328,4 @@
 2026-08-15 F354 RSGCKCO: RiskSignalCommunityKnowledgeTriple.jsx built and mounted; build exit 0
 2026-08-15 F355 SceneDatasetInvestigationTriple.jsx — scene × dataset × investigation triple coverage (SDSITRI); /v1/cinematic/scene/{id} × /v1/datasets × /v1/investigations; build exit 0; pushed to jarvis-overnight
 2026-08-15 F356 SGANSC Scene×GraphAnnotation×Scenario Triple Coverage — SceneAnnotationScenarioTriple.jsx (new, ~310 lines); mounted App.jsx; isSganscQuery+buildSganscScript wired JarvisBrain.jsx; ◈ SGANSC left:825760 zIndex:503; build exit 0
+2026-08-15 F357 TGCREP: TaskGraphCentralityReportTriple.jsx — Task × Graph Centrality × Report triple coverage; isTgcrepQuery+buildTgcrepScript wired in JarvisBrain.jsx; ◈ TGCREP left:826320 zIndex:504; build exit 0

@@ -507,6 +507,7 @@ import KnowledgeAipCentralityTriple from '@/components/cinematic/KnowledgeAipCen
 import RiskSignalCommunityKnowledgeTriple from '@/components/cinematic/RiskSignalCommunityKnowledgeTriple';
 import SceneDatasetInvestigationTriple from '@/components/cinematic/SceneDatasetInvestigationTriple';
 import SceneAnnotationScenarioTriple from '@/components/cinematic/SceneAnnotationScenarioTriple';
+import TaskGraphCentralityReportTriple from '@/components/cinematic/TaskGraphCentralityReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1615,6 +1616,8 @@ function App() {
             {/* F355 (overnight 2026-08-15): scene × dataset × investigation triple coverage — ◈ SDSITRI button (left:825200 bottom:8 zIndex:502); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/datasets + /v1/investigations; keyword-correlates each cinematic scene against datasets AND open investigations to surface FULLY TRACKED (dataset+investigation) vs DATA-BACKED (dataset only) vs CASE-LINKED (investigation only) vs DARK (neither — operational blind spot); cyan badge on FULLY TRACKED count; "sdsitri"/"scene dataset invest"/"scene data invest"/"scene dataset investigation"/"scene data case"/"tracked scene" voice trigger; jarvis:sdsitri-toggle event; 90-s auto-refresh */}
             <SceneDatasetInvestigationTriple />
             <SceneAnnotationScenarioTriple />
+            {/* F357 (overnight 2026-08-15): task × graph centrality × report triple coverage — ◈ TGCREP button (left:826320 bottom:8 zIndex:504); parallel-fetches /entities/Task + /v1/graph/centrality + /v1/reports; keyword-correlates each task against high-influence centrality nodes AND intelligence reports to surface FULLY COVERED (node+report) vs NODE LINKED (graph context, no report) vs REPORT BACKED (report, no node) vs UNTRACKED (neither — documentation and network intelligence gap); amber badge on UNTRACKED count; "tgcrep"/"task graph centrality report"/"task centrality report"/"task node report"/"untracked task" voice trigger; jarvis:tgcrep-toggle event; 90-s auto-refresh */}
+            <TaskGraphCentralityReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
