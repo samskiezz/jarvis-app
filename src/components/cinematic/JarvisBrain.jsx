@@ -574,6 +574,7 @@ import { isCgntoeQuery, buildCgntoeScript } from "./ContactGraphCentralityOpsTri
 import { isIsjrepQuery, buildIsjrepScript } from "./InvestmentSwarmReportTriple";
 import { isKgcaskQuery, buildKgcaskScript } from "./KnowledgeAipCentralityTriple";
 import { isRsgckcoQuery, buildRsgckcoScript } from "./RiskSignalCommunityKnowledgeTriple";
+import { isSdsitriQuery, buildSdsitriScript } from "./SceneDatasetInvestigationTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6277,6 +6278,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsgckco-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsgckcoScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSdsitriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sdsitri-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSdsitriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

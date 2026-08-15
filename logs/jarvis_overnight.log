@@ -326,3 +326,4 @@
 [2026-08-15] F352 InvestmentSwarmReportTriple.jsx — Investment × SwarmJob × Report Triple Coverage (ISJREP); /entities/Investment × /entities/SwarmJob × /v1/reports; mounted in App.jsx; wired in JarvisBrain.jsx; build exit 0
 2026-08-15 F353 Knowledge × AIP Skill × Graph Centrality Triple Coverage (KGCASK) — KnowledgeAipCentralityTriple.jsx; isKgcaskQuery+buildKgcaskScript in JarvisBrain.jsx; ◈ KGCASK left:824080 zIndex:500; build exit 0
 2026-08-15 F354 RSGCKCO: RiskSignalCommunityKnowledgeTriple.jsx built and mounted; build exit 0
+2026-08-15 F355 SceneDatasetInvestigationTriple.jsx — scene × dataset × investigation triple coverage (SDSITRI); /v1/cinematic/scene/{id} × /v1/datasets × /v1/investigations; build exit 0; pushed to jarvis-overnight

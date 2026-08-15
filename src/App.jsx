@@ -505,6 +505,7 @@ import ContactGraphCentralityOpsTriple from '@/components/cinematic/ContactGraph
 import InvestmentSwarmReportTriple from '@/components/cinematic/InvestmentSwarmReportTriple';
 import KnowledgeAipCentralityTriple from '@/components/cinematic/KnowledgeAipCentralityTriple';
 import RiskSignalCommunityKnowledgeTriple from '@/components/cinematic/RiskSignalCommunityKnowledgeTriple';
+import SceneDatasetInvestigationTriple from '@/components/cinematic/SceneDatasetInvestigationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1610,6 +1611,8 @@ function App() {
             {/* F353 (overnight 2026-08-15): knowledge × AIP skill × graph centrality triple coverage — ◈ KGCASK button (left:824080 bottom:8 zIndex:500); parallel-fetches /knowledge/ + /v1/aip/skill + /v1/graph/centrality; keyword-correlates each KB article against AIP skills AND centrality nodes to surface FULLY ARMED (skill+node) vs SKILL-BACKED (skill only) vs NODE-LINKED (node only) vs DORMANT (neither — knowledge isolation gap); purple badge on dormant count; "kgcask"/"knowledge aip skill"/"kb skill centrality"/"knowledge skill graph"/"dormant knowledge" voice trigger; jarvis:kgcask-toggle event; 90-s auto-refresh */}
             <KnowledgeAipCentralityTriple />
             <RiskSignalCommunityKnowledgeTriple />
+            {/* F355 (overnight 2026-08-15): scene × dataset × investigation triple coverage — ◈ SDSITRI button (left:825200 bottom:8 zIndex:502); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/datasets + /v1/investigations; keyword-correlates each cinematic scene against datasets AND open investigations to surface FULLY TRACKED (dataset+investigation) vs DATA-BACKED (dataset only) vs CASE-LINKED (investigation only) vs DARK (neither — operational blind spot); cyan badge on FULLY TRACKED count; "sdsitri"/"scene dataset invest"/"scene data invest"/"scene dataset investigation"/"scene data case"/"tracked scene" voice trigger; jarvis:sdsitri-toggle event; 90-s auto-refresh */}
+            <SceneDatasetInvestigationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
