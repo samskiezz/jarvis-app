@@ -515,6 +515,7 @@ import GraphAnnotationDatasetSwarmTriple from '@/components/cinematic/GraphAnnot
 import RiskSignalIntelOpsTriple from '@/components/cinematic/RiskSignalIntelOpsTriple';
 import SwarmJobCentralityScenarioTriple from '@/components/cinematic/SwarmJobCentralityScenarioTriple';
 import ContactSkillInvestigationTriple from '@/components/cinematic/ContactSkillInvestigationTriple';
+import DatasetSkillOpsTriple from '@/components/cinematic/DatasetSkillOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1639,6 +1640,8 @@ function App() {
             <SwarmJobCentralityScenarioTriple />
             {/* F364 (overnight 2026-08-15): contact × AIP skill × investigation triple coverage — ◈ CASITRI button (left:830240 bottom:8 zIndex:511); parallel-fetches /entities/Contact + /v1/aip/skill + /v1/investigations; keyword-correlates each contact against skills AND investigations to surface FULLY_TRACKED (skill+investigation) vs SKILLED vs INVESTIGATED vs BLIND; isCasitriQuery+buildCasitriScript wired in JarvisBrain; jarvis:casitri-toggle event; 90-s auto-refresh */}
             <ContactSkillInvestigationTriple />
+            {/* F365 (overnight 2026-08-15): dataset × AIP skill × ops event triple coverage — ◈ DASOETRI button (left:830800 bottom:8 zIndex:512); parallel-fetches /v1/datasets + /v1/aip/skill + /v1/ops/events; keyword-correlates each dataset (name/kind/description/tags/source) against AIP skills AND ops events to surface FULLY_ARMED (skill+ops — both capability backing and live operational trigger) vs SKILL_BACKED (skill only) vs OPS_TRIGGERED (ops only) vs DARK (neither — intelligence and operational blind spot); red badge on DARK count; stat tiles (datasets/skills/ops-events/fully-armed/skill-backed/ops-triggered/dark); segmented coverage bar (green/violet/orange/gray); ALL/FULLY_ARMED/SKILL_BACKED/OPS_TRIGGERED/DARK filter tabs + text search; expand dataset → split pane left=matched skills (violet scorebars + category badge) right=matched ops events (orange scorebars + type+severity badges); ASSESS → /v1/jarvis/agent/chat 2-sentence dataset operational coverage brief + TTS via jarvis:speak-dossier; isDasoetriQuery+buildDasoetriScript wired in JarvisBrain; jarvis:dasoetri-toggle event; 60-s auto-refresh */}
+            <DatasetSkillOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
