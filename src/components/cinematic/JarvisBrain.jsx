@@ -573,6 +573,7 @@ import { isGcdsscQuery, buildGcdsscScript } from "./GraphCentralityDatasetScenar
 import { isCgntoeQuery, buildCgntoeScript } from "./ContactGraphCentralityOpsTriple";
 import { isIsjrepQuery, buildIsjrepScript } from "./InvestmentSwarmReportTriple";
 import { isKgcaskQuery, buildKgcaskScript } from "./KnowledgeAipCentralityTriple";
+import { isRsgckcoQuery, buildRsgckcoScript } from "./RiskSignalCommunityKnowledgeTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6267,6 +6268,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kgcask-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKgcaskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRsgckcoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsgckco-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRsgckcoScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

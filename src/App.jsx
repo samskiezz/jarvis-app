@@ -504,6 +504,7 @@ import GraphCentralityDatasetScenarioTriple from '@/components/cinematic/GraphCe
 import ContactGraphCentralityOpsTriple from '@/components/cinematic/ContactGraphCentralityOpsTriple';
 import InvestmentSwarmReportTriple from '@/components/cinematic/InvestmentSwarmReportTriple';
 import KnowledgeAipCentralityTriple from '@/components/cinematic/KnowledgeAipCentralityTriple';
+import RiskSignalCommunityKnowledgeTriple from '@/components/cinematic/RiskSignalCommunityKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1608,6 +1609,7 @@ function App() {
             <InvestmentSwarmReportTriple />
             {/* F353 (overnight 2026-08-15): knowledge × AIP skill × graph centrality triple coverage — ◈ KGCASK button (left:824080 bottom:8 zIndex:500); parallel-fetches /knowledge/ + /v1/aip/skill + /v1/graph/centrality; keyword-correlates each KB article against AIP skills AND centrality nodes to surface FULLY ARMED (skill+node) vs SKILL-BACKED (skill only) vs NODE-LINKED (node only) vs DORMANT (neither — knowledge isolation gap); purple badge on dormant count; "kgcask"/"knowledge aip skill"/"kb skill centrality"/"knowledge skill graph"/"dormant knowledge" voice trigger; jarvis:kgcask-toggle event; 90-s auto-refresh */}
             <KnowledgeAipCentralityTriple />
+            <RiskSignalCommunityKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
