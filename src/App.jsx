@@ -513,6 +513,7 @@ import SceneContactKnowledgeTriple from '@/components/cinematic/SceneContactKnow
 import SceneInvestigationSkillTriple from '@/components/cinematic/SceneInvestigationSkillTriple';
 import GraphAnnotationDatasetSwarmTriple from '@/components/cinematic/GraphAnnotationDatasetSwarmTriple';
 import RiskSignalIntelOpsTriple from '@/components/cinematic/RiskSignalIntelOpsTriple';
+import SwarmJobCentralityScenarioTriple from '@/components/cinematic/SwarmJobCentralityScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1633,6 +1634,8 @@ function App() {
             <GraphAnnotationDatasetSwarmTriple />
             {/* F362 (overnight 2026-08-15): risk signal × intel profile × ops event triple coverage — ◈ RISOE button (left:829120 bottom:8 zIndex:509); parallel-fetches /entities/RiskSignal + /entities/IntelProfile + /v1/ops/events; keyword-correlates each risk signal against intel profiles AND ops events to surface FULLY_ACTIVE (intel+ops) vs INTEL_BACKED vs OPS_TRIGGERED vs BLIND; isRisoeQuery+buildRisoeScript wired in JarvisBrain; jarvis:risoe-toggle event; 90-s auto-refresh */}
             <RiskSignalIntelOpsTriple />
+            {/* F363 (overnight 2026-08-15): swarm job × graph centrality × scenario triple coverage — ◈ SJGCSC button (left:829680 bottom:8 zIndex:510); parallel-fetches /entities/SwarmJob + /v1/graph/centrality + /v1/scenario/list; keyword-correlates each swarm job against centrality nodes AND scenarios to surface FULLY_PLANNED (node+scenario) vs CENTRALITY_MAPPED vs SCENARIO_LINKED vs UNPLANNED; isSjgcscQuery+buildSjgcscScript wired in JarvisBrain; jarvis:sjgcsc-toggle event; 90-s auto-refresh */}
+            <SwarmJobCentralityScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

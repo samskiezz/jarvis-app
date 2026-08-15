@@ -335,3 +335,4 @@
 2026-08-15 F360 SISC Scene×Investigation×Skill triple coverage — SceneInvestigationSkillTriple.jsx + JarvisBrain wired; build exit 0; pushed to jarvis-overnight
 2026-08-15 F361 GADSJ: GraphAnnotationDatasetSwarmTriple.jsx — Graph Annotation × Dataset × SwarmJob triple coverage; /v1/graph/annotations × /v1/datasets × /entities/SwarmJob; isGadsjQuery+buildGadsjScript wired in JarvisBrain.jsx; ◈ GADSJ left:828560 zIndex:508; build exit 0
 2026-08-15 | F362 | RISOE | RiskSignalIntelOpsTriple.jsx (new, ~320 lines) | /entities/RiskSignal × /entities/IntelProfile × /v1/ops/events | FULLY_ACTIVE/INTEL_BACKED/OPS_TRIGGERED/BLIND coverage | ◈ RISOE left:829120 zIndex:509 | build exit 0
+2026-08-15 | F363 | SJGCSC | SwarmJobCentralityScenarioTriple.jsx (new, ~290 lines) | /entities/SwarmJob × /v1/graph/centrality × /v1/scenario/list | FULLY_PLANNED/CENTRALITY_MAPPED/SCENARIO_LINKED/UNPLANNED coverage | ◈ SJGCSC left:829680 zIndex:510 | build exit 0

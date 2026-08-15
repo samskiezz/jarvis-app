@@ -582,6 +582,7 @@ import { isScckcoQuery, buildScckcoScript } from "./SceneContactKnowledgeTriple"
 import { isSiscQuery, buildSiscScript } from "./SceneInvestigationSkillTriple";
 import { isGadsjQuery, buildGadsjScript } from "./GraphAnnotationDatasetSwarmTriple";
 import { isRisoeQuery, buildRisoeScript } from "./RiskSignalIntelOpsTriple";
+import { isSjgcscQuery, buildSjgcscScript } from "./SwarmJobCentralityScenarioTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6351,6 +6352,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:risoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRisoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSjgcscQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjgcsc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjgcscScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
