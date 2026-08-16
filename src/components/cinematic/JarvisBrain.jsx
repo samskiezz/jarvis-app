@@ -596,6 +596,7 @@ import { isCliannQuery, buildCliannScript } from "./ContactLiveAnnotationTriple"
 import { isSjliannQuery, buildSjliannScript } from "./SwarmJobLiveAnnotationTriple";
 import { isInvliannQuery, buildInvliannScript } from "./InvestmentLiveAnnotationTriple";
 import { isRsliannQuery, buildRsliannScript } from "./RiskSignalLiveAnnotationTriple";
+import { isIpsoeQuery, buildIpsoeScript } from "./IntelProfileSkillOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6491,6 +6492,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsliann-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsliannScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIpsoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipsoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpsoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
