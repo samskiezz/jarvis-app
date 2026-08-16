@@ -534,6 +534,7 @@ import KnowledgeLiveAnnotationTriple from '@/components/cinematic/KnowledgeLiveA
 import SceneLiveAnnotationTriple from '@/components/cinematic/SceneLiveAnnotationTriple';
 import InvestigationLiveAnnotationTriple from '@/components/cinematic/InvestigationLiveAnnotationTriple';
 import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnnotationTriple';
+import GraphAnnotationTaskDatasetTriple from '@/components/cinematic/GraphAnnotationTaskDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1696,6 +1697,8 @@ function App() {
             <InvestigationLiveAnnotationTriple />
             {/* F383 (overnight 2026-08-16): AIP skill × live intel × graph annotation triple coverage — ◈ ASLIANN (left:840880 bottom:8 zIndex:530); parallel-fetches /v1/aip/skill + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each skill against live world events AND graph annotations to surface FULLY_PRIMED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_TAGGED (annotation only) vs DORMANT (neither — capability intelligence gap); amber badge on FULLY_PRIMED; gray badge on DORMANT; isAsliannQuery+buildAsliannScript wired in JarvisBrain; jarvis:asliann-toggle event; 60-s auto-refresh */}
             <AipSkillLiveAnnotationTriple />
+            {/* F384 (overnight 2026-08-16): graph annotation × task × dataset triple coverage — ◈ GATADS (left:841440 bottom:8 zIndex:531); parallel-fetches /v1/graph/annotations + /entities/Task + /v1/datasets; keyword-correlates each graph annotation (label/entity/notes/tags) against active tasks AND datasets to surface FULLY_SUPPORTED (task+dataset — annotation has both operational backing and data source coverage) vs TASK_LINKED (task found, no dataset) vs DATA_BACKED (dataset found, no task) vs UNADDRESSED (neither — annotation governance gap); green badge on FULLY_SUPPORTED count; gray badge on UNADDRESSED count; isGatadsQuery+buildGatadsScript wired in JarvisBrain; jarvis:gatads-toggle event; 90-s auto-refresh */}
+            <GraphAnnotationTaskDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
