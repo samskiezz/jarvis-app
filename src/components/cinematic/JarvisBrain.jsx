@@ -601,6 +601,7 @@ import { isDlgannQuery, buildDlgannScript } from "./DatasetLiveAnnotationTriple"
 import { isRpliannQuery, buildRpliannScript } from "./ReportLiveAnnotationTriple";
 import { isKliannQuery, buildKliannScript } from "./KnowledgeLiveAnnotationTriple";
 import { isSclgannQuery, buildSclgannScript } from "./SceneLiveAnnotationTriple";
+import { isInlgannQuery, buildInlgannScript } from "./InvestigationLiveAnnotationTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6541,6 +6542,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sclgann-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSclgannScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isInlgannQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:inlgann-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInlgannScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
