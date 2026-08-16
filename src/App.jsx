@@ -524,6 +524,7 @@ import IntelProfileLiveAnnotationTriple from '@/components/cinematic/IntelProfil
 import TaskLiveIntelAnnotationTriple from '@/components/cinematic/TaskLiveIntelAnnotationTriple';
 import ScenarioLiveIntelAnnotationTriple from '@/components/cinematic/ScenarioLiveIntelAnnotationTriple';
 import ContactLiveAnnotationTriple from '@/components/cinematic/ContactLiveAnnotationTriple';
+import SwarmJobLiveAnnotationTriple from '@/components/cinematic/SwarmJobLiveAnnotationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1666,6 +1667,8 @@ function App() {
             <ScenarioLiveIntelAnnotationTriple />
             {/* F373 (overnight 2026-08-16): contact × live intel × graph annotation triple coverage — ◈ CLIANN button (left:835280 bottom:8 zIndex:520); parallel-fetches /entities/Contact + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each contact against live world events AND graph annotations to surface FULLY_TRACKED (live+annotation) vs WORLD_FLAGGED (live only) vs GRAPH_TAGGED (annotation only) vs BLIND (neither — surveillance gap); red badge on FULLY_TRACKED count; gray badge on BLIND count; isCliannQuery+buildCliannScript wired in JarvisBrain; jarvis:cliann-toggle event; 60-s auto-refresh */}
             <ContactLiveAnnotationTriple />
+            {/* F374 (overnight 2026-08-16): swarm job × live intel × graph annotation triple coverage — ◈ SJLIANN button (left:835840 bottom:8 zIndex:521); parallel-fetches /entities/SwarmJob + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each swarm job against live world events AND graph annotations to surface FULLY_ARMED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_TAGGED (annotation only) vs DARK (neither — operational blind spot); violet badge on FULLY_ARMED count; gray badge on DARK count; isSjliannQuery+buildSjliannScript wired in JarvisBrain; jarvis:sjliann-toggle event; 60-s auto-refresh */}
+            <SwarmJobLiveAnnotationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
