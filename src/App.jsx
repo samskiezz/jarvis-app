@@ -516,6 +516,7 @@ import RiskSignalIntelOpsTriple from '@/components/cinematic/RiskSignalIntelOpsT
 import SwarmJobCentralityScenarioTriple from '@/components/cinematic/SwarmJobCentralityScenarioTriple';
 import ContactSkillInvestigationTriple from '@/components/cinematic/ContactSkillInvestigationTriple';
 import DatasetSkillOpsTriple from '@/components/cinematic/DatasetSkillOpsTriple';
+import InvestmentAnnotationScenarioTriple from '@/components/cinematic/InvestmentAnnotationScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1642,6 +1643,8 @@ function App() {
             <ContactSkillInvestigationTriple />
             {/* F365 (overnight 2026-08-15): dataset × AIP skill × ops event triple coverage — ◈ DASOETRI button (left:830800 bottom:8 zIndex:512); parallel-fetches /v1/datasets + /v1/aip/skill + /v1/ops/events; keyword-correlates each dataset (name/kind/description/tags/source) against AIP skills AND ops events to surface FULLY_ARMED (skill+ops — both capability backing and live operational trigger) vs SKILL_BACKED (skill only) vs OPS_TRIGGERED (ops only) vs DARK (neither — intelligence and operational blind spot); red badge on DARK count; stat tiles (datasets/skills/ops-events/fully-armed/skill-backed/ops-triggered/dark); segmented coverage bar (green/violet/orange/gray); ALL/FULLY_ARMED/SKILL_BACKED/OPS_TRIGGERED/DARK filter tabs + text search; expand dataset → split pane left=matched skills (violet scorebars + category badge) right=matched ops events (orange scorebars + type+severity badges); ASSESS → /v1/jarvis/agent/chat 2-sentence dataset operational coverage brief + TTS via jarvis:speak-dossier; isDasoetriQuery+buildDasoetriScript wired in JarvisBrain; jarvis:dasoetri-toggle event; 60-s auto-refresh */}
             <DatasetSkillOpsTriple />
+            {/* F366 (overnight 2026-08-16): investment × graph annotation × scenario triple coverage — ◈ IGANSC button (left:831360 bottom:8 zIndex:513); parallel-fetches /entities/Investment + /v1/graph/annotations + /v1/scenario/list; keyword-correlates each investment against annotations AND scenarios to surface FULLY_PLANNED (annotation+scenario) vs GRAPH_MAPPED (annotation only) vs SCENARIO_LINKED (scenario only) vs UNPLANNED (neither — strategic planning gap); gray badge on UNPLANNED count; isIganscQuery+buildIganscScript wired in JarvisBrain; jarvis:igansc-toggle event; 90-s auto-refresh */}
+            <InvestmentAnnotationScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
