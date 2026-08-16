@@ -529,6 +529,7 @@ import InvestmentLiveAnnotationTriple from '@/components/cinematic/InvestmentLiv
 import RiskSignalLiveAnnotationTriple from '@/components/cinematic/RiskSignalLiveAnnotationTriple';
 import IntelProfileSkillOpsTriple from '@/components/cinematic/IntelProfileSkillOpsTriple';
 import DatasetLiveAnnotationTriple from '@/components/cinematic/DatasetLiveAnnotationTriple';
+import ReportLiveAnnotationTriple from '@/components/cinematic/ReportLiveAnnotationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1681,6 +1682,8 @@ function App() {
             <IntelProfileSkillOpsTriple />
             {/* F378 (overnight 2026-08-16): dataset × live intel × graph annotation triple coverage — ◈ DLGANN button (left:838080 bottom:8 zIndex:525); parallel-fetches /v1/datasets + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each dataset against live world events AND graph annotations to surface FULLY_ARMED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_TAGGED (annotation only) vs DARK (neither — no coverage); cyan badge on FULLY_ARMED count; gray badge on DARK count; isDlgannQuery+buildDlgannScript wired in JarvisBrain; jarvis:dlgann-toggle event; 60-s auto-refresh */}
             <DatasetLiveAnnotationTriple />
+            {/* F379 (overnight 2026-08-16): report × live intel × graph annotation triple coverage — ◈ RPLIANN button (left:838640 bottom:8 zIndex:526); parallel-fetches /v1/reports + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each intelligence report against live world events AND graph annotations to surface FULLY_ILLUMINATED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_TAGGED (annotation only) vs DARK (neither — no coverage); cyan badge on FULLY_ILLUMINATED count; gray badge on DARK count; isRpliannQuery+buildRpliannScript wired in JarvisBrain; jarvis:rpliann-toggle event; 60-s auto-refresh */}
+            <ReportLiveAnnotationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
