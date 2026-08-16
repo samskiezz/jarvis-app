@@ -520,6 +520,7 @@ import InvestmentAnnotationScenarioTriple from '@/components/cinematic/Investmen
 import KnowledgeAnnotationOpsTriple from '@/components/cinematic/KnowledgeAnnotationOpsTriple';
 import ContactLiveIntelAnnotationTriple from '@/components/cinematic/ContactLiveIntelAnnotationTriple';
 import RiskSignalAnnotationTaskTriple from '@/components/cinematic/RiskSignalAnnotationTaskTriple';
+import IntelProfileLiveAnnotationTriple from '@/components/cinematic/IntelProfileLiveAnnotationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1654,6 +1655,8 @@ function App() {
             <ContactLiveIntelAnnotationTriple />
             {/* F369 (overnight 2026-08-16): risk signal × graph annotation × task triple coverage — ◈ RSGATRI button (left:833040 bottom:8 zIndex:516); parallel-fetches /entities/RiskSignal + /v1/graph/annotations + /entities/Task; keyword-correlates each risk signal against graph annotations AND tasks to surface FULLY_COVERED (annotation+task) vs ANNOTATED (annotation only) vs TASKED (task only) vs EXPOSED (neither — risk intelligence gap); cyan badge on FULLY_COVERED count; gray badge on EXPOSED count; isRsgatriQuery+buildRsgatriScript wired in JarvisBrain; jarvis:rsgatri-toggle event; 60-s auto-refresh */}
             <RiskSignalAnnotationTaskTriple />
+            {/* F370 (overnight 2026-08-16): intel profile × live intel × graph annotation triple coverage — ◈ IPLIGA button (left:833600 bottom:8 zIndex:517); parallel-fetches /entities/IntelProfile + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each intel profile against live world events AND graph annotations to surface FULLY_ALARMED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_ANNOTATED (annotation only) vs DARK (neither — intelligence blind spot); red badge on FULLY_ALARMED count; gray badge on DARK count; isIpligaQuery+buildIpligaScript wired in JarvisBrain; jarvis:ipliga-toggle event; 60-s auto-refresh */}
+            <IntelProfileLiveAnnotationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
