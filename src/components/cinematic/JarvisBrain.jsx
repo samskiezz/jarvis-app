@@ -586,6 +586,7 @@ import { isSjgcscQuery, buildSjgcscScript } from "./SwarmJobCentralityScenarioTr
 import { isCasitriQuery, buildCasitriScript } from "./ContactSkillInvestigationTriple";
 import { isDasoetriQuery, buildDasoetriScript } from "./DatasetSkillOpsTriple";
 import { isIganscQuery, buildIganscScript } from "./InvestmentAnnotationScenarioTriple";
+import { isKgaoeQuery, buildKgaoeScript } from "./KnowledgeAnnotationOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6391,6 +6392,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igansc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIganscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isKgaoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kgaoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKgaoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
