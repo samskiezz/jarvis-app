@@ -533,6 +533,7 @@ import ReportLiveAnnotationTriple from '@/components/cinematic/ReportLiveAnnotat
 import KnowledgeLiveAnnotationTriple from '@/components/cinematic/KnowledgeLiveAnnotationTriple';
 import SceneLiveAnnotationTriple from '@/components/cinematic/SceneLiveAnnotationTriple';
 import InvestigationLiveAnnotationTriple from '@/components/cinematic/InvestigationLiveAnnotationTriple';
+import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnnotationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1693,6 +1694,8 @@ function App() {
             <SceneLiveAnnotationTriple />
             {/* F382 (overnight 2026-08-16): investigation × live intel × graph annotation triple coverage — ◈ INLGANN button (left:840320 bottom:8 zIndex:529); parallel-fetches /v1/investigations + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each open investigation case against live world events AND graph annotations to surface FULLY_WIRED (live+annotation — case has both current world event trigger and graph annotation backing) vs WORLD_TRIGGERED (live only) vs GRAPH_TAGGED (annotation only) vs COLD (neither — case has no live or graph backing — intelligence gap); cyan badge on FULLY_WIRED count; gray badge on COLD count; isInlgannQuery+buildInlgannScript wired in JarvisBrain; jarvis:inlgann-toggle event; 60-s auto-refresh */}
             <InvestigationLiveAnnotationTriple />
+            {/* F383 (overnight 2026-08-16): AIP skill × live intel × graph annotation triple coverage — ◈ ASLIANN (left:840880 bottom:8 zIndex:530); parallel-fetches /v1/aip/skill + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each skill against live world events AND graph annotations to surface FULLY_PRIMED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_TAGGED (annotation only) vs DORMANT (neither — capability intelligence gap); amber badge on FULLY_PRIMED; gray badge on DORMANT; isAsliannQuery+buildAsliannScript wired in JarvisBrain; jarvis:asliann-toggle event; 60-s auto-refresh */}
+            <AipSkillLiveAnnotationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
