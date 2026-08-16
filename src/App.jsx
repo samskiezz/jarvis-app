@@ -525,6 +525,7 @@ import TaskLiveIntelAnnotationTriple from '@/components/cinematic/TaskLiveIntelA
 import ScenarioLiveIntelAnnotationTriple from '@/components/cinematic/ScenarioLiveIntelAnnotationTriple';
 import ContactLiveAnnotationTriple from '@/components/cinematic/ContactLiveAnnotationTriple';
 import SwarmJobLiveAnnotationTriple from '@/components/cinematic/SwarmJobLiveAnnotationTriple';
+import InvestmentLiveAnnotationTriple from '@/components/cinematic/InvestmentLiveAnnotationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1669,6 +1670,8 @@ function App() {
             <ContactLiveAnnotationTriple />
             {/* F374 (overnight 2026-08-16): swarm job × live intel × graph annotation triple coverage — ◈ SJLIANN button (left:835840 bottom:8 zIndex:521); parallel-fetches /entities/SwarmJob + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each swarm job against live world events AND graph annotations to surface FULLY_ARMED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_TAGGED (annotation only) vs DARK (neither — operational blind spot); violet badge on FULLY_ARMED count; gray badge on DARK count; isSjliannQuery+buildSjliannScript wired in JarvisBrain; jarvis:sjliann-toggle event; 60-s auto-refresh */}
             <SwarmJobLiveAnnotationTriple />
+            {/* F375 (overnight 2026-08-16): investment × live intel × graph annotation triple coverage — ◈ INVLIANN button (left:836400 bottom:8 zIndex:522); parallel-fetches /entities/Investment + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each investment against live world events AND graph annotations to surface FULLY_EXPOSED (live+annotation) vs WORLD_FLAGGED (live only) vs GRAPH_TAGGED (annotation only) vs STABLE (neither — no exposure); red badge on FULLY_EXPOSED count; gray badge on STABLE count; isInvliannQuery+buildInvliannScript wired in JarvisBrain; jarvis:invliann-toggle event; 60-s auto-refresh */}
+            <InvestmentLiveAnnotationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
