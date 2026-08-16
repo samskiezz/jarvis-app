@@ -526,6 +526,7 @@ import ScenarioLiveIntelAnnotationTriple from '@/components/cinematic/ScenarioLi
 import ContactLiveAnnotationTriple from '@/components/cinematic/ContactLiveAnnotationTriple';
 import SwarmJobLiveAnnotationTriple from '@/components/cinematic/SwarmJobLiveAnnotationTriple';
 import InvestmentLiveAnnotationTriple from '@/components/cinematic/InvestmentLiveAnnotationTriple';
+import RiskSignalLiveAnnotationTriple from '@/components/cinematic/RiskSignalLiveAnnotationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1672,6 +1673,8 @@ function App() {
             <SwarmJobLiveAnnotationTriple />
             {/* F375 (overnight 2026-08-16): investment × live intel × graph annotation triple coverage — ◈ INVLIANN button (left:836400 bottom:8 zIndex:522); parallel-fetches /entities/Investment + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each investment against live world events AND graph annotations to surface FULLY_EXPOSED (live+annotation) vs WORLD_FLAGGED (live only) vs GRAPH_TAGGED (annotation only) vs STABLE (neither — no exposure); red badge on FULLY_EXPOSED count; gray badge on STABLE count; isInvliannQuery+buildInvliannScript wired in JarvisBrain; jarvis:invliann-toggle event; 60-s auto-refresh */}
             <InvestmentLiveAnnotationTriple />
+            {/* F376 (overnight 2026-08-16): risk signal × live intel × graph annotation triple coverage — ◈ RSLIANN button (left:836960 bottom:8 zIndex:523); parallel-fetches /entities/RiskSignal + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each risk signal against live world events AND graph annotations to surface FULLY_ELEVATED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_TAGGED (annotation only) vs DORMANT (neither — no activation); red badge on FULLY_ELEVATED count; gray badge on DORMANT count; isRsliannQuery+buildRsliannScript wired in JarvisBrain; jarvis:rsliann-toggle event; 60-s auto-refresh */}
+            <RiskSignalLiveAnnotationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

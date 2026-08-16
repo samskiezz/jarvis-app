@@ -595,6 +595,7 @@ import { isScliannQuery, buildScliannScript } from "./ScenarioLiveIntelAnnotatio
 import { isCliannQuery, buildCliannScript } from "./ContactLiveAnnotationTriple";
 import { isSjliannQuery, buildSjliannScript } from "./SwarmJobLiveAnnotationTriple";
 import { isInvliannQuery, buildInvliannScript } from "./InvestmentLiveAnnotationTriple";
+import { isRsliannQuery, buildRsliannScript } from "./RiskSignalLiveAnnotationTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6481,6 +6482,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invliann-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvliannScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRsliannQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsliann-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRsliannScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
