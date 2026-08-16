@@ -521,6 +521,7 @@ import KnowledgeAnnotationOpsTriple from '@/components/cinematic/KnowledgeAnnota
 import ContactLiveIntelAnnotationTriple from '@/components/cinematic/ContactLiveIntelAnnotationTriple';
 import RiskSignalAnnotationTaskTriple from '@/components/cinematic/RiskSignalAnnotationTaskTriple';
 import IntelProfileLiveAnnotationTriple from '@/components/cinematic/IntelProfileLiveAnnotationTriple';
+import TaskLiveIntelAnnotationTriple from '@/components/cinematic/TaskLiveIntelAnnotationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1657,6 +1658,8 @@ function App() {
             <RiskSignalAnnotationTaskTriple />
             {/* F370 (overnight 2026-08-16): intel profile × live intel × graph annotation triple coverage — ◈ IPLIGA button (left:833600 bottom:8 zIndex:517); parallel-fetches /entities/IntelProfile + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each intel profile against live world events AND graph annotations to surface FULLY_ALARMED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_ANNOTATED (annotation only) vs DARK (neither — intelligence blind spot); red badge on FULLY_ALARMED count; gray badge on DARK count; isIpligaQuery+buildIpligaScript wired in JarvisBrain; jarvis:ipliga-toggle event; 60-s auto-refresh */}
             <IntelProfileLiveAnnotationTriple />
+            {/* F371 (overnight 2026-08-16): task × live intel × graph annotation triple coverage — ◈ TLGANN button (left:834160 bottom:8 zIndex:518); parallel-fetches /entities/Task + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each task against live world events AND graph annotations to surface FULLY_WIRED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_ANNOTATED (annotation only) vs UNTRACKED (neither — operational blind spot); cyan badge on FULLY_WIRED count; gray badge on UNTRACKED count; isTlgannQuery+buildTlgannScript wired in JarvisBrain; jarvis:tlgann-toggle event; 60-s auto-refresh */}
+            <TaskLiveIntelAnnotationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

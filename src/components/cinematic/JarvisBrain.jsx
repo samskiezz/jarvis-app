@@ -590,6 +590,7 @@ import { isKgaoeQuery, buildKgaoeScript } from "./KnowledgeAnnotationOpsTriple";
 import { isClgannQuery, buildClgannScript } from "./ContactLiveIntelAnnotationTriple";
 import { isRsgatriQuery, buildRsgatriScript } from "./RiskSignalAnnotationTaskTriple";
 import { isIpligaQuery, buildIpligaScript } from "./IntelProfileLiveAnnotationTriple";
+import { isTlgannQuery, buildTlgannScript } from "./TaskLiveIntelAnnotationTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6431,6 +6432,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipliga-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpligaScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTlgannQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tlgann-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTlgannScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
