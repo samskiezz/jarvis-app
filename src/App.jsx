@@ -535,6 +535,7 @@ import SceneLiveAnnotationTriple from '@/components/cinematic/SceneLiveAnnotatio
 import InvestigationLiveAnnotationTriple from '@/components/cinematic/InvestigationLiveAnnotationTriple';
 import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnnotationTriple';
 import GraphAnnotationTaskDatasetTriple from '@/components/cinematic/GraphAnnotationTaskDatasetTriple';
+import ContactOpsDatasetTriple from '@/components/cinematic/ContactOpsDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1699,6 +1700,8 @@ function App() {
             <AipSkillLiveAnnotationTriple />
             {/* F384 (overnight 2026-08-16): graph annotation × task × dataset triple coverage — ◈ GATADS (left:841440 bottom:8 zIndex:531); parallel-fetches /v1/graph/annotations + /entities/Task + /v1/datasets; keyword-correlates each graph annotation (label/entity/notes/tags) against active tasks AND datasets to surface FULLY_SUPPORTED (task+dataset — annotation has both operational backing and data source coverage) vs TASK_LINKED (task found, no dataset) vs DATA_BACKED (dataset found, no task) vs UNADDRESSED (neither — annotation governance gap); green badge on FULLY_SUPPORTED count; gray badge on UNADDRESSED count; isGatadsQuery+buildGatadsScript wired in JarvisBrain; jarvis:gatads-toggle event; 90-s auto-refresh */}
             <GraphAnnotationTaskDatasetTriple />
+            {/* F385 (overnight 2026-08-16): contact × ops event × dataset triple coverage — ◈ COEDS (left:842000 bottom:8 zIndex:532); parallel-fetches /entities/Contact + /v1/ops/events + /v1/datasets; keyword-correlates each contact (name/role/company/sector/aliases) against live ops events AND datasets to surface FULLY_TRACKED (ops+dataset) vs OPS_FLAGGED (ops only) vs DATA_BACKED (dataset only) vs UNTRACKED (neither — contact registry intelligence gap); cyan badge on FULLY_TRACKED count; gray badge on UNTRACKED count; isCoedQuery+buildCoedScript wired in JarvisBrain; jarvis:coeds-toggle event; 90-s auto-refresh */}
+            <ContactOpsDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
