@@ -518,6 +518,7 @@ import ContactSkillInvestigationTriple from '@/components/cinematic/ContactSkill
 import DatasetSkillOpsTriple from '@/components/cinematic/DatasetSkillOpsTriple';
 import InvestmentAnnotationScenarioTriple from '@/components/cinematic/InvestmentAnnotationScenarioTriple';
 import KnowledgeAnnotationOpsTriple from '@/components/cinematic/KnowledgeAnnotationOpsTriple';
+import ContactLiveIntelAnnotationTriple from '@/components/cinematic/ContactLiveIntelAnnotationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1648,6 +1649,8 @@ function App() {
             <InvestmentAnnotationScenarioTriple />
             {/* F367 (overnight 2026-08-16): knowledge × graph annotation × ops event triple coverage — ◈ KGAOE button (left:831920 bottom:8 zIndex:514); parallel-fetches /knowledge + /v1/graph/annotations + /v1/ops/events; keyword-correlates each knowledge item against annotations AND ops events to surface FULLY_WIRED (annotation+ops) vs GRAPH_TAGGED (annotation only) vs OPS_TRIGGERED (ops only) vs DORMANT (neither — intelligence and operational gap); gray badge on DORMANT count; isKgaoeQuery+buildKgaoeScript wired in JarvisBrain; jarvis:kgaoe-toggle event; 90-s auto-refresh */}
             <KnowledgeAnnotationOpsTriple />
+            {/* F368 (overnight 2026-08-16): contact × live intel × graph annotation triple coverage — ◈ CLGANN button (left:832480 bottom:8 zIndex:515); parallel-fetches /entities/Contact + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each contact against live world events AND graph annotations to surface FULLY_ALARMED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_ANNOTATED (annotation only) vs DARK (neither — personnel intelligence blind spot); amber badge on FULLY_ALARMED count; gray badge on DARK count; isClgannQuery+buildClgannScript wired in JarvisBrain; jarvis:clgann-toggle event; 60-s auto-refresh */}
+            <ContactLiveIntelAnnotationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

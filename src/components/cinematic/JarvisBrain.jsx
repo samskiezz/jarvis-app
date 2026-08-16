@@ -587,6 +587,7 @@ import { isCasitriQuery, buildCasitriScript } from "./ContactSkillInvestigationT
 import { isDasoetriQuery, buildDasoetriScript } from "./DatasetSkillOpsTriple";
 import { isIganscQuery, buildIganscScript } from "./InvestmentAnnotationScenarioTriple";
 import { isKgaoeQuery, buildKgaoeScript } from "./KnowledgeAnnotationOpsTriple";
+import { isClgannQuery, buildClgannScript } from "./ContactLiveIntelAnnotationTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6401,6 +6402,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kgaoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKgaoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isClgannQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:clgann-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildClgannScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
