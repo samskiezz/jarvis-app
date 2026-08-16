@@ -528,6 +528,7 @@ import SwarmJobLiveAnnotationTriple from '@/components/cinematic/SwarmJobLiveAnn
 import InvestmentLiveAnnotationTriple from '@/components/cinematic/InvestmentLiveAnnotationTriple';
 import RiskSignalLiveAnnotationTriple from '@/components/cinematic/RiskSignalLiveAnnotationTriple';
 import IntelProfileSkillOpsTriple from '@/components/cinematic/IntelProfileSkillOpsTriple';
+import DatasetLiveAnnotationTriple from '@/components/cinematic/DatasetLiveAnnotationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1678,6 +1679,8 @@ function App() {
             <RiskSignalLiveAnnotationTriple />
             {/* F377 (overnight 2026-08-16): intel profile × aip skill × ops event triple coverage — ◈ IPSOE button (left:837520 bottom:8 zIndex:524); parallel-fetches /entities/IntelProfile + /v1/aip/skill + /v1/ops/events; keyword-correlates each intel profile against AIP skills AND ops events to surface FULLY_WIRED (skill+ops) vs SKILL_BACKED (skill only) vs OPS_TRIGGERED (ops only) vs DARK (neither — no coverage); cyan badge on FULLY_WIRED count; red badge on DARK count; isIpsoeQuery+buildIpsoeScript wired in JarvisBrain; jarvis:ipsoe-toggle event; 60-s auto-refresh */}
             <IntelProfileSkillOpsTriple />
+            {/* F378 (overnight 2026-08-16): dataset × live intel × graph annotation triple coverage — ◈ DLGANN button (left:838080 bottom:8 zIndex:525); parallel-fetches /v1/datasets + /functions/getLiveIntel + /v1/graph/annotations; keyword-correlates each dataset against live world events AND graph annotations to surface FULLY_ARMED (live+annotation) vs WORLD_TRIGGERED (live only) vs GRAPH_TAGGED (annotation only) vs DARK (neither — no coverage); cyan badge on FULLY_ARMED count; gray badge on DARK count; isDlgannQuery+buildDlgannScript wired in JarvisBrain; jarvis:dlgann-toggle event; 60-s auto-refresh */}
+            <DatasetLiveAnnotationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
