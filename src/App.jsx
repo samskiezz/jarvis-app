@@ -537,6 +537,7 @@ import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnn
 import GraphAnnotationTaskDatasetTriple from '@/components/cinematic/GraphAnnotationTaskDatasetTriple';
 import ContactOpsDatasetTriple from '@/components/cinematic/ContactOpsDatasetTriple';
 import SceneGraphCommunityRiskTriple from '@/components/cinematic/SceneGraphCommunityRiskTriple';
+import SwarmJobKnowledgeCentralityTriple from '@/components/cinematic/SwarmJobKnowledgeCentralityTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1705,6 +1706,8 @@ function App() {
             <ContactOpsDatasetTriple />
             {/* F386 (overnight 2026-08-17): scene × graph community × risk signal triple coverage — ◈ SCGCRISK button (left:842560 bottom:8 zIndex:533); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/graph/communities + /entities/RiskSignal; keyword-correlates each cinematic scene against graph network communities AND active risk signals to surface FULLY_ALARMED (community+risk) vs COMMUNITY_BACKED (community only) vs RISK_FLAGGED (risk only) vs DARK (neither — operational blind spot); red badge on FULLY_ALARMED count; gray badge on DARK count; isScgcriskQuery+buildScgcriskScript wired in JarvisBrain; jarvis:scgcrisk-toggle event; 90-s auto-refresh */}
             <SceneGraphCommunityRiskTriple />
+            {/* F387 (overnight 2026-08-17): swarm job × knowledge × graph centrality triple coverage — ◈ SJKGCEN (left:843120 bottom:8 zIndex:534); parallel-fetches /entities/SwarmJob + /knowledge/ + /v1/graph/centrality; keyword-correlates each swarm job against KB articles AND top-influence centrality nodes to surface FULLY_ARMED (KB+node) vs KB_BACKED vs CENTRALITY_MAPPED vs BLIND; violet badge on FULLY_ARMED; gray badge on BLIND; isSwjkgcenQuery+buildSwjkgcenScript wired in JarvisBrain; jarvis:sjkgcen-toggle event; 90-s auto-refresh */}
+            <SwarmJobKnowledgeCentralityTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
