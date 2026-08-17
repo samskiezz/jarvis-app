@@ -616,6 +616,7 @@ import { isScaskdsQuery, buildScaskdsScript } from "./SceneAipSkillDatasetTriple
 import { isTipgcQuery, buildTipgcScript } from "./TaskIntelProfileCommunityTriple";
 import { isTgcknQuery, buildTgcknScript } from "./TaskCentralityKnowledgeTriple";
 import { isIpinvscQuery, buildIpinvscScript } from "./IntelProfileInvestmentScenarioTriple";
+import { isCkiknowQuery, buildCkiknowScript } from "./ContactKnowledgeInvestigationTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6691,6 +6692,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipinvsc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpinvscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCkiknowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ckiknow-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCkiknowScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
