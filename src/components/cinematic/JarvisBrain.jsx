@@ -617,6 +617,7 @@ import { isTipgcQuery, buildTipgcScript } from "./TaskIntelProfileCommunityTripl
 import { isTgcknQuery, buildTgcknScript } from "./TaskCentralityKnowledgeTriple";
 import { isIpinvscQuery, buildIpinvscScript } from "./IntelProfileInvestmentScenarioTriple";
 import { isCkiknowQuery, buildCkiknowScript } from "./ContactKnowledgeInvestigationTriple";
+import { isSjroeQuery, buildSjroeScript } from "./SwarmJobReportOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6701,6 +6702,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ckiknow-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCkiknowScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSjroeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjroe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjroeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
