@@ -545,6 +545,7 @@ import InvestmentInvestigationKnowledgeTriple from '@/components/cinematic/Inves
 import RiskSignalReportDatasetTriple from '@/components/cinematic/RiskSignalReportDatasetTriple';
 import SceneAipSkillDatasetTriple from '@/components/cinematic/SceneAipSkillDatasetTriple';
 import TaskIntelProfileCommunityTriple from '@/components/cinematic/TaskIntelProfileCommunityTriple';
+import TaskCentralityKnowledgeTriple from '@/components/cinematic/TaskCentralityKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1728,6 +1729,7 @@ function App() {
             {/* F393 (overnight 2026-08-17): scene × aip skill × dataset triple coverage — ◈ SCASKDS (left:846480 bottom:8 zIndex:540); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/aip/skill + /v1/datasets; keyword-correlates each cinematic scene against AIP skills AND datasets to surface FULLY_POWERED (skill+dataset) vs SKILLED vs DATA_BACKED vs DARK; green badge on FULLY_POWERED count; gray badge on DARK count; isScaskdsQuery+buildScaskdsScript wired in JarvisBrain; jarvis:scaskds-toggle event; 90-s auto-refresh */}
             <SceneAipSkillDatasetTriple />
             <TaskIntelProfileCommunityTriple />
+            <TaskCentralityKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
