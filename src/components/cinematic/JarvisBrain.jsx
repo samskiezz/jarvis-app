@@ -612,6 +612,7 @@ import { isIgcdsQuery, buildIgcdsScript } from "./InvestmentGraphCommunityDatase
 import { isCsrepQuery, buildCsrepScript } from "./ContactScenarioReportTriple";
 import { isIiknowQuery, buildIiknowScript } from "./InvestmentInvestigationKnowledgeTriple";
 import { isRrdsQuery, buildRrdsScript } from "./RiskSignalReportDatasetTriple";
+import { isScaskdsQuery, buildScaskdsScript } from "./SceneAipSkillDatasetTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6651,6 +6652,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rrds-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRrdsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isScaskdsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scaskds-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScaskdsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

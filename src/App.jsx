@@ -543,6 +543,7 @@ import InvestmentGraphCommunityDatasetTriple from '@/components/cinematic/Invest
 import ContactScenarioReportTriple from '@/components/cinematic/ContactScenarioReportTriple';
 import InvestmentInvestigationKnowledgeTriple from '@/components/cinematic/InvestmentInvestigationKnowledgeTriple';
 import RiskSignalReportDatasetTriple from '@/components/cinematic/RiskSignalReportDatasetTriple';
+import SceneAipSkillDatasetTriple from '@/components/cinematic/SceneAipSkillDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1723,6 +1724,8 @@ function App() {
             <InvestmentInvestigationKnowledgeTriple />
             {/* F392 (overnight 2026-08-17): risk signal × report × dataset triple coverage — ◈ RRDS (left:845920 bottom:8 zIndex:539); parallel-fetches /entities/RiskSignal + /v1/reports + /v1/datasets; keyword-correlates each risk signal against intelligence reports AND datasets to surface FULLY_EVIDENCED (report+dataset) vs REPORTED_ONLY vs DATA_BACKED vs UNTRACKED (neither — critical intelligence gap); red badge on UNTRACKED count; isRrdsQuery+buildRrdsScript wired in JarvisBrain; jarvis:rrds-toggle event; 90-s auto-refresh */}
             <RiskSignalReportDatasetTriple />
+            {/* F393 (overnight 2026-08-17): scene × aip skill × dataset triple coverage — ◈ SCASKDS (left:846480 bottom:8 zIndex:540); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/aip/skill + /v1/datasets; keyword-correlates each cinematic scene against AIP skills AND datasets to surface FULLY_POWERED (skill+dataset) vs SKILLED vs DATA_BACKED vs DARK; green badge on FULLY_POWERED count; gray badge on DARK count; isScaskdsQuery+buildScaskdsScript wired in JarvisBrain; jarvis:scaskds-toggle event; 90-s auto-refresh */}
+            <SceneAipSkillDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
