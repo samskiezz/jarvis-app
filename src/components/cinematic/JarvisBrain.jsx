@@ -609,6 +609,7 @@ import { isScgcriskQuery, buildScgcriskScript } from "./SceneGraphCommunityRiskT
 import { isSwjkgcenQuery, buildSwjkgcenScript } from "./SwarmJobKnowledgeCentralityTriple";
 import { isTkgcknowQuery, buildTkgcknowScript } from "./TaskGraphCommunityKnowledgeTriple";
 import { isIgcdsQuery, buildIgcdsScript } from "./InvestmentGraphCommunityDatasetTriple";
+import { isCsrepQuery, buildCsrepScript } from "./ContactScenarioReportTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6621,6 +6622,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igcds-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIgcdsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isCsrepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csrep-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCsrepScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
