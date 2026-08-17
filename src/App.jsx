@@ -552,6 +552,7 @@ import SwarmJobReportOpsTriple from '@/components/cinematic/SwarmJobReportOpsTri
 import RiskSignalDatasetScenarioTriple from '@/components/cinematic/RiskSignalDatasetScenarioTriple';
 import RiskSignalGraphCommunityOpsTriple from '@/components/cinematic/RiskSignalGraphCommunityOpsTriple';
 import IntelProfileContactOpsTriple from '@/components/cinematic/IntelProfileContactOpsTriple';
+import GraphNodeScenarioDatasetTriple from '@/components/cinematic/GraphNodeScenarioDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1747,6 +1748,8 @@ function App() {
             <RiskSignalGraphCommunityOpsTriple />
             {/* F401 (overnight 2026-08-17): intel profile × contact × ops event triple coverage — ◈ IPCOE (left:850960 bottom:8 zIndex:548); parallel-fetches /entities/IntelProfile + /entities/Contact + /v1/ops/events; keyword-correlates each intel profile against contacts AND ops events to surface FULLY_TRACKED (contact+ops) vs CONTACT_MATCHED (contact only) vs OPS_TRIGGERED (ops only) vs DARK (neither); isIpcoeQuery+buildIpcoeScript wired in JarvisBrain; jarvis:ipcoe-toggle event; 90-s auto-refresh */}
             <IntelProfileContactOpsTriple />
+            {/* F402 (overnight 2026-08-17): graph centrality node × scenario × dataset triple coverage — ◈ GNSCDS (left:851520 bottom:8 zIndex:549); parallel-fetches /v1/graph/centrality + /v1/scenario/list + /v1/datasets; keyword-correlates each top-influence centrality node against scenarios AND datasets to surface FULLY_READY (scenario+dataset) vs SCENARIO_ONLY (scenario only) vs DATA_BACKED (dataset only) vs DARK (neither); isGnscdsQuery+buildGnscdsScript wired in JarvisBrain; jarvis:gnscds-toggle event; 90-s auto-refresh */}
+            <GraphNodeScenarioDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
