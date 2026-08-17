@@ -539,6 +539,7 @@ import ContactOpsDatasetTriple from '@/components/cinematic/ContactOpsDatasetTri
 import SceneGraphCommunityRiskTriple from '@/components/cinematic/SceneGraphCommunityRiskTriple';
 import SwarmJobKnowledgeCentralityTriple from '@/components/cinematic/SwarmJobKnowledgeCentralityTriple';
 import TaskGraphCommunityKnowledgeTriple from '@/components/cinematic/TaskGraphCommunityKnowledgeTriple';
+import InvestmentGraphCommunityDatasetTriple from '@/components/cinematic/InvestmentGraphCommunityDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1711,6 +1712,8 @@ function App() {
             <SwarmJobKnowledgeCentralityTriple />
             {/* F388 (overnight 2026-08-17): task × graph community × knowledge triple coverage — ◈ TKGCKNOW (left:843680 bottom:8 zIndex:535); parallel-fetches /entities/Task + /v1/graph/communities + /knowledge/; keyword-correlates each task against graph network communities AND KB articles to surface FULLY_MAPPED (community+KB) vs COMMUNITY_BACKED vs KNOWLEDGE_BACKED vs DARK; green badge on FULLY_MAPPED; gray badge on DARK; isTkgcknowQuery+buildTkgcknowScript wired in JarvisBrain; jarvis:tkgcknow-toggle event; 90-s auto-refresh */}
             <TaskGraphCommunityKnowledgeTriple />
+            {/* F389 (overnight 2026-08-17): investment × graph community × dataset triple coverage — ◈ IGCDS (left:844240 bottom:8 zIndex:536); parallel-fetches /entities/Investment + /v1/graph/communities + /v1/datasets; keyword-correlates each investment (name/sector/notes/tags/ticker) against graph network communities AND datasets to surface FULLY_CHARTED (community+dataset) vs COMMUNITY_MAPPED (community only) vs DATA_BACKED (dataset only) vs UNCHARTED (neither — portfolio intelligence gap); cyan badge on FULLY_CHARTED count; gray badge on UNCHARTED count; isIgcdsQuery+buildIgcdsScript wired in JarvisBrain; jarvis:igcds-toggle event; 90-s auto-refresh */}
+            <InvestmentGraphCommunityDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
