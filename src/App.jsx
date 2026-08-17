@@ -551,6 +551,7 @@ import ContactKnowledgeInvestigationTriple from '@/components/cinematic/ContactK
 import SwarmJobReportOpsTriple from '@/components/cinematic/SwarmJobReportOpsTriple';
 import RiskSignalDatasetScenarioTriple from '@/components/cinematic/RiskSignalDatasetScenarioTriple';
 import RiskSignalGraphCommunityOpsTriple from '@/components/cinematic/RiskSignalGraphCommunityOpsTriple';
+import IntelProfileContactOpsTriple from '@/components/cinematic/IntelProfileContactOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1744,6 +1745,8 @@ function App() {
             <RiskSignalDatasetScenarioTriple />
             {/* F400 (overnight 2026-08-17): risk signal × graph community × ops event triple coverage — ◈ RSGCOE (left:850400 bottom:8 zIndex:547); parallel-fetches /entities/RiskSignal + /v1/graph/communities + /v1/ops/events; keyword-correlates each risk signal against graph network communities AND ops events to surface FULLY_ACTIVE (community+ops) vs COMMUNITY_TAGGED (community only) vs OPS_TRIGGERED (ops only) vs DARK (neither — untracked threat vector); green badge on FULLY_ACTIVE; red badge on DARK; isRsgcoeQuery+buildRsgcoeScript wired in JarvisBrain; jarvis:rsgcoe-toggle event; 90-s auto-refresh */}
             <RiskSignalGraphCommunityOpsTriple />
+            {/* F401 (overnight 2026-08-17): intel profile × contact × ops event triple coverage — ◈ IPCOE (left:850960 bottom:8 zIndex:548); parallel-fetches /entities/IntelProfile + /entities/Contact + /v1/ops/events; keyword-correlates each intel profile against contacts AND ops events to surface FULLY_TRACKED (contact+ops) vs CONTACT_MATCHED (contact only) vs OPS_TRIGGERED (ops only) vs DARK (neither); isIpcoeQuery+buildIpcoeScript wired in JarvisBrain; jarvis:ipcoe-toggle event; 90-s auto-refresh */}
+            <IntelProfileContactOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
