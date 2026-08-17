@@ -605,6 +605,7 @@ import { isInlgannQuery, buildInlgannScript } from "./InvestigationLiveAnnotatio
 import { isAsliannQuery, buildAsliannScript } from "./AipSkillLiveAnnotationTriple";
 import { isGatadsQuery, buildGatadsScript } from "./GraphAnnotationTaskDatasetTriple";
 import { isCoedQuery, buildCoedScript } from "./ContactOpsDatasetTriple";
+import { isScgcriskQuery, buildScgcriskScript } from "./SceneGraphCommunityRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6581,6 +6582,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:coeds-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCoedScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isScgcriskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scgcrisk-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScgcriskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

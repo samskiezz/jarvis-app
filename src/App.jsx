@@ -536,6 +536,7 @@ import InvestigationLiveAnnotationTriple from '@/components/cinematic/Investigat
 import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnnotationTriple';
 import GraphAnnotationTaskDatasetTriple from '@/components/cinematic/GraphAnnotationTaskDatasetTriple';
 import ContactOpsDatasetTriple from '@/components/cinematic/ContactOpsDatasetTriple';
+import SceneGraphCommunityRiskTriple from '@/components/cinematic/SceneGraphCommunityRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1702,6 +1703,8 @@ function App() {
             <GraphAnnotationTaskDatasetTriple />
             {/* F385 (overnight 2026-08-16): contact × ops event × dataset triple coverage — ◈ COEDS (left:842000 bottom:8 zIndex:532); parallel-fetches /entities/Contact + /v1/ops/events + /v1/datasets; keyword-correlates each contact (name/role/company/sector/aliases) against live ops events AND datasets to surface FULLY_TRACKED (ops+dataset) vs OPS_FLAGGED (ops only) vs DATA_BACKED (dataset only) vs UNTRACKED (neither — contact registry intelligence gap); cyan badge on FULLY_TRACKED count; gray badge on UNTRACKED count; isCoedQuery+buildCoedScript wired in JarvisBrain; jarvis:coeds-toggle event; 90-s auto-refresh */}
             <ContactOpsDatasetTriple />
+            {/* F386 (overnight 2026-08-17): scene × graph community × risk signal triple coverage — ◈ SCGCRISK button (left:842560 bottom:8 zIndex:533); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/graph/communities + /entities/RiskSignal; keyword-correlates each cinematic scene against graph network communities AND active risk signals to surface FULLY_ALARMED (community+risk) vs COMMUNITY_BACKED (community only) vs RISK_FLAGGED (risk only) vs DARK (neither — operational blind spot); red badge on FULLY_ALARMED count; gray badge on DARK count; isScgcriskQuery+buildScgcriskScript wired in JarvisBrain; jarvis:scgcrisk-toggle event; 90-s auto-refresh */}
+            <SceneGraphCommunityRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
