@@ -372,3 +372,4 @@
 [2026-08-17] F392 RiskSignalReportDatasetTriple.jsx — /entities/RiskSignal × /v1/reports × /v1/datasets; FULLY_EVIDENCED/REPORTED_ONLY/DATA_BACKED/UNTRACKED; ◈ RRDS left:845920 zIndex:539; isRrdsQuery+buildRrdsScript wired in JarvisBrain.jsx; mounted in App.jsx; build exit 0
 2026-08-17 F393 SCASKDS — SceneAipSkillDatasetTriple.jsx: scene×aip-skill×dataset triple coverage; 10 scenes vs /v1/aip/skill + /v1/datasets; FULLY_POWERED/SKILLED/DATA_BACKED/DARK; green/gray badges; violet+emerald split-pane; isScaskdsQuery+buildScaskdsScript wired JarvisBrain; ◈ left:846480 zIndex:540; build exit 0
 [2026-08-17] OVERNIGHT RUN — backlog fully exhausted (F01–F393 all [x] done). No unchecked [ ] features remain. Backlog needs new entries to continue.
+[2026-08-17 13:21 UTC] OVERNIGHT RUN — backlog scan complete. All F01–F393 confirmed [x] done. No unchecked features remain. Add new features to docs/JARVIS_FEATURE_BACKLOG.md to resume overnight builds.
