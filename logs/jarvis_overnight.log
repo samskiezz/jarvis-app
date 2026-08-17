@@ -379,3 +379,4 @@
 2026-08-17 F397 CKIKNOW — ContactKnowledgeInvestigationTriple.jsx: Contact × Knowledge × Investigation triple coverage; /entities/Contact × /knowledge/ × /v1/investigations; FULLY_TRACKED/KB_BACKED/CASE_ACTIVE/DARK; cyan badge; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
 2026-08-17 F398 SwarmJobReportOpsTriple.jsx — SwarmJob × Report × Ops Event triple coverage (SJROE); build exit 0; mounted in App.jsx; isSjroeQuery+buildSjroeScript wired in JarvisBrain.jsx
 2026-08-17 F399 RiskSignalDatasetScenarioTriple.jsx — RiskSignal × Dataset × Scenario triple coverage (RSDSCN); /entities/RiskSignal × /v1/datasets × /v1/scenario/list; FULLY_MAPPED/DATA_BACKED/SCENARIO_COVERED/UNRESOLVED; build exit 0
+[2026-08-17] F400 RiskSignalGraphCommunityOpsTriple.jsx — /entities/RiskSignal × /v1/graph/communities × /v1/ops/events; FULLY_ACTIVE/COMMUNITY_TAGGED/OPS_TRIGGERED/DARK states; isRsgcoeQuery+buildRsgcoeScript wired in JarvisBrain; mounted in App.jsx; build exit 0

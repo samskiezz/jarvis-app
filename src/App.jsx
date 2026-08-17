@@ -550,6 +550,7 @@ import IntelProfileInvestmentScenarioTriple from '@/components/cinematic/IntelPr
 import ContactKnowledgeInvestigationTriple from '@/components/cinematic/ContactKnowledgeInvestigationTriple';
 import SwarmJobReportOpsTriple from '@/components/cinematic/SwarmJobReportOpsTriple';
 import RiskSignalDatasetScenarioTriple from '@/components/cinematic/RiskSignalDatasetScenarioTriple';
+import RiskSignalGraphCommunityOpsTriple from '@/components/cinematic/RiskSignalGraphCommunityOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1741,6 +1742,8 @@ function App() {
             <SwarmJobReportOpsTriple />
             {/* F399 (overnight 2026-08-17): risk signal × dataset × scenario triple coverage — ◈ RSDSCN (left:849840 bottom:8 zIndex:546); parallel-fetches /entities/RiskSignal + /v1/datasets + /v1/scenario/list; keyword-correlates each risk signal against datasets AND active scenarios to surface FULLY_MAPPED (dataset+scenario) vs DATA_BACKED (dataset only) vs SCENARIO_COVERED (scenario only) vs UNRESOLVED (neither — intelligence and response gap); amber badge on UNRESOLVED count; isRsdscnQuery+buildRsdscnScript wired in JarvisBrain; jarvis:rsdscn-toggle event; 90-s auto-refresh */}
             <RiskSignalDatasetScenarioTriple />
+            {/* F400 (overnight 2026-08-17): risk signal × graph community × ops event triple coverage — ◈ RSGCOE (left:850400 bottom:8 zIndex:547); parallel-fetches /entities/RiskSignal + /v1/graph/communities + /v1/ops/events; keyword-correlates each risk signal against graph network communities AND ops events to surface FULLY_ACTIVE (community+ops) vs COMMUNITY_TAGGED (community only) vs OPS_TRIGGERED (ops only) vs DARK (neither — untracked threat vector); green badge on FULLY_ACTIVE; red badge on DARK; isRsgcoeQuery+buildRsgcoeScript wired in JarvisBrain; jarvis:rsgcoe-toggle event; 90-s auto-refresh */}
+            <RiskSignalGraphCommunityOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

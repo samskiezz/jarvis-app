@@ -619,6 +619,7 @@ import { isIpinvscQuery, buildIpinvscScript } from "./IntelProfileInvestmentScen
 import { isCkiknowQuery, buildCkiknowScript } from "./ContactKnowledgeInvestigationTriple";
 import { isSjroeQuery, buildSjroeScript } from "./SwarmJobReportOpsTriple";
 import { isRsdscnQuery, buildRsdscnScript } from "./RiskSignalDatasetScenarioTriple";
+import { isRsgcoeQuery, buildRsgcoeScript } from "./RiskSignalGraphCommunityOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6721,6 +6722,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsdscn-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsdscnScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isRsgcoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsgcoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRsgcoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
