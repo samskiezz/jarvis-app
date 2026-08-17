@@ -613,6 +613,7 @@ import { isCsrepQuery, buildCsrepScript } from "./ContactScenarioReportTriple";
 import { isIiknowQuery, buildIiknowScript } from "./InvestmentInvestigationKnowledgeTriple";
 import { isRrdsQuery, buildRrdsScript } from "./RiskSignalReportDatasetTriple";
 import { isScaskdsQuery, buildScaskdsScript } from "./SceneAipSkillDatasetTriple";
+import { isTipgcQuery, buildTipgcScript } from "./TaskIntelProfileCommunityTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6661,6 +6662,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scaskds-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScaskdsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTipgcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tipgc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTipgcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
