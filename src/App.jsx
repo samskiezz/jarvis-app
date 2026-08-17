@@ -541,6 +541,7 @@ import SwarmJobKnowledgeCentralityTriple from '@/components/cinematic/SwarmJobKn
 import TaskGraphCommunityKnowledgeTriple from '@/components/cinematic/TaskGraphCommunityKnowledgeTriple';
 import InvestmentGraphCommunityDatasetTriple from '@/components/cinematic/InvestmentGraphCommunityDatasetTriple';
 import ContactScenarioReportTriple from '@/components/cinematic/ContactScenarioReportTriple';
+import InvestmentInvestigationKnowledgeTriple from '@/components/cinematic/InvestmentInvestigationKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1717,6 +1718,8 @@ function App() {
             <InvestmentGraphCommunityDatasetTriple />
             {/* F390 (overnight 2026-08-17): contact × scenario × report triple coverage — ◈ CSREP (left:844800 bottom:8 zIndex:537); parallel-fetches /entities/Contact + /v1/scenario/list + /v1/reports; keyword-correlates each contact (name/role/company/email) against threat scenarios AND intelligence reports to surface FULLY_PROFILED (scenario+report) vs SCENARIO_MAPPED (scenario only) vs REPORT_BACKED (report only) vs BLIND (neither — contact intelligence gap); amber badge on BLIND count; isCsrepQuery+buildCsrepScript wired in JarvisBrain; jarvis:csrep-toggle event; 90-s auto-refresh */}
             <ContactScenarioReportTriple />
+            {/* F391 (overnight 2026-08-17): investment × investigation × knowledge triple coverage — ◈ IIKNOW (left:845360 bottom:8 zIndex:538); parallel-fetches /entities/Investment + /v1/investigations + /knowledge/; keyword-correlates each investment (name/sector/ticker/notes) against active investigations AND KB articles to surface FULLY_CHARTED (case+kb — investment has both active case investigation and knowledge backing) vs CASE_ACTIVE (investigation only) vs KNOWLEDGE_BACKED (KB only) vs DARK (neither — portfolio intelligence gap); dark badge on DARK count; isIiknowQuery+buildIiknowScript wired in JarvisBrain; jarvis:iiknow-toggle event; 90-s auto-refresh */}
+            <InvestmentInvestigationKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

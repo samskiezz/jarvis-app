@@ -368,3 +368,4 @@
 [2026-08-17] F389 InvestmentGraphCommunityDatasetTriple.jsx (IGCDS) — Investment × Graph Community × Dataset triple coverage; left:844240 zIndex:536; build exit 0
 2026-08-17 F390 ContactScenarioReportTriple.jsx — Contact × Scenario × Report triple coverage (CSREP); /entities/Contact × /v1/scenario/list × /v1/reports; FULLY_PROFILED/SCENARIO_MAPPED/REPORT_BACKED/BLIND classification; mounted in App.jsx; isCsrepQuery+buildCsrepScript wired in JarvisBrain.jsx; build exit 0
 [2026-08-17] OVERNIGHT RUN — backlog fully exhausted (F01–F390 all [x] done). No unchecked [ ] features remain. Nothing to implement this run.
+[2026-08-17] F391 IIKNOW — InvestmentInvestigationKnowledgeTriple.jsx (new, ~290 lines) mounted in App.jsx; isIiknowQuery+buildIiknowScript wired in JarvisBrain.jsx; /entities/Investment × /v1/investigations × /knowledge/ triple coverage; ◈ IIKNOW left:845360 zIndex:538; build exit 0
