@@ -538,6 +538,7 @@ import GraphAnnotationTaskDatasetTriple from '@/components/cinematic/GraphAnnota
 import ContactOpsDatasetTriple from '@/components/cinematic/ContactOpsDatasetTriple';
 import SceneGraphCommunityRiskTriple from '@/components/cinematic/SceneGraphCommunityRiskTriple';
 import SwarmJobKnowledgeCentralityTriple from '@/components/cinematic/SwarmJobKnowledgeCentralityTriple';
+import TaskGraphCommunityKnowledgeTriple from '@/components/cinematic/TaskGraphCommunityKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1708,6 +1709,8 @@ function App() {
             <SceneGraphCommunityRiskTriple />
             {/* F387 (overnight 2026-08-17): swarm job × knowledge × graph centrality triple coverage — ◈ SJKGCEN (left:843120 bottom:8 zIndex:534); parallel-fetches /entities/SwarmJob + /knowledge/ + /v1/graph/centrality; keyword-correlates each swarm job against KB articles AND top-influence centrality nodes to surface FULLY_ARMED (KB+node) vs KB_BACKED vs CENTRALITY_MAPPED vs BLIND; violet badge on FULLY_ARMED; gray badge on BLIND; isSwjkgcenQuery+buildSwjkgcenScript wired in JarvisBrain; jarvis:sjkgcen-toggle event; 90-s auto-refresh */}
             <SwarmJobKnowledgeCentralityTriple />
+            {/* F388 (overnight 2026-08-17): task × graph community × knowledge triple coverage — ◈ TKGCKNOW (left:843680 bottom:8 zIndex:535); parallel-fetches /entities/Task + /v1/graph/communities + /knowledge/; keyword-correlates each task against graph network communities AND KB articles to surface FULLY_MAPPED (community+KB) vs COMMUNITY_BACKED vs KNOWLEDGE_BACKED vs DARK; green badge on FULLY_MAPPED; gray badge on DARK; isTkgcknowQuery+buildTkgcknowScript wired in JarvisBrain; jarvis:tkgcknow-toggle event; 90-s auto-refresh */}
+            <TaskGraphCommunityKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

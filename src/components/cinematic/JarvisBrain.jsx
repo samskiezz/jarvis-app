@@ -607,6 +607,7 @@ import { isGatadsQuery, buildGatadsScript } from "./GraphAnnotationTaskDatasetTr
 import { isCoedQuery, buildCoedScript } from "./ContactOpsDatasetTriple";
 import { isScgcriskQuery, buildScgcriskScript } from "./SceneGraphCommunityRiskTriple";
 import { isSwjkgcenQuery, buildSwjkgcenScript } from "./SwarmJobKnowledgeCentralityTriple";
+import { isTkgcknowQuery, buildTkgcknowScript } from "./TaskGraphCommunityKnowledgeTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6601,6 +6602,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjkgcen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwjkgcenScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTkgcknowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tkgcknow-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTkgcknowScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
