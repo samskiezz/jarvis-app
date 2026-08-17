@@ -546,6 +546,7 @@ import RiskSignalReportDatasetTriple from '@/components/cinematic/RiskSignalRepo
 import SceneAipSkillDatasetTriple from '@/components/cinematic/SceneAipSkillDatasetTriple';
 import TaskIntelProfileCommunityTriple from '@/components/cinematic/TaskIntelProfileCommunityTriple';
 import TaskCentralityKnowledgeTriple from '@/components/cinematic/TaskCentralityKnowledgeTriple';
+import IntelProfileInvestmentScenarioTriple from '@/components/cinematic/IntelProfileInvestmentScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1730,6 +1731,7 @@ function App() {
             <SceneAipSkillDatasetTriple />
             <TaskIntelProfileCommunityTriple />
             <TaskCentralityKnowledgeTriple />
+            <IntelProfileInvestmentScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
