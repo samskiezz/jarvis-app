@@ -393,3 +393,4 @@
 2026-08-18 F408 DGCCON: DatasetGraphCentralityContactTriple.jsx — /v1/datasets × /v1/graph/centrality × /entities/Contact triple coverage panel; isDgcconQuery+buildDgcconScript wired in JarvisBrain.jsx; mounted in App.jsx; ◈ DGCCON left:854880 zIndex:555; build exit 0
 [2026-08-18] BACKLOG COMPLETE — All F01–F408 features marked [x] done. No unchecked features remain in JARVIS_FEATURE_BACKLOG.md. Overnight build skipped — nothing to implement.
 [2026-08-18] F409 INVGCR — InvestmentGraphCentralityReportTriple.jsx mounted in App.jsx; isInvgcrQuery+buildInvgcrScript wired in JarvisBrain.jsx; /entities/Investment × /v1/graph/centrality × /v1/reports triple coverage; ◈ INVGCR left:855440 zIndex:556; build exit 0
+2026-08-18 F410 SJGCR SwarmJobGraphCentralityReportTriple.jsx — /entities/SwarmJob × /v1/graph/centrality × /v1/reports — build exit 0 — pushed to jarvis-overnight

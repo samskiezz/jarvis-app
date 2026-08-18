@@ -629,6 +629,7 @@ import { isRsgcaskQuery, buildRsgcaskScript } from "./RiskSignalGraphCentralityS
 import { isInvgcaskQuery, buildInvgcaskScript } from "./InvestigationGraphCentralitySkillTriple";
 import { isDgcconQuery, buildDgcconScript } from "./DatasetGraphCentralityContactTriple";
 import { isInvgcrQuery, buildInvgcrScript } from "./InvestmentGraphCentralityReportTriple";
+import { isSjgcrQuery, buildSjgcrScript } from "./SwarmJobGraphCentralityReportTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6821,6 +6822,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invgcr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvgcrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSjgcrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjgcr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjgcrScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
