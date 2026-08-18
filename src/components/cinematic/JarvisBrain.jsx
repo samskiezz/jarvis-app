@@ -636,6 +636,7 @@ import { isKipoeQuery, buildKipoeScript } from "./KnowledgeIntelProfileOpsTriple
 import { isIasoeQuery, buildIasoeScript } from "./InvestmentAipSkillOpsTriple";
 import { isScgcknQuery, buildScgcknScript } from "./SceneGraphCommunityKnowledgeTriple";
 import { isTskivQuery, buildTskivScript } from "./TaskSkillInvestigationTriple";
+import { isIpscoeQuery, buildIpscoeScript } from "./IntelProfileScenarioOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6891,6 +6892,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tskiv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTskivScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIpscoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipscoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpscoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
