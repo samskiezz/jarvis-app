@@ -557,6 +557,7 @@ import SceneAipSkillOpsTriple from '@/components/cinematic/SceneAipSkillOpsTripl
 import SceneGraphCentralitySkillTriple from '@/components/cinematic/SceneGraphCentralitySkillTriple';
 import ContactGraphCentralityReportTriple from '@/components/cinematic/ContactGraphCentralityReportTriple';
 import RiskSignalGraphCentralitySkillTriple from '@/components/cinematic/RiskSignalGraphCentralitySkillTriple';
+import InvestigationGraphCentralitySkillTriple from '@/components/cinematic/InvestigationGraphCentralitySkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1762,6 +1763,8 @@ function App() {
             <ContactGraphCentralityReportTriple />
             {/* F406 (overnight 2026-08-18): risk signal × graph centrality × AIP skill triple coverage — ◈ RSGCASK (left:853760 bottom:8 zIndex:553); parallel-fetches /entities/RiskSignal + /v1/graph/centrality + /v1/aip/skill; keyword-correlates each risk signal against top-influence centrality nodes AND AIP skills to surface FULLY_MITIGATED (node+skill) vs NODE_MAPPED (node only) vs SKILL_COVERED (skill only) vs EXPOSED (neither — unmitigated threat gap); isRsgcaskQuery+buildRsgcaskScript wired in JarvisBrain; jarvis:rsgcask-toggle event; 90-s auto-refresh */}
             <RiskSignalGraphCentralitySkillTriple />
+            {/* F407 (overnight 2026-08-18): investigation × graph centrality × AIP skill triple coverage — ◈ INVGCASK (left:854320 bottom:8 zIndex:554); parallel-fetches /v1/investigations + /v1/graph/centrality + /v1/aip/skill; keyword-correlates each open investigation against top-influence centrality nodes AND AIP skills to surface FULLY_EQUIPPED (node+skill) vs NODE_LINKED (node only) vs SKILLED (skill only) vs DARK (neither — investigation support gap); isInvgcaskQuery+buildInvgcaskScript wired in JarvisBrain; jarvis:invgcask-toggle event; 90-s auto-refresh */}
+            <InvestigationGraphCentralitySkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
