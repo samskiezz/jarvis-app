@@ -6,3 +6,4 @@
 2026-08-18 F415 IASOE — InvestmentAipSkillOpsTriple.jsx (new, ~290 lines) mounted in App.jsx; isIasoeQuery+buildIasoeScript wired in JarvisBrain.jsx; ◈ IASOE left:870000 zIndex:562; build exit 0
 2026-08-18 F416 SCGCKN Scene×GraphCommunity×Knowledge — SceneGraphCommunityKnowledgeTriple.jsx (new, ~310 lines) mounted in App.jsx; isScgcknQuery+buildScgcknScript wired in JarvisBrain.jsx; ◈ SCGCKN left:870560 zIndex:563; /v1/cinematic/scene/{id} × /v1/graph/communities × /knowledge/; build exit 0; pushed jarvis-overnight
 2026-08-18 BACKLOG COMPLETE — all F01–F416 marked [x] done; no unchecked features remain; overnight run exited without build
+[2026-08-18] F417 TaskSkillInvestigationTriple.jsx — Task × AIP Skill × Investigation Triple Coverage (TSKIV); /entities/Task × /v1/aip/skill × /v1/investigations; FULLY_EQUIPPED/SKILL_ARMED/CASE_ACTIVE/UNASSIGNED states; ◈ TSKIV left:871120 zIndex:564; isTskivQuery+buildTskivScript wired in JarvisBrain; build exit 0
