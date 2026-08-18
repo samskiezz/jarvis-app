@@ -634,6 +634,7 @@ import { isTirsigQuery, buildTirsigScript } from "./TaskInvestmentRiskSignalTrip
 import { isCiitQuery, buildCiitScript } from "./ContactIntelInvestigationTriple";
 import { isKipoeQuery, buildKipoeScript } from "./KnowledgeIntelProfileOpsTriple";
 import { isIasoeQuery, buildIasoeScript } from "./InvestmentAipSkillOpsTriple";
+import { isScgcknQuery, buildScgcknScript } from "./SceneGraphCommunityKnowledgeTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6871,6 +6872,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iasoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIasoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isScgcknQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scgckn-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScgcknScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

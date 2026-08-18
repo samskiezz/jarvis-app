@@ -565,6 +565,7 @@ import TaskInvestmentRiskSignalTriple from '@/components/cinematic/TaskInvestmen
 import ContactIntelInvestigationTriple from '@/components/cinematic/ContactIntelInvestigationTriple';
 import KnowledgeIntelProfileOpsTriple from '@/components/cinematic/KnowledgeIntelProfileOpsTriple';
 import InvestmentAipSkillOpsTriple from '@/components/cinematic/InvestmentAipSkillOpsTriple';
+import SceneGraphCommunityKnowledgeTriple from '@/components/cinematic/SceneGraphCommunityKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1786,6 +1787,8 @@ function App() {
             <KnowledgeIntelProfileOpsTriple />
             {/* F415 (overnight 2026-08-18): investment × AIP skill × ops event triple coverage — ◈ IASOE (left:870000 bottom:8 zIndex:562); /entities/Investment × /v1/aip/skill × /v1/ops/events; isIasoeQuery+buildIasoeScript in JarvisBrain */}
             <InvestmentAipSkillOpsTriple />
+            {/* F416 (overnight 2026-08-18): scene × graph community × knowledge triple coverage — ◈ SCGCKN (left:870560 bottom:8 zIndex:563); /v1/cinematic/scene/{id} × /v1/graph/communities × /knowledge/; isScgcknQuery+buildScgcknScript in JarvisBrain */}
+            <SceneGraphCommunityKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
