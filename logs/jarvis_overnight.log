@@ -1,0 +1,1 @@
+2026-08-18 | F31 | DatasetKnowledgeCoverage mounted in App.jsx | /v1/datasets + /knowledge/ + /v1/jarvis/agent/chat | all confirmed-real endpoints | build: success (vite ✓ built in 17.86s)
