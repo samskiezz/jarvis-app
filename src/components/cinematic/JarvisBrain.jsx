@@ -627,6 +627,7 @@ import { isScgcaskQuery, buildScgcaskScript } from "./SceneGraphCentralitySkillT
 import { isCgcrQuery, buildCgcrScript } from "./ContactGraphCentralityReportTriple";
 import { isRsgcaskQuery, buildRsgcaskScript } from "./RiskSignalGraphCentralitySkillTriple";
 import { isInvgcaskQuery, buildInvgcaskScript } from "./InvestigationGraphCentralitySkillTriple";
+import { isDgcconQuery, buildDgcconScript } from "./DatasetGraphCentralityContactTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6801,6 +6802,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invgcask-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvgcaskScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isDgcconQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dgccon-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDgcconScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
