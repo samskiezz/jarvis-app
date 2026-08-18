@@ -3,3 +3,4 @@
 2026-08-18 F412 TIRSIG TaskInvestmentRiskSignalTriple.jsx — task × investment × risk signal triple; FULLY_HEDGED/INVEST_TASK/RISK_TASK/UNHEDGED; /entities/Task × /entities/Investment × /entities/RiskSignal; ASSESS+TTS via /v1/jarvis/agent/chat; ◈ TIRSIG left:856560 zIndex:558; build exit 0
 [2026-08-18] F413 ContactIntelInvestigationTriple — /entities/Contact × /entities/IntelProfile × /v1/investigations; CIIT panel; isCiitQuery+buildCiitScript in JarvisBrain; build exit 0
 2026-08-18T16:23:16Z F414 KIPOE — KnowledgeIntelProfileOpsTriple.jsx (~340 lines); /knowledge/ × /entities/IntelProfile × /v1/ops/events; FULLY_ACTIVATED/INTEL_PRIMED/OPS_TRIGGERED/DORMANT; mounted App.jsx; isKipoeQuery+buildKipoeScript in JarvisBrain.jsx; ◈ KIPOE left:869440 zIndex:561; build exit 0
+2026-08-18 F415 IASOE — InvestmentAipSkillOpsTriple.jsx (new, ~290 lines) mounted in App.jsx; isIasoeQuery+buildIasoeScript wired in JarvisBrain.jsx; ◈ IASOE left:870000 zIndex:562; build exit 0

@@ -633,6 +633,7 @@ import { isSjgcrQuery, buildSjgcrScript } from "./SwarmJobGraphCentralityReportT
 import { isTirsigQuery, buildTirsigScript } from "./TaskInvestmentRiskSignalTriple";
 import { isCiitQuery, buildCiitScript } from "./ContactIntelInvestigationTriple";
 import { isKipoeQuery, buildKipoeScript } from "./KnowledgeIntelProfileOpsTriple";
+import { isIasoeQuery, buildIasoeScript } from "./InvestmentAipSkillOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6861,6 +6862,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kipoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKipoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIasoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iasoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIasoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
