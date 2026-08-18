@@ -8,3 +8,4 @@
 2026-08-18 BACKLOG COMPLETE — all F01–F416 marked [x] done; no unchecked features remain; overnight run exited without build
 [2026-08-18] F417 TaskSkillInvestigationTriple.jsx — Task × AIP Skill × Investigation Triple Coverage (TSKIV); /entities/Task × /v1/aip/skill × /v1/investigations; FULLY_EQUIPPED/SKILL_ARMED/CASE_ACTIVE/UNASSIGNED states; ◈ TSKIV left:871120 zIndex:564; isTskivQuery+buildTskivScript wired in JarvisBrain; build exit 0
 [2026-08-18] F418 IntelProfileScenarioOpsTriple.jsx — Intel Profile × Scenario × Ops Event Triple Coverage (IPSCOE); /entities/IntelProfile × /v1/scenario/list × /v1/ops/events; FULLY_COVERED/SCENARIO_ONLY/OPS_ONLY/UNCOVERED states; ◈ IPSCOE left:871680 zIndex:565; isIpscoeQuery+buildIpscoeScript wired in JarvisBrain; build exit 0
+2026-08-18 F419 BrainSystemStatusFusion.jsx: /v1/cinematic/brain x /v1/jarvis/system/status; Operational Score gauge + sparklines + ASSESS; ◈ BSSF left:872240 zIndex:566; build exit 0
