@@ -623,6 +623,7 @@ import { isRsgcoeQuery, buildRsgcoeScript } from "./RiskSignalGraphCommunityOpsT
 import { isIpcoeQuery, buildIpcoeScript } from "./IntelProfileContactOpsTriple";
 import { isGnscdsQuery, buildGnscdsScript } from "./GraphNodeScenarioDatasetTriple";
 import { isScasoeQuery, buildScasoeScript } from "./SceneAipSkillOpsTriple";
+import { isScgcaskQuery, buildScgcaskScript } from "./SceneGraphCentralitySkillTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6761,6 +6762,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scasoe-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildScasoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isScgcaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scgcask-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScgcaskScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

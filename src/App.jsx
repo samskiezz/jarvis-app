@@ -554,6 +554,7 @@ import RiskSignalGraphCommunityOpsTriple from '@/components/cinematic/RiskSignal
 import IntelProfileContactOpsTriple from '@/components/cinematic/IntelProfileContactOpsTriple';
 import GraphNodeScenarioDatasetTriple from '@/components/cinematic/GraphNodeScenarioDatasetTriple';
 import SceneAipSkillOpsTriple from '@/components/cinematic/SceneAipSkillOpsTriple';
+import SceneGraphCentralitySkillTriple from '@/components/cinematic/SceneGraphCentralitySkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1753,6 +1754,8 @@ function App() {
             <GraphNodeScenarioDatasetTriple />
             {/* F403 (overnight 2026-08-18): cinematic scene × AIP skill × ops event triple coverage — ◈ SCASOE (left:852080 bottom:8 zIndex:550); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/aip/skill + /v1/ops/events; keyword-correlates each cinematic scene against AIP skills AND ops events to surface FULLY_ARMED (skill+ops — scene has both capability backing and live operational trigger) vs SKILLED (skill matched, no ops event — capability without live trigger) vs OPS_TRIGGERED (ops event matched, no skill — live trigger without capability backing) vs DARK (neither — operational blind spot); isScasoeQuery+buildScasoeScript wired in JarvisBrain; jarvis:scasoe-toggle event; 90-s auto-refresh */}
             <SceneAipSkillOpsTriple />
+            {/* F404 (overnight 2026-08-18): scene × graph centrality × AIP skill triple coverage — ◈ SCGCASK (left:852640 bottom:8 zIndex:551); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/graph/centrality + /v1/aip/skill; keyword-correlates each cinematic scene against top-influence centrality nodes AND AIP skills to surface FULLY_EQUIPPED (node+skill) vs NODE_LINKED (node only) vs SKILLED (skill only) vs DARK (neither); isScgcaskQuery+buildScgcaskScript wired in JarvisBrain; jarvis:scgcask-toggle event; 90-s auto-refresh */}
+            <SceneGraphCentralitySkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
