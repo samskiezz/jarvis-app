@@ -559,6 +559,7 @@ import ContactGraphCentralityReportTriple from '@/components/cinematic/ContactGr
 import RiskSignalGraphCentralitySkillTriple from '@/components/cinematic/RiskSignalGraphCentralitySkillTriple';
 import InvestigationGraphCentralitySkillTriple from '@/components/cinematic/InvestigationGraphCentralitySkillTriple';
 import DatasetGraphCentralityContactTriple from '@/components/cinematic/DatasetGraphCentralityContactTriple';
+import InvestmentGraphCentralityReportTriple from '@/components/cinematic/InvestmentGraphCentralityReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1768,6 +1769,8 @@ function App() {
             <InvestigationGraphCentralitySkillTriple />
             {/* F408 (overnight 2026-08-18): dataset × graph centrality × contact triple coverage — ◈ DGCCON (left:854880 bottom:8 zIndex:555); parallel-fetches /v1/datasets + /v1/graph/centrality + /entities/Contact; keyword-correlates each dataset against top-influence centrality nodes AND contacts to surface FULLY_MAPPED (node+contact) vs NODE_LINKED (node only) vs CONTACT_BACKED (contact only) vs DARK (neither); isDgcconQuery+buildDgcconScript wired in JarvisBrain; jarvis:dgccon-toggle event; 90-s auto-refresh */}
             <DatasetGraphCentralityContactTriple />
+            {/* F409 (overnight 2026-08-18): investment × graph centrality × report triple coverage — ◈ INVGCR (left:855440 bottom:8 zIndex:556); parallel-fetches /entities/Investment + /v1/graph/centrality + /v1/reports; keyword-correlates each investment against top-influence centrality nodes AND intelligence reports to surface FULLY_CHARTED (node+report) vs NODE_MAPPED (node only) vs REPORT_BACKED (report only) vs DARK (neither); isInvgcrQuery+buildInvgcrScript wired in JarvisBrain; jarvis:invgcr-toggle event; 90-s auto-refresh */}
+            <InvestmentGraphCentralityReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
