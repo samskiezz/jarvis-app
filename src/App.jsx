@@ -562,6 +562,7 @@ import DatasetGraphCentralityContactTriple from '@/components/cinematic/DatasetG
 import InvestmentGraphCentralityReportTriple from '@/components/cinematic/InvestmentGraphCentralityReportTriple';
 import SwarmJobGraphCentralityReportTriple from '@/components/cinematic/SwarmJobGraphCentralityReportTriple';
 import TaskInvestmentRiskSignalTriple from '@/components/cinematic/TaskInvestmentRiskSignalTriple';
+import ContactIntelInvestigationTriple from '@/components/cinematic/ContactIntelInvestigationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1777,6 +1778,8 @@ function App() {
             <SwarmJobGraphCentralityReportTriple />
             {/* F412 (overnight 2026-08-18): task × investment × risk signal triple coverage — ◈ TIRSIG (left:856560 bottom:8 zIndex:558); /entities/Task × /entities/Investment × /entities/RiskSignal; isTirsigQuery+buildTirsigScript in JarvisBrain */}
             <TaskInvestmentRiskSignalTriple />
+            {/* F413 (overnight 2026-08-18): contact × intel profile × investigation triple coverage — ◈ CIIT (left:868880 bottom:8 zIndex:560); /entities/Contact × /entities/IntelProfile × /v1/investigations; isCiitQuery+buildCiitScript in JarvisBrain */}
+            <ContactIntelInvestigationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
