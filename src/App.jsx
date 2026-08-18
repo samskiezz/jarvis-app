@@ -556,6 +556,7 @@ import GraphNodeScenarioDatasetTriple from '@/components/cinematic/GraphNodeScen
 import SceneAipSkillOpsTriple from '@/components/cinematic/SceneAipSkillOpsTriple';
 import SceneGraphCentralitySkillTriple from '@/components/cinematic/SceneGraphCentralitySkillTriple';
 import ContactGraphCentralityReportTriple from '@/components/cinematic/ContactGraphCentralityReportTriple';
+import RiskSignalGraphCentralitySkillTriple from '@/components/cinematic/RiskSignalGraphCentralitySkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1759,6 +1760,8 @@ function App() {
             <SceneGraphCentralitySkillTriple />
             {/* F405 (overnight 2026-08-18): contact × graph centrality × report triple coverage — ◈ CGCR (left:853200 bottom:8 zIndex:552); parallel-fetches /entities/Contact + /v1/graph/centrality + /v1/reports; keyword-correlates each contact against top-influence centrality nodes AND intelligence reports to surface FULLY_MAPPED (node+report) vs NODE_ALIGNED (node only) vs REPORT_BACKED (report only) vs DARK (neither — intelligence gap); isCgcrQuery+buildCgcrScript wired in JarvisBrain; jarvis:cgcr-toggle event; 90-s auto-refresh */}
             <ContactGraphCentralityReportTriple />
+            {/* F406 (overnight 2026-08-18): risk signal × graph centrality × AIP skill triple coverage — ◈ RSGCASK (left:853760 bottom:8 zIndex:553); parallel-fetches /entities/RiskSignal + /v1/graph/centrality + /v1/aip/skill; keyword-correlates each risk signal against top-influence centrality nodes AND AIP skills to surface FULLY_MITIGATED (node+skill) vs NODE_MAPPED (node only) vs SKILL_COVERED (skill only) vs EXPOSED (neither — unmitigated threat gap); isRsgcaskQuery+buildRsgcaskScript wired in JarvisBrain; jarvis:rsgcask-toggle event; 90-s auto-refresh */}
+            <RiskSignalGraphCentralitySkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

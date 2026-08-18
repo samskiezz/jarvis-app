@@ -388,3 +388,4 @@
 [2026-08-18] OVERNIGHT RUN: Backlog fully exhausted — all features F01–F403 are marked [x] done. No unchecked [ ] feature found. No implementation work performed this cycle.
 2026-08-18 F404 SCGCASK — SceneGraphCentralitySkillTriple.jsx — scene×centrality×skill triple coverage — left:852640 zIndex:551 — build exit 0
 [2026-08-18] F405 ContactGraphCentralityReportTriple.jsx — contact × graph centrality × report triple coverage (CGCR); /entities/Contact + /v1/graph/centrality + /v1/reports; FULLY_MAPPED/NODE_ALIGNED/REPORT_BACKED/DARK; ◈ CGCR left:853200 zIndex:552; build exit 0
+[2026-08-18] F406 RSGCASK: RiskSignalGraphCentralitySkillTriple.jsx — /entities/RiskSignal × /v1/graph/centrality × /v1/aip/skill; FULLY_MITIGATED/NODE_MAPPED/SKILL_COVERED/EXPOSED; mounted App.jsx; isRsgcaskQuery+buildRsgcaskScript wired JarvisBrain.jsx; build exit 0
