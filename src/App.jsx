@@ -555,6 +555,7 @@ import IntelProfileContactOpsTriple from '@/components/cinematic/IntelProfileCon
 import GraphNodeScenarioDatasetTriple from '@/components/cinematic/GraphNodeScenarioDatasetTriple';
 import SceneAipSkillOpsTriple from '@/components/cinematic/SceneAipSkillOpsTriple';
 import SceneGraphCentralitySkillTriple from '@/components/cinematic/SceneGraphCentralitySkillTriple';
+import ContactGraphCentralityReportTriple from '@/components/cinematic/ContactGraphCentralityReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1756,6 +1757,8 @@ function App() {
             <SceneAipSkillOpsTriple />
             {/* F404 (overnight 2026-08-18): scene × graph centrality × AIP skill triple coverage — ◈ SCGCASK (left:852640 bottom:8 zIndex:551); parallel-fetches /v1/cinematic/scene/{id} (all 10) + /v1/graph/centrality + /v1/aip/skill; keyword-correlates each cinematic scene against top-influence centrality nodes AND AIP skills to surface FULLY_EQUIPPED (node+skill) vs NODE_LINKED (node only) vs SKILLED (skill only) vs DARK (neither); isScgcaskQuery+buildScgcaskScript wired in JarvisBrain; jarvis:scgcask-toggle event; 90-s auto-refresh */}
             <SceneGraphCentralitySkillTriple />
+            {/* F405 (overnight 2026-08-18): contact × graph centrality × report triple coverage — ◈ CGCR (left:853200 bottom:8 zIndex:552); parallel-fetches /entities/Contact + /v1/graph/centrality + /v1/reports; keyword-correlates each contact against top-influence centrality nodes AND intelligence reports to surface FULLY_MAPPED (node+report) vs NODE_ALIGNED (node only) vs REPORT_BACKED (report only) vs DARK (neither — intelligence gap); isCgcrQuery+buildCgcrScript wired in JarvisBrain; jarvis:cgcr-toggle event; 90-s auto-refresh */}
+            <ContactGraphCentralityReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
