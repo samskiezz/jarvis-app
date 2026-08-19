@@ -581,6 +581,7 @@ import InvestmentKnowledgeGraphTriple from '@/components/cinematic/InvestmentKno
 import SwarmJobScenarioLiveIntelTriple from '@/components/cinematic/SwarmJobScenarioLiveIntelTriple';
 import SceneReportLiveIntelTriple from '@/components/cinematic/SceneReportLiveIntelTriple';
 import RiskInvestigationReportTriple from '@/components/cinematic/RiskInvestigationReportTriple';
+import ContactDatasetOpsTriple from '@/components/cinematic/ContactDatasetOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1833,6 +1834,8 @@ function App() {
             <SceneReportLiveIntelTriple />
             {/* F431 (overnight 2026-08-19): risk signal × investigation × report triple coverage — ◈ RIRT (left:878960 bottom:8 zIndex:578); parallel-fetches /entities/RiskSignal + /v1/investigations + /v1/reports; keyword-correlates each risk signal against active investigations AND reports to surface FULLY_COVERED/INV_BACKED/REPORT_BACKED/DARK; dark badge highlights unaddressed risks; isRirtQuery+buildRirtScript wired in JarvisBrain; jarvis:rirt-toggle event; 60-s auto-refresh */}
             <RiskInvestigationReportTriple />
+            {/* F432 (overnight 2026-08-19): contact × dataset × ops event triple coverage — ◈ CDOE (left:879520 bottom:8 zIndex:579); parallel-fetches /entities/Contact + /v1/datasets + /v1/ops/events; keyword-correlates each contact against datasets AND ops events to surface FULLY_WIRED/DATA_ONLY/OPS_FLAGGED/UNSEEN; unseen badge highlights off-grid contacts; isCdoeQuery+buildCdoeScript wired in JarvisBrain; jarvis:cdoe-toggle event; 90-s auto-refresh */}
+            <ContactDatasetOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

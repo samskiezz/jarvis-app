@@ -649,6 +649,7 @@ import { isInvkgcQuery, buildInvkgcScript } from "./InvestmentKnowledgeGraphTrip
 import { isSjscliQuery, buildSjscliScript } from "./SwarmJobScenarioLiveIntelTriple";
 import { isScrliQuery, buildScrliScript } from "./SceneReportLiveIntelTriple";
 import { isRirtQuery, buildRirtScript } from "./RiskInvestigationReportTriple";
+import { isCdoeQuery, buildCdoeScript } from "./ContactDatasetOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7012,6 +7013,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rirt-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRirtScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCdoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cdoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCdoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
