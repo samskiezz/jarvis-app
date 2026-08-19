@@ -571,6 +571,7 @@ import IntelProfileScenarioOpsTriple from '@/components/cinematic/IntelProfileSc
 import BrainSystemStatusFusion from '@/components/cinematic/BrainSystemStatusFusion';
 import TaskKnowledgeLiveIntelTriple from '@/components/cinematic/TaskKnowledgeLiveIntelTriple';
 import InvestigationContactSkillTriple from '@/components/cinematic/InvestigationContactSkillTriple';
+import SwarmJobReportLiveIntelTriple from '@/components/cinematic/SwarmJobReportLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1803,6 +1804,8 @@ function App() {
             <TaskKnowledgeLiveIntelTriple />
             {/* F421 (overnight 2026-08-19): investigation × contact × AIP skill triple coverage — ◈ ICASK (left:873360 bottom:8 zIndex:568); /v1/investigations × /entities/Contact × /v1/aip/skill; isIcaskQuery+buildIcaskScript in JarvisBrain */}
             <InvestigationContactSkillTriple />
+            {/* F422 (overnight 2026-08-19): swarm job × report × live intel triple coverage — ◈ SWJRLI (left:873920 bottom:8 zIndex:569); /entities/SwarmJob × /v1/reports × /functions/getLiveIntel; isSwjrliQuery+buildSwjrliScript in JarvisBrain */}
+            <SwarmJobReportLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
