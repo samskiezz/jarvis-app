@@ -641,6 +641,7 @@ import { isBssfQuery, buildBssfScript } from "./BrainSystemStatusFusion";
 import { isTkliveQuery, buildTkliveScript } from "./TaskKnowledgeLiveIntelTriple";
 import { isIcaskQuery, buildIcaskScript } from "./InvestigationContactSkillTriple";
 import { isSwjrliQuery, buildSwjrliScript } from "./SwarmJobReportLiveIntelTriple";
+import { isDgcoeQuery, buildDgcoeScript } from "./DatasetGraphCommunityOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6940,6 +6941,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swjrli-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSwjrliScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDgcoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dgcoe-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDgcoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

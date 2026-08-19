@@ -572,6 +572,7 @@ import BrainSystemStatusFusion from '@/components/cinematic/BrainSystemStatusFus
 import TaskKnowledgeLiveIntelTriple from '@/components/cinematic/TaskKnowledgeLiveIntelTriple';
 import InvestigationContactSkillTriple from '@/components/cinematic/InvestigationContactSkillTriple';
 import SwarmJobReportLiveIntelTriple from '@/components/cinematic/SwarmJobReportLiveIntelTriple';
+import DatasetGraphCommunityOpsTriple from '@/components/cinematic/DatasetGraphCommunityOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1806,6 +1807,8 @@ function App() {
             <InvestigationContactSkillTriple />
             {/* F422 (overnight 2026-08-19): swarm job × report × live intel triple coverage — ◈ SWJRLI (left:873920 bottom:8 zIndex:569); /entities/SwarmJob × /v1/reports × /functions/getLiveIntel; isSwjrliQuery+buildSwjrliScript in JarvisBrain */}
             <SwarmJobReportLiveIntelTriple />
+            {/* F423 (overnight 2026-08-19): dataset × graph community × ops event triple coverage — ◈ DGCOE (left:874480 bottom:8 zIndex:570); /v1/datasets × /v1/graph/communities × /v1/ops/events; keyword-correlates each dataset against network communities AND ops events; isDgcoeQuery+buildDgcoeScript wired in JarvisBrain; jarvis:dgcoe-toggle event; 90-s auto-refresh */}
+            <DatasetGraphCommunityOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
