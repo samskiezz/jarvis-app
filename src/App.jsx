@@ -580,6 +580,7 @@ import RiskSignalLiveIntelGraphTriple from '@/components/cinematic/RiskSignalLiv
 import InvestmentKnowledgeGraphTriple from '@/components/cinematic/InvestmentKnowledgeGraphTriple';
 import SwarmJobScenarioLiveIntelTriple from '@/components/cinematic/SwarmJobScenarioLiveIntelTriple';
 import SceneReportLiveIntelTriple from '@/components/cinematic/SceneReportLiveIntelTriple';
+import RiskInvestigationReportTriple from '@/components/cinematic/RiskInvestigationReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1830,6 +1831,8 @@ function App() {
             <SwarmJobScenarioLiveIntelTriple />
             {/* F430 (overnight 2026-08-19): scene × report × live intel triple coverage — ◈ SCRLI (left:878400 bottom:8 zIndex:577); parallel-fetches /v1/cinematic/scene/{id} (10 scenes) + /v1/reports + /functions/getLiveIntel; keyword-correlates each cinematic scene against reports AND live intel to surface FULLY_ILLUMINATED/REPORT_BACKED/WORLD_TRIGGERED/DARK; isScrliQuery+buildScrliScript wired in JarvisBrain; jarvis:scrli-toggle event; 60-s auto-refresh */}
             <SceneReportLiveIntelTriple />
+            {/* F431 (overnight 2026-08-19): risk signal × investigation × report triple coverage — ◈ RIRT (left:878960 bottom:8 zIndex:578); parallel-fetches /entities/RiskSignal + /v1/investigations + /v1/reports; keyword-correlates each risk signal against active investigations AND reports to surface FULLY_COVERED/INV_BACKED/REPORT_BACKED/DARK; dark badge highlights unaddressed risks; isRirtQuery+buildRirtScript wired in JarvisBrain; jarvis:rirt-toggle event; 60-s auto-refresh */}
+            <RiskInvestigationReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
