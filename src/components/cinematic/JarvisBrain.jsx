@@ -642,6 +642,7 @@ import { isTkliveQuery, buildTkliveScript } from "./TaskKnowledgeLiveIntelTriple
 import { isIcaskQuery, buildIcaskScript } from "./InvestigationContactSkillTriple";
 import { isSwjrliQuery, buildSwjrliScript } from "./SwarmJobReportLiveIntelTriple";
 import { isDgcoeQuery, buildDgcoeScript } from "./DatasetGraphCommunityOpsTriple";
+import { isSsjarQuery, buildSsjarScript } from "./SwarmSkillSystemReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6953,7 +6954,14 @@ export default function JarvisBrain() {
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
-
+    if (isSsjarQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssjar-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSsjarScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
