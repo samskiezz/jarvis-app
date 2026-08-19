@@ -645,6 +645,7 @@ import { isDgcoeQuery, buildDgcoeScript } from "./DatasetGraphCommunityOpsTriple
 import { isSsjarQuery, buildSsjarScript } from "./SwarmSkillSystemReadiness";
 import { isCrstQuery, buildCrstScript } from "./ContactReportScenarioTriple";
 import { isTlscQuery, buildTlscScript } from "./TaskLiveIntelScenarioTriple";
+import { isInvkgcQuery, buildInvkgcScript } from "./InvestmentKnowledgeGraphTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6976,6 +6977,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tlsc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTlscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isInvkgcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invkgc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildInvkgcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

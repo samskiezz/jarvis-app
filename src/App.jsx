@@ -577,6 +577,7 @@ import SwarmSkillSystemReadiness from '@/components/cinematic/SwarmSkillSystemRe
 import ContactReportScenarioTriple from '@/components/cinematic/ContactReportScenarioTriple';
 import TaskLiveIntelScenarioTriple from '@/components/cinematic/TaskLiveIntelScenarioTriple';
 import RiskSignalLiveIntelGraphTriple from '@/components/cinematic/RiskSignalLiveIntelGraphTriple';
+import InvestmentKnowledgeGraphTriple from '@/components/cinematic/InvestmentKnowledgeGraphTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1821,6 +1822,8 @@ function App() {
             <TaskLiveIntelScenarioTriple />
             {/* F427 (overnight 2026-08-19): risk signal × live intel × graph centrality triple coverage — ◈ RSLGC (left:876720 bottom:8 zIndex:574); parallel-fetches /entities/RiskSignal + /functions/getLiveIntel + /v1/graph/centrality; keyword-correlates each risk signal against live world events AND top-influence graph nodes to surface FULLY_ACTIVE/WORLD_TRIGGERED/NODE_BACKED/ISOLATED; isRslgcQuery+buildRslgcScript self-wired; jarvis:rslgc-toggle event; 90-s auto-refresh */}
             <RiskSignalLiveIntelGraphTriple />
+            {/* F428 (overnight 2026-08-19): investment × knowledge × graph centrality triple coverage — ◈ INVKGC (left:877280 bottom:8 zIndex:575); parallel-fetches /entities/Investment + /knowledge/ + /v1/graph/centrality; keyword-correlates each investment against KB articles AND top-influence graph nodes to surface FULLY_DOCUMENTED/KB_BACKED/NODE_BACKED/UNDOCUMENTED; isInvkgcQuery+buildInvkgcScript wired in JarvisBrain; jarvis:invkgc-toggle event; 90-s auto-refresh */}
+            <InvestmentKnowledgeGraphTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -19,3 +19,4 @@
 [2026-08-19] BACKLOG COMPLETE — All F001–F425 features marked [x] done. No unchecked features remain. Jarvis overnight build: NOTHING TO BUILD. Backlog exhausted.
 [2026-08-19] F426 TaskLiveIntelScenarioTriple.jsx — Task × Live Intel × Scenario triple coverage (TLSC); /entities/Task × /functions/getLiveIntel × /v1/scenario/list; FULLY_ARMED/LIVE_ONLY/PLANNED/DORMANT; ◈ TLSC left:876160 zIndex:573; build exit 0
 2026-08-19 10:27:27 UTC | F427 RiskSignalLiveIntelGraphTriple — /entities/RiskSignal × /functions/getLiveIntel × /v1/graph/centrality wired to App.jsx; build clean.
+2026-08-19 F428 INVKGC — InvestmentKnowledgeGraphTriple.jsx (new, ~300 lines); /entities/Investment × /knowledge/ × /v1/graph/centrality; FULLY_DOCUMENTED/KB_BACKED/NODE_BACKED/UNDOCUMENTED; amber badge on undocumented count; isInvkgcQuery+buildInvkgcScript wired in JarvisBrain.jsx; ◈ INVKGC left:877280 zIndex:575; build exit 0; pushed to jarvis-overnight
