@@ -29,6 +29,26 @@ export function isQuickIntelCardQuery(text) {
   return QIC_RE.test(text || "");
 }
 
+export async function buildQicScript() {
+  try {
+    const res = await getLiveIntel({ type: "all" });
+    const quakes  = Array.isArray(res?.earthquakes) ? res.earthquakes : [];
+    const markets = Array.isArray(res?.markets)     ? res.markets     : [];
+    const topQ = quakes.reduce((b, q) => Number(q.mag) > Number(b?.mag ?? -1) ? q : b, null);
+    const topM = markets.slice().sort((a, b) => Math.abs(Number(b.change_pct)) - Math.abs(Number(a.change_pct)))[0];
+    const parts = [];
+    if (topQ) parts.push(`Top seismic event: M${Number(topQ.mag).toFixed(1)} near ${topQ.place || "unknown"}.`);
+    if (topM) {
+      const chg = Number(topM.change_pct);
+      parts.push(`Largest market move: ${topM.display} ${chg >= 0 ? "+" : ""}${chg.toFixed(2)}%.`);
+    }
+    parts.push(`${quakes.length} quake${quakes.length !== 1 ? "s" : ""} and ${markets.length} instrument${markets.length !== 1 ? "s" : ""} tracked.`);
+    return parts.join(" ") || "Quick intel card is live, sir.";
+  } catch {
+    return "Quick intel card is live. Opening the panel now, sir.";
+  }
+}
+
 function fmtMag(mag) {
   return `M${Number(mag).toFixed(1)}`;
 }
@@ -102,11 +122,18 @@ export default function QuickIntelCard() {
   // Voice trigger via JarvisBrain custom event
   useEffect(() => {
     function onAsk(e) {
-      const q = e?.detail?.query || "";
+      const q = e?.detail?.text || e?.detail?.query || "";
       if (isQuickIntelCardQuery(q)) setOpen(true);
     }
     window.addEventListener("jarvis:ask", onAsk);
     return () => window.removeEventListener("jarvis:ask", onAsk);
+  }, []);
+
+  // Dedicated toggle for JarvisBrain ask() wiring
+  useEffect(() => {
+    function onToggle() { setOpen(o => !o); }
+    window.addEventListener("jarvis:qic-toggle", onToggle);
+    return () => window.removeEventListener("jarvis:qic-toggle", onToggle);
   }, []);
 
   const quakes  = Array.isArray(data?.earthquakes) ? data.earthquakes : [];

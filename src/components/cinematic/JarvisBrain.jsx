@@ -652,6 +652,7 @@ import { isRirtQuery, buildRirtScript } from "./RiskInvestigationReportTriple";
 import { isCdoeQuery, buildCdoeScript } from "./ContactDatasetOpsTriple";
 import { isCsjgcQuery, buildCsjgcScript } from "./ContactSwarmCentralityTriple";
 import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
+import { isQuickIntelCardQuery, buildQicScript } from "./QuickIntelCard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1171,6 +1172,18 @@ export default function JarvisBrain() {
       const script = await buildMBriefScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(12000, script.length * 70));
+      return;
+    }
+
+    // F32: quick intel card — "quick intel / intel card / world snapshot / qic"
+    // Opens QuickIntelCard panel (jarvis:qic-toggle) and speaks a one-liner with
+    // top seismic event + biggest market mover from /functions/getLiveIntel.
+    if (isQuickIntelCardQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:qic-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildQicScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
     }
 
