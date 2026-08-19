@@ -25,3 +25,4 @@
 2026-08-19 14:34:04 UTC | F431 RiskInvestigationReportTriple mounted | /entities/RiskSignal + /v1/investigations + /v1/reports | isRirtQuery+buildRirtScript wired JarvisBrain | build: vite exit 0 | branch: jarvis-overnight
 2026-08-19 15:23:44 UTC | F432 ContactDatasetOpsTriple mounted | /entities/Contact + /v1/datasets + /v1/ops/events | isCdoeQuery+buildCdoeScript wired JarvisBrain | build: vite exit 0 | branch: jarvis-overnight
 2026-08-19 16:16:01 UTC | BACKLOG EXHAUSTED — all features F01–F432 marked [x] done; no unchecked [ ] feature found; overnight builder skipped this run
+2026-08-19 F433 ContactSwarmCentralityTriple — /entities/Contact × /entities/SwarmJob × /v1/graph/centrality; FULLY_MAPPED/SWARM_LINKED/NODE_ALIGNED/DARK; isCsjgcQuery+buildCsjgcScript; jarvis:csjgc-toggle; left:880080 zIndex:580; build exit 0

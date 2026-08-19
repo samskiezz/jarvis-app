@@ -582,6 +582,7 @@ import SwarmJobScenarioLiveIntelTriple from '@/components/cinematic/SwarmJobScen
 import SceneReportLiveIntelTriple from '@/components/cinematic/SceneReportLiveIntelTriple';
 import RiskInvestigationReportTriple from '@/components/cinematic/RiskInvestigationReportTriple';
 import ContactDatasetOpsTriple from '@/components/cinematic/ContactDatasetOpsTriple';
+import ContactSwarmCentralityTriple from '@/components/cinematic/ContactSwarmCentralityTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1836,6 +1837,8 @@ function App() {
             <RiskInvestigationReportTriple />
             {/* F432 (overnight 2026-08-19): contact × dataset × ops event triple coverage — ◈ CDOE (left:879520 bottom:8 zIndex:579); parallel-fetches /entities/Contact + /v1/datasets + /v1/ops/events; keyword-correlates each contact against datasets AND ops events to surface FULLY_WIRED/DATA_ONLY/OPS_FLAGGED/UNSEEN; unseen badge highlights off-grid contacts; isCdoeQuery+buildCdoeScript wired in JarvisBrain; jarvis:cdoe-toggle event; 90-s auto-refresh */}
             <ContactDatasetOpsTriple />
+            {/* F433 (overnight 2026-08-19): contact × swarm job × graph centrality triple coverage — ◈ CSJGC (left:880080 bottom:8 zIndex:580); parallel-fetches /entities/Contact + /entities/SwarmJob + /v1/graph/centrality; keyword-correlates each contact against active swarm jobs AND centrality nodes to surface FULLY_MAPPED/SWARM_LINKED/NODE_ALIGNED/DARK; dark badge highlights off-graph contacts; isCsjgcQuery+buildCsjgcScript wired in JarvisBrain; jarvis:csjgc-toggle event; 90-s auto-refresh */}
+            <ContactSwarmCentralityTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
