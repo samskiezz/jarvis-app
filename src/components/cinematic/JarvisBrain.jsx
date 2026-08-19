@@ -638,6 +638,7 @@ import { isScgcknQuery, buildScgcknScript } from "./SceneGraphCommunityKnowledge
 import { isTskivQuery, buildTskivScript } from "./TaskSkillInvestigationTriple";
 import { isIpscoeQuery, buildIpscoeScript } from "./IntelProfileScenarioOpsTriple";
 import { isBssfQuery, buildBssfScript } from "./BrainSystemStatusFusion";
+import { isTkliveQuery, buildTkliveScript } from "./TaskKnowledgeLiveIntelTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6911,6 +6912,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:bssf-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildBssfScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTkliveQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tklive-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTkliveScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

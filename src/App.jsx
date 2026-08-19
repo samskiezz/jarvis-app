@@ -569,6 +569,7 @@ import SceneGraphCommunityKnowledgeTriple from '@/components/cinematic/SceneGrap
 import TaskSkillInvestigationTriple from '@/components/cinematic/TaskSkillInvestigationTriple';
 import IntelProfileScenarioOpsTriple from '@/components/cinematic/IntelProfileScenarioOpsTriple';
 import BrainSystemStatusFusion from '@/components/cinematic/BrainSystemStatusFusion';
+import TaskKnowledgeLiveIntelTriple from '@/components/cinematic/TaskKnowledgeLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1797,6 +1798,8 @@ function App() {
             <IntelProfileScenarioOpsTriple />
             {/* F419 (overnight 2026-08-18): brain stats × system status fusion — ◈ BSSF (left:872240 bottom:8 zIndex:566); /v1/cinematic/brain × /v1/jarvis/system/status; isBssfQuery+buildBssfScript in JarvisBrain */}
             <BrainSystemStatusFusion />
+            {/* F420 (overnight 2026-08-19): task × knowledge × live intel triple coverage — ◈ TKLIVE (left:872800 bottom:8 zIndex:567); /entities/Task × /knowledge/* × /functions/getLiveIntel; isTkliveQuery+buildTkliveScript in JarvisBrain */}
+            <TaskKnowledgeLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
