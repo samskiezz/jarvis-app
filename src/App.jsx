@@ -583,6 +583,7 @@ import SceneReportLiveIntelTriple from '@/components/cinematic/SceneReportLiveIn
 import RiskInvestigationReportTriple from '@/components/cinematic/RiskInvestigationReportTriple';
 import ContactDatasetOpsTriple from '@/components/cinematic/ContactDatasetOpsTriple';
 import ContactSwarmCentralityTriple from '@/components/cinematic/ContactSwarmCentralityTriple';
+import MorningMissionBrief from '@/components/cinematic/MorningMissionBrief';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -657,6 +658,8 @@ function App() {
             <GraphPathExplorer />
             {/* F75: morning briefing — ◈ BRIEF button (left:2156); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /functions/getLiveIntel; structures spoken briefing from real data; speaks via /v1/voice/tts; "JARVIS, brief me" / "morning briefing" voice trigger (isBriefingQuery+buildBriefingScript wired in JarvisBrain) */}
             <MorningBriefing />
+            {/* F31: morning mission brief — ◎ MBRIEF button (left:55080); parallel-fetches /entities/Task + /entities/RiskSignal + /v1/ops/events + /v1/investigations; AI-narrated 4-6 sentence mission brief via /v1/jarvis/agent/chat; brief history (last 5); speaks via jarvis:speak-dossier; "mission brief / morning brief / mbrief" voice trigger (isMBriefQuery+buildMBriefScript wired in JarvisBrain) */}
+            <MorningMissionBrief />
             {/* F80: system health scorecard — ⊕ SCORE button (left:4548); composite 0-100 JARVIS health score from /v1/jarvis/system/status (40%) + /v1/cinematic/brain (30%) + /entities/RiskSignal (30%); score ring + sub-score bars + metric tiles + sparkline history; ASK JARVIS for AI anomaly commentary via /v1/jarvis/agent/chat + TTS; "JARVIS, health score" / "system score" voice trigger (isHealthScoreQuery+buildHealthScoreScript wired in JarvisBrain) */}
             <SystemHealthScorecard />
             {/* F100: entity chronology — ⊕ CHRON button (left:5512); merges /entities/Task+RiskSignal+IntelProfile+SwarmJob+Investment+Contact sorted by timestamp; ALL/TASK/RISK/INTEL/SWARM/INVEST/CONTACT filter tabs + text filter; 60 s auto-refresh; "JARVIS, entity chronology" / "all entities timeline" voice trigger (isEntityChronologyQuery+buildEntityChronologyScript wired in JarvisBrain) */}

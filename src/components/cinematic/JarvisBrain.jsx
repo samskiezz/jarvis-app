@@ -651,6 +651,7 @@ import { isScrliQuery, buildScrliScript } from "./SceneReportLiveIntelTriple";
 import { isRirtQuery, buildRirtScript } from "./RiskInvestigationReportTriple";
 import { isCdoeQuery, buildCdoeScript } from "./ContactDatasetOpsTriple";
 import { isCsjgcQuery, buildCsjgcScript } from "./ContactSwarmCentralityTriple";
+import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1155,6 +1156,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:briefing-open"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildBriefingScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(12000, script.length * 70));
+      return;
+    }
+
+    // F31: morning mission brief — "mission brief / morning brief / mbrief / daily brief / today's brief"
+    // Opens MorningMissionBrief panel (jarvis:mbrief-toggle) and speaks an AI-narrated
+    // 4–6 sentence mission brief compiled from real /entities/Task + /entities/RiskSignal +
+    // /v1/ops/events + /v1/investigations via /v1/jarvis/agent/chat.
+    if (isMBriefQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mbrief-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildMBriefScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(12000, script.length * 70));
       return;
