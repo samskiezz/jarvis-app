@@ -1,1 +1,2 @@
 [2026-08-19] F01 DONE — ⌘K CommandPalette mounted in App.jsx (src/components/cinematic/CommandPalette.jsx); lists all PAGES + 10 cinematic scenes; keyboard nav; build verified exit:0
+[2026-08-19] F02 DONE — "Hey JARVIS" wake word; HeyJarvisListener.jsx mounted in App.jsx; Web SpeechRecognition listens for 'jarvis'; dispatches jarvis:ask to open JarvisBrain; WakeWordToggle UI; build verified exit:0
