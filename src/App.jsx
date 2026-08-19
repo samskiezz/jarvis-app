@@ -578,6 +578,7 @@ import ContactReportScenarioTriple from '@/components/cinematic/ContactReportSce
 import TaskLiveIntelScenarioTriple from '@/components/cinematic/TaskLiveIntelScenarioTriple';
 import RiskSignalLiveIntelGraphTriple from '@/components/cinematic/RiskSignalLiveIntelGraphTriple';
 import InvestmentKnowledgeGraphTriple from '@/components/cinematic/InvestmentKnowledgeGraphTriple';
+import SwarmJobScenarioLiveIntelTriple from '@/components/cinematic/SwarmJobScenarioLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1824,6 +1825,8 @@ function App() {
             <RiskSignalLiveIntelGraphTriple />
             {/* F428 (overnight 2026-08-19): investment × knowledge × graph centrality triple coverage — ◈ INVKGC (left:877280 bottom:8 zIndex:575); parallel-fetches /entities/Investment + /knowledge/ + /v1/graph/centrality; keyword-correlates each investment against KB articles AND top-influence graph nodes to surface FULLY_DOCUMENTED/KB_BACKED/NODE_BACKED/UNDOCUMENTED; isInvkgcQuery+buildInvkgcScript wired in JarvisBrain; jarvis:invkgc-toggle event; 90-s auto-refresh */}
             <InvestmentKnowledgeGraphTriple />
+            {/* F429 (overnight 2026-08-19): swarm job × scenario × live intel triple coverage — ◈ SJSCLI (left:877840 bottom:8 zIndex:576); parallel-fetches /entities/SwarmJob + /v1/scenario/list + /functions/getLiveIntel; keyword-correlates each swarm job against scenarios AND live intel to surface FULLY_ARMED/SCENARIO_READY/LIVE_TRIGGERED/DORMANT; isSjscliQuery+buildSjscliScript wired in JarvisBrain; jarvis:sjscli-toggle event; 60-s auto-refresh */}
+            <SwarmJobScenarioLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
