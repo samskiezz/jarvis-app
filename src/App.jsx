@@ -574,6 +574,7 @@ import InvestigationContactSkillTriple from '@/components/cinematic/Investigatio
 import SwarmJobReportLiveIntelTriple from '@/components/cinematic/SwarmJobReportLiveIntelTriple';
 import DatasetGraphCommunityOpsTriple from '@/components/cinematic/DatasetGraphCommunityOpsTriple';
 import SwarmSkillSystemReadiness from '@/components/cinematic/SwarmSkillSystemReadiness';
+import ContactReportScenarioTriple from '@/components/cinematic/ContactReportScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1812,6 +1813,8 @@ function App() {
             <DatasetGraphCommunityOpsTriple />
             {/* F424 (overnight 2026-08-19): swarm job × aip skill × system status readiness — ◈ SSJAR (left:875040 bottom:8 zIndex:571); /entities/SwarmJob × /v1/aip/skill × /v1/jarvis/system/status; classifies each swarm job as FULLY_READY/SKILL_EQUIPPED/SYSTEM_ACTIVE/UNSUPPORTED; isSsjarQuery+buildSsjarScript wired in JarvisBrain; jarvis:ssjar-toggle event; 90-s auto-refresh */}
             <SwarmSkillSystemReadiness />
+            {/* F425 (overnight 2026-08-19): contact × report × scenario triple coverage — ◈ CRST (left:875600 bottom:8 zIndex:572); /entities/Contact × /v1/reports × /v1/scenario/list; classifies each contact as FULLY_COVERED/REPORT_ONLY/SCENARIO_ONLY/UNCOVERED; isCrstQuery+buildCrstScript wired in JarvisBrain; jarvis:crst-toggle event; 90-s auto-refresh */}
+            <ContactReportScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

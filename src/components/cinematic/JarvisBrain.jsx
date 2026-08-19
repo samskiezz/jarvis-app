@@ -643,6 +643,7 @@ import { isIcaskQuery, buildIcaskScript } from "./InvestigationContactSkillTripl
 import { isSwjrliQuery, buildSwjrliScript } from "./SwarmJobReportLiveIntelTriple";
 import { isDgcoeQuery, buildDgcoeScript } from "./DatasetGraphCommunityOpsTriple";
 import { isSsjarQuery, buildSsjarScript } from "./SwarmSkillSystemReadiness";
+import { isCrstQuery, buildCrstScript } from "./ContactReportScenarioTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -6958,6 +6959,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ssjar-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSsjarScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCrstQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:crst-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCrstScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
