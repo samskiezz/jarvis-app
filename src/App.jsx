@@ -576,6 +576,7 @@ import DatasetGraphCommunityOpsTriple from '@/components/cinematic/DatasetGraphC
 import SwarmSkillSystemReadiness from '@/components/cinematic/SwarmSkillSystemReadiness';
 import ContactReportScenarioTriple from '@/components/cinematic/ContactReportScenarioTriple';
 import TaskLiveIntelScenarioTriple from '@/components/cinematic/TaskLiveIntelScenarioTriple';
+import RiskSignalLiveIntelGraphTriple from '@/components/cinematic/RiskSignalLiveIntelGraphTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1818,6 +1819,8 @@ function App() {
             <ContactReportScenarioTriple />
             {/* F426 (overnight 2026-08-19): task × live intel × scenario triple coverage — ◈ TLSC (left:876160 bottom:8 zIndex:573); parallel-fetches /entities/Task + /functions/getLiveIntel + /v1/scenario/list; keyword-correlates each task against live world events AND active scenarios to surface FULLY_ARMED/LIVE_ONLY/PLANNED/DORMANT; isTlscQuery+buildTlscScript wired in JarvisBrain; jarvis:tlsc-toggle event; 90-s auto-refresh */}
             <TaskLiveIntelScenarioTriple />
+            {/* F427 (overnight 2026-08-19): risk signal × live intel × graph centrality triple coverage — ◈ RSLGC (left:876720 bottom:8 zIndex:574); parallel-fetches /entities/RiskSignal + /functions/getLiveIntel + /v1/graph/centrality; keyword-correlates each risk signal against live world events AND top-influence graph nodes to surface FULLY_ACTIVE/WORLD_TRIGGERED/NODE_BACKED/ISOLATED; isRslgcQuery+buildRslgcScript self-wired; jarvis:rslgc-toggle event; 90-s auto-refresh */}
+            <RiskSignalLiveIntelGraphTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
