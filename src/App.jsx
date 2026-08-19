@@ -579,6 +579,7 @@ import TaskLiveIntelScenarioTriple from '@/components/cinematic/TaskLiveIntelSce
 import RiskSignalLiveIntelGraphTriple from '@/components/cinematic/RiskSignalLiveIntelGraphTriple';
 import InvestmentKnowledgeGraphTriple from '@/components/cinematic/InvestmentKnowledgeGraphTriple';
 import SwarmJobScenarioLiveIntelTriple from '@/components/cinematic/SwarmJobScenarioLiveIntelTriple';
+import SceneReportLiveIntelTriple from '@/components/cinematic/SceneReportLiveIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1827,6 +1828,8 @@ function App() {
             <InvestmentKnowledgeGraphTriple />
             {/* F429 (overnight 2026-08-19): swarm job × scenario × live intel triple coverage — ◈ SJSCLI (left:877840 bottom:8 zIndex:576); parallel-fetches /entities/SwarmJob + /v1/scenario/list + /functions/getLiveIntel; keyword-correlates each swarm job against scenarios AND live intel to surface FULLY_ARMED/SCENARIO_READY/LIVE_TRIGGERED/DORMANT; isSjscliQuery+buildSjscliScript wired in JarvisBrain; jarvis:sjscli-toggle event; 60-s auto-refresh */}
             <SwarmJobScenarioLiveIntelTriple />
+            {/* F430 (overnight 2026-08-19): scene × report × live intel triple coverage — ◈ SCRLI (left:878400 bottom:8 zIndex:577); parallel-fetches /v1/cinematic/scene/{id} (10 scenes) + /v1/reports + /functions/getLiveIntel; keyword-correlates each cinematic scene against reports AND live intel to surface FULLY_ILLUMINATED/REPORT_BACKED/WORLD_TRIGGERED/DARK; isScrliQuery+buildScrliScript wired in JarvisBrain; jarvis:scrli-toggle event; 60-s auto-refresh */}
+            <SceneReportLiveIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
