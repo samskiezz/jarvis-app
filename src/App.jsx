@@ -600,6 +600,7 @@ import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
 import OpsEventsTimeline from '@/components/cinematic/OpsEventsTimeline';
 import RiskSeverityTrendSparkline from '@/components/cinematic/RiskSeverityTrendSparkline';
 import GraphCommunitiesExplorer from '@/components/cinematic/GraphCommunitiesExplorer';
+import MetricAnomalyMonitor from '@/components/cinematic/MetricAnomalyMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1890,6 +1891,8 @@ function App() {
             <RiskSeverityTrendSparkline />
             {/* F46 (overnight 2026-08-20): Graph Communities Explorer — ⬢ COMMX button (left:720 bottom:18 zIndex:68); polls /v1/graph/communities every 90 s; groups clusters by member count with proportional size bars; stat tiles (clusters/nodes/largest/singleton); text search across cluster + node ids; expand cluster row → inline node membership chips (first 40 + overflow count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence partition brief + jarvis:speak-dossier TTS; isCommxQuery+buildCommxScript exported for JarvisBrain intent routing; jarvis:commx-toggle event; "communities/graph communities/clusters/graph clusters/commx/community explorer" voice trigger */}
             <GraphCommunitiesExplorer />
+            {/* F47 (overnight 2026-08-20): Metric Anomaly Monitor — ⚠ ANOM button (left:780 bottom:18 zIndex:68); polls /v1/jarvis/analytics/anomalies every 60 s; sorts anomalies by |zscore| descending with HIGH/MEDIUM severity colour + direction arrow (↑/↓); stat tiles (total/high/medium/max |z|); ALL/HIGH/MEDIUM filter tabs + text search; each row shows latest vs mean±std + proportional |z| bar; red pulse on high-severity count badge; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence anomaly brief + jarvis:speak-dossier TTS; isAnomQuery+buildAnomScript exported for JarvisBrain intent routing; jarvis:anom-toggle event; "anomaly/anomalies/anomaly monitor/anom/metric anomaly" voice trigger */}
+            <MetricAnomalyMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
