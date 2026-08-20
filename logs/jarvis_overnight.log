@@ -15,3 +15,4 @@
 [2026-08-20] F38: OpsHealthSummaryDrawer mounted in App.jsx — parallel-polls /v1/jarvis/system/status + /v1/ops/events; service health grid + critical events list; isOhsdQuery+buildOhsdScript already wired in JarvisBrain; build verified exit:0
 [2026-08-20] F39: KnowledgePulsePanel.jsx — /knowledge/ browse + search + expand + confidence bars; ASSESS → /v1/jarvis/agent/chat + TTS; isKpulseQuery+buildKpulseScript wired in JarvisBrain; ◎ KPULSE mounted App.jsx; build exit:0
 [2026-08-20] F40 IntelProfileMissionMap.jsx — /entities/IntelProfile × /v1/investigations; ACTIVE/MONITORED/PASSIVE; ASSESS+TTS; build exit:0; pushed to jarvis-overnight
+[2026-08-20] F41 SwarmInvestigationConvergence.jsx — /entities/SwarmJob × /v1/investigations convergence panel; LINKED/PARALLEL/INDEPENDENT; ASSESS+TTS; ⬡ SWRINV; isSwrinvQuery+buildSwrinvScript in JarvisBrain; build exit:0

@@ -659,6 +659,7 @@ import { isQuickIntelCardQuery, buildQicScript } from "./QuickIntelCard";
 import { isAnchorDrillQuery } from "./PerSceneAnchorDrillDown";
 import { isKpulseQuery, buildKpulseScript } from "../overnight/KnowledgePulsePanel";
 import { isIpmmQuery, buildIpmmScript } from "../overnight/IntelProfileMissionMap";
+import { isSwrinvQuery, buildSwrinvScript } from "../overnight/SwarmInvestigationConvergence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2350,6 +2351,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipmm-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpmmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSwrinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swrinv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSwrinvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

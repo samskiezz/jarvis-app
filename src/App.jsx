@@ -594,6 +594,7 @@ import LiveIntelRiskConvergence from '@/components/cinematic/LiveIntelRiskConver
 import OpsHealthSummaryDrawer from '@/components/overnight/OpsHealthSummaryDrawer';
 import KnowledgePulsePanel from '@/components/overnight/KnowledgePulsePanel';
 import IntelProfileMissionMap from '@/components/overnight/IntelProfileMissionMap';
+import SwarmInvestigationConvergence from '@/components/overnight/SwarmInvestigationConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1872,6 +1873,8 @@ function App() {
             <KnowledgePulsePanel />
             {/* F40 (overnight 2026-08-20): intel profile mission map — ◈ IPMM (left:882880 bottom:8 zIndex:585); parallel-fetches /entities/IntelProfile + /v1/investigations every 90 s; keyword-correlates each intel profile against open investigations to surface ACTIVE/MONITORED/PASSIVE classification; amber badge on active count; ALL/ACTIVE/MONITORED/PASSIVE filter tabs + text search; expand row → matched investigations; ASSESS → /v1/jarvis/agent/chat 2-sentence dossier brief + TTS; isIpmmQuery+buildIpmmScript wired in JarvisBrain; jarvis:ipmm-toggle event; "intel profile map/intel mission/ipmm/profile map/intel dossier" voice trigger */}
             <IntelProfileMissionMap />
+            {/* F41 (overnight 2026-08-20): swarm investigation convergence — ⬡ SWRINV (right:244 bottom:8 zIndex:586); parallel-fetches /entities/SwarmJob + /v1/investigations every 90 s; keyword-correlates each swarm job against open investigations to surface LINKED/PARALLEL/INDEPENDENT classification; cyan badge on linked count; ALL/LINKED/PARALLEL/INDEPENDENT filter tabs + text search; expand row → matched investigations with keyword score; ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSwrinvQuery+buildSwrinvScript wired in JarvisBrain; jarvis:swrinv-toggle event; "swarm investigation/swarm convergence/swrinv/job investigation" voice trigger */}
+            <SwarmInvestigationConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
