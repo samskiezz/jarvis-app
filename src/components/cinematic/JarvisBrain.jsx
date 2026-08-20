@@ -652,6 +652,7 @@ import { isRirtQuery, buildRirtScript } from "./RiskInvestigationReportTriple";
 import { isCdoeQuery, buildCdoeScript } from "./ContactDatasetOpsTriple";
 import { isCsjgcQuery, buildCsjgcScript } from "./ContactSwarmCentralityTriple";
 import { isGexpQuery, buildGexpScript } from "./GraphNodeExpander";
+import { isLirisconvQuery, buildLirisconvScript } from "./LiveIntelRiskConvergence";
 import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
 import { isQuickIntelCardQuery, buildQicScript } from "./QuickIntelCard";
 import { isAnchorDrillQuery } from "./PerSceneAnchorDrillDown";
@@ -7076,6 +7077,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gexp-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGexpScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLirisconvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lirisconv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLirisconvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
