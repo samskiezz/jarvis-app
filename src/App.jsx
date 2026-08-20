@@ -604,6 +604,7 @@ import MetricAnomalyMonitor from '@/components/cinematic/MetricAnomalyMonitor';
 import LlmProviderHealthMonitor from '@/components/cinematic/LlmProviderHealthMonitor';
 import LlmBudgetSentinel from '@/components/cinematic/LlmBudgetSentinel';
 import ResearchAutopilotMonitor from '@/components/cinematic/ResearchAutopilotMonitor';
+import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1902,6 +1903,8 @@ function App() {
             <LlmBudgetSentinel />
             {/* F50 (overnight 2026-08-20): Research Autopilot Monitor — ◈ RAUT button (left:900 bottom:18 zIndex:68); polls /v1/jarvis/research/status every 30 s; running/idle/stopped/disabled state from autopilot.running + idle_no_llm + enabled_env; stat tiles (ITER / TOPICS / NOTES / UPTIME); detail rows for backend, availability, autopilot backend, idle-no-llm flag, last injected count, relative last-iteration timestamp, last topic, ollama host, config source, model, last error; env-hint banner surfaces the /status hint; ON/OFF badge pulses when the loop is running; live uptime + relative timestamps re-render every second while open; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + jarvis:speak-dossier TTS; isRautQuery+buildRautScript exported for JarvisBrain intent routing; jarvis:raut-toggle event; "research autopilot/raut/autopilot status/research status/gpu autopilot/research loop" voice trigger */}
             <ResearchAutopilotMonitor />
+            {/* F51 (overnight 2026-08-20): AIP Skill × Scenario Coverage — ⬡ SKAS button (left:960 bottom:18 zIndex:68); parallel-fetches /v1/aip/skill + /v1/scenario/list every 90 s; keyword-correlates each skill against scenarios to classify EXERCISED vs UNUSED; stat tiles (skills/scenarios/exercised/unused); ALL/EXERCISED/UNUSED filter tabs + search; expand skill → matched scenario cards with relevance score + proportional bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + jarvis:speak-dossier TTS; isSkasQuery+buildSkasScript exported for JarvisBrain intent routing; jarvis:skas-toggle event; "skill coverage/skill scenario/scenario skills/skas/aip skill coverage/which skills/unused skills/skill map/skill gap" voice trigger */}
+            <AipSkillScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
