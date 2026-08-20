@@ -598,6 +598,7 @@ import IntelProfileMissionMap from '@/components/overnight/IntelProfileMissionMa
 import SwarmInvestigationConvergence from '@/components/overnight/SwarmInvestigationConvergence';
 import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
 import OpsEventsTimeline from '@/components/cinematic/OpsEventsTimeline';
+import RiskSeverityTrendSparkline from '@/components/cinematic/RiskSeverityTrendSparkline';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1884,6 +1885,8 @@ function App() {
             <EntityCountPulse />
             {/* F44 (overnight 2026-08-20): Ops Events Timeline — ⊞ OPSEV button (left:600 bottom:18); polls /v1/ops/events every 30 s; severity-sorted (CRITICAL/WARNING/INFO) timeline; stat tiles (total/critical/warning/info); ALL/CRITICAL/WARNING/INFO filter tabs + text search; expand row → full event details; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops brief + TTS; red badge on critical count; voice trigger "ops events/operational events/opsev/event timeline" via jarvis:ask */}
             <OpsEventsTimeline />
+            {/* F45 (overnight 2026-08-20): Risk Severity Trend Sparkline — ◈ RTREND button (left:660 bottom:18); polls /entities/RiskSignal every 60 s in the background; buckets by CRITICAL/HIGH/MEDIUM/LOW/INFO; stores rolling 30-reading window in localStorage so trend survives reloads; button shows live CRITICAL count + inline sparkline; expand → stat tiles per severity + stacked-bar 30-reading history + legend + ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence trend brief + jarvis:speak-dossier TTS; ⌫ clears stored history; isRtrendQuery+buildRtrendScript exported for JarvisBrain intent routing; jarvis:rtrend-toggle event; "risk trend/risk history/risk sparkline/risk over time/rtrend" voice trigger */}
+            <RiskSeverityTrendSparkline />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
