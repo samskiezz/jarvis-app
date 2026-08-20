@@ -35,7 +35,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live. [2026-08-20: SkillScorecard.jsx confirmed implemented & mounted in App.jsx; build verified exit:0]
 - [x] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time. [2026-08-20: BrainGrowthSparkline.jsx confirmed implemented & mounted in App.jsx; build verified exit:0]
 - [x] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only). [2026-08-20: PerSceneAnchorDrillDown.jsx created & mounted in App.jsx; fetches /v1/cinematic/scene/{id}; all-anchors expanded view with JSON drill-down; 10-scene picker; 60 s refresh; Ctrl+Shift+A + jarvis:anchor-drill-toggle + isAnchorDrillQuery in JarvisBrain; build verified exit:0]
-- [ ] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts.
+- [x] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts. [2026-08-20: JarvisBootSequence.jsx confirmed implemented & mounted (App.jsx:27,631); fetches /v1/jarvis/system/status + /v1/cinematic/brain; cinematic terminal boot lines; TTS "all systems online" on user click; once-per-session via sessionStorage; build verified exit:0]
 - [ ] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant.
 - [ ] F20 "Show me" navigation — already in JarvisBrain; extend keyword map to data drill (e.g. "show risks").
 - [ ] F21 Live clock + uptime (real process uptime from system status).
