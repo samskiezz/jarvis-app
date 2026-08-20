@@ -584,6 +584,7 @@ import SceneReportLiveIntelTriple from '@/components/cinematic/SceneReportLiveIn
 import RiskInvestigationReportTriple from '@/components/cinematic/RiskInvestigationReportTriple';
 import ContactDatasetOpsTriple from '@/components/cinematic/ContactDatasetOpsTriple';
 import ContactSwarmCentralityTriple from '@/components/cinematic/ContactSwarmCentralityTriple';
+import GraphNodeExpander from '@/components/cinematic/GraphNodeExpander';
 import MorningMissionBrief from '@/components/cinematic/MorningMissionBrief';
 import QuickIntelCard from '@/components/cinematic/QuickIntelCard';
 import PerSceneAnchorDrillDown from '@/components/cinematic/PerSceneAnchorDrillDown';
@@ -1851,6 +1852,8 @@ function App() {
             <ContactDatasetOpsTriple />
             {/* F433 (overnight 2026-08-19): contact × swarm job × graph centrality triple coverage — ◈ CSJGC (left:880080 bottom:8 zIndex:580); parallel-fetches /entities/Contact + /entities/SwarmJob + /v1/graph/centrality; keyword-correlates each contact against active swarm jobs AND centrality nodes to surface FULLY_MAPPED/SWARM_LINKED/NODE_ALIGNED/DARK; dark badge highlights off-graph contacts; isCsjgcQuery+buildCsjgcScript wired in JarvisBrain; jarvis:csjgc-toggle event; 90-s auto-refresh */}
             <ContactSwarmCentralityTriple />
+            {/* F34 (overnight 2026-08-20): graph node expander — ◈ GEXP (left:880640 bottom:8 zIndex:581); /v1/graph/centrality → pick node → /v1/graph/expand/{id} → 1-hop neighbourhood cards; ASSESS → /v1/jarvis/agent/chat + TTS; isGexpQuery+buildGexpScript wired in JarvisBrain; jarvis:gexp-toggle event; 120-s centrality refresh */}
+            <GraphNodeExpander />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
