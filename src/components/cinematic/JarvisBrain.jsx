@@ -653,6 +653,7 @@ import { isCdoeQuery, buildCdoeScript } from "./ContactDatasetOpsTriple";
 import { isCsjgcQuery, buildCsjgcScript } from "./ContactSwarmCentralityTriple";
 import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
 import { isQuickIntelCardQuery, buildQicScript } from "./QuickIntelCard";
+import { isAnchorDrillQuery } from "./PerSceneAnchorDrillDown";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1184,6 +1185,15 @@ export default function JarvisBrain() {
       const script = await buildQicScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+
+    // F17: anchor drill-down — "scene anchors / anchor drill / expand scene / scene detail"
+    if (isAnchorDrillQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:anchor-drill-toggle"));
+      setOpen(true); setThinking(false);
+      setText("Opening anchor drill-down for the current scene, sir.");
+      hideT.current = setTimeout(() => setOpen(false), 6000);
       return;
     }
 

@@ -585,6 +585,7 @@ import ContactDatasetOpsTriple from '@/components/cinematic/ContactDatasetOpsTri
 import ContactSwarmCentralityTriple from '@/components/cinematic/ContactSwarmCentralityTriple';
 import MorningMissionBrief from '@/components/cinematic/MorningMissionBrief';
 import QuickIntelCard from '@/components/cinematic/QuickIntelCard';
+import PerSceneAnchorDrillDown from '@/components/cinematic/PerSceneAnchorDrillDown';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -663,6 +664,8 @@ function App() {
             <MorningMissionBrief />
             {/* F32: quick intel card — ⊕ QIC button; polls /functions/getLiveIntel every 5 min; compact card: top earthquake + biggest market mover; Ctrl+Shift+I shortcut; speaks top quake+mover via /v1/voice/tts; "quick intel / intel card / world snapshot / qic" voice trigger (isQuickIntelCardQuery+buildQicScript wired in JarvisBrain) */}
             <QuickIntelCard />
+            {/* F17: per-scene anchor drill-down — Ctrl+Shift+A or jarvis:anchor-drill-toggle; fetches /v1/cinematic/scene/{id} for current scene; shows all anchors expanded with JSON drill-down; scene picker tabs; 60 s refresh; isAnchorDrillQuery wired in JarvisBrain */}
+            <PerSceneAnchorDrillDown />
             {/* F80: system health scorecard — ⊕ SCORE button (left:4548); composite 0-100 JARVIS health score from /v1/jarvis/system/status (40%) + /v1/cinematic/brain (30%) + /entities/RiskSignal (30%); score ring + sub-score bars + metric tiles + sparkline history; ASK JARVIS for AI anomaly commentary via /v1/jarvis/agent/chat + TTS; "JARVIS, health score" / "system score" voice trigger (isHealthScoreQuery+buildHealthScoreScript wired in JarvisBrain) */}
             <SystemHealthScorecard />
             {/* F100: entity chronology — ⊕ CHRON button (left:5512); merges /entities/Task+RiskSignal+IntelProfile+SwarmJob+Investment+Contact sorted by timestamp; ALL/TASK/RISK/INTEL/SWARM/INVEST/CONTACT filter tabs + text filter; 60 s auto-refresh; "JARVIS, entity chronology" / "all entities timeline" voice trigger (isEntityChronologyQuery+buildEntityChronologyScript wired in JarvisBrain) */}

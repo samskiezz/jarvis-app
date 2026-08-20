@@ -25,16 +25,16 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS). [2026-08-19: StatusReporter.jsx + SpokenStatusReport.jsx implemented & mounted in App.jsx; fetches /v1/jarvis/system/status + /v1/cinematic/brain; composes spoken text + TTS via /v1/voice/tts; HUD card auto-dismisses after 14 s; build verified]
 - [x] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins. [2026-08-19: WorldIncidentFeed.jsx already implemented with Three.js globe + earthquake pins + scrolling list; was mounted in App.jsx; backlog entry updated to reflect completed state]
 - [x] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers. [2026-08-20: MarketsTicker.jsx implemented — scrolling bottom ticker strip + expandable market grid; mounted in App.jsx; isMarketsQuery+buildMarketsScript wired in JarvisBrain.jsx; speaks top movers ranked by abs(change_pct); build verified exit:0]
-- [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.
-- [ ] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical.
-- [ ] F10 Task board — /entities/Task → live mission cards with status.
-- [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
-- [ ] F12 Investigations list — /v1/investigations → open cases panel.
-- [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
-- [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
-- [ ] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live.
-- [ ] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time.
-- [ ] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only).
+- [x] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier. [2026-08-20: EntityQuickSearch.jsx confirmed implemented & mounted (App.jsx:619); isEntitySearchQuery+extractEntitySearchTerm+buildEntityDossierScript wired in JarvisBrain; Ctrl+Shift+E + jarvis:entity-search event; build verified exit:0]
+- [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical. [2026-08-20: RiskBoard.jsx confirmed implemented & mounted (App.jsx:621); isRiskQuery+buildRiskScript wired in JarvisBrain; severity-sorted with red pulse on critical; build verified exit:0]
+- [x] F10 Task board — /entities/Task → live mission cards with status. [2026-08-20: TaskBoard.jsx confirmed implemented & mounted in App.jsx; build verified exit:0]
+- [x] F11 Datasets browser — /v1/datasets → catalog list with row counts. [2026-08-20: DatasetsBrowser.jsx confirmed implemented & mounted in App.jsx; build verified exit:0]
+- [x] F12 Investigations list — /v1/investigations → open cases panel. [2026-08-20: InvestigationsList.jsx confirmed implemented & mounted in App.jsx; build verified exit:0]
+- [x] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome. [2026-08-20: ScenarioLauncher.jsx confirmed implemented & mounted in App.jsx; build verified exit:0]
+- [x] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes. [2026-08-20: DocumentSearch.jsx confirmed implemented & mounted in App.jsx; build verified exit:0]
+- [x] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live. [2026-08-20: SkillScorecard.jsx confirmed implemented & mounted in App.jsx; build verified exit:0]
+- [x] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time. [2026-08-20: BrainGrowthSparkline.jsx confirmed implemented & mounted in App.jsx; build verified exit:0]
+- [x] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only). [2026-08-20: PerSceneAnchorDrillDown.jsx created & mounted in App.jsx; fetches /v1/cinematic/scene/{id}; all-anchors expanded view with JSON drill-down; 10-scene picker; 60 s refresh; Ctrl+Shift+A + jarvis:anchor-drill-toggle + isAnchorDrillQuery in JarvisBrain; build verified exit:0]
 - [ ] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts.
 - [ ] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant.
 - [ ] F20 "Show me" navigation — already in JarvisBrain; extend keyword map to data drill (e.g. "show risks").
