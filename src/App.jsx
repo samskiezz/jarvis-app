@@ -605,6 +605,7 @@ import LlmProviderHealthMonitor from '@/components/cinematic/LlmProviderHealthMo
 import LlmBudgetSentinel from '@/components/cinematic/LlmBudgetSentinel';
 import ResearchAutopilotMonitor from '@/components/cinematic/ResearchAutopilotMonitor';
 import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCoverage';
+import ReportInvestigationBridge from '@/components/cinematic/ReportInvestigationBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1905,6 +1906,8 @@ function App() {
             <ResearchAutopilotMonitor />
             {/* F51 (overnight 2026-08-20): AIP Skill × Scenario Coverage — ⬡ SKAS button (left:960 bottom:18 zIndex:68); parallel-fetches /v1/aip/skill + /v1/scenario/list every 90 s; keyword-correlates each skill against scenarios to classify EXERCISED vs UNUSED; stat tiles (skills/scenarios/exercised/unused); ALL/EXERCISED/UNUSED filter tabs + search; expand skill → matched scenario cards with relevance score + proportional bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + jarvis:speak-dossier TTS; isSkasQuery+buildSkasScript exported for JarvisBrain intent routing; jarvis:skas-toggle event; "skill coverage/skill scenario/scenario skills/skas/aip skill coverage/which skills/unused skills/skill map/skill gap" voice trigger */}
             <AipSkillScenarioCoverage />
+            {/* F52 (overnight 2026-08-20): Report × Investigation Bridge — ◈ RIIB button (left:61240 bottom:8 zIndex:119); parallel-fetches /v1/reports + /v1/investigations; keyword-correlates each investigation against the report catalog to surface SUPPORTED (at least one report provides documentary evidence) vs BLIND (no matching reports — evidence gap); amber badge on blind count; stat tiles (investigations/reports/supported/blind); ALL/SUPPORTED/BLIND filter tabs + text search; expand investigation → matched reports with topic badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-evidence brief + jarvis:speak-dossier TTS; isRiibQuery+buildRiibScript wired in JarvisBrain; jarvis:riib-toggle event; 90-s auto-refresh; "report investigation/investigation evidence/riib/unsupported investigations/investigation documents/which investigations have reports/evidence gap" voice trigger */}
+            <ReportInvestigationBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

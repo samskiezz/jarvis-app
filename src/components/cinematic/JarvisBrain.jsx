@@ -30,6 +30,7 @@ import { isAnomQuery, buildAnomScript } from "./MetricAnomalyMonitor";
 import { isLlmhQuery, buildLlmhScript } from "./LlmProviderHealthMonitor";
 import { isRautQuery, buildRautScript } from "./ResearchAutopilotMonitor";
 import { isSkasQuery, buildSkasScript } from "./AipSkillScenarioCoverage";
+import { isRiibQuery, buildRiibScript } from "./ReportInvestigationBridge";
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
 import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
@@ -950,6 +951,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skas-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSkasScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F52: report × investigation bridge — ReportInvestigationBridge opens itself via jarvis:riib-toggle;
+    // we speak the /v1/reports + /v1/investigations evidence-gap brief.
+    if (isRiibQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:riib-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRiibScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
