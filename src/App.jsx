@@ -602,6 +602,7 @@ import RiskSeverityTrendSparkline from '@/components/cinematic/RiskSeverityTrend
 import GraphCommunitiesExplorer from '@/components/cinematic/GraphCommunitiesExplorer';
 import MetricAnomalyMonitor from '@/components/cinematic/MetricAnomalyMonitor';
 import LlmProviderHealthMonitor from '@/components/cinematic/LlmProviderHealthMonitor';
+import LlmBudgetSentinel from '@/components/cinematic/LlmBudgetSentinel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1896,6 +1897,8 @@ function App() {
             <MetricAnomalyMonitor />
             {/* F48 (overnight 2026-08-20): LLM Provider Health Monitor — ⬡ LLMH button (left:840 bottom:18 zIndex:68); polls /v1/jarvis/agent/llm/health every 60 s; one row per registered LLM provider (qwen32b/gpu/kimi/openai/anthropic/ollama) with configured + reachable badges and measured latency; stat tiles (total/reachable/down/max lat); ALL/REACHABLE/DOWN/UNCONFIGURED filter tabs + text search; latency-coloured bar per row; red pulse on down count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence health brief + jarvis:speak-dossier TTS; isLlmhQuery+buildLlmhScript exported for JarvisBrain intent routing; jarvis:llmh-toggle event; "llm health/provider health/llmh/llm status/model health/llm providers" voice trigger */}
             <LlmProviderHealthMonitor />
+            {/* F49 (overnight 2026-08-20): LLM Budget Sentinel — ◉ LBSG button (right-edge; min(96480px,100vw-115px)); polls /v1/token-governor/spend_status + /v1/aip/providers every 60 s; stat tiles (spent/daily-cap/pct-used/providers); daily budget + archon cap gauge bars; CEILING HIT banner when spent≥cap; per-provider row with configured/unconfigured badge + id + model; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence budget brief + jarvis:speak-dossier TTS; RED "CEIL" badge on ceiling_hit, AMBER pct badge when pct_used≥75; isLbsgQuery+buildLbsgScript exported for JarvisBrain intent routing; jarvis:lbsg-toggle event; "provider status/llm providers/token budget/daily budget/spend status/budget ceiling/llm spend/budget sentinel/which providers/model providers/provider health/archon budget/lbsg" voice trigger */}
+            <LlmBudgetSentinel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
