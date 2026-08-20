@@ -603,6 +603,7 @@ import GraphCommunitiesExplorer from '@/components/cinematic/GraphCommunitiesExp
 import MetricAnomalyMonitor from '@/components/cinematic/MetricAnomalyMonitor';
 import LlmProviderHealthMonitor from '@/components/cinematic/LlmProviderHealthMonitor';
 import LlmBudgetSentinel from '@/components/cinematic/LlmBudgetSentinel';
+import ResearchAutopilotMonitor from '@/components/cinematic/ResearchAutopilotMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1899,6 +1900,8 @@ function App() {
             <LlmProviderHealthMonitor />
             {/* F49 (overnight 2026-08-20): LLM Budget Sentinel — ◉ LBSG button (right-edge; min(96480px,100vw-115px)); polls /v1/token-governor/spend_status + /v1/aip/providers every 60 s; stat tiles (spent/daily-cap/pct-used/providers); daily budget + archon cap gauge bars; CEILING HIT banner when spent≥cap; per-provider row with configured/unconfigured badge + id + model; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence budget brief + jarvis:speak-dossier TTS; RED "CEIL" badge on ceiling_hit, AMBER pct badge when pct_used≥75; isLbsgQuery+buildLbsgScript exported for JarvisBrain intent routing; jarvis:lbsg-toggle event; "provider status/llm providers/token budget/daily budget/spend status/budget ceiling/llm spend/budget sentinel/which providers/model providers/provider health/archon budget/lbsg" voice trigger */}
             <LlmBudgetSentinel />
+            {/* F50 (overnight 2026-08-20): Research Autopilot Monitor — ◈ RAUT button (left:900 bottom:18 zIndex:68); polls /v1/jarvis/research/status every 30 s; running/idle/stopped/disabled state from autopilot.running + idle_no_llm + enabled_env; stat tiles (ITER / TOPICS / NOTES / UPTIME); detail rows for backend, availability, autopilot backend, idle-no-llm flag, last injected count, relative last-iteration timestamp, last topic, ollama host, config source, model, last error; env-hint banner surfaces the /status hint; ON/OFF badge pulses when the loop is running; live uptime + relative timestamps re-render every second while open; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + jarvis:speak-dossier TTS; isRautQuery+buildRautScript exported for JarvisBrain intent routing; jarvis:raut-toggle event; "research autopilot/raut/autopilot status/research status/gpu autopilot/research loop" voice trigger */}
+            <ResearchAutopilotMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

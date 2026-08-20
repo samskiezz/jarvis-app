@@ -28,6 +28,7 @@ import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView"
 import { isCommxQuery, buildCommxScript } from "./GraphCommunitiesExplorer";
 import { isAnomQuery, buildAnomScript } from "./MetricAnomalyMonitor";
 import { isLlmhQuery, buildLlmhScript } from "./LlmProviderHealthMonitor";
+import { isRautQuery, buildRautScript } from "./ResearchAutopilotMonitor";
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
 import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
@@ -929,6 +930,15 @@ export default function JarvisBrain() {
     if (isLlmhQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildLlmhScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F50: research autopilot — ResearchAutopilotMonitor opens itself via its own jarvis:ask
+    // listener; we speak the /v1/jarvis/research/status brief.
+    if (isRautQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRautScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
