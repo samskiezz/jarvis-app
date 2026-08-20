@@ -601,6 +601,7 @@ import OpsEventsTimeline from '@/components/cinematic/OpsEventsTimeline';
 import RiskSeverityTrendSparkline from '@/components/cinematic/RiskSeverityTrendSparkline';
 import GraphCommunitiesExplorer from '@/components/cinematic/GraphCommunitiesExplorer';
 import MetricAnomalyMonitor from '@/components/cinematic/MetricAnomalyMonitor';
+import LlmProviderHealthMonitor from '@/components/cinematic/LlmProviderHealthMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1893,6 +1894,8 @@ function App() {
             <GraphCommunitiesExplorer />
             {/* F47 (overnight 2026-08-20): Metric Anomaly Monitor — ⚠ ANOM button (left:780 bottom:18 zIndex:68); polls /v1/jarvis/analytics/anomalies every 60 s; sorts anomalies by |zscore| descending with HIGH/MEDIUM severity colour + direction arrow (↑/↓); stat tiles (total/high/medium/max |z|); ALL/HIGH/MEDIUM filter tabs + text search; each row shows latest vs mean±std + proportional |z| bar; red pulse on high-severity count badge; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence anomaly brief + jarvis:speak-dossier TTS; isAnomQuery+buildAnomScript exported for JarvisBrain intent routing; jarvis:anom-toggle event; "anomaly/anomalies/anomaly monitor/anom/metric anomaly" voice trigger */}
             <MetricAnomalyMonitor />
+            {/* F48 (overnight 2026-08-20): LLM Provider Health Monitor — ⬡ LLMH button (left:840 bottom:18 zIndex:68); polls /v1/jarvis/agent/llm/health every 60 s; one row per registered LLM provider (qwen32b/gpu/kimi/openai/anthropic/ollama) with configured + reachable badges and measured latency; stat tiles (total/reachable/down/max lat); ALL/REACHABLE/DOWN/UNCONFIGURED filter tabs + text search; latency-coloured bar per row; red pulse on down count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence health brief + jarvis:speak-dossier TTS; isLlmhQuery+buildLlmhScript exported for JarvisBrain intent routing; jarvis:llmh-toggle event; "llm health/provider health/llmh/llm status/model health/llm providers" voice trigger */}
+            <LlmProviderHealthMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

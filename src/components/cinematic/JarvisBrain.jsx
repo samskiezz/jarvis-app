@@ -27,6 +27,7 @@ import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
 import { isCommxQuery, buildCommxScript } from "./GraphCommunitiesExplorer";
 import { isAnomQuery, buildAnomScript } from "./MetricAnomalyMonitor";
+import { isLlmhQuery, buildLlmhScript } from "./LlmProviderHealthMonitor";
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
 import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
@@ -919,6 +920,15 @@ export default function JarvisBrain() {
     if (isAnomQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildAnomScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F48: LLM provider health — LlmProviderHealthMonitor opens itself via its own jarvis:ask
+    // listener; we speak the /v1/jarvis/agent/llm/health brief.
+    if (isLlmhQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLlmhScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
