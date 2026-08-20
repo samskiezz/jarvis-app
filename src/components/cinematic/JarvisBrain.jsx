@@ -666,6 +666,7 @@ import { isAnchorDrillQuery } from "./PerSceneAnchorDrillDown";
 import { isKpulseQuery, buildKpulseScript } from "../overnight/KnowledgePulsePanel";
 import { isIpmmQuery, buildIpmmScript } from "../overnight/IntelProfileMissionMap";
 import { isSwrinvQuery, buildSwrinvScript } from "../overnight/SwarmInvestigationConvergence";
+import { isGcirtQuery, buildGcirtScript } from "./GraphCommunityInvestigationReportTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -961,6 +962,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:riib-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRiibScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F53: graph community × investigation × report triple — GCIRT opens itself via jarvis:gcirt-toggle;
+    // we speak the community/investigation/report coverage brief.
+    if (isGcirtQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcirt-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcirtScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;

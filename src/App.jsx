@@ -606,6 +606,7 @@ import LlmBudgetSentinel from '@/components/cinematic/LlmBudgetSentinel';
 import ResearchAutopilotMonitor from '@/components/cinematic/ResearchAutopilotMonitor';
 import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCoverage';
 import ReportInvestigationBridge from '@/components/cinematic/ReportInvestigationBridge';
+import GraphCommunityInvestigationReportTriple from '@/components/cinematic/GraphCommunityInvestigationReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1908,6 +1909,8 @@ function App() {
             <AipSkillScenarioCoverage />
             {/* F52 (overnight 2026-08-20): Report × Investigation Bridge — ◈ RIIB button (left:61240 bottom:8 zIndex:119); parallel-fetches /v1/reports + /v1/investigations; keyword-correlates each investigation against the report catalog to surface SUPPORTED (at least one report provides documentary evidence) vs BLIND (no matching reports — evidence gap); amber badge on blind count; stat tiles (investigations/reports/supported/blind); ALL/SUPPORTED/BLIND filter tabs + text search; expand investigation → matched reports with topic badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-evidence brief + jarvis:speak-dossier TTS; isRiibQuery+buildRiibScript wired in JarvisBrain; jarvis:riib-toggle event; 90-s auto-refresh; "report investigation/investigation evidence/riib/unsupported investigations/investigation documents/which investigations have reports/evidence gap" voice trigger */}
             <ReportInvestigationBridge />
+            {/* F53 (overnight 2026-08-20): Graph Community × Investigation × Report Triple — ◈ GCIRT button (left:1020 bottom:18 zIndex:68); parallel-fetches /v1/graph/communities + /v1/investigations + /v1/reports; keyword-correlates each cluster against both open investigations and report catalog; FULLY_COVERED/INVESTIGATION_ONLY/REPORT_ONLY/DARK classification; amber badge on dark count; isGcirtQuery+buildGcirtScript wired in JarvisBrain; jarvis:gcirt-toggle event; 90-s auto-refresh; "community investigation report/gcirt/cluster evidence/dark clusters" voice trigger */}
+            <GraphCommunityInvestigationReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
