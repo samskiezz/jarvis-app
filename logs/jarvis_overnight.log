@@ -14,3 +14,4 @@
 2026-08-20T07:21:41Z F37 ScenarioDatasetCoverage.jsx — /v1/scenario/list × /v1/datasets keyword-coverage; DATA_BACKED vs DATA_DARK; ⬡ SCDV button; ASSESS → AI brief + TTS; mounted App.jsx; wired JarvisBrain; build exit:0
 [2026-08-20] F38: OpsHealthSummaryDrawer mounted in App.jsx — parallel-polls /v1/jarvis/system/status + /v1/ops/events; service health grid + critical events list; isOhsdQuery+buildOhsdScript already wired in JarvisBrain; build verified exit:0
 [2026-08-20] F39: KnowledgePulsePanel.jsx — /knowledge/ browse + search + expand + confidence bars; ASSESS → /v1/jarvis/agent/chat + TTS; isKpulseQuery+buildKpulseScript wired in JarvisBrain; ◎ KPULSE mounted App.jsx; build exit:0
+[2026-08-20] F40 IntelProfileMissionMap.jsx — /entities/IntelProfile × /v1/investigations; ACTIVE/MONITORED/PASSIVE; ASSESS+TTS; build exit:0; pushed to jarvis-overnight

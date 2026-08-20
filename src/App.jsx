@@ -593,6 +593,7 @@ import WatchtowerRulesPanel from '@/components/cinematic/WatchtowerRulesPanel';
 import LiveIntelRiskConvergence from '@/components/cinematic/LiveIntelRiskConvergence';
 import OpsHealthSummaryDrawer from '@/components/overnight/OpsHealthSummaryDrawer';
 import KnowledgePulsePanel from '@/components/overnight/KnowledgePulsePanel';
+import IntelProfileMissionMap from '@/components/overnight/IntelProfileMissionMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1869,6 +1870,8 @@ function App() {
             <OpsHealthSummaryDrawer />
             {/* F39 (overnight 2026-08-20): knowledge pulse panel — ◎ KPULSE (left:882320 bottom:8 zIndex:584); polls /knowledge/ every 5 min; kind badges + confidence bars + age; text search; expand article inline; ASSESS → /v1/jarvis/agent/chat 2-sentence KB health brief + TTS; isKpulseQuery+buildKpulseScript wired in JarvisBrain; jarvis:kpulse-toggle event; "knowledge pulse/kpulse/knowledge base/browse knowledge/kb pulse" voice trigger */}
             <KnowledgePulsePanel />
+            {/* F40 (overnight 2026-08-20): intel profile mission map — ◈ IPMM (left:882880 bottom:8 zIndex:585); parallel-fetches /entities/IntelProfile + /v1/investigations every 90 s; keyword-correlates each intel profile against open investigations to surface ACTIVE/MONITORED/PASSIVE classification; amber badge on active count; ALL/ACTIVE/MONITORED/PASSIVE filter tabs + text search; expand row → matched investigations; ASSESS → /v1/jarvis/agent/chat 2-sentence dossier brief + TTS; isIpmmQuery+buildIpmmScript wired in JarvisBrain; jarvis:ipmm-toggle event; "intel profile map/intel mission/ipmm/profile map/intel dossier" voice trigger */}
+            <IntelProfileMissionMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
