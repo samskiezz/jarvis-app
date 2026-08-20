@@ -599,6 +599,7 @@ import SwarmInvestigationConvergence from '@/components/overnight/SwarmInvestiga
 import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
 import OpsEventsTimeline from '@/components/cinematic/OpsEventsTimeline';
 import RiskSeverityTrendSparkline from '@/components/cinematic/RiskSeverityTrendSparkline';
+import GraphCommunitiesExplorer from '@/components/cinematic/GraphCommunitiesExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1887,6 +1888,8 @@ function App() {
             <OpsEventsTimeline />
             {/* F45 (overnight 2026-08-20): Risk Severity Trend Sparkline — ◈ RTREND button (left:660 bottom:18); polls /entities/RiskSignal every 60 s in the background; buckets by CRITICAL/HIGH/MEDIUM/LOW/INFO; stores rolling 30-reading window in localStorage so trend survives reloads; button shows live CRITICAL count + inline sparkline; expand → stat tiles per severity + stacked-bar 30-reading history + legend + ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence trend brief + jarvis:speak-dossier TTS; ⌫ clears stored history; isRtrendQuery+buildRtrendScript exported for JarvisBrain intent routing; jarvis:rtrend-toggle event; "risk trend/risk history/risk sparkline/risk over time/rtrend" voice trigger */}
             <RiskSeverityTrendSparkline />
+            {/* F46 (overnight 2026-08-20): Graph Communities Explorer — ⬢ COMMX button (left:720 bottom:18 zIndex:68); polls /v1/graph/communities every 90 s; groups clusters by member count with proportional size bars; stat tiles (clusters/nodes/largest/singleton); text search across cluster + node ids; expand cluster row → inline node membership chips (first 40 + overflow count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence partition brief + jarvis:speak-dossier TTS; isCommxQuery+buildCommxScript exported for JarvisBrain intent routing; jarvis:commx-toggle event; "communities/graph communities/clusters/graph clusters/commx/community explorer" voice trigger */}
+            <GraphCommunitiesExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

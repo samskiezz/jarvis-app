@@ -25,6 +25,7 @@ import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
 import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
 import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
+import { isCommxQuery, buildCommxScript } from "./GraphCommunitiesExplorer";
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
 import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
@@ -899,6 +900,15 @@ export default function JarvisBrain() {
     if (isCentralityQuery(q)) {
       setOpen(true); setThinking(true); setText("");
       const script = await buildCentralityScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F46: graph communities — GraphCommunitiesExplorer opens itself via its own jarvis:ask
+    // listener when VOICE_RE matches. Here we just speak the /v1/graph/communities brief.
+    if (isCommxQuery(q)) {
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCommxScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
