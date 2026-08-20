@@ -12,3 +12,4 @@
 [2026-08-20] F35 WatchtowerRulesPanel: /v1/rules list + POST /v1/rules/evaluate; ⬡ RULES button; severity cards; EVAL + TTS; AI ASSESS; isWtwrQuery+buildWtwrScript wired in JarvisBrain; build exit:0
 [2026-08-20] F36 LiveIntelRiskConvergence: pre-existing component (431 lines) mounted in App.jsx; parallel-fetches /functions/getLiveIntel + /entities/RiskSignal; TRIGGERED/DORMANT classification; isLirisconvQuery+buildLirisconvScript wired in JarvisBrain; build exit:0
 2026-08-20T07:21:41Z F37 ScenarioDatasetCoverage.jsx — /v1/scenario/list × /v1/datasets keyword-coverage; DATA_BACKED vs DATA_DARK; ⬡ SCDV button; ASSESS → AI brief + TTS; mounted App.jsx; wired JarvisBrain; build exit:0
+[2026-08-20] F38: OpsHealthSummaryDrawer mounted in App.jsx — parallel-polls /v1/jarvis/system/status + /v1/ops/events; service health grid + critical events list; isOhsdQuery+buildOhsdScript already wired in JarvisBrain; build verified exit:0

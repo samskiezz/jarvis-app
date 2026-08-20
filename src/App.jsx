@@ -591,6 +591,7 @@ import QuickIntelCard from '@/components/cinematic/QuickIntelCard';
 import PerSceneAnchorDrillDown from '@/components/cinematic/PerSceneAnchorDrillDown';
 import WatchtowerRulesPanel from '@/components/cinematic/WatchtowerRulesPanel';
 import LiveIntelRiskConvergence from '@/components/cinematic/LiveIntelRiskConvergence';
+import OpsHealthSummaryDrawer from '@/components/overnight/OpsHealthSummaryDrawer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1863,6 +1864,8 @@ function App() {
             <LiveIntelRiskConvergence />
             {/* F37 (overnight 2026-08-20): scenario × dataset coverage — ⬡ SCDV (left:881760 bottom:8 zIndex:583); parallel-fetches /v1/scenario/list + /v1/datasets; keyword-correlates each scenario against the dataset catalog to surface DATA_BACKED vs DATA_DARK scenarios; amber badge on dark count; stat tiles (scenarios/datasets/backed/dark); ALL/BACKED/DARK filter tabs + text search; expand row → matched datasets with keyword score; ASSESS → /v1/jarvis/agent/chat 2-sentence data-readiness brief + TTS; isScenarioDsvQuery+buildScenarioDsvScript wired in JarvisBrain; jarvis:scdv-toggle event; 90-s auto-refresh */}
             <ScenarioDatasetCoverage />
+            {/* F38 (overnight 2026-08-20): ops health summary drawer — right-edge ◀ OPS HEALTH tab at 64 % from top; parallel-polls /v1/jarvis/system/status (60 s) + /v1/ops/events (30 s); service health grid + critical events list; rose (#F43F5E) accent; red badge on critical event count; isOhsdQuery+buildOhsdScript wired in JarvisBrain; jarvis:ohsd-toggle event; "ops health/service health summary/ohsd" voice trigger */}
+            <OpsHealthSummaryDrawer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
