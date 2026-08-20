@@ -17,3 +17,4 @@
 [2026-08-20] F40 IntelProfileMissionMap.jsx — /entities/IntelProfile × /v1/investigations; ACTIVE/MONITORED/PASSIVE; ASSESS+TTS; build exit:0; pushed to jarvis-overnight
 [2026-08-20] F41 SwarmInvestigationConvergence.jsx — /entities/SwarmJob × /v1/investigations convergence panel; LINKED/PARALLEL/INDEPENDENT; ASSESS+TTS; ⬡ SWRINV; isSwrinvQuery+buildSwrinvScript in JarvisBrain; build exit:0
 [2026-08-20] F42 InvestigationsBoard.jsx — /v1/investigations list + lazy /{id} drill-down (seeds/annotations/subgraph); ⊗ INVST; stat tiles; filter tabs; ASSESS+TTS; isInvstQuery+buildInvstScript already wired in JarvisBrain; mounted App.jsx; build exit:0
+[2026-08-20] F43 EntityCountPulse.jsx — ◈ PULSE button (left:540 bottom:18); parallel-polls /entities/{Task,RiskSignal,IntelProfile,SwarmJob,Investment,Contact} every 60 s; live count + delta per type with proportional bar; total footer; voice trigger via jarvis:ask; imported & mounted in App.jsx; build exit:0

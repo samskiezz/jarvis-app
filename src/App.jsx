@@ -596,6 +596,7 @@ import OpsHealthSummaryDrawer from '@/components/overnight/OpsHealthSummaryDrawe
 import KnowledgePulsePanel from '@/components/overnight/KnowledgePulsePanel';
 import IntelProfileMissionMap from '@/components/overnight/IntelProfileMissionMap';
 import SwarmInvestigationConvergence from '@/components/overnight/SwarmInvestigationConvergence';
+import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1878,6 +1879,8 @@ function App() {
             <SwarmInvestigationConvergence />
             {/* F42 (overnight 2026-08-20): InvestigationsBoard — ⊗ INVST button; fetches /v1/investigations list + lazy /v1/investigations/{id} drill-down (seeds, annotations, subgraph); stat tiles: total/annotated/seeded/recent-7d; ALL/ANNOTATED/SEEDED filter tabs + text search; expand row → seeds/annotations/subgraph counts; ASSESS → /v1/jarvis/agent/chat 2-sentence case brief + TTS; isInvstQuery+buildInvstScript wired in JarvisBrain; jarvis:invst-toggle; 90-s auto-refresh; "investigations/saved cases/case files/invst" voice trigger */}
             <InvestigationsBoard />
+            {/* F43 (overnight 2026-08-20): Entity Count Pulse — ◈ PULSE button (left:540 bottom:18); parallel-polls all 6 entity endpoints (/entities/{Task,RiskSignal,IntelProfile,SwarmJob,Investment,Contact}) every 60 s; shows live count + delta (↑/↓/=) per type with proportional bar; total entity count; voice trigger "entity pulse/entity counts/how many entities/entity monitor" via jarvis:ask; 60-s auto-refresh */}
+            <EntityCountPulse />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
