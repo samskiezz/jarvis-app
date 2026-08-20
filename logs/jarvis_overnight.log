@@ -16,3 +16,4 @@
 [2026-08-20] F39: KnowledgePulsePanel.jsx — /knowledge/ browse + search + expand + confidence bars; ASSESS → /v1/jarvis/agent/chat + TTS; isKpulseQuery+buildKpulseScript wired in JarvisBrain; ◎ KPULSE mounted App.jsx; build exit:0
 [2026-08-20] F40 IntelProfileMissionMap.jsx — /entities/IntelProfile × /v1/investigations; ACTIVE/MONITORED/PASSIVE; ASSESS+TTS; build exit:0; pushed to jarvis-overnight
 [2026-08-20] F41 SwarmInvestigationConvergence.jsx — /entities/SwarmJob × /v1/investigations convergence panel; LINKED/PARALLEL/INDEPENDENT; ASSESS+TTS; ⬡ SWRINV; isSwrinvQuery+buildSwrinvScript in JarvisBrain; build exit:0
+[2026-08-20] F42 InvestigationsBoard.jsx — /v1/investigations list + lazy /{id} drill-down (seeds/annotations/subgraph); ⊗ INVST; stat tiles; filter tabs; ASSESS+TTS; isInvstQuery+buildInvstScript already wired in JarvisBrain; mounted App.jsx; build exit:0

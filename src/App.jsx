@@ -23,6 +23,7 @@ import RiskBoard from '@/components/cinematic/RiskBoard';
 import TaskBoard from '@/components/cinematic/TaskBoard';
 import DatasetsBrowser from '@/components/cinematic/DatasetsBrowser';
 import InvestigationsList from '@/components/cinematic/InvestigationsList';
+import InvestigationsBoard from '@/components/cinematic/InvestigationsBoard';
 import AlertToasts from '@/components/cinematic/AlertToasts';
 import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
 import LiveClockUptime from '@/components/cinematic/LiveClockUptime';
@@ -1875,6 +1876,8 @@ function App() {
             <IntelProfileMissionMap />
             {/* F41 (overnight 2026-08-20): swarm investigation convergence — ⬡ SWRINV (right:244 bottom:8 zIndex:586); parallel-fetches /entities/SwarmJob + /v1/investigations every 90 s; keyword-correlates each swarm job against open investigations to surface LINKED/PARALLEL/INDEPENDENT classification; cyan badge on linked count; ALL/LINKED/PARALLEL/INDEPENDENT filter tabs + text search; expand row → matched investigations with keyword score; ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSwrinvQuery+buildSwrinvScript wired in JarvisBrain; jarvis:swrinv-toggle event; "swarm investigation/swarm convergence/swrinv/job investigation" voice trigger */}
             <SwarmInvestigationConvergence />
+            {/* F42 (overnight 2026-08-20): InvestigationsBoard — ⊗ INVST button; fetches /v1/investigations list + lazy /v1/investigations/{id} drill-down (seeds, annotations, subgraph); stat tiles: total/annotated/seeded/recent-7d; ALL/ANNOTATED/SEEDED filter tabs + text search; expand row → seeds/annotations/subgraph counts; ASSESS → /v1/jarvis/agent/chat 2-sentence case brief + TTS; isInvstQuery+buildInvstScript wired in JarvisBrain; jarvis:invst-toggle; 90-s auto-refresh; "investigations/saved cases/case files/invst" voice trigger */}
+            <InvestigationsBoard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
