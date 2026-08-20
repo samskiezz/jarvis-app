@@ -597,6 +597,7 @@ import KnowledgePulsePanel from '@/components/overnight/KnowledgePulsePanel';
 import IntelProfileMissionMap from '@/components/overnight/IntelProfileMissionMap';
 import SwarmInvestigationConvergence from '@/components/overnight/SwarmInvestigationConvergence';
 import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
+import OpsEventsTimeline from '@/components/cinematic/OpsEventsTimeline';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1881,6 +1882,8 @@ function App() {
             <InvestigationsBoard />
             {/* F43 (overnight 2026-08-20): Entity Count Pulse — ◈ PULSE button (left:540 bottom:18); parallel-polls all 6 entity endpoints (/entities/{Task,RiskSignal,IntelProfile,SwarmJob,Investment,Contact}) every 60 s; shows live count + delta (↑/↓/=) per type with proportional bar; total entity count; voice trigger "entity pulse/entity counts/how many entities/entity monitor" via jarvis:ask; 60-s auto-refresh */}
             <EntityCountPulse />
+            {/* F44 (overnight 2026-08-20): Ops Events Timeline — ⊞ OPSEV button (left:600 bottom:18); polls /v1/ops/events every 30 s; severity-sorted (CRITICAL/WARNING/INFO) timeline; stat tiles (total/critical/warning/info); ALL/CRITICAL/WARNING/INFO filter tabs + text search; expand row → full event details; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops brief + TTS; red badge on critical count; voice trigger "ops events/operational events/opsev/event timeline" via jarvis:ask */}
+            <OpsEventsTimeline />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
