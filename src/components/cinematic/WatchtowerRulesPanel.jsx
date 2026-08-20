@@ -1,473 +1,398 @@
-import { useState, useEffect, useCallback } from 'react';
+/**
+ * WatchtowerRulesPanel — F35 Watchtower Rules Monitor.
+ * Sources from /v1/rules (rule list) and POST /v1/rules/evaluate (live-intel evaluation).
+ * ⬡ RULES button; 60-s auto-refresh; badge shows enabled rule count.
+ * EVALUATE → runs /v1/rules/evaluate against live-intel snapshot → shows matched alerts + TTS.
+ * Voice trigger: "JARVIS, rules" / "watchtower" / "automation rules" / "alert rules" / "rules".
+ * Additive only — mounted via App.jsx; intents exported for JarvisBrain.
+ */
+import { useEffect, useState, useCallback } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = '';
-const WTWR_RE = /\b(watchtower|rules?[_\s-]?engine|ops[_\s-]?rules?|alert[_\s-]?rules?|rule[_\s-]?engine|wtwr|rule[_\s-]?evaluation|active[_\s-]?rules?|which[_\s-]?rules?|create[_\s-]?rule|evaluate[_\s-]?rules?)\b/i;
+const CY  = "#29E7FF";
+const PRP = "#A855F7";
+const GLD = "#FFD700";
+const RED = "#FF3B6B";
+const GRN = "#00E5A0";
+const OR  = "#FF8800";
 
-export function isWtwrQuery(t) {
-  return WTWR_RE.test(t || '');
+const API_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
+
+const RULES_RE = /\b(rules?|watchtower|automation\s*rule|alert\s*rule|rule\s*engine|trigger\s*rule|rule\s*set)\b/i;
+
+function sevColor(sev) {
+  const n = typeof sev === "number" ? sev : 50;
+  if (n >= 80) return RED;
+  if (n >= 60) return OR;
+  if (n >= 40) return GLD;
+  return GRN;
 }
 
-export async function buildWtwrScript() {
-  const r = await fetch(`${API}/v1/rules`).then(res => res.json()).catch(() => []);
-  const rules = normaliseArray(r);
-  const enabled = rules.filter(x => x.enabled !== false).length;
-  const disabled = rules.length - enabled;
-  const topRules = rules.slice(0, 4).map(x => x.name || x.id || '?').join(', ') || 'none';
+function sevLabel(sev) {
+  const n = typeof sev === "number" ? sev : 50;
+  if (n >= 80) return "CRITICAL";
+  if (n >= 60) return "HIGH";
+  if (n >= 40) return "MEDIUM";
+  return "LOW";
+}
+
+async function fetchRules() {
+  const r = await fetch(`${apiBase()}/v1/rules`, {
+    headers: { Authorization: `Bearer ${API_KEY}` },
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const d = await r.json();
+  return Array.isArray(d)
+    ? d
+    : Array.isArray(d?.rules)
+    ? d.rules
+    : Array.isArray(d?.items)
+    ? d.items
+    : Array.isArray(d?.data)
+    ? d.data
+    : [];
+}
+
+async function evaluateRules() {
+  const r = await fetch(`${apiBase()}/v1/rules/evaluate`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({}),
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const d = await r.json();
+  return Array.isArray(d)
+    ? d
+    : Array.isArray(d?.alerts)
+    ? d.alerts
+    : Array.isArray(d?.fired)
+    ? d.fired
+    : Array.isArray(d?.matches)
+    ? d.matches
+    : [];
+}
+
+async function fetchAgentChat(prompt) {
+  const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ message: prompt }),
+  });
+  if (!r.ok) throw new Error(`HTTP ${r.status}`);
+  const d = await r.json();
+  return d?.response || d?.reply || d?.text || d?.content || "";
+}
+
+export function isRulesQuery(text) {
+  return RULES_RE.test(text || "");
+}
+export { isRulesQuery as isWtwrQuery };
+
+export async function buildRulesScript() {
+  let rules = [];
+  try { rules = await fetchRules(); } catch (_) {}
+  const enabled = rules.filter(r => r.enabled !== false);
+  if (!rules.length) return "Watchtower rules monitor: no rules configured.";
+  const highSev = enabled.filter(r => (r.severity || 50) >= 60);
   return (
-    `Watchtower Rules Engine: ${rules.length} rules registered — ${enabled} enabled, ${disabled} disabled. ` +
-    `Top rules: ${topRules}. Evaluate any rule set against live intel via POST /v1/rules/evaluate.`
+    `Watchtower: ${rules.length} automation rule${rules.length !== 1 ? "s" : ""} loaded, ` +
+    `${enabled.length} enabled. ` +
+    (highSev.length > 0
+      ? `${highSev.length} high-severity rule${highSev.length !== 1 ? "s" : ""} active.`
+      : "No high-severity rules active.")
+  );
+}
+export { buildRulesScript as buildWtwrScript };
+
+function RuleCard({ rule }) {
+  const color = sevColor(rule.severity);
+  const label = sevLabel(rule.severity);
+  const enabled = rule.enabled !== false;
+  return (
+    <div style={{
+      background: "rgba(41,231,255,0.04)",
+      border: `1px solid ${enabled ? color + "44" : "#333"}`,
+      borderRadius: 6,
+      padding: "10px 12px",
+      marginBottom: 8,
+      opacity: enabled ? 1 : 0.55,
+      position: "relative",
+    }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
+        <span style={{
+          fontSize: 9, fontWeight: 700, letterSpacing: 1, color,
+          border: `1px solid ${color}55`, borderRadius: 3, padding: "1px 5px",
+        }}>{label}</span>
+        <span style={{ fontSize: 9, color: enabled ? GRN : "#666", letterSpacing: 1 }}>
+          {enabled ? "ENABLED" : "DISABLED"}
+        </span>
+        {rule.target && (
+          <span style={{ fontSize: 9, color: "#888", marginLeft: "auto" }}>
+            → {rule.target}
+          </span>
+        )}
+      </div>
+      <div style={{ color: CY, fontSize: 13, fontWeight: 600, marginBottom: 4 }}>
+        {rule.name || rule.id || "Unnamed rule"}
+      </div>
+      {rule.expr && Object.keys(rule.expr).length > 0 && (
+        <div style={{
+          fontFamily: "monospace", fontSize: 10, color: "#aaa",
+          background: "rgba(0,0,0,0.3)", borderRadius: 3, padding: "3px 6px",
+          wordBreak: "break-all",
+        }}>
+          {JSON.stringify(rule.expr)}
+        </div>
+      )}
+    </div>
   );
 }
 
-function normaliseArray(raw) {
-  if (!raw) return [];
-  if (Array.isArray(raw)) return raw;
-  for (const k of ['items', 'results', 'data', 'rules', 'records']) {
-    if (Array.isArray(raw[k])) return raw[k];
-  }
-  return [];
+function AlertCard({ alert }) {
+  const color = alert.severity >= 80 ? RED : alert.severity >= 60 ? OR : GLD;
+  return (
+    <div style={{
+      background: `${color}18`,
+      border: `1px solid ${color}55`,
+      borderRadius: 6,
+      padding: "8px 12px",
+      marginBottom: 6,
+    }}>
+      <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+        <span style={{ fontSize: 9, color, fontWeight: 700, letterSpacing: 1 }}>
+          {alert.rule_name || alert.name || alert.rule || "Rule fired"}
+        </span>
+        {alert.severity != null && (
+          <span style={{ fontSize: 9, color: "#888" }}>sev {alert.severity}</span>
+        )}
+      </div>
+      {alert.message && (
+        <div style={{ fontSize: 11, color: "#ddd", marginTop: 2 }}>{alert.message}</div>
+      )}
+    </div>
+  );
 }
-
-const PANEL_W = 600;
-const PANEL_H = 580;
-const ACCENT = '#F59E0B';
 
 export default function WatchtowerRulesPanel() {
   const [open, setOpen] = useState(false);
   const [rules, setRules] = useState([]);
+  const [alerts, setAlerts] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [err, setErr] = useState(null);
-  const [tab, setTab] = useState('RULES');
-  const [search, setSearch] = useState('');
-  const [evalCtx, setEvalCtx] = useState('{}');
-  const [evalResult, setEvalResult] = useState(null);
-  const [evaluating, setEvaluating] = useState(false);
-  const [newName, setNewName] = useState('');
-  const [newSeverity, setNewSeverity] = useState(50);
-  const [newTarget, setNewTarget] = useState('');
-  const [creating, setCreating] = useState(false);
-  const [createMsg, setCreateMsg] = useState('');
-  const [assessing, setAssessing] = useState(false);
-  const [assessText, setAssessText] = useState('');
+  const [evalLoading, setEvalLoading] = useState(false);
+  const [lastFetch, setLastFetch] = useState(null);
+  const [evalMsg, setEvalMsg] = useState("");
+  const [filter, setFilter] = useState("all");
 
   const load = useCallback(async () => {
-    setLoading(true); setErr(null);
+    setLoading(true);
     try {
-      const r = await fetch(`${API}/v1/rules`).then(res => res.json());
-      setRules(normaliseArray(r));
+      const data = await fetchRules();
+      setRules(data);
+      setLastFetch(new Date().toLocaleTimeString());
     } catch (e) {
-      setErr(e.message);
+      setRules([]);
+    } finally {
+      setLoading(false);
     }
-    setLoading(false);
   }, []);
 
   useEffect(() => {
-    if (open) load();
-    const id = open ? setInterval(load, 60000) : null;
-    return () => { if (id) clearInterval(id); };
+    if (!open) return;
+    load();
+    const id = setInterval(load, 60000);
+    return () => clearInterval(id);
   }, [open, load]);
 
   useEffect(() => {
-    const h = () => setOpen(v => !v);
-    window.addEventListener('jarvis:wtwr-toggle', h);
-    return () => window.removeEventListener('jarvis:wtwr-toggle', h);
+    function handler() { setOpen(o => !o); }
+    window.addEventListener("jarvis:rules-toggle", handler);
+    window.addEventListener("jarvis:wtwr-toggle", handler);
+    return () => {
+      window.removeEventListener("jarvis:rules-toggle", handler);
+      window.removeEventListener("jarvis:wtwr-toggle", handler);
+    };
   }, []);
 
-  const enabled = rules.filter(x => x.enabled !== false).length;
-  const disabled = rules.length - enabled;
-
-  const filtered = rules.filter(r => {
-    if (!search) return true;
-    const s = search.toLowerCase();
-    return `${r.name || ''} ${r.target || ''} ${r.id || ''}`.toLowerCase().includes(s);
-  });
-
-  const badgeCount = enabled;
-  const badgeCol = disabled > 0 ? '#F59E0B' : '#22C55E';
-
-  async function doEval() {
-    setEvaluating(true); setEvalResult(null);
+  const handleEvaluate = async () => {
+    setEvalLoading(true);
+    setAlerts([]);
+    setEvalMsg("");
     try {
-      let ctx = null;
-      try { ctx = JSON.parse(evalCtx); } catch (_) { ctx = null; }
-      const r = await fetch(`${API}/v1/rules/evaluate`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer dev-key' },
-        body: JSON.stringify({ context: ctx }),
-      });
-      const d = await r.json();
-      setEvalResult(d);
-    } catch (e) {
-      setEvalResult({ error: e.message });
-    }
-    setEvaluating(false);
-  }
-
-  async function doCreate() {
-    if (!newName.trim()) return;
-    setCreating(true); setCreateMsg('');
-    try {
-      const r = await fetch(`${API}/v1/rules`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer dev-key' },
-        body: JSON.stringify({ name: newName.trim(), severity: newSeverity, target: newTarget.trim() || undefined, enabled: true }),
-      });
-      if (r.ok) {
-        setCreateMsg('Rule created.');
-        setNewName(''); setNewTarget(''); setNewSeverity(50);
-        load();
+      const fired = await evaluateRules();
+      setAlerts(fired);
+      if (fired.length === 0) {
+        setEvalMsg("No rules matched current live-intel snapshot.");
+        window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", {
+          detail: { text: "Watchtower evaluation complete. No rules matched the current live-intel snapshot." }
+        }));
       } else {
-        const e = await r.json().catch(() => ({}));
-        setCreateMsg(`Error: ${e.detail || r.status}`);
+        setEvalMsg(`${fired.length} rule${fired.length !== 1 ? "s" : ""} fired.`);
+        const names = fired.slice(0, 3).map(a => a.rule_name || a.name || "rule").join(", ");
+        window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", {
+          detail: { text: `Watchtower alert: ${fired.length} rule${fired.length !== 1 ? "s" : ""} fired. ${names}.` }
+        }));
       }
     } catch (e) {
-      setCreateMsg(`Error: ${e.message}`);
+      setEvalMsg(`Evaluate error: ${e.message}`);
+    } finally {
+      setEvalLoading(false);
     }
-    setCreating(false);
-  }
+  };
 
-  async function doAssess() {
-    setAssessing(true); setAssessText('');
+  const handleAssess = async () => {
+    if (!rules.length) return;
+    const enabled = rules.filter(r => r.enabled !== false);
+    const summary = rules.slice(0, 6).map(r => `${r.name || "rule"} (sev ${r.severity || 50}, ${r.enabled !== false ? "enabled" : "disabled"})`).join("; ");
+    const prompt = `Jarvis, analyse these watchtower automation rules and give a 2-sentence operational assessment: ${summary}. Are the right rules active?`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer dev-key' },
-        body: JSON.stringify({
-          message: `Watchtower Rules Engine: ${rules.length} rules — ${enabled} enabled, ${disabled} disabled. Give a 2-sentence ops-rules health brief.`,
-        }),
-      });
-      const d = await r.json();
-      const txt = d.response || d.answer || d.result || JSON.stringify(d);
-      setAssessText(txt);
-      window.dispatchEvent(new CustomEvent('jarvis:speak-dossier', { detail: { text: txt } }));
-    } catch (e) {
-      setAssessText(`Error: ${e.message}`);
-    }
-    setAssessing(false);
-  }
+      const reply = await fetchAgentChat(prompt);
+      if (reply) {
+        window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text: reply } }));
+      }
+    } catch (_) {}
+  };
 
-  function sevColour(sev) {
-    if (sev >= 80) return '#EF4444';
-    if (sev >= 50) return '#F59E0B';
-    return '#22C55E';
+  const visibleRules = filter === "enabled"
+    ? rules.filter(r => r.enabled !== false)
+    : filter === "disabled"
+    ? rules.filter(r => r.enabled === false)
+    : rules;
+
+  const enabledCount = rules.filter(r => r.enabled !== false).length;
+
+  if (!open) {
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        title="Watchtower Rules Monitor"
+        style={{
+          position: "fixed", bottom: 8, left: 11640, zIndex: 62,
+          background: "rgba(41,231,255,0.08)", border: "1px solid rgba(41,231,255,0.3)",
+          color: CY, borderRadius: 4, padding: "3px 8px", fontSize: 10,
+          fontFamily: "monospace", cursor: "pointer", letterSpacing: 1,
+        }}
+      >
+        ⬡ RULES{enabledCount > 0 ? <span style={{ marginLeft: 4, color: GRN, fontSize: 9 }}>{enabledCount}</span> : null}
+      </button>
+    );
   }
 
   return (
-    <>
-      {/* dock button */}
-      <button
-        onClick={() => setOpen(v => !v)}
-        title="Watchtower Rules Engine (WTWR)"
-        style={{
-          position: 'fixed',
-          left: 557040,
-          bottom: 8,
-          zIndex: 215,
-          background: open ? ACCENT : '#1e293b',
-          border: `1px solid ${ACCENT}`,
-          borderRadius: 6,
-          color: open ? '#04060A' : '#e2e8f0',
-          fontSize: 11,
-          fontWeight: 700,
-          padding: '4px 9px',
-          cursor: 'pointer',
-          letterSpacing: 1,
-          display: 'flex',
-          alignItems: 'center',
-          gap: 5,
-        }}
-      >
-        ◈ WTWR
-        {rules.length > 0 && (
-          <span style={{ background: badgeCol, color: '#000', borderRadius: 8, fontSize: 10, padding: '0 5px', fontWeight: 800 }}>
-            {badgeCount}
-          </span>
-        )}
-      </button>
-
-      {/* panel */}
-      {open && (
-        <div style={{
-          position: 'fixed',
-          right: 24,
-          bottom: 48,
-          width: PANEL_W,
-          height: PANEL_H,
-          background: 'rgba(10,15,30,0.97)',
-          border: `1px solid ${ACCENT}`,
-          borderRadius: 12,
-          zIndex: 9200,
-          display: 'flex',
-          flexDirection: 'column',
-          boxShadow: `0 0 40px rgba(245,158,11,0.18)`,
-          overflow: 'hidden',
+    <div style={{
+      position: "fixed", top: 60, right: 20, width: 420, maxHeight: "80vh",
+      background: "rgba(8,12,24,0.97)", border: "1px solid rgba(41,231,255,0.25)",
+      borderRadius: 10, zIndex: 9200, display: "flex", flexDirection: "column",
+      fontFamily: "monospace", boxShadow: "0 4px 32px rgba(0,0,0,0.6)",
+    }}>
+      {/* header */}
+      <div style={{
+        padding: "12px 16px", borderBottom: "1px solid rgba(41,231,255,0.15)",
+        display: "flex", alignItems: "center", gap: 10,
+      }}>
+        <span style={{ color: CY, fontSize: 13, fontWeight: 700, flex: 1 }}>
+          ⬡ WATCHTOWER RULES
+        </span>
+        {lastFetch && <span style={{ fontSize: 9, color: "#666" }}>{lastFetch}</span>}
+        <button onClick={handleEvaluate} disabled={evalLoading} style={{
+          background: `rgba(255,56,107,0.12)`, border: "1px solid rgba(255,56,107,0.4)",
+          color: RED, borderRadius: 4, padding: "3px 8px", fontSize: 10,
+          cursor: evalLoading ? "wait" : "pointer", letterSpacing: 1,
         }}>
-          {/* header */}
-          <div style={{ padding: '12px 16px 8px', borderBottom: '1px solid #1e293b', display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ color: ACCENT, fontSize: 14, fontWeight: 800, letterSpacing: 1 }}>◈ WATCHTOWER RULES ENGINE</span>
-            <span style={{ flex: 1 }} />
-            {loading && <span style={{ color: '#64748b', fontSize: 11 }}>loading…</span>}
-            <button onClick={load} title="Refresh" style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 13 }}>↺</button>
-            <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', color: '#64748b', cursor: 'pointer', fontSize: 16 }}>✕</button>
+          {evalLoading ? "…" : "▶ EVAL"}
+        </button>
+        <button onClick={handleAssess} style={{
+          background: "rgba(168,85,247,0.1)", border: "1px solid rgba(168,85,247,0.3)",
+          color: PRP, borderRadius: 4, padding: "3px 8px", fontSize: 10,
+          cursor: "pointer", letterSpacing: 1,
+        }}>
+          AI ASSESS
+        </button>
+        <button onClick={() => setOpen(false)} style={{
+          background: "none", border: "none", color: "#666", fontSize: 16, cursor: "pointer",
+        }}>×</button>
+      </div>
+
+      {/* stat row */}
+      <div style={{
+        padding: "8px 16px", borderBottom: "1px solid rgba(41,231,255,0.1)",
+        display: "flex", gap: 16,
+      }}>
+        {[
+          { label: "TOTAL", val: rules.length, c: CY },
+          { label: "ENABLED", val: enabledCount, c: GRN },
+          { label: "DISABLED", val: rules.length - enabledCount, c: "#666" },
+          { label: "FIRED", val: alerts.length, c: alerts.length > 0 ? RED : "#666" },
+        ].map(({ label, val, c }) => (
+          <div key={label} style={{ textAlign: "center" }}>
+            <div style={{ fontSize: 18, fontWeight: 700, color: c }}>{val}</div>
+            <div style={{ fontSize: 8, color: "#666", letterSpacing: 1 }}>{label}</div>
           </div>
+        ))}
+      </div>
 
-          {/* stat tiles */}
-          <div style={{ display: 'flex', gap: 8, padding: '8px 16px', borderBottom: '1px solid #0f172a' }}>
-            {[
-              { label: 'RULES', val: rules.length, col: ACCENT },
-              { label: 'ENABLED', val: enabled, col: '#22C55E' },
-              { label: 'DISABLED', val: disabled, col: '#EF4444' },
-              { label: 'ENGINE', val: 'LIVE', col: '#06B6D4' },
-            ].map(({ label, val, col }) => (
-              <div key={label} style={{ flex: 1, background: '#0f172a', borderRadius: 6, padding: '6px 8px', textAlign: 'center' }}>
-                <div style={{ color: col, fontSize: 18, fontWeight: 800 }}>{val}</div>
-                <div style={{ color: '#475569', fontSize: 9, letterSpacing: 1 }}>{label}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* tab bar */}
-          <div style={{ display: 'flex', gap: 6, padding: '6px 16px', borderBottom: '1px solid #0f172a', alignItems: 'center', flexWrap: 'wrap' }}>
-            {['RULES', 'EVALUATE', 'CREATE'].map(t => (
-              <button key={t} onClick={() => setTab(t)} style={{
-                background: tab === t ? ACCENT : '#1e293b',
-                border: '1px solid #334155',
-                borderRadius: 4,
-                color: tab === t ? '#04060A' : '#94a3b8',
-                fontSize: 10,
-                fontWeight: 700,
-                padding: '3px 8px',
-                cursor: 'pointer',
-                letterSpacing: 1,
-              }}>{t}</button>
-            ))}
-            {tab === 'RULES' && (
-              <input
-                value={search}
-                onChange={e => setSearch(e.target.value)}
-                placeholder="search rules…"
-                style={{
-                  flex: 1, background: '#1e293b', border: '1px solid #334155', borderRadius: 4,
-                  color: '#e2e8f0', fontSize: 11, padding: '3px 8px',
-                }}
-              />
-            )}
-          </div>
-
-          {/* body */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '8px 16px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-            {err && <div style={{ color: '#ef4444', fontSize: 12 }}>Error: {err}</div>}
-
-            {/* RULES tab */}
-            {tab === 'RULES' && (
-              <>
-                {filtered.length === 0 && !loading && (
-                  <div style={{ color: '#475569', fontSize: 12, marginTop: 24, textAlign: 'center' }}>
-                    No rules registered. Use CREATE to add the first rule.
-                  </div>
-                )}
-                {filtered.map((rule, i) => {
-                  const key = rule.id || rule._id || i;
-                  const sev = rule.severity ?? 50;
-                  const isOn = rule.enabled !== false;
-                  return (
-                    <div key={key} style={{
-                      background: '#0f172a',
-                      borderRadius: 6,
-                      border: `1px solid ${isOn ? '#1e293b' : '#3f1239'}`,
-                      padding: '8px 12px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      gap: 10,
-                    }}>
-                      <span style={{
-                        width: 8, height: 8, borderRadius: '50%',
-                        background: isOn ? '#22C55E' : '#475569',
-                        boxShadow: isOn ? '0 0 6px #22C55E' : 'none',
-                        flexShrink: 0,
-                      }} />
-                      <span style={{
-                        background: sevColour(sev) + '22',
-                        color: sevColour(sev),
-                        borderRadius: 4,
-                        fontSize: 9,
-                        fontWeight: 700,
-                        padding: '1px 5px',
-                        flexShrink: 0,
-                      }}>SEV {sev}</span>
-                      <span style={{ color: '#e2e8f0', fontSize: 12, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                        {rule.name || rule.id || '?'}
-                      </span>
-                      {rule.target && (
-                        <span style={{ color: '#64748b', fontSize: 10, maxWidth: 100, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                          → {rule.target}
-                        </span>
-                      )}
-                      {/* severity bar */}
-                      <div style={{ width: 50, background: '#1e293b', borderRadius: 2, height: 4, flexShrink: 0 }}>
-                        <div style={{ width: `${sev}%`, background: sevColour(sev), height: 4, borderRadius: 2 }} />
-                      </div>
-                    </div>
-                  );
-                })}
-              </>
-            )}
-
-            {/* EVALUATE tab */}
-            {tab === 'EVALUATE' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <div style={{ color: '#64748b', fontSize: 11, lineHeight: 1.5 }}>
-                  Evaluate all enabled rules against a JSON context. Leave as <code style={{ color: ACCENT }}>{'{}'}</code> to use the live-intel snapshot.
-                </div>
-                <textarea
-                  value={evalCtx}
-                  onChange={e => setEvalCtx(e.target.value)}
-                  rows={5}
-                  placeholder='{"key": "value"}'
-                  style={{
-                    background: '#0f172a', border: '1px solid #334155', borderRadius: 6,
-                    color: '#e2e8f0', fontSize: 11, padding: '8px', fontFamily: 'monospace',
-                    resize: 'vertical',
-                  }}
-                />
-                <button
-                  onClick={doEval}
-                  disabled={evaluating}
-                  style={{
-                    background: evaluating ? '#1e293b' : ACCENT,
-                    border: 'none', borderRadius: 6,
-                    color: evaluating ? '#94a3b8' : '#04060A',
-                    fontSize: 11, fontWeight: 700,
-                    padding: '6px 14px', cursor: 'pointer', alignSelf: 'flex-start',
-                  }}
-                >
-                  {evaluating ? 'Evaluating…' : '▶ EVALUATE RULES'}
-                </button>
-                {evalResult && (
-                  <div style={{ background: '#0f172a', borderRadius: 6, border: '1px solid #334155', padding: '10px 12px' }}>
-                    <div style={{ color: ACCENT, fontSize: 10, letterSpacing: 1, marginBottom: 6 }}>EVALUATION RESULT</div>
-                    {evalResult.error ? (
-                      <div style={{ color: '#EF4444', fontSize: 11 }}>{evalResult.error}</div>
-                    ) : (
-                      <>
-                        {evalResult.fired !== undefined && (
-                          <div style={{ color: '#94a3b8', fontSize: 11, marginBottom: 4 }}>
-                            Fired: <span style={{ color: '#22C55E', fontWeight: 700 }}>{evalResult.fired}</span> rule(s)
-                          </div>
-                        )}
-                        {Array.isArray(evalResult.alerts) && evalResult.alerts.length > 0 && (
-                          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-                            {evalResult.alerts.slice(0, 10).map((a, ai) => (
-                              <div key={ai} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                                <span style={{
-                                  background: sevColour(a.severity || 50) + '22',
-                                  color: sevColour(a.severity || 50),
-                                  borderRadius: 3, fontSize: 9, padding: '1px 4px', fontWeight: 700,
-                                }}>SEV {a.severity || '?'}</span>
-                                <span style={{ color: '#cbd5e1', fontSize: 11 }}>{a.rule_name || a.name || 'Alert'}</span>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                        {(!evalResult.alerts || evalResult.alerts.length === 0) && evalResult.fired === 0 && (
-                          <div style={{ color: '#22C55E', fontSize: 11 }}>No rules fired — context is clean.</div>
-                        )}
-                        {evalResult.message && (
-                          <div style={{ color: '#94a3b8', fontSize: 11, marginTop: 4 }}>{evalResult.message}</div>
-                        )}
-                        {!evalResult.alerts && evalResult.fired === undefined && (
-                          <pre style={{ color: '#94a3b8', fontSize: 10, overflowX: 'auto', maxHeight: 160 }}>
-                            {JSON.stringify(evalResult, null, 2)}
-                          </pre>
-                        )}
-                      </>
-                    )}
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* CREATE tab */}
-            {tab === 'CREATE' && (
-              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-                <div style={{ color: '#64748b', fontSize: 11 }}>Register a new Watchtower rule.</div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <label style={{ color: '#94a3b8', fontSize: 10, letterSpacing: 1 }}>NAME</label>
-                  <input
-                    value={newName}
-                    onChange={e => setNewName(e.target.value)}
-                    placeholder="e.g. High-severity quake alert"
-                    style={{
-                      background: '#0f172a', border: '1px solid #334155', borderRadius: 4,
-                      color: '#e2e8f0', fontSize: 11, padding: '6px 10px',
-                    }}
-                  />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <label style={{ color: '#94a3b8', fontSize: 10, letterSpacing: 1 }}>
-                    SEVERITY: <span style={{ color: sevColour(newSeverity), fontWeight: 700 }}>{newSeverity}</span>
-                  </label>
-                  <input
-                    type="range" min={0} max={100} value={newSeverity}
-                    onChange={e => setNewSeverity(Number(e.target.value))}
-                    style={{ accentColor: sevColour(newSeverity) }}
-                  />
-                </div>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                  <label style={{ color: '#94a3b8', fontSize: 10, letterSpacing: 1 }}>TARGET (optional)</label>
-                  <input
-                    value={newTarget}
-                    onChange={e => setNewTarget(e.target.value)}
-                    placeholder="e.g. quake / crypto / fx"
-                    style={{
-                      background: '#0f172a', border: '1px solid #334155', borderRadius: 4,
-                      color: '#e2e8f0', fontSize: 11, padding: '6px 10px',
-                    }}
-                  />
-                </div>
-                <button
-                  onClick={doCreate}
-                  disabled={creating || !newName.trim()}
-                  style={{
-                    background: (creating || !newName.trim()) ? '#1e293b' : ACCENT,
-                    border: 'none', borderRadius: 6,
-                    color: (creating || !newName.trim()) ? '#94a3b8' : '#04060A',
-                    fontSize: 11, fontWeight: 700,
-                    padding: '6px 14px', cursor: 'pointer', alignSelf: 'flex-start',
-                  }}
-                >
-                  {creating ? 'Creating…' : '◈ CREATE RULE'}
-                </button>
-                {createMsg && (
-                  <div style={{ color: createMsg.startsWith('Error') ? '#EF4444' : '#22C55E', fontSize: 11 }}>
-                    {createMsg}
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-
-          {/* assess footer */}
-          <div style={{ padding: '8px 16px', borderTop: '1px solid #1e293b' }}>
-            {assessText && (
-              <div style={{ color: '#94a3b8', fontSize: 11, marginBottom: 6, lineHeight: 1.5 }}>{assessText}</div>
-            )}
-            <button
-              onClick={doAssess}
-              disabled={assessing}
-              style={{
-                background: assessing ? '#1e293b' : ACCENT,
-                border: 'none', borderRadius: 6,
-                color: assessing ? '#94a3b8' : '#04060A',
-                fontSize: 11, fontWeight: 700,
-                padding: '5px 14px', cursor: 'pointer',
-              }}
-            >
-              {assessing ? 'Assessing…' : '▶ ASSESS'}
-            </button>
-          </div>
+      {/* eval result */}
+      {evalMsg && (
+        <div style={{
+          padding: "6px 16px", background: alerts.length > 0 ? "rgba(255,56,107,0.08)" : "rgba(0,229,160,0.06)",
+          borderBottom: "1px solid rgba(41,231,255,0.1)", fontSize: 11,
+          color: alerts.length > 0 ? RED : GRN,
+        }}>
+          {evalMsg}
         </div>
       )}
-    </>
+
+      {/* alert results */}
+      {alerts.length > 0 && (
+        <div style={{ padding: "8px 14px", borderBottom: "1px solid rgba(41,231,255,0.1)" }}>
+          <div style={{ fontSize: 9, color: RED, letterSpacing: 1, marginBottom: 6 }}>FIRED ALERTS</div>
+          {alerts.map((a, i) => <AlertCard key={i} alert={a} />)}
+        </div>
+      )}
+
+      {/* filter tabs */}
+      <div style={{
+        padding: "6px 14px", borderBottom: "1px solid rgba(41,231,255,0.1)",
+        display: "flex", gap: 8,
+      }}>
+        {["all", "enabled", "disabled"].map(f => (
+          <button key={f} onClick={() => setFilter(f)} style={{
+            background: filter === f ? "rgba(41,231,255,0.12)" : "none",
+            border: `1px solid ${filter === f ? CY + "66" : "#333"}`,
+            color: filter === f ? CY : "#666", borderRadius: 3,
+            padding: "2px 8px", fontSize: 9, cursor: "pointer", letterSpacing: 1,
+            textTransform: "uppercase",
+          }}>
+            {f}
+          </button>
+        ))}
+        <span style={{ marginLeft: "auto", fontSize: 9, color: "#555", alignSelf: "center" }}>
+          {loading ? "refreshing…" : `${visibleRules.length} rules`}
+        </span>
+      </div>
+
+      {/* rules list */}
+      <div style={{ overflowY: "auto", flex: 1, padding: "10px 14px" }}>
+        {loading && !rules.length ? (
+          <div style={{ color: "#555", fontSize: 11, textAlign: "center", padding: 20 }}>
+            Loading rules…
+          </div>
+        ) : visibleRules.length === 0 ? (
+          <div style={{ color: "#555", fontSize: 11, textAlign: "center", padding: 20 }}>
+            No rules found. Configure rules via POST /v1/rules.
+          </div>
+        ) : (
+          visibleRules.map((rule, i) => (
+            <RuleCard key={rule.id || rule.name || i} rule={rule} />
+          ))
+        )}
+      </div>
+    </div>
   );
 }
