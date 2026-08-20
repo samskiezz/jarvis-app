@@ -592,6 +592,7 @@ import PerSceneAnchorDrillDown from '@/components/cinematic/PerSceneAnchorDrillD
 import WatchtowerRulesPanel from '@/components/cinematic/WatchtowerRulesPanel';
 import LiveIntelRiskConvergence from '@/components/cinematic/LiveIntelRiskConvergence';
 import OpsHealthSummaryDrawer from '@/components/overnight/OpsHealthSummaryDrawer';
+import KnowledgePulsePanel from '@/components/overnight/KnowledgePulsePanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1866,6 +1867,8 @@ function App() {
             <ScenarioDatasetCoverage />
             {/* F38 (overnight 2026-08-20): ops health summary drawer — right-edge ◀ OPS HEALTH tab at 64 % from top; parallel-polls /v1/jarvis/system/status (60 s) + /v1/ops/events (30 s); service health grid + critical events list; rose (#F43F5E) accent; red badge on critical event count; isOhsdQuery+buildOhsdScript wired in JarvisBrain; jarvis:ohsd-toggle event; "ops health/service health summary/ohsd" voice trigger */}
             <OpsHealthSummaryDrawer />
+            {/* F39 (overnight 2026-08-20): knowledge pulse panel — ◎ KPULSE (left:882320 bottom:8 zIndex:584); polls /knowledge/ every 5 min; kind badges + confidence bars + age; text search; expand article inline; ASSESS → /v1/jarvis/agent/chat 2-sentence KB health brief + TTS; isKpulseQuery+buildKpulseScript wired in JarvisBrain; jarvis:kpulse-toggle event; "knowledge pulse/kpulse/knowledge base/browse knowledge/kb pulse" voice trigger */}
+            <KnowledgePulsePanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
