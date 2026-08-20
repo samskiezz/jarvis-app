@@ -77,6 +77,7 @@ import EntityActivityHeatmap from '@/components/cinematic/EntityActivityHeatmap'
 import GraphAnomalyDetector from '@/components/cinematic/GraphAnomalyDetector';
 import OpsEventTimeline from '@/components/cinematic/OpsEventTimeline';
 import ReportSummariser from '@/components/cinematic/ReportSummariser';
+import ReportsLibrary from '@/components/cinematic/ReportsLibrary';
 import VitalsMonitor from '@/components/overnight/VitalsMonitor';
 import AgentChatTranscript from '@/components/cinematic/AgentChatTranscript';
 import InvestigationSkillCoverage from '@/components/cinematic/InvestigationSkillCoverage';
@@ -740,6 +741,8 @@ function App() {
             <OpsEventTimeline />
             {/* F50: report summariser — ◎ SUMM button (left:2572); fetches /v1/reports every 2 min; filterable report list; click any report → /v1/jarvis/agent/chat AI executive summary + spoken via jarvis:speak-dossier TTS; isReportSummariserQuery+buildReportSummariserScript already wired in JarvisBrain; "summarize report"/"report summary" voice trigger */}
             <ReportSummariser />
+            {/* F33: reports library — ⊞ RLIB button; fetches /v1/reports; stat tiles (total/generated/manual/recent-7d); ALL/GENERATED/MANUAL filter tabs + text search; expand row → body excerpt + meta chips; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRlibQuery+buildRlibScript wired in JarvisBrain; "reports/report library/rlib" voice trigger; 90-s refresh */}
+            <ReportsLibrary />
             {/* F51: biometric vitals monitor — ◈ VITALS button (left:10460); polls /v1/vitals/latest every 60 s; HR/HRV/SpO₂/steps/sleep/weight gauge cards + GaugeBar; always returns data (falls back to default schema); ▶ JARVIS ASSESS → /v1/jarvis/agent/chat 2-sentence health commentary + TTS; "JARVIS, vitals"/"biometrics"/"health metrics"/"body stats" voice trigger */}
             <VitalsMonitor />
             {/* F52: agent chat transcript — ◉ CHAT button (left:3512); persistent multi-turn chat panel wired to /v1/jarvis/agent/chat; keeps scrollable conversation history in localStorage (max 60 msgs); typed input separate from ephemeral JarvisBrain overlay; isChatQuery+buildChatScript already wired in JarvisBrain; "JARVIS, open chat"/"chat panel"/"agent chat" voice trigger */}
