@@ -59,6 +59,7 @@ import SwarmJobsMonitor from '@/components/cinematic/SwarmJobsMonitor';
 import GraphCentralityView from '@/components/cinematic/GraphCentralityView';
 import KnowledgeBrowser from '@/components/cinematic/KnowledgeBrowser';
 import IntelProfileDirectory from '@/components/cinematic/IntelProfileDirectory';
+import ScenarioDatasetCoverage from '@/components/cinematic/ScenarioDatasetCoverage';
 import GraphCommunitiesView from '@/components/cinematic/GraphCommunitiesView';
 import IntelDigest from '@/components/cinematic/IntelDigest';
 import OpsCasesPanel from '@/components/cinematic/OpsCasesPanel';
@@ -1860,6 +1861,8 @@ function App() {
             <GraphNodeExpander />
             {/* F36 (overnight 2026-08-20): live intel × risk signal convergence — ◈ LIRISCONV (left:881200 bottom:8 zIndex:582); parallel-fetches /functions/getLiveIntel + /entities/RiskSignal; keyword-correlates each active risk signal against live world events (seismic/crypto/FX) to surface TRIGGERED vs DORMANT signals; amber badge on triggered count; ALL/TRIGGERED/DORMANT filter tabs + text search; expand → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score; ASSESS → /v1/jarvis/agent/chat 2-sentence convergence brief + TTS; isLirisconvQuery+buildLirisconvScript wired in JarvisBrain; jarvis:lirisconv-toggle event; 60-s auto-refresh */}
             <LiveIntelRiskConvergence />
+            {/* F37 (overnight 2026-08-20): scenario × dataset coverage — ⬡ SCDV (left:881760 bottom:8 zIndex:583); parallel-fetches /v1/scenario/list + /v1/datasets; keyword-correlates each scenario against the dataset catalog to surface DATA_BACKED vs DATA_DARK scenarios; amber badge on dark count; stat tiles (scenarios/datasets/backed/dark); ALL/BACKED/DARK filter tabs + text search; expand row → matched datasets with keyword score; ASSESS → /v1/jarvis/agent/chat 2-sentence data-readiness brief + TTS; isScenarioDsvQuery+buildScenarioDsvScript wired in JarvisBrain; jarvis:scdv-toggle event; 90-s auto-refresh */}
+            <ScenarioDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

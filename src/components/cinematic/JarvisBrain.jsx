@@ -653,6 +653,7 @@ import { isCdoeQuery, buildCdoeScript } from "./ContactDatasetOpsTriple";
 import { isCsjgcQuery, buildCsjgcScript } from "./ContactSwarmCentralityTriple";
 import { isGexpQuery, buildGexpScript } from "./GraphNodeExpander";
 import { isLirisconvQuery, buildLirisconvScript } from "./LiveIntelRiskConvergence";
+import { isScenarioDsvQuery, buildScenarioDsvScript } from "./ScenarioDatasetCoverage";
 import { isMBriefQuery, buildMBriefScript } from "./MorningMissionBrief";
 import { isQuickIntelCardQuery, buildQicScript } from "./QuickIntelCard";
 import { isAnchorDrillQuery } from "./PerSceneAnchorDrillDown";
@@ -7087,6 +7088,17 @@ export default function JarvisBrain() {
       const script = await buildLirisconvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F37: scenario dataset coverage — "scenario dataset / data coverage / data-backed scenarios / scdv"
+    // opens ScenarioDatasetCoverage panel and speaks data-readiness brief from /v1/scenario/list + /v1/datasets.
+    if (isScenarioDsvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scdv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildScenarioDsvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
     }
     clearTimeout(hideT.current);
