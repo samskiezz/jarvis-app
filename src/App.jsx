@@ -617,6 +617,7 @@ import KnowledgeGraphCoverage from '@/components/cinematic/KnowledgeGraphCoverag
 import BrainTaskProgressMonitor from '@/components/cinematic/BrainTaskProgressMonitor';
 import InvestigationOpsFrequency from '@/components/cinematic/InvestigationOpsFrequency';
 import DatasetAnomalyCorrelator from '@/components/cinematic/DatasetAnomalyCorrelator';
+import CognitiveLoadIndex from '@/components/cinematic/CognitiveLoadIndex';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1941,6 +1942,8 @@ function App() {
             <InvestigationOpsFrequency />
             {/* F63 (overnight 2026-08-21): Dataset × Anomaly Correlator (DSAN) — pre-built DatasetAnomalyCorrelator.jsx (367 lines) activated & mounted; parallel-fetches /v1/datasets + /v1/jarvis/analytics/anomalies; keyword-correlates each dataset against active anomalies → EXPOSED vs CLEAR; amber badge on exposed count; stat tiles (datasets/anomalies/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand dataset → matched anomaly rows with |z| bar + direction arrow; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence anomaly-dataset brief + TTS; isDsanQuery+buildDsanScript already wired in JarvisBrain; jarvis:dsan-toggle event; "dataset anomaly/anomaly dataset/dsan/dataset metric anomaly/which datasets have anomalies" voice trigger */}
             <DatasetAnomalyCorrelator />
+            {/* F64 (overnight 2026-08-21): JARVIS Cognitive Load Index (JCLI) — ◈ JCLI button (left:1440 bottom:18 zIndex:68); parallel-polls /v1/cinematic/brain + /entities/RiskSignal + /entities/Task + /entities/SwarmJob every 60 s; computes load score = (critical×10 + high×5 + pending_tasks×2 + running_jobs×3) ÷ brain_nodes → OVERLOADED/STRAINED/BALANCED/SURPLUS; gauge bar + stat tiles; breakdown rows with contribution bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational load brief + jarvis:speak-dossier TTS; isJcliQuery+buildJcliScript wired in JarvisBrain; jarvis:jcli-toggle event; "cognitive load/jcli/jarvis load/brain load/operational load/load index/system load/intelligence load/load gauge" voice trigger */}
+            <CognitiveLoadIndex />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

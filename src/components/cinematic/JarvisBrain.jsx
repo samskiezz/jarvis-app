@@ -674,6 +674,7 @@ import { isTinaQuery, buildTinaScript } from "./TaskInvestigationAlignment";
 import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
 import { isBrsmQuery, buildBrsmScript } from "./BrainRiskMonitor";
 import { isCrsiQuery, buildCrsiScript } from "./ContactRiskSignalIntelligence";
+import { isJcliQuery, buildJcliScript } from "./CognitiveLoadIndex";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3774,6 +3775,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dsan-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDsanScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isJcliQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:jcli-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildJcliScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
