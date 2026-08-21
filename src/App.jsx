@@ -625,6 +625,7 @@ import IntelProfileDatasetCoverage from '@/components/cinematic/IntelProfileData
 import SwarmRiskCoverageMonitor from '@/components/cinematic/SwarmRiskCoverageMonitor';
 import ContactIntelProfileCrossRef from '@/components/cinematic/ContactIntelProfileCrossRef';
 import InvestmentLiveIntelScanner from '@/components/cinematic/InvestmentLiveIntelScanner';
+import ScenarioKnowledgeMap from '@/components/cinematic/ScenarioKnowledgeMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1965,6 +1966,8 @@ function App() {
             <ContactIntelProfileCrossRef />
             {/* F71 (overnight 2026-08-21): Investment × Live Intel Opportunity Scanner (ILOS) — ◈ ILOS button (left:1800 bottom:18 zIndex:68); parallel-fetches /entities/Investment + /functions/getLiveIntel every 60 s; keyword-correlates each investment (name/sector/tags/notes) against live world events (crypto/FX/seismic) → TRIGGERED (≥1 match) vs QUIET; amber badge on triggered count; stat tiles (investments/live events/triggered/quiet); ALL/TRIGGERED/QUIET filter tabs + text search; expand investment → matched events with CRYPTO/FX/SEISMIC type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio live-intelligence brief + jarvis:speak-dossier TTS; isIlosQuery+buildIlosScript wired in JarvisBrain; jarvis:ilos-toggle event; "investment intel/live investment/ilos/market opportunity/investment opportunity/portfolio intel/live portfolio/triggered investments/market signal/portfolio live intel" voice trigger */}
             <InvestmentLiveIntelScanner />
+            {/* F72 (overnight 2026-08-21): Scenario × Knowledge Intelligence Map (SKIM) — ◈ SKIM button (left:1860 bottom:18 zIndex:68); parallel-fetches /v1/scenario/list + /knowledge/ every 90 s; keyword-correlates each scenario (name/description/tags) against KB articles → DOCUMENTED (≥1 match) vs BLIND; amber badge on blind count; stat tiles (scenarios/articles/documented/blind); ALL/DOCUMENTED/BLIND filter tabs + text search; expand scenario → matched KB articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-scenario brief + jarvis:speak-dossier TTS; isSkimQuery+buildSkimScript wired in JarvisBrain; jarvis:skim-toggle event; "scenario knowledge/knowledge scenario/skim/blind scenarios/undocumented scenarios/kb scenario/knowledge gaps/scenario kb coverage/scenario documentation/scenario intel coverage" voice trigger */}
+            <ScenarioKnowledgeMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

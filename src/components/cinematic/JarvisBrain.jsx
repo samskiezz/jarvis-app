@@ -141,6 +141,7 @@ import { isIpdfQuery, buildIpdfScript } from "./IntelProfileDatasetCoverage";
 import { isSrscQuery, buildSrscScript } from "./SwarmRiskCoverageMonitor";
 import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
 import { isIlosQuery, buildIlosScript } from "./InvestmentLiveIntelScanner";
+import { isSkimQuery, buildSkimScript } from "./ScenarioKnowledgeMap";
 import { isDlgrQuery, buildDlgrScript } from "./DecisionLedgerMonitor";
 import { isGovQuery, buildGovScript } from "./DataGovernanceMonitor";
 import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
@@ -2375,6 +2376,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ilos-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIlosScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSkimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skim-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSkimScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
