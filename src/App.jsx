@@ -612,6 +612,7 @@ import AipSkillReportsCoverage from '@/components/cinematic/AipSkillReportsCover
 import BrainRiskMonitor from '@/components/cinematic/BrainRiskMonitor';
 import ContactRiskSignalIntelligence from '@/components/cinematic/ContactRiskSignalIntelligence';
 import ContactTaskBoard from '@/components/cinematic/ContactTaskBoard';
+import InvestmentRiskExposureTracker from '@/components/cinematic/InvestmentRiskExposureTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1926,6 +1927,8 @@ function App() {
             <ContactRiskSignalIntelligence />
             {/* F58 (overnight 2026-08-21): Contact × Task Board (CTBD) — pre-built ContactTaskBoard.jsx (370 lines) activated; parallel-fetches /entities/Contact + /entities/Task every 90 s; keyword-correlates each contact against tasks → ASSIGNED vs UNASSIGNED; team workload view with task count per contact; expand contact → matched tasks with priority/status; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence workload brief + TTS; isCtbdQuery+buildCtbdScript already wired in JarvisBrain; jarvis:ctbd-toggle event; "contact task/task assignment/team workload/ctbd/contact workload/task owners" voice trigger */}
             <ContactTaskBoard />
+            {/* F59 (overnight 2026-08-21): Investment × Risk Signal Exposure Tracker (INVRISEX) — pre-built InvestmentRiskExposureTracker.jsx (430 lines) activated; parallel-fetches /entities/Investment + /entities/RiskSignal every 60 s; keyword-correlates each investment (name/sector/tags/notes) against active risk signals → EXPOSED vs CLEAR; red badge on exposed count; stat tiles (investments/risk signals/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched risk signals with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio risk exposure brief + jarvis:speak-dossier TTS; isInvrisexQuery+buildInvrisexScript wired in JarvisBrain; jarvis:invrisex-toggle event; "investment risk/portfolio exposure/invrisex/portfolio risk/risk exposure/risky investments/exposed investments" voice trigger */}
+            <InvestmentRiskExposureTracker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
