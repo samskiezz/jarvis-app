@@ -47,3 +47,4 @@
 [2026-08-21] F70 ContactIntelProfileCrossRef — /entities/Contact + /entities/IntelProfile; PROFILED/UNKNOWN; CIPR button left:1740; isCiprQuery+buildCiprScript in JarvisBrain; build exit:0; cipr-toggle in dist/assets/index-BAM1gSKj.js
 [2026-08-21] F71 InvestmentLiveIntelScanner.jsx — Investment × Live Intel Opportunity Scanner (ILOS); /entities/Investment × /functions/getLiveIntel; TRIGGERED/QUIET correlation; vite build exit:0
 2026-08-21 F72 ScenarioKnowledgeMap (SKIM): /v1/scenario/list × /knowledge/ → DOCUMENTED/BLIND; ◈ SKIM button; vite build exit:0
+[2026-08-21] F73 IntelProfileRiskCorrelator — pre-built component activated & mounted in App.jsx; isIprscQuery+buildIprscScript already wired in JarvisBrain; /entities/IntelProfile + /entities/RiskSignal; vite build exit:0

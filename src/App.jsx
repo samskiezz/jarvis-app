@@ -626,6 +626,7 @@ import SwarmRiskCoverageMonitor from '@/components/cinematic/SwarmRiskCoverageMo
 import ContactIntelProfileCrossRef from '@/components/cinematic/ContactIntelProfileCrossRef';
 import InvestmentLiveIntelScanner from '@/components/cinematic/InvestmentLiveIntelScanner';
 import ScenarioKnowledgeMap from '@/components/cinematic/ScenarioKnowledgeMap';
+import IntelProfileRiskCorrelator from '@/components/cinematic/IntelProfileRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1968,6 +1969,8 @@ function App() {
             <InvestmentLiveIntelScanner />
             {/* F72 (overnight 2026-08-21): Scenario × Knowledge Intelligence Map (SKIM) — ◈ SKIM button (left:1860 bottom:18 zIndex:68); parallel-fetches /v1/scenario/list + /knowledge/ every 90 s; keyword-correlates each scenario (name/description/tags) against KB articles → DOCUMENTED (≥1 match) vs BLIND; amber badge on blind count; stat tiles (scenarios/articles/documented/blind); ALL/DOCUMENTED/BLIND filter tabs + text search; expand scenario → matched KB articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-scenario brief + jarvis:speak-dossier TTS; isSkimQuery+buildSkimScript wired in JarvisBrain; jarvis:skim-toggle event; "scenario knowledge/knowledge scenario/skim/blind scenarios/undocumented scenarios/kb scenario/knowledge gaps/scenario kb coverage/scenario documentation/scenario intel coverage" voice trigger */}
             <ScenarioKnowledgeMap />
+            {/* F73 (overnight 2026-08-21): Intel Profile × Risk Signal Correlator (IPRSC) — pre-built IntelProfileRiskCorrelator.jsx (352 lines) activated & mounted; parallel-fetches /entities/IntelProfile + /entities/RiskSignal every 90 s; keyword-correlates each intel profile against active risk signals → FLAGGED (≥1 match) vs CLEAR; red badge on flagged count; stat tiles (intel-profiles/risk-signals/flagged/clear); ALL/FLAGGED/CLEAR filter tabs + text search; expand profile → matched risk signals with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-risk brief + jarvis:speak-dossier TTS; isIprscQuery+buildIprscScript already wired in JarvisBrain; jarvis:iprsc-toggle event; "intel risk/risk intel profile/iprsc/intel with risk/risky intel/which intel profiles have risk/intel profile risk/intel flag" voice trigger */}
+            <IntelProfileRiskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
