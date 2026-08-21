@@ -630,6 +630,7 @@ import IntelProfileRiskCorrelator from '@/components/cinematic/IntelProfileRiskC
 import InvestmentInvestigationCorrelator from '@/components/cinematic/InvestmentInvestigationCorrelator';
 import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
 import SwarmInvestigationCorrelator from '@/components/cinematic/SwarmInvestigationCorrelator';
+import KnowledgeOpsEventCorrelator from '@/components/cinematic/KnowledgeOpsEventCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1981,6 +1982,8 @@ function App() {
             <BrainAipSkillRatio />
             {/* F76: SwarmJob × Investigation Correlator */}
             <SwarmInvestigationCorrelator />
+            {/* F77 (overnight 2026-08-21): Knowledge × Ops Event Correlator (KOEC) — ◈ KOEC button (left:2100 bottom:18 zIndex:68); parallel-fetches /knowledge/ + /v1/ops/events every 90 s; keyword-correlates each KB article against live ops events → ACTIVE (≥1 match) vs DORMANT; amber badge on dormant count; stat tiles (articles/ops evts/active/dormant); ALL/ACTIVE/DORMANT filter tabs + text search; expand article → matched ops events with severity + type badges + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence KB-ops brief + jarvis:speak-dossier TTS; isKoecQuery+buildKoecScript wired in JarvisBrain; jarvis:koec-toggle event; "knowledge ops/ops knowledge/koec/active knowledge/live knowledge/kb ops/knowledge events/ops articles/which knowledge is active/knowledge operational" voice trigger */}
+            <KnowledgeOpsEventCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
