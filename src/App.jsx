@@ -609,6 +609,7 @@ import ReportInvestigationBridge from '@/components/cinematic/ReportInvestigatio
 import GraphCommunityInvestigationReportTriple from '@/components/cinematic/GraphCommunityInvestigationReportTriple';
 import TaskInvestigationAlignment from '@/components/cinematic/TaskInvestigationAlignment';
 import AipSkillReportsCoverage from '@/components/cinematic/AipSkillReportsCoverage';
+import BrainRiskMonitor from '@/components/cinematic/BrainRiskMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1917,6 +1918,8 @@ function App() {
             <TaskInvestigationAlignment />
             {/* F55 (overnight 2026-08-21): AIP Skill × Reports Coverage (ASRC) — ◈ ASRC button (left:1140 bottom:18 zIndex:68); parallel-fetches /v1/aip/skill + /v1/reports every 90 s; keyword-correlates each JARVIS skill against the report catalog → REPORTED vs UNDOCUMENTED; stat tiles (skills/reports/reported/undocumented); ALL/REPORTED/UNDOCUMENTED filter tabs + text search; expand skill → matched report cards with topic badge + relevance score bar; amber badge on undocumented count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-documentation brief + jarvis:speak-dossier TTS; isAsrcQuery+buildAsrcScript wired in JarvisBrain; jarvis:asrc-toggle event; "skill reports/skill documentation/asrc/reported skills/undocumented skills/skill report coverage" voice trigger */}
             <AipSkillReportsCoverage />
+            {/* F56 (overnight 2026-08-21): Brain × Risk Signal Monitor (BRSM) — ◉ BRSM button (left:1200 bottom:18 zIndex:68); parallel-polls /v1/cinematic/brain + /entities/RiskSignal every 60 s; computes B:R ratio (brain nodes per active risk signal) → AHEAD/MATCHED/BEHIND status; stat tiles (nodes/synapses/signals/ratio); brain vs risk proportional bars; severity breakdown CRITICAL/HIGH/MEDIUM/LOW/INFO with count bars; red pulse on critical count; latest signals list; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intelligence brief + jarvis:speak-dossier TTS; isBrsmQuery+buildBrsmScript wired in JarvisBrain; jarvis:brsm-toggle event; "brain risk/risk brain/brsm/brain vs risk/intelligence ratio/brain risk monitor/jarvis risk ratio" voice trigger */}
+            <BrainRiskMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

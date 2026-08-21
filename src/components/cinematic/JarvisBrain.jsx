@@ -669,6 +669,7 @@ import { isSwrinvQuery, buildSwrinvScript } from "../overnight/SwarmInvestigatio
 import { isGcirtQuery, buildGcirtScript } from "./GraphCommunityInvestigationReportTriple";
 import { isTinaQuery, buildTinaScript } from "./TaskInvestigationAlignment";
 import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
+import { isBrsmQuery, buildBrsmScript } from "./BrainRiskMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -994,6 +995,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:asrc-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAsrcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F56: brain × risk signal monitor — BRSM opens itself via jarvis:brsm-toggle;
+    // we speak the brain-vs-risk intelligence brief.
+    if (isBrsmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:brsm-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildBrsmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
