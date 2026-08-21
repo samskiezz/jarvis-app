@@ -189,7 +189,7 @@ export default function InvestmentInvestigationCorrelator() {
         onClick={() => setOpen(o => !o)}
         title="Investment × Investigation Correlator (IVIN)"
         style={{
-          position: 'fixed', left: 634614, bottom: 8, zIndex: 233,
+          position: 'fixed', left: 1920, bottom: 8, zIndex: 119,
           width: 54, height: 22, borderRadius: 3,
           border: `1px solid ${badgeColor}77`, cursor: 'pointer',
           background: 'rgba(5,8,13,0.75)', color: badgeColor,

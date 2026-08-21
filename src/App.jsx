@@ -627,6 +627,7 @@ import ContactIntelProfileCrossRef from '@/components/cinematic/ContactIntelProf
 import InvestmentLiveIntelScanner from '@/components/cinematic/InvestmentLiveIntelScanner';
 import ScenarioKnowledgeMap from '@/components/cinematic/ScenarioKnowledgeMap';
 import IntelProfileRiskCorrelator from '@/components/cinematic/IntelProfileRiskCorrelator';
+import InvestmentInvestigationCorrelator from '@/components/cinematic/InvestmentInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1971,6 +1972,9 @@ function App() {
             <ScenarioKnowledgeMap />
             {/* F73 (overnight 2026-08-21): Intel Profile × Risk Signal Correlator (IPRSC) — pre-built IntelProfileRiskCorrelator.jsx (352 lines) activated & mounted; parallel-fetches /entities/IntelProfile + /entities/RiskSignal every 90 s; keyword-correlates each intel profile against active risk signals → FLAGGED (≥1 match) vs CLEAR; red badge on flagged count; stat tiles (intel-profiles/risk-signals/flagged/clear); ALL/FLAGGED/CLEAR filter tabs + text search; expand profile → matched risk signals with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-risk brief + jarvis:speak-dossier TTS; isIprscQuery+buildIprscScript already wired in JarvisBrain; jarvis:iprsc-toggle event; "intel risk/risk intel profile/iprsc/intel with risk/risky intel/which intel profiles have risk/intel profile risk/intel flag" voice trigger */}
             <IntelProfileRiskCorrelator />
+
+            {/* F74 (overnight 2026-08-21): Investment × Investigation Correlator (IVIN) — pre-built InvestmentInvestigationCorrelator.jsx (331 lines) activated & mounted; parallel-fetches /entities/Investment + /v1/investigations every 90 s; keyword-correlates each investment against open investigations → UNDER_INVESTIGATION (≥1 match) vs CLEAR; amber badge on linked count; stat tiles (investments/investigations/linked/clear); ALL/LINKED/CLEAR filter tabs + text search; expand investment → matched investigations with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio exposure brief + jarvis:speak-dossier TTS; isIvinQuery+buildIvinScript already wired in JarvisBrain; jarvis:ivin-toggle event; "investment investigation/ivin/investments under investigation/investment case/portfolio probe" voice trigger */}
+            <InvestmentInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
