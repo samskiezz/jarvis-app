@@ -607,6 +607,7 @@ import ResearchAutopilotMonitor from '@/components/cinematic/ResearchAutopilotMo
 import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCoverage';
 import ReportInvestigationBridge from '@/components/cinematic/ReportInvestigationBridge';
 import GraphCommunityInvestigationReportTriple from '@/components/cinematic/GraphCommunityInvestigationReportTriple';
+import TaskInvestigationAlignment from '@/components/cinematic/TaskInvestigationAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1911,6 +1912,8 @@ function App() {
             <ReportInvestigationBridge />
             {/* F53 (overnight 2026-08-20): Graph Community × Investigation × Report Triple — ◈ GCIRT button (left:1020 bottom:18 zIndex:68); parallel-fetches /v1/graph/communities + /v1/investigations + /v1/reports; keyword-correlates each cluster against both open investigations and report catalog; FULLY_COVERED/INVESTIGATION_ONLY/REPORT_ONLY/DARK classification; amber badge on dark count; isGcirtQuery+buildGcirtScript wired in JarvisBrain; jarvis:gcirt-toggle event; 90-s auto-refresh; "community investigation report/gcirt/cluster evidence/dark clusters" voice trigger */}
             <GraphCommunityInvestigationReportTriple />
+            {/* F54 (overnight 2026-08-21): Task × Investigation Alignment (TINA) — ◈ TINA button (left:1080 bottom:18 zIndex:68); parallel-fetches /entities/Task + /v1/investigations every 90 s; keyword-correlates each task against open investigations → ALIGNED vs ORPHAN; stat tiles (tasks/inv/aligned/orphan); ALL/ALIGNED/ORPHAN filter tabs + text search; expand task → matched investigation cards with score bar; red badge on orphan count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence alignment brief + jarvis:speak-dossier TTS; isTinaQuery+buildTinaScript wired in JarvisBrain; jarvis:tina-toggle event; "task alignment/orphan tasks/tina/task investigation/unaligned tasks/task coverage/task mission gap" voice trigger */}
+            <TaskInvestigationAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

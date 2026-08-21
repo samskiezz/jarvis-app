@@ -667,6 +667,7 @@ import { isKpulseQuery, buildKpulseScript } from "../overnight/KnowledgePulsePan
 import { isIpmmQuery, buildIpmmScript } from "../overnight/IntelProfileMissionMap";
 import { isSwrinvQuery, buildSwrinvScript } from "../overnight/SwarmInvestigationConvergence";
 import { isGcirtQuery, buildGcirtScript } from "./GraphCommunityInvestigationReportTriple";
+import { isTinaQuery, buildTinaScript } from "./TaskInvestigationAlignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -972,6 +973,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcirt-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcirtScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F54: task × investigation alignment — TINA opens itself via jarvis:tina-toggle;
+    // we speak the task alignment brief.
+    if (isTinaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tina-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTinaScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
