@@ -618,6 +618,7 @@ import BrainTaskProgressMonitor from '@/components/cinematic/BrainTaskProgressMo
 import InvestigationOpsFrequency from '@/components/cinematic/InvestigationOpsFrequency';
 import DatasetAnomalyCorrelator from '@/components/cinematic/DatasetAnomalyCorrelator';
 import CognitiveLoadIndex from '@/components/cinematic/CognitiveLoadIndex';
+import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1944,6 +1945,8 @@ function App() {
             <DatasetAnomalyCorrelator />
             {/* F64 (overnight 2026-08-21): JARVIS Cognitive Load Index (JCLI) — ◈ JCLI button (left:1440 bottom:18 zIndex:68); parallel-polls /v1/cinematic/brain + /entities/RiskSignal + /entities/Task + /entities/SwarmJob every 60 s; computes load score = (critical×10 + high×5 + pending_tasks×2 + running_jobs×3) ÷ brain_nodes → OVERLOADED/STRAINED/BALANCED/SURPLUS; gauge bar + stat tiles; breakdown rows with contribution bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational load brief + jarvis:speak-dossier TTS; isJcliQuery+buildJcliScript wired in JarvisBrain; jarvis:jcli-toggle event; "cognitive load/jcli/jarvis load/brain load/operational load/load index/system load/intelligence load/load gauge" voice trigger */}
             <CognitiveLoadIndex />
+            {/* F65 (overnight 2026-08-21): Agent Tool Registry (ATR) — pre-built AgentToolRegistry.jsx (327 lines) activated; polls /v1/jarvis/agent/tools every 60 s; category filter tabs (ALL + derived categories); text search on name + description; self-contained ◈ ATR button (left:105600 bottom:8 zIndex:116); ▶ QUERY → /v1/jarvis/agent/chat asks Jarvis to describe/use the tool; isToolRegistryQuery+buildToolRegistryScript already wired in JarvisBrain (line 137 import, line 2292 branch); jarvis:atr-toggle event; "tool registry/agent tools/what tools/jarvis capabilities/available tools/tool catalogue/tool list/tool set/atr" voice trigger */}
+            <AgentToolRegistry />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
