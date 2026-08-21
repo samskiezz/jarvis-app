@@ -611,6 +611,7 @@ import TaskInvestigationAlignment from '@/components/cinematic/TaskInvestigation
 import AipSkillReportsCoverage from '@/components/cinematic/AipSkillReportsCoverage';
 import BrainRiskMonitor from '@/components/cinematic/BrainRiskMonitor';
 import ContactRiskSignalIntelligence from '@/components/cinematic/ContactRiskSignalIntelligence';
+import ContactTaskBoard from '@/components/cinematic/ContactTaskBoard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1923,6 +1924,8 @@ function App() {
             <BrainRiskMonitor />
             {/* F57 (overnight 2026-08-21): Contact × Risk Signal Intelligence (CRSI) — ◈ CRSI (left:1260 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /entities/RiskSignal every 90 s; keyword-correlates each contact against active risk signals → AT_RISK vs CLEAR; amber badge on at-risk count; stat tiles (contacts/signals/at-risk/clear); ALL/AT_RISK/CLEAR filter tabs + text search; expand contact → matched signals with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + jarvis:speak-dossier TTS; isCrsiQuery+buildCrsiScript wired in JarvisBrain; jarvis:crsi-toggle event; "contact risk/crsi/at risk contacts/contact signals/contact threat/who is at risk/contact intelligence" voice trigger */}
             <ContactRiskSignalIntelligence />
+            {/* F58 (overnight 2026-08-21): Contact × Task Board (CTBD) — pre-built ContactTaskBoard.jsx (370 lines) activated; parallel-fetches /entities/Contact + /entities/Task every 90 s; keyword-correlates each contact against tasks → ASSIGNED vs UNASSIGNED; team workload view with task count per contact; expand contact → matched tasks with priority/status; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence workload brief + TTS; isCtbdQuery+buildCtbdScript already wired in JarvisBrain; jarvis:ctbd-toggle event; "contact task/task assignment/team workload/ctbd/contact workload/task owners" voice trigger */}
+            <ContactTaskBoard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
