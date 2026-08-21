@@ -614,6 +614,7 @@ import ContactRiskSignalIntelligence from '@/components/cinematic/ContactRiskSig
 import ContactTaskBoard from '@/components/cinematic/ContactTaskBoard';
 import InvestmentRiskExposureTracker from '@/components/cinematic/InvestmentRiskExposureTracker';
 import KnowledgeGraphCoverage from '@/components/cinematic/KnowledgeGraphCoverage';
+import BrainTaskProgressMonitor from '@/components/cinematic/BrainTaskProgressMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1932,6 +1933,8 @@ function App() {
             <InvestmentRiskExposureTracker />
             {/* F60 (overnight 2026-08-21): Knowledge × Graph Coverage (KGCV) — parallel-fetches /knowledge/ + /v1/graph/centrality every 90 s; keyword-correlates each high-centrality graph node against knowledge articles → DOCUMENTED vs UNDOCUMENTED; amber badge on undocumented count; stat tiles (nodes/articles/documented/undocumented); ALL/DOCUM/UNDOC filter tabs + text search; expand node → matched articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + jarvis:speak-dossier TTS; isKgcvQuery+buildKgcvScript wired in JarvisBrain; jarvis:kgcv-toggle event; "knowledge graph/kgcv/graph knowledge/undocumented nodes/node coverage/knowledge coverage/knowledge gaps/graph coverage" voice trigger */}
             <KnowledgeGraphCoverage />
+            {/* F61 (overnight 2026-08-21): Brain × Task Progress Monitor (BSTP) — parallel-polls /v1/cinematic/brain + /entities/Task every 60 s; computes task completion rate vs brain growth → SYNCED/BRAIN AHEAD/TASKS LAGGING/CRITICAL; ◈ BSTP button (left:1380 bottom:18 zIndex:68); stat tiles (nodes/synapses/tasks/done%); task completion bar + brain-node bar; ALL/DONE/PENDING/OTHER filter tabs + text search; task list rows with status + priority; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brain-task coherence brief + jarvis:speak-dossier TTS; isBstpQuery+buildBstpScript wired in JarvisBrain; jarvis:bstp-toggle event; "brain task/task brain/bstp/brain progress/task progress/brain sync/task coherence" voice trigger */}
+            <BrainTaskProgressMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
