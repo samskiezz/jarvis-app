@@ -137,6 +137,7 @@ import { isRbldQuery, buildRbldScript } from "./RunBuilderMonitor";
 import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistry";
 import { isSoecQuery, buildSoecScript } from "./ScenarioOpsCorrelator";
 import { isSdjicQuery, buildSdjicScript } from "./SwarmDatasetMonitor";
+import { isIpdfQuery, buildIpdfScript } from "./IntelProfileDatasetCoverage";
 import { isDlgrQuery, buildDlgrScript } from "./DecisionLedgerMonitor";
 import { isGovQuery, buildGovScript } from "./DataGovernanceMonitor";
 import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
@@ -2319,6 +2320,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sdjic-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSdjicScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F68: dispatches jarvis:ipdf-toggle + speaks intel-profile dataset full-coverage brief;
+    // "intel profile dataset full / profile data full / ipdf / data-backed profiles /
+    //  dark profiles / which profiles have data / profile coverage /
+    //  profile dataset coverage / intel data coverage / intel profile coverage"
+    if (isIpdfQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipdf-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpdfScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

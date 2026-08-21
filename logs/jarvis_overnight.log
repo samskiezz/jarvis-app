@@ -42,3 +42,4 @@
 [2026-08-21] F65 AgentToolRegistry — pre-built component mounted in App.jsx; polls /v1/jarvis/agent/tools; category filter + text search; jarvis:atr-toggle; JarvisBrain already wired; vite build exit:0
 [2026-08-21] F66 ScenarioOpsCorrelator (SOEC): /v1/scenario/list × /v1/ops/events keyword correlator; TRIGGERED/DORMANT; ◈ SOEC button; isSoecQuery+buildSoecScript wired in JarvisBrain; vite build exit:0
 [2026-08-21] F67 SwarmDatasetMonitor (SDJIC): /entities/SwarmJob × /v1/datasets; ATTENDED vs IDLE datasets; ◈ SDJIC button; isSdjicQuery+buildSdjicScript wired in JarvisBrain; vite build exit:0
+[2026-08-21] F68 IntelProfileDatasetCoverage (IPDF): /entities/IntelProfile × /v1/datasets; DATA_BACKED vs DATA_DARK profiles; ◈ IPDF button; isIpdfQuery+buildIpdfScript wired in JarvisBrain; vite build exit:0
