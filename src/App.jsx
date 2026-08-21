@@ -613,6 +613,7 @@ import BrainRiskMonitor from '@/components/cinematic/BrainRiskMonitor';
 import ContactRiskSignalIntelligence from '@/components/cinematic/ContactRiskSignalIntelligence';
 import ContactTaskBoard from '@/components/cinematic/ContactTaskBoard';
 import InvestmentRiskExposureTracker from '@/components/cinematic/InvestmentRiskExposureTracker';
+import KnowledgeGraphCoverage from '@/components/cinematic/KnowledgeGraphCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1929,6 +1930,8 @@ function App() {
             <ContactTaskBoard />
             {/* F59 (overnight 2026-08-21): Investment × Risk Signal Exposure Tracker (INVRISEX) — pre-built InvestmentRiskExposureTracker.jsx (430 lines) activated; parallel-fetches /entities/Investment + /entities/RiskSignal every 60 s; keyword-correlates each investment (name/sector/tags/notes) against active risk signals → EXPOSED vs CLEAR; red badge on exposed count; stat tiles (investments/risk signals/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched risk signals with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio risk exposure brief + jarvis:speak-dossier TTS; isInvrisexQuery+buildInvrisexScript wired in JarvisBrain; jarvis:invrisex-toggle event; "investment risk/portfolio exposure/invrisex/portfolio risk/risk exposure/risky investments/exposed investments" voice trigger */}
             <InvestmentRiskExposureTracker />
+            {/* F60 (overnight 2026-08-21): Knowledge × Graph Coverage (KGCV) — parallel-fetches /knowledge/ + /v1/graph/centrality every 90 s; keyword-correlates each high-centrality graph node against knowledge articles → DOCUMENTED vs UNDOCUMENTED; amber badge on undocumented count; stat tiles (nodes/articles/documented/undocumented); ALL/DOCUM/UNDOC filter tabs + text search; expand node → matched articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + jarvis:speak-dossier TTS; isKgcvQuery+buildKgcvScript wired in JarvisBrain; jarvis:kgcv-toggle event; "knowledge graph/kgcv/graph knowledge/undocumented nodes/node coverage/knowledge coverage/knowledge gaps/graph coverage" voice trigger */}
+            <KnowledgeGraphCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

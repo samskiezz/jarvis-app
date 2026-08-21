@@ -232,6 +232,7 @@ import { isPolpQuery, buildPolpScript } from "./PolicyDecisionPanel";
 import { isWinpQuery, buildWinpScript } from "./WorldIntelPanel";
 import { isCtbdQuery, buildCtbdScript } from "./ContactTaskBoard";
 import { isInvrisexQuery, buildInvrisexScript } from "./InvestmentRiskExposureTracker";
+import { isKgcvQuery, buildKgcvScript } from "./KnowledgeGraphCoverage";
 import { isCdcvQuery, buildCdcvScript } from "./ContactDecisionCoverage";
 import { isSwarmDecisionQuery, buildSwarmDecisionScript } from "./SwarmJobDecisionCoverage";
 import { isCspcQuery, buildCspcScript } from "./ContactSpecCoverage";
@@ -3313,6 +3314,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invrisex-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvrisexScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isKgcvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kgcv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKgcvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
