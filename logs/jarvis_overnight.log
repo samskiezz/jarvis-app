@@ -44,3 +44,4 @@
 [2026-08-21] F67 SwarmDatasetMonitor (SDJIC): /entities/SwarmJob × /v1/datasets; ATTENDED vs IDLE datasets; ◈ SDJIC button; isSdjicQuery+buildSdjicScript wired in JarvisBrain; vite build exit:0
 [2026-08-21] F68 IntelProfileDatasetCoverage (IPDF): /entities/IntelProfile × /v1/datasets; DATA_BACKED vs DATA_DARK profiles; ◈ IPDF button; isIpdfQuery+buildIpdfScript wired in JarvisBrain; vite build exit:0
 2026-08-21 F69 SwarmRiskCoverageMonitor (SRSC): /entities/SwarmJob × /entities/RiskSignal; COVERED vs UNCOVERED; ◈ SRSC button left:1680; isSrscQuery+buildSrscScript wired in JarvisBrain; mounted in App.jsx; vite build exit:0; SRSC+isSrscQuery+srsc-toggle appear in dist/assets/index-BxgknSJc.js
+[2026-08-21] F70 ContactIntelProfileCrossRef — /entities/Contact + /entities/IntelProfile; PROFILED/UNKNOWN; CIPR button left:1740; isCiprQuery+buildCiprScript in JarvisBrain; build exit:0; cipr-toggle in dist/assets/index-BAM1gSKj.js

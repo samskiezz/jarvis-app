@@ -139,6 +139,7 @@ import { isSoecQuery, buildSoecScript } from "./ScenarioOpsCorrelator";
 import { isSdjicQuery, buildSdjicScript } from "./SwarmDatasetMonitor";
 import { isIpdfQuery, buildIpdfScript } from "./IntelProfileDatasetCoverage";
 import { isSrscQuery, buildSrscScript } from "./SwarmRiskCoverageMonitor";
+import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
 import { isDlgrQuery, buildDlgrScript } from "./DecisionLedgerMonitor";
 import { isGovQuery, buildGovScript } from "./DataGovernanceMonitor";
 import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
@@ -2347,6 +2348,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:srsc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSrscScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F70: dispatches jarvis:cipr-toggle + speaks contact × intel profile coverage brief;
+    // "contact profile / intel contact / cipr / profiled contacts / contact intel match /
+    //  who is profiled / contact intelligence match / contact cross reference /
+    //  unknown contacts / intel coverage contact / contact profiling"
+    if (isCiprQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cipr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCiprScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
