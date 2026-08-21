@@ -608,6 +608,7 @@ import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCov
 import ReportInvestigationBridge from '@/components/cinematic/ReportInvestigationBridge';
 import GraphCommunityInvestigationReportTriple from '@/components/cinematic/GraphCommunityInvestigationReportTriple';
 import TaskInvestigationAlignment from '@/components/cinematic/TaskInvestigationAlignment';
+import AipSkillReportsCoverage from '@/components/cinematic/AipSkillReportsCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1914,6 +1915,8 @@ function App() {
             <GraphCommunityInvestigationReportTriple />
             {/* F54 (overnight 2026-08-21): Task × Investigation Alignment (TINA) — ◈ TINA button (left:1080 bottom:18 zIndex:68); parallel-fetches /entities/Task + /v1/investigations every 90 s; keyword-correlates each task against open investigations → ALIGNED vs ORPHAN; stat tiles (tasks/inv/aligned/orphan); ALL/ALIGNED/ORPHAN filter tabs + text search; expand task → matched investigation cards with score bar; red badge on orphan count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence alignment brief + jarvis:speak-dossier TTS; isTinaQuery+buildTinaScript wired in JarvisBrain; jarvis:tina-toggle event; "task alignment/orphan tasks/tina/task investigation/unaligned tasks/task coverage/task mission gap" voice trigger */}
             <TaskInvestigationAlignment />
+            {/* F55 (overnight 2026-08-21): AIP Skill × Reports Coverage (ASRC) — ◈ ASRC button (left:1140 bottom:18 zIndex:68); parallel-fetches /v1/aip/skill + /v1/reports every 90 s; keyword-correlates each JARVIS skill against the report catalog → REPORTED vs UNDOCUMENTED; stat tiles (skills/reports/reported/undocumented); ALL/REPORTED/UNDOCUMENTED filter tabs + text search; expand skill → matched report cards with topic badge + relevance score bar; amber badge on undocumented count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-documentation brief + jarvis:speak-dossier TTS; isAsrcQuery+buildAsrcScript wired in JarvisBrain; jarvis:asrc-toggle event; "skill reports/skill documentation/asrc/reported skills/undocumented skills/skill report coverage" voice trigger */}
+            <AipSkillReportsCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

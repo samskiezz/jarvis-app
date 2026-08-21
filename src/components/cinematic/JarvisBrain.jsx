@@ -668,6 +668,7 @@ import { isIpmmQuery, buildIpmmScript } from "../overnight/IntelProfileMissionMa
 import { isSwrinvQuery, buildSwrinvScript } from "../overnight/SwarmInvestigationConvergence";
 import { isGcirtQuery, buildGcirtScript } from "./GraphCommunityInvestigationReportTriple";
 import { isTinaQuery, buildTinaScript } from "./TaskInvestigationAlignment";
+import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -983,6 +984,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tina-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTinaScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F55: AIP skill × reports coverage — ASRC opens itself via jarvis:asrc-toggle;
+    // we speak the skill documentation brief.
+    if (isAsrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:asrc-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAsrcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
