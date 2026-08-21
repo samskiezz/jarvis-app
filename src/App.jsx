@@ -624,6 +624,7 @@ import SwarmDatasetMonitor from '@/components/cinematic/SwarmDatasetMonitor';
 import IntelProfileDatasetCoverage from '@/components/cinematic/IntelProfileDatasetCoverage';
 import SwarmRiskCoverageMonitor from '@/components/cinematic/SwarmRiskCoverageMonitor';
 import ContactIntelProfileCrossRef from '@/components/cinematic/ContactIntelProfileCrossRef';
+import InvestmentLiveIntelScanner from '@/components/cinematic/InvestmentLiveIntelScanner';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1962,6 +1963,8 @@ function App() {
             <SwarmRiskCoverageMonitor />
             {/* F70 (overnight 2026-08-21): Contact × IntelProfile Cross-Reference (CIPR) — ◈ CIPR button (left:1740 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /entities/IntelProfile every 90 s; keyword-correlates each contact (name/organization/email/tags) against intel profiles (name/aliases/organization/role/tags) → PROFILED (≥1 match) vs UNKNOWN; amber badge on unknown count; stat tiles (contacts/profiles/profiled/unknown); ALL/PROFILED/UNKNOWN filter tabs + text search; expand contact → matched intel profiles with role badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intelligence coverage brief + jarvis:speak-dossier TTS; isCiprQuery+buildCiprScript wired in JarvisBrain; jarvis:cipr-toggle event; "contact profile/intel contact/cipr/profiled contacts/contact intel match/who is profiled/contact intelligence match/contact cross reference/unknown contacts/intel coverage contact/contact profiling" voice trigger */}
             <ContactIntelProfileCrossRef />
+            {/* F71 (overnight 2026-08-21): Investment × Live Intel Opportunity Scanner (ILOS) — ◈ ILOS button (left:1800 bottom:18 zIndex:68); parallel-fetches /entities/Investment + /functions/getLiveIntel every 60 s; keyword-correlates each investment (name/sector/tags/notes) against live world events (crypto/FX/seismic) → TRIGGERED (≥1 match) vs QUIET; amber badge on triggered count; stat tiles (investments/live events/triggered/quiet); ALL/TRIGGERED/QUIET filter tabs + text search; expand investment → matched events with CRYPTO/FX/SEISMIC type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio live-intelligence brief + jarvis:speak-dossier TTS; isIlosQuery+buildIlosScript wired in JarvisBrain; jarvis:ilos-toggle event; "investment intel/live investment/ilos/market opportunity/investment opportunity/portfolio intel/live portfolio/triggered investments/market signal/portfolio live intel" voice trigger */}
+            <InvestmentLiveIntelScanner />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
