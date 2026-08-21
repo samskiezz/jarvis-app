@@ -615,6 +615,7 @@ import ContactTaskBoard from '@/components/cinematic/ContactTaskBoard';
 import InvestmentRiskExposureTracker from '@/components/cinematic/InvestmentRiskExposureTracker';
 import KnowledgeGraphCoverage from '@/components/cinematic/KnowledgeGraphCoverage';
 import BrainTaskProgressMonitor from '@/components/cinematic/BrainTaskProgressMonitor';
+import InvestigationOpsFrequency from '@/components/cinematic/InvestigationOpsFrequency';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1935,6 +1936,8 @@ function App() {
             <KnowledgeGraphCoverage />
             {/* F61 (overnight 2026-08-21): Brain × Task Progress Monitor (BSTP) — parallel-polls /v1/cinematic/brain + /entities/Task every 60 s; computes task completion rate vs brain growth → SYNCED/BRAIN AHEAD/TASKS LAGGING/CRITICAL; ◈ BSTP button (left:1380 bottom:18 zIndex:68); stat tiles (nodes/synapses/tasks/done%); task completion bar + brain-node bar; ALL/DONE/PENDING/OTHER filter tabs + text search; task list rows with status + priority; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brain-task coherence brief + jarvis:speak-dossier TTS; isBstpQuery+buildBstpScript wired in JarvisBrain; jarvis:bstp-toggle event; "brain task/task brain/bstp/brain progress/task progress/brain sync/task coherence" voice trigger */}
             <BrainTaskProgressMonitor />
+            {/* F62 (overnight 2026-08-21): Investigation × Ops Event Frequency (INVOPSFREQ) — parallel-fetches /v1/investigations + /v1/ops/events; keyword-correlates each investigation against ops events → ACTIVE vs QUIET; per-case event frequency ranked list; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence tactical note + TTS; isInvOpsFreqQuery already wired in JarvisBrain; jarvis:invopsfreq-toggle event; "investigation ops/case event/ops per case/event frequency/invopsfreq/case chatter" voice trigger */}
+            <InvestigationOpsFrequency />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
