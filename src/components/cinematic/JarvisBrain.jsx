@@ -135,6 +135,7 @@ import { isLbsgQuery, buildLbsgScript } from "./LlmBudgetSentinel";
 import { isTopObjectsQuery, buildTopObjectsScript } from "./TopObjectsExplorer";
 import { isRbldQuery, buildRbldScript } from "./RunBuilderMonitor";
 import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistry";
+import { isSoecQuery, buildSoecScript } from "./ScenarioOpsCorrelator";
 import { isDlgrQuery, buildDlgrScript } from "./DecisionLedgerMonitor";
 import { isGovQuery, buildGovScript } from "./DataGovernanceMonitor";
 import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
@@ -2293,6 +2294,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:atr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildToolRegistryScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F66: dispatches jarvis:soec-toggle + speaks triggered-scenario brief;
+    // "scenario ops / ops scenario / soec / triggered scenarios /
+    //  scenario activity / ops correlation / scenario correlation / which scenarios are active"
+    if (isSoecQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:soec-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSoecScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

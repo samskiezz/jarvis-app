@@ -619,6 +619,7 @@ import InvestigationOpsFrequency from '@/components/cinematic/InvestigationOpsFr
 import DatasetAnomalyCorrelator from '@/components/cinematic/DatasetAnomalyCorrelator';
 import CognitiveLoadIndex from '@/components/cinematic/CognitiveLoadIndex';
 import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
+import ScenarioOpsCorrelator from '@/components/cinematic/ScenarioOpsCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1947,6 +1948,8 @@ function App() {
             <CognitiveLoadIndex />
             {/* F65 (overnight 2026-08-21): Agent Tool Registry (ATR) — pre-built AgentToolRegistry.jsx (327 lines) activated; polls /v1/jarvis/agent/tools every 60 s; category filter tabs (ALL + derived categories); text search on name + description; self-contained ◈ ATR button (left:105600 bottom:8 zIndex:116); ▶ QUERY → /v1/jarvis/agent/chat asks Jarvis to describe/use the tool; isToolRegistryQuery+buildToolRegistryScript already wired in JarvisBrain (line 137 import, line 2292 branch); jarvis:atr-toggle event; "tool registry/agent tools/what tools/jarvis capabilities/available tools/tool catalogue/tool list/tool set/atr" voice trigger */}
             <AgentToolRegistry />
+            {/* F66 (overnight 2026-08-21): Scenario × Ops Events Correlator (SOEC) — ◈ SOEC button (left:1500 bottom:18 zIndex:68); parallel-fetches /v1/scenario/list + /v1/ops/events every 60 s; keyword-correlates each scenario (name/description/tags) against ops events (type/resource/description) → TRIGGERED (≥1 match) vs DORMANT; amber badge on triggered count; stat tiles (scenarios/ops events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand scenario → matched ops events with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-scenario brief + jarvis:speak-dossier TTS; isSoecQuery+buildSoecScript wired in JarvisBrain; jarvis:soec-toggle event; "scenario ops/ops scenario/soec/triggered scenarios/scenario activity/ops correlation/scenario correlation/which scenarios are active" voice trigger */}
+            <ScenarioOpsCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

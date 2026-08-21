@@ -40,3 +40,4 @@
 [2026-08-21] F63 Dataset × Anomaly Correlator (DSAN): pre-built DatasetAnomalyCorrelator.jsx mounted in App.jsx; /v1/datasets + /v1/jarvis/analytics/anomalies; isDsanQuery+buildDsanScript wired in JarvisBrain; vite build exit:0
 [2026-08-21] F64 CognitiveLoadIndex (JCLI) — new component; polls /v1/cinematic/brain + /entities/{RiskSignal,Task,SwarmJob}; computes load score → OVERLOADED/STRAINED/BALANCED/SURPLUS gauge; mounted in App.jsx + wired in JarvisBrain; vite build exit:0
 [2026-08-21] F65 AgentToolRegistry — pre-built component mounted in App.jsx; polls /v1/jarvis/agent/tools; category filter + text search; jarvis:atr-toggle; JarvisBrain already wired; vite build exit:0
+[2026-08-21] F66 ScenarioOpsCorrelator (SOEC): /v1/scenario/list × /v1/ops/events keyword correlator; TRIGGERED/DORMANT; ◈ SOEC button; isSoecQuery+buildSoecScript wired in JarvisBrain; vite build exit:0
