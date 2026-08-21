@@ -610,6 +610,7 @@ import GraphCommunityInvestigationReportTriple from '@/components/cinematic/Grap
 import TaskInvestigationAlignment from '@/components/cinematic/TaskInvestigationAlignment';
 import AipSkillReportsCoverage from '@/components/cinematic/AipSkillReportsCoverage';
 import BrainRiskMonitor from '@/components/cinematic/BrainRiskMonitor';
+import ContactRiskSignalIntelligence from '@/components/cinematic/ContactRiskSignalIntelligence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1920,6 +1921,8 @@ function App() {
             <AipSkillReportsCoverage />
             {/* F56 (overnight 2026-08-21): Brain × Risk Signal Monitor (BRSM) — ◉ BRSM button (left:1200 bottom:18 zIndex:68); parallel-polls /v1/cinematic/brain + /entities/RiskSignal every 60 s; computes B:R ratio (brain nodes per active risk signal) → AHEAD/MATCHED/BEHIND status; stat tiles (nodes/synapses/signals/ratio); brain vs risk proportional bars; severity breakdown CRITICAL/HIGH/MEDIUM/LOW/INFO with count bars; red pulse on critical count; latest signals list; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intelligence brief + jarvis:speak-dossier TTS; isBrsmQuery+buildBrsmScript wired in JarvisBrain; jarvis:brsm-toggle event; "brain risk/risk brain/brsm/brain vs risk/intelligence ratio/brain risk monitor/jarvis risk ratio" voice trigger */}
             <BrainRiskMonitor />
+            {/* F57 (overnight 2026-08-21): Contact × Risk Signal Intelligence (CRSI) — ◈ CRSI (left:1260 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /entities/RiskSignal every 90 s; keyword-correlates each contact against active risk signals → AT_RISK vs CLEAR; amber badge on at-risk count; stat tiles (contacts/signals/at-risk/clear); ALL/AT_RISK/CLEAR filter tabs + text search; expand contact → matched signals with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + jarvis:speak-dossier TTS; isCrsiQuery+buildCrsiScript wired in JarvisBrain; jarvis:crsi-toggle event; "contact risk/crsi/at risk contacts/contact signals/contact threat/who is at risk/contact intelligence" voice trigger */}
+            <ContactRiskSignalIntelligence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
