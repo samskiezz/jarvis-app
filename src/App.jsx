@@ -616,6 +616,7 @@ import InvestmentRiskExposureTracker from '@/components/cinematic/InvestmentRisk
 import KnowledgeGraphCoverage from '@/components/cinematic/KnowledgeGraphCoverage';
 import BrainTaskProgressMonitor from '@/components/cinematic/BrainTaskProgressMonitor';
 import InvestigationOpsFrequency from '@/components/cinematic/InvestigationOpsFrequency';
+import DatasetAnomalyCorrelator from '@/components/cinematic/DatasetAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1938,6 +1939,8 @@ function App() {
             <BrainTaskProgressMonitor />
             {/* F62 (overnight 2026-08-21): Investigation × Ops Event Frequency (INVOPSFREQ) — parallel-fetches /v1/investigations + /v1/ops/events; keyword-correlates each investigation against ops events → ACTIVE vs QUIET; per-case event frequency ranked list; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence tactical note + TTS; isInvOpsFreqQuery already wired in JarvisBrain; jarvis:invopsfreq-toggle event; "investigation ops/case event/ops per case/event frequency/invopsfreq/case chatter" voice trigger */}
             <InvestigationOpsFrequency />
+            {/* F63 (overnight 2026-08-21): Dataset × Anomaly Correlator (DSAN) — pre-built DatasetAnomalyCorrelator.jsx (367 lines) activated & mounted; parallel-fetches /v1/datasets + /v1/jarvis/analytics/anomalies; keyword-correlates each dataset against active anomalies → EXPOSED vs CLEAR; amber badge on exposed count; stat tiles (datasets/anomalies/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand dataset → matched anomaly rows with |z| bar + direction arrow; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence anomaly-dataset brief + TTS; isDsanQuery+buildDsanScript already wired in JarvisBrain; jarvis:dsan-toggle event; "dataset anomaly/anomaly dataset/dsan/dataset metric anomaly/which datasets have anomalies" voice trigger */}
+            <DatasetAnomalyCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

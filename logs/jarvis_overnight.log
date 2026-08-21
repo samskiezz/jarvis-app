@@ -37,3 +37,4 @@
 [2026-08-21] F60 KnowledgeGraphCoverage.jsx — /knowledge/ × /v1/graph/centrality; DOCUMENTED vs UNDOCUMENTED nodes; ◈ KGCV button left:1320; mounted in App.jsx; wired in JarvisBrain; vite build exit:0
 [2026-08-21] F61 BrainTaskProgressMonitor — /v1/cinematic/brain + /entities/Task → SYNCED/GROWING/LAGGING/CRITICAL; ◈ BSTP button; stat tiles + progress bars + task list; ASSESS via agent chat; isBstpQuery wired in JarvisBrain; vite build exit:0
 [2026-08-21] F62 InvestigationOpsFrequency — pre-built (603 lines) activated & mounted in App.jsx; /v1/investigations + /v1/ops/events; ACTIVE vs QUIET per-case event frequency; isInvOpsFreqQuery already wired in JarvisBrain; vite build exit:0
+[2026-08-21] F63 Dataset × Anomaly Correlator (DSAN): pre-built DatasetAnomalyCorrelator.jsx mounted in App.jsx; /v1/datasets + /v1/jarvis/analytics/anomalies; isDsanQuery+buildDsanScript wired in JarvisBrain; vite build exit:0
