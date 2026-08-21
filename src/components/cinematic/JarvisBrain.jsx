@@ -683,6 +683,7 @@ import { isBrsmQuery, buildBrsmScript } from "./BrainRiskMonitor";
 import { isCrsiQuery, buildCrsiScript } from "./ContactRiskSignalIntelligence";
 import { isJcliQuery, buildJcliScript } from "./CognitiveLoadIndex";
 import { isBasirQuery, buildBasirScript } from "./BrainAipSkillRatio";
+import { isSjicQuery, buildSjicScript } from "./SwarmInvestigationCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7388,6 +7389,15 @@ export default function JarvisBrain() {
       const script = await buildScenarioDsvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+
+    if (isSjicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjic-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjicScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
     clearTimeout(hideT.current);
