@@ -628,6 +628,7 @@ import InvestmentLiveIntelScanner from '@/components/cinematic/InvestmentLiveInt
 import ScenarioKnowledgeMap from '@/components/cinematic/ScenarioKnowledgeMap';
 import IntelProfileRiskCorrelator from '@/components/cinematic/IntelProfileRiskCorrelator';
 import InvestmentInvestigationCorrelator from '@/components/cinematic/InvestmentInvestigationCorrelator';
+import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1975,6 +1976,8 @@ function App() {
 
             {/* F74 (overnight 2026-08-21): Investment × Investigation Correlator (IVIN) — pre-built InvestmentInvestigationCorrelator.jsx (331 lines) activated & mounted; parallel-fetches /entities/Investment + /v1/investigations every 90 s; keyword-correlates each investment against open investigations → UNDER_INVESTIGATION (≥1 match) vs CLEAR; amber badge on linked count; stat tiles (investments/investigations/linked/clear); ALL/LINKED/CLEAR filter tabs + text search; expand investment → matched investigations with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio exposure brief + jarvis:speak-dossier TTS; isIvinQuery+buildIvinScript already wired in JarvisBrain; jarvis:ivin-toggle event; "investment investigation/ivin/investments under investigation/investment case/portfolio probe" voice trigger */}
             <InvestmentInvestigationCorrelator />
+            {/* F75 (overnight 2026-08-21): Brain × AIP Skill Intelligence Ratio (BASIR) — /v1/cinematic/brain + /v1/aip/skill → computes brain-nodes-per-skill ratio (B:S); SURPLUS/BALANCED/STRAINED/OVERLOADED state; ◈ BASIR button (left:1980 bottom:18 zIndex:68); stat tiles (nodes/synapses/skills/B:S ratio); gauge bar with threshold markers; per-skill rows with allocation bar + expand for metadata; ALL/ENABLED/DISABLED filter tabs + text search; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence cognitive capacity brief + jarvis:speak-dossier TTS; isBasirQuery+buildBasirScript wired in JarvisBrain; jarvis:basir-toggle event; 60-s auto-refresh; "brain skill/skill brain/basir/brain capacity/skill ratio/brain per skill/neural skill/aip brain/cognitive skill ratio/intelligence ratio skill" voice trigger */}
+            <BrainAipSkillRatio />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

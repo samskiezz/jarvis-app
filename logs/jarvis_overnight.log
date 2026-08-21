@@ -49,3 +49,4 @@
 2026-08-21 F72 ScenarioKnowledgeMap (SKIM): /v1/scenario/list × /knowledge/ → DOCUMENTED/BLIND; ◈ SKIM button; vite build exit:0
 [2026-08-21] F73 IntelProfileRiskCorrelator — pre-built component activated & mounted in App.jsx; isIprscQuery+buildIprscScript already wired in JarvisBrain; /entities/IntelProfile + /entities/RiskSignal; vite build exit:0
 [2026-08-21] F74 IVIN: Investment × Investigation Correlator — InvestmentInvestigationCorrelator.jsx (331 lines) activated; fixed left:1920; mounted in App.jsx; isIvinQuery+buildIvinScript already in JarvisBrain; vite build exit:0; dist/assets/index-BCBn7xlf.js contains IVIN
+[2026-08-21] F75 BrainAipSkillRatio (BASIR) — /v1/cinematic/brain + /v1/aip/skill; B:S ratio gauge; SURPLUS/BALANCED/STRAINED/OVERLOADED; isBasirQuery+buildBasirScript wired in JarvisBrain; mounted in App.jsx; vite build exit:0; BASIR confirmed in dist/assets/index-DTll77RL.js
