@@ -622,6 +622,7 @@ import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 import ScenarioOpsCorrelator from '@/components/cinematic/ScenarioOpsCorrelator';
 import SwarmDatasetMonitor from '@/components/cinematic/SwarmDatasetMonitor';
 import IntelProfileDatasetCoverage from '@/components/cinematic/IntelProfileDatasetCoverage';
+import SwarmRiskCoverageMonitor from '@/components/cinematic/SwarmRiskCoverageMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1956,6 +1957,8 @@ function App() {
             <SwarmDatasetMonitor />
             {/* F68 (overnight 2026-08-21): IntelProfile × Dataset Coverage (IPDS) — ◈ IPDS button (left:1620 bottom:18 zIndex:68); parallel-fetches /entities/IntelProfile + /v1/datasets every 90 s; keyword-correlates each profile (name/description/aliases/tags/role/organization) against datasets → DATA_BACKED (≥1 match) vs DATA_DARK; amber badge on dark count; stat tiles (profiles/datasets/backed/data-dark); ALL/DATA_BACKED/DATA_DARK filter tabs + text search; expand profile → matched datasets with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intelligence coverage brief + jarvis:speak-dossier TTS; isIpdfQuery+buildIpdfScript wired in JarvisBrain; jarvis:ipdf-toggle event; "intel profile dataset/profile data/ipdf/data-backed profiles/dark profiles/which profiles have data/profile coverage/profile dataset coverage/intel data coverage" voice trigger */}
             <IntelProfileDatasetCoverage />
+            {/* F69 (overnight 2026-08-21): SwarmJob × Risk Signal Coverage Monitor (SRSC) — ◈ SRSC button (left:1680 bottom:18 zIndex:68); parallel-fetches /entities/SwarmJob + /entities/RiskSignal every 60 s; keyword-correlates each risk signal (name/description/severity/source/tags) against swarm jobs (name/description/target/objective/tags) → COVERED (≥1 match) vs UNCOVERED; red badge on uncovered count; stat tiles (signals/jobs/covered/uncovered); ALL/COVERED/UNCOVERED filter tabs + text search; expand signal → matched swarm jobs with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm coverage brief + jarvis:speak-dossier TTS; isSrscQuery+buildSrscScript wired in JarvisBrain; jarvis:srsc-toggle event; "swarm risk/risk swarm/srsc/uncovered risks/risk coverage/which risks have swarm/swarm coverage/swarm signal/risk supervision" voice trigger */}
+            <SwarmRiskCoverageMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
