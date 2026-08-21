@@ -136,6 +136,7 @@ import { isTopObjectsQuery, buildTopObjectsScript } from "./TopObjectsExplorer";
 import { isRbldQuery, buildRbldScript } from "./RunBuilderMonitor";
 import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistry";
 import { isSoecQuery, buildSoecScript } from "./ScenarioOpsCorrelator";
+import { isSdjicQuery, buildSdjicScript } from "./SwarmDatasetMonitor";
 import { isDlgrQuery, buildDlgrScript } from "./DecisionLedgerMonitor";
 import { isGovQuery, buildGovScript } from "./DataGovernanceMonitor";
 import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
@@ -2306,6 +2307,18 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:soec-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSoecScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F67: dispatches jarvis:sdjic-toggle + speaks swarm-dataset coverage brief;
+    // "swarm dataset / dataset jobs / sdjic / attended datasets / idle datasets /
+    //  swarm coverage / which datasets have swarm jobs / dataset swarm / dataset ingestion"
+    if (isSdjicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sdjic-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSdjicScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

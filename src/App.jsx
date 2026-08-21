@@ -620,6 +620,7 @@ import DatasetAnomalyCorrelator from '@/components/cinematic/DatasetAnomalyCorre
 import CognitiveLoadIndex from '@/components/cinematic/CognitiveLoadIndex';
 import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 import ScenarioOpsCorrelator from '@/components/cinematic/ScenarioOpsCorrelator';
+import SwarmDatasetMonitor from '@/components/cinematic/SwarmDatasetMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1950,6 +1951,8 @@ function App() {
             <AgentToolRegistry />
             {/* F66 (overnight 2026-08-21): Scenario × Ops Events Correlator (SOEC) — ◈ SOEC button (left:1500 bottom:18 zIndex:68); parallel-fetches /v1/scenario/list + /v1/ops/events every 60 s; keyword-correlates each scenario (name/description/tags) against ops events (type/resource/description) → TRIGGERED (≥1 match) vs DORMANT; amber badge on triggered count; stat tiles (scenarios/ops events/triggered/dormant); ALL/TRIGGERED/DORMANT filter tabs + text search; expand scenario → matched ops events with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops-scenario brief + jarvis:speak-dossier TTS; isSoecQuery+buildSoecScript wired in JarvisBrain; jarvis:soec-toggle event; "scenario ops/ops scenario/soec/triggered scenarios/scenario activity/ops correlation/scenario correlation/which scenarios are active" voice trigger */}
             <ScenarioOpsCorrelator />
+            {/* F67 (overnight 2026-08-21): SwarmJob × Dataset Ingestion Monitor (SDJIC) — ◈ SDJIC button (left:1560 bottom:18 zIndex:68); parallel-fetches /entities/SwarmJob + /v1/datasets every 60 s; keyword-correlates each dataset (name/description/tags/source) against swarm jobs (name/description/target) → ATTENDED (≥1 match) vs IDLE; amber badge on idle count; stat tiles (datasets/jobs/attended/idle); ALL/ATTENDED/IDLE filter tabs + text search; expand dataset → matched swarm jobs with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ingestion coverage brief + jarvis:speak-dossier TTS; isSdjicQuery+buildSdjicScript wired in JarvisBrain; jarvis:sdjic-toggle event; "swarm dataset/dataset jobs/sdjic/attended datasets/idle datasets/swarm coverage/which datasets have swarm jobs/dataset swarm/dataset ingestion" voice trigger */}
+            <SwarmDatasetMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
