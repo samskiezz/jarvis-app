@@ -66,3 +66,4 @@
 2026-08-22 | F89 | RiskSignal × AIP Skill Coverage (RSASK) | DONE | RiskSignalAipSkillCoverage.jsx created, mounted in App.jsx, isRsaskQuery+buildRsaskScript wired in JarvisBrain; vite build exit:0; dist/assets/index-RamitwD9.js verified
 [2026-08-22] F90 DGCC — DatasetGraphCentralityCoverage.jsx: /v1/datasets + /v1/graph/centrality keyword-correlates datasets against high-centrality graph nodes → DATA_CENTERED/PERIPHERAL; amber badge on peripheral; ◈ DGCC button left:2880; isDgccQuery+buildDgccScript wired in JarvisBrain; jarvis:dgcc-toggle; vite build exit:0; bundle: index-CtvOSySy.js
 [2026-08-22] F91 GraphCentralityAipSkillCoverage.jsx built & pushed — /v1/graph/centrality × /v1/aip/skill; GCAS button; vite exit:0
+[2026-08-22] F92 KnowledgeAipSkillCoverage (KASC): /knowledge/ × /v1/aip/skill → SKILLED/UNSUPPORTED; ◈ KASC button; mounted App.jsx; wired JarvisBrain; build exit:0

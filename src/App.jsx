@@ -643,6 +643,7 @@ import TaskOpsEventsExposure from '@/components/cinematic/TaskOpsEventsExposure'
 import RiskSignalAipSkillCoverage from '@/components/cinematic/RiskSignalAipSkillCoverage';
 import DatasetGraphCentralityCoverage from '@/components/cinematic/DatasetGraphCentralityCoverage';
 import GraphCentralityAipSkillCoverage from '@/components/cinematic/GraphCentralityAipSkillCoverage';
+import KnowledgeAipSkillCoverage from '@/components/cinematic/KnowledgeAipSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2022,6 +2023,8 @@ function App() {
             <DatasetGraphCentralityCoverage />
             {/* F91 (overnight 2026-08-22): Graph Centrality × AIP Skill Coverage (GCAS) — ◈ GCAS button (left:2940 bottom:18 zIndex:68); parallel-fetches /v1/graph/centrality + /v1/aip/skill every 90 s; keyword-correlates each top-centrality node (id/label/type) against AIP skills (name/description/category/tags) → SKILLED (≥1 match) vs UNCOVERED; amber badge on uncovered count; stat tiles (nodes/skills/skilled/uncovered); ALL/SKILLED/UNCOVERED filter tabs + text search; expand node → matched skills with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + jarvis:speak-dossier TTS; isGcasQuery+buildGcasScript wired in JarvisBrain; jarvis:gcas-toggle event; 90-s auto-refresh; "graph skill/skill graph/gcas/centrality skill/graph aip/high centrality skill/influential node skill/graph coverage skill" voice trigger */}
             <GraphCentralityAipSkillCoverage />
+            {/* F92 (overnight 2026-08-22): Knowledge × AIP Skill Coverage (KASC) — ◈ KASC button (left:3000 bottom:18 zIndex:68); parallel-fetches /knowledge/ + /v1/aip/skill every 90 s; keyword-correlates each KB article against AIP skills → SKILLED (≥1 match) vs UNSUPPORTED (0); amber badge on unsupported count; stat tiles (articles/skills/skilled/unsupported); ALL/SKILLED/UNSUPPORTED filter tabs + text search; expand article → matched skills with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKascQuery+buildKascScript wired in JarvisBrain */}
+            <KnowledgeAipSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
