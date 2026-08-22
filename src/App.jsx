@@ -635,6 +635,7 @@ import DatasetReportCoverage from '@/components/cinematic/DatasetReportCoverage'
 import ScenarioGraphCoverage from '@/components/cinematic/ScenarioGraphCoverage';
 import TaskLiveIntelExposure from '@/components/cinematic/TaskLiveIntelExposure';
 import ContactKnowledgeBridge from '@/components/cinematic/ContactKnowledgeBridge';
+import InvestmentAipSkillCoverage from '@/components/cinematic/InvestmentAipSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1998,6 +1999,8 @@ function App() {
             <TaskLiveIntelExposure />
             {/* F82 (overnight 2026-08-22): Contact × Knowledge Intelligence Bridge (CKIB) — ◈ CKIB button (left:2400 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /knowledge/ every 90 s; keyword-correlates each contact (name/email/organization/role/tags) against KB articles (title/content/summary/tags) → DOCUMENTED (≥1 match) vs UNKNOWN (0 matches); amber badge on unknown count; stat tiles (contacts/articles/documented/unknown); ALL/DOCUMENTED/UNKNOWN filter tabs + text search; expand contact → matched KB articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence KB coverage brief + jarvis:speak-dossier TTS; isCkibQuery+buildCkibScript wired in JarvisBrain; jarvis:ckib-toggle event; "contact knowledge/knowledge contact/ckib/documented contacts/unknown contacts knowledge/kb contact/contact kb/who has knowledge/contact knowledge bridge/contact documentation" voice trigger */}
             <ContactKnowledgeBridge />
+            {/* F83 (overnight 2026-08-22): Investment × AIP Skill Coverage (IASC) — ◈ IASC button (left:2460 bottom:18 zIndex:68); parallel-fetches /entities/Investment + /v1/aip/skill every 90 s; keyword-correlates each skill (name/description/tags/category) against investments (name/sector/notes/tags) → EXERCISED (≥1 match) vs DORMANT (0 matches); amber badge on dormant count; stat tiles (skills/investments/exercised/dormant); ALL/EXERCISED/DORMANT filter tabs + text search; expand skill → matched investments with sector badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-portfolio brief + jarvis:speak-dossier TTS; isIascQuery+buildIascScript wired in JarvisBrain; jarvis:iasc-toggle event; "investment skill/skill investment/iasc/exercised skills/dormant skills/portfolio skills/skill investment coverage/aip investment/investment aip" voice trigger */}
+            <InvestmentAipSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

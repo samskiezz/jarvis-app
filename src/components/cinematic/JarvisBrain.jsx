@@ -690,6 +690,7 @@ import { isCscoQuery, buildCscoScript } from "./ContactScenarioCoverage";
 import { isSgcvQuery, buildSgcvScript } from "./ScenarioGraphCoverage";
 import { isTlieQuery, buildTlieScript } from "./TaskLiveIntelExposure";
 import { isCkibQuery, buildCkibScript } from "./ContactKnowledgeBridge";
+import { isIascQuery, buildIascScript } from "./InvestmentAipSkillCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7456,6 +7457,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ckib-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCkibScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isIascQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iasc-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIascScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
