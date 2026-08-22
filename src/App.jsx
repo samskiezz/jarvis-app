@@ -644,6 +644,7 @@ import RiskSignalAipSkillCoverage from '@/components/cinematic/RiskSignalAipSkil
 import DatasetGraphCentralityCoverage from '@/components/cinematic/DatasetGraphCentralityCoverage';
 import GraphCentralityAipSkillCoverage from '@/components/cinematic/GraphCentralityAipSkillCoverage';
 import KnowledgeAipSkillCoverage from '@/components/cinematic/KnowledgeAipSkillCoverage';
+import RiskSignalInvestigationCoverage from '@/components/cinematic/RiskSignalInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2025,6 +2026,8 @@ function App() {
             <GraphCentralityAipSkillCoverage />
             {/* F92 (overnight 2026-08-22): Knowledge × AIP Skill Coverage (KASC) — ◈ KASC button (left:3000 bottom:18 zIndex:68); parallel-fetches /knowledge/ + /v1/aip/skill every 90 s; keyword-correlates each KB article against AIP skills → SKILLED (≥1 match) vs UNSUPPORTED (0); amber badge on unsupported count; stat tiles (articles/skills/skilled/unsupported); ALL/SKILLED/UNSUPPORTED filter tabs + text search; expand article → matched skills with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKascQuery+buildKascScript wired in JarvisBrain */}
             <KnowledgeAipSkillCoverage />
+            {/* F93 (overnight 2026-08-22): RiskSignal × Investigation Coverage (RSIC) — ◈ RSIC button (left:3060 bottom:18 zIndex:68); parallel-fetches /entities/RiskSignal + /v1/investigations every 90 s; keyword-correlates each risk signal (title/description/severity/category/tags) against open investigations (title/description/annotations/seeds) → INVESTIGATED (≥1 match) vs UNTRACKED (0); amber badge on untracked count; stat tiles (signals/cases/investigated/untracked); ALL/INVESTIGATED/UNTRACKED filter tabs + text search; expand signal → matched investigation cases with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk coverage brief + jarvis:speak-dossier TTS; isRsicQuery+buildRsicScript wired in JarvisBrain; jarvis:rsic-toggle event; 90-s auto-refresh; "risk investigation/investigation risk/rsic/tracked risks/untracked risks/risk case coverage/which risks have investigations/risk coverage investigation" voice trigger */}
+            <RiskSignalInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
