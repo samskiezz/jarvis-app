@@ -640,6 +640,7 @@ import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMo
 import ContactInvestigationsCorrelator from '@/components/cinematic/ContactInvestigationsCorrelator';
 import TaskAipSkillAlignment from '@/components/cinematic/TaskAipSkillAlignment';
 import TaskOpsEventsExposure from '@/components/cinematic/TaskOpsEventsExposure';
+import RiskSignalAipSkillCoverage from '@/components/cinematic/RiskSignalAipSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2013,6 +2014,8 @@ function App() {
             <TaskAipSkillAlignment />
             {/* F88 (overnight 2026-08-22): Task × Ops Events Exposure (TOEX) — ◈ TOEX button (left:2760 bottom:18 zIndex:68); parallel-fetches /entities/Task + /v1/ops/events every 60 s; keyword-correlates each task (title/description/tags/priority/status) against live ops events (type/resource/description/service) → TRIGGERED (≥1 match) vs QUIET (0); amber badge on triggered count; stat tiles (tasks/ops events/triggered/quiet); ALL/TRIGGERED/QUIET filter tabs + text search; expand task → matched ops events with severity badge (CRITICAL/WARNING/INFO/OK) + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-ops exposure brief + jarvis:speak-dossier TTS; isToexQuery+buildToexScript wired in JarvisBrain; jarvis:toex-toggle event; "task ops/ops task/toex/task operational events/which tasks have ops activity/task ops exposure" voice trigger */}
             <TaskOpsEventsExposure />
+            {/* F89 (overnight 2026-08-22): RiskSignal × AIP Skill Coverage (RSSC) — ◈ RSSC button (left:2820 bottom:18 zIndex:68); parallel-fetches /entities/RiskSignal + /v1/aip/skill every 90 s; keyword-correlates each risk signal (title/description/severity/category/tags) against AIP skills (name/description/category/tags) → MITIGATED (≥1 match) vs UNCOVERED (0); amber badge on uncovered count; stat tiles (signals/skills/mitigated/uncovered); ALL/MITIGATED/UNCOVERED filter tabs + text search; expand signal → matched skills with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-skill coverage brief + jarvis:speak-dossier TTS; isRsscQuery+buildRsscScript wired in JarvisBrain; jarvis:rssc-toggle event; "risk skill/skill risk/rssc/uncovered risks/risk signal skill/which risks have no skill" voice trigger */}
+            <RiskSignalAipSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
