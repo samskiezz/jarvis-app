@@ -378,7 +378,7 @@ import { isTaskSwjQuery, buildTaskSwjScript } from "./TaskSwarmJobCoverage";
 import { isSkscenQuery, buildSkscenScript } from "./SkillScenarioCoverage";
 import { isInvscnmapQuery, buildInvscnmapScript } from "./InvestigationSceneMapper";
 import { isScconQuery, buildScconScript } from "./SceneContactCoverage";
-import { isCscenQuery, buildCscenScript } from "./ContactScenarioCoverage";
+import { isCscoQuery as isCscenQuery, buildCscoScript as buildCscenScript } from "./ContactScenarioCoverage";
 import { isTaskDsQuery, buildTaskDsScript } from "./TaskDatasetCoverage";
 import { isCoecQuery, buildCoecScript } from "./ContactOpsEventCoverage";
 import { isRskillQuery, buildRskillScript } from "./ReportSkillCoverage";
@@ -687,6 +687,7 @@ import { isSjicQuery, buildSjicScript } from "./SwarmInvestigationCorrelator";
 import { isKoecQuery, buildKoecScript } from "./KnowledgeOpsEventCorrelator";
 import { isDricQuery, buildDricScript } from "./DatasetReportCoverage";
 import { isCscoQuery, buildCscoScript } from "./ContactScenarioCoverage";
+import { isSgcvQuery, buildSgcvScript } from "./ScenarioGraphCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7426,6 +7427,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:csco-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCscoScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isSgcvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sgcv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSgcvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

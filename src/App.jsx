@@ -632,7 +632,7 @@ import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
 import SwarmInvestigationCorrelator from '@/components/cinematic/SwarmInvestigationCorrelator';
 import KnowledgeOpsEventCorrelator from '@/components/cinematic/KnowledgeOpsEventCorrelator';
 import DatasetReportCoverage from '@/components/cinematic/DatasetReportCoverage';
-import ContactScenarioCoverage from '@/components/cinematic/ContactScenarioCoverage';
+import ScenarioGraphCoverage from '@/components/cinematic/ScenarioGraphCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1990,6 +1990,8 @@ function App() {
             <DatasetReportCoverage />
             {/* F79 (overnight 2026-08-22): Contact × Scenario Coverage (CSCO) — ◈ CSCO button (left:2220 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /v1/scenario/list every 90 s; keyword-correlates each contact against the live scenario catalog → ENGAGED (≥1 match) vs OFF_PLAN; amber badge on off-plan count; stat tiles (contacts/scenarios/engaged/off-plan); ALL/ENGAGED/OFF_PLAN filter tabs + text search; expand contact → matched scenarios with type+status badges + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario engagement brief + jarvis:speak-dossier TTS; isCscoQuery+buildCscoScript wired in JarvisBrain; jarvis:csco-toggle event; "contact scenario/scenario contact/csco/engaged contacts/off-plan contacts/who is in scenarios/contact scenario coverage/scenario engagement" voice trigger */}
             <ContactScenarioCoverage />
+            {/* F80 (overnight 2026-08-22): Scenario × Graph Centrality Coverage (SGCV) — ◈ SGCV button (left:2280 bottom:18 zIndex:68); parallel-fetches /v1/scenario/list + /v1/graph/centrality every 90 s; keyword-correlates each scenario against top-centrality graph nodes → ENTITY_BACKED (≥1 match) vs DARK; amber badge on dark count; stat tiles (scenarios/nodes/backed/dark); ALL/ENTITY_BACKED/DARK filter tabs + text search; expand scenario → matched nodes with type badge + centrality score + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence entity coverage brief + jarvis:speak-dossier TTS; isSgcvQuery+buildSgcvScript wired in JarvisBrain; jarvis:sgcv-toggle event; "scenario graph/graph scenario/sgcv/dark scenarios/entity backed scenarios/which scenarios have graph nodes/scenario entity coverage" voice trigger */}
+            <ScenarioGraphCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
