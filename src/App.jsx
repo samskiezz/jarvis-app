@@ -641,6 +641,7 @@ import ContactInvestigationsCorrelator from '@/components/cinematic/ContactInves
 import TaskAipSkillAlignment from '@/components/cinematic/TaskAipSkillAlignment';
 import TaskOpsEventsExposure from '@/components/cinematic/TaskOpsEventsExposure';
 import RiskSignalAipSkillCoverage from '@/components/cinematic/RiskSignalAipSkillCoverage';
+import DatasetGraphCentralityCoverage from '@/components/cinematic/DatasetGraphCentralityCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2016,6 +2017,8 @@ function App() {
             <TaskOpsEventsExposure />
             {/* F89 (overnight 2026-08-22): RiskSignal × AIP Skill Coverage (RSSC) — ◈ RSSC button (left:2820 bottom:18 zIndex:68); parallel-fetches /entities/RiskSignal + /v1/aip/skill every 90 s; keyword-correlates each risk signal (title/description/severity/category/tags) against AIP skills (name/description/category/tags) → MITIGATED (≥1 match) vs UNCOVERED (0); amber badge on uncovered count; stat tiles (signals/skills/mitigated/uncovered); ALL/MITIGATED/UNCOVERED filter tabs + text search; expand signal → matched skills with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk-skill coverage brief + jarvis:speak-dossier TTS; isRsscQuery+buildRsscScript wired in JarvisBrain; jarvis:rssc-toggle event; "risk skill/skill risk/rssc/uncovered risks/risk signal skill/which risks have no skill" voice trigger */}
             <RiskSignalAipSkillCoverage />
+            {/* F90 (overnight 2026-08-22): Dataset × Graph Centrality Coverage (DGCC) — ◈ DGCC button (left:2880 bottom:18 zIndex:68); parallel-fetches /v1/datasets + /v1/graph/centrality every 90 s; keyword-correlates each dataset (name/description/category/tags) against top-centrality graph nodes (id/label/type) → DATA_CENTERED (≥1 match) vs PERIPHERAL (0); amber badge on peripheral count; stat tiles (datasets/nodes/centered/peripheral); ALL/DATA_CENTERED/PERIPHERAL filter tabs + text search; expand dataset → matched nodes with type badge + centrality score + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence dataset-graph coverage brief + jarvis:speak-dossier TTS; isDgccQuery+buildDgccScript wired in JarvisBrain; jarvis:dgcc-toggle event; "dataset graph/graph dataset/dgcc/centered datasets/peripheral datasets/dataset centrality/graph dataset coverage" voice trigger */}
+            <DatasetGraphCentralityCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
