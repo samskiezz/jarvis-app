@@ -691,6 +691,7 @@ import { isSgcvQuery, buildSgcvScript } from "./ScenarioGraphCoverage";
 import { isTlieQuery, buildTlieScript } from "./TaskLiveIntelExposure";
 import { isCkibQuery, buildCkibScript } from "./ContactKnowledgeBridge";
 import { isIascQuery, buildIascScript } from "./InvestmentAipSkillCoverage";
+import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7475,6 +7476,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:trcv-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTrcvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F85: brain node velocity monitor — BNVM opens itself via jarvis:bnvm-toggle;
+    // we speak the growth-velocity brief.
+    if (isBnvmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:bnvm-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildBnvmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

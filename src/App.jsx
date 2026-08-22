@@ -636,6 +636,7 @@ import ScenarioGraphCoverage from '@/components/cinematic/ScenarioGraphCoverage'
 import TaskLiveIntelExposure from '@/components/cinematic/TaskLiveIntelExposure';
 import ContactKnowledgeBridge from '@/components/cinematic/ContactKnowledgeBridge';
 import InvestmentAipSkillCoverage from '@/components/cinematic/InvestmentAipSkillCoverage';
+import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2001,6 +2002,8 @@ function App() {
             <ContactKnowledgeBridge />
             {/* F83 (overnight 2026-08-22): Investment × AIP Skill Coverage (IASC) — ◈ IASC button (left:2460 bottom:18 zIndex:68); parallel-fetches /entities/Investment + /v1/aip/skill every 90 s; keyword-correlates each skill (name/description/tags/category) against investments (name/sector/notes/tags) → EXERCISED (≥1 match) vs DORMANT (0 matches); amber badge on dormant count; stat tiles (skills/investments/exercised/dormant); ALL/EXERCISED/DORMANT filter tabs + text search; expand skill → matched investments with sector badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-portfolio brief + jarvis:speak-dossier TTS; isIascQuery+buildIascScript wired in JarvisBrain; jarvis:iasc-toggle event; "investment skill/skill investment/iasc/exercised skills/dormant skills/portfolio skills/skill investment coverage/aip investment/investment aip" voice trigger */}
             <InvestmentAipSkillCoverage />
+            {/* F85 (overnight 2026-08-22): Brain Node Velocity Monitor (BNVM) — ◈ BNVM button (left:2580 bottom:18 zIndex:68); polls /v1/cinematic/brain every 30 s; computes Δnodes/Δtime + Δsynapses/Δtime velocity; stores rolling 20-reading window in localStorage; sparklines for node + synapse velocity; ACCELERATING/STEADY/DECELERATING classification via linear regression slope; stat tiles (node velocity nodes/min, synapse velocity, trend, peak velocity); reading history table; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence growth-velocity brief + jarvis:speak-dossier TTS; isBnvmQuery+buildBnvmScript wired in JarvisBrain; jarvis:bnvm-toggle event; "brain velocity/node velocity/brain acceleration/bnvm/growth velocity/brain growth rate/neural growth/growth rate" voice trigger */}
+            <BrainNodeVelocityMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
