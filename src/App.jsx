@@ -586,6 +586,7 @@ import SceneReportLiveIntelTriple from '@/components/cinematic/SceneReportLiveIn
 import RiskInvestigationReportTriple from '@/components/cinematic/RiskInvestigationReportTriple';
 import ContactDatasetOpsTriple from '@/components/cinematic/ContactDatasetOpsTriple';
 import ContactSwarmCentralityTriple from '@/components/cinematic/ContactSwarmCentralityTriple';
+import TaskSwarmInvestmentTriple from '@/components/cinematic/TaskSwarmInvestmentTriple';
 import GraphNodeExpander from '@/components/cinematic/GraphNodeExpander';
 import MorningMissionBrief from '@/components/cinematic/MorningMissionBrief';
 import QuickIntelCard from '@/components/cinematic/QuickIntelCard';
@@ -1915,6 +1916,8 @@ function App() {
             <ContactDatasetOpsTriple />
             {/* F433 (overnight 2026-08-19): contact × swarm job × graph centrality triple coverage — ◈ CSJGC (left:880080 bottom:8 zIndex:580); parallel-fetches /entities/Contact + /entities/SwarmJob + /v1/graph/centrality; keyword-correlates each contact against active swarm jobs AND centrality nodes to surface FULLY_MAPPED/SWARM_LINKED/NODE_ALIGNED/DARK; dark badge highlights off-graph contacts; isCsjgcQuery+buildCsjgcScript wired in JarvisBrain; jarvis:csjgc-toggle event; 90-s auto-refresh */}
             <ContactSwarmCentralityTriple />
+            {/* F434 (overnight 2026-08-22): task × swarm job × investment triple coverage — ◈ TSIT (left:880640 bottom:8 zIndex:581); parallel-fetches /entities/Task + /entities/SwarmJob + /entities/Investment; keyword-correlates each task against active swarm jobs AND investments to surface FULLY_RESOURCED/JOB_ASSIGNED/FUNDED/DARK; red badge on dark count; isTsitQuery+buildTsitScript wired in JarvisBrain; jarvis:tsit-toggle event; 90-s auto-refresh */}
+            <TaskSwarmInvestmentTriple />
             {/* F34 (overnight 2026-08-20): graph node expander — ◈ GEXP (left:880640 bottom:8 zIndex:581); /v1/graph/centrality → pick node → /v1/graph/expand/{id} → 1-hop neighbourhood cards; ASSESS → /v1/jarvis/agent/chat + TTS; isGexpQuery+buildGexpScript wired in JarvisBrain; jarvis:gexp-toggle event; 120-s centrality refresh */}
             <GraphNodeExpander />
             {/* F36 (overnight 2026-08-20): live intel × risk signal convergence — ◈ LIRISCONV (left:881200 bottom:8 zIndex:582); parallel-fetches /functions/getLiveIntel + /entities/RiskSignal; keyword-correlates each active risk signal against live world events (seismic/crypto/FX) to surface TRIGGERED vs DORMANT signals; amber badge on triggered count; ALL/TRIGGERED/DORMANT filter tabs + text search; expand → matched live events with SEISMIC/CRYPTO/FX type badge + relevance score; ASSESS → /v1/jarvis/agent/chat 2-sentence convergence brief + TTS; isLirisconvQuery+buildLirisconvScript wired in JarvisBrain; jarvis:lirisconv-toggle event; 60-s auto-refresh */}

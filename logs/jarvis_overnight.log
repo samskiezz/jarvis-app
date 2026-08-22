@@ -72,3 +72,4 @@
 [2026-08-22] F95 ScenarioTaskCoverage (SCNTASK) — pre-built component activated; /v1/scenario/list × /entities/Task → TASKED vs UNTASKED; ◈ SCNTASK button left:61800; isScntaskQuery+buildScntaskScript+jarvis:scntask-toggle wired in JarvisBrain; mounted App.jsx; vite build exit:0; bundle: index-CaNg4rG7.js
 [2026-08-22] F96 IntelProfileKnowledgeCoverage.jsx implemented & mounted; isIpkcQuery+buildIpkcScript wired in JarvisBrain; /entities/IntelProfile × /knowledge/ → DOCUMENTED/UNDOCUMENTED; vite build verified exit:0
 2026-08-22 F97 AgentToolsRunner mounted — ⌘⇧T palette runs real /v1/jarvis/agent/tools + /v1/jarvis/agent/chat; vite build exit:0
+[2026-08-22] F434 TaskSwarmInvestmentTriple.jsx — Task × SwarmJob × Investment triple coverage (TSIT); /entities/Task + /entities/SwarmJob + /entities/Investment; FULLY_RESOURCED/JOB_ASSIGNED/FUNDED/DARK; isTsitQuery+buildTsitScript in JarvisBrain; jarvis:tsit-toggle; vite build exit:0

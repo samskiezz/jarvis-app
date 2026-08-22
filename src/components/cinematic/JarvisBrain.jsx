@@ -667,6 +667,7 @@ import { isScrliQuery, buildScrliScript } from "./SceneReportLiveIntelTriple";
 import { isRirtQuery, buildRirtScript } from "./RiskInvestigationReportTriple";
 import { isCdoeQuery, buildCdoeScript } from "./ContactDatasetOpsTriple";
 import { isCsjgcQuery, buildCsjgcScript } from "./ContactSwarmCentralityTriple";
+import { isTsitQuery, buildTsitScript } from "./TaskSwarmInvestmentTriple";
 import { isGexpQuery, buildGexpScript } from "./GraphNodeExpander";
 import { isLirisconvQuery, buildLirisconvScript } from "./LiveIntelRiskConvergence";
 import { isScenarioDsvQuery, buildScenarioDsvScript } from "./ScenarioDatasetCoverage";
@@ -7379,6 +7380,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:csjgc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCsjgcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTsitQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tsit-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTsitScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
