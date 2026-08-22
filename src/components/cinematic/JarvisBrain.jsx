@@ -692,6 +692,7 @@ import { isTlieQuery, buildTlieScript } from "./TaskLiveIntelExposure";
 import { isCkibQuery, buildCkibScript } from "./ContactKnowledgeBridge";
 import { isIascQuery, buildIascScript } from "./InvestmentAipSkillCoverage";
 import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
+import { isCinvtgQuery, buildCinvtgScript } from "./ContactInvestigationsCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7486,6 +7487,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:bnvm-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildBnvmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F86: contact × investigations correlator — CINVTG opens itself; we speak the brief.
+    if (isCinvtgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cinvtg-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCinvtgScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

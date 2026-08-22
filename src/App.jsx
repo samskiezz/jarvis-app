@@ -637,6 +637,7 @@ import TaskLiveIntelExposure from '@/components/cinematic/TaskLiveIntelExposure'
 import ContactKnowledgeBridge from '@/components/cinematic/ContactKnowledgeBridge';
 import InvestmentAipSkillCoverage from '@/components/cinematic/InvestmentAipSkillCoverage';
 import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMonitor';
+import ContactInvestigationsCorrelator from '@/components/cinematic/ContactInvestigationsCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2004,6 +2005,8 @@ function App() {
             <InvestmentAipSkillCoverage />
             {/* F85 (overnight 2026-08-22): Brain Node Velocity Monitor (BNVM) — ◈ BNVM button (left:2580 bottom:18 zIndex:68); polls /v1/cinematic/brain every 30 s; computes Δnodes/Δtime + Δsynapses/Δtime velocity; stores rolling 20-reading window in localStorage; sparklines for node + synapse velocity; ACCELERATING/STEADY/DECELERATING classification via linear regression slope; stat tiles (node velocity nodes/min, synapse velocity, trend, peak velocity); reading history table; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence growth-velocity brief + jarvis:speak-dossier TTS; isBnvmQuery+buildBnvmScript wired in JarvisBrain; jarvis:bnvm-toggle event; "brain velocity/node velocity/brain acceleration/bnvm/growth velocity/brain growth rate/neural growth/growth rate" voice trigger */}
             <BrainNodeVelocityMonitor />
+            {/* F86 (overnight 2026-08-22): Contact × Investigations Correlator (CINVTG) — ◈ CINVTG button (left:2640 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /v1/investigations every 90 s; keyword-correlates each contact (name/email/organization/role/tags) against open investigation cases (title/description/annotations/seeds) → IMPLICATED (≥1 match) vs CLEAR (0 matches); amber badge on implicated count; stat tiles (contacts/cases/implicated/clear); ALL/IMPLICATED/CLEAR filter tabs + text search; expand contact → matched investigation cases with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-investigation brief + jarvis:speak-dossier TTS; isCinvtgQuery+buildCinvtgScript wired in JarvisBrain; jarvis:cinvtg-toggle event; "contact investigation/investigation contact/cinvtg/implicated contacts/who is under investigation/contact case/linked contacts" voice trigger */}
+            <ContactInvestigationsCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
