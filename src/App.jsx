@@ -632,6 +632,7 @@ import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
 import SwarmInvestigationCorrelator from '@/components/cinematic/SwarmInvestigationCorrelator';
 import KnowledgeOpsEventCorrelator from '@/components/cinematic/KnowledgeOpsEventCorrelator';
 import DatasetReportCoverage from '@/components/cinematic/DatasetReportCoverage';
+import ContactScenarioCoverage from '@/components/cinematic/ContactScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1987,6 +1988,8 @@ function App() {
             <KnowledgeOpsEventCorrelator />
             {/* F78 (overnight 2026-08-22): Dataset × Report Intelligence Coverage (DRIC) — ◈ DRIC button (left:2160 bottom:18 zIndex:68); parallel-fetches /v1/datasets + /v1/reports every 90 s; keyword-correlates each dataset against the report catalog → REPORTED (≥1 match) vs UNANALYZED; amber badge on unanalyzed count; stat tiles (datasets/reports/reported/unanalyzed); ALL/REPORTED/UNANALYZED filter tabs + text search; expand dataset → matched reports with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence dataset analysis coverage brief + jarvis:speak-dossier TTS; isDricQuery+buildDricScript wired in JarvisBrain; jarvis:dric-toggle event; "dataset report/report dataset/dric/analyzed datasets/unanalyzed datasets/dataset analysis coverage/which datasets have reports/data analysis gap" voice trigger */}
             <DatasetReportCoverage />
+            {/* F79 (overnight 2026-08-22): Contact × Scenario Coverage (CSCO) — ◈ CSCO button (left:2220 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /v1/scenario/list every 90 s; keyword-correlates each contact against the live scenario catalog → ENGAGED (≥1 match) vs OFF_PLAN; amber badge on off-plan count; stat tiles (contacts/scenarios/engaged/off-plan); ALL/ENGAGED/OFF_PLAN filter tabs + text search; expand contact → matched scenarios with type+status badges + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario engagement brief + jarvis:speak-dossier TTS; isCscoQuery+buildCscoScript wired in JarvisBrain; jarvis:csco-toggle event; "contact scenario/scenario contact/csco/engaged contacts/off-plan contacts/who is in scenarios/contact scenario coverage/scenario engagement" voice trigger */}
+            <ContactScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

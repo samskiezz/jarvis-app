@@ -1,358 +1,355 @@
-import { useState, useEffect, useCallback } from 'react';
+/**
+ * ContactScenarioCoverage — F79 (CSCO)
+ *
+ * Parallel-fetches /entities/Contact + /v1/scenario/list every 90 s.
+ * Keyword-correlates each contact against the live scenario catalog.
+ * Classification: ENGAGED (≥1 matching scenario) vs OFF_PLAN (0 scenarios).
+ * Amber badge on off-plan count.
+ *
+ * Voice intents: "contact scenario / scenario contact / csco / engaged contacts /
+ *                off-plan contacts / contact coverage / who is in scenarios /
+ *                contact scenario coverage / scenario engagement"
+ * Strip button: ◈ CSCO  left:2220 bottom:18 zIndex:68
+ * Custom event: jarvis:csco-toggle
+ * Additive only — mounted via App.jsx; intents exported for JarvisBrain.
+ */
+import { useEffect, useState, useRef, useCallback } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = '';
+const CY  = "#29E7FF";
+const AMB = "#FFD700";
+const GRN = "#00E5A0";
+const POLL = 90_000;
 
-const CSCEN_RE = /\b(contact[._-]?scenario|scenario[._-]?contact|cscen|engaged[._-]?contacts?|sidelined[._-]?contacts?|contact[._-]?scenario[._-]?coverage|contact[._-]?in[._-]?scenario|which[._-]?contacts?[._-]?(are[._-]?in|have)[._-]?scenario|contact[._-]?scenario[._-]?link)\b/i;
+const API_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
+const hdrs = { Authorization: `Bearer ${API_KEY}` };
 
-export function isCscenQuery(t) {
-  return CSCEN_RE.test(t || '');
+const CSCO_RE =
+  /\b(contact.scenario|scenario.contact|csco|engaged.contact|off.plan.contact|contact.cover|who.is.in.scenario|contact.scenario.cover|scenario.engagement|contact.engage|which.contact.*scenario|scenario.contact.cover)\b/i;
+
+export function isCscoQuery(t) { return CSCO_RE.test(t || ""); }
+
+function tokenize(str) {
+  return (str || "").toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter(w => w.length > 2);
 }
 
-export async function buildCscenScript() {
-  const [contR, scenR] = await Promise.allSettled([
-    fetch(`${API}/entities/Contact`).then(r => r.json()),
-    fetch(`${API}/v1/scenario/list`).then(r => r.json()),
+function relevance(contact, scenario) {
+  const a = tokenize([
+    contact.name, contact.role, contact.organization,
+    contact.description, (contact.tags || []).join(" "),
+  ].join(" "));
+  const b = tokenize([
+    scenario.name, scenario.description, scenario.objective,
+    scenario.type, (scenario.tags || []).join(" "),
+  ].join(" "));
+  const setB = new Set(b);
+  const hits = a.filter(w => setB.has(w)).length;
+  return hits / Math.max(a.length, 1);
+}
+
+async function fetchAll() {
+  const base = apiBase();
+  const [cr, sr] = await Promise.all([
+    fetch(`${base}/entities/Contact`,      { headers: hdrs }),
+    fetch(`${base}/v1/scenario/list`,      { headers: hdrs }),
   ]);
-  const contacts  = normaliseContacts(contR.status === 'fulfilled' ? contR.value : []);
-  const scenarios = normaliseScenarios(scenR.status === 'fulfilled' ? scenR.value : []);
-  const enriched  = correlate(contacts, scenarios);
-  const engaged   = enriched.filter(c => c._engaged).length;
-  const sidelined = enriched.length - engaged;
-  return (
-    `Contact × Scenario Coverage: ${contacts.length} contacts, ${scenarios.length} scenarios indexed. ` +
-    `${engaged} contacts are ENGAGED (scenario alignment found); ${sidelined} are SIDELINED (no scenario coverage). ` +
-    `Top engaged: ${enriched.filter(c => c._engaged).slice(0, 4).map(c => c.name || c.title || c.id || '?').join(', ') || 'none'}.`
-  );
-}
+  const cd = cr.ok ? await cr.json() : {};
+  const sd = sr.ok ? await sr.json() : {};
 
-function normaliseContacts(raw) {
-  if (!raw) return [];
-  if (Array.isArray(raw)) return raw;
-  for (const k of ['items', 'results', 'data', 'contacts', 'entities', 'records']) {
-    if (Array.isArray(raw[k])) return raw[k];
-  }
-  return [];
-}
-
-function normaliseScenarios(raw) {
-  if (!raw) return [];
-  const arr = ['scenarios', 'items', 'results', 'data'].reduce(
-    (a, k) => (a.length ? a : Array.isArray(raw?.[k]) ? raw[k] : []),
-    Array.isArray(raw) ? raw : [],
-  );
-  return arr.map((s, i) => ({
-    id:          s.id || String(i),
-    name:        s.name || s.title || s.scenario || `Scenario ${i + 1}`,
-    description: String(s.description || s.summary || s.narrative || '').slice(0, 300),
-    status:      s.status || s.state || s.phase || '',
-    category:    s.category || s.type || s.kind || '',
-    tags:        Array.isArray(s.tags) ? s.tags.join(' ') : (s.tags || ''),
+  const contacts = (Array.isArray(cd) ? cd : cd?.data || cd?.items || cd?.results || cd?.contacts || []).map(c => ({
+    id:           c.id || c._id || String(Math.random()),
+    name:         c.name || c.full_name || "Unknown Contact",
+    role:         c.role || c.title || "",
+    organization: c.organization || c.company || c.org || "",
+    description:  c.description || c.bio || c.notes || "",
+    tags:         c.tags || [],
   }));
+
+  const scenarios = (Array.isArray(sd) ? sd : sd?.data || sd?.items || sd?.results || sd?.scenarios || []).map(s => ({
+    id:          s.id || s._id || String(Math.random()),
+    name:        s.name || s.title || "Unnamed Scenario",
+    description: s.description || s.summary || "",
+    objective:   s.objective || s.goal || "",
+    type:        s.type || s.scenario_type || "",
+    status:      s.status || s.state || "",
+    tags:        s.tags || [],
+  }));
+
+  return { contacts, scenarios };
 }
 
-function tokens(str) {
-  return String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(w => w.length > 2);
+export async function buildCscoScript() {
+  try {
+    const { contacts, scenarios } = await fetchAll();
+    if (!contacts.length) return "No contacts found for scenario coverage analysis, sir.";
+    const offPlan = contacts.filter(c =>
+      !scenarios.some(s => relevance(c, s) > 0.03)
+    );
+    const engaged = contacts.length - offPlan.length;
+    return (
+      `Contact × Scenario Coverage: ${contacts.length} contacts checked against ${scenarios.length} active scenarios. ` +
+      `${engaged} ENGAGED (linked to at least one scenario), ${offPlan.length} OFF_PLAN (no scenario coverage). ` +
+      (offPlan.length
+        ? `Off-plan contacts include: ${offPlan.slice(0, 3).map(c => `"${c.name}"`).join(", ")}. ` +
+          `Analyse the scenario engagement gap and recommend which contacts should be assigned to active scenarios in exactly 2 sentences.`
+        : "All contacts are engaged with active scenarios. Excellent scenario coverage, sir.")
+    );
+  } catch {
+    return "Unable to retrieve contact scenario coverage data at this time, sir.";
+  }
 }
-
-function matchScore(contact, scenario) {
-  const ctToks = new Set([
-    ...tokens(contact.name),
-    ...tokens(contact.title),
-    ...tokens(contact.email),
-    ...tokens(contact.company),
-    ...tokens(contact.description),
-  ].filter(Boolean));
-  const scenToks = [
-    ...tokens(scenario.name),
-    ...tokens(scenario.description),
-    ...tokens(scenario.category),
-    ...tokens(scenario.tags),
-  ].filter(Boolean);
-  if (!ctToks.size || !scenToks.length) return 0;
-  let hits = 0;
-  for (const t of scenToks) if (ctToks.has(t)) hits++;
-  return hits / Math.max(ctToks.size, scenToks.length);
-}
-
-function correlate(contacts, scenarios) {
-  return contacts.map(contact => {
-    const scored = scenarios
-      .map(s => ({ ...s, _score: matchScore(contact, s) }))
-      .filter(x => x._score > 0)
-      .sort((a, b) => b._score - a._score)
-      .slice(0, 5);
-    return { ...contact, _engaged: scored.length > 0, _matches: scored };
-  });
-}
-
-function scenarioStatusColor(st) {
-  const s = String(st || '').toLowerCase();
-  if (s.includes('active') || s.includes('live') || s.includes('run'))  return '#22c55e';
-  if (s.includes('pend') || s.includes('plan') || s.includes('draft'))  return '#facc15';
-  if (s.includes('complet') || s.includes('done') || s.includes('clos')) return '#6E8AA0';
-  return '#94a3b8';
-}
-
-const PANEL_W = 580;
-const PANEL_H = 560;
-const CY = '#00CFFF';
-const AM = '#F59E0B';
-const GR = '#22C55E';
-const PU = '#A78BFA';
-
-const chip = (label, color = CY) => (
-  <span style={{
-    display: 'inline-block', padding: '1px 7px', borderRadius: 4,
-    border: `1px solid ${color}44`, background: `${color}14`,
-    color, fontSize: 10, letterSpacing: 1, marginRight: 4,
-  }}>{label}</span>
-);
-
-const scorebar = (score, color = CY) => (
-  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, verticalAlign: 'middle' }}>
-    <div style={{ width: 60, height: 4, background: '#1a2535', borderRadius: 2, overflow: 'hidden' }}>
-      <div style={{ width: `${Math.round(score * 100)}%`, height: '100%', background: color, borderRadius: 2 }} />
-    </div>
-    <span style={{ color: '#6E8AA0', fontSize: 10 }}>{(score * 100).toFixed(0)}%</span>
-  </div>
-);
 
 export default function ContactScenarioCoverage() {
   const [open, setOpen]         = useState(false);
   const [contacts, setContacts] = useState([]);
   const [scenarios, setScenarios] = useState([]);
+  const [correlated, setCorrelated] = useState([]);
   const [loading, setLoading]   = useState(false);
-  const [tab, setTab]           = useState('ALL');
-  const [search, setSearch]     = useState('');
+  const [filter, setFilter]     = useState("ALL");
+  const [search, setSearch]     = useState("");
   const [expanded, setExpanded] = useState(null);
+  const [assessed, setAssessed] = useState("");
   const [assessing, setAssessing] = useState(false);
-  const [brief, setBrief]       = useState('');
+  const timer = useRef(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [contR, scenR] = await Promise.allSettled([
-        fetch(`${API}/entities/Contact`).then(r => r.json()),
-        fetch(`${API}/v1/scenario/list`).then(r => r.json()),
-      ]);
-      setContacts(normaliseContacts(contR.status === 'fulfilled' ? contR.value : []));
-      setScenarios(normaliseScenarios(scenR.status === 'fulfilled' ? scenR.value : []));
-    } catch { /* silently skip */ }
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    const onToggle = () => setOpen(o => !o);
-    window.addEventListener('jarvis:cscen-toggle', onToggle);
-    return () => window.removeEventListener('jarvis:cscen-toggle', onToggle);
-  }, []);
-
-  useEffect(() => {
-    let timer;
-    if (open) {
-      load();
-      timer = setInterval(load, 90000);
+      const { contacts: cs, scenarios: ss } = await fetchAll();
+      setContacts(cs);
+      setScenarios(ss);
+      const cor = cs.map(c => {
+        const matched = ss
+          .map(s => ({ ...s, score: relevance(c, s) }))
+          .filter(s => s.score > 0.03)
+          .sort((a, b) => b.score - a.score);
+        return { ...c, matched, status: matched.length ? "ENGAGED" : "OFF_PLAN" };
+      });
+      setCorrelated(cor);
+    } finally {
+      setLoading(false);
     }
-    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const toggle = () => {
+      setOpen(o => { if (!o) load(); return !o; });
+    };
+    window.addEventListener("jarvis:csco-toggle", toggle);
+    return () => window.removeEventListener("jarvis:csco-toggle", toggle);
+  }, [load]);
+
+  useEffect(() => {
+    if (!open) return;
+    timer.current = setInterval(load, POLL);
+    return () => clearInterval(timer.current);
   }, [open, load]);
 
-  const enriched  = correlate(contacts, scenarios);
-  const engaged   = enriched.filter(c => c._engaged);
-  const sidelined = enriched.filter(c => !c._engaged);
-  const badgeCount = sidelined.length;
-  const badgeColor = badgeCount > 0 ? AM : GR;
-
-  const filtered = enriched
-    .filter(c => tab === 'ALL' || (tab === 'ENGAGED' ? c._engaged : !c._engaged))
-    .filter(c => {
-      if (!search) return true;
-      const s = search.toLowerCase();
-      return (
-        String(c.name || '').toLowerCase().includes(s) ||
-        String(c.title || '').toLowerCase().includes(s) ||
-        String(c.company || '').toLowerCase().includes(s) ||
-        String(c.email || '').toLowerCase().includes(s)
-      );
-    });
-
-  async function assess() {
+  const assess = useCallback(async () => {
     setAssessing(true);
-    setBrief('');
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer dev-key' },
-        body: JSON.stringify({
-          message: `You have ${contacts.length} contacts and ${scenarios.length} operational scenarios. ` +
-            `${engaged.length} contacts are ENGAGED (scenario domain alignment found); ` +
-            `${sidelined.length} are SIDELINED (no scenario tie — personnel not mapped to any operational plan). ` +
-            `Give a 2-sentence contact-scenario engagement brief highlighting the most significant coverage pattern or gap.`,
-        }),
-      });
-      const d = await r.json();
-      const txt = d.response || d.answer || d.text || d.content || '';
-      setBrief(txt);
-      window.dispatchEvent(new CustomEvent('jarvis:speak-dossier', { detail: { text: txt } }));
-    } catch { setBrief('Agent unavailable.'); }
-    setAssessing(false);
-  }
+      const script = await buildCscoScript();
+      setAssessed(script);
+      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text: script } }));
+    } finally {
+      setAssessing(false);
+    }
+  }, []);
 
-  const label = c => c.name || c.title || c.id || '?';
+  const visible = correlated.filter(c => {
+    if (filter === "ENGAGED"  && c.status !== "ENGAGED")  return false;
+    if (filter === "OFF_PLAN" && c.status !== "OFF_PLAN") return false;
+    if (search && !c.name.toLowerCase().includes(search.toLowerCase()) &&
+        !c.role.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+
+  const engaged  = correlated.filter(c => c.status === "ENGAGED").length;
+  const offPlan  = correlated.filter(c => c.status === "OFF_PLAN").length;
+
+  const PANEL = {
+    position: "fixed", bottom: 58, left: 2220, zIndex: 69,
+    width: 440, maxHeight: "70vh", display: "flex", flexDirection: "column",
+    background: "linear-gradient(160deg,#06111B 80%,#0B1D2A)",
+    border: `1px solid ${CY}44`, borderRadius: 10,
+    boxShadow: `0 0 32px ${CY}22`, fontFamily: "'JetBrains Mono',monospace",
+    overflow: "hidden",
+  };
 
   return (
     <>
-      {/* Floating toggle button */}
+      {/* Strip button */}
       <button
-        onClick={() => setOpen(o => !o)}
-        title="Contact × Scenario Coverage (CSCEN)"
+        onClick={() => { setOpen(o => { if (!o) load(); return !o; }); }}
         style={{
-          position: 'fixed', left: 706480, bottom: 8, zIndex: 290,
-          width: 54, height: 22, borderRadius: 3,
-          border: `1px solid ${badgeColor}77`, cursor: 'pointer',
-          background: 'rgba(5,8,13,0.75)', color: badgeColor,
-          fontSize: 9, letterSpacing: 1, backdropFilter: 'blur(6px)',
-          boxShadow: `0 0 10px ${badgeColor}44`, fontFamily: "'JetBrains Mono',monospace",
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3,
+          position: "fixed", left: 2220, bottom: 18, zIndex: 68,
+          background: open ? `${CY}22` : "transparent",
+          border: `1px solid ${CY}55`, borderRadius: 5,
+          color: CY, fontFamily: "'JetBrains Mono',monospace",
+          fontSize: 9, letterSpacing: 1.5, padding: "3px 9px",
+          cursor: "pointer", display: "flex", alignItems: "center", gap: 5,
         }}
       >
-        ◈ CSCEN
-        {badgeCount > 0 && (
+        ◈ CSCO
+        {offPlan > 0 && (
           <span style={{
-            background: badgeColor, color: '#04060A', borderRadius: 3, padding: '0 4px',
-            fontSize: 8, fontWeight: 700, minWidth: 14, textAlign: 'center',
-          }}>{badgeCount}</span>
+            background: AMB, color: "#000", borderRadius: 3,
+            fontSize: 8, padding: "0 4px", fontWeight: 700,
+          }}>{offPlan}</span>
         )}
       </button>
 
       {open && (
-        <div style={{
-          position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%,-50%)',
-          width: PANEL_W, height: PANEL_H, zIndex: 9200,
-          background: 'rgba(6,10,18,0.97)', border: `1px solid ${CY}33`,
-          borderRadius: 12, backdropFilter: 'blur(16px)',
-          boxShadow: `0 0 60px ${CY}22`, fontFamily: "'JetBrains Mono',monospace",
-          display: 'flex', flexDirection: 'column', overflow: 'hidden',
-        }}>
+        <div style={PANEL}>
           {/* Header */}
           <div style={{
-            padding: '10px 14px', borderBottom: `1px solid ${CY}22`,
-            display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0,
+            padding: "10px 14px 8px", borderBottom: `1px solid ${CY}22`,
+            display: "flex", justifyContent: "space-between", alignItems: "center",
           }}>
-            <span style={{ color: CY, fontSize: 11, letterSpacing: 2, fontWeight: 700, textShadow: `0 0 12px ${CY}` }}>
-              ◈ CONTACT × SCENARIO COVERAGE
+            <span style={{ fontSize: 10, color: CY, letterSpacing: 2, fontWeight: 700 }}>
+              CONTACT × SCENARIO COVERAGE
             </span>
-            <span style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center' }}>
-              {loading && <span style={{ color: '#6E8AA0', fontSize: 10 }}>loading…</span>}
-              <button
-                onClick={assess}
-                disabled={assessing}
-                style={{
-                  padding: '2px 8px', borderRadius: 3, border: `1px solid ${CY}55`,
-                  background: 'transparent', color: CY, cursor: 'pointer', fontSize: 9, letterSpacing: 1,
-                }}
-              >{assessing ? 'assessing…' : '▶ ASSESS'}</button>
-              <button
-                onClick={() => setOpen(false)}
-                style={{ background: 'none', border: 'none', color: '#6E8AA0', cursor: 'pointer', fontSize: 14, padding: 0 }}
-              >✕</button>
-            </span>
+            <button onClick={() => setOpen(false)} style={{
+              background: "none", border: "none", color: "#566878",
+              fontSize: 12, cursor: "pointer",
+            }}>✕</button>
           </div>
 
           {/* Stat tiles */}
-          <div style={{ display: 'flex', gap: 8, padding: '8px 14px', flexShrink: 0 }}>
+          <div style={{
+            display: "grid", gridTemplateColumns: "repeat(4,1fr)",
+            gap: 6, padding: "8px 14px", borderBottom: `1px solid ${CY}18`,
+          }}>
             {[
-              { label: 'CONTACTS',  val: contacts.length,  col: CY },
-              { label: 'SCENARIOS', val: scenarios.length, col: PU },
-              { label: 'ENGAGED',   val: engaged.length,   col: GR },
-              { label: 'SIDELINED', val: sidelined.length, col: AM },
-            ].map(({ label: l, val, col }) => (
-              <div key={l} style={{
-                flex: 1, background: `${col}0d`, border: `1px solid ${col}33`,
-                borderRadius: 6, padding: '6px 8px', textAlign: 'center',
+              { label: "CONTACTS",  val: correlated.length, col: CY },
+              { label: "SCENARIOS", val: scenarios.length,  col: "#B485FF" },
+              { label: "ENGAGED",   val: engaged,           col: GRN },
+              { label: "OFF_PLAN",  val: offPlan,           col: AMB },
+            ].map(({ label, val, col }) => (
+              <div key={label} style={{
+                background: `${col}0D`, border: `1px solid ${col}33`,
+                borderRadius: 6, padding: "6px 8px", textAlign: "center",
               }}>
-                <div style={{ color: col, fontSize: 16, fontWeight: 700 }}>{val}</div>
-                <div style={{ color: '#6E8AA0', fontSize: 9, letterSpacing: 1, marginTop: 2 }}>{l}</div>
+                <div style={{ fontSize: 14, color: col, fontWeight: 700 }}>{val}</div>
+                <div style={{ fontSize: 7, color: "#566878", letterSpacing: 1 }}>{label}</div>
               </div>
             ))}
           </div>
 
-          {/* Filter tabs + search */}
-          <div style={{ display: 'flex', gap: 6, padding: '0 14px 8px', flexShrink: 0, alignItems: 'center' }}>
-            {['ALL', 'ENGAGED', 'SIDELINED'].map(t => (
-              <button
-                key={t}
-                onClick={() => setTab(t)}
-                style={{
-                  padding: '2px 10px', borderRadius: 3, cursor: 'pointer', fontSize: 9, letterSpacing: 1,
-                  border: `1px solid ${tab === t ? CY : '#2a3a4a'}`,
-                  background: tab === t ? `${CY}22` : 'transparent',
-                  color: tab === t ? CY : '#6E8AA0',
-                }}
-              >{t}</button>
+          {/* Filter tabs */}
+          <div style={{
+            display: "flex", gap: 4, padding: "6px 14px", borderBottom: `1px solid ${CY}18`,
+            flexWrap: "wrap",
+          }}>
+            {["ALL", "ENGAGED", "OFF_PLAN"].map(f => (
+              <button key={f} onClick={() => setFilter(f)} style={{
+                fontSize: 8, padding: "2px 8px", borderRadius: 3, letterSpacing: 1,
+                border: `1px solid ${filter === f ? CY : "#2A3D4F"}`,
+                background: filter === f ? `${CY}22` : "transparent",
+                color: filter === f ? CY : "#566878", cursor: "pointer", fontFamily: "inherit",
+              }}>{f}</button>
             ))}
             <input
               value={search}
               onChange={e => setSearch(e.target.value)}
-              placeholder="search contacts…"
+              placeholder="search…"
               style={{
-                marginLeft: 'auto', background: 'rgba(255,255,255,0.03)', border: `1px solid #2a3a4a`,
-                borderRadius: 4, color: '#DCEBF5', padding: '2px 8px', fontSize: 10, outline: 'none',
-                fontFamily: "'JetBrains Mono',monospace", width: 160,
+                marginLeft: "auto", fontSize: 8, background: "#0B1D2A",
+                border: `1px solid ${CY}33`, borderRadius: 3, color: CY,
+                padding: "2px 7px", fontFamily: "inherit", outline: "none", width: 100,
               }}
             />
           </div>
 
-          {/* List */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '0 14px 8px' }}>
-            {filtered.length === 0 ? (
-              <div style={{ color: '#6E8AA0', fontSize: 11, textAlign: 'center', paddingTop: 40 }}>
-                {loading ? 'Loading…' : 'No contacts found.'}
+          {/* Contact rows */}
+          <div style={{ flex: 1, overflowY: "auto", padding: "6px 14px" }}>
+            {loading && !correlated.length && (
+              <div style={{ color: AMB, fontSize: 9, textAlign: "center", padding: 20 }}>
+                ◌ loading…
               </div>
-            ) : filtered.map((contact, i) => {
-              const isExp      = expanded === i;
-              const statusClr  = contact._engaged ? GR : AM;
+            )}
+            {visible.map(c => {
+              const isExp = expanded === c.id;
+              const col = c.status === "ENGAGED" ? GRN : AMB;
               return (
-                <div
-                  key={contact.id || i}
-                  style={{ borderBottom: `1px solid ${CY}11`, paddingBottom: 6, marginBottom: 6 }}
-                >
+                <div key={c.id} style={{ borderBottom: `1px solid ${CY}11`, padding: "7px 0" }}>
                   <div
-                    onClick={() => setExpanded(isExp ? null : i)}
-                    style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', padding: '4px 0' }}
+                    onClick={() => setExpanded(isExp ? null : c.id)}
+                    style={{ display: "flex", alignItems: "center", gap: 6, cursor: "pointer" }}
                   >
                     <span style={{
-                      width: 7, height: 7, borderRadius: '50%', background: statusClr,
-                      boxShadow: `0 0 6px ${statusClr}`, flexShrink: 0,
-                    }} />
-                    <span style={{ color: '#DCEBF5', fontSize: 11, flex: 1 }}>{label(contact)}</span>
-                    {contact.company && chip(contact.company, PU)}
-                    {contact.title  && chip(contact.title, '#6E8AA0')}
-                    {chip(contact._engaged ? 'ENGAGED' : 'SIDELINED', statusClr)}
-                    <span style={{ color: '#6E8AA0', fontSize: 9, marginLeft: 'auto' }}>
-                      {isExp ? '▲' : '▼'}
+                      fontSize: 8, color: col, border: `1px solid ${col}55`,
+                      borderRadius: 3, padding: "1px 5px", letterSpacing: 1, flexShrink: 0,
+                      animation: c.status === "OFF_PLAN" ? "cscopulse 2s infinite" : "none",
+                    }}>{c.status}</span>
+                    <span style={{
+                      flex: 1, color: "#DCEBF5", fontSize: 10, fontWeight: 600,
+                      overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                    }}>{c.name}</span>
+                    {c.role && (
+                      <span style={{
+                        fontSize: 7, color: "#B485FF", border: "1px solid #B485FF44",
+                        borderRadius: 3, padding: "1px 4px", flexShrink: 0,
+                      }}>{c.role.toUpperCase()}</span>
+                    )}
+                    {c.organization && (
+                      <span style={{ color: "#566878", fontSize: 8, flexShrink: 0 }}>
+                        {c.organization}
+                      </span>
+                    )}
+                    <span style={{ color: "#566878", fontSize: 10, flexShrink: 0 }}>
+                      {isExp ? "▲" : "▼"}
                     </span>
                   </div>
 
                   {isExp && (
-                    <div style={{ paddingLeft: 14, paddingTop: 4 }}>
-                      {contact._matches.length > 0 ? (
-                        <>
-                          <div style={{ color: '#6E8AA0', fontSize: 9, letterSpacing: 1, marginBottom: 4 }}>
-                            MATCHED SCENARIOS
-                          </div>
-                          {contact._matches.map((s, j) => (
-                            <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
-                              <span style={{ color: '#DCEBF5', fontSize: 10, flex: 1 }}>
-                                {s.name || s.id || '?'}
-                              </span>
-                              {s.status   && chip(s.status,   scenarioStatusColor(s.status))}
-                              {s.category && chip(s.category, '#6E8AA0')}
-                              {scorebar(s._score, AM)}
-                            </div>
-                          ))}
-                        </>
+                    <div style={{ marginTop: 6, paddingLeft: 8 }}>
+                      {c.description && (
+                        <div style={{ color: "#8BAABB", fontSize: 8, marginBottom: 6, lineHeight: 1.5 }}>
+                          {c.description.slice(0, 160)}{c.description.length > 160 ? "…" : ""}
+                        </div>
+                      )}
+                      {c.matched.length === 0 ? (
+                        <div style={{ color: AMB, fontSize: 8 }}>No matching scenarios found.</div>
                       ) : (
-                        <div style={{ color: AM, fontSize: 10 }}>No scenarios matched this contact.</div>
+                        c.matched.slice(0, 5).map(s => (
+                          <div key={s.id} style={{
+                            background: `${GRN}08`, border: `1px solid ${GRN}22`,
+                            borderRadius: 5, padding: "5px 8px", marginBottom: 5,
+                          }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
+                              {s.type && (
+                                <span style={{
+                                  fontSize: 7, color: "#B485FF",
+                                  border: "1px solid #B485FF44",
+                                  borderRadius: 3, padding: "1px 4px", flexShrink: 0,
+                                }}>{s.type.toUpperCase()}</span>
+                              )}
+                              {s.status && (
+                                <span style={{
+                                  fontSize: 7, color: CY,
+                                  border: `1px solid ${CY}44`,
+                                  borderRadius: 3, padding: "1px 4px", flexShrink: 0,
+                                }}>{s.status.toUpperCase()}</span>
+                              )}
+                              <span style={{
+                                flex: 1, color: "#DCEBF5", fontSize: 10, fontWeight: 600,
+                                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                              }}>{s.name}</span>
+                              <span style={{ color: GRN, fontSize: 9, flexShrink: 0 }}>
+                                {(s.score * 100).toFixed(0)}%
+                              </span>
+                            </div>
+                            <div style={{ height: 3, background: "#1A2530", borderRadius: 2 }}>
+                              <div style={{
+                                height: 3, borderRadius: 2,
+                                width: `${Math.min(100, s.score * 100)}%`,
+                                background: GRN, boxShadow: `0 0 6px ${GRN}`,
+                              }} />
+                            </div>
+                          </div>
+                        ))
                       )}
                     </div>
                   )}
@@ -361,18 +358,45 @@ export default function ContactScenarioCoverage() {
             })}
           </div>
 
-          {/* Brief block */}
-          {brief && (
-            <div style={{
-              padding: '8px 14px', borderTop: `1px solid ${CY}22`,
-              color: '#DCEBF5', fontSize: 11, lineHeight: 1.5, flexShrink: 0,
-              background: 'rgba(0,207,255,0.03)',
-            }}>
-              <span style={{ color: CY, fontSize: 9, letterSpacing: 2 }}>ASSESS ▸ </span>{brief}
+          {/* Assess footer */}
+          <div style={{
+            padding: "8px 14px", borderTop: `1px solid ${CY}18`,
+            display: "flex", flexDirection: "column", gap: 6,
+          }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <span style={{ fontSize: 8, color: "#566878" }}>
+                Source: /entities/Contact + /v1/scenario/list
+              </span>
+              <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                <span style={{ color: loading ? AMB : GRN, fontSize: 8 }}>
+                  {loading ? "◌ syncing" : `${correlated.length} contacts · ${scenarios.length} scenarios`}
+                </span>
+                <button
+                  onClick={assess}
+                  disabled={assessing}
+                  style={{
+                    fontSize: 9, padding: "3px 9px", borderRadius: 4,
+                    border: `1px solid ${CY}66`,
+                    background: assessing ? `${CY}22` : "transparent",
+                    color: assessing ? AMB : CY,
+                    cursor: assessing ? "default" : "pointer",
+                    fontFamily: "inherit", letterSpacing: 1,
+                  }}>
+                  {assessing ? "◌ ASSESSING…" : "▶ ASSESS"}
+                </button>
+              </div>
             </div>
-          )}
+            {assessed && (
+              <div style={{
+                fontSize: 10, color: "#DCEBF5", background: `${CY}0A`,
+                border: `1px solid ${CY}33`, borderRadius: 6, padding: "8px 10px",
+                maxHeight: 90, overflowY: "auto", lineHeight: 1.6,
+              }}>{assessed}</div>
+            )}
+          </div>
         </div>
       )}
+      <style>{`@keyframes cscopulse{0%,100%{opacity:1}50%{opacity:.4}}`}</style>
     </>
   );
 }
