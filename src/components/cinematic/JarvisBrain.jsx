@@ -697,6 +697,7 @@ import { isTasaQuery, buildTasaScript } from "./TaskAipSkillAlignment";
 import { isToexQuery, buildToexScript } from "./TaskOpsEventsExposure";
 import { isRsaskQuery, buildRsaskScript } from "./RiskSignalAipSkillCoverage";
 import { isDgccQuery, buildDgccScript } from "./DatasetGraphCentralityCoverage";
+import { isGcasQuery, buildGcasScript } from "./GraphCentralityAipSkillCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7532,6 +7533,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dgcc-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDgccScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGcasQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcas-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcasScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
