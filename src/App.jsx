@@ -647,6 +647,7 @@ import KnowledgeAipSkillCoverage from '@/components/cinematic/KnowledgeAipSkillC
 import RiskSignalInvestigationCoverage from '@/components/cinematic/RiskSignalInvestigationCoverage';
 import SwarmJobAipSkillCoverage from '@/components/cinematic/SwarmJobAipSkillCoverage';
 import ScenarioTaskCoverage from '@/components/cinematic/ScenarioTaskCoverage';
+import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2034,6 +2035,8 @@ function App() {
             <SwarmJobAipSkillCoverage />
             {/* F95 (overnight 2026-08-22): Scenario × Task Coverage (SCNTASK) — pre-built ScenarioTaskCoverage.jsx (374 lines) activated & mounted; parallel-fetches /v1/scenario/list + /entities/Task every 90 s; keyword-correlates each scenario against the task backlog → TASKED (≥1 match) vs UNTASKED (0); red badge on untasked count; stat tiles (scenarios/tasks/tasked/untasked); ALL/TASKED/UNTASKED filter tabs + text search; expand scenario → matched tasks with status chip + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario-execution brief + jarvis:speak-dossier TTS; isScntaskQuery+buildScntaskScript wired in JarvisBrain; jarvis:scntask-toggle event; "scenario task/scntask/scenario execution/which scenarios have tasks/task coverage/unplanned scenarios/scenarios without tasks" voice trigger */}
             <ScenarioTaskCoverage />
+            {/* F96 (overnight 2026-08-22): IntelProfile × Knowledge Coverage (IPKC) — ◈ IPKC button (left:3180 bottom:18 zIndex:68); parallel-fetches /entities/IntelProfile + /knowledge/ every 90 s; keyword-correlates each intel profile against KB articles → DOCUMENTED (≥1 match) vs UNDOCUMENTED (0); amber badge on undocumented count; stat tiles (profiles/articles/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + text search; expand profile → matched KB articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-knowledge brief + jarvis:speak-dossier TTS; isIpkcQuery+buildIpkcScript wired in JarvisBrain; jarvis:ipkc-toggle event; "intel profile knowledge/profile kb/ipkc/documented profiles/undocumented intel/intel knowledge gap" voice trigger */}
+            <IntelProfileKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
