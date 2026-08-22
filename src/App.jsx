@@ -639,6 +639,7 @@ import InvestmentAipSkillCoverage from '@/components/cinematic/InvestmentAipSkil
 import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMonitor';
 import ContactInvestigationsCorrelator from '@/components/cinematic/ContactInvestigationsCorrelator';
 import TaskAipSkillAlignment from '@/components/cinematic/TaskAipSkillAlignment';
+import TaskOpsEventsExposure from '@/components/cinematic/TaskOpsEventsExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2010,6 +2011,8 @@ function App() {
             <ContactInvestigationsCorrelator />
             {/* F87 (overnight 2026-08-22): Task × AIP Skill Alignment (TASA) — ◈ TASA button (left:2700 bottom:18 zIndex:68); parallel-fetches /entities/Task + /v1/aip/skill every 90 s; keyword-correlates each task (name/description/status/priority/tags) against AIP skills (name/description/category/tags) → SKILLED (≥1 match) vs UNSKILLED (0 matches); amber badge on unskilled count; stat tiles (tasks/skills/skilled/unskilled); ALL/SKILLED/UNSKILLED filter tabs + text search; expand task → matched skills with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-skill brief + jarvis:speak-dossier TTS; isTasaQuery+buildTasaScript wired in JarvisBrain; jarvis:tasa-toggle event; "task skill / skill task / tasa / unskilled tasks / task capability / task aip" voice trigger */}
             <TaskAipSkillAlignment />
+            {/* F88 (overnight 2026-08-22): Task × Ops Events Exposure (TOEX) — ◈ TOEX button (left:2760 bottom:18 zIndex:68); parallel-fetches /entities/Task + /v1/ops/events every 60 s; keyword-correlates each task (title/description/tags/priority/status) against live ops events (type/resource/description/service) → TRIGGERED (≥1 match) vs QUIET (0); amber badge on triggered count; stat tiles (tasks/ops events/triggered/quiet); ALL/TRIGGERED/QUIET filter tabs + text search; expand task → matched ops events with severity badge (CRITICAL/WARNING/INFO/OK) + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-ops exposure brief + jarvis:speak-dossier TTS; isToexQuery+buildToexScript wired in JarvisBrain; jarvis:toex-toggle event; "task ops/ops task/toex/task operational events/which tasks have ops activity/task ops exposure" voice trigger */}
+            <TaskOpsEventsExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -694,6 +694,7 @@ import { isIascQuery, buildIascScript } from "./InvestmentAipSkillCoverage";
 import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
 import { isCinvtgQuery, buildCinvtgScript } from "./ContactInvestigationsCorrelator";
 import { isTasaQuery, buildTasaScript } from "./TaskAipSkillAlignment";
+import { isToexQuery, buildToexScript } from "./TaskOpsEventsExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7505,6 +7506,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tasa-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTasaScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isToexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:toex-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildToexScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
