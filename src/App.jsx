@@ -633,6 +633,7 @@ import SwarmInvestigationCorrelator from '@/components/cinematic/SwarmInvestigat
 import KnowledgeOpsEventCorrelator from '@/components/cinematic/KnowledgeOpsEventCorrelator';
 import DatasetReportCoverage from '@/components/cinematic/DatasetReportCoverage';
 import ScenarioGraphCoverage from '@/components/cinematic/ScenarioGraphCoverage';
+import TaskLiveIntelExposure from '@/components/cinematic/TaskLiveIntelExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1992,6 +1993,8 @@ function App() {
             <ContactScenarioCoverage />
             {/* F80 (overnight 2026-08-22): Scenario × Graph Centrality Coverage (SGCV) — ◈ SGCV button (left:2280 bottom:18 zIndex:68); parallel-fetches /v1/scenario/list + /v1/graph/centrality every 90 s; keyword-correlates each scenario against top-centrality graph nodes → ENTITY_BACKED (≥1 match) vs DARK; amber badge on dark count; stat tiles (scenarios/nodes/backed/dark); ALL/ENTITY_BACKED/DARK filter tabs + text search; expand scenario → matched nodes with type badge + centrality score + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence entity coverage brief + jarvis:speak-dossier TTS; isSgcvQuery+buildSgcvScript wired in JarvisBrain; jarvis:sgcv-toggle event; "scenario graph/graph scenario/sgcv/dark scenarios/entity backed scenarios/which scenarios have graph nodes/scenario entity coverage" voice trigger */}
             <ScenarioGraphCoverage />
+            {/* F81 (overnight 2026-08-22): Task × Live Intel Exposure (TLIE) — ◈ TLIE button (left:2340 bottom:18 zIndex:68); parallel-fetches /entities/Task + /functions/getLiveIntel every 60 s; keyword-correlates each task (title/description/tags/priority) against live world events (crypto/FX/seismic) → TRIGGERED (≥1 match) vs QUIET; amber badge on triggered count; stat tiles (tasks/live events/triggered/quiet); ALL/TRIGGERED/QUIET filter tabs + text search; expand task → matched events with CRYPTO/FX/SEISMIC type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task live-intelligence brief + jarvis:speak-dossier TTS; isTlieQuery+buildTlieScript wired in JarvisBrain; jarvis:tlie-toggle event; "task live intel/live task/tlie/task world event/triggered tasks/task intel" voice trigger */}
+            <TaskLiveIntelExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
