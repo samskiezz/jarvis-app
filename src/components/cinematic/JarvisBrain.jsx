@@ -300,7 +300,7 @@ import { isOedcQuery, buildOedcScript } from "./OpsEventDecisionCoverage";
 import { isIavrQuery, buildIavrScript } from "./InvestigationAnomalyCorrelator";
 import { isDdcvQuery, buildDdcvScript } from "./DatasetDecisionCoverage";
 import { isAldcQuery, buildAldcScript } from "./AlertDecisionCoverage";
-import { isTkrpQuery, buildTkrpScript } from "./TaskReportCoverage";
+import { isTkrpQuery, buildTkrpScript, isTrcvQuery, buildTrcvScript } from "./TaskReportCoverage";
 import { isGnsrskQuery, buildGnsrskScript } from "./GraphNodeRiskSignalCoverage";
 import { isRsliveQuery, buildRsliveScript } from "./RiskSignalLiveIntelCoverage";
 import { isGnscenQuery, buildGnscenScript } from "./GraphNodeScenarioCoverage";
@@ -7466,6 +7466,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iasc-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIascScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isTrcvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trcv-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTrcvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
