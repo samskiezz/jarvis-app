@@ -645,6 +645,7 @@ import DatasetGraphCentralityCoverage from '@/components/cinematic/DatasetGraphC
 import GraphCentralityAipSkillCoverage from '@/components/cinematic/GraphCentralityAipSkillCoverage';
 import KnowledgeAipSkillCoverage from '@/components/cinematic/KnowledgeAipSkillCoverage';
 import RiskSignalInvestigationCoverage from '@/components/cinematic/RiskSignalInvestigationCoverage';
+import SwarmJobAipSkillCoverage from '@/components/cinematic/SwarmJobAipSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2028,6 +2029,8 @@ function App() {
             <KnowledgeAipSkillCoverage />
             {/* F93 (overnight 2026-08-22): RiskSignal × Investigation Coverage (RSIC) — ◈ RSIC button (left:3060 bottom:18 zIndex:68); parallel-fetches /entities/RiskSignal + /v1/investigations every 90 s; keyword-correlates each risk signal (title/description/severity/category/tags) against open investigations (title/description/annotations/seeds) → INVESTIGATED (≥1 match) vs UNTRACKED (0); amber badge on untracked count; stat tiles (signals/cases/investigated/untracked); ALL/INVESTIGATED/UNTRACKED filter tabs + text search; expand signal → matched investigation cases with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk coverage brief + jarvis:speak-dossier TTS; isRsicQuery+buildRsicScript wired in JarvisBrain; jarvis:rsic-toggle event; 90-s auto-refresh; "risk investigation/investigation risk/rsic/tracked risks/untracked risks/risk case coverage/which risks have investigations/risk coverage investigation" voice trigger */}
             <RiskSignalInvestigationCoverage />
+            {/* F94 (overnight 2026-08-22): SwarmJob × AIP Skill Coverage (SJASC) — ◈ SJASC button (left:3120 bottom:18 zIndex:68); parallel-fetches /entities/SwarmJob + /v1/aip/skill every 90 s; keyword-correlates each swarm job (name/description/target/objective/tags) against AIP skills (name/description/category/tags) → SKILLED (≥1 match) vs UNSUPPORTED (0); amber badge on unsupported count; stat tiles (jobs/skills/skilled/unsupported); ALL/SKILLED/UNSUPPORTED filter tabs + text search; expand job → matched skills with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm capability brief + jarvis:speak-dossier TTS; isJascQuery+buildJascScript wired in JarvisBrain; jarvis:sjasc-toggle event; 90-s auto-refresh; "swarm aip/swarm skill/sjasc/swarm job skill/skilled swarm/unsupported swarm/aip swarm coverage/swarm capability coverage/swarm skill coverage/which swarm jobs have skills" voice trigger */}
+            <SwarmJobAipSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
