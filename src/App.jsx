@@ -638,6 +638,7 @@ import ContactKnowledgeBridge from '@/components/cinematic/ContactKnowledgeBridg
 import InvestmentAipSkillCoverage from '@/components/cinematic/InvestmentAipSkillCoverage';
 import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMonitor';
 import ContactInvestigationsCorrelator from '@/components/cinematic/ContactInvestigationsCorrelator';
+import TaskAipSkillAlignment from '@/components/cinematic/TaskAipSkillAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2007,6 +2008,8 @@ function App() {
             <BrainNodeVelocityMonitor />
             {/* F86 (overnight 2026-08-22): Contact × Investigations Correlator (CINVTG) — ◈ CINVTG button (left:2640 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /v1/investigations every 90 s; keyword-correlates each contact (name/email/organization/role/tags) against open investigation cases (title/description/annotations/seeds) → IMPLICATED (≥1 match) vs CLEAR (0 matches); amber badge on implicated count; stat tiles (contacts/cases/implicated/clear); ALL/IMPLICATED/CLEAR filter tabs + text search; expand contact → matched investigation cases with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-investigation brief + jarvis:speak-dossier TTS; isCinvtgQuery+buildCinvtgScript wired in JarvisBrain; jarvis:cinvtg-toggle event; "contact investigation/investigation contact/cinvtg/implicated contacts/who is under investigation/contact case/linked contacts" voice trigger */}
             <ContactInvestigationsCorrelator />
+            {/* F87 (overnight 2026-08-22): Task × AIP Skill Alignment (TASA) — ◈ TASA button (left:2700 bottom:18 zIndex:68); parallel-fetches /entities/Task + /v1/aip/skill every 90 s; keyword-correlates each task (name/description/status/priority/tags) against AIP skills (name/description/category/tags) → SKILLED (≥1 match) vs UNSKILLED (0 matches); amber badge on unskilled count; stat tiles (tasks/skills/skilled/unskilled); ALL/SKILLED/UNSKILLED filter tabs + text search; expand task → matched skills with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-skill brief + jarvis:speak-dossier TTS; isTasaQuery+buildTasaScript wired in JarvisBrain; jarvis:tasa-toggle event; "task skill / skill task / tasa / unskilled tasks / task capability / task aip" voice trigger */}
+            <TaskAipSkillAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
