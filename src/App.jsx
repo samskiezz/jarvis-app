@@ -651,6 +651,7 @@ import ScenarioTaskCoverage from '@/components/cinematic/ScenarioTaskCoverage';
 import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKnowledgeCoverage';
 import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
 import AlertAnomalyCorrelator from '@/components/cinematic/AlertAnomalyCorrelator';
+import IntelProfileOpsCorrelator from '@/components/cinematic/IntelProfileOpsCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2046,6 +2047,8 @@ function App() {
             <AgentToolsRunner />
             {/* F98 (overnight 2026-08-22): Alert × Anomaly Correlator (ALAC) — pre-built AlertAnomalyCorrelator.jsx (367 lines) activated; parallel-fetches /v1/alerts + /v1/jarvis/analytics/anomalies every 90 s; keyword-correlates each alert against active anomalies → LINKED vs ORPHAN; amber badge on orphan count; isAlacQuery+buildAlacScript wired in JarvisBrain; jarvis:alac-toggle event */}
             <AlertAnomalyCorrelator />
+            {/* F99 (overnight 2026-08-22): IntelProfile × Ops Events Correlator (IPOEC) — ◈ IPOEC button (left:3240 bottom:18 zIndex:68); parallel-fetches /entities/IntelProfile + /v1/ops/events every 90 s; keyword-correlates each intel profile (name/description/aliases/tags/role/org) against live ops events (type/resource/description/service) → ACTIVE (≥1 match) vs PASSIVE; amber badge on active count; stat tiles (profiles/ops evts/active/passive); ALL/ACTIVE/PASSIVE filter tabs + text search; expand profile → matched ops events with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-ops brief + jarvis:speak-dossier TTS; isIpoecQuery+buildIpoecScript wired in JarvisBrain; jarvis:ipoec-toggle event; "intel ops/ops intel profile/ipoec/active intel profiles/intel operational/profile ops/which profiles have ops events/intel profile ops activity" voice trigger */}
+            <IntelProfileOpsCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
