@@ -650,6 +650,7 @@ import SwarmJobAipSkillCoverage from '@/components/cinematic/SwarmJobAipSkillCov
 import ScenarioTaskCoverage from '@/components/cinematic/ScenarioTaskCoverage';
 import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKnowledgeCoverage';
 import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
+import AlertAnomalyCorrelator from '@/components/cinematic/AlertAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2043,6 +2044,8 @@ function App() {
             <IntelProfileKnowledgeCoverage />
             {/* F97 (overnight 2026-08-22): Agent Tools Runner (ATR-RUN) — ⌘⇧T / Ctrl+Shift+T opens a searchable palette that fetches real tool names from /v1/jarvis/agent/tools; selecting a tool fires /v1/jarvis/agent/chat with a one-shot invocation prompt and displays the result inline; complementary to the read-only ATR viewer (F65) — this actually runs tools; no extra button needed (keyboard shortcut is self-contained) */}
             <AgentToolsRunner />
+            {/* F98 (overnight 2026-08-22): Alert × Anomaly Correlator (ALAC) — pre-built AlertAnomalyCorrelator.jsx (367 lines) activated; parallel-fetches /v1/alerts + /v1/jarvis/analytics/anomalies every 90 s; keyword-correlates each alert against active anomalies → LINKED vs ORPHAN; amber badge on orphan count; isAlacQuery+buildAlacScript wired in JarvisBrain; jarvis:alac-toggle event */}
+            <AlertAnomalyCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
