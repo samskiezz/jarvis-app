@@ -648,6 +648,7 @@ import RiskSignalInvestigationCoverage from '@/components/cinematic/RiskSignalIn
 import SwarmJobAipSkillCoverage from '@/components/cinematic/SwarmJobAipSkillCoverage';
 import ScenarioTaskCoverage from '@/components/cinematic/ScenarioTaskCoverage';
 import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKnowledgeCoverage';
+import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2037,6 +2038,8 @@ function App() {
             <ScenarioTaskCoverage />
             {/* F96 (overnight 2026-08-22): IntelProfile × Knowledge Coverage (IPKC) — ◈ IPKC button (left:3180 bottom:18 zIndex:68); parallel-fetches /entities/IntelProfile + /knowledge/ every 90 s; keyword-correlates each intel profile against KB articles → DOCUMENTED (≥1 match) vs UNDOCUMENTED (0); amber badge on undocumented count; stat tiles (profiles/articles/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + text search; expand profile → matched KB articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-knowledge brief + jarvis:speak-dossier TTS; isIpkcQuery+buildIpkcScript wired in JarvisBrain; jarvis:ipkc-toggle event; "intel profile knowledge/profile kb/ipkc/documented profiles/undocumented intel/intel knowledge gap" voice trigger */}
             <IntelProfileKnowledgeCoverage />
+            {/* F97 (overnight 2026-08-22): Agent Tools Runner (ATR-RUN) — ⌘⇧T / Ctrl+Shift+T opens a searchable palette that fetches real tool names from /v1/jarvis/agent/tools; selecting a tool fires /v1/jarvis/agent/chat with a one-shot invocation prompt and displays the result inline; complementary to the read-only ATR viewer (F65) — this actually runs tools; no extra button needed (keyboard shortcut is self-contained) */}
+            <AgentToolsRunner />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
