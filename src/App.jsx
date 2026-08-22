@@ -634,6 +634,7 @@ import KnowledgeOpsEventCorrelator from '@/components/cinematic/KnowledgeOpsEven
 import DatasetReportCoverage from '@/components/cinematic/DatasetReportCoverage';
 import ScenarioGraphCoverage from '@/components/cinematic/ScenarioGraphCoverage';
 import TaskLiveIntelExposure from '@/components/cinematic/TaskLiveIntelExposure';
+import ContactKnowledgeBridge from '@/components/cinematic/ContactKnowledgeBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1995,6 +1996,8 @@ function App() {
             <ScenarioGraphCoverage />
             {/* F81 (overnight 2026-08-22): Task × Live Intel Exposure (TLIE) — ◈ TLIE button (left:2340 bottom:18 zIndex:68); parallel-fetches /entities/Task + /functions/getLiveIntel every 60 s; keyword-correlates each task (title/description/tags/priority) against live world events (crypto/FX/seismic) → TRIGGERED (≥1 match) vs QUIET; amber badge on triggered count; stat tiles (tasks/live events/triggered/quiet); ALL/TRIGGERED/QUIET filter tabs + text search; expand task → matched events with CRYPTO/FX/SEISMIC type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task live-intelligence brief + jarvis:speak-dossier TTS; isTlieQuery+buildTlieScript wired in JarvisBrain; jarvis:tlie-toggle event; "task live intel/live task/tlie/task world event/triggered tasks/task intel" voice trigger */}
             <TaskLiveIntelExposure />
+            {/* F82 (overnight 2026-08-22): Contact × Knowledge Intelligence Bridge (CKIB) — ◈ CKIB button (left:2400 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /knowledge/ every 90 s; keyword-correlates each contact (name/email/organization/role/tags) against KB articles (title/content/summary/tags) → DOCUMENTED (≥1 match) vs UNKNOWN (0 matches); amber badge on unknown count; stat tiles (contacts/articles/documented/unknown); ALL/DOCUMENTED/UNKNOWN filter tabs + text search; expand contact → matched KB articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence KB coverage brief + jarvis:speak-dossier TTS; isCkibQuery+buildCkibScript wired in JarvisBrain; jarvis:ckib-toggle event; "contact knowledge/knowledge contact/ckib/documented contacts/unknown contacts knowledge/kb contact/contact kb/who has knowledge/contact knowledge bridge/contact documentation" voice trigger */}
+            <ContactKnowledgeBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
