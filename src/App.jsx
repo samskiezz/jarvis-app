@@ -631,6 +631,7 @@ import InvestmentInvestigationCorrelator from '@/components/cinematic/Investment
 import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
 import SwarmInvestigationCorrelator from '@/components/cinematic/SwarmInvestigationCorrelator';
 import KnowledgeOpsEventCorrelator from '@/components/cinematic/KnowledgeOpsEventCorrelator';
+import DatasetReportCoverage from '@/components/cinematic/DatasetReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1984,6 +1985,8 @@ function App() {
             <SwarmInvestigationCorrelator />
             {/* F77 (overnight 2026-08-21): Knowledge × Ops Event Correlator (KOEC) — ◈ KOEC button (left:2100 bottom:18 zIndex:68); parallel-fetches /knowledge/ + /v1/ops/events every 90 s; keyword-correlates each KB article against live ops events → ACTIVE (≥1 match) vs DORMANT; amber badge on dormant count; stat tiles (articles/ops evts/active/dormant); ALL/ACTIVE/DORMANT filter tabs + text search; expand article → matched ops events with severity + type badges + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence KB-ops brief + jarvis:speak-dossier TTS; isKoecQuery+buildKoecScript wired in JarvisBrain; jarvis:koec-toggle event; "knowledge ops/ops knowledge/koec/active knowledge/live knowledge/kb ops/knowledge events/ops articles/which knowledge is active/knowledge operational" voice trigger */}
             <KnowledgeOpsEventCorrelator />
+            {/* F78 (overnight 2026-08-22): Dataset × Report Intelligence Coverage (DRIC) — ◈ DRIC button (left:2160 bottom:18 zIndex:68); parallel-fetches /v1/datasets + /v1/reports every 90 s; keyword-correlates each dataset against the report catalog → REPORTED (≥1 match) vs UNANALYZED; amber badge on unanalyzed count; stat tiles (datasets/reports/reported/unanalyzed); ALL/REPORTED/UNANALYZED filter tabs + text search; expand dataset → matched reports with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence dataset analysis coverage brief + jarvis:speak-dossier TTS; isDricQuery+buildDricScript wired in JarvisBrain; jarvis:dric-toggle event; "dataset report/report dataset/dric/analyzed datasets/unanalyzed datasets/dataset analysis coverage/which datasets have reports/data analysis gap" voice trigger */}
+            <DatasetReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

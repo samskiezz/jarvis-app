@@ -685,6 +685,7 @@ import { isJcliQuery, buildJcliScript } from "./CognitiveLoadIndex";
 import { isBasirQuery, buildBasirScript } from "./BrainAipSkillRatio";
 import { isSjicQuery, buildSjicScript } from "./SwarmInvestigationCorrelator";
 import { isKoecQuery, buildKoecScript } from "./KnowledgeOpsEventCorrelator";
+import { isDricQuery, buildDricScript } from "./DatasetReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7406,6 +7407,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:koec-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKoecScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    if (isDricQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dric-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDricScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
