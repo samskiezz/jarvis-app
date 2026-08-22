@@ -646,6 +646,7 @@ import GraphCentralityAipSkillCoverage from '@/components/cinematic/GraphCentral
 import KnowledgeAipSkillCoverage from '@/components/cinematic/KnowledgeAipSkillCoverage';
 import RiskSignalInvestigationCoverage from '@/components/cinematic/RiskSignalInvestigationCoverage';
 import SwarmJobAipSkillCoverage from '@/components/cinematic/SwarmJobAipSkillCoverage';
+import ScenarioTaskCoverage from '@/components/cinematic/ScenarioTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2031,6 +2032,8 @@ function App() {
             <RiskSignalInvestigationCoverage />
             {/* F94 (overnight 2026-08-22): SwarmJob × AIP Skill Coverage (SJASC) — ◈ SJASC button (left:3120 bottom:18 zIndex:68); parallel-fetches /entities/SwarmJob + /v1/aip/skill every 90 s; keyword-correlates each swarm job (name/description/target/objective/tags) against AIP skills (name/description/category/tags) → SKILLED (≥1 match) vs UNSUPPORTED (0); amber badge on unsupported count; stat tiles (jobs/skills/skilled/unsupported); ALL/SKILLED/UNSUPPORTED filter tabs + text search; expand job → matched skills with category badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm capability brief + jarvis:speak-dossier TTS; isJascQuery+buildJascScript wired in JarvisBrain; jarvis:sjasc-toggle event; 90-s auto-refresh; "swarm aip/swarm skill/sjasc/swarm job skill/skilled swarm/unsupported swarm/aip swarm coverage/swarm capability coverage/swarm skill coverage/which swarm jobs have skills" voice trigger */}
             <SwarmJobAipSkillCoverage />
+            {/* F95 (overnight 2026-08-22): Scenario × Task Coverage (SCNTASK) — pre-built ScenarioTaskCoverage.jsx (374 lines) activated & mounted; parallel-fetches /v1/scenario/list + /entities/Task every 90 s; keyword-correlates each scenario against the task backlog → TASKED (≥1 match) vs UNTASKED (0); red badge on untasked count; stat tiles (scenarios/tasks/tasked/untasked); ALL/TASKED/UNTASKED filter tabs + text search; expand scenario → matched tasks with status chip + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario-execution brief + jarvis:speak-dossier TTS; isScntaskQuery+buildScntaskScript wired in JarvisBrain; jarvis:scntask-toggle event; "scenario task/scntask/scenario execution/which scenarios have tasks/task coverage/unplanned scenarios/scenarios without tasks" voice trigger */}
+            <ScenarioTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
