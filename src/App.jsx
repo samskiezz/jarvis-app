@@ -674,6 +674,7 @@ import InvestmentKnowledgeReportTriple from '@/components/cinematic/InvestmentKn
 import ContactSwarmJobReportTriple from '@/components/cinematic/ContactSwarmJobReportTriple';
 import TaskKnowledgeAnomalyTriple from '@/components/cinematic/TaskKnowledgeAnomalyTriple';
 import ScenarioAnomalyCorrelator from '@/components/cinematic/ScenarioAnomalyCorrelator';
+import InvestmentGraphCentrality from '@/components/cinematic/InvestmentGraphCentrality';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2115,6 +2116,8 @@ function App() {
             <TaskKnowledgeAnomalyTriple />
             {/* F122 (overnight 2026-08-23): Scenario × Anomaly Correlator (SCAN) — pre-built ScenarioAnomalyCorrelator.jsx activated & mounted; parallel-fetches /v1/scenario/list + /v1/jarvis/analytics/anomalies every 90 s; keyword-correlates each scenario against active metric anomalies → EXPOSED (≥1 match) vs CLEAR (0); red badge on exposed count; stat tiles (scenarios/anomalies/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand scenario → matched anomaly rows with severity badge + |z| + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario-anomaly brief + jarvis:speak-dossier TTS; isScanQuery+buildScanScript already wired in JarvisBrain (line 282 import, line 3805 branch); jarvis:scan-toggle event; "scenario anomaly/anomaly scenario/scan panel/exposed scenario/scenario with anomaly" voice trigger */}
             <ScenarioAnomalyCorrelator />
+            {/* F123 (overnight 2026-08-23): Investment × Graph Centrality Coverage (IGCV) — ◈ IGCV button (left:4140 bottom:18 zIndex:68); parallel-fetches /entities/Investment + /v1/graph/centrality every 90 s; keyword-correlates each investment against top-centrality graph nodes → ENTITY_LINKED (≥1 match) vs PERIPHERAL (0); amber badge on peripheral count; stat tiles (investments/central-nodes/entity-linked/peripheral); ALL/ENTITY_LINKED/PERIPHERAL filter tabs + text search; expand investment → matched nodes with centrality score + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio graph-coverage brief + jarvis:speak-dossier TTS; isIgcvQuery+buildIgcvScript wired in JarvisBrain; jarvis:igcv-toggle event; "investment graph/graph investment/igcv/peripheral investments/investment centrality/portfolio graph/entity linked investments" voice trigger */}
+            <InvestmentGraphCentrality />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
