@@ -652,6 +652,7 @@ import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKn
 import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
 import AlertAnomalyCorrelator from '@/components/cinematic/AlertAnomalyCorrelator';
 import IntelProfileOpsCorrelator from '@/components/cinematic/IntelProfileOpsCorrelator';
+import OpsEventKnowledgeRiskTriple from '@/components/cinematic/OpsEventKnowledgeRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2049,6 +2050,8 @@ function App() {
             <AlertAnomalyCorrelator />
             {/* F99 (overnight 2026-08-22): IntelProfile × Ops Events Correlator (IPOEC) — ◈ IPOEC button (left:3240 bottom:18 zIndex:68); parallel-fetches /entities/IntelProfile + /v1/ops/events every 90 s; keyword-correlates each intel profile (name/description/aliases/tags/role/org) against live ops events (type/resource/description/service) → ACTIVE (≥1 match) vs PASSIVE; amber badge on active count; stat tiles (profiles/ops evts/active/passive); ALL/ACTIVE/PASSIVE filter tabs + text search; expand profile → matched ops events with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-ops brief + jarvis:speak-dossier TTS; isIpoecQuery+buildIpoecScript wired in JarvisBrain; jarvis:ipoec-toggle event; "intel ops/ops intel profile/ipoec/active intel profiles/intel operational/profile ops/which profiles have ops events/intel profile ops activity" voice trigger */}
             <IntelProfileOpsCorrelator />
+            {/* F100 (overnight 2026-08-23): Ops Event × Knowledge × Risk Signal Triple (OEKR) — ◈ OEKR button (left:3300 bottom:18 zIndex:68); parallel-fetches /v1/ops/events + /knowledge/ + /entities/RiskSignal every 60 s; keyword-correlates each ops event against KB articles AND risk signals → FULL_COVERAGE / KB_ONLY / RISK_ONLY / DARK; amber badge on dark count; isOekrQuery+buildOekrScript wired in JarvisBrain; jarvis:oekr-toggle event */}
+            <OpsEventKnowledgeRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
