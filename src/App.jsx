@@ -663,6 +663,7 @@ import AipEvalBenchmark from '@/components/cinematic/AipEvalBenchmark';
 import SystemAlertRiskCommand from '@/components/cinematic/SystemAlertRiskCommand';
 import AlertScenarioResponseMap from '@/components/cinematic/AlertScenarioResponseMap';
 import LiveIntelKnowledgeNexus from '@/components/cinematic/LiveIntelKnowledgeNexus';
+import ReportScenarioDatasetTriple from '@/components/cinematic/ReportScenarioDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2082,6 +2083,8 @@ function App() {
             <AlertScenarioResponseMap />
             {/* F110: Live Intel × Knowledge Nexus (LIKN) — ◈ LIKN button (left:3720 bottom:18 zIndex:68); parallel-fetches /functions/getLiveIntel + /knowledge/ every 60 s; keyword-correlates each KB article against live world events → LIVE vs DORMANT; amber badge on live count; ALL/LIVE/DORMANT filter tabs + text search; expand article → matched events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLiknQuery+buildLiknScript wired in JarvisBrain; jarvis:likn-toggle event; "live intel knowledge/knowledge nexus/likn/live kb/which knowledge is live/live world knowledge" voice trigger */}
             <LiveIntelKnowledgeNexus />
+            {/* F111: Report × Scenario × Dataset Triple (RSDTRI) — ◈ RSDTRI button (left:3780 bottom:18 zIndex:68); parallel-fetches /v1/reports + /v1/scenario/list + /v1/datasets every 90 s; keyword-correlates each report against scenarios AND datasets → FULL_COVERAGE/SCENARIO_ONLY/DATASET_ONLY/DARK; amber badge on dark count; ALL/FULL_COVERAGE/SCENARIO_ONLY/DATASET_ONLY/DARK filter tabs + text search; expand report → matched scenarios + datasets with relevance score bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isRsdtriQuery+buildRsdtriScript wired in JarvisBrain; jarvis:rsdtri-toggle event; "report scenario dataset/rsdtri/report triple/grounded reports/dark reports/report coverage triple" voice trigger */}
+            <ReportScenarioDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -713,6 +713,7 @@ import { isKaibQuery, buildKaibScript } from "./KnowledgeAnomalyBridge";
 import { isSarcQuery, buildSarcScript } from "./SystemAlertRiskCommand";
 import { isAsrmQuery, buildAsrmScript } from "./AlertScenarioResponseMap";
 import { isLiknQuery, buildLiknScript } from "./LiveIntelKnowledgeNexus";
+import { isRsdtriQuery, buildRsdtriScript } from "./ReportScenarioDatasetTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7676,6 +7677,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:likn-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLiknScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRsdtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsdtri-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRsdtriScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
