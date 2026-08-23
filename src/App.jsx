@@ -655,6 +655,7 @@ import IntelProfileOpsCorrelator from '@/components/cinematic/IntelProfileOpsCor
 import OpsEventKnowledgeRiskTriple from '@/components/cinematic/OpsEventKnowledgeRiskTriple';
 import IntelProfileGraphCentrality from '@/components/cinematic/IntelProfileGraphCentrality';
 import SwarmJobScenarioIntelligence from '@/components/cinematic/SwarmJobScenarioIntelligence';
+import GraphCentralityOpsEvents from '@/components/cinematic/GraphCentralityOpsEvents';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2058,6 +2059,8 @@ function App() {
             <IntelProfileGraphCentrality />
             {/* F102 (overnight 2026-08-23): SwarmJob × Scenario Intelligence (SJSI) — ◈ SJSI button (left:3360 bottom:18 zIndex:68); parallel-fetches /entities/SwarmJob + /v1/scenario/list every 90 s; keyword-correlates each swarm job against scenarios → PLANNED (≥1 match) vs UNPLANNED (0); amber badge on unplanned count; stat tiles (jobs/scenarios/planned/unplanned); ALL/PLANNED/UNPLANNED filter tabs + text search; expand job → matched scenario cards with type/status badges + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-scenario brief + jarvis:speak-dossier TTS; isSjsiQuery+buildSjsiScript wired in JarvisBrain; jarvis:sjsi-toggle event; "swarm scenario/scenario swarm/sjsi/unplanned swarm/swarm plan/swarm without scenario/swarm scenario coverage" voice trigger */}
             <SwarmJobScenarioIntelligence />
+            {/* F103 (overnight 2026-08-23): Graph Centrality × Ops Events (GCOE) — ◈ GCOE button (left:3420 bottom:18 zIndex:68); parallel-fetches /v1/graph/centrality + /v1/ops/events every 60 s; keyword-correlates each top-centrality graph node against live ops events → MONITORED (≥1 match) vs UNMONITORED (0); red badge on unmonitored count; stat tiles (nodes/ops events/monitored/unmonitored); ALL/MONITORED/UNMONITORED filter tabs + text search; expand node → matched ops events with severity + type badges + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-ops coverage brief + jarvis:speak-dossier TTS; isGcoeQuery+buildGcoeScript wired in JarvisBrain; jarvis:gcoe-toggle event; "graph ops/ops graph/gcoe/monitored nodes/unmonitored nodes/graph operational/central nodes ops/which nodes have ops/node ops events/graph ops events" voice trigger */}
+            <GraphCentralityOpsEvents />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
