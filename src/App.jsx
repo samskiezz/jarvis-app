@@ -668,6 +668,7 @@ import InvestigationKnowledgeCoverage from '@/components/cinematic/Investigation
 import ScenarioRiskInvestigationTriple from '@/components/cinematic/ScenarioRiskInvestigationTriple';
 import DatasetAlertCorrelator from '@/components/cinematic/DatasetAlertCorrelator';
 import ContactAnomalyCorrelator from '@/components/cinematic/ContactAnomalyCorrelator';
+import TaskAlertCorrelator from '@/components/cinematic/TaskAlertCorrelator';
 import KnowledgeInvestigationRiskTriple from '@/components/cinematic/KnowledgeInvestigationRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2098,6 +2099,8 @@ function App() {
             <DatasetAlertCorrelator />
             {/* F116 (overnight 2026-08-23): Contact × Anomaly Correlator (CACR) — pre-built ContactAnomalyCorrelator.jsx (368 lines) activated & mounted; parallel-fetches /entities/Contact + /v1/jarvis/analytics/anomalies every 90 s; keyword-correlates each contact (name/email/title/company) against active metric anomalies → FLAGGED (≥1 match) vs CLEAR; amber badge on flagged count; stat tiles (contacts/anomalies/flagged/clear); ALL/FLAGGED/CLEAR filter tabs + text search; expand contact → matched anomalies with |z| bar + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isContactAnomalyQuery+buildContactAnomalyScript already wired in JarvisBrain (line 256 import, line 3567 branch); jarvis:cacr-toggle event; "contact anomaly/anomaly contact/cacr/flagged contacts/contacts with anomaly" voice trigger */}
             <ContactAnomalyCorrelator />
+            {/* F118 (overnight 2026-08-23): Task × Alert Correlator (TACL) — pre-built TaskAlertCorrelator.jsx (376 lines) activated & mounted; parallel-fetches /entities/Task + /v1/alerts every 60 s; keyword-correlates each task (title/description/type/status) against active alerts (category/type/message/source/severity) → EXPOSED (≥1 match) vs CLEAR (0); amber badge on exposed count; stat tiles (tasks/alerts/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand task → matched alerts with severity + category badges + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-alert brief + TTS; isTaskAlcQuery+buildTaskAlcScript already wired in JarvisBrain (line 313 import, line 4099 branch); jarvis:tacl-toggle event; "task alert/alert task/tacl/tasks with alerts/exposed tasks/tasks under alert" voice trigger */}
+            <TaskAlertCorrelator />
             {/* F117 (overnight 2026-08-23): Knowledge × Investigation × Risk Signal Triple (KIRNT) — /knowledge/ + /v1/investigations + /entities/RiskSignal; FULL_COVERAGE/INV_ONLY/RISK_ONLY/DARK; ◈ KIRNT button left:3900; isKirntQuery+buildKirntScript in JarvisBrain; 90-s auto-refresh */}
             <KnowledgeInvestigationRiskTriple />
             <Suspense fallback={<Loading />}>
