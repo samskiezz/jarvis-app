@@ -84,3 +84,4 @@
 [2026-08-23] F106 KAIB — KnowledgeAnomalyBridge.jsx: /knowledge/ × /v1/jarvis/analytics/anomalies → ALARMED/STABLE; ◈ KAIB button; isKaibQuery+buildKaibScript wired in JarvisBrain; vite build exit:0
 [2026-08-23] F107 AIP Eval & Benchmark Console (EVLB): activated pre-built AipEvalBenchmark.jsx (318 lines); mounted in App.jsx after F106; uses /v1/aip/providers + /v1/jarvis/agent/chat; isEvlbQuery+buildEvlbScript already wired in JarvisBrain; vite build exit:0; EVLB appears in dist/assets/index-CUSqv6wF.js
 [2026-08-23] F108 SystemAlertRiskCommand.jsx (SARC): parallel-fetches /v1/jarvis/system/status + /v1/alerts + /entities/RiskSignal; DEFCON 1-4 command center; mounted App.jsx + wired JarvisBrain; vite build exit:0
+[2026-08-23] F109 AlertScenarioResponseMap.jsx (ASRM): parallel-fetches /v1/alerts + /v1/scenario/list; keyword-correlates alerts→scenarios ARMED/SILENT; amber badge; mounted App.jsx + wired JarvisBrain; vite build exit:0

@@ -661,6 +661,7 @@ import SwarmJobOpsEventsCorrelator from '@/components/cinematic/SwarmJobOpsEvent
 import KnowledgeAnomalyBridge from '@/components/cinematic/KnowledgeAnomalyBridge';
 import AipEvalBenchmark from '@/components/cinematic/AipEvalBenchmark';
 import SystemAlertRiskCommand from '@/components/cinematic/SystemAlertRiskCommand';
+import AlertScenarioResponseMap from '@/components/cinematic/AlertScenarioResponseMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2076,6 +2077,8 @@ function App() {
             <AipEvalBenchmark />
             {/* F108 (overnight 2026-08-23): System Status × Alert × Risk Signal Command Center (SARC) — ◉ SARC button (left:3600 bottom:18 zIndex:68); parallel-fetches /v1/jarvis/system/status + /v1/alerts + /entities/RiskSignal every 60 s; computes DEFCON 1–4 state (CRITICAL/ELEVATED/GUARDED/ALL CLEAR); stat tiles (SVCS DOWN / CRIT ALERTS / CRIT RISKS / SERVICES / ALERTS / RISK SIGNALS); optional CPU/MEM from system status; ALL/SERVICES/ALERTS/RISKS filter tabs + text search; per-service status rows, alert severity rows, risk signal severity rows; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + jarvis:speak-dossier TTS; isSarcQuery+buildSarcScript wired in JarvisBrain; jarvis:sarc-toggle event; "sarc/system command/command center/operational status/defcon/system alert risk/sarc center/ops command" voice trigger */}
             <SystemAlertRiskCommand />
+            {/* F109 (overnight 2026-08-23): Alert × Scenario Response Map (ASRM) — ◈ ASRM button (left:3660 bottom:18 zIndex:68); parallel-fetches /v1/alerts + /v1/scenario/list every 60 s; keyword-correlates each active alert against scenarios → ARMED (≥1 match) vs SILENT (0); amber badge on armed count; stat tiles (alerts/scenarios/armed/silent); ALL/ARMED/SILENT filter tabs + text search; expand alert → matched scenarios with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + jarvis:speak-dossier TTS; isAsrmQuery+buildAsrmScript wired in JarvisBrain; jarvis:asrm-toggle event; "alert scenario/scenario response/asrm/armed scenarios/which scenarios are triggered/alert response map/scenario alert mapping" voice trigger */}
+            <AlertScenarioResponseMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
