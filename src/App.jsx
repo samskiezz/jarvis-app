@@ -659,6 +659,7 @@ import GraphCentralityOpsEvents from '@/components/cinematic/GraphCentralityOpsE
 import ContactAlertCorrelator from '@/components/cinematic/ContactAlertCorrelator';
 import SwarmJobOpsEventsCorrelator from '@/components/cinematic/SwarmJobOpsEventsCorrelator';
 import KnowledgeAnomalyBridge from '@/components/cinematic/KnowledgeAnomalyBridge';
+import AipEvalBenchmark from '@/components/cinematic/AipEvalBenchmark';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2070,6 +2071,8 @@ function App() {
             <SwarmJobOpsEventsCorrelator />
             {/* F106 (overnight 2026-08-23): Knowledge × Anomaly Intelligence Bridge (KAIB) — ◈ KAIB button (left:3540 bottom:18 zIndex:68); parallel-fetches /knowledge/ + /v1/jarvis/analytics/anomalies every 60 s; keyword-correlates each KB article against active metric anomalies → ALARMED (≥1 match) vs STABLE (0); amber badge on alarmed count; stat tiles (articles/anomalies/alarmed/stable); ALL/ALARMED/STABLE filter tabs + text search; expand article → matched anomaly rows with severity badge + |z| + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + jarvis:speak-dossier TTS; isKaibQuery+buildKaibScript wired in JarvisBrain; jarvis:kaib-toggle event; "knowledge anomaly/anomaly knowledge/kaib/kb anomaly/alarmed knowledge/knowledge metric" voice trigger */}
             <KnowledgeAnomalyBridge />
+            {/* F107 (overnight 2026-08-23): AIP Eval & Benchmark Console (EVLB) — pre-built AipEvalBenchmark.jsx (318 lines) activated; ⊡ EVLB button (left:616320 bottom:8 zIndex:228); EVAL tab: single-prompt evaluation against any configured provider (fetches /v1/aip/providers for model list, fires /v1/jarvis/agent/chat for evaluation); BENCHMARK tab: multi-model benchmark across selected providers; isEvlbQuery+buildEvlbScript already wired in JarvisBrain (line 263 import, line 3615 branch); jarvis:evlb-toggle event; "eval/evaluation/benchmark/aip eval/model eval/run eval/llm eval/run benchmark/model benchmark/test suite/prompt eval/evlb" voice trigger */}
+            <AipEvalBenchmark />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
