@@ -653,6 +653,7 @@ import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
 import AlertAnomalyCorrelator from '@/components/cinematic/AlertAnomalyCorrelator';
 import IntelProfileOpsCorrelator from '@/components/cinematic/IntelProfileOpsCorrelator';
 import OpsEventKnowledgeRiskTriple from '@/components/cinematic/OpsEventKnowledgeRiskTriple';
+import IntelProfileGraphCentrality from '@/components/cinematic/IntelProfileGraphCentrality';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2052,6 +2053,8 @@ function App() {
             <IntelProfileOpsCorrelator />
             {/* F100 (overnight 2026-08-23): Ops Event × Knowledge × Risk Signal Triple (OEKR) — ◈ OEKR button (left:3300 bottom:18 zIndex:68); parallel-fetches /v1/ops/events + /knowledge/ + /entities/RiskSignal every 60 s; keyword-correlates each ops event against KB articles AND risk signals → FULL_COVERAGE / KB_ONLY / RISK_ONLY / DARK; amber badge on dark count; isOekrQuery+buildOekrScript wired in JarvisBrain; jarvis:oekr-toggle event */}
             <OpsEventKnowledgeRiskTriple />
+            {/* F101 (overnight 2026-08-23): Intel Profile × Graph Centrality (IGCP) — pre-built IntelProfileGraphCentrality.jsx activated & mounted; parallel-fetches /entities/IntelProfile + /v1/graph/centrality; keyword-correlates each intel profile against top-centrality graph nodes → HIGH-PROFILE (≥1 match) vs PERIPHERAL; isIgcpQuery+buildIgcpScript already wired in JarvisBrain (line 251 import, line 3522 branch); jarvis:igcp-toggle event; "intel graph centrality/intel profile central/igcp/high profile intel/network intel" voice trigger */}
+            <IntelProfileGraphCentrality />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
