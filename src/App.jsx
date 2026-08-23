@@ -656,6 +656,7 @@ import OpsEventKnowledgeRiskTriple from '@/components/cinematic/OpsEventKnowledg
 import IntelProfileGraphCentrality from '@/components/cinematic/IntelProfileGraphCentrality';
 import SwarmJobScenarioIntelligence from '@/components/cinematic/SwarmJobScenarioIntelligence';
 import GraphCentralityOpsEvents from '@/components/cinematic/GraphCentralityOpsEvents';
+import ContactAlertCorrelator from '@/components/cinematic/ContactAlertCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2061,6 +2062,8 @@ function App() {
             <SwarmJobScenarioIntelligence />
             {/* F103 (overnight 2026-08-23): Graph Centrality × Ops Events (GCOE) — ◈ GCOE button (left:3420 bottom:18 zIndex:68); parallel-fetches /v1/graph/centrality + /v1/ops/events every 60 s; keyword-correlates each top-centrality graph node against live ops events → MONITORED (≥1 match) vs UNMONITORED (0); red badge on unmonitored count; stat tiles (nodes/ops events/monitored/unmonitored); ALL/MONITORED/UNMONITORED filter tabs + text search; expand node → matched ops events with severity + type badges + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-ops coverage brief + jarvis:speak-dossier TTS; isGcoeQuery+buildGcoeScript wired in JarvisBrain; jarvis:gcoe-toggle event; "graph ops/ops graph/gcoe/monitored nodes/unmonitored nodes/graph operational/central nodes ops/which nodes have ops/node ops events/graph ops events" voice trigger */}
             <GraphCentralityOpsEvents />
+            {/* F104 (overnight 2026-08-23): Contact × Alert Correlator (CACL) — pre-built ContactAlertCorrelator.jsx activated & mounted; parallel-fetches /entities/Contact + /v1/alerts every 90 s; keyword-correlates each contact (name/email/title/company/description) against active alerts (category/type/message/title/description/source/severity) → FLAGGED (≥1 match) vs CLEAR (0); amber badge on flagged count; isCaclQuery+buildCaclScript already wired in JarvisBrain (line 289 import, line 3856 branch); jarvis:cacl-toggle event; "contact alert/alert contact/cacl/contacts with alert/flagged contact/which contacts have alert" voice trigger */}
+            <ContactAlertCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
