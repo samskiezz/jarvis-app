@@ -662,6 +662,7 @@ import KnowledgeAnomalyBridge from '@/components/cinematic/KnowledgeAnomalyBridg
 import AipEvalBenchmark from '@/components/cinematic/AipEvalBenchmark';
 import SystemAlertRiskCommand from '@/components/cinematic/SystemAlertRiskCommand';
 import AlertScenarioResponseMap from '@/components/cinematic/AlertScenarioResponseMap';
+import LiveIntelKnowledgeNexus from '@/components/cinematic/LiveIntelKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2079,6 +2080,8 @@ function App() {
             <SystemAlertRiskCommand />
             {/* F109 (overnight 2026-08-23): Alert × Scenario Response Map (ASRM) — ◈ ASRM button (left:3660 bottom:18 zIndex:68); parallel-fetches /v1/alerts + /v1/scenario/list every 60 s; keyword-correlates each active alert against scenarios → ARMED (≥1 match) vs SILENT (0); amber badge on armed count; stat tiles (alerts/scenarios/armed/silent); ALL/ARMED/SILENT filter tabs + text search; expand alert → matched scenarios with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + jarvis:speak-dossier TTS; isAsrmQuery+buildAsrmScript wired in JarvisBrain; jarvis:asrm-toggle event; "alert scenario/scenario response/asrm/armed scenarios/which scenarios are triggered/alert response map/scenario alert mapping" voice trigger */}
             <AlertScenarioResponseMap />
+            {/* F110: Live Intel × Knowledge Nexus (LIKN) — ◈ LIKN button (left:3720 bottom:18 zIndex:68); parallel-fetches /functions/getLiveIntel + /knowledge/ every 60 s; keyword-correlates each KB article against live world events → LIVE vs DORMANT; amber badge on live count; ALL/LIVE/DORMANT filter tabs + text search; expand article → matched events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLiknQuery+buildLiknScript wired in JarvisBrain; jarvis:likn-toggle event; "live intel knowledge/knowledge nexus/likn/live kb/which knowledge is live/live world knowledge" voice trigger */}
+            <LiveIntelKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
