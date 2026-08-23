@@ -708,6 +708,7 @@ import { isIpoecQuery, buildIpoecScript } from "./IntelProfileOpsCorrelator";
 import { isOekrQuery, buildOekrScript } from "./OpsEventKnowledgeRiskTriple";
 import { isSjsiQuery, buildSjsiScript } from "./SwarmJobScenarioIntelligence";
 import { isGcoeQuery, buildGcoeScript } from "./GraphCentralityOpsEvents";
+import { isSjoeQuery, buildSjoeScript } from "./SwarmJobOpsEventsCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7631,6 +7632,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcoe-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGcoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSjoeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjoe-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjoeScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

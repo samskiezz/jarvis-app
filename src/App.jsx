@@ -657,6 +657,7 @@ import IntelProfileGraphCentrality from '@/components/cinematic/IntelProfileGrap
 import SwarmJobScenarioIntelligence from '@/components/cinematic/SwarmJobScenarioIntelligence';
 import GraphCentralityOpsEvents from '@/components/cinematic/GraphCentralityOpsEvents';
 import ContactAlertCorrelator from '@/components/cinematic/ContactAlertCorrelator';
+import SwarmJobOpsEventsCorrelator from '@/components/cinematic/SwarmJobOpsEventsCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2064,6 +2065,8 @@ function App() {
             <GraphCentralityOpsEvents />
             {/* F104 (overnight 2026-08-23): Contact × Alert Correlator (CACL) — pre-built ContactAlertCorrelator.jsx activated & mounted; parallel-fetches /entities/Contact + /v1/alerts every 90 s; keyword-correlates each contact (name/email/title/company/description) against active alerts (category/type/message/title/description/source/severity) → FLAGGED (≥1 match) vs CLEAR (0); amber badge on flagged count; isCaclQuery+buildCaclScript already wired in JarvisBrain (line 289 import, line 3856 branch); jarvis:cacl-toggle event; "contact alert/alert contact/cacl/contacts with alert/flagged contact/which contacts have alert" voice trigger */}
             <ContactAlertCorrelator />
+            {/* F105 (overnight 2026-08-23): SwarmJob × Ops Events Correlator (SJOE) — ◈ SJOE button (left:3480 bottom:18 zIndex:68); parallel-fetches /entities/SwarmJob + /v1/ops/events every 60 s; keyword-correlates each swarm job (name/type/description/tags/target) against live ops events (type/resource/description/service) → TRIGGERED (≥1 match) vs QUIET (0); amber badge on triggered count; stat tiles (jobs/ops evts/triggered/quiet); ALL/TRIGGERED/QUIET filter tabs + text search; expand job → matched ops events with severity badge + relevance score bar (max 6 shown); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-ops brief + jarvis:speak-dossier TTS; isSjoeQuery+buildSjoeScript wired in JarvisBrain; jarvis:sjoe-toggle event; "swarm ops/ops swarm/sjoe/swarm operational/swarm events/swarm ops events/triggered swarm/which swarm jobs have ops events" voice trigger */}
+            <SwarmJobOpsEventsCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
