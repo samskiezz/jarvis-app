@@ -665,6 +665,7 @@ import AlertScenarioResponseMap from '@/components/cinematic/AlertScenarioRespon
 import LiveIntelKnowledgeNexus from '@/components/cinematic/LiveIntelKnowledgeNexus';
 import ReportScenarioDatasetTriple from '@/components/cinematic/ReportScenarioDatasetTriple';
 import InvestigationKnowledgeCoverage from '@/components/cinematic/InvestigationKnowledgeCoverage';
+import ScenarioRiskInvestigationTriple from '@/components/cinematic/ScenarioRiskInvestigationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2088,6 +2089,8 @@ function App() {
             <ReportScenarioDatasetTriple />
             {/* F112 (overnight 2026-08-23): Investigation × Knowledge Coverage (INVKNOW) — pre-built InvestigationKnowledgeCoverage.jsx (382 lines) activated; parallel-fetches /v1/investigations + /knowledge/ every 90 s; keyword-correlates each investigation against KB articles → SUPPORTED vs BLIND; amber badge on blind count; stat tiles (investigations/articles/supported/blind); ALL/SUPPORTED/BLIND filter tabs + text search; expand investigation → matched articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-knowledge brief + TTS; isInvknowQuery+buildInvknowScript wired in JarvisBrain; jarvis:invknow-toggle event; "investigation knowledge/knowledge for investigations/invknow/research gap/blind investigations" voice trigger */}
             <InvestigationKnowledgeCoverage />
+            {/* F113 (overnight 2026-08-23): Scenario × RiskSignal × Investigation Triple (SRIT) — parallel-fetches /v1/scenario/list + /entities/RiskSignal + /v1/investigations every 90 s; keyword-correlates each scenario against risk signals AND investigations → FULL_COVERAGE/RISK_ONLY/CASE_ONLY/DARK; red badge on dark count; stat tiles (scenarios/full-cov/risk-only/dark); ALL/FULL_COVERAGE/RISK_ONLY/CASE_ONLY/DARK filter tabs + text search; expand scenario → matched signals list + matched investigations list with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence triple-coverage brief + TTS; isSritQuery+buildSritScript wired in JarvisBrain; jarvis:srit-toggle event; "scenario risk investigation/srit/dark scenarios/scenario triple" voice trigger */}
+            <ScenarioRiskInvestigationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
