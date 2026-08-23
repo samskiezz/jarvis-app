@@ -675,6 +675,7 @@ import ContactSwarmJobReportTriple from '@/components/cinematic/ContactSwarmJobR
 import TaskKnowledgeAnomalyTriple from '@/components/cinematic/TaskKnowledgeAnomalyTriple';
 import ScenarioAnomalyCorrelator from '@/components/cinematic/ScenarioAnomalyCorrelator';
 import InvestmentGraphCentrality from '@/components/cinematic/InvestmentGraphCentrality';
+import AlertGraphCentralityMonitor from '@/components/cinematic/AlertGraphCentralityMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2118,6 +2119,8 @@ function App() {
             <ScenarioAnomalyCorrelator />
             {/* F123 (overnight 2026-08-23): Investment × Graph Centrality Coverage (IGCV) — ◈ IGCV button (left:4140 bottom:18 zIndex:68); parallel-fetches /entities/Investment + /v1/graph/centrality every 90 s; keyword-correlates each investment against top-centrality graph nodes → ENTITY_LINKED (≥1 match) vs PERIPHERAL (0); amber badge on peripheral count; stat tiles (investments/central-nodes/entity-linked/peripheral); ALL/ENTITY_LINKED/PERIPHERAL filter tabs + text search; expand investment → matched nodes with centrality score + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio graph-coverage brief + jarvis:speak-dossier TTS; isIgcvQuery+buildIgcvScript wired in JarvisBrain; jarvis:igcv-toggle event; "investment graph/graph investment/igcv/peripheral investments/investment centrality/portfolio graph/entity linked investments" voice trigger */}
             <InvestmentGraphCentrality />
+            {/* F124 (overnight 2026-08-23): Alert × Graph Centrality Monitor (AGCM) — ◈ AGCM button (left:4200 bottom:18 zIndex:68); parallel-fetches /v1/alerts + /v1/graph/centrality every 60 s; keyword-correlates each alert against top-centrality graph nodes → CENTRAL (≥1 match) vs PERIPHERAL (0); amber badge on central count; stat tiles (alerts/nodes/central/peripheral); ALL/CENTRAL/PERIPHERAL filter tabs + text search; expand alert → matched nodes with centrality score + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isAgcmQuery+buildAgcmScript wired in JarvisBrain; jarvis:agcm-toggle event; "alert graph/graph alert/agcm/central alerts/alert centrality/which alerts affect central nodes/graph alert monitor" voice trigger */}
+            <AlertGraphCentralityMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
