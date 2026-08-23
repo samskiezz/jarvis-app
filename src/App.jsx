@@ -670,6 +670,7 @@ import DatasetAlertCorrelator from '@/components/cinematic/DatasetAlertCorrelato
 import ContactAnomalyCorrelator from '@/components/cinematic/ContactAnomalyCorrelator';
 import TaskAlertCorrelator from '@/components/cinematic/TaskAlertCorrelator';
 import KnowledgeInvestigationRiskTriple from '@/components/cinematic/KnowledgeInvestigationRiskTriple';
+import InvestmentKnowledgeReportTriple from '@/components/cinematic/InvestmentKnowledgeReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2103,6 +2104,8 @@ function App() {
             <TaskAlertCorrelator />
             {/* F117 (overnight 2026-08-23): Knowledge × Investigation × Risk Signal Triple (KIRNT) — /knowledge/ + /v1/investigations + /entities/RiskSignal; FULL_COVERAGE/INV_ONLY/RISK_ONLY/DARK; ◈ KIRNT button left:3900; isKirntQuery+buildKirntScript in JarvisBrain; 90-s auto-refresh */}
             <KnowledgeInvestigationRiskTriple />
+            {/* F119 (overnight 2026-08-23): Investment × Knowledge × Report Triple (IKRT) — /entities/Investment + /knowledge/ + /v1/reports; FULL_COVERAGE/REPORT_ONLY/KB_ONLY/DARK; amber badge on dark count; ◈ IKRT button left:3960; isIkrtQuery+buildIkrtScript in JarvisBrain; 90-s auto-refresh */}
+            <InvestmentKnowledgeReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
