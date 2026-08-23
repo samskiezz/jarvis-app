@@ -668,6 +668,7 @@ import InvestigationKnowledgeCoverage from '@/components/cinematic/Investigation
 import ScenarioRiskInvestigationTriple from '@/components/cinematic/ScenarioRiskInvestigationTriple';
 import DatasetAlertCorrelator from '@/components/cinematic/DatasetAlertCorrelator';
 import ContactAnomalyCorrelator from '@/components/cinematic/ContactAnomalyCorrelator';
+import KnowledgeInvestigationRiskTriple from '@/components/cinematic/KnowledgeInvestigationRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2097,6 +2098,8 @@ function App() {
             <DatasetAlertCorrelator />
             {/* F116 (overnight 2026-08-23): Contact × Anomaly Correlator (CACR) — pre-built ContactAnomalyCorrelator.jsx (368 lines) activated & mounted; parallel-fetches /entities/Contact + /v1/jarvis/analytics/anomalies every 90 s; keyword-correlates each contact (name/email/title/company) against active metric anomalies → FLAGGED (≥1 match) vs CLEAR; amber badge on flagged count; stat tiles (contacts/anomalies/flagged/clear); ALL/FLAGGED/CLEAR filter tabs + text search; expand contact → matched anomalies with |z| bar + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isContactAnomalyQuery+buildContactAnomalyScript already wired in JarvisBrain (line 256 import, line 3567 branch); jarvis:cacr-toggle event; "contact anomaly/anomaly contact/cacr/flagged contacts/contacts with anomaly" voice trigger */}
             <ContactAnomalyCorrelator />
+            {/* F117 (overnight 2026-08-23): Knowledge × Investigation × Risk Signal Triple (KIRNT) — /knowledge/ + /v1/investigations + /entities/RiskSignal; FULL_COVERAGE/INV_ONLY/RISK_ONLY/DARK; ◈ KIRNT button left:3900; isKirntQuery+buildKirntScript in JarvisBrain; 90-s auto-refresh */}
+            <KnowledgeInvestigationRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

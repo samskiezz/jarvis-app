@@ -716,6 +716,7 @@ import { isLiknQuery, buildLiknScript } from "./LiveIntelKnowledgeNexus";
 import { isRsdtriQuery, buildRsdtriScript } from "./ReportScenarioDatasetTriple";
 import { isInvknowQuery, buildInvknowScript } from "./InvestigationKnowledgeCoverage";
 import { isSritQuery, buildSritScript } from "./ScenarioRiskInvestigationTriple";
+import { isKirntQuery, buildKirntScript } from "./KnowledgeInvestigationRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7703,6 +7704,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:srit-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSritScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKirntQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kirnt-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKirntScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
