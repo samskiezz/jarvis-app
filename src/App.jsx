@@ -673,6 +673,7 @@ import KnowledgeInvestigationRiskTriple from '@/components/cinematic/KnowledgeIn
 import InvestmentKnowledgeReportTriple from '@/components/cinematic/InvestmentKnowledgeReportTriple';
 import ContactSwarmJobReportTriple from '@/components/cinematic/ContactSwarmJobReportTriple';
 import TaskKnowledgeAnomalyTriple from '@/components/cinematic/TaskKnowledgeAnomalyTriple';
+import ScenarioAnomalyCorrelator from '@/components/cinematic/ScenarioAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2112,6 +2113,8 @@ function App() {
             <ContactSwarmJobReportTriple />
             {/* F121 (overnight 2026-08-23): Task × Knowledge × Anomaly Triple (TKAT) — /entities/Task + /knowledge/ + /v1/jarvis/analytics/anomalies; FULLY_EXPOSED/KB_ONLY/ANOMALY_ONLY/CLEAR; amber badge on fully-exposed count; ◈ TKAT button left:4080; isTkatQuery+buildTkatScript in JarvisBrain; 90-s auto-refresh */}
             <TaskKnowledgeAnomalyTriple />
+            {/* F122 (overnight 2026-08-23): Scenario × Anomaly Correlator (SCAN) — pre-built ScenarioAnomalyCorrelator.jsx activated & mounted; parallel-fetches /v1/scenario/list + /v1/jarvis/analytics/anomalies every 90 s; keyword-correlates each scenario against active metric anomalies → EXPOSED (≥1 match) vs CLEAR (0); red badge on exposed count; stat tiles (scenarios/anomalies/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand scenario → matched anomaly rows with severity badge + |z| + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario-anomaly brief + jarvis:speak-dossier TTS; isScanQuery+buildScanScript already wired in JarvisBrain (line 282 import, line 3805 branch); jarvis:scan-toggle event; "scenario anomaly/anomaly scenario/scan panel/exposed scenario/scenario with anomaly" voice trigger */}
+            <ScenarioAnomalyCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
