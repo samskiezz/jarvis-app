@@ -666,6 +666,7 @@ import LiveIntelKnowledgeNexus from '@/components/cinematic/LiveIntelKnowledgeNe
 import ReportScenarioDatasetTriple from '@/components/cinematic/ReportScenarioDatasetTriple';
 import InvestigationKnowledgeCoverage from '@/components/cinematic/InvestigationKnowledgeCoverage';
 import ScenarioRiskInvestigationTriple from '@/components/cinematic/ScenarioRiskInvestigationTriple';
+import DatasetAlertCorrelator from '@/components/cinematic/DatasetAlertCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2091,6 +2092,8 @@ function App() {
             <InvestigationKnowledgeCoverage />
             {/* F113 (overnight 2026-08-23): Scenario × RiskSignal × Investigation Triple (SRIT) — parallel-fetches /v1/scenario/list + /entities/RiskSignal + /v1/investigations every 90 s; keyword-correlates each scenario against risk signals AND investigations → FULL_COVERAGE/RISK_ONLY/CASE_ONLY/DARK; red badge on dark count; stat tiles (scenarios/full-cov/risk-only/dark); ALL/FULL_COVERAGE/RISK_ONLY/CASE_ONLY/DARK filter tabs + text search; expand scenario → matched signals list + matched investigations list with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence triple-coverage brief + TTS; isSritQuery+buildSritScript wired in JarvisBrain; jarvis:srit-toggle event; "scenario risk investigation/srit/dark scenarios/scenario triple" voice trigger */}
             <ScenarioRiskInvestigationTriple />
+            {/* F115 (overnight 2026-08-23): Dataset × Alert Correlator (DSAL) — pre-built DatasetAlertCorrelator.jsx (336 lines) activated & mounted in App.jsx; parallel-fetches /v1/datasets + /v1/alerts; keyword-correlates each dataset against active alerts → EXPOSED (≥1 match) vs CLEAR (0); amber badge on exposed count; isDsalQuery+buildDsalScript already wired in JarvisBrain (line 291 import, line 3882 branch); jarvis:dsal-toggle event; "dataset alert/alert dataset/dsal/datasets with alert/exposed dataset/which datasets have alert" voice trigger */}
+            <DatasetAlertCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

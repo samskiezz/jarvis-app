@@ -1,352 +1,331 @@
-import { useState, useEffect, useCallback } from 'react';
+/**
+ * F114 — Contact × SwarmJob Coverage (CSJC)
+ *
+ * Parallel-fetches /entities/Contact + /entities/SwarmJob every 60 s,
+ * then keyword-correlates each contact (name/email/organization/role/tags)
+ * against swarm jobs (name/description/target/objective/tags).
+ *
+ * Classification:
+ *   ASSIGNED   — contact matched ≥1 swarm job
+ *   UNASSIGNED — contact matched 0 swarm jobs
+ *
+ * Amber badge on UNASSIGNED count.
+ * Stat tiles: contacts / jobs / assigned / unassigned
+ * Filter tabs: ALL | ASSIGNED | UNASSIGNED + text search
+ * Expand contact → matched swarm job cards with status badge + relevance score bar (max 6 shown).
+ * ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence contact-swarm coverage brief + jarvis:speak-dossier TTS.
+ *
+ * Toggle:  ◈ CSJC  at left:3900 bottom:18 zIndex:68
+ * Event:   jarvis:csjc-toggle
+ * Voice:   "contact swarm / swarm contact / csjc / contact jobs / contact swarm coverage /
+ *           which contacts have swarm / swarm contact assignment / contact swarm job"
+ * Refresh: 60 s auto-poll
+ */
+import { useCallback, useEffect, useRef, useState } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = '';
-const CSJC_RE = /\b(contact[._-]?swarm|swarm[._-]?contact|csjc|monitored[._-]?contacts?|which[._-]?contacts?[._-]?have[._-]?swarm|contacts?[._-]?with[._-]?swarm[._-]?coverage|swarm[._-]?contact[._-]?coverage|contact[._-]?automation|contacts?[._-]?without[._-]?swarm)\b/i;
+const BTN_LEFT = 3900;
+const POLL_MS  = 60_000;
+const AMBER    = "#F59E0B";
+const GREEN    = "#34D399";
+const CYAN     = "#67E8F9";
+const SLATE    = "#6E8AA0";
+const BLUE     = "#60A5FA";
+const RED      = "#F87171";
 
-export function isCsjcQuery(t) {
-  return CSJC_RE.test(t || '');
-}
+const API_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
+
+// ── exported intent helpers ───────────────────────────────────────────────────
+
+const CSJC_RE =
+  /\b(contact\s+swarm|swarm\s+contact|csjc|contact\s+jobs?|contact\s+swarm\s+coverage|which\s+contacts\s+have\s+swarm|swarm\s+contact\s+assign\w*|contact\s+swarm\s+job)\b/i;
+
+export function isCsjcQuery(q) { return CSJC_RE.test(q); }
 
 export async function buildCsjcScript() {
-  const [ctR, sjR] = await Promise.allSettled([
-    fetch(`${API}/entities/Contact`).then(r => r.json()),
-    fetch(`${API}/entities/SwarmJob`).then(r => r.json()),
-  ]);
-  const contacts = normaliseArray(ctR.status === 'fulfilled' ? ctR.value : []);
-  const jobs = normaliseArray(sjR.status === 'fulfilled' ? sjR.value : []);
-  const enriched = correlate(contacts, jobs);
-  const monitored = enriched.filter(c => c._linked).length;
-  const unmonitored = enriched.length - monitored;
-  return (
-    `Contact × SwarmJob Coverage: ${contacts.length} contacts, ${jobs.length} swarm jobs indexed. ` +
-    `${monitored} contacts have swarm automation coverage; ${unmonitored} are unmonitored — no swarm job tracks these contacts. ` +
-    `Top unmonitored: ${enriched.filter(c => !c._linked).slice(0, 4).map(c => c.name || c.title || c.email || c.id || '?').join(', ') || 'none'}.`
-  );
-}
+  try {
+    const base = apiBase();
+    const hdr  = { Authorization: `Bearer ${API_KEY}` };
+    const [ctRes, sjRes] = await Promise.all([
+      fetch(`${base}/entities/Contact`,  { headers: hdr }),
+      fetch(`${base}/entities/SwarmJob`, { headers: hdr }),
+    ]);
+    const contacts  = ctRes.ok ? await ctRes.json() : [];
+    const swarmJobs = sjRes.ok ? await sjRes.json() : [];
 
-function normaliseArray(raw) {
-  if (!raw) return [];
-  if (Array.isArray(raw)) return raw;
-  for (const k of ['items', 'results', 'data', 'contacts', 'jobs', 'swarm_jobs', 'entities', 'records']) {
-    if (Array.isArray(raw[k])) return raw[k];
+    const ctList = Array.isArray(contacts)  ? contacts  : (contacts.contacts   || contacts.items   || []);
+    const sjList = Array.isArray(swarmJobs) ? swarmJobs : (swarmJobs.swarm_jobs || swarmJobs.items  || []);
+
+    const unassigned = ctList.filter(ct => {
+      const toks = `${ct.name||""} ${ct.email||""} ${ct.organization||""} ${ct.role||""} ${(ct.tags||[]).join(" ")}`.toLowerCase().split(/\s+/);
+      return !sjList.some(sj =>
+        toks.some(t => t.length > 3 && `${sj.name||""} ${sj.description||""} ${sj.target||""} ${sj.objective||""} ${(sj.tags||[]).join(" ")}`.toLowerCase().includes(t))
+      );
+    }).length;
+
+    const total = ctList.length;
+    return `Contact-swarm coverage: ${total} contacts evaluated against ${sjList.length} swarm jobs. ${unassigned} contact${unassigned !== 1 ? "s are" : " is"} UNASSIGNED — no swarm job keyword-matches found — these contacts may lack active intelligence tasking and should be reviewed for swarm coverage gaps.`;
+  } catch {
+    return "Unable to fetch contact-swarm job coverage data.";
   }
-  return [];
 }
 
-function tokens(str) {
-  return String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(w => w.length > 2);
+// ── keyword helpers ───────────────────────────────────────────────────────────
+
+function tokens(text) {
+  return String(text || "").toLowerCase().split(/\s+/).filter(t => t.length > 3);
 }
 
-function matchScore(contact, job) {
-  const ctToks = new Set([
-    ...tokens(contact.name),
-    ...tokens(contact.title),
-    ...tokens(contact.email),
-    ...tokens(contact.company),
-    ...tokens(contact.description),
-    ...tokens(contact.category),
-  ].filter(Boolean));
-  const jobToks = [
-    ...tokens(job.name),
-    ...tokens(job.kind),
-    ...tokens(job.target),
-    ...tokens(job.description),
-    ...tokens(job.type),
-    ...tokens(job.status),
-  ].filter(Boolean);
-  if (!ctToks.size || !jobToks.length) return 0;
-  let hits = 0;
-  for (const t of jobToks) if (ctToks.has(t)) hits++;
-  return hits / Math.max(ctToks.size, jobToks.length);
+function scoreAgainst(ctTokens, sj) {
+  const haystack = `${sj.name||""} ${sj.description||""} ${sj.target||""} ${sj.objective||""} ${(sj.tags||[]).join(" ")}`.toLowerCase();
+  return ctTokens.filter(t => haystack.includes(t)).length;
 }
 
-function correlate(contacts, jobs) {
-  return contacts.map(ct => {
-    const scored = jobs
-      .map(job => ({ job, score: matchScore(ct, job) }))
-      .filter(s => s.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 5);
-    return { ...ct, _linked: scored.length > 0, _matches: scored };
-  });
+function classify(ct, sjList) {
+  const toks = tokens(`${ct.name||""} ${ct.email||""} ${ct.organization||""} ${ct.role||""} ${(ct.tags||[]).join(" ")}`);
+  const matched = sjList.filter(sj => scoreAgainst(toks, sj) > 0);
+  return { label: matched.length > 0 ? "ASSIGNED" : "UNASSIGNED", matched };
 }
 
-const PANEL_W = 580;
-const PANEL_H = 560;
-const CY = '#00CFFF';
-const AM = '#F59E0B';
-const GR = '#22C55E';
-const PR = '#A78BFA';
-
-const chip = (label, color = CY) => (
-  <span style={{
-    display: 'inline-block', padding: '1px 7px', borderRadius: 4, border: `1px solid ${color}44`,
-    background: `${color}14`, color, fontSize: 10, letterSpacing: 1, marginRight: 4,
-  }}>{label}</span>
-);
-
-const scorebar = (score, color = CY) => (
-  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, verticalAlign: 'middle' }}>
-    <div style={{ width: 60, height: 4, background: '#1a2535', borderRadius: 2, overflow: 'hidden' }}>
-      <div style={{ width: `${Math.round(score * 100)}%`, height: '100%', background: color, borderRadius: 2 }} />
-    </div>
-    <span style={{ color: '#6E8AA0', fontSize: 10 }}>{(score * 100).toFixed(0)}%</span>
-  </div>
-);
+// ── component ────────────────────────────────────────────────────────────────
 
 export default function ContactSwarmJobCoverage() {
-  const [open, setOpen] = useState(false);
-  const [contacts, setContacts] = useState([]);
-  const [jobs, setJobs] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [tab, setTab] = useState('ALL');
-  const [search, setSearch] = useState('');
-  const [expanded, setExpanded] = useState(null);
-  const [assessing, setAssessing] = useState(false);
-  const [brief, setBrief] = useState('');
+  const [open,     setOpen]     = useState(false);
+  const [loading,  setLoading]  = useState(false);
+  const [data,     setData]     = useState(null);
+  const [tab,      setTab]      = useState("ALL");
+  const [search,   setSearch]   = useState("");
+  const [expanded, setExpanded] = useState({});
+  const [assessing,setAssessing]= useState(false);
+  const timerRef = useRef(null);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [ctR, sjR] = await Promise.allSettled([
-        fetch(`${API}/entities/Contact`).then(r => r.json()),
-        fetch(`${API}/entities/SwarmJob`).then(r => r.json()),
+      const base = apiBase();
+      const hdr  = { Authorization: `Bearer ${API_KEY}` };
+      const [ctRes, sjRes] = await Promise.all([
+        fetch(`${base}/entities/Contact`,  { headers: hdr }),
+        fetch(`${base}/entities/SwarmJob`, { headers: hdr }),
       ]);
-      setContacts(normaliseArray(ctR.status === 'fulfilled' ? ctR.value : []));
-      setJobs(normaliseArray(sjR.status === 'fulfilled' ? sjR.value : []));
-    } catch { /* silently skip */ }
-    setLoading(false);
-  }, []);
+      const ct = ctRes.ok ? await ctRes.json() : [];
+      const sj = sjRes.ok ? await sjRes.json() : [];
 
-  useEffect(() => {
-    const onToggle = () => setOpen(o => !o);
-    window.addEventListener('jarvis:csjc-toggle', onToggle);
-    return () => window.removeEventListener('jarvis:csjc-toggle', onToggle);
-  }, []);
+      const ctList = Array.isArray(ct) ? ct : (ct.contacts    || ct.items  || []);
+      const sjList = Array.isArray(sj) ? sj : (sj.swarm_jobs  || sj.items  || []);
 
-  useEffect(() => {
-    let timer;
-    if (open) {
-      load();
-      timer = setInterval(load, 90000);
+      const rows = ctList.map(c => ({ ...c, ...classify(c, sjList) }));
+      setData({ rows, sjList });
+    } catch (e) {
+      setData({ rows: [], sjList: [], error: String(e) });
+    } finally {
+      setLoading(false);
     }
-    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    load();
+    timerRef.current = setInterval(load, POLL_MS);
+    return () => clearInterval(timerRef.current);
   }, [open, load]);
 
-  const enriched = correlate(contacts, jobs);
-  const monitored = enriched.filter(c => c._linked);
-  const unmonitored = enriched.filter(c => !c._linked);
-  const badgeCount = unmonitored.length;
-  const badgeColor = badgeCount > 0 ? AM : GR;
-
-  const filtered = enriched
-    .filter(c => tab === 'ALL' || (tab === 'MONITORED' ? c._linked : !c._linked))
-    .filter(c => {
-      if (!search) return true;
-      const q = search.toLowerCase();
-      return (
-        String(c.name || '').toLowerCase().includes(q) ||
-        String(c.title || '').toLowerCase().includes(q) ||
-        String(c.email || '').toLowerCase().includes(q) ||
-        String(c.company || '').toLowerCase().includes(q)
-      );
-    });
-
-  async function assess() {
-    setAssessing(true);
-    setBrief('');
-    try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer dev-key' },
-        body: JSON.stringify({
-          message: `You have ${contacts.length} contacts and ${jobs.length} swarm jobs. ${monitored.length} contacts are covered by active swarm automation; ${unmonitored.length} are unmonitored with no swarm job tracking them. Give a 2-sentence contact automation coverage brief highlighting the key gap.`,
-        }),
+  useEffect(() => {
+    const handler = () => {
+      setOpen(v => {
+        if (!v) load();
+        return !v;
       });
-      const d = await r.json();
-      const txt = d.response || d.answer || d.text || d.content || '';
-      setBrief(txt);
-      window.dispatchEvent(new CustomEvent('jarvis:speak-dossier', { detail: { text: txt } }));
-    } catch { setBrief('Agent unavailable.'); }
+    };
+    window.addEventListener("jarvis:csjc-toggle", handler);
+    return () => window.removeEventListener("jarvis:csjc-toggle", handler);
+  }, [load]);
+
+  const rows       = data?.rows || [];
+  const unassigned = rows.filter(r => r.label === "UNASSIGNED").length;
+  const assigned   = rows.filter(r => r.label === "ASSIGNED").length;
+
+  const filtered = rows.filter(r => {
+    if (tab !== "ALL" && r.label !== tab) return false;
+    if (!search) return true;
+    return `${r.name||""} ${r.email||""} ${r.organization||""}`.toLowerCase().includes(search.toLowerCase());
+  });
+
+  const assess = async () => {
+    setAssessing(true);
+    try {
+      const script = await buildCsjcScript();
+      const base   = apiBase();
+      const hdr    = { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` };
+      const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
+        method: "POST", headers: hdr,
+        body: JSON.stringify({ message: `Give a 2-sentence assessment: ${script}` }),
+      });
+      const j = await r.json();
+      const text = j.response || j.reply || j.message || script;
+      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
+    } catch { /* silent */ }
     setAssessing(false);
-  }
+  };
 
-  const label = c => c.name || c.title || c.email || c.id || '?';
+  const sjStatusColor = status => {
+    const s = (status || "").toLowerCase();
+    if (s === "running")   return GREEN;
+    if (s === "completed") return CYAN;
+    if (s === "queued")    return BLUE;
+    if (s === "failed")    return RED;
+    return SLATE;
+  };
 
-  return (
-    <>
+  if (!open) {
+    return (
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={() => { setOpen(true); load(); }}
         title="Contact × SwarmJob Coverage (CSJC)"
         style={{
-          position: 'fixed', left: 657360, bottom: 8, zIndex: 238,
-          width: 54, height: 22, borderRadius: 3,
-          border: `1px solid ${badgeColor}77`, cursor: 'pointer',
-          background: 'rgba(5,8,13,0.75)', color: badgeColor,
-          fontSize: 9, letterSpacing: 1, backdropFilter: 'blur(6px)',
-          boxShadow: `0 0 10px ${badgeColor}44`, fontFamily: "'JetBrains Mono',monospace",
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3,
-        }}
-      >
+          position: "fixed", left: BTN_LEFT, bottom: 18, zIndex: 68,
+          background: "rgba(5,8,13,0.80)", border: `1px solid ${AMBER}55`,
+          color: AMBER, fontFamily: "'JetBrains Mono',monospace", fontSize: 11,
+          padding: "4px 9px", borderRadius: 6, cursor: "pointer",
+          boxShadow: unassigned > 0 ? `0 0 14px ${AMBER}44` : "none",
+          backdropFilter: "blur(6px)", letterSpacing: 1,
+        }}>
         ◈ CSJC
-        {badgeCount > 0 && (
-          <span style={{
-            background: badgeColor, color: '#04060A', borderRadius: 3, padding: '0 4px',
-            fontSize: 8, fontWeight: 700, minWidth: 14, textAlign: 'center',
-          }}>{badgeCount}</span>
+        {unassigned > 0 && (
+          <span style={{ marginLeft: 6, background: AMBER, color: "#0a0d14", borderRadius: 4,
+            padding: "1px 5px", fontSize: 10, fontWeight: 700 }}>{unassigned}</span>
         )}
       </button>
+    );
+  }
 
-      {open && (
-        <div style={{
-          position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%,-50%)',
-          width: PANEL_W, height: PANEL_H, zIndex: 9200,
-          background: 'rgba(6,10,18,0.97)', border: `1px solid ${CY}33`,
-          borderRadius: 12, backdropFilter: 'blur(16px)',
-          boxShadow: `0 0 60px ${CY}22`, fontFamily: "'JetBrains Mono',monospace",
-          display: 'flex', flexDirection: 'column', overflow: 'hidden',
-        }}>
-          <div style={{
-            padding: '10px 14px', borderBottom: `1px solid ${CY}22`,
-            display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0,
+  return (
+    <div style={{
+      position: "fixed", left: Math.max(8, BTN_LEFT - 380), bottom: 60, zIndex: 68,
+      width: 480, maxHeight: "76vh", display: "flex", flexDirection: "column",
+      background: "rgba(6,10,18,0.94)", border: `1px solid ${AMBER}44`,
+      borderRadius: 12, overflow: "hidden", backdropFilter: "blur(12px)",
+      boxShadow: `0 0 40px ${AMBER}22`,
+      fontFamily: "'JetBrains Mono',monospace", color: "#DCEBF5", fontSize: 12,
+    }}>
+      {/* header */}
+      <div style={{ padding: "10px 14px", borderBottom: `1px solid ${AMBER}33`,
+        display: "flex", alignItems: "center", gap: 8, flexShrink: 0 }}>
+        <span style={{ color: AMBER, fontWeight: 700, letterSpacing: 2, fontSize: 11 }}>◈ CONTACT × SWARM JOB COVERAGE</span>
+        <button onClick={assess} disabled={assessing} style={{
+          marginLeft: "auto", background: "transparent", border: `1px solid ${CYAN}55`,
+          color: CYAN, borderRadius: 5, padding: "2px 8px", cursor: "pointer", fontSize: 10 }}>
+          {assessing ? "…" : "▶ ASSESS"}
+        </button>
+        <button onClick={() => setOpen(false)} style={{
+          background: "transparent", border: "none", color: SLATE, cursor: "pointer", fontSize: 14 }}>✕</button>
+      </div>
+
+      {/* stat tiles */}
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 6, padding: "10px 14px", flexShrink: 0 }}>
+        {[
+          ["CONTACTS",   rows.length, CYAN],
+          ["JOBS",       data?.sjList?.length ?? 0, BLUE],
+          ["ASSIGNED",   assigned,   GREEN],
+          ["UNASSIGNED", unassigned, AMBER],
+        ].map(([label, val, col]) => (
+          <div key={label} style={{ background: "rgba(255,255,255,0.04)", borderRadius: 7,
+            padding: "8px 6px", textAlign: "center", border: `1px solid ${col}33` }}>
+            <div style={{ color: col, fontSize: 18, fontWeight: 700, lineHeight: 1 }}>{val}</div>
+            <div style={{ color: SLATE, fontSize: 9, letterSpacing: 1, marginTop: 3 }}>{label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* filter tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 14px 8px", flexShrink: 0, flexWrap: "wrap" }}>
+        {["ALL", "ASSIGNED", "UNASSIGNED"].map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{
+            background: tab === t ? AMBER + "33" : "transparent",
+            border: `1px solid ${tab === t ? AMBER : SLATE + "44"}`,
+            color: tab === t ? AMBER : SLATE, borderRadius: 5, padding: "2px 8px",
+            cursor: "pointer", fontSize: 10, letterSpacing: 0.5,
           }}>
-            <span style={{ color: CY, fontSize: 11, letterSpacing: 2, fontWeight: 700, textShadow: `0 0 12px ${CY}` }}>
-              ◈ CONTACT × SWARM JOB COVERAGE
-            </span>
-            <span style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center' }}>
-              {loading && <span style={{ color: '#6E8AA0', fontSize: 10 }}>loading…</span>}
-              <button
-                onClick={assess}
-                disabled={assessing}
-                style={{
-                  padding: '2px 8px', borderRadius: 3, border: `1px solid ${CY}55`,
-                  background: 'transparent', color: CY, cursor: 'pointer', fontSize: 9, letterSpacing: 1,
-                }}
-              >{assessing ? 'assessing…' : '▶ ASSESS'}</button>
-              <button
-                onClick={() => setOpen(false)}
-                style={{
-                  background: 'none', border: 'none', color: '#6E8AA0', cursor: 'pointer', fontSize: 14, padding: 0,
-                }}
-              >✕</button>
-            </span>
-          </div>
+            {t}{t === "ASSIGNED" ? ` (${assigned})` : t === "UNASSIGNED" ? ` (${unassigned})` : ""}
+          </button>
+        ))}
+        <input value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="search…"
+          style={{ marginLeft: "auto", background: "rgba(255,255,255,0.06)", border: `1px solid ${SLATE}44`,
+            color: "#DCEBF5", borderRadius: 5, padding: "2px 8px", fontSize: 10, width: 100 }} />
+      </div>
 
-          <div style={{ display: 'flex', gap: 8, padding: '8px 14px', flexShrink: 0 }}>
-            {[
-              { label: 'CONTACTS', val: contacts.length, col: CY },
-              { label: 'SWARM JOBS', val: jobs.length, col: PR },
-              { label: 'MONITORED', val: monitored.length, col: GR },
-              { label: 'UNMONITORED', val: unmonitored.length, col: AM },
-            ].map(({ label: l, val, col }) => (
-              <div key={l} style={{
-                flex: 1, background: `${col}0d`, border: `1px solid ${col}33`,
-                borderRadius: 6, padding: '6px 8px', textAlign: 'center',
-              }}>
-                <div style={{ color: col, fontSize: 16, fontWeight: 700 }}>{val}</div>
-                <div style={{ color: '#6E8AA0', fontSize: 9, letterSpacing: 1, marginTop: 2 }}>{l}</div>
+      {/* rows */}
+      <div style={{ overflowY: "auto", flex: 1, padding: "0 14px 14px" }}>
+        {loading && !data && (
+          <div style={{ color: SLATE, textAlign: "center", padding: 20 }}>loading…</div>
+        )}
+        {!loading && filtered.length === 0 && (
+          <div style={{ color: SLATE, textAlign: "center", padding: 20 }}>no contacts match</div>
+        )}
+        {filtered.map((row, i) => {
+          const exp     = expanded[i];
+          const rowCol  = row.label === "ASSIGNED" ? GREEN : AMBER;
+          const ctToks  = tokens(`${row.name||""} ${row.email||""} ${row.organization||""} ${row.role||""} ${(row.tags||[]).join(" ")}`);
+          return (
+            <div key={i} style={{ marginBottom: 6, background: "rgba(255,255,255,0.03)",
+              border: `1px solid ${rowCol}33`, borderRadius: 8 }}>
+              <div onClick={() => setExpanded(p => ({ ...p, [i]: !exp }))}
+                style={{ display: "flex", alignItems: "center", gap: 8, padding: "8px 10px", cursor: "pointer" }}>
+                <span style={{ color: rowCol, fontSize: 9, fontWeight: 700,
+                  border: `1px solid ${rowCol}55`, borderRadius: 4,
+                  padding: "1px 5px", letterSpacing: 0.5, flexShrink: 0 }}>
+                  {row.label}
+                </span>
+                <span style={{ flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {row.name || row.email || row.id || "—"}
+                </span>
+                {row.organization && (
+                  <span style={{ color: SLATE, fontSize: 10, flexShrink: 0 }}>{row.organization}</span>
+                )}
+                <span style={{ color: SLATE, fontSize: 10, flexShrink: 0 }}>
+                  {row.matched.length}J
+                </span>
+                <span style={{ color: SLATE, fontSize: 11 }}>{exp ? "▲" : "▼"}</span>
               </div>
-            ))}
-          </div>
 
-          <div style={{ display: 'flex', gap: 6, padding: '0 14px 8px', flexShrink: 0, alignItems: 'center' }}>
-            {['ALL', 'MONITORED', 'UNMONITORED'].map(t => (
-              <button
-                key={t}
-                onClick={() => setTab(t)}
-                style={{
-                  padding: '2px 10px', borderRadius: 3, cursor: 'pointer', fontSize: 9, letterSpacing: 1,
-                  border: `1px solid ${tab === t ? CY : '#2a3a4a'}`,
-                  background: tab === t ? `${CY}22` : 'transparent',
-                  color: tab === t ? CY : '#6E8AA0',
-                }}
-              >{t}</button>
-            ))}
-            <input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="search contacts…"
-              style={{
-                marginLeft: 'auto', background: 'rgba(255,255,255,0.03)', border: `1px solid #2a3a4a`,
-                borderRadius: 4, color: '#DCEBF5', padding: '2px 8px', fontSize: 10, outline: 'none',
-                fontFamily: "'JetBrains Mono',monospace", width: 160,
-              }}
-            />
-          </div>
-
-          <div style={{ flex: 1, overflowY: 'auto', padding: '0 14px 8px' }}>
-            {filtered.length === 0 ? (
-              <div style={{ color: '#6E8AA0', fontSize: 11, textAlign: 'center', paddingTop: 40 }}>
-                {loading ? 'Loading…' : 'No contacts found.'}
-              </div>
-            ) : filtered.map((ct, i) => {
-              const isExp = expanded === i;
-              const statusColor = ct._linked ? GR : AM;
-              return (
-                <div
-                  key={ct.id || i}
-                  style={{ borderBottom: `1px solid ${CY}11`, paddingBottom: 6, marginBottom: 6 }}
-                >
-                  <div
-                    onClick={() => setExpanded(isExp ? null : i)}
-                    style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', padding: '4px 0' }}
-                  >
-                    <span style={{
-                      width: 7, height: 7, borderRadius: '50%', background: statusColor,
-                      boxShadow: `0 0 6px ${statusColor}`, flexShrink: 0,
-                    }} />
-                    <span style={{ color: '#DCEBF5', fontSize: 11, flex: 1 }}>{label(ct)}</span>
-                    {ct.company && chip(ct.company, '#6E8AA0')}
-                    {chip(ct._linked ? 'MONITORED' : 'UNMONITORED', statusColor)}
-                    <span style={{ color: '#6E8AA0', fontSize: 9, marginLeft: 'auto' }}>
-                      {isExp ? '▲' : '▼'}
-                    </span>
+              {exp && (
+                <div style={{ padding: "0 10px 10px", borderTop: `1px solid ${SLATE}22` }}>
+                  <div style={{ color: CYAN, fontSize: 10, letterSpacing: 1, margin: "6px 0 4px" }}>
+                    SWARM JOBS ({row.matched.length})
                   </div>
-
-                  {isExp && (
-                    <div style={{ paddingLeft: 14, paddingTop: 4 }}>
-                      {ct.email && (
-                        <div style={{ color: '#6E8AA0', fontSize: 9, marginBottom: 4 }}>
-                          {ct.email}
-                        </div>
-                      )}
-                      {ct._matches.length > 0 ? (
-                        <>
-                          <div style={{ color: '#6E8AA0', fontSize: 9, letterSpacing: 1, marginBottom: 4 }}>
-                            MATCHED SWARM JOBS
-                          </div>
-                          {ct._matches.map(({ job, score }, j) => (
-                            <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
-                              {job.kind && chip(job.kind, PR)}
-                              {job.status && chip(job.status, '#6E8AA0')}
-                              <span style={{ color: '#DCEBF5', fontSize: 10, flex: 1 }}>
-                                {job.name || job.kind || job.id || '?'}
+                  {row.matched.length === 0
+                    ? <div style={{ color: SLATE, fontSize: 10 }}>no swarm job matches</div>
+                    : row.matched.slice(0, 6).map((sj, j) => {
+                        const score = scoreAgainst(ctToks, sj);
+                        const pct   = Math.min(100, score * 20);
+                        const st    = (sj.status || sj.state || "").toUpperCase();
+                        const stCol = sjStatusColor(sj.status || sj.state || "");
+                        return (
+                          <div key={j} style={{ marginBottom: 5 }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                              {st && (
+                                <span style={{ color: stCol, fontSize: 9, border: `1px solid ${stCol}55`,
+                                  borderRadius: 3, padding: "0 4px", flexShrink: 0 }}>{st}</span>
+                              )}
+                              <span style={{ flex: 1, fontSize: 11, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                                {sj.name || sj.id || "—"}
                               </span>
-                              {scorebar(score, GR)}
+                              <span style={{ color: SLATE, fontSize: 10 }}>{score}pt</span>
                             </div>
-                          ))}
-                        </>
-                      ) : (
-                        <div style={{ color: AM, fontSize: 10 }}>No swarm jobs matched this contact.</div>
-                      )}
-                    </div>
-                  )}
+                            <div style={{ height: 3, background: SLATE + "33", borderRadius: 2, marginTop: 2 }}>
+                              <div style={{ width: `${pct}%`, height: "100%", background: CYAN, borderRadius: 2 }} />
+                            </div>
+                          </div>
+                        );
+                      })}
                 </div>
-              );
-            })}
-          </div>
-
-          {brief && (
-            <div style={{
-              padding: '8px 14px', borderTop: `1px solid ${CY}22`,
-              color: '#DCEBF5', fontSize: 11, lineHeight: 1.5, flexShrink: 0,
-              background: 'rgba(0,207,255,0.03)',
-            }}>
-              <span style={{ color: CY, fontSize: 9, letterSpacing: 2 }}>ASSESS ▸ </span>{brief}
+              )}
             </div>
-          )}
-        </div>
-      )}
-    </>
+          );
+        })}
+      </div>
+    </div>
   );
 }

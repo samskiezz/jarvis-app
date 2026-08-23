@@ -89,3 +89,4 @@
 [2026-08-23] F111 ReportScenarioDatasetTriple.jsx (RSDTRI): parallel-fetches /v1/reports + /v1/scenario/list + /v1/datasets; 4-way classification FULL_COVERAGE/SCENARIO_ONLY/DATASET_ONLY/DARK; amber badge on dark; mounted App.jsx + wired JarvisBrain; vite build exit:0
 [2026-08-23] F112 Investigation × Knowledge Coverage (INVKNOW): activated pre-built InvestigationKnowledgeCoverage.jsx; mounted in App.jsx; isInvknowQuery+buildInvknowScript wired in JarvisBrain; vite build exit:0
 [2026-08-23] F113 ScenarioRiskInvestigationTriple.jsx — /v1/scenario/list + /entities/RiskSignal + /v1/investigations; FULL_COVERAGE/RISK_ONLY/CASE_ONLY/DARK; ◈ SRIT button; isSritQuery+buildSritScript in JarvisBrain; vite build exit:0
+[2026-08-23] F115 DSAL: Dataset × Alert Correlator — activated pre-built DatasetAlertCorrelator.jsx (336 lines); mounted in App.jsx; /v1/datasets + /v1/alerts; JarvisBrain already wired; vite build exit:0; DSAL in dist/assets/index-DwvJuGGa.js
