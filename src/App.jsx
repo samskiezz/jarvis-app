@@ -660,6 +660,7 @@ import ContactAlertCorrelator from '@/components/cinematic/ContactAlertCorrelato
 import SwarmJobOpsEventsCorrelator from '@/components/cinematic/SwarmJobOpsEventsCorrelator';
 import KnowledgeAnomalyBridge from '@/components/cinematic/KnowledgeAnomalyBridge';
 import AipEvalBenchmark from '@/components/cinematic/AipEvalBenchmark';
+import SystemAlertRiskCommand from '@/components/cinematic/SystemAlertRiskCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2073,6 +2074,8 @@ function App() {
             <KnowledgeAnomalyBridge />
             {/* F107 (overnight 2026-08-23): AIP Eval & Benchmark Console (EVLB) — pre-built AipEvalBenchmark.jsx (318 lines) activated; ⊡ EVLB button (left:616320 bottom:8 zIndex:228); EVAL tab: single-prompt evaluation against any configured provider (fetches /v1/aip/providers for model list, fires /v1/jarvis/agent/chat for evaluation); BENCHMARK tab: multi-model benchmark across selected providers; isEvlbQuery+buildEvlbScript already wired in JarvisBrain (line 263 import, line 3615 branch); jarvis:evlb-toggle event; "eval/evaluation/benchmark/aip eval/model eval/run eval/llm eval/run benchmark/model benchmark/test suite/prompt eval/evlb" voice trigger */}
             <AipEvalBenchmark />
+            {/* F108 (overnight 2026-08-23): System Status × Alert × Risk Signal Command Center (SARC) — ◉ SARC button (left:3600 bottom:18 zIndex:68); parallel-fetches /v1/jarvis/system/status + /v1/alerts + /entities/RiskSignal every 60 s; computes DEFCON 1–4 state (CRITICAL/ELEVATED/GUARDED/ALL CLEAR); stat tiles (SVCS DOWN / CRIT ALERTS / CRIT RISKS / SERVICES / ALERTS / RISK SIGNALS); optional CPU/MEM from system status; ALL/SERVICES/ALERTS/RISKS filter tabs + text search; per-service status rows, alert severity rows, risk signal severity rows; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + jarvis:speak-dossier TTS; isSarcQuery+buildSarcScript wired in JarvisBrain; jarvis:sarc-toggle event; "sarc/system command/command center/operational status/defcon/system alert risk/sarc center/ops command" voice trigger */}
+            <SystemAlertRiskCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
