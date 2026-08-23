@@ -664,6 +664,7 @@ import SystemAlertRiskCommand from '@/components/cinematic/SystemAlertRiskComman
 import AlertScenarioResponseMap from '@/components/cinematic/AlertScenarioResponseMap';
 import LiveIntelKnowledgeNexus from '@/components/cinematic/LiveIntelKnowledgeNexus';
 import ReportScenarioDatasetTriple from '@/components/cinematic/ReportScenarioDatasetTriple';
+import InvestigationKnowledgeCoverage from '@/components/cinematic/InvestigationKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2085,6 +2086,8 @@ function App() {
             <LiveIntelKnowledgeNexus />
             {/* F111: Report × Scenario × Dataset Triple (RSDTRI) — ◈ RSDTRI button (left:3780 bottom:18 zIndex:68); parallel-fetches /v1/reports + /v1/scenario/list + /v1/datasets every 90 s; keyword-correlates each report against scenarios AND datasets → FULL_COVERAGE/SCENARIO_ONLY/DATASET_ONLY/DARK; amber badge on dark count; ALL/FULL_COVERAGE/SCENARIO_ONLY/DATASET_ONLY/DARK filter tabs + text search; expand report → matched scenarios + datasets with relevance score bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isRsdtriQuery+buildRsdtriScript wired in JarvisBrain; jarvis:rsdtri-toggle event; "report scenario dataset/rsdtri/report triple/grounded reports/dark reports/report coverage triple" voice trigger */}
             <ReportScenarioDatasetTriple />
+            {/* F112 (overnight 2026-08-23): Investigation × Knowledge Coverage (INVKNOW) — pre-built InvestigationKnowledgeCoverage.jsx (382 lines) activated; parallel-fetches /v1/investigations + /knowledge/ every 90 s; keyword-correlates each investigation against KB articles → SUPPORTED vs BLIND; amber badge on blind count; stat tiles (investigations/articles/supported/blind); ALL/SUPPORTED/BLIND filter tabs + text search; expand investigation → matched articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investigation-knowledge brief + TTS; isInvknowQuery+buildInvknowScript wired in JarvisBrain; jarvis:invknow-toggle event; "investigation knowledge/knowledge for investigations/invknow/research gap/blind investigations" voice trigger */}
+            <InvestigationKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
