@@ -658,6 +658,7 @@ import SwarmJobScenarioIntelligence from '@/components/cinematic/SwarmJobScenari
 import GraphCentralityOpsEvents from '@/components/cinematic/GraphCentralityOpsEvents';
 import ContactAlertCorrelator from '@/components/cinematic/ContactAlertCorrelator';
 import SwarmJobOpsEventsCorrelator from '@/components/cinematic/SwarmJobOpsEventsCorrelator';
+import KnowledgeAnomalyBridge from '@/components/cinematic/KnowledgeAnomalyBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2067,6 +2068,8 @@ function App() {
             <ContactAlertCorrelator />
             {/* F105 (overnight 2026-08-23): SwarmJob × Ops Events Correlator (SJOE) — ◈ SJOE button (left:3480 bottom:18 zIndex:68); parallel-fetches /entities/SwarmJob + /v1/ops/events every 60 s; keyword-correlates each swarm job (name/type/description/tags/target) against live ops events (type/resource/description/service) → TRIGGERED (≥1 match) vs QUIET (0); amber badge on triggered count; stat tiles (jobs/ops evts/triggered/quiet); ALL/TRIGGERED/QUIET filter tabs + text search; expand job → matched ops events with severity badge + relevance score bar (max 6 shown); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-ops brief + jarvis:speak-dossier TTS; isSjoeQuery+buildSjoeScript wired in JarvisBrain; jarvis:sjoe-toggle event; "swarm ops/ops swarm/sjoe/swarm operational/swarm events/swarm ops events/triggered swarm/which swarm jobs have ops events" voice trigger */}
             <SwarmJobOpsEventsCorrelator />
+            {/* F106 (overnight 2026-08-23): Knowledge × Anomaly Intelligence Bridge (KAIB) — ◈ KAIB button (left:3540 bottom:18 zIndex:68); parallel-fetches /knowledge/ + /v1/jarvis/analytics/anomalies every 60 s; keyword-correlates each KB article against active metric anomalies → ALARMED (≥1 match) vs STABLE (0); amber badge on alarmed count; stat tiles (articles/anomalies/alarmed/stable); ALL/ALARMED/STABLE filter tabs + text search; expand article → matched anomaly rows with severity badge + |z| + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + jarvis:speak-dossier TTS; isKaibQuery+buildKaibScript wired in JarvisBrain; jarvis:kaib-toggle event; "knowledge anomaly/anomaly knowledge/kaib/kb anomaly/alarmed knowledge/knowledge metric" voice trigger */}
+            <KnowledgeAnomalyBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

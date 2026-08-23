@@ -709,6 +709,7 @@ import { isOekrQuery, buildOekrScript } from "./OpsEventKnowledgeRiskTriple";
 import { isSjsiQuery, buildSjsiScript } from "./SwarmJobScenarioIntelligence";
 import { isGcoeQuery, buildGcoeScript } from "./GraphCentralityOpsEvents";
 import { isSjoeQuery, buildSjoeScript } from "./SwarmJobOpsEventsCorrelator";
+import { isKaibQuery, buildKaibScript } from "./KnowledgeAnomalyBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7640,6 +7641,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjoe-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSjoeScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKaibQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kaib-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKaibScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
