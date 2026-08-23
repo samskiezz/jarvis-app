@@ -706,6 +706,7 @@ import { isScntaskQuery, buildScntaskScript } from "./ScenarioTaskCoverage";
 import { isIpkcQuery, buildIpkcScript } from "./IntelProfileKnowledgeCoverage";
 import { isIpoecQuery, buildIpoecScript } from "./IntelProfileOpsCorrelator";
 import { isOekrQuery, buildOekrScript } from "./OpsEventKnowledgeRiskTriple";
+import { isSjsiQuery, buildSjsiScript } from "./SwarmJobScenarioIntelligence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7613,6 +7614,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:oekr-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildOekrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSjsiQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjsi-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjsiScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

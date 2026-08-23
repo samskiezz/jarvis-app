@@ -654,6 +654,7 @@ import AlertAnomalyCorrelator from '@/components/cinematic/AlertAnomalyCorrelato
 import IntelProfileOpsCorrelator from '@/components/cinematic/IntelProfileOpsCorrelator';
 import OpsEventKnowledgeRiskTriple from '@/components/cinematic/OpsEventKnowledgeRiskTriple';
 import IntelProfileGraphCentrality from '@/components/cinematic/IntelProfileGraphCentrality';
+import SwarmJobScenarioIntelligence from '@/components/cinematic/SwarmJobScenarioIntelligence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2055,6 +2056,8 @@ function App() {
             <OpsEventKnowledgeRiskTriple />
             {/* F101 (overnight 2026-08-23): Intel Profile × Graph Centrality (IGCP) — pre-built IntelProfileGraphCentrality.jsx activated & mounted; parallel-fetches /entities/IntelProfile + /v1/graph/centrality; keyword-correlates each intel profile against top-centrality graph nodes → HIGH-PROFILE (≥1 match) vs PERIPHERAL; isIgcpQuery+buildIgcpScript already wired in JarvisBrain (line 251 import, line 3522 branch); jarvis:igcp-toggle event; "intel graph centrality/intel profile central/igcp/high profile intel/network intel" voice trigger */}
             <IntelProfileGraphCentrality />
+            {/* F102 (overnight 2026-08-23): SwarmJob × Scenario Intelligence (SJSI) — ◈ SJSI button (left:3360 bottom:18 zIndex:68); parallel-fetches /entities/SwarmJob + /v1/scenario/list every 90 s; keyword-correlates each swarm job against scenarios → PLANNED (≥1 match) vs UNPLANNED (0); amber badge on unplanned count; stat tiles (jobs/scenarios/planned/unplanned); ALL/PLANNED/UNPLANNED filter tabs + text search; expand job → matched scenario cards with type/status badges + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-scenario brief + jarvis:speak-dossier TTS; isSjsiQuery+buildSjsiScript wired in JarvisBrain; jarvis:sjsi-toggle event; "swarm scenario/scenario swarm/sjsi/unplanned swarm/swarm plan/swarm without scenario/swarm scenario coverage" voice trigger */}
+            <SwarmJobScenarioIntelligence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
