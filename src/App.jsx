@@ -667,6 +667,7 @@ import ReportScenarioDatasetTriple from '@/components/cinematic/ReportScenarioDa
 import InvestigationKnowledgeCoverage from '@/components/cinematic/InvestigationKnowledgeCoverage';
 import ScenarioRiskInvestigationTriple from '@/components/cinematic/ScenarioRiskInvestigationTriple';
 import DatasetAlertCorrelator from '@/components/cinematic/DatasetAlertCorrelator';
+import ContactAnomalyCorrelator from '@/components/cinematic/ContactAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2094,6 +2095,8 @@ function App() {
             <ScenarioRiskInvestigationTriple />
             {/* F115 (overnight 2026-08-23): Dataset × Alert Correlator (DSAL) — pre-built DatasetAlertCorrelator.jsx (336 lines) activated & mounted in App.jsx; parallel-fetches /v1/datasets + /v1/alerts; keyword-correlates each dataset against active alerts → EXPOSED (≥1 match) vs CLEAR (0); amber badge on exposed count; isDsalQuery+buildDsalScript already wired in JarvisBrain (line 291 import, line 3882 branch); jarvis:dsal-toggle event; "dataset alert/alert dataset/dsal/datasets with alert/exposed dataset/which datasets have alert" voice trigger */}
             <DatasetAlertCorrelator />
+            {/* F116 (overnight 2026-08-23): Contact × Anomaly Correlator (CACR) — pre-built ContactAnomalyCorrelator.jsx (368 lines) activated & mounted; parallel-fetches /entities/Contact + /v1/jarvis/analytics/anomalies every 90 s; keyword-correlates each contact (name/email/title/company) against active metric anomalies → FLAGGED (≥1 match) vs CLEAR; amber badge on flagged count; stat tiles (contacts/anomalies/flagged/clear); ALL/FLAGGED/CLEAR filter tabs + text search; expand contact → matched anomalies with |z| bar + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isContactAnomalyQuery+buildContactAnomalyScript already wired in JarvisBrain (line 256 import, line 3567 branch); jarvis:cacr-toggle event; "contact anomaly/anomaly contact/cacr/flagged contacts/contacts with anomaly" voice trigger */}
+            <ContactAnomalyCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
