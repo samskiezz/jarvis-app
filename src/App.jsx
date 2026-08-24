@@ -678,6 +678,7 @@ import InvestmentGraphCentrality from '@/components/cinematic/InvestmentGraphCen
 import AlertGraphCentralityMonitor from '@/components/cinematic/AlertGraphCentralityMonitor';
 import InvestmentAlertCorrelator from '@/components/cinematic/InvestmentAlertCorrelator';
 import SwarmJobAlertMonitor from '@/components/cinematic/SwarmJobAlertMonitor';
+import AlertKnowledgeBridge from '@/components/cinematic/AlertKnowledgeBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2127,6 +2128,8 @@ function App() {
             <InvestmentAlertCorrelator />
             {/* F126 (overnight 2026-08-24): SwarmJob × Alert Exposure Monitor (SJAM) — ◈ SJAM button (left:4260 bottom:18 zIndex:68); parallel-fetches /entities/SwarmJob + /v1/alerts every 60 s; keyword-correlates each swarm job (name/description/target/objective/tags) against active alerts (type/category/message/title/source/severity) → TRIGGERED (≥1 match) vs QUIET (0); amber badge on triggered count; stat tiles (jobs/alerts/triggered/quiet); ALL/TRIGGERED/QUIET filter tabs + text search; expand job → matched alerts with severity badge + relevance score bar (max 6 shown); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-alert exposure brief + jarvis:speak-dossier TTS; isSjamQuery+buildSjamScript wired in JarvisBrain; jarvis:sjam-toggle event; "swarm alert/alert swarm/sjam/triggered swarm/swarm exposure/swarm alerts/which swarm jobs have alerts/swarm alert exposure" voice trigger */}
             <SwarmJobAlertMonitor />
+            {/* F127 (overnight 2026-08-24): Alert × Knowledge Intelligence Bridge (AKIB) — /v1/alerts + /knowledge/ → keyword-correlates each active alert against KB articles → DOCUMENTED (≥1 match) vs UNDOCUMENTED; amber badge on undocumented count; ◈ AKIB button (left:4320 bottom:18 zIndex:68); stat tiles (alerts/KB articles/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + text search; expand alert → matched KB articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isAkibQuery+buildAkibScript wired in JarvisBrain; jarvis:akib-toggle event; 90-s auto-refresh */}
+            <AlertKnowledgeBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
