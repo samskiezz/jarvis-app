@@ -1,0 +1,1 @@
+[2026-08-24] F01 ⌘K command palette: Extended CommandPalette.jsx with 50 JARVIS action commands (JARVIS group) that dispatch jarvis:ask events; navigation + action commands; build verified (vite exit 0).
