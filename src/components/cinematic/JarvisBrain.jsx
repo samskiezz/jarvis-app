@@ -727,6 +727,7 @@ import { isLigncQuery, buildLigncScript } from "./LiveIntelGraphNexus";
 import { isSjkaQuery, buildSjkaScript } from "./SwarmJobKnowledgeAlignment";
 import { isIpscQuery, buildIpscScript } from "./IntelProfileSwarmJobCoverage";
 import { isCgcmQuery, buildCgcmScript } from "./ContactGraphCentralityMap";
+import { isCoatQuery, buildCoatScript } from "./ContactOpsAlertTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7802,6 +7803,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cgcm-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCgcmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCoatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:coat-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCoatScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
