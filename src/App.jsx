@@ -693,6 +693,7 @@ import InvestigationAnomalyCorrelator from '@/components/cinematic/Investigation
 import TemporalRiskPulse from '@/components/cinematic/TemporalRiskPulse';
 import OpsDatasetCoverage from '@/components/cinematic/OpsDatasetCoverage';
 import SystemStatusInvestigationBridge from '@/components/cinematic/SystemStatusInvestigationBridge';
+import FullStackIntelDashboard from '@/components/cinematic/FullStackIntelDashboard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2172,6 +2173,8 @@ function App() {
             <OpsDatasetCoverage />
             {/* F435 (overnight 2026-08-24): System Status × Investigation Bridge (SSIHB) — parallel-fetches /v1/jarvis/system/status + /v1/investigations; keyword-correlates each service/metric against open case titles/descriptions → INVESTIGATED (degraded + has case) vs UNMONITORED (degraded + no case) vs HEALTHY; amber badge on unmonitored count; ◈ SSIHB button (left:881200, bottom:8, zIndex:582); stat tiles (services/cases/investigated/unmonitored); ALL/INVESTIGATED/UNMONITORED/HEALTHY filter tabs + text search; expand service → matched investigations with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence infrastructure-investigation brief + jarvis:speak-dossier TTS; isSsihbQuery+buildSsihbScript wired in JarvisBrain; jarvis:ssihb-toggle event; "system investigation / status case / ssihb / system health case / infrastructure investigation / degraded service case" voice trigger; 60-s auto-refresh */}
             <SystemStatusInvestigationBridge />
+            {/* F242 (overnight 2026-08-24): Full-Stack Intelligence Dashboard (FSID) — parallel-fetches /v1/jarvis/system/status + /entities/RiskSignal + /v1/investigations + /v1/ops/events + /functions/getLiveIntel every 60s; DEFCON 1-4 computation; 6 stat tiles; 4 expandable sections (RISK SIGNALS, OPEN INVESTIGATIONS, OPS EVENTS, WORLD INTEL); ▶ BRIEF → /v1/jarvis/agent/chat 3-sentence cross-domain brief + jarvis:speak-dossier TTS; isFsidQuery+buildFsidScript wired in JarvisBrain; jarvis:fsid-toggle event; "fsid / full dash / unified intel / situational aware / ops center / full intel / all streams" voice trigger */}
+            <FullStackIntelDashboard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

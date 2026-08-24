@@ -733,6 +733,7 @@ import { isCoatQuery, buildCoatScript } from "./ContactOpsAlertTriple";
 import { isSrisvQuery, buildSrisvScript } from "./SceneRiskInvestigationCoverage";
 import { isClieQuery, buildClieScript } from "./ContactLiveIntelExposure";
 import { isSsihbQuery, buildSsihbScript } from "./SystemStatusInvestigationBridge";
+import { isFsidQuery, buildFsidScript } from "./FullStackIntelDashboard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7859,6 +7860,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ssihb-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSsihbScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F242 — Full-Stack Intelligence Dashboard
+    if (isFsidQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:fsid-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildFsidScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
