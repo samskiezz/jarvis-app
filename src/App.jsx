@@ -696,6 +696,7 @@ import SystemStatusInvestigationBridge from '@/components/cinematic/SystemStatus
 import FullStackIntelDashboard from '@/components/cinematic/FullStackIntelDashboard';
 import ThreatForecastEngine from '@/components/cinematic/ThreatForecastEngine';
 import LiveIntelSkillNexus from '@/components/cinematic/LiveIntelSkillNexus';
+import RiskSignalScenarioKnowledge from '@/components/cinematic/RiskSignalScenarioKnowledge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2181,6 +2182,8 @@ function App() {
             <ThreatForecastEngine />
             {/* F243 (overnight 2026-08-24): Live Intel × AIP Skill Nexus (LISN) — /functions/getLiveIntel + /v1/aip/skill; keyword-correlates each live seismic/crypto/FX event against AIP skills → ACTIVE (≥1 match) vs UNRESOURCED (0); amber badge on unresourced count; ◈ LISN button left:5040 bottom:18 zIndex:68; isLisnQuery+buildLisnScript wired in JarvisBrain; jarvis:lisn-toggle event; 60-s auto-refresh; "live intel skill/skill nexus/lisn/unresourced events/live skill/world event skill/aip nexus" voice trigger */}
             <LiveIntelSkillNexus />
+            {/* F244 (overnight 2026-08-24): RiskSignal × Scenario × Knowledge Coverage (RSKC) — parallel-fetches /entities/RiskSignal + /v1/scenario/list + /knowledge/; keyword-correlates each risk signal against scenarios AND KB articles → FULL_COVERAGE/SCENARIO_ONLY/KB_ONLY/DARK; red badge on dark count; ◈ RSKC button left:5100 bottom:18 zIndex:68; isRskcQuery+buildRskcScript wired in JarvisBrain; jarvis:rskc-toggle event; 90-s auto-refresh; "risk scenario knowledge / rskc / dark risks / scenario knowledge / risk coverage triple" voice trigger */}
+            <RiskSignalScenarioKnowledge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

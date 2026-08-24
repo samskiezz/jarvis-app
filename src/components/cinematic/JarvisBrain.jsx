@@ -349,6 +349,7 @@ import { isInvscnQuery, buildInvscnScript } from "./InvestigationScenarioCoverag
 import { isDsliveQuery, buildDsliveScript } from "./LiveIntelDatasetCoverage";
 import { isGcinvQuery, buildGcinvScript } from "./GraphCommunityInvestmentCoverage";
 import { isLisnQuery, buildLisnScript } from "./LiveIntelSkillNexus";
+import { isRskcQuery, buildRskcScript } from "./RiskSignalScenarioKnowledge";
 import { isGcontQuery, buildGcontScript } from "./GraphCommunityContactCoverage";
 import { isGcskQuery, buildGcskScript } from "./GraphCommunitySkillCoverage";
 import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCoverage";
@@ -7879,6 +7880,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:lisn-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLisnScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F244 — RiskSignal × Scenario × Knowledge Coverage
+    if (isRskcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rskc-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRskcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
