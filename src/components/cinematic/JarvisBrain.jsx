@@ -298,6 +298,7 @@ import { isInvRptQuery, buildInvRptScript } from "./InvestmentReportCoverage";
 import { isRsrptQuery, buildRsrptScript } from "./RiskSignalReportCoverage";
 import { isOedcQuery, buildOedcScript } from "./OpsEventDecisionCoverage";
 import { isIavrQuery, buildIavrScript } from "./InvestigationAnomalyCorrelator";
+import { isTarpQuery, buildTarpScript } from "./TemporalRiskPulse";
 import { isDdcvQuery, buildDdcvScript } from "./DatasetDecisionCoverage";
 import { isAldcQuery, buildAldcScript } from "./AlertDecisionCoverage";
 import { isTkrpQuery, buildTkrpScript, isTrcvQuery, buildTrcvScript } from "./TaskReportCoverage";
@@ -3995,6 +3996,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iavr-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIavrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTarpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tarp-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTarpScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

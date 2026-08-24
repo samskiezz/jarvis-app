@@ -690,6 +690,7 @@ import GraphNodeAlertCoverage from '@/components/cinematic/GraphNodeAlertCoverag
 import LiveIntelScenarioMapper from '@/components/cinematic/LiveIntelScenarioMapper';
 import SceneRiskInvestigationCoverage from '@/components/cinematic/SceneRiskInvestigationCoverage';
 import InvestigationAnomalyCorrelator from '@/components/cinematic/InvestigationAnomalyCorrelator';
+import TemporalRiskPulse from '@/components/cinematic/TemporalRiskPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2163,6 +2164,8 @@ function App() {
             <SceneRiskInvestigationCoverage />
             {/* F-IAVR (overnight 2026-08-24): Investigation × Anomaly Correlator (IAVR) — pre-built InvestigationAnomalyCorrelator.jsx activated & mounted; parallel-fetches /v1/investigations + /v1/jarvis/analytics/anomalies?limit=30 every 90 s; keyword-correlates each investigation against active metric anomalies → BACKED (≥1 match) vs UNBACKED (0); isIavrQuery+buildIavrScript wired in JarvisBrain (line 300 import, line 3994 branch); jarvis:iavr-toggle event; "investigation anomaly / iavr / case anomaly" voice trigger */}
             <InvestigationAnomalyCorrelator />
+            {/* F239 (overnight 2026-08-24): JARVIS Temporal Risk Pulse (TARP) — /entities/RiskSignal + /v1/ops/events; bins into 1h/6h/24h/72h/7d time windows; stacked heat-row grid; ACCELERATING/STEADY/COOLING state; isTarpQuery+buildTarpScript wired in JarvisBrain; jarvis:tarp-toggle event */}
+            <TemporalRiskPulse />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
