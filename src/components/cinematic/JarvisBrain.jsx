@@ -732,6 +732,7 @@ import { isCgcmQuery, buildCgcmScript } from "./ContactGraphCentralityMap";
 import { isCoatQuery, buildCoatScript } from "./ContactOpsAlertTriple";
 import { isSrisvQuery, buildSrisvScript } from "./SceneRiskInvestigationCoverage";
 import { isClieQuery, buildClieScript } from "./ContactLiveIntelExposure";
+import { isSsihbQuery, buildSsihbScript } from "./SystemStatusInvestigationBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7849,6 +7850,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:srisv-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSrisvScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F435 — System Status × Investigation Bridge
+    if (isSsihbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssihb-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSsihbScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

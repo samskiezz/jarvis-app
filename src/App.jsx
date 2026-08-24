@@ -692,6 +692,7 @@ import SceneRiskInvestigationCoverage from '@/components/cinematic/SceneRiskInve
 import InvestigationAnomalyCorrelator from '@/components/cinematic/InvestigationAnomalyCorrelator';
 import TemporalRiskPulse from '@/components/cinematic/TemporalRiskPulse';
 import OpsDatasetCoverage from '@/components/cinematic/OpsDatasetCoverage';
+import SystemStatusInvestigationBridge from '@/components/cinematic/SystemStatusInvestigationBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2169,6 +2170,8 @@ function App() {
             <TemporalRiskPulse />
             {/* F240 (overnight 2026-08-24): Ops Event × Dataset Coverage (EVTDS) — pre-built OpsDatasetCoverage.jsx activated & mounted; parallel-fetches /v1/ops/events?limit=200 + /v1/datasets every 90 s; keyword-correlates each ops event against dataset catalog → COVERED (≥1 match) vs BLIND (0); isEvtdsQuery+buildEvtdsScript wired in JarvisBrain; jarvis:evtds-toggle event; "ops dataset / event data gap / data blind / evtds" voice trigger */}
             <OpsDatasetCoverage />
+            {/* F435 (overnight 2026-08-24): System Status × Investigation Bridge (SSIHB) — parallel-fetches /v1/jarvis/system/status + /v1/investigations; keyword-correlates each service/metric against open case titles/descriptions → INVESTIGATED (degraded + has case) vs UNMONITORED (degraded + no case) vs HEALTHY; amber badge on unmonitored count; ◈ SSIHB button (left:881200, bottom:8, zIndex:582); stat tiles (services/cases/investigated/unmonitored); ALL/INVESTIGATED/UNMONITORED/HEALTHY filter tabs + text search; expand service → matched investigations with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence infrastructure-investigation brief + jarvis:speak-dossier TTS; isSsihbQuery+buildSsihbScript wired in JarvisBrain; jarvis:ssihb-toggle event; "system investigation / status case / ssihb / system health case / infrastructure investigation / degraded service case" voice trigger; 60-s auto-refresh */}
+            <SystemStatusInvestigationBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
