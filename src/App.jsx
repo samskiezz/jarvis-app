@@ -679,6 +679,7 @@ import AlertGraphCentralityMonitor from '@/components/cinematic/AlertGraphCentra
 import InvestmentAlertCorrelator from '@/components/cinematic/InvestmentAlertCorrelator';
 import SwarmJobAlertMonitor from '@/components/cinematic/SwarmJobAlertMonitor';
 import AlertKnowledgeBridge from '@/components/cinematic/AlertKnowledgeBridge';
+import LiveIntelGraphNexus from '@/components/cinematic/LiveIntelGraphNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2130,6 +2131,8 @@ function App() {
             <SwarmJobAlertMonitor />
             {/* F127 (overnight 2026-08-24): Alert × Knowledge Intelligence Bridge (AKIB) — /v1/alerts + /knowledge/ → keyword-correlates each active alert against KB articles → DOCUMENTED (≥1 match) vs UNDOCUMENTED; amber badge on undocumented count; ◈ AKIB button (left:4320 bottom:18 zIndex:68); stat tiles (alerts/KB articles/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + text search; expand alert → matched KB articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isAkibQuery+buildAkibScript wired in JarvisBrain; jarvis:akib-toggle event; 90-s auto-refresh */}
             <AlertKnowledgeBridge />
+            {/* F128 (overnight 2026-08-24): Live Intel × Graph Centrality Nexus (LIGNC) — /functions/getLiveIntel + /v1/graph/centrality → keyword-correlates each top-centrality graph node against live world events (seismic/crypto/FX) → ACTIVE (≥1 match) vs DORMANT; amber badge on active count; ◈ LIGNC button (left:4380 bottom:18 zIndex:68); stat tiles (nodes/live events/active/dormant); ALL/ACTIVE/DORMANT filter tabs + text search; expand node → matched events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLigncQuery+buildLigncScript wired in JarvisBrain; jarvis:lignc-toggle event; 60-s auto-refresh */}
+            <LiveIntelGraphNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
