@@ -721,6 +721,7 @@ import { isIkrtQuery, buildIkrtScript } from "./InvestmentKnowledgeReportTriple"
 import { isCsjrtQuery, buildCsjrtScript } from "./ContactSwarmJobReportTriple";
 import { isTkatQuery, buildTkatScript } from "./TaskKnowledgeAnomalyTriple";
 import { isAgcmQuery, buildAgcmScript } from "./AlertGraphCentralityMonitor";
+import { isSjamQuery, buildSjamScript } from "./SwarmJobAlertMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7748,6 +7749,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:agcm-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAgcmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSjamQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjam-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjamScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

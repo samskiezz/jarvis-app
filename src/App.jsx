@@ -677,6 +677,7 @@ import ScenarioAnomalyCorrelator from '@/components/cinematic/ScenarioAnomalyCor
 import InvestmentGraphCentrality from '@/components/cinematic/InvestmentGraphCentrality';
 import AlertGraphCentralityMonitor from '@/components/cinematic/AlertGraphCentralityMonitor';
 import InvestmentAlertCorrelator from '@/components/cinematic/InvestmentAlertCorrelator';
+import SwarmJobAlertMonitor from '@/components/cinematic/SwarmJobAlertMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2124,6 +2125,8 @@ function App() {
             <AlertGraphCentralityMonitor />
             {/* F125 (overnight 2026-08-24): Investment × Alert Correlator (IACR) — pre-built InvestmentAlertCorrelator.jsx activated & mounted; parallel-fetches /entities/Investment + /v1/alerts every 90 s; keyword-correlates each investment against active alerts → EXPOSED (≥1 match) vs CLEAR (0); red badge on exposed count; stat tiles (investments/alerts/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched alerts with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-alert exposure brief + jarvis:speak-dossier TTS; isIacrQuery+buildIacrScript already wired in JarvisBrain (line 236 import, line 3401 branch); jarvis:iacr-toggle event; "investment alert/alert investment/iacr/exposed investments/risky investments/investments with alerts" voice trigger */}
             <InvestmentAlertCorrelator />
+            {/* F126 (overnight 2026-08-24): SwarmJob × Alert Exposure Monitor (SJAM) — ◈ SJAM button (left:4260 bottom:18 zIndex:68); parallel-fetches /entities/SwarmJob + /v1/alerts every 60 s; keyword-correlates each swarm job (name/description/target/objective/tags) against active alerts (type/category/message/title/source/severity) → TRIGGERED (≥1 match) vs QUIET (0); amber badge on triggered count; stat tiles (jobs/alerts/triggered/quiet); ALL/TRIGGERED/QUIET filter tabs + text search; expand job → matched alerts with severity badge + relevance score bar (max 6 shown); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm-alert exposure brief + jarvis:speak-dossier TTS; isSjamQuery+buildSjamScript wired in JarvisBrain; jarvis:sjam-toggle event; "swarm alert/alert swarm/sjam/triggered swarm/swarm exposure/swarm alerts/which swarm jobs have alerts/swarm alert exposure" voice trigger */}
+            <SwarmJobAlertMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
