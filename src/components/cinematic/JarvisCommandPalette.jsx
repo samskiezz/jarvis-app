@@ -155,22 +155,6 @@ export default function JarvisCommandPalette() {
 
   return (
     <>
-      {/* Toggle button — always visible on non-APEX routes */}
-      {!isApex && (
-        <button
-          onClick={() => setOpen((v) => !v)}
-          title="Command Palette (⌘K)"
-          style={{
-            position: "fixed", bottom: 10, left: 2988, zIndex: 80,
-            background: open ? "rgba(41,231,255,0.18)" : "rgba(5,12,20,0.75)",
-            border: `1px solid ${open ? CY : "rgba(41,231,255,0.2)"}`,
-            color: CY, fontFamily: MONO, fontSize: 10, letterSpacing: 1.2,
-            padding: "4px 8px", borderRadius: 6, cursor: "pointer", whiteSpace: "nowrap",
-            backdropFilter: "blur(6px)",
-          }}
-        >⌘K PAL</button>
-      )}
-
       {/* Palette overlay */}
       {!isApex && open && (
         <div
