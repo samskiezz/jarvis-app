@@ -191,6 +191,7 @@ import SwarmGraphConvergence from '@/components/cinematic/SwarmGraphConvergence'
 import SnapshotTracker from '@/components/cinematic/SnapshotTracker';
 import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRate';
 import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage';
+import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -566,6 +567,8 @@ function App() {
             <InvestigationCloseRate />
             {/* F165 (overnight 2026-07-05): graph node × task coverage — ◈ GNTASK button (left:54520, bottom:8, zIndex:107); parallel-fetches /v1/graph/centrality + /entities/Task; keyword-correlates each top-influence node against the task catalog to surface TASKED (active task coverage) vs UNMANAGED (no operational task — priority gap); violet badge on unmanaged count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence influence-coverage brief + TTS; "graph node task"/"node task coverage"/"high influence task"/"gntask" voice trigger; jarvis:gntask-toggle event; 90-s auto-refresh */}
             <GraphNodeTaskCoverage />
+            {/* F46 (overnight 2026-08-24): skill gap advisor — ◈ SKLGAP button; fetches /v1/aip/skill, identifies lowest-scoring skills, sends each to /v1/jarvis/agent/chat for AI training recommendations; "skill gap"/"training plan"/"how do I improve"/"learning plan" voice trigger */}
+            <SkillGapAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
