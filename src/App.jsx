@@ -685,6 +685,7 @@ import IntelProfileSwarmJobCoverage from '@/components/cinematic/IntelProfileSwa
 import ContactGraphCentralityMap from '@/components/cinematic/ContactGraphCentralityMap';
 import InvestmentScenarioPlanner from '@/components/cinematic/InvestmentScenarioPlanner';
 import InvestmentAnomalyCorrelator from '@/components/cinematic/InvestmentAnomalyCorrelator';
+import GraphNodeAlertCoverage from '@/components/cinematic/GraphNodeAlertCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2148,6 +2149,8 @@ function App() {
             <InvestmentScenarioPlanner />
             {/* F133 (overnight 2026-08-24): Investment × Anomaly Correlator (IVAC) — pre-built InvestmentAnomalyCorrelator.jsx (362 lines) activated & mounted; parallel-fetches /entities/Investment + /v1/jarvis/analytics/anomalies?limit=30 every 90 s; keyword-correlates each investment (title/name/description/sector/type/ticker) against active metric anomalies (metric/name/description/kind/source) → EXPOSED (≥1 match) vs CLEAR (0); red badge on exposed count; ◈ IVAC button (left:602640 bottom:8 zIndex:225); stat tiles (investments/anomalies/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched anomaly rows with severity badge + |z|/relevance score bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio anomaly brief + jarvis:speak-dossier TTS; isIvacQuery+buildIvacScript already wired in JarvisBrain (line 260 import, line 3605 branch); jarvis:ivac-toggle event; "investment anomaly / anomaly investment / ivac / exposed investment / investment metric / investment z-score / investment anomaly correlator" voice trigger */}
             <InvestmentAnomalyCorrelator />
+            {/* F170 (overnight 2026-08-24): Graph Node × Alert Coverage (GNAC) — pre-built GraphNodeAlertCoverage.jsx activated & mounted; parallel-fetches /v1/graph/centrality + /v1/alerts every 60 s; keyword-correlates each top-centrality node against active alerts → ALERTED (≥1 match) vs CLEAR (0); amber badge on alerted count; ◈ GNAC button (left:566160 bottom:8 zIndex:217); stat tiles (nodes/alerts/alerted/clear); ALL/ALERTED/CLEAR filter tabs + text search; expand node → matched alerts with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-alert brief + jarvis:speak-dossier TTS; isGnacQuery+buildGnacScript already wired in JarvisBrain (line 250 import, line 3533 branch); jarvis:gnac-toggle event; "graph alerts / central node alerts / gnac / node alert coverage / which nodes have alerts / alerted nodes / network alert coverage" voice trigger */}
+            <GraphNodeAlertCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
