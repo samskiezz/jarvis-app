@@ -695,6 +695,7 @@ import OpsDatasetCoverage from '@/components/cinematic/OpsDatasetCoverage';
 import SystemStatusInvestigationBridge from '@/components/cinematic/SystemStatusInvestigationBridge';
 import FullStackIntelDashboard from '@/components/cinematic/FullStackIntelDashboard';
 import ThreatForecastEngine from '@/components/cinematic/ThreatForecastEngine';
+import LiveIntelSkillNexus from '@/components/cinematic/LiveIntelSkillNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2178,6 +2179,8 @@ function App() {
             <FullStackIntelDashboard />
             {/* F200 (overnight 2026-08-24): Threat Forecast Engine (FCAST) — parallel-fetches /entities/RiskSignal + /functions/getLiveIntel; sends real context to /v1/jarvis/agent/chat for a forward-looking 3-sentence 24h threat forecast; risk-level gauge (LOW/ELEVATED/HIGH/CRITICAL); ▶ REFRESH re-runs AI forecast on demand; ⬡ FCAST button left:73008 bottom:8 zIndex:110; jarvis:forecast-toggle event; Ctrl+Shift+F hotkey; 5-min auto-poll; isForecastQuery+buildForecastScript already wired in JarvisBrain (line 72 import, line 1588 handler); "forecast/threat forecast/24h risk/predict threats/risk prediction/risk outlook/what's coming" voice trigger */}
             <ThreatForecastEngine />
+            {/* F243 (overnight 2026-08-24): Live Intel × AIP Skill Nexus (LISN) — /functions/getLiveIntel + /v1/aip/skill; keyword-correlates each live seismic/crypto/FX event against AIP skills → ACTIVE (≥1 match) vs UNRESOURCED (0); amber badge on unresourced count; ◈ LISN button left:5040 bottom:18 zIndex:68; isLisnQuery+buildLisnScript wired in JarvisBrain; jarvis:lisn-toggle event; 60-s auto-refresh; "live intel skill/skill nexus/lisn/unresourced events/live skill/world event skill/aip nexus" voice trigger */}
+            <LiveIntelSkillNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

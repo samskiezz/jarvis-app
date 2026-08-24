@@ -348,6 +348,7 @@ import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
 import { isInvscnQuery, buildInvscnScript } from "./InvestigationScenarioCoverage";
 import { isDsliveQuery, buildDsliveScript } from "./LiveIntelDatasetCoverage";
 import { isGcinvQuery, buildGcinvScript } from "./GraphCommunityInvestmentCoverage";
+import { isLisnQuery, buildLisnScript } from "./LiveIntelSkillNexus";
 import { isGcontQuery, buildGcontScript } from "./GraphCommunityContactCoverage";
 import { isGcskQuery, buildGcskScript } from "./GraphCommunitySkillCoverage";
 import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCoverage";
@@ -7869,6 +7870,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:fsid-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildFsidScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F243 — Live Intel × AIP Skill Nexus
+    if (isLisnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lisn-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLisnScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
