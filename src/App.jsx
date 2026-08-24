@@ -682,6 +682,7 @@ import AlertKnowledgeBridge from '@/components/cinematic/AlertKnowledgeBridge';
 import LiveIntelGraphNexus from '@/components/cinematic/LiveIntelGraphNexus';
 import SwarmJobKnowledgeAlignment from '@/components/cinematic/SwarmJobKnowledgeAlignment';
 import IntelProfileSwarmJobCoverage from '@/components/cinematic/IntelProfileSwarmJobCoverage';
+import ContactGraphCentralityMap from '@/components/cinematic/ContactGraphCentralityMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2139,6 +2140,8 @@ function App() {
             <SwarmJobKnowledgeAlignment />
             {/* F130 (overnight 2026-08-24): IntelProfile × SwarmJob Coverage (IPSC) — /entities/IntelProfile + /entities/SwarmJob → keyword-correlates each intel profile (name/description/aliases/tags/role/organization) against active swarm jobs (name/description/target/objective/tags) → ASSIGNED (≥1 match) vs UNASSIGNED (0); amber badge on unassigned count; ◈ IPSC button (left:4500 bottom:18 zIndex:68); stat tiles (profiles/jobs/assigned/unassigned); ALL/ASSIGNED/UNASSIGNED filter tabs + text search; expand profile → matched swarm jobs with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIpscQuery+buildIpscScript wired in JarvisBrain; jarvis:ipsc-toggle event; 90-s auto-refresh */}
             <IntelProfileSwarmJobCoverage />
+            {/* F131 (overnight 2026-08-24): Contact × Graph Centrality Intelligence Map (CGCM) — ◈ CGCM button (left:4560 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /v1/graph/centrality every 90 s; keyword-correlates each contact against top-centrality graph nodes → HIGH_INFLUENCE (≥1 match) vs PERIPHERAL; amber badge on high-influence count; stat tiles (contacts/nodes/high-influence/peripheral); ALL/HIGH_INFLUENCE/PERIPHERAL filter tabs + text search; expand contact → matched nodes with type badge + centrality bar + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCgcmQuery+buildCgcmScript wired in JarvisBrain; jarvis:cgcm-toggle event; "contact graph / cgcm / influential contacts / contact centrality / contact network / central contacts" voice trigger */}
+            <ContactGraphCentralityMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
