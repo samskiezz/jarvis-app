@@ -688,6 +688,7 @@ import InvestmentScenarioPlanner from '@/components/cinematic/InvestmentScenario
 import InvestmentAnomalyCorrelator from '@/components/cinematic/InvestmentAnomalyCorrelator';
 import GraphNodeAlertCoverage from '@/components/cinematic/GraphNodeAlertCoverage';
 import LiveIntelScenarioMapper from '@/components/cinematic/LiveIntelScenarioMapper';
+import SceneRiskInvestigationCoverage from '@/components/cinematic/SceneRiskInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2157,6 +2158,8 @@ function App() {
             <GraphNodeAlertCoverage />
             {/* F212 (overnight 2026-08-24): Live Intel × Scenario Mapper (LISC) — parallel-fetches /functions/getLiveIntel + /v1/scenario/list every 5 min; keyword-correlates each live seismic/crypto/FX event against scenario catalog → COVERED / UNPLANNED; ◈ LISC toggle; isLiscQuery+buildLiscScript wired in JarvisBrain; jarvis:lisc-toggle event */}
             <LiveIntelScenarioMapper />
+            {/* F235 (overnight 2026-08-24): Scene × Risk Signal × Investigation Coverage (SRISV) — parallel-fetches all 10 /v1/cinematic/scene/{id} + /entities/RiskSignal + /v1/investigations; keyword-correlates each scene's anchor data against active risk signals AND open investigations → DUAL_COVERAGE/RISK_ONLY/INV_ONLY/DARK; red badge on dark count; ◈ SRISV button (left:4740 bottom:18 zIndex:68); stat tiles (scenes/risk signals/investigations/dual/risk-only/inv-only/dark); ALL/DUAL_COVERAGE/RISK_ONLY/INV_ONLY/DARK filter tabs + text search; expand scene → matched risk signals with severity badge + relevance score bar + matched investigations with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene intelligence brief + jarvis:speak-dossier TTS; isSrisvQuery+buildSrisvScript wired in JarvisBrain; jarvis:srisv-toggle event; 90-s auto-refresh; "scene risk / cinematic coverage / scene investigation / srisv / scene intelligence / which scenes are live / scene ground truth / cinematic risk / scene intel / live scenes" voice trigger */}
+            <SceneRiskInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

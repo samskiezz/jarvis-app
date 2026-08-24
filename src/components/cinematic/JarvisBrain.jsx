@@ -728,6 +728,7 @@ import { isSjkaQuery, buildSjkaScript } from "./SwarmJobKnowledgeAlignment";
 import { isIpscQuery, buildIpscScript } from "./IntelProfileSwarmJobCoverage";
 import { isCgcmQuery, buildCgcmScript } from "./ContactGraphCentralityMap";
 import { isCoatQuery, buildCoatScript } from "./ContactOpsAlertTriple";
+import { isSrisvQuery, buildSrisvScript } from "./SceneRiskInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7811,6 +7812,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:coat-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCoatScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSrisvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srisv-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSrisvScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
