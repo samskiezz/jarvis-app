@@ -694,6 +694,7 @@ import TemporalRiskPulse from '@/components/cinematic/TemporalRiskPulse';
 import OpsDatasetCoverage from '@/components/cinematic/OpsDatasetCoverage';
 import SystemStatusInvestigationBridge from '@/components/cinematic/SystemStatusInvestigationBridge';
 import FullStackIntelDashboard from '@/components/cinematic/FullStackIntelDashboard';
+import ThreatForecastEngine from '@/components/cinematic/ThreatForecastEngine';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2175,6 +2176,8 @@ function App() {
             <SystemStatusInvestigationBridge />
             {/* F242 (overnight 2026-08-24): Full-Stack Intelligence Dashboard (FSID) — parallel-fetches /v1/jarvis/system/status + /entities/RiskSignal + /v1/investigations + /v1/ops/events + /functions/getLiveIntel every 60s; DEFCON 1-4 computation; 6 stat tiles; 4 expandable sections (RISK SIGNALS, OPEN INVESTIGATIONS, OPS EVENTS, WORLD INTEL); ▶ BRIEF → /v1/jarvis/agent/chat 3-sentence cross-domain brief + jarvis:speak-dossier TTS; isFsidQuery+buildFsidScript wired in JarvisBrain; jarvis:fsid-toggle event; "fsid / full dash / unified intel / situational aware / ops center / full intel / all streams" voice trigger */}
             <FullStackIntelDashboard />
+            {/* F200 (overnight 2026-08-24): Threat Forecast Engine (FCAST) — parallel-fetches /entities/RiskSignal + /functions/getLiveIntel; sends real context to /v1/jarvis/agent/chat for a forward-looking 3-sentence 24h threat forecast; risk-level gauge (LOW/ELEVATED/HIGH/CRITICAL); ▶ REFRESH re-runs AI forecast on demand; ⬡ FCAST button left:73008 bottom:8 zIndex:110; jarvis:forecast-toggle event; Ctrl+Shift+F hotkey; 5-min auto-poll; isForecastQuery+buildForecastScript already wired in JarvisBrain (line 72 import, line 1588 handler); "forecast/threat forecast/24h risk/predict threats/risk prediction/risk outlook/what's coming" voice trigger */}
+            <ThreatForecastEngine />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
