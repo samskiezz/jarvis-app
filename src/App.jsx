@@ -676,6 +676,7 @@ import TaskKnowledgeAnomalyTriple from '@/components/cinematic/TaskKnowledgeAnom
 import ScenarioAnomalyCorrelator from '@/components/cinematic/ScenarioAnomalyCorrelator';
 import InvestmentGraphCentrality from '@/components/cinematic/InvestmentGraphCentrality';
 import AlertGraphCentralityMonitor from '@/components/cinematic/AlertGraphCentralityMonitor';
+import InvestmentAlertCorrelator from '@/components/cinematic/InvestmentAlertCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2121,6 +2122,8 @@ function App() {
             <InvestmentGraphCentrality />
             {/* F124 (overnight 2026-08-23): Alert × Graph Centrality Monitor (AGCM) — ◈ AGCM button (left:4200 bottom:18 zIndex:68); parallel-fetches /v1/alerts + /v1/graph/centrality every 60 s; keyword-correlates each alert against top-centrality graph nodes → CENTRAL (≥1 match) vs PERIPHERAL (0); amber badge on central count; stat tiles (alerts/nodes/central/peripheral); ALL/CENTRAL/PERIPHERAL filter tabs + text search; expand alert → matched nodes with centrality score + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isAgcmQuery+buildAgcmScript wired in JarvisBrain; jarvis:agcm-toggle event; "alert graph/graph alert/agcm/central alerts/alert centrality/which alerts affect central nodes/graph alert monitor" voice trigger */}
             <AlertGraphCentralityMonitor />
+            {/* F125 (overnight 2026-08-24): Investment × Alert Correlator (IACR) — pre-built InvestmentAlertCorrelator.jsx activated & mounted; parallel-fetches /entities/Investment + /v1/alerts every 90 s; keyword-correlates each investment against active alerts → EXPOSED (≥1 match) vs CLEAR (0); red badge on exposed count; stat tiles (investments/alerts/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched alerts with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-alert exposure brief + jarvis:speak-dossier TTS; isIacrQuery+buildIacrScript already wired in JarvisBrain (line 236 import, line 3401 branch); jarvis:iacr-toggle event; "investment alert/alert investment/iacr/exposed investments/risky investments/investments with alerts" voice trigger */}
+            <InvestmentAlertCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
