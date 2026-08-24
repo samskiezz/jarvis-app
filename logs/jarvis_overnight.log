@@ -104,3 +104,4 @@
 [2026-08-24] F127 AKIB: Alert × Knowledge Intelligence Bridge — AlertKnowledgeBridge.jsx; /v1/alerts + /knowledge/; DOCUMENTED vs UNDOCUMENTED; mounted App.jsx; JarvisBrain wired; build exit:0
 [2026-08-24] F128 DONE — LiveIntelGraphNexus.jsx: /functions/getLiveIntel + /v1/graph/centrality → ACTIVE/DORMANT node classification; ◈ LIGNC button (left:4380); isLigncQuery+buildLigncScript wired in JarvisBrain; vite build exit:0; dist/assets/index-C09jgvXX.js
 2026-08-24 F129 SwarmJobKnowledgeAlignment (SJKA): /entities/SwarmJob + /knowledge/ → SUPPORTED/UNSUPPORTED; ◈ SJKA left:4440; isSjkaQuery+buildSjkaScript wired JarvisBrain; vite build exit:0; dist/assets/index-YgW0XOXl.js confirmed
+2026-08-24 F130 IntelProfileSwarmJobCoverage (IPSC): /entities/IntelProfile × /entities/SwarmJob → ASSIGNED/UNASSIGNED; ◈ IPSC button left:4500; isIpscQuery+buildIpscScript wired in JarvisBrain; vite build exit:0

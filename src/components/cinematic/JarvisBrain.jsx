@@ -725,6 +725,7 @@ import { isSjamQuery, buildSjamScript } from "./SwarmJobAlertMonitor";
 import { isAkibQuery, buildAkibScript } from "./AlertKnowledgeBridge";
 import { isLigncQuery, buildLigncScript } from "./LiveIntelGraphNexus";
 import { isSjkaQuery, buildSjkaScript } from "./SwarmJobKnowledgeAlignment";
+import { isIpscQuery, buildIpscScript } from "./IntelProfileSwarmJobCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7784,6 +7785,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjka-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSjkaScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIpscQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipsc-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpscScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
