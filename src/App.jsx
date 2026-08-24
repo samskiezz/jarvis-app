@@ -683,6 +683,7 @@ import LiveIntelGraphNexus from '@/components/cinematic/LiveIntelGraphNexus';
 import SwarmJobKnowledgeAlignment from '@/components/cinematic/SwarmJobKnowledgeAlignment';
 import IntelProfileSwarmJobCoverage from '@/components/cinematic/IntelProfileSwarmJobCoverage';
 import ContactGraphCentralityMap from '@/components/cinematic/ContactGraphCentralityMap';
+import InvestmentScenarioPlanner from '@/components/cinematic/InvestmentScenarioPlanner';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2142,6 +2143,8 @@ function App() {
             <IntelProfileSwarmJobCoverage />
             {/* F131 (overnight 2026-08-24): Contact × Graph Centrality Intelligence Map (CGCM) — ◈ CGCM button (left:4560 bottom:18 zIndex:68); parallel-fetches /entities/Contact + /v1/graph/centrality every 90 s; keyword-correlates each contact against top-centrality graph nodes → HIGH_INFLUENCE (≥1 match) vs PERIPHERAL; amber badge on high-influence count; stat tiles (contacts/nodes/high-influence/peripheral); ALL/HIGH_INFLUENCE/PERIPHERAL filter tabs + text search; expand contact → matched nodes with type badge + centrality bar + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCgcmQuery+buildCgcmScript wired in JarvisBrain; jarvis:cgcm-toggle event; "contact graph / cgcm / influential contacts / contact centrality / contact network / central contacts" voice trigger */}
             <ContactGraphCentralityMap />
+            {/* F132 (overnight 2026-08-24): Investment × Scenario Planner (INSCENP) — pre-built InvestmentScenarioPlanner.jsx activated & mounted; parallel-fetches /entities/Investment + /v1/scenario/list every 60 s; keyword-correlates each investment (name/type/description/tags) against available scenarios → MATCHED (≥1 match) vs UNMATCHED; amber badge on matched count; ◈ INSCENP button (left:6524 bottom:6 zIndex:66); stat tiles (investments/scenarios/matched/unmatched); ALL/MATCHED/UNMATCHED filter tabs; expand investment → matched scenarios with type + severity + ▶ RUN button to fire POST /v1/scenario/{id}/run + inline outcome; ▶ PLAN → /v1/jarvis/agent/chat 2-sentence strategic advisory + jarvis:speak-dossier TTS; isInvScenPlanQuery+buildInvScenPlanScript wired in JarvisBrain; jarvis:invscplan-toggle event; "investment scenario / scenario plan / hedge scenario / portfolio scenario / inscenp / scenario for investment / investment risk scenario" voice trigger */}
+            <InvestmentScenarioPlanner />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
