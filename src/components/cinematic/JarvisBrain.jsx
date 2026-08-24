@@ -724,6 +724,7 @@ import { isAgcmQuery, buildAgcmScript } from "./AlertGraphCentralityMonitor";
 import { isSjamQuery, buildSjamScript } from "./SwarmJobAlertMonitor";
 import { isAkibQuery, buildAkibScript } from "./AlertKnowledgeBridge";
 import { isLigncQuery, buildLigncScript } from "./LiveIntelGraphNexus";
+import { isSjkaQuery, buildSjkaScript } from "./SwarmJobKnowledgeAlignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7775,6 +7776,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:lignc-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLigncScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSjkaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjka-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSjkaScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

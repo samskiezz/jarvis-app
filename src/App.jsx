@@ -680,6 +680,7 @@ import InvestmentAlertCorrelator from '@/components/cinematic/InvestmentAlertCor
 import SwarmJobAlertMonitor from '@/components/cinematic/SwarmJobAlertMonitor';
 import AlertKnowledgeBridge from '@/components/cinematic/AlertKnowledgeBridge';
 import LiveIntelGraphNexus from '@/components/cinematic/LiveIntelGraphNexus';
+import SwarmJobKnowledgeAlignment from '@/components/cinematic/SwarmJobKnowledgeAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2133,6 +2134,8 @@ function App() {
             <AlertKnowledgeBridge />
             {/* F128 (overnight 2026-08-24): Live Intel × Graph Centrality Nexus (LIGNC) — /functions/getLiveIntel + /v1/graph/centrality → keyword-correlates each top-centrality graph node against live world events (seismic/crypto/FX) → ACTIVE (≥1 match) vs DORMANT; amber badge on active count; ◈ LIGNC button (left:4380 bottom:18 zIndex:68); stat tiles (nodes/live events/active/dormant); ALL/ACTIVE/DORMANT filter tabs + text search; expand node → matched events with SEISMIC/CRYPTO/FX type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLigncQuery+buildLigncScript wired in JarvisBrain; jarvis:lignc-toggle event; 60-s auto-refresh */}
             <LiveIntelGraphNexus />
+            {/* F129 (overnight 2026-08-24): SwarmJob × Knowledge Alignment (SJKA) — /entities/SwarmJob + /knowledge/ → keyword-correlates each swarm job (name/description/target/objective/tags) against KB articles (title/content/topic/tags) → SUPPORTED (≥1 match) vs UNSUPPORTED (0); amber badge on unsupported count; ◈ SJKA button (left:4440 bottom:18 zIndex:68); stat tiles (jobs/KB articles/supported/unsupported); ALL/SUPPORTED/UNSUPPORTED filter tabs + text search; expand job → matched KB articles with topic badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge coverage brief + TTS; isSjkaQuery+buildSjkaScript wired in JarvisBrain; jarvis:sjka-toggle event; 90-s auto-refresh */}
+            <SwarmJobKnowledgeAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
