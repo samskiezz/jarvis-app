@@ -691,6 +691,7 @@ import LiveIntelScenarioMapper from '@/components/cinematic/LiveIntelScenarioMap
 import SceneRiskInvestigationCoverage from '@/components/cinematic/SceneRiskInvestigationCoverage';
 import InvestigationAnomalyCorrelator from '@/components/cinematic/InvestigationAnomalyCorrelator';
 import TemporalRiskPulse from '@/components/cinematic/TemporalRiskPulse';
+import OpsDatasetCoverage from '@/components/cinematic/OpsDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2166,6 +2167,8 @@ function App() {
             <InvestigationAnomalyCorrelator />
             {/* F239 (overnight 2026-08-24): JARVIS Temporal Risk Pulse (TARP) — /entities/RiskSignal + /v1/ops/events; bins into 1h/6h/24h/72h/7d time windows; stacked heat-row grid; ACCELERATING/STEADY/COOLING state; isTarpQuery+buildTarpScript wired in JarvisBrain; jarvis:tarp-toggle event */}
             <TemporalRiskPulse />
+            {/* F240 (overnight 2026-08-24): Ops Event × Dataset Coverage (EVTDS) — pre-built OpsDatasetCoverage.jsx activated & mounted; parallel-fetches /v1/ops/events?limit=200 + /v1/datasets every 90 s; keyword-correlates each ops event against dataset catalog → COVERED (≥1 match) vs BLIND (0); isEvtdsQuery+buildEvtdsScript wired in JarvisBrain; jarvis:evtds-toggle event; "ops dataset / event data gap / data blind / evtds" voice trigger */}
+            <OpsDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
