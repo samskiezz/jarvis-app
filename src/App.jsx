@@ -684,6 +684,7 @@ import SwarmJobKnowledgeAlignment from '@/components/cinematic/SwarmJobKnowledge
 import IntelProfileSwarmJobCoverage from '@/components/cinematic/IntelProfileSwarmJobCoverage';
 import ContactGraphCentralityMap from '@/components/cinematic/ContactGraphCentralityMap';
 import InvestmentScenarioPlanner from '@/components/cinematic/InvestmentScenarioPlanner';
+import InvestmentAnomalyCorrelator from '@/components/cinematic/InvestmentAnomalyCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2145,6 +2146,8 @@ function App() {
             <ContactGraphCentralityMap />
             {/* F132 (overnight 2026-08-24): Investment × Scenario Planner (INSCENP) — pre-built InvestmentScenarioPlanner.jsx activated & mounted; parallel-fetches /entities/Investment + /v1/scenario/list every 60 s; keyword-correlates each investment (name/type/description/tags) against available scenarios → MATCHED (≥1 match) vs UNMATCHED; amber badge on matched count; ◈ INSCENP button (left:6524 bottom:6 zIndex:66); stat tiles (investments/scenarios/matched/unmatched); ALL/MATCHED/UNMATCHED filter tabs; expand investment → matched scenarios with type + severity + ▶ RUN button to fire POST /v1/scenario/{id}/run + inline outcome; ▶ PLAN → /v1/jarvis/agent/chat 2-sentence strategic advisory + jarvis:speak-dossier TTS; isInvScenPlanQuery+buildInvScenPlanScript wired in JarvisBrain; jarvis:invscplan-toggle event; "investment scenario / scenario plan / hedge scenario / portfolio scenario / inscenp / scenario for investment / investment risk scenario" voice trigger */}
             <InvestmentScenarioPlanner />
+            {/* F133 (overnight 2026-08-24): Investment × Anomaly Correlator (IVAC) — pre-built InvestmentAnomalyCorrelator.jsx (362 lines) activated & mounted; parallel-fetches /entities/Investment + /v1/jarvis/analytics/anomalies?limit=30 every 90 s; keyword-correlates each investment (title/name/description/sector/type/ticker) against active metric anomalies (metric/name/description/kind/source) → EXPOSED (≥1 match) vs CLEAR (0); red badge on exposed count; ◈ IVAC button (left:602640 bottom:8 zIndex:225); stat tiles (investments/anomalies/exposed/clear); ALL/EXPOSED/CLEAR filter tabs + text search; expand investment → matched anomaly rows with severity badge + |z|/relevance score bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio anomaly brief + jarvis:speak-dossier TTS; isIvacQuery+buildIvacScript already wired in JarvisBrain (line 260 import, line 3605 branch); jarvis:ivac-toggle event; "investment anomaly / anomaly investment / ivac / exposed investment / investment metric / investment z-score / investment anomaly correlator" voice trigger */}
+            <InvestmentAnomalyCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
