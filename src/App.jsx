@@ -713,6 +713,7 @@ import SystemAnomalyReportTriple from '@/components/cinematic/SystemAnomalyRepor
 import RiskDatasetScenarioTriple from '@/components/cinematic/RiskDatasetScenarioTriple';
 import InvestigationKnowledgeSkillTriple from '@/components/cinematic/InvestigationKnowledgeSkillTriple';
 import TaskKnowledgeReportBridge from '@/components/cinematic/TaskKnowledgeReportBridge';
+import SwarmScenarioContactTriple from '@/components/cinematic/SwarmScenarioContactTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2232,6 +2233,8 @@ function App() {
             <InvestigationKnowledgeSkillTriple />
             {/* F267 (overnight 2026-08-25): Task × Knowledge × Report Bridge (TKRB) — /entities/Task + /knowledge/ + /v1/reports; FULL_COVERAGE/KB_ONLY/REPORT_ONLY/DARK classification; amber badge on dark count; ◈ TKRB button left:5760 bottom:18 zIndex:68; isTkrbQuery+buildTkrbScript wired in JarvisBrain; jarvis:tkrb-toggle event; 90-s auto-refresh */}
             <TaskKnowledgeReportBridge />
+            {/* F268 (overnight 2026-08-25): SwarmJob × Scenario × Contact Triple (SSCT) — /entities/SwarmJob + /v1/scenario/list + /entities/Contact; FULL_COVERAGE/SCENARIO_ONLY/CONTACT_ONLY/DARK; red badge on dark (unowned+unplanned) count; ◈ SSCT button left:5820 bottom:18 zIndex:68; isSsctQuery+buildSsctScript wired in JarvisBrain; jarvis:ssct-toggle event; 90-s auto-refresh; "swarm scenario contact/ssct/unowned swarms/swarm coverage triple" voice trigger */}
+            <SwarmScenarioContactTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

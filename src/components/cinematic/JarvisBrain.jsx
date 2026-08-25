@@ -748,6 +748,7 @@ import { isSartQuery, buildSartScript } from "./SystemAnomalyReportTriple";
 import { isRdstQuery, buildRdstScript } from "./RiskDatasetScenarioTriple";
 import { isIkastQuery, buildIkastScript } from "./InvestigationKnowledgeSkillTriple";
 import { isTkrbQuery, buildTkrbScript } from "./TaskKnowledgeReportBridge";
+import { isSsctQuery, buildSsctScript } from "./SwarmScenarioContactTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8004,6 +8005,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tkrb-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildTkrbScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSsctQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssct-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSsctScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
