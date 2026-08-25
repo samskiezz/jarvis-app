@@ -704,6 +704,7 @@ import DatasetKnowledgeScenarioTriple from '@/components/cinematic/DatasetKnowle
 import GraphCentralityTaskBridge from '@/components/cinematic/GraphCentralityTaskBridge';
 import SystemStatusDatasetKnowledgeBridge from '@/components/cinematic/SystemStatusDatasetKnowledgeBridge';
 import RiskKnowledgeOpsTriple from '@/components/cinematic/RiskKnowledgeOpsTriple';
+import LiveIntelKnowledgeGap from '@/components/cinematic/LiveIntelKnowledgeGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2205,6 +2206,8 @@ function App() {
             <SystemStatusDatasetKnowledgeBridge />
             {/* F251 (overnight 2026-08-25): Risk Signal × Knowledge × Ops Event Triple (RKET) — /entities/RiskSignal + /knowledge/ + /v1/ops/events; keyword-correlates each risk signal against KB articles AND ops events → DUAL_COVERAGE/KB_ONLY/OPS_ONLY/DARK; amber badge on dark count; ◈ RKET button left:5460 bottom:18 zIndex:68; isRketQuery+buildRketScript wired in JarvisBrain; jarvis:rket-toggle event; 90-s auto-refresh */}
             <RiskKnowledgeOpsTriple />
+            {/* F260 (overnight 2026-08-25): Live Intel × Knowledge Gap (IKGAP) — pre-built LiveIntelKnowledgeGap.jsx (524 lines) activated & mounted; parallel-fetches /functions/getLiveIntel + /knowledge/; keyword-correlates each live seismic/crypto/FX event against KB articles → KNOWN (≥1 article) vs BLIND SPOT (0); ◈ IKGAP button left:9720 bottom:8 zIndex:70; isIkgapQuery+buildIkgapScript already wired in JarvisBrain (line 103 import, line 1959 branch); jarvis:ikgap-toggle event; 5-min auto-refresh; "intel knowledge / knowledge gap / knowledge blind spot / live knowledge gap / ikgap / what don't we know / blind spot / what's unknown / knowledge coverage" voice trigger */}
+            <LiveIntelKnowledgeGap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
