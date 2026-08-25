@@ -700,6 +700,7 @@ import RiskSignalScenarioKnowledge from '@/components/cinematic/RiskSignalScenar
 import CoordinatedResponsePlanner from '@/components/cinematic/CoordinatedResponsePlanner';
 import ScenarioIntelContactTriple from '@/components/cinematic/ScenarioIntelContactTriple';
 import ContactDatasetBridge from '@/components/cinematic/ContactDatasetBridge';
+import DatasetKnowledgeScenarioTriple from '@/components/cinematic/DatasetKnowledgeScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2193,6 +2194,8 @@ function App() {
             <ScenarioIntelContactTriple />
             {/* F247 (overnight 2026-08-25): Contact × Dataset Intelligence Bridge (CDIB) — /entities/Contact + /v1/datasets → keyword-correlates each contact (name/email/organization/role/tags) against dataset catalog → DATA_BACKED (≥1 match) vs DATA_DARK (0); amber badge on data-dark count; ◈ CDIB button left:5220 bottom:18 zIndex:68; isCdibQuery+buildCdibScript wired in JarvisBrain; jarvis:cdib-toggle event; 90-s auto-refresh; "contact dataset/dataset contact/cdib/data-backed contacts/dark contacts/which contacts have datasets/contact data bridge/contact data coverage" voice trigger */}
             <ContactDatasetBridge />
+            {/* F248 (overnight 2026-08-25): Dataset × Knowledge × Scenario Triple (DKST) — /v1/datasets + /knowledge/ + /v1/scenario/list; keyword-correlates each dataset against KB articles AND scenarios → FULL_COVERAGE/KB_ONLY/SCENARIO_ONLY/DARK; amber badge on dark count; ◈ DKST button left:5280 bottom:18 zIndex:68; isDkstQuery+buildDkstScript wired in JarvisBrain; jarvis:dkst-toggle event; 90-s auto-refresh; "dataset knowledge scenario/dkst/dark datasets/dataset triple" voice trigger */}
+            <DatasetKnowledgeScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

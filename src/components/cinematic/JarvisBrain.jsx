@@ -352,6 +352,7 @@ import { isLisnQuery, buildLisnScript } from "./LiveIntelSkillNexus";
 import { isRskcQuery, buildRskcScript } from "./RiskSignalScenarioKnowledge";
 import { isSipcxQuery, buildSipcxScript } from "./ScenarioIntelContactTriple";
 import { isCdibQuery, buildCdibScript } from "./ContactDatasetBridge";
+import { isDkstQuery, buildDkstScript } from "./DatasetKnowledgeScenarioTriple";
 import { isGcontQuery, buildGcontScript } from "./GraphCommunityContactCoverage";
 import { isGcskQuery, buildGcskScript } from "./GraphCommunitySkillCoverage";
 import { isGcscenQuery, buildGcscenScript } from "./GraphCommunityScenarioCoverage";
@@ -7900,6 +7901,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sipcx-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSipcxScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F248 — Dataset × Knowledge × Scenario Triple
+    if (isDkstQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dkst-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildDkstScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
