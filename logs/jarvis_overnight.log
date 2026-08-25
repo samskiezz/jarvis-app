@@ -130,3 +130,4 @@
 2026-08-25 F260 IKGAP — Live Intel × Knowledge Gap activated: LiveIntelKnowledgeGap.jsx (pre-built 524 lines) mounted in App.jsx; /functions/getLiveIntel + /knowledge/ → KNOWN vs BLIND SPOT; JarvisBrain wiring confirmed (line 103+1959); vite build exit:0; bundle: dist/assets/index-BMAE-z5c.js
 2026-08-25T07:21:21Z F261 CKXR: ContactKnowledgeCrossRef.jsx — /entities/Contact + /knowledge/ → DOCUMENTED/UNDOCUMENTED; wired in App.jsx + JarvisBrain; vite build exit:0
 [2026-08-25] F262 LISWRM: activated pre-built LiveIntelSwarmAlignPanel.jsx (480 lines); mounted in App.jsx; /functions/getLiveIntel + /entities/SwarmJob correlator; RESPONDING vs UNAUTOMATED classification; isLiswrmQuery+buildLiswrmScript already wired in JarvisBrain; vite build exit:0; dist/assets/index-7v514107.js
+[2026-08-25] F205 SkillOpsGapDetector: activated pre-built SkillOpsGapDetector.jsx; mounted in App.jsx; wired isSkopsgapQuery+buildSkopsgapScript in JarvisBrain.jsx; vite build exit:0
