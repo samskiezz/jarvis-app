@@ -716,6 +716,7 @@ import TaskKnowledgeReportBridge from '@/components/cinematic/TaskKnowledgeRepor
 import SwarmScenarioContactTriple from '@/components/cinematic/SwarmScenarioContactTriple';
 import InvestigationSkillDatasetTriple from '@/components/cinematic/InvestigationSkillDatasetTriple';
 import LiveIntelReportKnowledgeCoverage from '@/components/cinematic/LiveIntelReportKnowledgeCoverage';
+import ContactSwarmDatasetMesh from '@/components/cinematic/ContactSwarmDatasetMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2241,6 +2242,8 @@ function App() {
             <InvestigationSkillDatasetTriple />
             {/* F270 (overnight 2026-08-25): Live Intel × Report × Knowledge Coverage (LIRKC) — /functions/getLiveIntel + /v1/reports + /knowledge/; FULL_COVERAGE/REPORTED_ONLY/KB_ONLY/BLIND classification; amber badge on blind count; ◈ LIRKC button left:5940 bottom:18 zIndex:68; isLirkcQuery+buildLirkcScript wired in JarvisBrain; jarvis:lirkc-toggle event; 5-min auto-refresh */}
             <LiveIntelReportKnowledgeCoverage />
+            {/* F271 (overnight 2026-08-25): Contact × SwarmJob × Dataset Intelligence Mesh (CSDM) — /entities/Contact + /entities/SwarmJob + /v1/datasets; FULLY_COVERED/SWARM_ONLY/DATA_ONLY/UNTRACKED classification; amber badge on untracked count; ◈ CSDM button left:6000 bottom:18 zIndex:68; isCsdmQuery+buildCsdmScript wired in JarvisBrain; jarvis:csdm-toggle event; 90-s auto-refresh */}
+            <ContactSwarmDatasetMesh />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
