@@ -122,3 +122,4 @@
 [2026-08-24] F244 RiskSignal × Scenario × Knowledge Coverage (RSKC): RiskSignalScenarioKnowledge.jsx implemented; triple correlator pivoting on RiskSignal vs /v1/scenario/list + /knowledge/; FULL_COVERAGE/SCENARIO_ONLY/KB_ONLY/DARK; isRskcQuery+buildRskcScript wired in JarvisBrain; vite build exit:0
 2026-08-24 F245 CoordinatedResponsePlanner.jsx built & mounted; parallel-fetches /v1/investigations + /entities/Task + /v1/aip/skill + /v1/scenario/list → AI response plan via /v1/jarvis/agent/chat + TTS; build: PASS
 2026-08-25 F246 SIPCX: ScenarioIntelContactTriple.jsx implemented — /v1/scenario/list + /entities/IntelProfile + /entities/Contact; FULL_COVERAGE/PROFILE_ONLY/CONTACT_ONLY/DARK; isSipcxQuery+buildSipcxScript wired in JarvisBrain; vite build exit:0
+2026-08-25 F247 CDIB: ContactDatasetBridge.jsx — /entities/Contact + /v1/datasets → DATA_BACKED vs DATA_DARK; isCdibQuery+buildCdibScript wired in JarvisBrain; mounted in App.jsx; vite build exit:0

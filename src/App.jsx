@@ -699,6 +699,7 @@ import LiveIntelSkillNexus from '@/components/cinematic/LiveIntelSkillNexus';
 import RiskSignalScenarioKnowledge from '@/components/cinematic/RiskSignalScenarioKnowledge';
 import CoordinatedResponsePlanner from '@/components/cinematic/CoordinatedResponsePlanner';
 import ScenarioIntelContactTriple from '@/components/cinematic/ScenarioIntelContactTriple';
+import ContactDatasetBridge from '@/components/cinematic/ContactDatasetBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2190,6 +2191,8 @@ function App() {
             <CoordinatedResponsePlanner />
             {/* F246 (overnight 2026-08-25): Scenario × IntelProfile × Contact Triple (SIPCX) — /v1/scenario/list + /entities/IntelProfile + /entities/Contact; keyword-correlates each scenario against intel profiles AND contacts → FULL_COVERAGE/PROFILE_ONLY/CONTACT_ONLY/DARK; red badge on dark count; ◈ SIPCX button left:5160 bottom:18 zIndex:68; isSipcxQuery+buildSipcxScript wired in JarvisBrain; jarvis:sipcx-toggle event; 90-s auto-refresh; "scenario intel contact/sipcx/dark scenarios/scenario people coverage" voice trigger */}
             <ScenarioIntelContactTriple />
+            {/* F247 (overnight 2026-08-25): Contact × Dataset Intelligence Bridge (CDIB) — /entities/Contact + /v1/datasets → keyword-correlates each contact (name/email/organization/role/tags) against dataset catalog → DATA_BACKED (≥1 match) vs DATA_DARK (0); amber badge on data-dark count; ◈ CDIB button left:5220 bottom:18 zIndex:68; isCdibQuery+buildCdibScript wired in JarvisBrain; jarvis:cdib-toggle event; 90-s auto-refresh; "contact dataset/dataset contact/cdib/data-backed contacts/dark contacts/which contacts have datasets/contact data bridge/contact data coverage" voice trigger */}
+            <ContactDatasetBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
