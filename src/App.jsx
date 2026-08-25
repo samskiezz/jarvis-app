@@ -698,6 +698,7 @@ import ThreatForecastEngine from '@/components/cinematic/ThreatForecastEngine';
 import LiveIntelSkillNexus from '@/components/cinematic/LiveIntelSkillNexus';
 import RiskSignalScenarioKnowledge from '@/components/cinematic/RiskSignalScenarioKnowledge';
 import CoordinatedResponsePlanner from '@/components/cinematic/CoordinatedResponsePlanner';
+import ScenarioIntelContactTriple from '@/components/cinematic/ScenarioIntelContactTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2187,6 +2188,8 @@ function App() {
             <RiskSignalScenarioKnowledge />
             {/* F245 (overnight 2026-08-24): Coordinated Response Planner (CRP) — user describes incident → parallel-fetches /v1/investigations + /entities/Task + /v1/aip/skill + /v1/scenario/list; keyword-correlates against description; sends full context to /v1/jarvis/agent/chat for a 4-step response plan + TTS; ◈ CRP button left:55640 bottom:8 zIndex:110; isCrpQuery+buildCrpScript exported; jarvis:crp-toggle event; "coordinate response/response plan/crp/plan response/respond to/incident response" voice trigger */}
             <CoordinatedResponsePlanner />
+            {/* F246 (overnight 2026-08-25): Scenario × IntelProfile × Contact Triple (SIPCX) — /v1/scenario/list + /entities/IntelProfile + /entities/Contact; keyword-correlates each scenario against intel profiles AND contacts → FULL_COVERAGE/PROFILE_ONLY/CONTACT_ONLY/DARK; red badge on dark count; ◈ SIPCX button left:5160 bottom:18 zIndex:68; isSipcxQuery+buildSipcxScript wired in JarvisBrain; jarvis:sipcx-toggle event; 90-s auto-refresh; "scenario intel contact/sipcx/dark scenarios/scenario people coverage" voice trigger */}
+            <ScenarioIntelContactTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
