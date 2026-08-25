@@ -69,6 +69,7 @@ import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
 import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
 import { isInvScenarioQuery, buildInvScenarioScript } from "./InvestigationScenarioRecommender";
 import { isSctmQuery, buildSctmScript } from "./AipSkillContactTaskMesh";
+import { isCkrmQuery, buildCkrmScript } from "./ContactKnowledgeReportMesh";
 import { isCtrskQuery, buildCtrskScript } from "./ContactRiskExposure";
 import { isForecastQuery, buildForecastScript } from "./ThreatForecastEngine";
 import { isThreatVelocityQuery, buildThreatVelocityScript } from "./ThreatVelocityMonitor";
@@ -1602,6 +1603,21 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sctm-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSctmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F275 — Contact × Knowledge × Report Intelligence Mesh (CKRM)
+    // dispatches jarvis:ckrm-toggle; ◈ CKRM left:6180 bottom:18 zIndex:68; 90-s auto-refresh;
+    // "contact knowledge report / ckrm / dark contacts / contact documentation /
+    //  contact kb / contact report / untracked contacts / contact coverage /
+    //  knowledge contact mesh / contact intelligence coverage / undocumented contacts /
+    //  contact record gap / contact mesh"
+    if (isCkrmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ckrm-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCkrmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

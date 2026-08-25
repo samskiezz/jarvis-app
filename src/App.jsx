@@ -720,6 +720,7 @@ import ContactSwarmDatasetMesh from '@/components/cinematic/ContactSwarmDatasetM
 import ScenarioRiskTaskConvergence from '@/components/cinematic/ScenarioRiskTaskConvergence';
 import InvestigationScenarioRecommender from '@/components/cinematic/InvestigationScenarioRecommender';
 import AipSkillContactTaskMesh from '@/components/cinematic/AipSkillContactTaskMesh';
+import ContactKnowledgeReportMesh from '@/components/cinematic/ContactKnowledgeReportMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2253,6 +2254,8 @@ function App() {
             <InvestigationScenarioRecommender />
             {/* F274 (overnight 2026-08-25): AIP Skill × Contact × Task Mesh (SCTM) — /v1/aip/skill + /entities/Contact + /entities/Task; STAFFED_AND_TASKED/STAFFED_ONLY/TASKED_ONLY/ORPHANED classification; amber badge on orphaned (unused skill) count; ◈ SCTM button left:6120 bottom:18 zIndex:68; isSctmQuery+buildSctmScript wired in JarvisBrain; jarvis:sctm-toggle event; 90-s auto-refresh */}
             <AipSkillContactTaskMesh />
+            {/* F275 (overnight 2026-08-25): Contact × Knowledge × Report Intelligence Mesh (CKRM) — /entities/Contact + /knowledge/ + /v1/reports; FULL_COVERAGE/KB_ONLY/REPORT_ONLY/DARK classification; amber badge on dark count; ◈ CKRM button left:6180 bottom:18 zIndex:68; isCkrmQuery+buildCkrmScript wired in JarvisBrain; jarvis:ckrm-toggle event; 90-s auto-refresh */}
+            <ContactKnowledgeReportMesh />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
