@@ -711,6 +711,7 @@ import LiveIntelSwarmAlignPanel from '@/components/cinematic/LiveIntelSwarmAlign
 import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
 import SystemAnomalyReportTriple from '@/components/cinematic/SystemAnomalyReportTriple';
 import RiskDatasetScenarioTriple from '@/components/cinematic/RiskDatasetScenarioTriple';
+import InvestigationKnowledgeSkillTriple from '@/components/cinematic/InvestigationKnowledgeSkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2226,6 +2227,8 @@ function App() {
             <SystemAnomalyReportTriple />
             {/* F265 (overnight 2026-08-25): Risk Signal × Dataset × Scenario Triple (RDST) — /entities/RiskSignal + /v1/datasets + /v1/scenario/list; FULL_COVERAGE/DATA_ONLY/SCENARIO_ONLY/DARK classification; red badge on dark count; ◈ RDST button left:5640 bottom:18 zIndex:68; isRdstQuery+buildRdstScript wired in JarvisBrain; jarvis:rdst-toggle event; 90-s auto-refresh */}
             <RiskDatasetScenarioTriple />
+            {/* F266 (overnight 2026-08-25): Investigation × Knowledge × AIP Skill Triple (IKAST) — /v1/investigations + /knowledge/ + /v1/aip/skill; FULL_COVERAGE/KB_ONLY/SKILL_ONLY/DARK classification; amber badge on dark count; ◈ IKAST button left:5700 bottom:18 zIndex:68; isIkastQuery+buildIkastScript wired in JarvisBrain; jarvis:ikast-toggle event; 90-s auto-refresh */}
+            <InvestigationKnowledgeSkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
