@@ -719,6 +719,7 @@ import LiveIntelReportKnowledgeCoverage from '@/components/cinematic/LiveIntelRe
 import ContactSwarmDatasetMesh from '@/components/cinematic/ContactSwarmDatasetMesh';
 import ScenarioRiskTaskConvergence from '@/components/cinematic/ScenarioRiskTaskConvergence';
 import InvestigationScenarioRecommender from '@/components/cinematic/InvestigationScenarioRecommender';
+import AipSkillContactTaskMesh from '@/components/cinematic/AipSkillContactTaskMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2250,6 +2251,8 @@ function App() {
             <ScenarioRiskTaskConvergence />
             {/* F273 (overnight 2026-08-25): Investigation × Scenario Recommender (INVSC) — /v1/investigations + /v1/scenario/list; keyword-correlates each open investigation against available scenarios to surface COVERED (scenario backing found) vs UNCOVERED cases; split panel: investigations left, matched scenarios right; ▶ RUN triggers /v1/scenario/{id}/run; ▶ ADVISE → /v1/jarvis/agent/chat 2-sentence advisory + TTS; "investigation scenario"/"case action"/"recommend scenario"/"case remediation"/"invsc" voice trigger; ◈ INVSC button left:5796, zIndex:65; jarvis:invscen-toggle event; 60-s auto-refresh */}
             <InvestigationScenarioRecommender />
+            {/* F274 (overnight 2026-08-25): AIP Skill × Contact × Task Mesh (SCTM) — /v1/aip/skill + /entities/Contact + /entities/Task; STAFFED_AND_TASKED/STAFFED_ONLY/TASKED_ONLY/ORPHANED classification; amber badge on orphaned (unused skill) count; ◈ SCTM button left:6120 bottom:18 zIndex:68; isSctmQuery+buildSctmScript wired in JarvisBrain; jarvis:sctm-toggle event; 90-s auto-refresh */}
+            <AipSkillContactTaskMesh />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

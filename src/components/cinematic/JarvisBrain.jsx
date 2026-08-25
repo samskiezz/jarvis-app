@@ -68,6 +68,7 @@ import { isTaskAlignQuery, buildTaskAlignScript } from "./TaskSkillAlignment";
 import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
 import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
 import { isInvScenarioQuery, buildInvScenarioScript } from "./InvestigationScenarioRecommender";
+import { isSctmQuery, buildSctmScript } from "./AipSkillContactTaskMesh";
 import { isCtrskQuery, buildCtrskScript } from "./ContactRiskExposure";
 import { isForecastQuery, buildForecastScript } from "./ThreatForecastEngine";
 import { isThreatVelocityQuery, buildThreatVelocityScript } from "./ThreatVelocityMonitor";
@@ -1588,6 +1589,19 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invscen-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildInvScenarioScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
+    // F274 — AIP Skill × Contact × Task Mesh (SCTM)
+    // dispatches jarvis:sctm-toggle; ◈ SCTM left:6120 bottom:18 zIndex:68; 90-s auto-refresh;
+    // "skill contact task / sctm / orphaned skills / staffed skills / skill task mesh /
+    //  aip skill mesh / skill coverage / skill staff / task skill match"
+    if (isSctmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sctm-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSctmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
