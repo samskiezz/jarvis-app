@@ -717,6 +717,7 @@ import SwarmScenarioContactTriple from '@/components/cinematic/SwarmScenarioCont
 import InvestigationSkillDatasetTriple from '@/components/cinematic/InvestigationSkillDatasetTriple';
 import LiveIntelReportKnowledgeCoverage from '@/components/cinematic/LiveIntelReportKnowledgeCoverage';
 import ContactSwarmDatasetMesh from '@/components/cinematic/ContactSwarmDatasetMesh';
+import ScenarioRiskTaskConvergence from '@/components/cinematic/ScenarioRiskTaskConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2244,6 +2245,8 @@ function App() {
             <LiveIntelReportKnowledgeCoverage />
             {/* F271 (overnight 2026-08-25): Contact × SwarmJob × Dataset Intelligence Mesh (CSDM) — /entities/Contact + /entities/SwarmJob + /v1/datasets; FULLY_COVERED/SWARM_ONLY/DATA_ONLY/UNTRACKED classification; amber badge on untracked count; ◈ CSDM button left:6000 bottom:18 zIndex:68; isCsdmQuery+buildCsdmScript wired in JarvisBrain; jarvis:csdm-toggle event; 90-s auto-refresh */}
             <ContactSwarmDatasetMesh />
+            {/* F272 (overnight 2026-08-25): Scenario × Risk Signal × Task Convergence (SRCT) — /v1/scenario/list + /entities/RiskSignal + /entities/Task; MANAGED/PLANNED_ONLY/ACTIVE_ONLY/UNMANAGED classification; red badge on unmanaged count; ◈ SRCT button left:6060 bottom:18 zIndex:68; isSrctQuery+buildSrctScript wired in JarvisBrain; jarvis:srct-toggle event; 90-s auto-refresh */}
+            <ScenarioRiskTaskConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
