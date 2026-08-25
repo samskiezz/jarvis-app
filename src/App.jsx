@@ -718,6 +718,7 @@ import InvestigationSkillDatasetTriple from '@/components/cinematic/Investigatio
 import LiveIntelReportKnowledgeCoverage from '@/components/cinematic/LiveIntelReportKnowledgeCoverage';
 import ContactSwarmDatasetMesh from '@/components/cinematic/ContactSwarmDatasetMesh';
 import ScenarioRiskTaskConvergence from '@/components/cinematic/ScenarioRiskTaskConvergence';
+import InvestigationScenarioRecommender from '@/components/cinematic/InvestigationScenarioRecommender';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2247,6 +2248,8 @@ function App() {
             <ContactSwarmDatasetMesh />
             {/* F272 (overnight 2026-08-25): Scenario × Risk Signal × Task Convergence (SRCT) — /v1/scenario/list + /entities/RiskSignal + /entities/Task; MANAGED/PLANNED_ONLY/ACTIVE_ONLY/UNMANAGED classification; red badge on unmanaged count; ◈ SRCT button left:6060 bottom:18 zIndex:68; isSrctQuery+buildSrctScript wired in JarvisBrain; jarvis:srct-toggle event; 90-s auto-refresh */}
             <ScenarioRiskTaskConvergence />
+            {/* F273 (overnight 2026-08-25): Investigation × Scenario Recommender (INVSC) — /v1/investigations + /v1/scenario/list; keyword-correlates each open investigation against available scenarios to surface COVERED (scenario backing found) vs UNCOVERED cases; split panel: investigations left, matched scenarios right; ▶ RUN triggers /v1/scenario/{id}/run; ▶ ADVISE → /v1/jarvis/agent/chat 2-sentence advisory + TTS; "investigation scenario"/"case action"/"recommend scenario"/"case remediation"/"invsc" voice trigger; ◈ INVSC button left:5796, zIndex:65; jarvis:invscen-toggle event; 60-s auto-refresh */}
+            <InvestigationScenarioRecommender />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
