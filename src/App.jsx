@@ -702,6 +702,7 @@ import ScenarioIntelContactTriple from '@/components/cinematic/ScenarioIntelCont
 import ContactDatasetBridge from '@/components/cinematic/ContactDatasetBridge';
 import DatasetKnowledgeScenarioTriple from '@/components/cinematic/DatasetKnowledgeScenarioTriple';
 import GraphCentralityTaskBridge from '@/components/cinematic/GraphCentralityTaskBridge';
+import SystemStatusDatasetKnowledgeBridge from '@/components/cinematic/SystemStatusDatasetKnowledgeBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2199,6 +2200,8 @@ function App() {
             <DatasetKnowledgeScenarioTriple />
             {/* F249 (overnight 2026-08-25): Graph Centrality × Task Bridge (GCTIB) — /v1/graph/centrality + /entities/Task; keyword-correlates each top-centrality node against tasks → TASKED (≥1 match) vs UNMONITORED (0); amber badge on unmonitored count; ◈ GCTIB button left:5340 bottom:18 zIndex:68; isGctibQuery+buildGctibScript wired in JarvisBrain; jarvis:gctib-toggle event; 90-s auto-refresh; "graph task/task graph/gctib/tasked nodes/unmonitored nodes/which nodes have tasks" voice trigger */}
             <GraphCentralityTaskBridge />
+            {/* F250 (overnight 2026-08-25): System Status × Dataset × Knowledge Bridge (SDKB) — /v1/jarvis/system/status + /v1/datasets + /knowledge/; correlates each service against dataset catalog + KB articles → FULL_COVERAGE / DATA_ONLY / KB_ONLY / DARK; amber badge on DARK count; ◈ SDKB button left:5400 bottom:18 zIndex:68; isSdkbQuery+buildSdkbScript wired in JarvisBrain; jarvis:sdkb-toggle event; 90-s auto-refresh */}
+            <SystemStatusDatasetKnowledgeBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

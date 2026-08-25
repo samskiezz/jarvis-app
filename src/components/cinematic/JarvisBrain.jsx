@@ -366,6 +366,7 @@ import { isTaskKnowledgeQuery, buildTaskKnowledgeScript } from "./TaskKnowledgeC
 import { isKbliveQuery, buildKbliveScript } from "./KnowledgeLiveIntelCoverage";
 import { isGcdsQuery, buildGcdsScript } from "./GraphCommunityDatasetCoverage";
 import { isGctibQuery, buildGctibScript } from "./GraphCentralityTaskBridge";
+import { isSdkbQuery, buildSdkbScript } from "./SystemStatusDatasetKnowledgeBridge";
 import { isIpoevQuery, buildIpoevScript } from "./IntelProfileOpsEventCoverage";
 import { isKbscenQuery, buildKbscenScript } from "./KnowledgeScenarioCoverage";
 import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
@@ -7920,6 +7921,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gctib-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildGctibScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F250 — System Status × Dataset × Knowledge Bridge
+    if (isSdkbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sdkb-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSdkbScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
