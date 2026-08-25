@@ -712,6 +712,7 @@ import InvestigationScenarioLinker from '@/components/cinematic/InvestigationSce
 import SystemAnomalyReportTriple from '@/components/cinematic/SystemAnomalyReportTriple';
 import RiskDatasetScenarioTriple from '@/components/cinematic/RiskDatasetScenarioTriple';
 import InvestigationKnowledgeSkillTriple from '@/components/cinematic/InvestigationKnowledgeSkillTriple';
+import TaskKnowledgeReportBridge from '@/components/cinematic/TaskKnowledgeReportBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2229,6 +2230,8 @@ function App() {
             <RiskDatasetScenarioTriple />
             {/* F266 (overnight 2026-08-25): Investigation × Knowledge × AIP Skill Triple (IKAST) — /v1/investigations + /knowledge/ + /v1/aip/skill; FULL_COVERAGE/KB_ONLY/SKILL_ONLY/DARK classification; amber badge on dark count; ◈ IKAST button left:5700 bottom:18 zIndex:68; isIkastQuery+buildIkastScript wired in JarvisBrain; jarvis:ikast-toggle event; 90-s auto-refresh */}
             <InvestigationKnowledgeSkillTriple />
+            {/* F267 (overnight 2026-08-25): Task × Knowledge × Report Bridge (TKRB) — /entities/Task + /knowledge/ + /v1/reports; FULL_COVERAGE/KB_ONLY/REPORT_ONLY/DARK classification; amber badge on dark count; ◈ TKRB button left:5760 bottom:18 zIndex:68; isTkrbQuery+buildTkrbScript wired in JarvisBrain; jarvis:tkrb-toggle event; 90-s auto-refresh */}
+            <TaskKnowledgeReportBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
