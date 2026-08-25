@@ -703,6 +703,7 @@ import ContactDatasetBridge from '@/components/cinematic/ContactDatasetBridge';
 import DatasetKnowledgeScenarioTriple from '@/components/cinematic/DatasetKnowledgeScenarioTriple';
 import GraphCentralityTaskBridge from '@/components/cinematic/GraphCentralityTaskBridge';
 import SystemStatusDatasetKnowledgeBridge from '@/components/cinematic/SystemStatusDatasetKnowledgeBridge';
+import RiskKnowledgeOpsTriple from '@/components/cinematic/RiskKnowledgeOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2202,6 +2203,8 @@ function App() {
             <GraphCentralityTaskBridge />
             {/* F250 (overnight 2026-08-25): System Status × Dataset × Knowledge Bridge (SDKB) — /v1/jarvis/system/status + /v1/datasets + /knowledge/; correlates each service against dataset catalog + KB articles → FULL_COVERAGE / DATA_ONLY / KB_ONLY / DARK; amber badge on DARK count; ◈ SDKB button left:5400 bottom:18 zIndex:68; isSdkbQuery+buildSdkbScript wired in JarvisBrain; jarvis:sdkb-toggle event; 90-s auto-refresh */}
             <SystemStatusDatasetKnowledgeBridge />
+            {/* F251 (overnight 2026-08-25): Risk Signal × Knowledge × Ops Event Triple (RKET) — /entities/RiskSignal + /knowledge/ + /v1/ops/events; keyword-correlates each risk signal against KB articles AND ops events → DUAL_COVERAGE/KB_ONLY/OPS_ONLY/DARK; amber badge on dark count; ◈ RKET button left:5460 bottom:18 zIndex:68; isRketQuery+buildRketScript wired in JarvisBrain; jarvis:rket-toggle event; 90-s auto-refresh */}
+            <RiskKnowledgeOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
