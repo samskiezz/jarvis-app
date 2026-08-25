@@ -133,3 +133,4 @@
 [2026-08-25] F205 SkillOpsGapDetector: activated pre-built SkillOpsGapDetector.jsx; mounted in App.jsx; wired isSkopsgapQuery+buildSkopsgapScript in JarvisBrain.jsx; vite build exit:0
 2026-08-25 F263 Investigation×Scenario Linker (INVSL) — activated pre-built InvestigationScenarioLinker.jsx (365 lines); /v1/investigations + /v1/scenario/list; JarvisBrain wiring already present; mounted in App.jsx; vite build exit:0
 2026-08-25T00:00:00Z | F264 SART | SystemAnomalyReportTriple.jsx — System Status × Anomaly × Report Triple; /v1/jarvis/system/status + /v1/jarvis/analytics/anomalies + /v1/reports; REPORTED_AFFECTED/REPORTED_ONLY/AFFECTED_ONLY/BLIND; isSartQuery+buildSartScript wired; vite build exit:0
+2026-08-25T12:22:20Z | F265 RDST | RiskDatasetScenarioTriple.jsx — Risk Signal × Dataset × Scenario Triple; /entities/RiskSignal + /v1/datasets + /v1/scenario/list; FULL_COVERAGE/DATA_ONLY/SCENARIO_ONLY/DARK; isRdstQuery+buildRdstScript wired; vite build exit:0

@@ -710,6 +710,7 @@ import ContactKnowledgeCrossRef from '@/components/cinematic/ContactKnowledgeCro
 import LiveIntelSwarmAlignPanel from '@/components/cinematic/LiveIntelSwarmAlignPanel';
 import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
 import SystemAnomalyReportTriple from '@/components/cinematic/SystemAnomalyReportTriple';
+import RiskDatasetScenarioTriple from '@/components/cinematic/RiskDatasetScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2223,6 +2224,8 @@ function App() {
             <InvestigationScenarioLinker />
             {/* F264 (overnight 2026-08-25): System Status × Anomaly × Report Triple (SART) — /v1/jarvis/system/status + /v1/jarvis/analytics/anomalies + /v1/reports; correlates each anomaly against degraded services + covering reports → REPORTED_AFFECTED/REPORTED_ONLY/AFFECTED_ONLY/BLIND; red badge on blind count; ◈ SART button left:5580 bottom:18 zIndex:68; isSartQuery+buildSartScript wired in JarvisBrain; jarvis:sart-toggle event; 60-s auto-refresh; "system anomaly report/sart/anomaly report/which anomalies have reports" voice trigger */}
             <SystemAnomalyReportTriple />
+            {/* F265 (overnight 2026-08-25): Risk Signal × Dataset × Scenario Triple (RDST) — /entities/RiskSignal + /v1/datasets + /v1/scenario/list; FULL_COVERAGE/DATA_ONLY/SCENARIO_ONLY/DARK classification; red badge on dark count; ◈ RDST button left:5640 bottom:18 zIndex:68; isRdstQuery+buildRdstScript wired in JarvisBrain; jarvis:rdst-toggle event; 90-s auto-refresh */}
+            <RiskDatasetScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
