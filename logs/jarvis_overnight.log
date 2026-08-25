@@ -1,0 +1,1 @@
+[2026-08-25] F01 DONE — ⌘K command palette: CommandPalette.jsx (pages+scenes) + JarvisCommandPalette.jsx (scenes+panels+agent ask) both pre-existed on main; CommandPalette mounted in App.jsx; vite build verified clean; branch jarvis-overnight created from main.
