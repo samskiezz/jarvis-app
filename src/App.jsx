@@ -706,6 +706,7 @@ import SystemStatusDatasetKnowledgeBridge from '@/components/cinematic/SystemSta
 import RiskKnowledgeOpsTriple from '@/components/cinematic/RiskKnowledgeOpsTriple';
 import LiveIntelKnowledgeGap from '@/components/cinematic/LiveIntelKnowledgeGap';
 import ContactKnowledgeCrossRef from '@/components/cinematic/ContactKnowledgeCrossRef';
+import LiveIntelSwarmAlignPanel from '@/components/cinematic/LiveIntelSwarmAlignPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2211,6 +2212,8 @@ function App() {
             <LiveIntelKnowledgeGap />
             {/* F261 (overnight 2026-08-25): Contact × Knowledge Cross-Reference (CKXR) — /entities/Contact + /knowledge/; keyword-correlates each contact against KB articles → DOCUMENTED (≥1 match) vs UNDOCUMENTED (0); amber badge on undocumented count; ◈ CKXR button left:5520 bottom:18 zIndex:68; isCkxrQuery+buildCkxrScript wired in JarvisBrain; jarvis:ckxr-toggle event; 90-s auto-refresh; "contact knowledge/knowledge contact/ckxr/documented contacts/undocumented contacts/which contacts have knowledge/contact kb coverage/contact knowledge gap/contact kb" voice trigger */}
             <ContactKnowledgeCrossRef />
+            {/* F262 (overnight 2026-08-25): Live Intel × Swarm Job Alignment Panel (LISWRM) — pre-built LiveIntelSwarmAlignPanel.jsx (480 lines, F302) activated & mounted; parallel-fetches /functions/getLiveIntel + /entities/SwarmJob; keyword-correlates each live world event (seismic/crypto/FX) against swarm jobs → RESPONDING vs UNAUTOMATED; red badge on unautomated count; ◈ LISWRM button left:392880 bottom:8 zIndex:179; isLiswrmQuery+buildLiswrmScript already wired in JarvisBrain; jarvis:liswrm-toggle event; 120-s auto-refresh; "live swarm / world swarm / liswrm / swarm world response / automated response / swarm live event / swarm alignment / which swarms respond to live events" voice trigger */}
+            <LiveIntelSwarmAlignPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
