@@ -714,6 +714,7 @@ import RiskDatasetScenarioTriple from '@/components/cinematic/RiskDatasetScenari
 import InvestigationKnowledgeSkillTriple from '@/components/cinematic/InvestigationKnowledgeSkillTriple';
 import TaskKnowledgeReportBridge from '@/components/cinematic/TaskKnowledgeReportBridge';
 import SwarmScenarioContactTriple from '@/components/cinematic/SwarmScenarioContactTriple';
+import InvestigationSkillDatasetTriple from '@/components/cinematic/InvestigationSkillDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2235,6 +2236,8 @@ function App() {
             <TaskKnowledgeReportBridge />
             {/* F268 (overnight 2026-08-25): SwarmJob × Scenario × Contact Triple (SSCT) — /entities/SwarmJob + /v1/scenario/list + /entities/Contact; FULL_COVERAGE/SCENARIO_ONLY/CONTACT_ONLY/DARK; red badge on dark (unowned+unplanned) count; ◈ SSCT button left:5820 bottom:18 zIndex:68; isSsctQuery+buildSsctScript wired in JarvisBrain; jarvis:ssct-toggle event; 90-s auto-refresh; "swarm scenario contact/ssct/unowned swarms/swarm coverage triple" voice trigger */}
             <SwarmScenarioContactTriple />
+            {/* F269 (overnight 2026-08-25): Investigation × AIP Skill × Dataset Triple (IASD) — /v1/investigations + /v1/aip/skill + /v1/datasets; FULLY_RESOURCED/SKILL_ONLY/DATA_ONLY/DARK classification; amber badge on dark (uninvestigated) count; ◈ IASD button left:5880 bottom:18 zIndex:68; isIasdQuery+buildIasdScript wired in JarvisBrain; jarvis:iasd-toggle event; 90-s auto-refresh; "investigation skill dataset/iasd/dark investigations/resource gap" voice trigger */}
+            <InvestigationSkillDatasetTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
