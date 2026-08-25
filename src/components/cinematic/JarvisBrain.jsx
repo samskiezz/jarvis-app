@@ -750,6 +750,7 @@ import { isIkastQuery, buildIkastScript } from "./InvestigationKnowledgeSkillTri
 import { isTkrbQuery, buildTkrbScript } from "./TaskKnowledgeReportBridge";
 import { isSsctQuery, buildSsctScript } from "./SwarmScenarioContactTriple";
 import { isIasdQuery, buildIasdScript } from "./InvestigationSkillDatasetTriple";
+import { isLirkcQuery, buildLirkcScript } from "./LiveIntelReportKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8022,6 +8023,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iasd-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIasdScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLirkcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lirkc-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLirkcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

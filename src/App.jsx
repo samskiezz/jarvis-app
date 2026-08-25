@@ -715,6 +715,7 @@ import InvestigationKnowledgeSkillTriple from '@/components/cinematic/Investigat
 import TaskKnowledgeReportBridge from '@/components/cinematic/TaskKnowledgeReportBridge';
 import SwarmScenarioContactTriple from '@/components/cinematic/SwarmScenarioContactTriple';
 import InvestigationSkillDatasetTriple from '@/components/cinematic/InvestigationSkillDatasetTriple';
+import LiveIntelReportKnowledgeCoverage from '@/components/cinematic/LiveIntelReportKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2238,6 +2239,8 @@ function App() {
             <SwarmScenarioContactTriple />
             {/* F269 (overnight 2026-08-25): Investigation × AIP Skill × Dataset Triple (IASD) — /v1/investigations + /v1/aip/skill + /v1/datasets; FULLY_RESOURCED/SKILL_ONLY/DATA_ONLY/DARK classification; amber badge on dark (uninvestigated) count; ◈ IASD button left:5880 bottom:18 zIndex:68; isIasdQuery+buildIasdScript wired in JarvisBrain; jarvis:iasd-toggle event; 90-s auto-refresh; "investigation skill dataset/iasd/dark investigations/resource gap" voice trigger */}
             <InvestigationSkillDatasetTriple />
+            {/* F270 (overnight 2026-08-25): Live Intel × Report × Knowledge Coverage (LIRKC) — /functions/getLiveIntel + /v1/reports + /knowledge/; FULL_COVERAGE/REPORTED_ONLY/KB_ONLY/BLIND classification; amber badge on blind count; ◈ LIRKC button left:5940 bottom:18 zIndex:68; isLirkcQuery+buildLirkcScript wired in JarvisBrain; jarvis:lirkc-toggle event; 5-min auto-refresh */}
+            <LiveIntelReportKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
