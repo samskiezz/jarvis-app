@@ -124,3 +124,4 @@
 2026-08-25 F246 SIPCX: ScenarioIntelContactTriple.jsx implemented — /v1/scenario/list + /entities/IntelProfile + /entities/Contact; FULL_COVERAGE/PROFILE_ONLY/CONTACT_ONLY/DARK; isSipcxQuery+buildSipcxScript wired in JarvisBrain; vite build exit:0
 2026-08-25 F247 CDIB: ContactDatasetBridge.jsx — /entities/Contact + /v1/datasets → DATA_BACKED vs DATA_DARK; isCdibQuery+buildCdibScript wired in JarvisBrain; mounted in App.jsx; vite build exit:0
 2026-08-25 F248 DKST — DatasetKnowledgeScenarioTriple.jsx: /v1/datasets + /knowledge/ + /v1/scenario/list triple correlator; FULL_COVERAGE/KB_ONLY/SCENARIO_ONLY/DARK; mounted App.jsx; wired JarvisBrain; vite build exit:0; in dist/assets/index-BuGZR6VV.js
+[2026-08-25] F249 GCTIB: GraphCentralityTaskBridge.jsx — /v1/graph/centrality + /entities/Task; TASKED vs UNMONITORED; amber badge; ◈ GCTIB button; isGctibQuery+buildGctibScript wired in JarvisBrain; mounted in App.jsx; vite build exit:0; bundle: index-Bc1Cuvud.js

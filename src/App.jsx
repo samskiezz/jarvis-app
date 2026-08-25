@@ -701,6 +701,7 @@ import CoordinatedResponsePlanner from '@/components/cinematic/CoordinatedRespon
 import ScenarioIntelContactTriple from '@/components/cinematic/ScenarioIntelContactTriple';
 import ContactDatasetBridge from '@/components/cinematic/ContactDatasetBridge';
 import DatasetKnowledgeScenarioTriple from '@/components/cinematic/DatasetKnowledgeScenarioTriple';
+import GraphCentralityTaskBridge from '@/components/cinematic/GraphCentralityTaskBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2196,6 +2197,8 @@ function App() {
             <ContactDatasetBridge />
             {/* F248 (overnight 2026-08-25): Dataset × Knowledge × Scenario Triple (DKST) — /v1/datasets + /knowledge/ + /v1/scenario/list; keyword-correlates each dataset against KB articles AND scenarios → FULL_COVERAGE/KB_ONLY/SCENARIO_ONLY/DARK; amber badge on dark count; ◈ DKST button left:5280 bottom:18 zIndex:68; isDkstQuery+buildDkstScript wired in JarvisBrain; jarvis:dkst-toggle event; 90-s auto-refresh; "dataset knowledge scenario/dkst/dark datasets/dataset triple" voice trigger */}
             <DatasetKnowledgeScenarioTriple />
+            {/* F249 (overnight 2026-08-25): Graph Centrality × Task Bridge (GCTIB) — /v1/graph/centrality + /entities/Task; keyword-correlates each top-centrality node against tasks → TASKED (≥1 match) vs UNMONITORED (0); amber badge on unmonitored count; ◈ GCTIB button left:5340 bottom:18 zIndex:68; isGctibQuery+buildGctibScript wired in JarvisBrain; jarvis:gctib-toggle event; 90-s auto-refresh; "graph task/task graph/gctib/tasked nodes/unmonitored nodes/which nodes have tasks" voice trigger */}
+            <GraphCentralityTaskBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

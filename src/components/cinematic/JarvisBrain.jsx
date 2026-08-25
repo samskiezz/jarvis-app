@@ -365,6 +365,7 @@ import { isGciplQuery, buildGciplScript } from "./GraphCommunityIntelProfileCove
 import { isTaskKnowledgeQuery, buildTaskKnowledgeScript } from "./TaskKnowledgeCoverage";
 import { isKbliveQuery, buildKbliveScript } from "./KnowledgeLiveIntelCoverage";
 import { isGcdsQuery, buildGcdsScript } from "./GraphCommunityDatasetCoverage";
+import { isGctibQuery, buildGctibScript } from "./GraphCentralityTaskBridge";
 import { isIpoevQuery, buildIpoevScript } from "./IntelProfileOpsEventCoverage";
 import { isKbscenQuery, buildKbscenScript } from "./KnowledgeScenarioCoverage";
 import { isConvinQuery, buildConvinScript } from "./ContactInvestmentCoverage";
@@ -7910,6 +7911,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dkst-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildDkstScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F249 — Graph Centrality × Task Bridge
+    if (isGctibQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gctib-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGctibScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
