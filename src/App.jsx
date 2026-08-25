@@ -705,6 +705,7 @@ import GraphCentralityTaskBridge from '@/components/cinematic/GraphCentralityTas
 import SystemStatusDatasetKnowledgeBridge from '@/components/cinematic/SystemStatusDatasetKnowledgeBridge';
 import RiskKnowledgeOpsTriple from '@/components/cinematic/RiskKnowledgeOpsTriple';
 import LiveIntelKnowledgeGap from '@/components/cinematic/LiveIntelKnowledgeGap';
+import ContactKnowledgeCrossRef from '@/components/cinematic/ContactKnowledgeCrossRef';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2208,6 +2209,8 @@ function App() {
             <RiskKnowledgeOpsTriple />
             {/* F260 (overnight 2026-08-25): Live Intel × Knowledge Gap (IKGAP) — pre-built LiveIntelKnowledgeGap.jsx (524 lines) activated & mounted; parallel-fetches /functions/getLiveIntel + /knowledge/; keyword-correlates each live seismic/crypto/FX event against KB articles → KNOWN (≥1 article) vs BLIND SPOT (0); ◈ IKGAP button left:9720 bottom:8 zIndex:70; isIkgapQuery+buildIkgapScript already wired in JarvisBrain (line 103 import, line 1959 branch); jarvis:ikgap-toggle event; 5-min auto-refresh; "intel knowledge / knowledge gap / knowledge blind spot / live knowledge gap / ikgap / what don't we know / blind spot / what's unknown / knowledge coverage" voice trigger */}
             <LiveIntelKnowledgeGap />
+            {/* F261 (overnight 2026-08-25): Contact × Knowledge Cross-Reference (CKXR) — /entities/Contact + /knowledge/; keyword-correlates each contact against KB articles → DOCUMENTED (≥1 match) vs UNDOCUMENTED (0); amber badge on undocumented count; ◈ CKXR button left:5520 bottom:18 zIndex:68; isCkxrQuery+buildCkxrScript wired in JarvisBrain; jarvis:ckxr-toggle event; 90-s auto-refresh; "contact knowledge/knowledge contact/ckxr/documented contacts/undocumented contacts/which contacts have knowledge/contact kb coverage/contact knowledge gap/contact kb" voice trigger */}
+            <ContactKnowledgeCrossRef />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

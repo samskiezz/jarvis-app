@@ -101,6 +101,7 @@ import { isCtintlQuery, buildCtintlScript } from "./ContactIntelLinker";
 import { isRpInvgQuery, buildRpInvgScript } from "./ReportInvestigationGap";
 import { isSkiinvQuery, buildSkiinvScript } from "./SkillInvestigationAdvisor";
 import { isIkgapQuery, buildIkgapScript } from "./LiveIntelKnowledgeGap";
+import { isCkxrQuery, buildCkxrScript } from "./ContactKnowledgeCrossRef";
 import { isInvrskQuery, buildInvrskScript } from "./InvestmentRiskExposure";
 import { isTaskRiskMatrixQuery, buildTaskRiskMatrixScript } from "./TaskRiskMatrix";
 import { isDsrskQuery, buildDsrskScript } from "./DatasetRiskAnalyzer";
@@ -1960,6 +1961,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ikgap-toggle"));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIkgapScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F261: contact × knowledge cross-reference — /entities/Contact + /knowledge/; DOCUMENTED vs UNDOCUMENTED
+    if (isCkxrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ckxr-toggle"));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCkxrScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
