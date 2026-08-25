@@ -709,6 +709,7 @@ import LiveIntelKnowledgeGap from '@/components/cinematic/LiveIntelKnowledgeGap'
 import ContactKnowledgeCrossRef from '@/components/cinematic/ContactKnowledgeCrossRef';
 import LiveIntelSwarmAlignPanel from '@/components/cinematic/LiveIntelSwarmAlignPanel';
 import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
+import SystemAnomalyReportTriple from '@/components/cinematic/SystemAnomalyReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2220,6 +2221,8 @@ function App() {
             <LiveIntelSwarmAlignPanel />
             {/* F263 (overnight 2026-08-25): Investigation × Scenario Linker (INVSL) — pre-built InvestigationScenarioLinker.jsx (365 lines) activated & mounted; parallel-fetches /v1/investigations + /v1/scenario/list; keyword-correlates each open case against scenario catalog → COVERED vs UNCOVERED; ◈ INVSL button left:7876 bottom:8 zIndex:65; isInvScenLinkerQuery+buildInvScenLinkerScript already wired in JarvisBrain; jarvis:inv-scen-link-toggle event; 90-s auto-refresh; "investigation scenario link/case scenario gap/invscenlink/which scenarios cover" voice trigger */}
             <InvestigationScenarioLinker />
+            {/* F264 (overnight 2026-08-25): System Status × Anomaly × Report Triple (SART) — /v1/jarvis/system/status + /v1/jarvis/analytics/anomalies + /v1/reports; correlates each anomaly against degraded services + covering reports → REPORTED_AFFECTED/REPORTED_ONLY/AFFECTED_ONLY/BLIND; red badge on blind count; ◈ SART button left:5580 bottom:18 zIndex:68; isSartQuery+buildSartScript wired in JarvisBrain; jarvis:sart-toggle event; 60-s auto-refresh; "system anomaly report/sart/anomaly report/which anomalies have reports" voice trigger */}
+            <SystemAnomalyReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

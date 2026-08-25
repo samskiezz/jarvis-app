@@ -744,6 +744,7 @@ import { isClieQuery, buildClieScript } from "./ContactLiveIntelExposure";
 import { isSsihbQuery, buildSsihbScript } from "./SystemStatusInvestigationBridge";
 import { isFsidQuery, buildFsidScript } from "./FullStackIntelDashboard";
 import { isSkopsgapQuery, buildSkopsgapScript } from "./SkillOpsGapDetector";
+import { isSartQuery, buildSartScript } from "./SystemAnomalyReportTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7968,6 +7969,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skopsgap-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSkopsgapScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSartQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sart-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSartScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
