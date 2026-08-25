@@ -708,6 +708,7 @@ import RiskKnowledgeOpsTriple from '@/components/cinematic/RiskKnowledgeOpsTripl
 import LiveIntelKnowledgeGap from '@/components/cinematic/LiveIntelKnowledgeGap';
 import ContactKnowledgeCrossRef from '@/components/cinematic/ContactKnowledgeCrossRef';
 import LiveIntelSwarmAlignPanel from '@/components/cinematic/LiveIntelSwarmAlignPanel';
+import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2217,6 +2218,8 @@ function App() {
             <ContactKnowledgeCrossRef />
             {/* F262 (overnight 2026-08-25): Live Intel × Swarm Job Alignment Panel (LISWRM) — pre-built LiveIntelSwarmAlignPanel.jsx (480 lines, F302) activated & mounted; parallel-fetches /functions/getLiveIntel + /entities/SwarmJob; keyword-correlates each live world event (seismic/crypto/FX) against swarm jobs → RESPONDING vs UNAUTOMATED; red badge on unautomated count; ◈ LISWRM button left:392880 bottom:8 zIndex:179; isLiswrmQuery+buildLiswrmScript already wired in JarvisBrain; jarvis:liswrm-toggle event; 120-s auto-refresh; "live swarm / world swarm / liswrm / swarm world response / automated response / swarm live event / swarm alignment / which swarms respond to live events" voice trigger */}
             <LiveIntelSwarmAlignPanel />
+            {/* F263 (overnight 2026-08-25): Investigation × Scenario Linker (INVSL) — pre-built InvestigationScenarioLinker.jsx (365 lines) activated & mounted; parallel-fetches /v1/investigations + /v1/scenario/list; keyword-correlates each open case against scenario catalog → COVERED vs UNCOVERED; ◈ INVSL button left:7876 bottom:8 zIndex:65; isInvScenLinkerQuery+buildInvScenLinkerScript already wired in JarvisBrain; jarvis:inv-scen-link-toggle event; 90-s auto-refresh; "investigation scenario link/case scenario gap/invscenlink/which scenarios cover" voice trigger */}
+            <InvestigationScenarioLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
