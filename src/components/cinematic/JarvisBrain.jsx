@@ -769,6 +769,7 @@ import { isSsrtQuery, buildSsrtScript } from "./SwarmSkillReportTriple";
 import { isRctgQuery, buildRctgScript } from "./RiskContactTaskConvergence";
 import { isDoecQuery, buildDoecScript } from "./DatasetOpsEventsCoverage";
 import { isAdkimQuery, buildAdkimScript } from "./AlertDatasetKnowledgeMesh";
+import { isIotcQuery, buildIotcScript } from "./InvestmentOpsTaskConvergence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8058,6 +8059,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:adkim-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAdkimScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F288 — Investment × Ops Events × Task Convergence (IOTC)
+    if (isIotcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iotc-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIotcScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

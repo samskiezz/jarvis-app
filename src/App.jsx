@@ -735,6 +735,7 @@ import SwarmSkillReportTriple from '@/components/cinematic/SwarmSkillReportTripl
 import RiskContactTaskConvergence from '@/components/cinematic/RiskContactTaskConvergence';
 import DatasetOpsEventsCoverage from '@/components/cinematic/DatasetOpsEventsCoverage';
 import AlertDatasetKnowledgeMesh from '@/components/cinematic/AlertDatasetKnowledgeMesh';
+import InvestmentOpsTaskConvergence from '@/components/cinematic/InvestmentOpsTaskConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2298,6 +2299,8 @@ function App() {
             <DatasetOpsEventsCoverage />
             {/* F287 (overnight 2026-08-26): Alert × Dataset × Knowledge Intelligence Mesh (ADKIM) — /v1/alerts + /v1/datasets + /knowledge/; FULL_COVERAGE/DATA_ONLY/KB_ONLY/DARK classification; dark-count badge; ◈ ADKIM button left:6960 bottom:18 zIndex:68; isAdkimQuery+buildAdkimScript wired in JarvisBrain; jarvis:adkim-toggle event; 90-s auto-refresh */}
             <AlertDatasetKnowledgeMesh />
+            {/* F288 (overnight 2026-08-26): Investment × Ops Events × Task Convergence (IOTC) — /entities/Investment + /v1/ops/events + /entities/Task; MONITORED/OPS_ONLY/TASK_ONLY/DARK classification; amber badge on dark (unmonitored) count; ◈ IOTC button left:7020 bottom:18 zIndex:68; isIotcQuery+buildIotcScript wired in JarvisBrain; jarvis:iotc-toggle event; 90-s auto-refresh */}
+            <InvestmentOpsTaskConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
