@@ -727,6 +727,7 @@ import JarvisPriorityActionQueue from '@/components/cinematic/JarvisPriorityActi
 import IntelProfileTaskInvestigationMesh from '@/components/cinematic/IntelProfileTaskInvestigationMesh';
 import InvestmentKnowledgeScenarioMesh from '@/components/cinematic/InvestmentKnowledgeScenarioMesh';
 import LiveIntelTaskCoverageMonitor from '@/components/cinematic/LiveIntelTaskCoverageMonitor';
+import SwarmLiveIntelPulseMonitor from '@/components/cinematic/SwarmLiveIntelPulseMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2274,6 +2275,8 @@ function App() {
             <InvestmentKnowledgeScenarioMesh />
             {/* F279 (overnight 2026-08-26): Live Intel × Task Coverage Monitor (LITCM) — /functions/getLiveIntel + /entities/Task; COVERED/UNCOVERED classification; amber badge on uncovered count; ◈ LITCM button left:6480 bottom:18 zIndex:68; isLitcmQuery+buildLitcmScript wired in JarvisBrain; jarvis:litcm-toggle event; 60-s auto-refresh */}
             <LiveIntelTaskCoverageMonitor />
+            {/* F280 (overnight 2026-08-26): SwarmJob × Live Intel Pulse Monitor (SLIPM) — /entities/SwarmJob + /functions/getLiveIntel; TRIGGERED/HUNTING classification; amber badge on triggered count; ◈ SLIPM button left:6540 bottom:18 zIndex:68; isSlıpmQuery+buildSlıpmScript wired in JarvisBrain; jarvis:slipm-toggle event; 60-s auto-refresh */}
+            <SwarmLiveIntelPulseMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

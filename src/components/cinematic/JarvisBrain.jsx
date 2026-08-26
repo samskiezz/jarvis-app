@@ -750,6 +750,7 @@ import { isJpaqQuery, buildJpaqScript } from "./JarvisPriorityActionQueue";
 import { isItimQuery, buildItimScript } from "./IntelProfileTaskInvestigationMesh";
 import { isIksmQuery, buildIksmScript } from "./InvestmentKnowledgeScenarioMesh";
 import { isLitcmQuery, buildLitcmScript } from "./LiveIntelTaskCoverageMonitor";
+import { isSlıpmQuery, buildSlıpmScript } from "./SwarmLiveIntelPulseMonitor";
 import { isFsidQuery, buildFsidScript } from "./FullStackIntelDashboard";
 import { isSkopsgapQuery, buildSkopsgapScript } from "./SkillOpsGapDetector";
 import { isSartQuery, buildSartScript } from "./SystemAnomalyReportTriple";
@@ -7978,6 +7979,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:litcm-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLitcmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F280 — SwarmJob × Live Intel Pulse Monitor
+    if (isSlıpmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:slipm-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSlıpmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
