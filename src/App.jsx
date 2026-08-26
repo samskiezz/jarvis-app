@@ -725,6 +725,7 @@ import ContactKnowledgeReportMesh from '@/components/cinematic/ContactKnowledgeR
 import JarvisReadinessScore from '@/components/cinematic/JarvisReadinessScore';
 import JarvisPriorityActionQueue from '@/components/cinematic/JarvisPriorityActionQueue';
 import IntelProfileTaskInvestigationMesh from '@/components/cinematic/IntelProfileTaskInvestigationMesh';
+import InvestmentKnowledgeScenarioMesh from '@/components/cinematic/InvestmentKnowledgeScenarioMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2268,6 +2269,8 @@ function App() {
             <JarvisPriorityActionQueue />
             {/* F277 (overnight 2026-08-26): IntelProfile × Task × Investigation Mesh (ITIM) — /entities/IntelProfile + /entities/Task + /v1/investigations; FULLY_TRACKED/TASK_ONLY/INV_ONLY/DARK classification; amber badge on dark count; ◈ ITIM button left:6360 bottom:18 zIndex:68; isItimQuery+buildItimScript wired in JarvisBrain; jarvis:itim-toggle event; 90-s auto-refresh */}
             <IntelProfileTaskInvestigationMesh />
+            {/* F278 (overnight 2026-08-26): Investment × Knowledge × Scenario Intelligence Mesh (IKSM) — /entities/Investment + /knowledge/ + /v1/scenario/list; FULLY_COVERED/KB_ONLY/SCENARIO_ONLY/DARK classification; amber badge on dark count; ◈ IKSM button left:6420 bottom:18 zIndex:68; isIksmQuery+buildIksmScript wired in JarvisBrain; jarvis:iksm-toggle event; 90-s auto-refresh */}
+            <InvestmentKnowledgeScenarioMesh />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

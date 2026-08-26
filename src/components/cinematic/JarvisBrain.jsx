@@ -748,6 +748,7 @@ import { isRdsimQuery, buildRdsimScript } from "./ReportDatasetSkillMesh";
 import { isJsrsQuery, buildJsrsScript } from "./JarvisReadinessScore";
 import { isJpaqQuery, buildJpaqScript } from "./JarvisPriorityActionQueue";
 import { isItimQuery, buildItimScript } from "./IntelProfileTaskInvestigationMesh";
+import { isIksmQuery, buildIksmScript } from "./InvestmentKnowledgeScenarioMesh";
 import { isFsidQuery, buildFsidScript } from "./FullStackIntelDashboard";
 import { isSkopsgapQuery, buildSkopsgapScript } from "./SkillOpsGapDetector";
 import { isSartQuery, buildSartScript } from "./SystemAnomalyReportTriple";
@@ -7958,6 +7959,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:itim-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildItimScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F278 — Investment × Knowledge × Scenario Intelligence Mesh
+    if (isIksmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iksm-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIksmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
