@@ -777,6 +777,7 @@ import { isRcigQuery, buildRcigScript } from "./ReportContactInvestigationMesh";
 import { isKoepQuery, buildKoepScript } from "./KnowledgeOpsEventPulse";
 import { isKsdmQuery, buildKsdmScript } from "./KnowledgeScenarioDatasetMesh";
 import { isRsskrQuery, buildRsskrScript } from "./RiskSignalReadinessMap";
+import { isSitaQuery, buildSitaScript } from "./SceneTaskAlignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8138,6 +8139,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsskr-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRsskrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F440 — Scene × Task Intelligence Alignment (SITA)
+    if (isSitaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sita-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSitaScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

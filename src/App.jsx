@@ -744,6 +744,7 @@ import ReportContactInvestigationMesh from '@/components/cinematic/ReportContact
 import KnowledgeOpsEventPulse from '@/components/cinematic/KnowledgeOpsEventPulse';
 import KnowledgeScenarioDatasetMesh from '@/components/cinematic/KnowledgeScenarioDatasetMesh';
 import RiskSignalReadinessMap from '@/components/cinematic/RiskSignalReadinessMap';
+import SceneTaskAlignment from '@/components/cinematic/SceneTaskAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2325,6 +2326,7 @@ function App() {
             <KnowledgeScenarioDatasetMesh />
             {/* F439 (overnight 2026-08-26): Risk Signal × Scenario × Knowledge Readiness Map (RSSKR) — /entities/RiskSignal + /v1/scenario/list + /knowledge/; READY/SCENARIO_ONLY/KB_ONLY/EXPOSED classification; red badge on exposed count; ◈ RSSKR button left:7440 bottom:18 zIndex:68; isRsskrQuery+buildRsskrScript wired in JarvisBrain; jarvis:rsskr-toggle event; 60-s auto-refresh */}
             <RiskSignalReadinessMap />
+            <SceneTaskAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
