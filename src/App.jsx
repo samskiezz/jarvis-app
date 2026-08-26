@@ -722,6 +722,7 @@ import ScenarioRiskTaskConvergence from '@/components/cinematic/ScenarioRiskTask
 import InvestigationScenarioRecommender from '@/components/cinematic/InvestigationScenarioRecommender';
 import AipSkillContactTaskMesh from '@/components/cinematic/AipSkillContactTaskMesh';
 import ContactKnowledgeReportMesh from '@/components/cinematic/ContactKnowledgeReportMesh';
+import JarvisReadinessScore from '@/components/cinematic/JarvisReadinessScore';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2259,6 +2260,8 @@ function App() {
             <AipSkillContactTaskMesh />
             {/* F275 (overnight 2026-08-25): Contact × Knowledge × Report Intelligence Mesh (CKRM) — /entities/Contact + /knowledge/ + /v1/reports; FULL_COVERAGE/KB_ONLY/REPORT_ONLY/DARK classification; amber badge on dark count; ◈ CKRM button left:6180 bottom:18 zIndex:68; isCkrmQuery+buildCkrmScript wired in JarvisBrain; jarvis:ckrm-toggle event; 90-s auto-refresh */}
             <ContactKnowledgeReportMesh />
+            {/* F437 (overnight 2026-08-26): JARVIS Situational Readiness Score (JSRS) — parallel-polls /v1/cinematic/brain + /entities/RiskSignal + /entities/Task + /entities/SwarmJob + /v1/jarvis/system/status + /v1/jarvis/analytics/anomalies every 60 s; computes composite 0-100 readiness score → READY/NOMINAL/DEGRADED/CRITICAL; ◈ JSRS button left:6240 bottom:18 zIndex:68; red pulse on CRITICAL; factor breakdown rows with score contributions; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational readiness brief + jarvis:speak-dossier TTS; isJsrsQuery+buildJsrsScript wired in JarvisBrain; jarvis:jsrs-toggle event; 60-s auto-refresh */}
+            <JarvisReadinessScore />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

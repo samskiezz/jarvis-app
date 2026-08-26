@@ -745,6 +745,7 @@ import { isSrisvQuery, buildSrisvScript } from "./SceneRiskInvestigationCoverage
 import { isClieQuery, buildClieScript } from "./ContactLiveIntelExposure";
 import { isSsihbQuery, buildSsihbScript } from "./SystemStatusInvestigationBridge";
 import { isRdsimQuery, buildRdsimScript } from "./ReportDatasetSkillMesh";
+import { isJsrsQuery, buildJsrsScript } from "./JarvisReadinessScore";
 import { isFsidQuery, buildFsidScript } from "./FullStackIntelDashboard";
 import { isSkopsgapQuery, buildSkopsgapScript } from "./SkillOpsGapDetector";
 import { isSartQuery, buildSartScript } from "./SystemAnomalyReportTriple";
@@ -7928,6 +7929,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rdsim-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRdsimScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F437 — JARVIS Situational Readiness Score
+    if (isJsrsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:jsrs-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildJsrsScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
