@@ -738,6 +738,7 @@ import AlertDatasetKnowledgeMesh from '@/components/cinematic/AlertDatasetKnowle
 import InvestmentOpsTaskConvergence from '@/components/cinematic/InvestmentOpsTaskConvergence';
 import IntelProfileScenarioTaskMesh from '@/components/cinematic/IntelProfileScenarioTaskMesh';
 import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvestigationCoverage';
+import ContactSkillRiskMesh from '@/components/cinematic/ContactSkillRiskMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2307,6 +2308,8 @@ function App() {
             <IntelProfileScenarioTaskMesh />
             {/* F290 (overnight 2026-08-26): AIP Skill × Investigation Coverage (ASIC) — /v1/aip/skill + /v1/investigations; DRIVEN/AUTONOMOUS classification; amber badge on autonomous count; ◈ ASIC button left:7140 bottom:18 zIndex:68; isAsicQuery+buildAsicScript wired in JarvisBrain; jarvis:asic-toggle event; 90-s auto-refresh */}
             <AipSkillInvestigationCoverage />
+            {/* F291 (overnight 2026-08-26): Contact × AIP Skill × Risk Signal Intelligence Mesh (CSRSM) — /entities/Contact + /v1/aip/skill + /entities/RiskSignal; FULLY_COVERED/SKILLED_ONLY/RISK_ONLY/DARK; amber badge on dark count; ◈ CSRSM button left:7200 bottom:18 zIndex:68; isCsrsmQuery+buildCsrsmScript wired in JarvisBrain; jarvis:csrsm-toggle event; 90-s auto-refresh */}
+            <ContactSkillRiskMesh />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

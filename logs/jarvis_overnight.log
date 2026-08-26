@@ -160,3 +160,4 @@
 2026-08-26 F287 AlertDatasetKnowledgeMesh (ADKIM) — /v1/alerts+/v1/datasets+/knowledge/ → FULL_COVERAGE/DATA_ONLY/KB_ONLY/DARK; ◈ ADKIM left:6960 bottom:18; isAdkimQuery+buildAdkimScript wired; vite build exit:0
 [2026-08-26] F288 InvestmentOpsTaskConvergence.jsx — /entities/Investment + /v1/ops/events + /entities/Task; MONITORED/OPS_ONLY/TASK_ONLY/DARK mesh; ◈ IOTC button left:7020; isIotcQuery+buildIotcScript wired in JarvisBrain; vite build exit:0; bundle index-BPc7sD-o.js
 [2026-08-26] F289 IntelProfileScenarioTaskMesh (IPST) — /entities/IntelProfile + /v1/scenario/list + /entities/Task; FULLY_MANAGED/SCENARIO_ONLY/TASK_ONLY/DARK; ◈ IPST left:7080 zIndex:68; isIpstQuery+buildIpstScript wired in JarvisBrain; jarvis:ipst-toggle; 90-s refresh; vite build exit:0
+2026-08-26 F291 DONE: ContactSkillRiskMesh.jsx — Contact×AIPSkill×RiskSignal 3-way correlation; FULLY_COVERED/SKILLED_ONLY/RISK_ONLY/DARK; wired App.jsx+JarvisBrain.jsx; build exit 0

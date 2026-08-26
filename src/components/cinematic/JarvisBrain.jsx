@@ -772,6 +772,7 @@ import { isAdkimQuery, buildAdkimScript } from "./AlertDatasetKnowledgeMesh";
 import { isIotcQuery, buildIotcScript } from "./InvestmentOpsTaskConvergence";
 import { isIpstQuery, buildIpstScript } from "./IntelProfileScenarioTaskMesh";
 import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
+import { isCsrsmQuery, buildCsrsmScript } from "./ContactSkillRiskMesh";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8088,6 +8089,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:asic-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAsicScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F291 — Contact × AIP Skill × Risk Signal Intelligence Mesh (CSRSM)
+    if (isCsrsmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csrsm-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildCsrsmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
