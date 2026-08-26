@@ -766,6 +766,7 @@ import { isGcsdQuery, buildGcsdScript } from "./GraphScenarioDatasetTriple";
 import { isCgibQuery, buildCgibScript } from "./ContactGraphCommunityBridge";
 import { isLigcmQuery, buildLigcmScript } from "./LiveIntelGraphCentrality";
 import { isSsrtQuery, buildSsrtScript } from "./SwarmSkillReportTriple";
+import { isRctgQuery, buildRctgScript } from "./RiskContactTaskConvergence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8028,6 +8029,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ssrt-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSsrtScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F285 — Risk Signal × Contact × Task Grand Convergence
+    if (isRctgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rctg-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRctgScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

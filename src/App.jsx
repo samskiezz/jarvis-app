@@ -732,6 +732,7 @@ import GraphScenarioDatasetTriple from '@/components/cinematic/GraphScenarioData
 import ContactGraphCommunityBridge from '@/components/cinematic/ContactGraphCommunityBridge';
 import LiveIntelGraphCentrality from '@/components/cinematic/LiveIntelGraphCentrality';
 import SwarmSkillReportTriple from '@/components/cinematic/SwarmSkillReportTriple';
+import RiskContactTaskConvergence from '@/components/cinematic/RiskContactTaskConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2289,6 +2290,8 @@ function App() {
             <LiveIntelGraphCentrality />
             {/* F284 (overnight 2026-08-26): SwarmJob × AIP Skill × Report Triple (SSRT) — /entities/SwarmJob + /v1/aip/skill + /v1/reports; FULLY_COVERED/SKILL_ONLY/REPORT_ONLY/DARK classification; amber badge on dark count; ◈ SSRT button left:6780 bottom:18 zIndex:68; isSsrtQuery+buildSsrtScript wired in JarvisBrain; jarvis:ssrt-toggle event; 90-s auto-refresh */}
             <SwarmSkillReportTriple />
+            {/* F285 (overnight 2026-08-26): Risk Signal × Contact × Task Grand Convergence (RCTG) — /entities/RiskSignal + /entities/Contact + /entities/Task; FULLY_MANAGED/TASK_ONLY/CONTACT_ONLY/UNMANAGED classification; red pulse badge on unmanaged count; ◈ RCTG button left:6840 bottom:18 zIndex:68; isRctgQuery+buildRctgScript wired in JarvisBrain; jarvis:rctg-toggle event; 60-s auto-refresh */}
+            <RiskContactTaskConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
