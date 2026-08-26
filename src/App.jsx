@@ -729,6 +729,7 @@ import InvestmentKnowledgeScenarioMesh from '@/components/cinematic/InvestmentKn
 import LiveIntelTaskCoverageMonitor from '@/components/cinematic/LiveIntelTaskCoverageMonitor';
 import SwarmLiveIntelPulseMonitor from '@/components/cinematic/SwarmLiveIntelPulseMonitor';
 import GraphScenarioDatasetTriple from '@/components/cinematic/GraphScenarioDatasetTriple';
+import ContactGraphCommunityBridge from '@/components/cinematic/ContactGraphCommunityBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2280,6 +2281,8 @@ function App() {
             <SwarmLiveIntelPulseMonitor />
             {/* F281 (overnight 2026-08-26): Graph Centrality × Scenario × Dataset Triple (GCSD) — /v1/graph/centrality + /v1/scenario/list + /v1/datasets; FULL_COVERAGE/SCENARIO_ONLY/DATA_ONLY/DARK classification; amber badge on dark count; ◈ GCSD button left:6600 bottom:18 zIndex:68; isGcsdQuery+buildGcsdScript wired in JarvisBrain; jarvis:gcsd-toggle event; 90-s auto-refresh */}
             <GraphScenarioDatasetTriple />
+            {/* F282 (overnight 2026-08-26): Contact × Graph Community Bridge (CGIB) — /entities/Contact + /v1/graph/communities; IN_CLUSTER/ISOLATED classification; amber badge on isolated count; ◈ CGIB button left:6660 bottom:18 zIndex:68; isCgibQuery+buildCgibScript wired in JarvisBrain; jarvis:cgib-toggle event; 90-s auto-refresh */}
+            <ContactGraphCommunityBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
