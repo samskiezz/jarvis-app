@@ -739,6 +739,7 @@ import InvestmentOpsTaskConvergence from '@/components/cinematic/InvestmentOpsTa
 import IntelProfileScenarioTaskMesh from '@/components/cinematic/IntelProfileScenarioTaskMesh';
 import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvestigationCoverage';
 import ContactSkillRiskMesh from '@/components/cinematic/ContactSkillRiskMesh';
+import KnowledgeOpsEventPulse from '@/components/cinematic/KnowledgeOpsEventPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2310,6 +2311,8 @@ function App() {
             <AipSkillInvestigationCoverage />
             {/* F291 (overnight 2026-08-26): Contact × AIP Skill × Risk Signal Intelligence Mesh (CSRSM) — /entities/Contact + /v1/aip/skill + /entities/RiskSignal; FULLY_COVERED/SKILLED_ONLY/RISK_ONLY/DARK; amber badge on dark count; ◈ CSRSM button left:7200 bottom:18 zIndex:68; isCsrsmQuery+buildCsrsmScript wired in JarvisBrain; jarvis:csrsm-toggle event; 90-s auto-refresh */}
             <ContactSkillRiskMesh />
+            {/* F292 (overnight 2026-08-26): Knowledge × Ops Events Intelligence Pulse (KOEP) — /knowledge/ + /v1/ops/events; ACTIVE/DORMANT classification; amber badge on active count; ◈ KOEP button left:7260 bottom:18 zIndex:68; isKoepQuery+buildKoepScript wired in JarvisBrain; jarvis:koep-toggle event; 60-s auto-refresh */}
+            <KnowledgeOpsEventPulse />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
