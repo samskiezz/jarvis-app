@@ -734,6 +734,7 @@ import LiveIntelGraphCentrality from '@/components/cinematic/LiveIntelGraphCentr
 import SwarmSkillReportTriple from '@/components/cinematic/SwarmSkillReportTriple';
 import RiskContactTaskConvergence from '@/components/cinematic/RiskContactTaskConvergence';
 import DatasetOpsEventsCoverage from '@/components/cinematic/DatasetOpsEventsCoverage';
+import AlertDatasetKnowledgeMesh from '@/components/cinematic/AlertDatasetKnowledgeMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2295,6 +2296,8 @@ function App() {
             <RiskContactTaskConvergence />
             {/* F286 (overnight 2026-08-26): Dataset × Ops Events Coverage Monitor (DOEC) — /v1/datasets + /v1/ops/events; ACTIVE/IDLE classification; amber badge on active count; ◈ DOEC button left:6900 bottom:18 zIndex:68; isDoecQuery+buildDoecScript wired in JarvisBrain; jarvis:doec-toggle event; 60-s auto-refresh */}
             <DatasetOpsEventsCoverage />
+            {/* F287 (overnight 2026-08-26): Alert × Dataset × Knowledge Intelligence Mesh (ADKIM) — /v1/alerts + /v1/datasets + /knowledge/; FULL_COVERAGE/DATA_ONLY/KB_ONLY/DARK classification; dark-count badge; ◈ ADKIM button left:6960 bottom:18 zIndex:68; isAdkimQuery+buildAdkimScript wired in JarvisBrain; jarvis:adkim-toggle event; 90-s auto-refresh */}
+            <AlertDatasetKnowledgeMesh />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
