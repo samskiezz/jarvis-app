@@ -733,6 +733,7 @@ import ContactGraphCommunityBridge from '@/components/cinematic/ContactGraphComm
 import LiveIntelGraphCentrality from '@/components/cinematic/LiveIntelGraphCentrality';
 import SwarmSkillReportTriple from '@/components/cinematic/SwarmSkillReportTriple';
 import RiskContactTaskConvergence from '@/components/cinematic/RiskContactTaskConvergence';
+import DatasetOpsEventsCoverage from '@/components/cinematic/DatasetOpsEventsCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2292,6 +2293,8 @@ function App() {
             <SwarmSkillReportTriple />
             {/* F285 (overnight 2026-08-26): Risk Signal × Contact × Task Grand Convergence (RCTG) — /entities/RiskSignal + /entities/Contact + /entities/Task; FULLY_MANAGED/TASK_ONLY/CONTACT_ONLY/UNMANAGED classification; red pulse badge on unmanaged count; ◈ RCTG button left:6840 bottom:18 zIndex:68; isRctgQuery+buildRctgScript wired in JarvisBrain; jarvis:rctg-toggle event; 60-s auto-refresh */}
             <RiskContactTaskConvergence />
+            {/* F286 (overnight 2026-08-26): Dataset × Ops Events Coverage Monitor (DOEC) — /v1/datasets + /v1/ops/events; ACTIVE/IDLE classification; amber badge on active count; ◈ DOEC button left:6900 bottom:18 zIndex:68; isDoecQuery+buildDoecScript wired in JarvisBrain; jarvis:doec-toggle event; 60-s auto-refresh */}
+            <DatasetOpsEventsCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
