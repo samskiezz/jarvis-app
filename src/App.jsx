@@ -726,6 +726,7 @@ import JarvisReadinessScore from '@/components/cinematic/JarvisReadinessScore';
 import JarvisPriorityActionQueue from '@/components/cinematic/JarvisPriorityActionQueue';
 import IntelProfileTaskInvestigationMesh from '@/components/cinematic/IntelProfileTaskInvestigationMesh';
 import InvestmentKnowledgeScenarioMesh from '@/components/cinematic/InvestmentKnowledgeScenarioMesh';
+import LiveIntelTaskCoverageMonitor from '@/components/cinematic/LiveIntelTaskCoverageMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2271,6 +2272,8 @@ function App() {
             <IntelProfileTaskInvestigationMesh />
             {/* F278 (overnight 2026-08-26): Investment × Knowledge × Scenario Intelligence Mesh (IKSM) — /entities/Investment + /knowledge/ + /v1/scenario/list; FULLY_COVERED/KB_ONLY/SCENARIO_ONLY/DARK classification; amber badge on dark count; ◈ IKSM button left:6420 bottom:18 zIndex:68; isIksmQuery+buildIksmScript wired in JarvisBrain; jarvis:iksm-toggle event; 90-s auto-refresh */}
             <InvestmentKnowledgeScenarioMesh />
+            {/* F279 (overnight 2026-08-26): Live Intel × Task Coverage Monitor (LITCM) — /functions/getLiveIntel + /entities/Task; COVERED/UNCOVERED classification; amber badge on uncovered count; ◈ LITCM button left:6480 bottom:18 zIndex:68; isLitcmQuery+buildLitcmScript wired in JarvisBrain; jarvis:litcm-toggle event; 60-s auto-refresh */}
+            <LiveIntelTaskCoverageMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
