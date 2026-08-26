@@ -742,6 +742,7 @@ import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvest
 import ContactSkillRiskMesh from '@/components/cinematic/ContactSkillRiskMesh';
 import ReportContactInvestigationMesh from '@/components/cinematic/ReportContactInvestigationMesh';
 import KnowledgeOpsEventPulse from '@/components/cinematic/KnowledgeOpsEventPulse';
+import KnowledgeScenarioDatasetMesh from '@/components/cinematic/KnowledgeScenarioDatasetMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2319,6 +2320,8 @@ function App() {
             <KnowledgeOpsEventPulse />
             {/* F293 (overnight 2026-08-26): Report × Contact × Investigation Grand Convergence (RCIG) — /v1/reports + /entities/Contact + /v1/investigations; FULLY_LINKED/CONTACT_ONLY/INV_ONLY/DARK; amber badge on dark count; ◈ RCIG button left:7320 bottom:18 zIndex:68; isRcigQuery+buildRcigScript wired in JarvisBrain; jarvis:rcig-toggle event; 90-s auto-refresh */}
             <ReportContactInvestigationMesh />
+            {/* F438 (overnight 2026-08-26): Knowledge × Scenario × Dataset Intelligence Mesh (KSDM) — /knowledge/ + /v1/scenario/list + /v1/datasets; FULLY_GROUNDED/SCENARIO_ONLY/DATA_ONLY/THEORETICAL classification; amber badge on theoretical count; ◈ KSDM button left:7380 bottom:18 zIndex:68; isKsdmQuery+buildKsdmScript wired in JarvisBrain; jarvis:ksdm-toggle event; 90-s auto-refresh */}
+            <KnowledgeScenarioDatasetMesh />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
