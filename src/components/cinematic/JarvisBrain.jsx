@@ -771,6 +771,7 @@ import { isDoecQuery, buildDoecScript } from "./DatasetOpsEventsCoverage";
 import { isAdkimQuery, buildAdkimScript } from "./AlertDatasetKnowledgeMesh";
 import { isIotcQuery, buildIotcScript } from "./InvestmentOpsTaskConvergence";
 import { isIpstQuery, buildIpstScript } from "./IntelProfileScenarioTaskMesh";
+import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8078,6 +8079,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipst-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIpstScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F290 — AIP Skill × Investigation Coverage (ASIC)
+    if (isAsicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:asic-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildAsicScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -737,6 +737,7 @@ import DatasetOpsEventsCoverage from '@/components/cinematic/DatasetOpsEventsCov
 import AlertDatasetKnowledgeMesh from '@/components/cinematic/AlertDatasetKnowledgeMesh';
 import InvestmentOpsTaskConvergence from '@/components/cinematic/InvestmentOpsTaskConvergence';
 import IntelProfileScenarioTaskMesh from '@/components/cinematic/IntelProfileScenarioTaskMesh';
+import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2304,6 +2305,8 @@ function App() {
             <InvestmentOpsTaskConvergence />
             {/* F289 (overnight 2026-08-26): IntelProfile × Scenario × Task Intelligence Triple (IPST) — /entities/IntelProfile + /v1/scenario/list + /entities/Task; FULLY_MANAGED/SCENARIO_ONLY/TASK_ONLY/DARK classification; amber badge on dark count; ◈ IPST button left:7080 bottom:18 zIndex:68; isIpstQuery+buildIpstScript wired in JarvisBrain; jarvis:ipst-toggle event; 90-s auto-refresh */}
             <IntelProfileScenarioTaskMesh />
+            {/* F290 (overnight 2026-08-26): AIP Skill × Investigation Coverage (ASIC) — /v1/aip/skill + /v1/investigations; DRIVEN/AUTONOMOUS classification; amber badge on autonomous count; ◈ ASIC button left:7140 bottom:18 zIndex:68; isAsicQuery+buildAsicScript wired in JarvisBrain; jarvis:asic-toggle event; 90-s auto-refresh */}
+            <AipSkillInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
