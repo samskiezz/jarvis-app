@@ -731,6 +731,7 @@ import SwarmLiveIntelPulseMonitor from '@/components/cinematic/SwarmLiveIntelPul
 import GraphScenarioDatasetTriple from '@/components/cinematic/GraphScenarioDatasetTriple';
 import ContactGraphCommunityBridge from '@/components/cinematic/ContactGraphCommunityBridge';
 import LiveIntelGraphCentrality from '@/components/cinematic/LiveIntelGraphCentrality';
+import SwarmSkillReportTriple from '@/components/cinematic/SwarmSkillReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2286,6 +2287,8 @@ function App() {
             <ContactGraphCommunityBridge />
             {/* F283 (overnight 2026-08-26): Live Intel × Graph Centrality Active Nodes Monitor (LIGCM) — /functions/getLiveIntel + /v1/graph/centrality; ACTIVE/DORMANT classification; active-count badge; ◈ LIGCM button left:6720 bottom:18 zIndex:68; isLigcmQuery+buildLigcmScript wired in JarvisBrain; jarvis:ligcm-toggle event; 60-s auto-refresh */}
             <LiveIntelGraphCentrality />
+            {/* F284 (overnight 2026-08-26): SwarmJob × AIP Skill × Report Triple (SSRT) — /entities/SwarmJob + /v1/aip/skill + /v1/reports; FULLY_COVERED/SKILL_ONLY/REPORT_ONLY/DARK classification; amber badge on dark count; ◈ SSRT button left:6780 bottom:18 zIndex:68; isSsrtQuery+buildSsrtScript wired in JarvisBrain; jarvis:ssrt-toggle event; 90-s auto-refresh */}
+            <SwarmSkillReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

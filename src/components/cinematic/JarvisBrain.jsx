@@ -765,6 +765,7 @@ import { isSrctQuery, buildSrctScript } from "./ScenarioRiskTaskConvergence";
 import { isGcsdQuery, buildGcsdScript } from "./GraphScenarioDatasetTriple";
 import { isCgibQuery, buildCgibScript } from "./ContactGraphCommunityBridge";
 import { isLigcmQuery, buildLigcmScript } from "./LiveIntelGraphCentrality";
+import { isSsrtQuery, buildSsrtScript } from "./SwarmSkillReportTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8018,6 +8019,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ligcm-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildLigcmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F284 — SwarmJob × AIP Skill × Report Triple
+    if (isSsrtQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssrt-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSsrtScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
