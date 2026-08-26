@@ -723,6 +723,7 @@ import InvestigationScenarioRecommender from '@/components/cinematic/Investigati
 import AipSkillContactTaskMesh from '@/components/cinematic/AipSkillContactTaskMesh';
 import ContactKnowledgeReportMesh from '@/components/cinematic/ContactKnowledgeReportMesh';
 import JarvisReadinessScore from '@/components/cinematic/JarvisReadinessScore';
+import JarvisPriorityActionQueue from '@/components/cinematic/JarvisPriorityActionQueue';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2262,6 +2263,8 @@ function App() {
             <ContactKnowledgeReportMesh />
             {/* F437 (overnight 2026-08-26): JARVIS Situational Readiness Score (JSRS) — parallel-polls /v1/cinematic/brain + /entities/RiskSignal + /entities/Task + /entities/SwarmJob + /v1/jarvis/system/status + /v1/jarvis/analytics/anomalies every 60 s; computes composite 0-100 readiness score → READY/NOMINAL/DEGRADED/CRITICAL; ◈ JSRS button left:6240 bottom:18 zIndex:68; red pulse on CRITICAL; factor breakdown rows with score contributions; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational readiness brief + jarvis:speak-dossier TTS; isJsrsQuery+buildJsrsScript wired in JarvisBrain; jarvis:jsrs-toggle event; 60-s auto-refresh */}
             <JarvisReadinessScore />
+            {/* F276 (overnight 2026-08-26): JARVIS Priority Action Queue (JPAQ) — parallel-polls /entities/Task + /entities/RiskSignal + /v1/investigations + /v1/ops/events + /entities/SwarmJob every 90 s; urgency-ranks all items into a single unified action queue; red pulse badge on critical count; ◈ JPAQ button left:6300 bottom:18 zIndex:68; isJpaqQuery+buildJpaqScript wired in JarvisBrain; jarvis:jpaq-toggle event; 90-s auto-refresh */}
+            <JarvisPriorityActionQueue />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

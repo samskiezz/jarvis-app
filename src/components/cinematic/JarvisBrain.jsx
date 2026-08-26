@@ -746,6 +746,7 @@ import { isClieQuery, buildClieScript } from "./ContactLiveIntelExposure";
 import { isSsihbQuery, buildSsihbScript } from "./SystemStatusInvestigationBridge";
 import { isRdsimQuery, buildRdsimScript } from "./ReportDatasetSkillMesh";
 import { isJsrsQuery, buildJsrsScript } from "./JarvisReadinessScore";
+import { isJpaqQuery, buildJpaqScript } from "./JarvisPriorityActionQueue";
 import { isFsidQuery, buildFsidScript } from "./FullStackIntelDashboard";
 import { isSkopsgapQuery, buildSkopsgapScript } from "./SkillOpsGapDetector";
 import { isSartQuery, buildSartScript } from "./SystemAnomalyReportTriple";
@@ -7929,6 +7930,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rdsim-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRdsimScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F276 — JARVIS Priority Action Queue
+    if (isJpaqQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:jpaq-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildJpaqScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
