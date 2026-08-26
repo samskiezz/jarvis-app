@@ -762,6 +762,7 @@ import { isIasdQuery, buildIasdScript } from "./InvestigationSkillDatasetTriple"
 import { isLirkcQuery, buildLirkcScript } from "./LiveIntelReportKnowledgeCoverage";
 import { isCsdmQuery, buildCsdmScript } from "./ContactSwarmDatasetMesh";
 import { isSrctQuery, buildSrctScript } from "./ScenarioRiskTaskConvergence";
+import { isGcsdQuery, buildGcsdScript } from "./GraphScenarioDatasetTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -7988,6 +7989,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:slipm-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildSlıpmScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F281 — Graph Centrality × Scenario × Dataset Triple
+    if (isGcsdQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcsd-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildGcsdScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
