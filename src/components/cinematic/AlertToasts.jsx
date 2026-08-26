@@ -8,6 +8,35 @@ const POLL_MS = 20_000;
 const TOAST_TTL = 12_000;
 const API_KEY = (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
 
+// ── F22 voice-query helpers ───────────────────────────────────────────────────
+export function isAlertQuery(q) {
+  return /\balert|warning|critical alert|open alert|ops alert|threat alert|active alarm/i.test(q);
+}
+
+export async function buildAlertScript() {
+  try {
+    const r = await fetch(`${apiBase()}/v1/alerts?status=open`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    });
+    if (!r.ok) return "Alert feed unavailable, sir.";
+    const data = await r.json();
+    const alerts = Array.isArray(data) ? data : (data.items || data.alerts || []);
+    if (alerts.length === 0) return "No open alerts at this time, sir. All systems nominal.";
+    const criticals = alerts.filter((a) => (a.payload?.severity ?? 50) >= 90);
+    const highs = alerts.filter((a) => { const s = a.payload?.severity ?? 50; return s >= 70 && s < 90; });
+    const parts = [`Sir, I have ${alerts.length} open alert${alerts.length !== 1 ? "s" : ""}.`];
+    if (criticals.length > 0) {
+      const names = criticals.slice(0, 2).map((a) => a.payload?.name || `Alert ${a.id}`).join(" and ");
+      parts.push(`${criticals.length} critical: ${names}.`);
+    }
+    if (highs.length > 0) parts.push(`${highs.length} high-severity.`);
+    parts.push("Recommend immediate review.");
+    return parts.join(" ");
+  } catch {
+    return "I was unable to retrieve the alert feed, sir.";
+  }
+}
+
 function severityLabel(sev) {
   if (sev >= 90) return { label: "CRITICAL", color: RED };
   if (sev >= 70) return { label: "HIGH", color: ORANGE };

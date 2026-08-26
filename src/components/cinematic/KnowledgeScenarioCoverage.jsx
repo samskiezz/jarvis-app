@@ -13,11 +13,11 @@
  *   knowledge-readiness brief + TTS via jarvis:speak-dossier.
  * 120 s auto-refresh.
  *
- * Intent: "knowledge scenario" / "scenario knowledge" / "know scenario" /
- *         "knowledge backed" / "knowledge dark" / "kscov"
- *   → jarvis:kscov-toggle + TTS brief via buildKscovScript()
+ * Intent: "knowledge scenario" / "scenario knowledge" / "kbscen" /
+ *         "knowledge backed scenario" / "unbriefed scenario" / "scenario briefing"
+ *   → jarvis:kbscen-toggle + TTS brief via buildKbscenScript()
  *
- * Toggle: ◈ KSCOV at left:8188, bottom:8, zIndex 65.
+ * Toggle: ◈ KBSCEN at left:8188, bottom:8, zIndex 65.
  * Mounted in App.jsx.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -107,14 +107,14 @@ function statusColor(s) {
 
 // ─── exported intent helpers (consumed by JarvisBrain) ───────────────────────
 
-const KSCOV_RE =
-  /knowledge.{0,20}scenario|scenario.{0,20}knowledge|know.{0,15}scenario|scenario.{0,15}know|knowledge[\s-]?backed|knowledge[\s-]?dark|kscov\b/i;
+const KBSCEN_RE =
+  /knowledge.{0,20}scenario|scenario.{0,20}knowledge|know.{0,15}scenario|scenario.{0,15}know|knowledge[\s-]?backed[\s-]?scenario|unbriefed[\s-]?scenario|scenario[\s-]?briefing|kbscen\b/i;
 
-export function isKscovQuery(q) {
-  return KSCOV_RE.test(q || "");
+export function isKbscenQuery(q) {
+  return KBSCEN_RE.test(q || "");
 }
 
-export async function buildKscovScript() {
+export async function buildKbscenScript() {
   try {
     const [knowledgeRaw, scenarioRaw] = await Promise.all([
       fetch(`${apiBase()}/knowledge/`, {
@@ -164,8 +164,8 @@ export default function KnowledgeScenarioCoverage() {
 
   useEffect(() => {
     const onToggle = () => setVisible((v) => !v);
-    window.addEventListener("jarvis:kscov-toggle", onToggle);
-    return () => window.removeEventListener("jarvis:kscov-toggle", onToggle);
+    window.addEventListener("jarvis:kbscen-toggle", onToggle);
+    return () => window.removeEventListener("jarvis:kbscen-toggle", onToggle);
   }, []);
 
   useEffect(() => {
@@ -212,7 +212,7 @@ export default function KnowledgeScenarioCoverage() {
       {/* Toggle button */}
       <button
         onClick={() => setVisible((v) => !v)}
-        title="Knowledge-Scenario Coverage (F62)"
+        title="Knowledge × Scenario Coverage (KBSCEN)"
         style={{
           position: "fixed", bottom: 8, left: BTN_LEFT, zIndex: 65,
           background: visible ? `${CY}22` : "rgba(5,8,13,0.75)",
@@ -224,7 +224,7 @@ export default function KnowledgeScenarioCoverage() {
           backdropFilter: "blur(4px)",
         }}
       >
-        ◈ KSCOV
+        ◈ KBSCEN
         {dark.length > 0 && (
           <span style={{
             marginLeft: 4, background: AMBER, color: "#000",
