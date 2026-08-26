@@ -724,6 +724,7 @@ import AipSkillContactTaskMesh from '@/components/cinematic/AipSkillContactTaskM
 import ContactKnowledgeReportMesh from '@/components/cinematic/ContactKnowledgeReportMesh';
 import JarvisReadinessScore from '@/components/cinematic/JarvisReadinessScore';
 import JarvisPriorityActionQueue from '@/components/cinematic/JarvisPriorityActionQueue';
+import IntelProfileTaskInvestigationMesh from '@/components/cinematic/IntelProfileTaskInvestigationMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2265,6 +2266,8 @@ function App() {
             <JarvisReadinessScore />
             {/* F276 (overnight 2026-08-26): JARVIS Priority Action Queue (JPAQ) — parallel-polls /entities/Task + /entities/RiskSignal + /v1/investigations + /v1/ops/events + /entities/SwarmJob every 90 s; urgency-ranks all items into a single unified action queue; red pulse badge on critical count; ◈ JPAQ button left:6300 bottom:18 zIndex:68; isJpaqQuery+buildJpaqScript wired in JarvisBrain; jarvis:jpaq-toggle event; 90-s auto-refresh */}
             <JarvisPriorityActionQueue />
+            {/* F277 (overnight 2026-08-26): IntelProfile × Task × Investigation Mesh (ITIM) — /entities/IntelProfile + /entities/Task + /v1/investigations; FULLY_TRACKED/TASK_ONLY/INV_ONLY/DARK classification; amber badge on dark count; ◈ ITIM button left:6360 bottom:18 zIndex:68; isItimQuery+buildItimScript wired in JarvisBrain; jarvis:itim-toggle event; 90-s auto-refresh */}
+            <IntelProfileTaskInvestigationMesh />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

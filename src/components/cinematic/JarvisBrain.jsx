@@ -747,6 +747,7 @@ import { isSsihbQuery, buildSsihbScript } from "./SystemStatusInvestigationBridg
 import { isRdsimQuery, buildRdsimScript } from "./ReportDatasetSkillMesh";
 import { isJsrsQuery, buildJsrsScript } from "./JarvisReadinessScore";
 import { isJpaqQuery, buildJpaqScript } from "./JarvisPriorityActionQueue";
+import { isItimQuery, buildItimScript } from "./IntelProfileTaskInvestigationMesh";
 import { isFsidQuery, buildFsidScript } from "./FullStackIntelDashboard";
 import { isSkopsgapQuery, buildSkopsgapScript } from "./SkillOpsGapDetector";
 import { isSartQuery, buildSartScript } from "./SystemAnomalyReportTriple";
@@ -7948,6 +7949,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:jsrs-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildJsrsScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F277 — IntelProfile × Task × Investigation Mesh
+    if (isItimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:itim-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildItimScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
