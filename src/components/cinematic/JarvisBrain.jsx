@@ -764,6 +764,7 @@ import { isCsdmQuery, buildCsdmScript } from "./ContactSwarmDatasetMesh";
 import { isSrctQuery, buildSrctScript } from "./ScenarioRiskTaskConvergence";
 import { isGcsdQuery, buildGcsdScript } from "./GraphScenarioDatasetTriple";
 import { isCgibQuery, buildCgibScript } from "./ContactGraphCommunityBridge";
+import { isLigcmQuery, buildLigcmScript } from "./LiveIntelGraphCentrality";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8008,6 +8009,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cgib-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildCgibScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F283 — Live Intel × Graph Centrality Active Nodes Monitor
+    if (isLigcmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ligcm-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLigcmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

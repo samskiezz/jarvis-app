@@ -730,6 +730,7 @@ import LiveIntelTaskCoverageMonitor from '@/components/cinematic/LiveIntelTaskCo
 import SwarmLiveIntelPulseMonitor from '@/components/cinematic/SwarmLiveIntelPulseMonitor';
 import GraphScenarioDatasetTriple from '@/components/cinematic/GraphScenarioDatasetTriple';
 import ContactGraphCommunityBridge from '@/components/cinematic/ContactGraphCommunityBridge';
+import LiveIntelGraphCentrality from '@/components/cinematic/LiveIntelGraphCentrality';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2283,6 +2284,8 @@ function App() {
             <GraphScenarioDatasetTriple />
             {/* F282 (overnight 2026-08-26): Contact × Graph Community Bridge (CGIB) — /entities/Contact + /v1/graph/communities; IN_CLUSTER/ISOLATED classification; amber badge on isolated count; ◈ CGIB button left:6660 bottom:18 zIndex:68; isCgibQuery+buildCgibScript wired in JarvisBrain; jarvis:cgib-toggle event; 90-s auto-refresh */}
             <ContactGraphCommunityBridge />
+            {/* F283 (overnight 2026-08-26): Live Intel × Graph Centrality Active Nodes Monitor (LIGCM) — /functions/getLiveIntel + /v1/graph/centrality; ACTIVE/DORMANT classification; active-count badge; ◈ LIGCM button left:6720 bottom:18 zIndex:68; isLigcmQuery+buildLigcmScript wired in JarvisBrain; jarvis:ligcm-toggle event; 60-s auto-refresh */}
+            <LiveIntelGraphCentrality />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
