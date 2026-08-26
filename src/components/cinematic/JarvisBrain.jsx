@@ -773,6 +773,7 @@ import { isIotcQuery, buildIotcScript } from "./InvestmentOpsTaskConvergence";
 import { isIpstQuery, buildIpstScript } from "./IntelProfileScenarioTaskMesh";
 import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
 import { isCsrsmQuery, buildCsrsmScript } from "./ContactSkillRiskMesh";
+import { isRcigQuery, buildRcigScript } from "./ReportContactInvestigationMesh";
 import { isKoepQuery, buildKoepScript } from "./KnowledgeOpsEventPulse";
 
 /**
@@ -8108,6 +8109,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:koep-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKoepScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F293 — Report × Contact × Investigation Grand Convergence (RCIG)
+    if (isRcigQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rcig-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRcigScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

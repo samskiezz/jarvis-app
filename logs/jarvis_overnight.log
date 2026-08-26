@@ -162,3 +162,4 @@
 [2026-08-26] F289 IntelProfileScenarioTaskMesh (IPST) — /entities/IntelProfile + /v1/scenario/list + /entities/Task; FULLY_MANAGED/SCENARIO_ONLY/TASK_ONLY/DARK; ◈ IPST left:7080 zIndex:68; isIpstQuery+buildIpstScript wired in JarvisBrain; jarvis:ipst-toggle; 90-s refresh; vite build exit:0
 2026-08-26 F291 DONE: ContactSkillRiskMesh.jsx — Contact×AIPSkill×RiskSignal 3-way correlation; FULLY_COVERED/SKILLED_ONLY/RISK_ONLY/DARK; wired App.jsx+JarvisBrain.jsx; build exit 0
 [2026-08-26] F292 KnowledgeOpsEventPulse (KOEP): /knowledge/ × /v1/ops/events; ACTIVE/DORMANT; ◈ KOEP left:7260; isKoepQuery+buildKoepScript wired; vite build exit:0
+[2026-08-26] F293 RCIG — ReportContactInvestigationMesh.jsx: /v1/reports + /entities/Contact + /v1/investigations; FULLY_LINKED/CONTACT_ONLY/INV_ONLY/DARK; ◈ RCIG button left:7320; isRcigQuery+buildRcigScript wired in JarvisBrain; vite build exit:0; dist/assets/index-C_sXUbYs.js confirmed

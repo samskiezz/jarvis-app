@@ -739,6 +739,7 @@ import InvestmentOpsTaskConvergence from '@/components/cinematic/InvestmentOpsTa
 import IntelProfileScenarioTaskMesh from '@/components/cinematic/IntelProfileScenarioTaskMesh';
 import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvestigationCoverage';
 import ContactSkillRiskMesh from '@/components/cinematic/ContactSkillRiskMesh';
+import ReportContactInvestigationMesh from '@/components/cinematic/ReportContactInvestigationMesh';
 import KnowledgeOpsEventPulse from '@/components/cinematic/KnowledgeOpsEventPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2313,6 +2314,8 @@ function App() {
             <ContactSkillRiskMesh />
             {/* F292 (overnight 2026-08-26): Knowledge × Ops Events Intelligence Pulse (KOEP) — /knowledge/ + /v1/ops/events; ACTIVE/DORMANT classification; amber badge on active count; ◈ KOEP button left:7260 bottom:18 zIndex:68; isKoepQuery+buildKoepScript wired in JarvisBrain; jarvis:koep-toggle event; 60-s auto-refresh */}
             <KnowledgeOpsEventPulse />
+            {/* F293 (overnight 2026-08-26): Report × Contact × Investigation Grand Convergence (RCIG) — /v1/reports + /entities/Contact + /v1/investigations; FULLY_LINKED/CONTACT_ONLY/INV_ONLY/DARK; amber badge on dark count; ◈ RCIG button left:7320 bottom:18 zIndex:68; isRcigQuery+buildRcigScript wired in JarvisBrain; jarvis:rcig-toggle event; 90-s auto-refresh */}
+            <ReportContactInvestigationMesh />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
