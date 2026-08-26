@@ -743,6 +743,7 @@ import ContactSkillRiskMesh from '@/components/cinematic/ContactSkillRiskMesh';
 import ReportContactInvestigationMesh from '@/components/cinematic/ReportContactInvestigationMesh';
 import KnowledgeOpsEventPulse from '@/components/cinematic/KnowledgeOpsEventPulse';
 import KnowledgeScenarioDatasetMesh from '@/components/cinematic/KnowledgeScenarioDatasetMesh';
+import RiskSignalReadinessMap from '@/components/cinematic/RiskSignalReadinessMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2322,6 +2323,8 @@ function App() {
             <ReportContactInvestigationMesh />
             {/* F438 (overnight 2026-08-26): Knowledge × Scenario × Dataset Intelligence Mesh (KSDM) — /knowledge/ + /v1/scenario/list + /v1/datasets; FULLY_GROUNDED/SCENARIO_ONLY/DATA_ONLY/THEORETICAL classification; amber badge on theoretical count; ◈ KSDM button left:7380 bottom:18 zIndex:68; isKsdmQuery+buildKsdmScript wired in JarvisBrain; jarvis:ksdm-toggle event; 90-s auto-refresh */}
             <KnowledgeScenarioDatasetMesh />
+            {/* F439 (overnight 2026-08-26): Risk Signal × Scenario × Knowledge Readiness Map (RSSKR) — /entities/RiskSignal + /v1/scenario/list + /knowledge/; READY/SCENARIO_ONLY/KB_ONLY/EXPOSED classification; red badge on exposed count; ◈ RSSKR button left:7440 bottom:18 zIndex:68; isRsskrQuery+buildRsskrScript wired in JarvisBrain; jarvis:rsskr-toggle event; 60-s auto-refresh */}
+            <RiskSignalReadinessMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

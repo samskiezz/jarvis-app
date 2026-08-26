@@ -164,3 +164,4 @@
 [2026-08-26] F292 KnowledgeOpsEventPulse (KOEP): /knowledge/ × /v1/ops/events; ACTIVE/DORMANT; ◈ KOEP left:7260; isKoepQuery+buildKoepScript wired; vite build exit:0
 [2026-08-26] F293 RCIG — ReportContactInvestigationMesh.jsx: /v1/reports + /entities/Contact + /v1/investigations; FULLY_LINKED/CONTACT_ONLY/INV_ONLY/DARK; ◈ RCIG button left:7320; isRcigQuery+buildRcigScript wired in JarvisBrain; vite build exit:0; dist/assets/index-C_sXUbYs.js confirmed
 [2026-08-26] F438 KnowledgeScenarioDatasetMesh.jsx — KSDM panel (/knowledge/ + /v1/scenario/list + /v1/datasets); FULLY_GROUNDED/SCENARIO_ONLY/DATA_ONLY/THEORETICAL; build exit:0; dist/assets/index-DFgZ_HNY.js
+[2026-08-26] F439 RiskSignalReadinessMap.jsx — /entities/RiskSignal + /v1/scenario/list + /knowledge/ → READY/SCENARIO_ONLY/KB_ONLY/EXPOSED; ◈ RSSKR left:7440; isRsskrQuery+buildRsskrScript in JarvisBrain; vite build exit:0; dist/assets/index-LetoWkDO.js
