@@ -770,6 +770,7 @@ import { isRctgQuery, buildRctgScript } from "./RiskContactTaskConvergence";
 import { isDoecQuery, buildDoecScript } from "./DatasetOpsEventsCoverage";
 import { isAdkimQuery, buildAdkimScript } from "./AlertDatasetKnowledgeMesh";
 import { isIotcQuery, buildIotcScript } from "./InvestmentOpsTaskConvergence";
+import { isIpstQuery, buildIpstScript } from "./IntelProfileScenarioTaskMesh";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8068,6 +8069,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iotc-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIotcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F289 — IntelProfile × Scenario × Task Intelligence Triple (IPST)
+    if (isIpstQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipst-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildIpstScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

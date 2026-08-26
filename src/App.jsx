@@ -736,6 +736,7 @@ import RiskContactTaskConvergence from '@/components/cinematic/RiskContactTaskCo
 import DatasetOpsEventsCoverage from '@/components/cinematic/DatasetOpsEventsCoverage';
 import AlertDatasetKnowledgeMesh from '@/components/cinematic/AlertDatasetKnowledgeMesh';
 import InvestmentOpsTaskConvergence from '@/components/cinematic/InvestmentOpsTaskConvergence';
+import IntelProfileScenarioTaskMesh from '@/components/cinematic/IntelProfileScenarioTaskMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2301,6 +2302,8 @@ function App() {
             <AlertDatasetKnowledgeMesh />
             {/* F288 (overnight 2026-08-26): Investment × Ops Events × Task Convergence (IOTC) — /entities/Investment + /v1/ops/events + /entities/Task; MONITORED/OPS_ONLY/TASK_ONLY/DARK classification; amber badge on dark (unmonitored) count; ◈ IOTC button left:7020 bottom:18 zIndex:68; isIotcQuery+buildIotcScript wired in JarvisBrain; jarvis:iotc-toggle event; 90-s auto-refresh */}
             <InvestmentOpsTaskConvergence />
+            {/* F289 (overnight 2026-08-26): IntelProfile × Scenario × Task Intelligence Triple (IPST) — /entities/IntelProfile + /v1/scenario/list + /entities/Task; FULLY_MANAGED/SCENARIO_ONLY/TASK_ONLY/DARK classification; amber badge on dark count; ◈ IPST button left:7080 bottom:18 zIndex:68; isIpstQuery+buildIpstScript wired in JarvisBrain; jarvis:ipst-toggle event; 90-s auto-refresh */}
+            <IntelProfileScenarioTaskMesh />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
