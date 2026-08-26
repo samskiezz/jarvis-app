@@ -14,6 +14,7 @@ import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
 import CommandPalette from '@/components/cinematic/CommandPalette';
+import JarvisCommandPalette from '@/components/cinematic/JarvisCommandPalette';
 import HeyJarvisListener from '@/components/cinematic/HeyJarvisListener';
 import SceneKeyboardNav from '@/components/cinematic/SceneKeyboardNav';
 import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
@@ -213,6 +214,8 @@ function App() {
             <FirstRunSetup />
             <JarvisBrain />
             <CommandPalette />
+            {/* F01: ⌘K command palette — scenes + 30 panel commands + ask JARVIS; apex routes handled by CommandPalette */}
+            <JarvisCommandPalette />
             {/* F02: "Hey JARVIS" always-listening wake word toggle */}
             <HeyJarvisListener />
             {/* F04: keyboard scene-jump (1–0 → scenes; Esc → home) */}

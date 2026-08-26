@@ -4,7 +4,7 @@
  * Additive-only; mounted in App.jsx next to JarvisBrain.
  */
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { PAGES } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
 
@@ -54,8 +54,11 @@ export default function CommandPalette() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
   const navigate = useNavigate();
+  const location = useLocation();
   const inputRef = useRef(null);
   const listRef = useRef(null);
+  // Only active on /apex routes — cinematic routes use JarvisCommandPalette
+  const isApex = location.pathname.startsWith("/apex");
 
   const filtered = query.trim()
     ? ALL_COMMANDS.filter(
@@ -80,6 +83,7 @@ export default function CommandPalette() {
   );
 
   useEffect(() => {
+    if (!isApex) return;
     const onKey = (e) => {
       const isModifier = e.metaKey || e.ctrlKey;
       if (isModifier && e.key === "k") {
@@ -92,7 +96,7 @@ export default function CommandPalette() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [isApex]);
 
   useEffect(() => {
     if (open) {
