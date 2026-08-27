@@ -785,6 +785,7 @@ import { isAtinQuery, buildAtinScript } from "./AlertTaskInvestigationNexus";
 import { isSasmQuery, buildSasmScript } from "./SwarmAipSkillMonitor";
 import { isCsatQuery, buildCsatScript } from "./ContactSwarmSkillTriple";
 import { isListrQuery, buildListrScript } from "./LiveIntelScenarioTaskTriple";
+import { isKasgoQuery, buildKasgoScript } from "./KnowledgeAipSkillScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8213,6 +8214,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:listr-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildListrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKasgoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kasgo-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildKasgoScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

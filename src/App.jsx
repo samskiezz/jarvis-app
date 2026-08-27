@@ -753,6 +753,7 @@ import AlertTaskInvestigationNexus from '@/components/cinematic/AlertTaskInvesti
 import SwarmAipSkillMonitor from '@/components/cinematic/SwarmAipSkillMonitor';
 import ContactSwarmSkillTriple from '@/components/cinematic/ContactSwarmSkillTriple';
 import LiveIntelScenarioTaskTriple from '@/components/cinematic/LiveIntelScenarioTaskTriple';
+import KnowledgeAipSkillScenarioCoverage from '@/components/cinematic/KnowledgeAipSkillScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2351,6 +2352,8 @@ function App() {
             <ContactSwarmSkillTriple />
             {/* F448 (overnight 2026-08-27): Live Intel × Scenario × Task Response Triple (LISTR) — /functions/getLiveIntel + /v1/scenario/list + /entities/Task; MANAGED/SCENARIO_ONLY/TASK_ONLY/UNRESPONDED classification; red badge on unresponded count; ◈ LISTR button left:7920 bottom:18 zIndex:68; isListrQuery+buildListrScript wired in JarvisBrain; jarvis:listr-toggle event; 60-s auto-refresh */}
             <LiveIntelScenarioTaskTriple />
+            {/* F449 (overnight 2026-08-27): Knowledge × AIP Skill × Scenario Grand Coverage (KASGO) — /knowledge/ + /v1/aip/skill + /v1/scenario/list; FULLY_ACTIONABLE/SKILLED_ONLY/PLANNED_ONLY/THEORETICAL classification; amber badge on theoretical count; ◈ KASGO button left:7980 bottom:18 zIndex:68; isKasgoQuery+buildKasgoScript wired in JarvisBrain; jarvis:kasgo-toggle event; 90-s auto-refresh */}
+            <KnowledgeAipSkillScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
