@@ -754,6 +754,7 @@ import SwarmAipSkillMonitor from '@/components/cinematic/SwarmAipSkillMonitor';
 import ContactSwarmSkillTriple from '@/components/cinematic/ContactSwarmSkillTriple';
 import LiveIntelScenarioTaskTriple from '@/components/cinematic/LiveIntelScenarioTaskTriple';
 import KnowledgeAipSkillScenarioCoverage from '@/components/cinematic/KnowledgeAipSkillScenarioCoverage';
+import RiskSignalDatasetGraphNexus from '@/components/cinematic/RiskSignalDatasetGraphNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2354,6 +2355,8 @@ function App() {
             <LiveIntelScenarioTaskTriple />
             {/* F449 (overnight 2026-08-27): Knowledge × AIP Skill × Scenario Grand Coverage (KASGO) — /knowledge/ + /v1/aip/skill + /v1/scenario/list; FULLY_ACTIONABLE/SKILLED_ONLY/PLANNED_ONLY/THEORETICAL classification; amber badge on theoretical count; ◈ KASGO button left:7980 bottom:18 zIndex:68; isKasgoQuery+buildKasgoScript wired in JarvisBrain; jarvis:kasgo-toggle event; 90-s auto-refresh */}
             <KnowledgeAipSkillScenarioCoverage />
+            {/* F450 (overnight 2026-08-27): Risk Signal × Dataset × Graph Centrality Intelligence Nexus (RDGN) — /entities/RiskSignal + /v1/datasets + /v1/graph/centrality; FULLY_GROUNDED/DATA_BACKED/GRAPH_MAPPED/FLOATING classification; red badge on floating count; ◈ RDGN button left:8040 bottom:18 zIndex:68; isRdgnQuery+buildRdgnScript wired in JarvisBrain; jarvis:rdgn-toggle event; 60-s auto-refresh */}
+            <RiskSignalDatasetGraphNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -786,6 +786,7 @@ import { isSasmQuery, buildSasmScript } from "./SwarmAipSkillMonitor";
 import { isCsatQuery, buildCsatScript } from "./ContactSwarmSkillTriple";
 import { isListrQuery, buildListrScript } from "./LiveIntelScenarioTaskTriple";
 import { isKasgoQuery, buildKasgoScript } from "./KnowledgeAipSkillScenarioCoverage";
+import { isRdgnQuery, buildRdgnScript } from "./RiskSignalDatasetGraphNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8222,6 +8223,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kasgo-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildKasgoScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F450 — Risk Signal × Dataset × Graph Centrality Intelligence Nexus
+    if (isRdgnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rdgn-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildRdgnScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
