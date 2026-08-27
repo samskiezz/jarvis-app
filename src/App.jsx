@@ -759,6 +759,7 @@ import LiveIntelOpsRiskConvergence from '@/components/cinematic/LiveIntelOpsRisk
 import AlertScenarioDatasetCoverage from '@/components/cinematic/AlertScenarioDatasetCoverage';
 import ContactInvestigationOpsTriple from '@/components/cinematic/ContactInvestigationOpsTriple';
 import SceneKnowledgeGraphTriple from '@/components/cinematic/SceneKnowledgeGraphTriple';
+import IntelProfileGraphCommunitiesScenario from '@/components/cinematic/IntelProfileGraphCommunitiesScenario';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2368,6 +2369,8 @@ function App() {
             {/* F453 (overnight 2026-08-27): Contact × Investigation × Ops Event Intelligence Triple (CIOET) — /entities/Contact + /v1/investigations + /v1/ops/events; FULL_CONTEXT/INV_ONLY/OPS_ONLY/ISOLATED classification; amber badge on isolated count; ◈ CIOET button left:8220 bottom:18 zIndex:68; isCioetQuery+buildCioetScript wired in JarvisBrain; jarvis:cioet-toggle event; 60-s auto-refresh */}
             <ContactInvestigationOpsTriple />
             <SceneKnowledgeGraphTriple />
+            {/* F455 (overnight 2026-08-27): IntelProfile × Graph Communities × Scenario Intelligence Nexus (IGCSN) — /entities/IntelProfile + /v1/graph/communities + /v1/scenario/list; FULLY_MAPPED/CLUSTERED_ONLY/PLANNED_ONLY/UNMAPPED classification; red badge on unmapped count; ◈ IGCSN button left:8340 bottom:18 zIndex:68; isIgcsnQuery+buildIgcsnScript wired in JarvisBrain; jarvis:igcsn-toggle event; 90-s auto-refresh */}
+            <IntelProfileGraphCommunitiesScenario />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
