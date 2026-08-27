@@ -758,6 +758,7 @@ import RiskSignalDatasetGraphNexus from '@/components/cinematic/RiskSignalDatase
 import LiveIntelOpsRiskConvergence from '@/components/cinematic/LiveIntelOpsRiskConvergence';
 import AlertScenarioDatasetCoverage from '@/components/cinematic/AlertScenarioDatasetCoverage';
 import ContactInvestigationOpsTriple from '@/components/cinematic/ContactInvestigationOpsTriple';
+import SceneKnowledgeGraphTriple from '@/components/cinematic/SceneKnowledgeGraphTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2366,6 +2367,7 @@ function App() {
             <AlertScenarioDatasetCoverage />
             {/* F453 (overnight 2026-08-27): Contact × Investigation × Ops Event Intelligence Triple (CIOET) — /entities/Contact + /v1/investigations + /v1/ops/events; FULL_CONTEXT/INV_ONLY/OPS_ONLY/ISOLATED classification; amber badge on isolated count; ◈ CIOET button left:8220 bottom:18 zIndex:68; isCioetQuery+buildCioetScript wired in JarvisBrain; jarvis:cioet-toggle event; 60-s auto-refresh */}
             <ContactInvestigationOpsTriple />
+            <SceneKnowledgeGraphTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

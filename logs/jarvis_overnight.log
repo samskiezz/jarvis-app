@@ -179,3 +179,4 @@
 2026-08-27 F451 LiveIntelOpsRiskConvergence (LORSC) — /functions/getLiveIntel + /v1/ops/events + /entities/RiskSignal three-way convergence; TRIPLE_HIT/OPS_ONLY/RISK_ONLY/SOLO; ◈ LORSC button left:8100; isLorscQuery+buildLorscScript wired in JarvisBrain; vite build exit:0
 2026-08-27 F452 AlertScenarioDatasetCoverage (ASDC) — /v1/alerts + /v1/scenario/list + /v1/datasets; FULL_COVERAGE/SCENARIO_ONLY/DATA_ONLY/DARK; ◈ ASDC button left:8160 bottom:18; isAsdcQuery+buildAsdcScript wired in JarvisBrain; jarvis:asdc-toggle; 60s refresh; vite build exit:0
 2026-08-27 11:23 UTC | F453 CIOET | ContactInvestigationOpsTriple.jsx — /entities/Contact + /v1/investigations + /v1/ops/events; FULL_CONTEXT/INV_ONLY/OPS_ONLY/ISOLATED; ◈ CIOET button; isCioetQuery+buildCioetScript wired; vite build exit:0
+[2026-08-27] F454 SceneKnowledgeGraphTriple (SKGCT) — Scene×Knowledge×Graph Centrality triple correlation; new component + App.jsx mount + JarvisBrain wiring; vite build exit:0
