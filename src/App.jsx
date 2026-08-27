@@ -747,6 +747,7 @@ import RiskSignalReadinessMap from '@/components/cinematic/RiskSignalReadinessMa
 import SceneTaskAlignment from '@/components/cinematic/SceneTaskAlignment';
 import SwarmInvestmentKnowledgeMesh from '@/components/cinematic/SwarmInvestmentKnowledgeMesh';
 import InvestmentGraphScenarioReadiness from '@/components/cinematic/InvestmentGraphScenarioReadiness';
+import TaskGraphCommunityBridge from '@/components/cinematic/TaskGraphCommunityBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2333,6 +2334,8 @@ function App() {
             <SwarmInvestmentKnowledgeMesh />
             {/* F442 (overnight 2026-08-27): Investment × Graph Centrality × Scenario Readiness (IGSR) — /entities/Investment + /v1/graph/centrality + /v1/scenario/list; FULLY_POSITIONED/GRAPH_ONLY/SCENARIO_ONLY/ISOLATED; amber badge on isolated count; ◈ IGSR button left:7620 bottom:18 zIndex:68; isIgsrQuery+buildIgsrScript wired in JarvisBrain; jarvis:igsr-toggle event; 90-s auto-refresh */}
             <InvestmentGraphScenarioReadiness />
+            {/* F443 (overnight 2026-08-27): Task × Graph Communities Intelligence Bridge (TGCIB) — /entities/Task + /v1/graph/communities; CLUSTERED/ISOLATED; amber badge on isolated count; ◈ TGCIB button left:7680 bottom:18 zIndex:68; isTgcibQuery+buildTgcibScript wired in JarvisBrain; jarvis:tgcib-toggle event; 90-s auto-refresh */}
+            <TaskGraphCommunityBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

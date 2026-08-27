@@ -780,6 +780,7 @@ import { isRsskrQuery, buildRsskrScript } from "./RiskSignalReadinessMap";
 import { isSitaQuery, buildSitaScript } from "./SceneTaskAlignment";
 import { isSikimQuery, buildSikimScript } from "./SwarmInvestmentKnowledgeMesh";
 import { isIgsrQuery, buildIgsrScript } from "./InvestmentGraphScenarioReadiness";
+import { isTgcibQuery, buildTgcibScript } from "./TaskGraphCommunityBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8166,6 +8167,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igsr-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildIgsrScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTgcibQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tgcib-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildTgcibScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
