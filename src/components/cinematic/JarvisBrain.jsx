@@ -789,6 +789,7 @@ import { isKasgoQuery, buildKasgoScript } from "./KnowledgeAipSkillScenarioCover
 import { isRdgnQuery, buildRdgnScript } from "./RiskSignalDatasetGraphNexus";
 import { isLorscQuery, buildLorscScript } from "./LiveIntelOpsRiskConvergence";
 import { isAsdcQuery, buildAsdcScript } from "./AlertScenarioDatasetCoverage";
+import { isCioetQuery, buildCioetScript } from "./ContactInvestigationOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8252,6 +8253,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:asdc-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = buildAsdcScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F453 — Contact × Investigation × Ops Event Intelligence Triple
+    if (isCioetQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cioet-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = buildCioetScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -757,6 +757,7 @@ import KnowledgeAipSkillScenarioCoverage from '@/components/cinematic/KnowledgeA
 import RiskSignalDatasetGraphNexus from '@/components/cinematic/RiskSignalDatasetGraphNexus';
 import LiveIntelOpsRiskConvergence from '@/components/cinematic/LiveIntelOpsRiskConvergence';
 import AlertScenarioDatasetCoverage from '@/components/cinematic/AlertScenarioDatasetCoverage';
+import ContactInvestigationOpsTriple from '@/components/cinematic/ContactInvestigationOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2363,6 +2364,8 @@ function App() {
             <LiveIntelOpsRiskConvergence />
             {/* F452 (overnight 2026-08-27): Alert × Scenario × Dataset Response Coverage (ASDC) — /v1/alerts + /v1/scenario/list + /v1/datasets; FULL_COVERAGE/SCENARIO_ONLY/DATA_ONLY/DARK; red badge on DARK count; ◈ ASDC button left:8160 bottom:18 zIndex:68; isAsdcQuery+buildAsdcScript wired in JarvisBrain; jarvis:asdc-toggle event; 60-s auto-refresh */}
             <AlertScenarioDatasetCoverage />
+            {/* F453 (overnight 2026-08-27): Contact × Investigation × Ops Event Intelligence Triple (CIOET) — /entities/Contact + /v1/investigations + /v1/ops/events; FULL_CONTEXT/INV_ONLY/OPS_ONLY/ISOLATED classification; amber badge on isolated count; ◈ CIOET button left:8220 bottom:18 zIndex:68; isCioetQuery+buildCioetScript wired in JarvisBrain; jarvis:cioet-toggle event; 60-s auto-refresh */}
+            <ContactInvestigationOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
