@@ -748,6 +748,7 @@ import SceneTaskAlignment from '@/components/cinematic/SceneTaskAlignment';
 import SwarmInvestmentKnowledgeMesh from '@/components/cinematic/SwarmInvestmentKnowledgeMesh';
 import InvestmentGraphScenarioReadiness from '@/components/cinematic/InvestmentGraphScenarioReadiness';
 import TaskGraphCommunityBridge from '@/components/cinematic/TaskGraphCommunityBridge';
+import GraphAnnotationBoard from '@/components/cinematic/GraphAnnotationBoard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2336,6 +2337,8 @@ function App() {
             <InvestmentGraphScenarioReadiness />
             {/* F443 (overnight 2026-08-27): Task × Graph Communities Intelligence Bridge (TGCIB) — /entities/Task + /v1/graph/communities; CLUSTERED/ISOLATED; amber badge on isolated count; ◈ TGCIB button left:7680 bottom:18 zIndex:68; isTgcibQuery+buildTgcibScript wired in JarvisBrain; jarvis:tgcib-toggle event; 90-s auto-refresh */}
             <TaskGraphCommunityBridge />
+            {/* F444 (overnight 2026-08-27): Graph Annotation Board (GANN) — pre-built GraphAnnotationBoard.jsx (485 lines) activated & mounted; GET /v1/graph/annotations (60 s poll) + POST /v1/graph/annotate + GET /v1/graph/centrality for quick-pick target; live annotation browser + creator; ◈ GANN button left:338160 bottom:8 zIndex:167; isGannQuery+buildGannScript wired in JarvisBrain (line 199+3030); jarvis:gann-toggle event; "graph annotations"/"annotate graph"/"graph notes"/"annotation board"/"gann" voice trigger */}
+            <GraphAnnotationBoard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
