@@ -751,6 +751,7 @@ import TaskGraphCommunityBridge from '@/components/cinematic/TaskGraphCommunityB
 import GraphAnnotationBoard from '@/components/cinematic/GraphAnnotationBoard';
 import AlertTaskInvestigationNexus from '@/components/cinematic/AlertTaskInvestigationNexus';
 import SwarmAipSkillMonitor from '@/components/cinematic/SwarmAipSkillMonitor';
+import ContactSwarmSkillTriple from '@/components/cinematic/ContactSwarmSkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2345,6 +2346,8 @@ function App() {
             <AlertTaskInvestigationNexus />
             {/* F446 (overnight 2026-08-27): SwarmJob × AIP Skill Coverage Monitor (SASM) — /entities/SwarmJob + /v1/aip/skill; SKILLED/UNSUPPORTED classification; amber badge on unsupported count; ◈ SASM button left:7800 bottom:18 zIndex:68; isSasmQuery+buildSasmScript wired in JarvisBrain; jarvis:sasm-toggle event; 90-s auto-refresh */}
             <SwarmAipSkillMonitor />
+            {/* F447 (overnight 2026-08-27): Contact × SwarmJob × AIP Skill Intelligence Triple (CSAT) — /entities/Contact + /entities/SwarmJob + /v1/aip/skill; FULLY_SUPPORTED/SWARM_ONLY/SKILL_ONLY/DARK classification; red badge on dark count; ◈ CSAT button left:7860 bottom:18 zIndex:68; isCsatQuery+buildCsatScript wired in JarvisBrain; jarvis:csat-toggle event; 90-s auto-refresh */}
+            <ContactSwarmSkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
