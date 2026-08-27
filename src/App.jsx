@@ -763,6 +763,7 @@ import IntelProfileGraphCommunitiesScenario from '@/components/cinematic/IntelPr
 import TaskKnowledgeOpsEventMesh from '@/components/cinematic/TaskKnowledgeOpsEventMesh';
 import SwarmScenarioReportNexus from '@/components/cinematic/SwarmScenarioReportNexus';
 import ContactKnowledgeDatasetMap from '@/components/cinematic/ContactKnowledgeDatasetMap';
+import AlertAipKnowledgeNexus from '@/components/cinematic/AlertAipKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2380,6 +2381,8 @@ function App() {
             <SwarmScenarioReportNexus />
             {/* F458 (overnight 2026-08-27): Contact × Knowledge × Dataset Intelligence Map (CKDM) — /entities/Contact + /knowledge/ + /v1/datasets; FULLY_GROUNDED/KB_ONLY/DATA_ONLY/DARK classification; red badge on dark count; ◈ CKDM button left:8520 bottom:18 zIndex:68; isCkdmQuery+buildCkdmScript wired in JarvisBrain; jarvis:ckdm-toggle event; 90-s auto-refresh */}
             <ContactKnowledgeDatasetMap />
+            {/* F459 — Alert × AIP Skill × Knowledge Intelligence Nexus */}
+            <AlertAipKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
