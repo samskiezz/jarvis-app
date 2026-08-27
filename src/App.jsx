@@ -756,6 +756,7 @@ import LiveIntelScenarioTaskTriple from '@/components/cinematic/LiveIntelScenari
 import KnowledgeAipSkillScenarioCoverage from '@/components/cinematic/KnowledgeAipSkillScenarioCoverage';
 import RiskSignalDatasetGraphNexus from '@/components/cinematic/RiskSignalDatasetGraphNexus';
 import LiveIntelOpsRiskConvergence from '@/components/cinematic/LiveIntelOpsRiskConvergence';
+import AlertScenarioDatasetCoverage from '@/components/cinematic/AlertScenarioDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2360,6 +2361,8 @@ function App() {
             <RiskSignalDatasetGraphNexus />
             {/* F451 (overnight 2026-08-27): Live Intel × Ops Events × Risk Signal Convergence (LORSC) — /functions/getLiveIntel + /v1/ops/events + /entities/RiskSignal; TRIPLE_HIT/OPS_ONLY/RISK_ONLY/SOLO classification; red badge on triple-hit count; ◈ LORSC button left:8100 bottom:18 zIndex:68; isLorscQuery+buildLorscScript wired in JarvisBrain; jarvis:lorsc-toggle event; 60-s auto-refresh */}
             <LiveIntelOpsRiskConvergence />
+            {/* F452 (overnight 2026-08-27): Alert × Scenario × Dataset Response Coverage (ASDC) — /v1/alerts + /v1/scenario/list + /v1/datasets; FULL_COVERAGE/SCENARIO_ONLY/DATA_ONLY/DARK; red badge on DARK count; ◈ ASDC button left:8160 bottom:18 zIndex:68; isAsdcQuery+buildAsdcScript wired in JarvisBrain; jarvis:asdc-toggle event; 60-s auto-refresh */}
+            <AlertScenarioDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
