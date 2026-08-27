@@ -782,6 +782,7 @@ import { isSikimQuery, buildSikimScript } from "./SwarmInvestmentKnowledgeMesh";
 import { isIgsrQuery, buildIgsrScript } from "./InvestmentGraphScenarioReadiness";
 import { isTgcibQuery, buildTgcibScript } from "./TaskGraphCommunityBridge";
 import { isAtinQuery, buildAtinScript } from "./AlertTaskInvestigationNexus";
+import { isSasmQuery, buildSasmScript } from "./SwarmAipSkillMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8184,6 +8185,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:atin-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildAtinScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F446 — SwarmJob × AIP Skill Coverage Monitor
+    if (isSasmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sasm-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildSasmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

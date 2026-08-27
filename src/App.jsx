@@ -750,6 +750,7 @@ import InvestmentGraphScenarioReadiness from '@/components/cinematic/InvestmentG
 import TaskGraphCommunityBridge from '@/components/cinematic/TaskGraphCommunityBridge';
 import GraphAnnotationBoard from '@/components/cinematic/GraphAnnotationBoard';
 import AlertTaskInvestigationNexus from '@/components/cinematic/AlertTaskInvestigationNexus';
+import SwarmAipSkillMonitor from '@/components/cinematic/SwarmAipSkillMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2342,6 +2343,8 @@ function App() {
             <GraphAnnotationBoard />
             {/* F445 (overnight 2026-08-27): Alert × Task × Investigation Grand Nexus (ATIN) — /v1/alerts?status=open&limit=100 + /entities/Task + /v1/investigations; FULLY_MANAGED/TASK_ONLY/INV_ONLY/UNMANAGED classification; red pulse on unmanaged count; ◈ ATIN button left:7740 bottom:18 zIndex:68; isAtinQuery+buildAtinScript wired in JarvisBrain; jarvis:atin-toggle event; 60-s auto-refresh */}
             <AlertTaskInvestigationNexus />
+            {/* F446 (overnight 2026-08-27): SwarmJob × AIP Skill Coverage Monitor (SASM) — /entities/SwarmJob + /v1/aip/skill; SKILLED/UNSUPPORTED classification; amber badge on unsupported count; ◈ SASM button left:7800 bottom:18 zIndex:68; isSasmQuery+buildSasmScript wired in JarvisBrain; jarvis:sasm-toggle event; 90-s auto-refresh */}
+            <SwarmAipSkillMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
