@@ -787,6 +787,7 @@ import { isCsatQuery, buildCsatScript } from "./ContactSwarmSkillTriple";
 import { isListrQuery, buildListrScript } from "./LiveIntelScenarioTaskTriple";
 import { isKasgoQuery, buildKasgoScript } from "./KnowledgeAipSkillScenarioCoverage";
 import { isRdgnQuery, buildRdgnScript } from "./RiskSignalDatasetGraphNexus";
+import { isLorscQuery, buildLorscScript } from "./LiveIntelOpsRiskConvergence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8232,6 +8233,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rdgn-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = await buildRdgnScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F451 — Live Intel × Ops Events × Risk Signal Convergence
+    if (isLorscQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lorsc-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = await buildLorscScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -755,6 +755,7 @@ import ContactSwarmSkillTriple from '@/components/cinematic/ContactSwarmSkillTri
 import LiveIntelScenarioTaskTriple from '@/components/cinematic/LiveIntelScenarioTaskTriple';
 import KnowledgeAipSkillScenarioCoverage from '@/components/cinematic/KnowledgeAipSkillScenarioCoverage';
 import RiskSignalDatasetGraphNexus from '@/components/cinematic/RiskSignalDatasetGraphNexus';
+import LiveIntelOpsRiskConvergence from '@/components/cinematic/LiveIntelOpsRiskConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2357,6 +2358,8 @@ function App() {
             <KnowledgeAipSkillScenarioCoverage />
             {/* F450 (overnight 2026-08-27): Risk Signal × Dataset × Graph Centrality Intelligence Nexus (RDGN) — /entities/RiskSignal + /v1/datasets + /v1/graph/centrality; FULLY_GROUNDED/DATA_BACKED/GRAPH_MAPPED/FLOATING classification; red badge on floating count; ◈ RDGN button left:8040 bottom:18 zIndex:68; isRdgnQuery+buildRdgnScript wired in JarvisBrain; jarvis:rdgn-toggle event; 60-s auto-refresh */}
             <RiskSignalDatasetGraphNexus />
+            {/* F451 (overnight 2026-08-27): Live Intel × Ops Events × Risk Signal Convergence (LORSC) — /functions/getLiveIntel + /v1/ops/events + /entities/RiskSignal; TRIPLE_HIT/OPS_ONLY/RISK_ONLY/SOLO classification; red badge on triple-hit count; ◈ LORSC button left:8100 bottom:18 zIndex:68; isLorscQuery+buildLorscScript wired in JarvisBrain; jarvis:lorsc-toggle event; 60-s auto-refresh */}
+            <LiveIntelOpsRiskConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
