@@ -746,6 +746,7 @@ import KnowledgeScenarioDatasetMesh from '@/components/cinematic/KnowledgeScenar
 import RiskSignalReadinessMap from '@/components/cinematic/RiskSignalReadinessMap';
 import SceneTaskAlignment from '@/components/cinematic/SceneTaskAlignment';
 import SwarmInvestmentKnowledgeMesh from '@/components/cinematic/SwarmInvestmentKnowledgeMesh';
+import InvestmentGraphScenarioReadiness from '@/components/cinematic/InvestmentGraphScenarioReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2330,6 +2331,8 @@ function App() {
             <SceneTaskAlignment />
             {/* F441 (overnight 2026-08-26): SwarmJob × Investment × Knowledge Intelligence Mesh (SIKIM) — /entities/SwarmJob + /entities/Investment + /knowledge/; FULLY_COVERED/FUNDED_ONLY/DOCUMENTED_ONLY/DARK; amber badge on dark count; ◈ SIKIM button left:7560 bottom:18 zIndex:68; isSikimQuery+buildSikimScript wired in JarvisBrain; jarvis:sikim-toggle event; 90-s auto-refresh */}
             <SwarmInvestmentKnowledgeMesh />
+            {/* F442 (overnight 2026-08-27): Investment × Graph Centrality × Scenario Readiness (IGSR) — /entities/Investment + /v1/graph/centrality + /v1/scenario/list; FULLY_POSITIONED/GRAPH_ONLY/SCENARIO_ONLY/ISOLATED; amber badge on isolated count; ◈ IGSR button left:7620 bottom:18 zIndex:68; isIgsrQuery+buildIgsrScript wired in JarvisBrain; jarvis:igsr-toggle event; 90-s auto-refresh */}
+            <InvestmentGraphScenarioReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
