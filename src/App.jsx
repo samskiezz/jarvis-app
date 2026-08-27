@@ -762,6 +762,7 @@ import SceneKnowledgeGraphTriple from '@/components/cinematic/SceneKnowledgeGrap
 import IntelProfileGraphCommunitiesScenario from '@/components/cinematic/IntelProfileGraphCommunitiesScenario';
 import TaskKnowledgeOpsEventMesh from '@/components/cinematic/TaskKnowledgeOpsEventMesh';
 import SwarmScenarioReportNexus from '@/components/cinematic/SwarmScenarioReportNexus';
+import ContactKnowledgeDatasetMap from '@/components/cinematic/ContactKnowledgeDatasetMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2377,6 +2378,8 @@ function App() {
             <TaskKnowledgeOpsEventMesh />
             {/* F457 (overnight 2026-08-27): SwarmJob × Scenario × Report Intelligence Nexus (SSRIN) — /entities/SwarmJob + /v1/scenario/list + /v1/reports; FULLY_DOCUMENTED/SCENARIO_ONLY/REPORT_ONLY/DARK classification; red badge on dark count; ◈ SSRIN button left:8460 bottom:18 zIndex:68; isSsrinQuery+buildSsrinScript wired in JarvisBrain; jarvis:ssrin-toggle event; 90-s auto-refresh */}
             <SwarmScenarioReportNexus />
+            {/* F458 (overnight 2026-08-27): Contact × Knowledge × Dataset Intelligence Map (CKDM) — /entities/Contact + /knowledge/ + /v1/datasets; FULLY_GROUNDED/KB_ONLY/DATA_ONLY/DARK classification; red badge on dark count; ◈ CKDM button left:8520 bottom:18 zIndex:68; isCkdmQuery+buildCkdmScript wired in JarvisBrain; jarvis:ckdm-toggle event; 90-s auto-refresh */}
+            <ContactKnowledgeDatasetMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

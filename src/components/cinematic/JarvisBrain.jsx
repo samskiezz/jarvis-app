@@ -794,6 +794,7 @@ import { isSkgctQuery, buildSkgctScript } from "./SceneKnowledgeGraphTriple";
 import { isIgcsnQuery, buildIgcsnScript } from "./IntelProfileGraphCommunitiesScenario";
 import { isTkoemQuery, buildTkoemScript } from "./TaskKnowledgeOpsEventMesh";
 import { isSsrinQuery, buildSsrinScript } from "./SwarmScenarioReportNexus";
+import { isCkdmQuery, buildCkdmScript } from "./ContactKnowledgeDatasetMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -8460,6 +8461,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ssrin-toggle", { detail: { query: q } }));
       setOpen(true); setThinking(true); setText("");
       const script = buildSsrinScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCkdmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ckdm-toggle", { detail: { query: q } }));
+      setOpen(true); setThinking(true); setText("");
+      const script = buildCkdmScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
