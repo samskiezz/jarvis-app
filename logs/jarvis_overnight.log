@@ -1,1 +1,2 @@
 2026-08-27 | F01 | ⌘K command palette | VERIFIED | CommandPalette.jsx already implemented and mounted in App.jsx; vite build passed (exit 0); marked done in backlog.
+2026-08-27 | F02 | Hey JARVIS wake word | VERIFIED | HeyJarvisListener.jsx already implemented and mounted in App.jsx; uses browser SpeechRecognition API, dispatches jarvis:ask on detection, wires to WakeWordToggle toggle; vite build passed (exit 0); marked done in backlog.
