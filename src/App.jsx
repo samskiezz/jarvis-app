@@ -752,6 +752,7 @@ import GraphAnnotationBoard from '@/components/cinematic/GraphAnnotationBoard';
 import AlertTaskInvestigationNexus from '@/components/cinematic/AlertTaskInvestigationNexus';
 import SwarmAipSkillMonitor from '@/components/cinematic/SwarmAipSkillMonitor';
 import ContactSwarmSkillTriple from '@/components/cinematic/ContactSwarmSkillTriple';
+import LiveIntelScenarioTaskTriple from '@/components/cinematic/LiveIntelScenarioTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2348,6 +2349,8 @@ function App() {
             <SwarmAipSkillMonitor />
             {/* F447 (overnight 2026-08-27): Contact × SwarmJob × AIP Skill Intelligence Triple (CSAT) — /entities/Contact + /entities/SwarmJob + /v1/aip/skill; FULLY_SUPPORTED/SWARM_ONLY/SKILL_ONLY/DARK classification; red badge on dark count; ◈ CSAT button left:7860 bottom:18 zIndex:68; isCsatQuery+buildCsatScript wired in JarvisBrain; jarvis:csat-toggle event; 90-s auto-refresh */}
             <ContactSwarmSkillTriple />
+            {/* F448 (overnight 2026-08-27): Live Intel × Scenario × Task Response Triple (LISTR) — /functions/getLiveIntel + /v1/scenario/list + /entities/Task; MANAGED/SCENARIO_ONLY/TASK_ONLY/UNRESPONDED classification; red badge on unresponded count; ◈ LISTR button left:7920 bottom:18 zIndex:68; isListrQuery+buildListrScript wired in JarvisBrain; jarvis:listr-toggle event; 60-s auto-refresh */}
+            <LiveIntelScenarioTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
