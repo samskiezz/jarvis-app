@@ -182,3 +182,4 @@
 [2026-08-27] F454 SceneKnowledgeGraphTriple (SKGCT) — Scene×Knowledge×Graph Centrality triple correlation; new component + App.jsx mount + JarvisBrain wiring; vite build exit:0
 [2026-08-27] F455 IGCSN — IntelProfileGraphCommunitiesScenario.jsx: /entities/IntelProfile + /v1/graph/communities + /v1/scenario/list → FULLY_MAPPED/CLUSTERED_ONLY/PLANNED_ONLY/UNMAPPED; ◈ IGCSN button left:8340; isIgcsnQuery+buildIgcsnScript wired in JarvisBrain; vite build exit:0; pushed to jarvis-overnight
 [2026-08-27] F456 TKOEM — TaskKnowledgeOpsEventMesh.jsx created; imported+mounted in App.jsx; isTkoemQuery+buildTkoemScript wired in JarvisBrain.jsx; vite build exit:0; committed to jarvis-overnight
+[2026-08-27] F457 SwarmScenarioReportNexus.jsx — SwarmJob x Scenario x Report Intelligence Nexus (SSRIN); /entities/SwarmJob + /v1/scenario/list + /v1/reports; FULLY_DOCUMENTED/SCENARIO_ONLY/REPORT_ONLY/DARK; ◈ SSRIN left:8460; isSsrinQuery+buildSsrinScript wired; vite build exit:0

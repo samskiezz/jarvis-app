@@ -761,6 +761,7 @@ import ContactInvestigationOpsTriple from '@/components/cinematic/ContactInvesti
 import SceneKnowledgeGraphTriple from '@/components/cinematic/SceneKnowledgeGraphTriple';
 import IntelProfileGraphCommunitiesScenario from '@/components/cinematic/IntelProfileGraphCommunitiesScenario';
 import TaskKnowledgeOpsEventMesh from '@/components/cinematic/TaskKnowledgeOpsEventMesh';
+import SwarmScenarioReportNexus from '@/components/cinematic/SwarmScenarioReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2374,6 +2375,8 @@ function App() {
             <IntelProfileGraphCommunitiesScenario />
             {/* F456 (overnight 2026-08-27): Task × Knowledge × Ops Event Intelligence Mesh (TKOEM) — /entities/Task + /knowledge/ + /v1/ops/events; FULLY_EXPOSED/KB_ONLY/OPS_ONLY/CLEAR classification; red badge on fully-exposed count; ◈ TKOEM button left:8400 bottom:18 zIndex:68; isTkoemQuery+buildTkoemScript wired in JarvisBrain; jarvis:tkoem-toggle event; 90-s auto-refresh */}
             <TaskKnowledgeOpsEventMesh />
+            {/* F457 (overnight 2026-08-27): SwarmJob × Scenario × Report Intelligence Nexus (SSRIN) — /entities/SwarmJob + /v1/scenario/list + /v1/reports; FULLY_DOCUMENTED/SCENARIO_ONLY/REPORT_ONLY/DARK classification; red badge on dark count; ◈ SSRIN button left:8460 bottom:18 zIndex:68; isSsrinQuery+buildSsrinScript wired in JarvisBrain; jarvis:ssrin-toggle event; 90-s auto-refresh */}
+            <SwarmScenarioReportNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
