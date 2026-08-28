@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
+import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -89,6 +90,10 @@ export default function JarvisBrain() {
         answer = await buildStatusScript();
       } else if (isMarketsQuery(q)) {
         answer = await buildMarketsScript();
+      } else if (isEntitySearchQuery(q)) {
+        const term = extractEntitySearchTerm(q);
+        answer = await buildEntityDossierScript(term);
+        window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term } }));
       } else {
         const pageContext = { route: window.location.pathname, scene };
         const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
