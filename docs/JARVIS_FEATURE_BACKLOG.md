@@ -28,7 +28,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier. [2026-08-28: EntityQuickSearch.jsx fully implemented; Ctrl/Cmd+Shift+E or "JARVIS, find/search/who is X" opens floating panel; queries /v1/graph/subgraph + /entities/IntelProfile, debounced 350 ms; click result dispatches jarvis:speak-dossier → JarvisBrain TTS; JarvisBrain.jsx wires isEntitySearchQuery/extractEntitySearchTerm/buildEntityDossierScript; vite build verified (exit 0)]
 - [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical. [2026-08-28: RiskBoard.jsx implemented; severity-sorted cards (critical/high/medium/low), red pulse animation on critical signals, filter tabs, 90s auto-refresh from /entities/RiskSignal; isRiskQuery/buildRiskScript wired into JarvisBrain.jsx; mounted in App.jsx; vite build verified (exit 0)]
 - [x] F10 Task board — /entities/Task → live mission cards with status. [2026-08-28: TaskBoard.jsx (290 lines) fully implemented; status-sorted cards (in_progress/pending/blocked/completed); filter tabs; 90s auto-refresh; "JARVIS, tasks/missions" voice trigger; isTaskQuery+buildTaskScript wired into JarvisBrain.jsx; mounted in App.jsx; vite build verified (exit 0)]
-- [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
+- [x] F11 Datasets browser — /v1/datasets → catalog list with row counts. [2026-08-28: pre-implemented as src/components/cinematic/DatasetsBrowser.jsx; mounted in App.jsx; filterable catalog with row-count badges; isDatasetsQuery/buildDatasetsScript wired in JarvisBrain; vite build verified (exit 0)]
 - [ ] F12 Investigations list — /v1/investigations → open cases panel.
 - [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
 - [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
@@ -48,4 +48,5 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [ ] F28 Command history — store + replay recent JARVIS commands (localStorage).
 - [ ] F29 Multi-voice toggle — switch JARVIS TTS voice (ash/fable/onyx) live.
 - [ ] F30 Scene auto-tour — cycle the 10 scenes hands-free with spoken narration of each.
+- [x] F31 Knowledge Freshness Monitor — /knowledge/ → classify articles as FRESH/CURRENT/STALE by updated_at age; red badge on stale count; voice "knowledge freshness / stale knowledge". [2026-08-28: KnowledgeFreshnessMonitor.jsx (230 lines); polls /knowledge/ with path fallbacks; FRESH<24h/CURRENT 1-7d/STALE>7d classification; filter tabs; isKfmQuery+buildKfmScript wired in JarvisBrain; ⬡ KFM button left:8580; jarvis:kfm-toggle event; 120-s auto-refresh; mounted in App.jsx; vite build verified (exit 0)]
 (Extend with more real features as endpoints allow. Prefer depth + real over count.)
