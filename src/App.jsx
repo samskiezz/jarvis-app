@@ -765,6 +765,7 @@ import SwarmScenarioReportNexus from '@/components/cinematic/SwarmScenarioReport
 import ContactKnowledgeDatasetMap from '@/components/cinematic/ContactKnowledgeDatasetMap';
 import AlertAipKnowledgeNexus from '@/components/cinematic/AlertAipKnowledgeNexus';
 import KnowledgeFreshnessMonitor from '@/components/cinematic/KnowledgeFreshnessMonitor';
+import ShowMeRouter from '@/components/cinematic/ShowMeRouter';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2386,6 +2387,8 @@ function App() {
             <AlertAipKnowledgeNexus />
             {/* F460 (overnight 2026-08-28): Knowledge Freshness Monitor (KFM) — /knowledge/; FRESH/CURRENT/STALE classification by updated_at age; red badge on stale count; ⬡ KFM button left:8580 bottom:8 zIndex:68; isKfmQuery+buildKfmScript wired in JarvisBrain; jarvis:kfm-toggle event; 120-s auto-refresh */}
             <KnowledgeFreshnessMonitor />
+            {/* F20 (overnight 2026-08-28): "show me X" navigation router — capture-phase listener normalises "show|open|view X" queries and re-dispatches the correct panel trigger; wires ShowMeNavigation keyword map into the live jarvis:ask event stream */}
+            <ShowMeRouter />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
