@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
+import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -86,6 +87,8 @@ export default function JarvisBrain() {
     try {
       if (isStatusQuery(q)) {
         answer = await buildStatusScript();
+      } else if (isMarketsQuery(q)) {
+        answer = await buildMarketsScript();
       } else {
         const pageContext = { route: window.location.pathname, scene };
         const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
