@@ -23,3 +23,4 @@
 [2026-08-28] F23 InvestmentWidget: /entities/Investment + /entities/WealthSnapshot; holdings cards, allocation bars, P&L indicators, type filter tabs; WEALTH toggle at left:1116; isInvestmentQuery+buildInvestmentScript in JarvisBrain; mounted in App.jsx; vite build exit 0
 [2026-08-28] F24 Contacts directory: ContactsDirectory.jsx (313 lines) verified implemented; /entities/Contact; searchable by name/role/email/dept/tags; isContactsQuery+buildContactsScript wired in JarvisBrain; mounted in App.jsx; vite build exit 0
 [2026-08-28] F25 SwarmJobsMonitor: verified pre-implemented (387 lines); polls /entities/SwarmJob every 20s; stat tiles + progress bars + filter tabs + failure pulse; isSwarmQuery+buildSwarmScript wired; vite build exit 0
+[2026-08-28] F26 GraphCentralityView verified: /v1/graph/centrality → ranked nodes, influence bars, type filter, 60s refresh; isCentralityQuery+buildCentralityScript in JarvisBrain; mounted App.jsx; vite build exit 0
