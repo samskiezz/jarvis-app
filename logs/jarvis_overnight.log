@@ -28,3 +28,4 @@
 [2026-08-28] F07 Markets ticker: MarketsTicker.jsx pre-implemented (/functions/getLiveIntel → crypto+FX scrolling strip + expanded grid); wired isMarketsQuery+buildMarketsScript into JarvisBrain.ask() for spoken top-movers; mounted in App.jsx; vite build exit 0
 [2026-08-28] F08 EntityQuickSearch: wired isEntitySearchQuery+extractEntitySearchTerm+buildEntityDossierScript into JarvisBrain.ask(); dispatches jarvis:entity-search to open search panel; vite build exit 0.
 [2026-08-29T00:16:37Z] F09 DONE — wired isRiskQuery+buildRiskScript into JarvisBrain.ask(); RiskBoard.jsx had full UI; vite build exit 0; pushed jarvis-overnight
+[2026-08-29] F10 Task board: wired isTaskQuery+buildTaskScript into JarvisBrain.ask(); TaskBoard.jsx mounts /entities/Task cards; vite build exit 0
