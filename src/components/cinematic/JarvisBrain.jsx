@@ -6,6 +6,7 @@ import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
 import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 import { isTaskQuery, buildTaskScript } from "./TaskBoard";
+import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -96,6 +97,8 @@ export default function JarvisBrain() {
         answer = await buildRiskScript();
       } else if (isTaskQuery(q)) {
         answer = await buildTaskScript();
+      } else if (isDatasetsQuery(q)) {
+        answer = await buildDatasetsScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
