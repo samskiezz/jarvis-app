@@ -23,6 +23,7 @@ import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
 import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
+import { getActiveVoice, isVoiceQuery, buildVoiceScript, applyVoiceFromQuery } from "./MultiVoiceToggle";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -77,7 +78,7 @@ export default function JarvisBrain() {
     try {
       const r = await fetch(`${apiBase()}/v1/voice/tts`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: answer }),
+        body: JSON.stringify({ text: answer, voice: getActiveVoice() }),
       });
       if (!r.ok) return;
       const url = URL.createObjectURL(await r.blob());
@@ -105,7 +106,11 @@ export default function JarvisBrain() {
     if (scene) navigate(`/cinematic/${scene}`);
     let answer = "";
     try {
-      if (isShowMeQuery(q)) {
+      if (isVoiceQuery(q)) {
+        const chosen = applyVoiceFromQuery(q);
+        answer = buildVoiceScript();
+        window.dispatchEvent(new CustomEvent("jarvis:voice-change", { detail: { voice: chosen } }));
+      } else if (isShowMeQuery(q)) {
         answer = await buildShowMeScript(q);
       } else if (isStatusQuery(q)) {
         answer = await buildStatusScript();
