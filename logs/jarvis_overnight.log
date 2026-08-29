@@ -33,3 +33,4 @@
 2026-08-29T03:14:01Z | F12 | InvestigationsList.jsx already mounted; wired isInvestigationsQuery+buildInvestigationsScript into JarvisBrain.jsx; vite build exit 0
 [2026-08-29] F13 Scenario launcher: ScenarioLauncher.jsx pre-implemented + mounted in App.jsx; wired isScenarioQuery+buildScenarioScript into JarvisBrain.jsx; vite build exit 0
 [2026-08-29] F14 Document search: wired isDocumentQuery+buildDocumentScript into JarvisBrain.ask(); speaks doc count + top reports; DOCS panel opens on voice/text match; vite build exit 0
+2026-08-29 F15 SkillScorecard: wired isSkillQuery+buildSkillScript into JarvisBrain.jsx; /v1/aip/skill live skill metrics panel + voice trigger; vite build exit 0
