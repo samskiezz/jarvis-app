@@ -9,6 +9,7 @@ import { isTaskQuery, buildTaskScript } from "./TaskBoard";
 import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
 import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
 import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
+import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -105,6 +106,8 @@ export default function JarvisBrain() {
         answer = await buildInvestigationsScript();
       } else if (isScenarioQuery(q)) {
         answer = await buildScenarioScript();
+      } else if (isDocumentQuery(q)) {
+        answer = await buildDocumentScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
