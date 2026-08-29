@@ -35,3 +35,4 @@
 [2026-08-29] F14 Document search: wired isDocumentQuery+buildDocumentScript into JarvisBrain.ask(); speaks doc count + top reports; DOCS panel opens on voice/text match; vite build exit 0
 2026-08-29 F15 SkillScorecard: wired isSkillQuery+buildSkillScript into JarvisBrain.jsx; /v1/aip/skill live skill metrics panel + voice trigger; vite build exit 0
 2026-08-29T07:14:22Z [F16] BrainGrowthSparkline wired into JarvisBrain — isBrainQuery+buildBrainScript added; 'JARVIS brain growth/trend' speaks node+synapse counts; vite build exit 0
+2026-08-29 F17 per-scene-anchor-drill-down: wired isAnchorDrillQuery+buildAnchorScript into JarvisBrain; PerSceneAnchorDrillDown already mounted; voice triggers 'scene anchors|anchor drill|expand scene|scene detail'; fetches /v1/cinematic/scene/{id}; vite build exit 0

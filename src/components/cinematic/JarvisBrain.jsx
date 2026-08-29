@@ -12,6 +12,7 @@ import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
 import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
 import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
+import { isAnchorDrillQuery, buildAnchorScript } from "./PerSceneAnchorDrillDown";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -114,6 +115,8 @@ export default function JarvisBrain() {
         answer = await buildSkillScript();
       } else if (isBrainQuery(q)) {
         answer = await buildBrainScript();
+      } else if (isAnchorDrillQuery(q)) {
+        answer = await buildAnchorScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

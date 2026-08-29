@@ -51,6 +51,29 @@ export function isAnchorDrillQuery(t) {
   return DRILL_RE.test(t || "");
 }
 
+export async function buildAnchorScript() {
+  const sid = currentSceneId() || SCENE_IDS[0];
+  const label = SCENE_LABELS[sid] || sid;
+  try {
+    const r = await fetch(
+      `${(typeof import.meta !== "undefined" && import.meta.env?.VITE_API_BASE_URL) || ""}/v1/cinematic/scene/${sid}`,
+      { headers: { Authorization: `Bearer ${(typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key"}` } }
+    );
+    if (!r.ok) throw new Error(`HTTP ${r.status}`);
+    const json = await r.json();
+    const anchors = json?.anchors || {};
+    const entries = Object.entries(anchors).filter(([k]) => !k.startsWith("_"));
+    const health = json?.health;
+    window.dispatchEvent(new CustomEvent("jarvis:anchor-drill-toggle"));
+    const filled = health?.filled ?? entries.filter(([, v]) => v != null).length;
+    const total = health?.total ?? entries.length;
+    return `Opening anchor drill-down for ${label}. ${filled} of ${total} anchors are bound. Panel is now active, sir.`;
+  } catch {
+    window.dispatchEvent(new CustomEvent("jarvis:anchor-drill-toggle"));
+    return `Opening anchor drill-down for ${label}. Use the panel to inspect all bound data points, sir.`;
+  }
+}
+
 function currentSceneId() {
   if (typeof window === "undefined") return null;
   const m = window.location.pathname.match(/\/scene\/([^/?#]+)/);
