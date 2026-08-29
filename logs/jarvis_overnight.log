@@ -30,3 +30,4 @@
 [2026-08-29T00:16:37Z] F09 DONE — wired isRiskQuery+buildRiskScript into JarvisBrain.ask(); RiskBoard.jsx had full UI; vite build exit 0; pushed jarvis-overnight
 [2026-08-29] F10 Task board: wired isTaskQuery+buildTaskScript into JarvisBrain.ask(); TaskBoard.jsx mounts /entities/Task cards; vite build exit 0
 2026-08-29 F11 Datasets browser: wired isDatasetsQuery+buildDatasetsScript into JarvisBrain; DatasetsBrowser.jsx+App.jsx mount confirmed; vite build exit 0
+2026-08-29T03:14:01Z | F12 | InvestigationsList.jsx already mounted; wired isInvestigationsQuery+buildInvestigationsScript into JarvisBrain.jsx; vite build exit 0
