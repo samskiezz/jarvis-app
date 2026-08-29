@@ -46,3 +46,4 @@
 [2026-08-29] F25 Swarm jobs monitor: wired isSwarmQuery+buildSwarmScript into JarvisBrain.ask(); SwarmJobsMonitor.jsx pre-existed + mounted; vite build exit 0.
 [2026-08-29] F26 Graph centrality view: wired isCentralityQuery+buildCentralityScript into JarvisBrain.ask(); GraphCentralityView.jsx polls /v1/graph/centrality every 60s; top-node TTS brief; vite build exit 0
 2026-08-29T18:14:18Z F27 ServiceDiagnostics: wired isDiagnosticsQuery+buildDiagnosticsScript into JarvisBrain.ask(); 'JARVIS, diagnostics/service health/health check' speaks service summary from /v1/jarvis/system/status; panel opens via internal jarvis:ask listener; vite build exit 0
+2026-08-29T19:14:53Z F28 CommandHistory: wired isHistoryQuery+buildHistoryScript into JarvisBrain.ask(); 'JARVIS, history/command history/replay' speaks entry count + top 5 recent; panel auto-opens via HIST_RE listener on jarvis:ask; vite build exit 0
