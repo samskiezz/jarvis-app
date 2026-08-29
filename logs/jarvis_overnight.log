@@ -44,3 +44,4 @@
 [2026-08-29] F23 Investment/wealth widget: wired isInvestmentQuery+buildInvestmentScript into JarvisBrain; InvestmentWidget.jsx sourced /entities/Investment+/entities/WealthSnapshot; vite build exit 0
 2026-08-29 F24 Contacts directory: wired isContactsQuery+buildContactsScript into JarvisBrain.ask(); ContactsDirectory.jsx already mounted; vite build exit 0
 [2026-08-29] F25 Swarm jobs monitor: wired isSwarmQuery+buildSwarmScript into JarvisBrain.ask(); SwarmJobsMonitor.jsx pre-existed + mounted; vite build exit 0.
+[2026-08-29] F26 Graph centrality view: wired isCentralityQuery+buildCentralityScript into JarvisBrain.ask(); GraphCentralityView.jsx polls /v1/graph/centrality every 60s; top-node TTS brief; vite build exit 0
