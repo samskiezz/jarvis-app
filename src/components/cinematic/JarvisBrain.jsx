@@ -14,6 +14,7 @@ import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isAnchorDrillQuery, buildAnchorScript } from "./PerSceneAnchorDrillDown";
 import { isAmbientQuery } from "./AmbientReactorHum";
+import { isShowMeQuery, buildShowMeScript } from "./ShowMeRouter";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -96,7 +97,9 @@ export default function JarvisBrain() {
     if (scene) navigate(`/cinematic/${scene}`);
     let answer = "";
     try {
-      if (isStatusQuery(q)) {
+      if (isShowMeQuery(q)) {
+        answer = await buildShowMeScript(q);
+      } else if (isStatusQuery(q)) {
         answer = await buildStatusScript();
       } else if (isMarketsQuery(q)) {
         answer = await buildMarketsScript();
