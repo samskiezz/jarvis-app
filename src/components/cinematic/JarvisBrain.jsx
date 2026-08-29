@@ -18,6 +18,7 @@ import { isShowMeQuery, buildShowMeScript } from "./ShowMeRouter";
 import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 import { isAlertQuery, buildAlertScript } from "./AlertToasts";
 import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
+import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -131,6 +132,8 @@ export default function JarvisBrain() {
         window.dispatchEvent(new CustomEvent("jarvis:alerts-toggle"));
       } else if (isInvestmentQuery(q)) {
         answer = await buildInvestmentScript();
+      } else if (isContactsQuery(q)) {
+        answer = await buildContactsScript();
       } else if (isAmbientQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
         answer = "Toggling ambient reactor hum, sir.";
