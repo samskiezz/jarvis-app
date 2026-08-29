@@ -15,6 +15,7 @@ import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isAnchorDrillQuery, buildAnchorScript } from "./PerSceneAnchorDrillDown";
 import { isAmbientQuery } from "./AmbientReactorHum";
 import { isShowMeQuery, buildShowMeScript } from "./ShowMeRouter";
+import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -121,6 +122,8 @@ export default function JarvisBrain() {
         answer = await buildBrainScript();
       } else if (isAnchorDrillQuery(q)) {
         answer = await buildAnchorScript();
+      } else if (isClockQuery(q)) {
+        answer = await buildClockScript();
       } else if (isAmbientQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
         answer = "Toggling ambient reactor hum, sir.";
