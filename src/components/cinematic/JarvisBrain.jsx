@@ -4,6 +4,7 @@ import { apiBase } from "@/api/cinematicDataAdapters";
 import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
+import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -90,6 +91,8 @@ export default function JarvisBrain() {
         answer = await buildStatusScript();
       } else if (isMarketsQuery(q)) {
         answer = await buildMarketsScript();
+      } else if (isRiskQuery(q)) {
+        answer = await buildRiskScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
