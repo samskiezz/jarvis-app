@@ -766,6 +766,7 @@ import ContactKnowledgeDatasetMap from '@/components/cinematic/ContactKnowledgeD
 import AlertAipKnowledgeNexus from '@/components/cinematic/AlertAipKnowledgeNexus';
 import KnowledgeFreshnessMonitor from '@/components/cinematic/KnowledgeFreshnessMonitor';
 import ShowMeRouter from '@/components/cinematic/ShowMeRouter';
+import OpsEventsFeed from '@/components/cinematic/OpsEventsFeed';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2389,6 +2390,8 @@ function App() {
             <KnowledgeFreshnessMonitor />
             {/* F20 (overnight 2026-08-28): "show me X" navigation router — capture-phase listener normalises "show|open|view X" queries and re-dispatches the correct panel trigger; wires ShowMeNavigation keyword map into the live jarvis:ask event stream */}
             <ShowMeRouter />
+            {/* F31 (overnight 2026-08-29): Ops Events Feed — /v1/ops/events; CRITICAL/WARNING/INFO classification; badge on critical count; ◈ OPS button left:8640 bottom:8 zIndex:68; isOpsEventsQuery+buildOpsEventsScript wired in JarvisBrain; jarvis:ops-events-toggle event; 30-s auto-refresh */}
+            <OpsEventsFeed />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

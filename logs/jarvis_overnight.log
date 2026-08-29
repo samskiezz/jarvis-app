@@ -49,3 +49,4 @@
 2026-08-29T19:14:53Z F28 CommandHistory: wired isHistoryQuery+buildHistoryScript into JarvisBrain.ask(); 'JARVIS, history/command history/replay' speaks entry count + top 5 recent; panel auto-opens via HIST_RE listener on jarvis:ask; vite build exit 0
 [2026-08-29] F29 multi-voice toggle: imported getActiveVoice/isVoiceQuery/applyVoiceFromQuery from MultiVoiceToggle into JarvisBrain; speak() passes voice param to /v1/voice/tts; isVoiceQuery wired in ask(); vite build exit 0
 [2026-08-29] F30 Scene auto-tour: wired isTourQuery+buildTourScript+jarvis:tour-start into JarvisBrain.ask(); SceneAutoTour.jsx cycles all 10 /v1/cinematic/scene/{id} with TTS narration; vite build exit 0
+[2026-08-29] F31 OpsEventsFeed: wired isOpsEventsQuery+buildOpsEventsScript into JarvisBrain.ask(); 'JARVIS, ops events/operations feed/event log' speaks event summary from /v1/ops/events; panel opens via jarvis:ops-events-toggle; vite build exit 0
