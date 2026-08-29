@@ -24,6 +24,7 @@ import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView"
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
 import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
 import { getActiveVoice, isVoiceQuery, buildVoiceScript, applyVoiceFromQuery } from "./MultiVoiceToggle";
+import { isTourQuery, buildTourScript } from "./SceneAutoTour";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -151,6 +152,9 @@ export default function JarvisBrain() {
         answer = await buildDiagnosticsScript();
       } else if (isHistoryQuery(q)) {
         answer = buildHistoryScript();
+      } else if (isTourQuery(q)) {
+        answer = buildTourScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tour-start"));
       } else if (isAmbientQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
         answer = "Toggling ambient reactor hum, sir.";
