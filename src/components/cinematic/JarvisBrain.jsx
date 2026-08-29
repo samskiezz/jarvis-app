@@ -13,6 +13,7 @@ import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
 import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isAnchorDrillQuery, buildAnchorScript } from "./PerSceneAnchorDrillDown";
+import { isAmbientQuery } from "./AmbientReactorHum";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -117,6 +118,9 @@ export default function JarvisBrain() {
         answer = await buildBrainScript();
       } else if (isAnchorDrillQuery(q)) {
         answer = await buildAnchorScript();
+      } else if (isAmbientQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
+        answer = "Toggling ambient reactor hum, sir.";
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

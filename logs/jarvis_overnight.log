@@ -37,3 +37,4 @@
 2026-08-29T07:14:22Z [F16] BrainGrowthSparkline wired into JarvisBrain — isBrainQuery+buildBrainScript added; 'JARVIS brain growth/trend' speaks node+synapse counts; vite build exit 0
 2026-08-29 F17 per-scene-anchor-drill-down: wired isAnchorDrillQuery+buildAnchorScript into JarvisBrain; PerSceneAnchorDrillDown already mounted; voice triggers 'scene anchors|anchor drill|expand scene|scene detail'; fetches /v1/cinematic/scene/{id}; vite build exit 0
 2026-08-29 F18 JARVIS boot sequence: JarvisBootSequence.jsx pre-implemented + mounted in App.jsx; fetches /v1/jarvis/system/status + /v1/cinematic/brain; cinematic boot terminal + TTS on click; vite build exit 0
+2026-08-29T10:13:34Z F19 Ambient reactor hum toggle: wired isAmbientQuery+jarvis:ambient-toggle into JarvisBrain.ask(); vite build exit 0
