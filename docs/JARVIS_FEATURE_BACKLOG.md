@@ -40,7 +40,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F20 "Show me" navigation — ShowMeRouter.jsx: isShowMeQuery+buildShowMeScript priority-routes "show [X]" to correct panel script; wired into JarvisBrain.ask() before all other checks; null default export satisfies App.jsx mount; vite build exit 0. (2026-08-29)
 - [x] F21 Live clock + uptime (real process uptime from system status). (2026-08-29: LiveClockUptime.jsx pre-existed + mounted in App.jsx; wired isClockQuery+buildClockScript into JarvisBrain.ask(); "JARVIS, time/uptime/clock" now speaks current time + process uptime from /v1/jarvis/system/status; vite build exit 0)
 - [x] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken). (2026-08-29: AlertToasts.jsx pre-implemented + mounted in App.jsx; wired isAlertQuery+buildAlertScript into JarvisBrain.ask(); "JARVIS, alerts/warnings/critical alerts" now speaks open-alert summary + dispatches jarvis:alerts-toggle; vite build exit 0)
-- [ ] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout.
+- [x] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout. (2026-08-29: InvestmentWidget.jsx pre-implemented + mounted in App.jsx; wired isInvestmentQuery+buildInvestmentScript into JarvisBrain.ask(); "JARVIS, investments/portfolio/wealth/holdings" now speaks holding count + total value + top positions; panel auto-opens via jarvis:ask INVEST_RE listener; vite build exit 0)
 - [ ] F24 Contacts directory — /entities/Contact → searchable people list.
 - [ ] F25 Swarm jobs monitor — /entities/SwarmJob → running jobs with progress.
 - [ ] F26 Graph centrality view — /v1/graph/centrality → top entities by influence.

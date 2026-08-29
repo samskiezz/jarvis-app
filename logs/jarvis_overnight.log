@@ -41,3 +41,4 @@
 [2026-08-29] F20 'show me' navigation: ShowMeRouter.jsx (isShowMeQuery+buildShowMeScript, 11-panel keyword map); wired into JarvisBrain.ask() as priority intent; vite build exit 0.
 2026-08-29T12:15:02Z F21 LiveClockUptime wired: isClockQuery+buildClockScript added to JarvisBrain.ask(); vite build exit 0
 2026-08-29T13:15:51Z [F22] Alert toasts wired: isAlertQuery+buildAlertScript imported from AlertToasts.jsx into JarvisBrain.jsx; speaks open-alert summary on voice query; vite build exit 0
+[2026-08-29] F23 Investment/wealth widget: wired isInvestmentQuery+buildInvestmentScript into JarvisBrain; InvestmentWidget.jsx sourced /entities/Investment+/entities/WealthSnapshot; vite build exit 0
