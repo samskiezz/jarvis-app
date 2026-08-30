@@ -31,6 +31,7 @@ import { isIntelProfileQuery, buildIntelProfileScript } from "./IntelProfileDire
 import { isCommunitiesQuery, buildCommunitiesScript } from "./GraphCommunitiesView";
 import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
 import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "./ScenarioRiskAdvisor";
+import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -178,6 +179,8 @@ export default function JarvisBrain() {
       } else if (isScenarioRiskAdvisorQuery(q)) {
         answer = await buildScenarioRiskAdvisorScript();
         window.dispatchEvent(new CustomEvent("jarvis:srmadvisor-toggle"));
+      } else if (isPathQuery(q)) {
+        answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
         answer = "Toggling ambient reactor hum, sir.";
