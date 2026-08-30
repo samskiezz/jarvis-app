@@ -32,6 +32,7 @@ import { isCommunitiesQuery, buildCommunitiesScript } from "./GraphCommunitiesVi
 import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
 import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "./ScenarioRiskAdvisor";
 import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
+import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -179,6 +180,8 @@ export default function JarvisBrain() {
       } else if (isScenarioRiskAdvisorQuery(q)) {
         answer = await buildScenarioRiskAdvisorScript();
         window.dispatchEvent(new CustomEvent("jarvis:srmadvisor-toggle"));
+      } else if (isAthrepQuery(q)) {
+        answer = await buildAthrepScript();
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
