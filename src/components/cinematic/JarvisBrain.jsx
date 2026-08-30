@@ -46,6 +46,7 @@ import { isRulesBrowserQuery, buildRulesBrowserScript } from "./DecisionRulesBro
 import { isSecurityAuditQuery, buildSecurityAuditScript } from "./SecurityAuditConsole";
 import { isKfmQuery, buildKfmScript } from "./KnowledgeFreshnessMonitor";
 import { isEvthmQuery, buildEvthmScript } from "./OpsEventHeatmap";
+import { isKrgapQuery, buildKrgapScript } from "./KnowledgeReportAuditor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -228,6 +229,8 @@ export default function JarvisBrain() {
         window.dispatchEvent(new CustomEvent("jarvis:kfm-toggle"));
       } else if (isEvthmQuery(q)) {
         answer = await buildEvthmScript();
+      } else if (isKrgapQuery(q)) {
+        answer = await buildKrgapScript();
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
