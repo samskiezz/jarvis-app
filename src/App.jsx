@@ -765,6 +765,7 @@ import SwarmScenarioReportNexus from '@/components/cinematic/SwarmScenarioReport
 import ContactKnowledgeDatasetMap from '@/components/cinematic/ContactKnowledgeDatasetMap';
 import AlertAipKnowledgeNexus from '@/components/cinematic/AlertAipKnowledgeNexus';
 import KnowledgeFreshnessMonitor from '@/components/cinematic/KnowledgeFreshnessMonitor';
+import KnowledgeSkillRecommender from '@/components/cinematic/KnowledgeSkillRecommender';
 import ShowMeRouter from '@/components/cinematic/ShowMeRouter';
 import OpsEventsFeed from '@/components/cinematic/OpsEventsFeed';
 import TaskBurndownMonitor from '@/components/cinematic/TaskBurndownMonitor';
@@ -2394,6 +2395,7 @@ function App() {
             <AlertAipKnowledgeNexus />
             {/* F460 (overnight 2026-08-28): Knowledge Freshness Monitor (KFM) — /knowledge/; FRESH/CURRENT/STALE classification by updated_at age; red badge on stale count; ⬡ KFM button left:8580 bottom:8 zIndex:68; isKfmQuery+buildKfmScript wired in JarvisBrain; jarvis:kfm-toggle event; 120-s auto-refresh */}
             <KnowledgeFreshnessMonitor />
+            <KnowledgeSkillRecommender />
             {/* F20 (overnight 2026-08-28): "show me X" navigation router — capture-phase listener normalises "show|open|view X" queries and re-dispatches the correct panel trigger; wires ShowMeNavigation keyword map into the live jarvis:ask event stream */}
             <ShowMeRouter />
             {/* F31 (overnight 2026-08-29): Ops Events Feed — /v1/ops/events; CRITICAL/WARNING/INFO classification; badge on critical count; ◈ OPS button left:8640 bottom:8 zIndex:68; isOpsEventsQuery+buildOpsEventsScript wired in JarvisBrain; jarvis:ops-events-toggle event; 30-s auto-refresh */}
