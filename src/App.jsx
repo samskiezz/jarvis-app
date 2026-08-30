@@ -772,6 +772,7 @@ import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
 import RemindersPanel from '@/components/cinematic/RemindersPanel';
 import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
 import MissionControlConsole from '@/components/cinematic/MissionControlConsole';
+import InvestigationTimeline from '@/components/cinematic/InvestigationTimeline';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2407,6 +2408,8 @@ function App() {
             <RemindersPanel />
             {/* F470 (overnight 2026-08-30): Mission Control Console — parallel-fetches /entities/Task + /entities/SwarmJob + /entities/RiskSignal + /v1/investigations; 4-KPI cockpit (Tasks/Swarms/Risks/Investigations) with SVG status bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ⬛ MCTL toggle left:71320 bottom:18; Ctrl+Shift+L shortcut; 45-s auto-refresh; isMissionControlQuery+buildMissionControlScript wired in JarvisBrain; "mission control/mission console/mctl/ops console/ops overview" voice trigger */}
             <MissionControlConsole />
+            {/* F471 (overnight 2026-08-30): Investigation Timeline — /v1/investigations; chronological vertical timeline sorted newest-first; status-coloured nodes (OPEN/ACTIVE/CLOSED/ESCALATED/ARCHIVED/ON HOLD); expandable case detail; filter tabs ALL/OPEN/ACTIVE/CLOSED/ESCALATED; stats tiles; badge on open/escalated count; ◈ INVTL button left:8760 bottom:8 zIndex:69; isInvtlQuery+buildInvtlScript wired in JarvisBrain; jarvis:invtl-toggle event; 60-s auto-refresh; voice: "investigation timeline/case timeline/invtl/case history/case chronology" */}
+            <InvestigationTimeline />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
