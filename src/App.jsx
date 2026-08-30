@@ -769,6 +769,7 @@ import ShowMeRouter from '@/components/cinematic/ShowMeRouter';
 import OpsEventsFeed from '@/components/cinematic/OpsEventsFeed';
 import TaskBurndownMonitor from '@/components/cinematic/TaskBurndownMonitor';
 import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
+import RemindersPanel from '@/components/cinematic/RemindersPanel';
 import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2401,6 +2402,8 @@ function App() {
             <SecondBrainBrowser />
             {/* F465 (overnight 2026-08-30): Scenario Risk Advisor (SRMADV) — /entities/RiskSignal + /v1/scenario/list; keyword-correlates active risk signals against available scenarios to surface the best mitigation simulations; click ▶ RUN executes /v1/scenario/{id}/run; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScenarioRiskAdvisorQuery+buildScenarioRiskAdvisorScript wired in JarvisBrain; jarvis:srmadvisor-toggle event; ◈ SRMADV button left:5068 bottom:8 zIndex:65; 60-s auto-refresh; voice: "mitigation advisor/scenario advisor/which scenarios/risk advisor/mitigate risk/scenario risk/srmadv" */}
             <ScenarioRiskAdvisor />
+            {/* F469 (overnight 2026-08-30): Reminders Panel — /reminders/list; pending reminders sorted newest-first; kind-coloured border (note/task/alert/reminder); badge on open count; ◈ REM button left:119400 bottom:8 zIndex:120; isRemindersQuery+buildRemindersScript wired in JarvisBrain; jarvis:reminders-toggle event; 60-s auto-refresh; voice: "reminder/remind me/my notes/pending note/note list" */}
+            <RemindersPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
