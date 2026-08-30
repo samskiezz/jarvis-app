@@ -767,6 +767,7 @@ import AlertAipKnowledgeNexus from '@/components/cinematic/AlertAipKnowledgeNexu
 import KnowledgeFreshnessMonitor from '@/components/cinematic/KnowledgeFreshnessMonitor';
 import ShowMeRouter from '@/components/cinematic/ShowMeRouter';
 import OpsEventsFeed from '@/components/cinematic/OpsEventsFeed';
+import TaskBurndownMonitor from '@/components/cinematic/TaskBurndownMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2392,6 +2393,8 @@ function App() {
             <ShowMeRouter />
             {/* F31 (overnight 2026-08-29): Ops Events Feed — /v1/ops/events; CRITICAL/WARNING/INFO classification; badge on critical count; ◈ OPS button left:8640 bottom:8 zIndex:68; isOpsEventsQuery+buildOpsEventsScript wired in JarvisBrain; jarvis:ops-events-toggle event; 30-s auto-refresh */}
             <OpsEventsFeed />
+            {/* F461 (overnight 2026-08-30): Task Burndown Monitor (TBM) — polls /entities/Task every 60 s; rolling 30-snapshot localStorage history; completion %, velocity (tasks/hr), ETA; sparkline; filter tabs ALL/DONE/IN_PROGRESS/PENDING/BLOCKED; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTbmQuery+buildTbmScript for JarvisBrain; jarvis:tbm-toggle event; ⬡ TBM button left:8700 bottom:8 zIndex:68; "task burndown/sprint/burndown/task velocity/completion rate" voice trigger */}
+            <TaskBurndownMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
