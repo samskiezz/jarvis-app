@@ -768,6 +768,7 @@ import KnowledgeFreshnessMonitor from '@/components/cinematic/KnowledgeFreshness
 import ShowMeRouter from '@/components/cinematic/ShowMeRouter';
 import OpsEventsFeed from '@/components/cinematic/OpsEventsFeed';
 import TaskBurndownMonitor from '@/components/cinematic/TaskBurndownMonitor';
+import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2395,6 +2396,8 @@ function App() {
             <OpsEventsFeed />
             {/* F461 (overnight 2026-08-30): Task Burndown Monitor (TBM) — polls /entities/Task every 60 s; rolling 30-snapshot localStorage history; completion %, velocity (tasks/hr), ETA; sparkline; filter tabs ALL/DONE/IN_PROGRESS/PENDING/BLOCKED; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTbmQuery+buildTbmScript for JarvisBrain; jarvis:tbm-toggle event; ⬡ TBM button left:8700 bottom:8 zIndex:68; "task burndown/sprint/burndown/task velocity/completion rate" voice trigger */}
             <TaskBurndownMonitor />
+            {/* F464 (overnight 2026-08-30): Second Brain Browser (SBB) — /v1/brain/catalog + /v1/brain/notes + /v1/brain/timeline; CATALOG/NOTES/TIMELINE tabs; text search; expandable note detail; orphan badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSbbQuery+buildSbbScript wired in JarvisBrain; jarvis:sbb-toggle event; ⬡ SBB button left:119280 bottom:8 zIndex:119; 90-s auto-refresh; voice: "second brain/brain notes/knowledge vault/brain catalog/my notes" */}
+            <SecondBrainBrowser />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
