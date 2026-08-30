@@ -774,6 +774,7 @@ import RemindersPanel from '@/components/cinematic/RemindersPanel';
 import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
 import MissionControlConsole from '@/components/cinematic/MissionControlConsole';
 import InvestigationTimeline from '@/components/cinematic/InvestigationTimeline';
+import LiveTaskUrgencySignal from '@/components/cinematic/LiveTaskUrgencySignal';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2412,6 +2413,8 @@ function App() {
             <MissionControlConsole />
             {/* F471 (overnight 2026-08-30): Investigation Timeline — /v1/investigations; chronological vertical timeline sorted newest-first; status-coloured nodes (OPEN/ACTIVE/CLOSED/ESCALATED/ARCHIVED/ON HOLD); expandable case detail; filter tabs ALL/OPEN/ACTIVE/CLOSED/ESCALATED; stats tiles; badge on open/escalated count; ◈ INVTL button left:8760 bottom:8 zIndex:69; isInvtlQuery+buildInvtlScript wired in JarvisBrain; jarvis:invtl-toggle event; 60-s auto-refresh; voice: "investigation timeline/case timeline/invtl/case history/case chronology" */}
             <InvestigationTimeline />
+            {/* F473 (overnight 2026-08-30): Live Task Urgency Signal (LITASK) — parallel-fetches /functions/getLiveIntel + /entities/Task; keyword-correlates tasks against live world events (quakes/crypto/FX) to surface SIGNALLED vs UNSIGNALLED urgency; filter tabs ALL/SIGNALLED/UNSIGNALLED; expand task → matched events + relevance; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLitaskQuery+buildLitaskScript wired in JarvisBrain; jarvis:litask-toggle event; ◈ LITASK button left:65720 bottom:8 zIndex:127; 60-s auto-refresh; voice: "live task/world task/litask/task signal/urgent tasks/task urgency" */}
+            <LiveTaskUrgencySignal />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

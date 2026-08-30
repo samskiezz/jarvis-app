@@ -38,6 +38,7 @@ import { isRemindersQuery, buildRemindersScript } from "./RemindersPanel";
 import { isMissionControlQuery, buildMissionControlScript } from "./MissionControlConsole";
 import { isInvtlQuery, buildInvtlScript } from "./InvestigationTimeline";
 import { isKsrecQuery, buildKsrecScript } from "./KnowledgeSkillRecommender";
+import { isLitaskQuery, buildLitaskScript } from "./LiveTaskUrgencySignal";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -201,6 +202,9 @@ export default function JarvisBrain() {
       } else if (isKsrecQuery(q)) {
         answer = await buildKsrecScript();
         window.dispatchEvent(new CustomEvent("jarvis:ksrec-toggle"));
+      } else if (isLitaskQuery(q)) {
+        answer = await buildLitaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:litask-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
