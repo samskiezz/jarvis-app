@@ -771,6 +771,7 @@ import TaskBurndownMonitor from '@/components/cinematic/TaskBurndownMonitor';
 import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
 import RemindersPanel from '@/components/cinematic/RemindersPanel';
 import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
+import MissionControlConsole from '@/components/cinematic/MissionControlConsole';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2404,6 +2405,8 @@ function App() {
             <ScenarioRiskAdvisor />
             {/* F469 (overnight 2026-08-30): Reminders Panel — /reminders/list; pending reminders sorted newest-first; kind-coloured border (note/task/alert/reminder); badge on open count; ◈ REM button left:119400 bottom:8 zIndex:120; isRemindersQuery+buildRemindersScript wired in JarvisBrain; jarvis:reminders-toggle event; 60-s auto-refresh; voice: "reminder/remind me/my notes/pending note/note list" */}
             <RemindersPanel />
+            {/* F470 (overnight 2026-08-30): Mission Control Console — parallel-fetches /entities/Task + /entities/SwarmJob + /entities/RiskSignal + /v1/investigations; 4-KPI cockpit (Tasks/Swarms/Risks/Investigations) with SVG status bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ⬛ MCTL toggle left:71320 bottom:18; Ctrl+Shift+L shortcut; 45-s auto-refresh; isMissionControlQuery+buildMissionControlScript wired in JarvisBrain; "mission control/mission console/mctl/ops console/ops overview" voice trigger */}
+            <MissionControlConsole />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
