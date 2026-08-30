@@ -776,6 +776,7 @@ import MissionControlConsole from '@/components/cinematic/MissionControlConsole'
 import InvestigationTimeline from '@/components/cinematic/InvestigationTimeline';
 import LiveTaskUrgencySignal from '@/components/cinematic/LiveTaskUrgencySignal';
 import GraphTimelineScrubber from '@/components/cinematic/GraphTimelineScrubber';
+import ReportViewer from '@/components/cinematic/ReportViewer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2418,6 +2419,8 @@ function App() {
             <LiveTaskUrgencySignal />
             {/* F475 (overnight 2026-08-30): Graph Timeline Scrubber — POST /v1/graph-time/playback (24 frames); SVG bar chart (nodes + links per frame); scrubber slider; per-frame detail readout; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence narrative + TTS; ◈ GTIME button left:10060 bottom:8 zIndex:70; isGraphTimelineQuery+buildGraphTimelineScript wired in JarvisBrain; jarvis:graph-timeline-toggle event; 5-min auto-refresh; voice: "graph timeline/graph history/graph over time/graph evolution/temporal graph/gtime" */}
             <GraphTimelineScrubber />
+            {/* F476 (overnight 2026-08-30): Report Viewer — /v1/reports; searchable panel with type filter tabs (ALL/THREAT/INTEL/OPS/KNOWLEDGE/OTHER); click-to-expand detail (summary/author/status/tags); type-coloured badges; 2-min auto-refresh; ◈ RVIEW button left:10920 bottom:8 zIndex:71; isReportViewerQuery+buildReportViewerScript wired in JarvisBrain; jarvis:report-viewer-toggle event; voice: "report viewer/show reports/intelligence reports/rview" */}
+            <ReportViewer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
