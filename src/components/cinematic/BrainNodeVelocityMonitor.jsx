@@ -125,7 +125,7 @@ export function isBnvmQuery(q) {
 
 export async function buildBnvmScript() {
   try {
-    const res = await fetch(`${apiBase}/v1/cinematic/brain`, {
+    const res = await fetch(`${apiBase()}/v1/cinematic/brain`, {
       headers: { Authorization: `Bearer ${API_KEY}` },
     });
     if (!res.ok) throw new Error(`${res.status}`);
@@ -171,7 +171,7 @@ export default function BrainNodeVelocityMonitor() {
 
   const fetchBrain = useCallback(async () => {
     try {
-      const res = await fetch(`${apiBase}/v1/cinematic/brain`, {
+      const res = await fetch(`${apiBase()}/v1/cinematic/brain`, {
         headers: { Authorization: `Bearer ${API_KEY}` },
       });
       if (!res.ok) throw new Error(`HTTP ${res.status}`);

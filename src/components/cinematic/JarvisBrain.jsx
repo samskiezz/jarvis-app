@@ -33,6 +33,7 @@ import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
 import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "./ScenarioRiskAdvisor";
 import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
 import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
+import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -182,6 +183,10 @@ export default function JarvisBrain() {
         window.dispatchEvent(new CustomEvent("jarvis:srmadvisor-toggle"));
       } else if (isAthrepQuery(q)) {
         answer = await buildAthrepScript();
+        window.dispatchEvent(new CustomEvent("jarvis:athrep-toggle"));
+      } else if (isBnvmQuery(q)) {
+        answer = await buildBnvmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:bnvm-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
