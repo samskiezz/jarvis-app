@@ -777,6 +777,7 @@ import InvestigationTimeline from '@/components/cinematic/InvestigationTimeline'
 import LiveTaskUrgencySignal from '@/components/cinematic/LiveTaskUrgencySignal';
 import GraphTimelineScrubber from '@/components/cinematic/GraphTimelineScrubber';
 import ReportViewer from '@/components/cinematic/ReportViewer';
+import DecisionRulesBrowser from '@/components/cinematic/DecisionRulesBrowser';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2421,6 +2422,8 @@ function App() {
             <GraphTimelineScrubber />
             {/* F476 (overnight 2026-08-30): Report Viewer — /v1/reports; searchable panel with type filter tabs (ALL/THREAT/INTEL/OPS/KNOWLEDGE/OTHER); click-to-expand detail (summary/author/status/tags); type-coloured badges; 2-min auto-refresh; ◈ RVIEW button left:10920 bottom:8 zIndex:71; isReportViewerQuery+buildReportViewerScript wired in JarvisBrain; jarvis:report-viewer-toggle event; voice: "report viewer/show reports/intelligence reports/rview" */}
             <ReportViewer />
+            {/* F477 (overnight 2026-08-30): Decision Rules Browser — /v1/rules; WATCHTOWER rule list sorted by severity; search by name/target; click-to-expand condition expr; enabled/disabled status; enabled count badge; 2-min auto-refresh; ◈ RULES button left:11780 bottom:8 zIndex:72; isRulesBrowserQuery+buildRulesBrowserScript wired in JarvisBrain; jarvis:rules-browser-toggle event; voice: "rules/decision rules/alert rules/watchtower/show rules/rule browser" */}
+            <DecisionRulesBrowser />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

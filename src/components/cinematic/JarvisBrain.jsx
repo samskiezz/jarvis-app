@@ -42,6 +42,7 @@ import { isLitaskQuery, buildLitaskScript } from "./LiveTaskUrgencySignal";
 import { isCrisisWarningQuery, buildCrisisWarningScript } from "./CrisisEarlyWarning";
 import { isGraphTimelineQuery, buildGraphTimelineScript } from "./GraphTimelineScrubber";
 import { isReportViewerQuery, buildReportViewerScript } from "./ReportViewer";
+import { isRulesBrowserQuery, buildRulesBrowserScript } from "./DecisionRulesBrowser";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -215,6 +216,8 @@ export default function JarvisBrain() {
         answer = await buildGraphTimelineScript();
       } else if (isReportViewerQuery(q)) {
         answer = await buildReportViewerScript();
+      } else if (isRulesBrowserQuery(q)) {
+        answer = await buildRulesBrowserScript();
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
