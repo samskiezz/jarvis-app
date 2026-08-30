@@ -30,6 +30,7 @@ import { isTbmQuery, buildTbmScript } from "./TaskBurndownMonitor";
 import { isIntelProfileQuery, buildIntelProfileScript } from "./IntelProfileDirectory";
 import { isCommunitiesQuery, buildCommunitiesScript } from "./GraphCommunitiesView";
 import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
+import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "./ScenarioRiskAdvisor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -174,6 +175,9 @@ export default function JarvisBrain() {
       } else if (isSbbQuery(q)) {
         answer = await buildSbbScript();
         window.dispatchEvent(new CustomEvent("jarvis:sbb-toggle"));
+      } else if (isScenarioRiskAdvisorQuery(q)) {
+        answer = await buildScenarioRiskAdvisorScript();
+        window.dispatchEvent(new CustomEvent("jarvis:srmadvisor-toggle"));
       } else if (isAmbientQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
         answer = "Toggling ambient reactor hum, sir.";

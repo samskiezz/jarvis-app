@@ -769,6 +769,7 @@ import ShowMeRouter from '@/components/cinematic/ShowMeRouter';
 import OpsEventsFeed from '@/components/cinematic/OpsEventsFeed';
 import TaskBurndownMonitor from '@/components/cinematic/TaskBurndownMonitor';
 import SecondBrainBrowser from '@/components/cinematic/SecondBrainBrowser';
+import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2398,6 +2399,8 @@ function App() {
             <TaskBurndownMonitor />
             {/* F464 (overnight 2026-08-30): Second Brain Browser (SBB) — /v1/brain/catalog + /v1/brain/notes + /v1/brain/timeline; CATALOG/NOTES/TIMELINE tabs; text search; expandable note detail; orphan badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSbbQuery+buildSbbScript wired in JarvisBrain; jarvis:sbb-toggle event; ⬡ SBB button left:119280 bottom:8 zIndex:119; 90-s auto-refresh; voice: "second brain/brain notes/knowledge vault/brain catalog/my notes" */}
             <SecondBrainBrowser />
+            {/* F465 (overnight 2026-08-30): Scenario Risk Advisor (SRMADV) — /entities/RiskSignal + /v1/scenario/list; keyword-correlates active risk signals against available scenarios to surface the best mitigation simulations; click ▶ RUN executes /v1/scenario/{id}/run; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScenarioRiskAdvisorQuery+buildScenarioRiskAdvisorScript wired in JarvisBrain; jarvis:srmadvisor-toggle event; ◈ SRMADV button left:5068 bottom:8 zIndex:65; 60-s auto-refresh; voice: "mitigation advisor/scenario advisor/which scenarios/risk advisor/mitigate risk/scenario risk/srmadv" */}
+            <ScenarioRiskAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
