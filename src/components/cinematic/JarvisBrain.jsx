@@ -43,6 +43,7 @@ import { isCrisisWarningQuery, buildCrisisWarningScript } from "./CrisisEarlyWar
 import { isGraphTimelineQuery, buildGraphTimelineScript } from "./GraphTimelineScrubber";
 import { isReportViewerQuery, buildReportViewerScript } from "./ReportViewer";
 import { isRulesBrowserQuery, buildRulesBrowserScript } from "./DecisionRulesBrowser";
+import { isSecurityAuditQuery, buildSecurityAuditScript } from "./SecurityAuditConsole";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -218,6 +219,8 @@ export default function JarvisBrain() {
         answer = await buildReportViewerScript();
       } else if (isRulesBrowserQuery(q)) {
         answer = await buildRulesBrowserScript();
+      } else if (isSecurityAuditQuery(q)) {
+        answer = await buildSecurityAuditScript();
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {

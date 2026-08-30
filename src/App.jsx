@@ -778,6 +778,7 @@ import LiveTaskUrgencySignal from '@/components/cinematic/LiveTaskUrgencySignal'
 import GraphTimelineScrubber from '@/components/cinematic/GraphTimelineScrubber';
 import ReportViewer from '@/components/cinematic/ReportViewer';
 import DecisionRulesBrowser from '@/components/cinematic/DecisionRulesBrowser';
+import SecurityAuditConsole from '@/components/cinematic/SecurityAuditConsole';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2424,6 +2425,8 @@ function App() {
             <ReportViewer />
             {/* F477 (overnight 2026-08-30): Decision Rules Browser — /v1/rules; WATCHTOWER rule list sorted by severity; search by name/target; click-to-expand condition expr; enabled/disabled status; enabled count badge; 2-min auto-refresh; ◈ RULES button left:11780 bottom:8 zIndex:72; isRulesBrowserQuery+buildRulesBrowserScript wired in JarvisBrain; jarvis:rules-browser-toggle event; voice: "rules/decision rules/alert rules/watchtower/show rules/rule browser" */}
             <DecisionRulesBrowser />
+            {/* F478 (overnight 2026-08-30): Security Audit Console — /v1/security/audit + /v1/security/compliance/status; hash-chained audit trail; compliance scorecard tiles (chain integrity/REVDB/tenancy/shares); AUDIT/REVDB tab filter; actor+action+object+timestamp columns; chain-integrity badge; 2-min auto-refresh; ◈ SAUDIT button left:12640 bottom:8 zIndex:73; isSecurityAuditQuery+buildSecurityAuditScript wired in JarvisBrain; jarvis:security-audit-toggle event; voice: "security audit/audit log/compliance/sec audit/audit chain/chain integrity/saudit/audit trail" */}
+            <SecurityAuditConsole />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
