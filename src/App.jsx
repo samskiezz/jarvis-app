@@ -775,6 +775,7 @@ import ScenarioRiskAdvisor from '@/components/cinematic/ScenarioRiskAdvisor';
 import MissionControlConsole from '@/components/cinematic/MissionControlConsole';
 import InvestigationTimeline from '@/components/cinematic/InvestigationTimeline';
 import LiveTaskUrgencySignal from '@/components/cinematic/LiveTaskUrgencySignal';
+import GraphTimelineScrubber from '@/components/cinematic/GraphTimelineScrubber';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2415,6 +2416,8 @@ function App() {
             <InvestigationTimeline />
             {/* F473 (overnight 2026-08-30): Live Task Urgency Signal (LITASK) — parallel-fetches /functions/getLiveIntel + /entities/Task; keyword-correlates tasks against live world events (quakes/crypto/FX) to surface SIGNALLED vs UNSIGNALLED urgency; filter tabs ALL/SIGNALLED/UNSIGNALLED; expand task → matched events + relevance; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLitaskQuery+buildLitaskScript wired in JarvisBrain; jarvis:litask-toggle event; ◈ LITASK button left:65720 bottom:8 zIndex:127; 60-s auto-refresh; voice: "live task/world task/litask/task signal/urgent tasks/task urgency" */}
             <LiveTaskUrgencySignal />
+            {/* F475 (overnight 2026-08-30): Graph Timeline Scrubber — POST /v1/graph-time/playback (24 frames); SVG bar chart (nodes + links per frame); scrubber slider; per-frame detail readout; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence narrative + TTS; ◈ GTIME button left:10060 bottom:8 zIndex:70; isGraphTimelineQuery+buildGraphTimelineScript wired in JarvisBrain; jarvis:graph-timeline-toggle event; 5-min auto-refresh; voice: "graph timeline/graph history/graph over time/graph evolution/temporal graph/gtime" */}
+            <GraphTimelineScrubber />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
