@@ -27,6 +27,7 @@ import { getActiveVoice, isVoiceQuery, buildVoiceScript, applyVoiceFromQuery } f
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
 import { isOpsEventsQuery, buildOpsEventsScript } from "./OpsEventsFeed";
 import { isTbmQuery, buildTbmScript } from "./TaskBurndownMonitor";
+import { isIntelProfileQuery, buildIntelProfileScript } from "./IntelProfileDirectory";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -163,6 +164,8 @@ export default function JarvisBrain() {
       } else if (isTbmQuery(q)) {
         answer = await buildTbmScript();
         window.dispatchEvent(new CustomEvent("jarvis:tbm-toggle"));
+      } else if (isIntelProfileQuery(q)) {
+        answer = await buildIntelProfileScript();
       } else if (isAmbientQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
         answer = "Toggling ambient reactor hum, sir.";
