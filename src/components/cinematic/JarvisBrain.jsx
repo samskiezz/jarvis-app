@@ -48,6 +48,7 @@ import { isKfmQuery, buildKfmScript } from "./KnowledgeFreshnessMonitor";
 import { isEvthmQuery, buildEvthmScript } from "./OpsEventHeatmap";
 import { isKrgapQuery, buildKrgapScript } from "./KnowledgeReportAuditor";
 import { isTaskRiskMatrixQuery, buildTaskRiskMatrixScript } from "./TaskRiskMatrix";
+import { isIntelProfileRosterQuery, buildIntelProfileRosterScript } from "./IntelProfileRoster";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -235,6 +236,9 @@ export default function JarvisBrain() {
       } else if (isTaskRiskMatrixQuery(q)) {
         answer = await buildTaskRiskMatrixScript();
         window.dispatchEvent(new CustomEvent("jarvis:task-risk-matrix-toggle"));
+      } else if (isIntelProfileRosterQuery(q)) {
+        answer = await buildIntelProfileRosterScript();
+        window.dispatchEvent(new CustomEvent("jarvis:intel-roster-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {

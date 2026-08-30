@@ -780,6 +780,7 @@ import ReportViewer from '@/components/cinematic/ReportViewer';
 import DecisionRulesBrowser from '@/components/cinematic/DecisionRulesBrowser';
 import SecurityAuditConsole from '@/components/cinematic/SecurityAuditConsole';
 import KnowledgeReportAuditor from '@/components/cinematic/KnowledgeReportAuditor';
+import IntelProfileRoster from '@/components/cinematic/IntelProfileRoster';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2430,6 +2431,8 @@ function App() {
             <SecurityAuditConsole />
             {/* F481 (overnight 2026-08-30): Knowledge-Report Auditor (KRGAP) — /knowledge/ + /v1/reports; keyword-correlates articles against formal reports; UNDOCUMENTED/DOCUMENTED/ORPHANED/ALL filter tabs; stat tiles; click ▶ AUDIT → /v1/jarvis/agent/chat 2-sentence doc-gap assessment + TTS; ◎ KRGAP button left:7252 zIndex:65; isKrgapQuery+buildKrgapScript wired in JarvisBrain; jarvis:krgap-toggle event; 5-min auto-refresh; voice: "knowledge report/report knowledge/doc gap/documentation gap/knowledge coverage/krgap/report coverage" */}
             <KnowledgeReportAuditor />
+            {/* F483 (overnight 2026-08-30): Intel Profile Roster — /entities/IntelProfile; searchable threat-sorted roster; threat-level summary bar; per-subject ASSESS → /v1/jarvis/agent/chat 2-sentence dossier + TTS; red CRITICAL badge; ◈ IPRO button left:11180 zIndex:70; isIntelProfileRosterQuery+buildIntelProfileRosterScript wired in JarvisBrain; jarvis:intel-roster-toggle event; 60-s auto-refresh; voice: "intel roster/tracked entities/who are we tracking/target roster/subject roster/subject list/ipro" */}
+            <IntelProfileRoster />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
