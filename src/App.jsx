@@ -783,6 +783,7 @@ import KnowledgeReportAuditor from '@/components/cinematic/KnowledgeReportAudito
 import IntelProfileRoster from '@/components/cinematic/IntelProfileRoster';
 import DataIntakeMonitor from '@/components/cinematic/DataIntakeMonitor';
 import GraphNeighborhoodExplorer from '@/components/cinematic/GraphNeighborhoodExplorer';
+import ContactRiskNexus from '@/components/cinematic/ContactRiskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2439,6 +2440,8 @@ function App() {
             <DataIntakeMonitor />
             {/* F485 (overnight 2026-08-31): Graph Neighborhood Explorer (GNEIGH) — /v1/graph/centrality + /v1/graph/subgraph; picks top-ranked node from centrality, expands 1-hop/2-hop neighborhood; neighbors list + edge table; depth 1/2 toggle; seed node picker (top-5 by score); ◈ GNEIGH button left:14360 bottom:8 zIndex:75; isGraphNeighborhoodQuery+buildGraphNeighborhoodScript wired in JarvisBrain; jarvis:gneigh-toggle event; voice: "graph neighborhood/show node neighbors/expand node/node subgraph/gneigh" */}
             <GraphNeighborhoodExplorer />
+            {/* F486 (overnight 2026-08-31): Contact-Risk Nexus (CRISK) — /entities/Contact + /entities/RiskSignal; name+tag cross-reference; severity-sorted; click-to-expand signal detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk brief + TTS; red CRITICAL badge; ◈ CRISK button left:15220 bottom:8 zIndex:76; isContactRiskQuery+buildContactRiskScript wired in JarvisBrain; jarvis:crisk-toggle event; 90-s auto-refresh; voice: "contact risk/risk contacts/who is risky/contact exposure/crisk" */}
+            <ContactRiskNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -51,6 +51,7 @@ import { isTaskRiskMatrixQuery, buildTaskRiskMatrixScript } from "./TaskRiskMatr
 import { isIntelProfileRosterQuery, buildIntelProfileRosterScript } from "./IntelProfileRoster";
 import { isDataIntakeQuery, buildDataIntakeScript } from "./DataIntakeMonitor";
 import { isGraphNeighborhoodQuery, buildGraphNeighborhoodScript } from "./GraphNeighborhoodExplorer";
+import { isContactRiskQuery, buildContactRiskScript } from "./ContactRiskNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -247,6 +248,9 @@ export default function JarvisBrain() {
       } else if (isGraphNeighborhoodQuery(q)) {
         answer = await buildGraphNeighborhoodScript();
         window.dispatchEvent(new CustomEvent("jarvis:gneigh-toggle"));
+      } else if (isContactRiskQuery(q)) {
+        answer = await buildContactRiskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:crisk-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
