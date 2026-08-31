@@ -50,6 +50,7 @@ import { isKrgapQuery, buildKrgapScript } from "./KnowledgeReportAuditor";
 import { isTaskRiskMatrixQuery, buildTaskRiskMatrixScript } from "./TaskRiskMatrix";
 import { isIntelProfileRosterQuery, buildIntelProfileRosterScript } from "./IntelProfileRoster";
 import { isDataIntakeQuery, buildDataIntakeScript } from "./DataIntakeMonitor";
+import { isGraphNeighborhoodQuery, buildGraphNeighborhoodScript } from "./GraphNeighborhoodExplorer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -243,6 +244,9 @@ export default function JarvisBrain() {
       } else if (isDataIntakeQuery(q)) {
         answer = await buildDataIntakeScript();
         window.dispatchEvent(new CustomEvent("jarvis:dint-toggle"));
+      } else if (isGraphNeighborhoodQuery(q)) {
+        answer = await buildGraphNeighborhoodScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gneigh-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {

@@ -74,3 +74,4 @@
 [2026-08-30] F482 TaskRiskMatrix voice wiring: isTaskRiskMatrixQuery+buildTaskRiskMatrixScript wired into JarvisBrain.ask(); jarvis:task-risk-matrix-toggle dispatched; vite build exit 0.
 [2026-08-30] F483 Intel Profile Roster voice wiring — IntelProfileRoster.jsx mounted in App.jsx; isIntelProfileRosterQuery+buildIntelProfileRosterScript wired into JarvisBrain.ask(); jarvis:intel-roster-toggle dispatched; /entities/IntelProfile; vite build exit 0.
 [2026-08-31] F484 Data Intake Monitor: DataIntakeMonitor.jsx created; isDataIntakeQuery+buildDataIntakeScript wired into JarvisBrain.ask(); jarvis:dint-toggle dispatched to open panel; /v1/datasets; bar-chart top-10 by row count + list view; total volume stat; ◈ DINT button left:13500 zIndex:74; 90-s auto-refresh; vite build exit 0.
+2026-08-31T01:18:44Z F485 GraphNeighborhoodExplorer — /v1/graph/centrality + /v1/graph/subgraph; GNEIGH panel; neighbors list + edge table; depth 1/2; seed picker; vite build exit 0

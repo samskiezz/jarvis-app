@@ -782,6 +782,7 @@ import SecurityAuditConsole from '@/components/cinematic/SecurityAuditConsole';
 import KnowledgeReportAuditor from '@/components/cinematic/KnowledgeReportAuditor';
 import IntelProfileRoster from '@/components/cinematic/IntelProfileRoster';
 import DataIntakeMonitor from '@/components/cinematic/DataIntakeMonitor';
+import GraphNeighborhoodExplorer from '@/components/cinematic/GraphNeighborhoodExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2436,6 +2437,8 @@ function App() {
             <IntelProfileRoster />
             {/* F484 (overnight 2026-08-31): Data Intake Monitor (DINT) — /v1/datasets; bar-chart view of top-10 datasets by row count + list view; total volume stat; ◈ DINT button left:13500 bottom:8 zIndex:74; isDataIntakeQuery+buildDataIntakeScript wired in JarvisBrain; jarvis:dint-toggle event; 90-s auto-refresh; voice: "data intake/dataset monitor/dint/data volume/row count/dataset rows/data distribution" */}
             <DataIntakeMonitor />
+            {/* F485 (overnight 2026-08-31): Graph Neighborhood Explorer (GNEIGH) — /v1/graph/centrality + /v1/graph/subgraph; picks top-ranked node from centrality, expands 1-hop/2-hop neighborhood; neighbors list + edge table; depth 1/2 toggle; seed node picker (top-5 by score); ◈ GNEIGH button left:14360 bottom:8 zIndex:75; isGraphNeighborhoodQuery+buildGraphNeighborhoodScript wired in JarvisBrain; jarvis:gneigh-toggle event; voice: "graph neighborhood/show node neighbors/expand node/node subgraph/gneigh" */}
+            <GraphNeighborhoodExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
