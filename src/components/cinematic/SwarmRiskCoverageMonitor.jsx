@@ -1,484 +1,446 @@
 /**
- * F69 — SwarmJob × Risk Signal Coverage Monitor (SRSC)
- *
- * Answers: "Which active risk signals have swarm jobs addressing them,
- *           and which are unsupervised?"
- *
- * Data sources (confirmed real endpoints):
- *   GET /entities/SwarmJob    → running/queued swarm intelligence jobs
- *   GET /entities/RiskSignal  → active risk signals
- *
- * Each RiskSignal's name/description/severity/source is keyword-matched against
- * each SwarmJob's name/description/target/objective to produce:
- *   COVERED    — at least one swarm job correlates to this signal
- *   UNCOVERED  — no swarm job is working on this risk signal
- *
- * Stat tiles:  signals / jobs / covered / uncovered
- * Red badge:   uncovered count on button (unsupervised risks are the gap).
- * Expand row:  matched swarm jobs with status badge + relevance score bar.
- * ▶ ASSESS:   2-sentence AI brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
- *
- * Toggle:  ◈ SRSC  at left:1680 bottom:18, zIndex:68.
- * Event:   jarvis:srsc-toggle
- * Voice:   "swarm risk / risk swarm / srsc / uncovered risks / risk coverage /
- *           which risks have swarm / swarm coverage / swarm signal / risk supervision"
- * Refresh: 60 s auto-poll.
+ * SwarmRiskCoverageMonitor — F488
+ * "JARVIS, swarm risk / risk coverage / swarm coverage / srisk /
+ *  which risks have swarm / automated risk / unmitigated risks / risk automation"
+ * Cross-references /entities/SwarmJob + /entities/RiskSignal to surface
+ * COVERED risks (≥1 active swarm job keyword-matches the signal) vs
+ * UNMITIGATED risks (no automation is actively running against them).
+ * Additive only — mounted via App.jsx; intent helpers exported for JarvisBrain.
  */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { apiBase } from "@/api/cinematicDataAdapters";
 
-const CY    = "#29E7FF";
-const AMBER = "#F5A623";
-const GREEN = "#00c878";
-const RED   = "#FF3B6B";
-const MUTED = "#6E8AA0";
-const BG    = "rgba(4,7,14,0.96)";
-const MONO  = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
+const CY  = "#29E7FF";
+const GRN = "#00E5A0";
+const RED = "#FF4444";
+const ORG = "#FF8C42";
+const DIM = "#8899AA";
 
-const BTN_LEFT   = 1680;
-const REFRESH_MS = 60_000;
 const API_KEY =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||
-  "dev-key";
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
 
-// ─── helpers ─────────────────────────────────────────────────────────────────
+const POLL_MS = 90_000;
 
-function normArr(raw) {
-  if (Array.isArray(raw))                return raw;
-  if (raw && Array.isArray(raw.items))   return raw.items;
-  if (raw && Array.isArray(raw.data))    return raw.data;
-  if (raw && Array.isArray(raw.results)) return raw.results;
-  return [];
+const SRISK_RE =
+  /\bsrisk\b|\bswarm.?risk\b|\brisk.?coverage\b|\bswarm.?coverage\b|\bwhich.risks.have.swarm\b|\bautomated.risk\b|\bunmitigated.risks?\b|\brisk.automation\b|\bswarm.mitigation\b|\bactive.coverage\b/i;
+
+export function isSwarmRiskQuery(text) {
+  return SRISK_RE.test(text || "");
 }
 
-function tokens(str) {
-  return String(str || "").toLowerCase().split(/\W+/).filter(t => t.length > 2);
+function normaliseJobs(data) {
+  if (!data) return [];
+  const raw = data.jobs || data.items || data.results || (Array.isArray(data) ? data : []);
+  return raw.map((j, i) => ({
+    id:     j.id || `j-${i}`,
+    name:   (j.name || j.title || j.job_name || j.label || `Job ${i + 1}`).trim(),
+    status: (j.status || j.state || "RUNNING").toUpperCase(),
+    kind:   (j.kind || j.type || j.category || "").toLowerCase(),
+    tags:   [...(j.tags || []), j.kind, j.type, j.category, j.target]
+              .filter(Boolean).map(x => String(x).toLowerCase()),
+  })).filter(j => ["RUNNING", "ACTIVE", "IN_PROGRESS", "PENDING"].includes(j.status));
 }
 
-function scoreMatch(signal, job) {
-  const sigTokens = new Set([
-    ...tokens(signal.name),
-    ...tokens(signal.description),
-    ...tokens(signal.source),
-    ...tokens(signal.severity),
-    ...tokens(Array.isArray(signal.tags) ? signal.tags.join(" ") : signal.tags),
-  ]);
-  const jobSrc = [
-    job.name, job.description,
-    job.target, job.objective,
-    Array.isArray(job.tags) ? job.tags.join(" ") : job.tags,
-  ].join(" ");
-  const jobTokens = tokens(jobSrc);
-  return jobTokens.filter(t => sigTokens.has(t)).length;
+function normaliseSignals(data) {
+  if (!data) return [];
+  const raw = data.signals || data.items || data.results || (Array.isArray(data) ? data : []);
+  return raw.map((s, i) => ({
+    id:       s.id || `s-${i}`,
+    title:    (s.title || s.name || s.signal || s.label || `Signal ${i + 1}`).trim(),
+    severity: (s.severity || s.level || s.priority || "LOW").toUpperCase(),
+    source:   (s.source || s.origin || "").toLowerCase(),
+    tags:     [...(s.tags || []), s.kind, s.type, s.category, s.source]
+                .filter(Boolean).map(x => String(x).toLowerCase()),
+  }));
 }
 
-// ─── fetch ───────────────────────────────────────────────────────────────────
-
-async function fetchAll() {
-  const base    = apiBase();
-  const headers = { Authorization: `Bearer ${API_KEY}` };
-  const [sr, jr] = await Promise.all([
-    fetch(`${base}/entities/RiskSignal`, { headers }).then(r => r.json()).catch(() => []),
-    fetch(`${base}/entities/SwarmJob`,   { headers }).then(r => r.json()).catch(() => []),
-  ]);
-  const signals = normArr(sr);
-  const jobs    = normArr(jr);
-  const correlated = signals.map(s => {
-    const matches = jobs
-      .map(j => ({ job: j, sc: scoreMatch(s, j) }))
-      .filter(x => x.sc > 0)
-      .sort((a, b) => b.sc - a.sc);
-    return {
-      signal: s,
-      classification: matches.length > 0 ? "COVERED" : "UNCOVERED",
-      matches,
-    };
-  });
-  return { correlated, signalCount: signals.length, jobCount: jobs.length };
+function severityOrder(s) {
+  if (s === "CRITICAL") return 0;
+  if (s === "HIGH")     return 1;
+  if (s === "MEDIUM")   return 2;
+  return 3;
 }
 
-// ─── exported helpers for JarvisBrain ────────────────────────────────────────
-
-export function isSrscQuery(q) {
-  const t = q.toLowerCase();
-  return (
-    t.includes("swarm risk") || t.includes("risk swarm") ||
-    t.includes("srsc") || t.includes("uncovered risk") ||
-    t.includes("risk coverage") || t.includes("which risks have swarm") ||
-    t.includes("swarm coverage") || t.includes("swarm signal") ||
-    t.includes("risk supervision") || t.includes("supervised risk") ||
-    t.includes("swarm monitor risk")
-  );
+function severityColor(s) {
+  if (s === "CRITICAL") return RED;
+  if (s === "HIGH")     return ORG;
+  if (s === "MEDIUM")   return "#FFD700";
+  return GRN;
 }
 
-export async function buildSrscScript() {
+function tokenise(str) {
+  return (str || "").toLowerCase().replace(/[^\w\s]/g, " ").split(/\s+/).filter(w => w.length > 2);
+}
+
+function matchScore(signal, job) {
+  const sigWords  = new Set([...tokenise(signal.title), ...signal.tags]);
+  const jobWords  = new Set([...tokenise(job.name),   ...job.tags, ...tokenise(job.kind)]);
+  let hits = 0;
+  for (const w of jobWords) {
+    if (sigWords.has(w)) hits++;
+  }
+  return hits;
+}
+
+function classify(signals, jobs) {
+  return signals
+    .map(s => {
+      const matched = jobs
+        .map(j => ({ ...j, score: matchScore(s, j) }))
+        .filter(j => j.score > 0)
+        .sort((a, b) => b.score - a.score);
+      return { ...s, matched, covered: matched.length > 0 };
+    })
+    .sort((a, b) => severityOrder(a.severity) - severityOrder(b.severity));
+}
+
+export async function buildSwarmRiskScript() {
+  let jobs = [], signals = [];
   try {
-    const base    = apiBase();
-    const headers = { Authorization: `Bearer ${API_KEY}` };
-    const [sr, jr] = await Promise.all([
-      fetch(`${base}/entities/RiskSignal`, { headers }).then(r => r.json()).catch(() => []),
-      fetch(`${base}/entities/SwarmJob`,   { headers }).then(r => r.json()).catch(() => []),
+    const base = apiBase();
+    const hdr  = { Authorization: `Bearer ${API_KEY}` };
+    const [jr, sr] = await Promise.all([
+      fetch(`${base}/entities/SwarmJob`,    { headers: hdr }),
+      fetch(`${base}/entities/RiskSignal`,  { headers: hdr }),
     ]);
-    const signals  = normArr(sr);
-    const jobs     = normArr(jr);
-    const covered  = signals.filter(s => jobs.some(j => scoreMatch(s, j) > 0)).length;
-    const uncovered = signals.length - covered;
-    return (
-      `Swarm Risk Coverage: ${signals.length} signals, ${jobs.length} jobs. ` +
-      `${covered} signals are covered by swarm activity. ` +
-      `${uncovered} are unsupervised. ` +
-      (uncovered > 0
-        ? `Top unsupervised signal: ${
-            signals.find(s => !jobs.some(j => scoreMatch(s, j) > 0))?.name || "unknown"
-          }.`
-        : "Full swarm coverage achieved.")
-    );
-  } catch (e) {
-    return `Swarm risk coverage check failed: ${e.message}`;
+    if (jr.ok) jobs    = normaliseJobs(await jr.json());
+    if (sr.ok) signals = normaliseSignals(await sr.json());
+  } catch (_) {}
+
+  if (!signals.length) return "Unable to retrieve swarm risk coverage data at this time, sir.";
+
+  const rows        = classify(signals, jobs);
+  const covered     = rows.filter(r => r.covered).length;
+  const unmitigated = rows.length - covered;
+  const pct         = rows.length ? Math.round((covered / rows.length) * 100) : 0;
+
+  const parts = [
+    `Swarm risk coverage: ${signals.length} active risk signal${signals.length !== 1 ? "s" : ""} cross-referenced against ${jobs.length} running swarm job${jobs.length !== 1 ? "s" : ""}.`,
+    `${covered} signal${covered !== 1 ? "s are" : " is"} COVERED by active automation — ${pct}% coverage.`,
+  ];
+  if (unmitigated > 0) {
+    const top = rows.filter(r => !r.covered).slice(0, 2).map(r => r.title).join(", ");
+    parts.push(`${unmitigated} signal${unmitigated !== 1 ? "s are" : " is"} UNMITIGATED — no active swarm job is targeting ${unmitigated === 1 ? "it" : "them"}. Top unmitigated: ${top}.`);
+  } else {
+    parts.push("All active risk signals have swarm coverage, sir.");
   }
+
+  return parts.join(" ");
 }
-
-// ─── assess ──────────────────────────────────────────────────────────────────
-
-async function runAssess(correlated, setText, speak) {
-  const covered   = correlated.filter(c => c.classification === "COVERED").length;
-  const uncovered = correlated.filter(c => c.classification === "UNCOVERED").length;
-  const topUncovered = correlated
-    .filter(c => c.classification === "UNCOVERED")
-    .slice(0, 2)
-    .map(c => c.signal?.name || "?")
-    .join(", ");
-  const prompt =
-    `You are JARVIS. In 2 sentences, brief the operator on SwarmJob × Risk Signal coverage: ` +
-    `${covered} risk signals have swarm job coverage, ${uncovered} are unsupervised. ` +
-    `${uncovered > 0 ? `Top unsupervised: ${topUncovered}.` : "All signals supervised."} ` +
-    `Conclude with the most urgent operational action.`;
-  const base    = apiBase();
-  const headers = { Authorization: `Bearer ${API_KEY}`, "Content-Type": "application/json" };
-  try {
-    const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
-      method: "POST", headers, body: JSON.stringify({ message: prompt }),
-    });
-    const j    = await r.json();
-    const text = j.response || j.reply || j.message || JSON.stringify(j);
-    setText(text);
-    window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
-    speak(text);
-  } catch (e) {
-    setText(`ASSESS error: ${e.message}`);
-  }
-}
-
-// ─── component ───────────────────────────────────────────────────────────────
 
 export default function SwarmRiskCoverageMonitor() {
-  const [open, setOpen]             = useState(false);
-  const [data, setData]             = useState(null);
-  const [loading, setLoading]       = useState(false);
-  const [err, setErr]               = useState(null);
-  const [filter, setFilter]         = useState("ALL");
-  const [search, setSearch]         = useState("");
-  const [expanded, setExpanded]     = useState(null);
-  const [assessing, setAssessing]   = useState(false);
-  const [assessText, setAssessText] = useState("");
-  const timerRef = useRef(null);
+  const [open,      setOpen]      = useState(false);
+  const [rows,      setRows]      = useState([]);
+  const [jobCount,  setJobCount]  = useState(0);
+  const [loading,   setLoading]   = useState(false);
+  const [lastTs,    setLastTs]    = useState(null);
+  const [tab,       setTab]       = useState("ALL");
+  const [expanded,  setExpanded]  = useState(null);
+  const [assessing, setAssessing] = useState(false);
+  const [brief,     setBrief]     = useState("");
 
   const load = useCallback(async () => {
-    setLoading(true); setErr(null);
+    setLoading(true);
     try {
-      const result = await fetchAll();
-      setData(result);
-    } catch (e) {
-      setErr(e.message);
-    } finally {
-      setLoading(false);
-    }
+      const base = apiBase();
+      const hdr  = { Authorization: `Bearer ${API_KEY}` };
+      const [jr, sr] = await Promise.all([
+        fetch(`${base}/entities/SwarmJob`,   { headers: hdr }),
+        fetch(`${base}/entities/RiskSignal`, { headers: hdr }),
+      ]);
+      const jobs    = jr.ok ? normaliseJobs(await jr.json())    : [];
+      const signals = sr.ok ? normaliseSignals(await sr.json()) : [];
+      setJobCount(jobs.length);
+      setRows(classify(signals, jobs));
+      setLastTs(Date.now());
+    } catch (_) {}
+    finally { setLoading(false); }
   }, []);
 
   useEffect(() => {
-    const handler = () => setOpen(o => !o);
-    window.addEventListener("jarvis:srsc-toggle", handler);
-    return () => window.removeEventListener("jarvis:srsc-toggle", handler);
-  }, []);
-
-  useEffect(() => {
-    if (!open) return;
     load();
-    timerRef.current = setInterval(load, REFRESH_MS);
-    return () => clearInterval(timerRef.current);
-  }, [open, load]);
+    const iv = setInterval(load, POLL_MS);
+    return () => clearInterval(iv);
+  }, [load]);
 
-  const speak = useCallback((text) => {
-    const base = apiBase();
-    fetch(`${base}/v1/voice/tts`, {
-      method: "POST",
-      headers: { Authorization: `Bearer ${API_KEY}`, "Content-Type": "application/json" },
-      body: JSON.stringify({ text, voice: localStorage.getItem("jarvis_voice") || "ash" }),
-    }).then(r => r.blob()).then(b => {
-      const url = URL.createObjectURL(b);
-      new Audio(url).play().catch(() => {});
-    }).catch(() => {});
+  useEffect(() => {
+    const onAsk = (e) => {
+      const q = e?.detail?.text || e?.detail?.query || "";
+      if (SRISK_RE.test(q)) { setOpen(true); load(); }
+    };
+    window.addEventListener("jarvis:ask", onAsk);
+    return () => window.removeEventListener("jarvis:ask", onAsk);
+  }, [load]);
+
+  useEffect(() => {
+    const onToggle = () => setOpen(v => !v);
+    window.addEventListener("jarvis:srisk-toggle", onToggle);
+    return () => window.removeEventListener("jarvis:srisk-toggle", onToggle);
   }, []);
 
-  if (!open) {
-    const uncoveredCount =
-      data?.correlated?.filter(c => c.classification === "UNCOVERED").length ?? 0;
-    return (
-      <button
-        onClick={() => setOpen(true)}
-        title="SwarmJob × Risk Signal Coverage Monitor (SRSC)"
-        style={{
-          position: "fixed", left: BTN_LEFT, bottom: 18, zIndex: 68,
-          background: "rgba(4,7,14,0.82)", border: `1px solid ${RED}44`,
-          color: RED, fontFamily: MONO, fontSize: 10, letterSpacing: 1,
-          padding: "3px 8px", borderRadius: 3, cursor: "pointer",
-          display: "flex", alignItems: "center", gap: 5,
-        }}
-      >
-        ◈ SRSC
-        {uncoveredCount > 0 && (
-          <span style={{
-            background: RED, color: "#fff", borderRadius: 8,
-            padding: "0 5px", fontSize: 9, fontWeight: 700,
-          }}>{uncoveredCount}</span>
-        )}
-      </button>
-    );
-  }
+  const covered     = rows.filter(r => r.covered).length;
+  const unmitigated = rows.length - covered;
+  const pct         = rows.length ? Math.round((covered / rows.length) * 100) : 0;
 
-  const { correlated = [], signalCount = 0, jobCount = 0 } = data || {};
-  const covered   = correlated.filter(c => c.classification === "COVERED").length;
-  const uncovered = correlated.filter(c => c.classification === "UNCOVERED").length;
-
-  const visible = correlated.filter(c => {
-    if (filter === "COVERED"   && c.classification !== "COVERED")   return false;
-    if (filter === "UNCOVERED" && c.classification !== "UNCOVERED") return false;
-    if (search) {
-      const q    = search.toLowerCase();
-      const name = String(c.signal?.name        || "").toLowerCase();
-      const desc = String(c.signal?.description || "").toLowerCase();
-      if (!name.includes(q) && !desc.includes(q)) return false;
-    }
+  const filtered = rows.filter(r => {
+    if (tab === "COVERED")     return r.covered;
+    if (tab === "UNMITIGATED") return !r.covered;
     return true;
   });
 
-  const TAB_STYLE = (active, col = RED) => ({
-    background: active ? col : "transparent",
-    color: active ? (col === RED ? "#fff" : "#000") : MUTED,
-    border: `1px solid ${active ? col : MUTED}44`,
-    borderRadius: 3, padding: "2px 8px", fontSize: 9,
-    fontFamily: MONO, cursor: "pointer", letterSpacing: 1,
-  });
+  const ts = lastTs ? new Date(lastTs).toLocaleTimeString("en-GB", { hour12: false }) : null;
 
-  const sevCol = (sev) => {
-    const s = String(sev || "").toUpperCase();
-    if (s === "CRITICAL") return RED;
-    if (s === "HIGH")     return "#FF7A00";
-    if (s === "MEDIUM")   return AMBER;
-    return GREEN;
-  };
+  async function assess() {
+    setAssessing(true); setBrief("");
+    try {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+        body: JSON.stringify({
+          message: `SRISK assessment: ${rows.length} risk signals cross-referenced against ${jobCount} active swarm jobs. ${covered} are COVERED (${pct}% coverage); ${unmitigated} are UNMITIGATED. In 2 sentences, identify the most critical unmitigated signals and recommend the swarm job strategy needed to close the coverage gap.`,
+        }),
+      });
+      const d = await r.json();
+      setBrief((d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim());
+    } catch (_) {
+      setBrief("Assessment unavailable — check agent endpoint.");
+    }
+    setAssessing(false);
+  }
 
   return (
-    <div style={{
-      position: "fixed", right: 18, top: 60, width: 520, maxHeight: "80vh",
-      background: BG, border: `1px solid ${RED}55`, borderRadius: 6,
-      fontFamily: MONO, fontSize: 11, color: CY, zIndex: 160,
-      display: "flex", flexDirection: "column", overflow: "hidden",
-    }}>
-      {/* header */}
-      <div style={{
-        display: "flex", alignItems: "center", justifyContent: "space-between",
-        padding: "8px 12px", borderBottom: `1px solid ${RED}33`,
-        flexShrink: 0,
-      }}>
-        <span style={{ color: RED, fontWeight: 700, letterSpacing: 2 }}>
-          ◈ SWARM × RISK SIGNAL COVERAGE
-        </span>
-        <button onClick={() => setOpen(false)} style={{
-          background: "none", border: "none", color: MUTED,
-          cursor: "pointer", fontSize: 14, lineHeight: 1,
-        }}>✕</button>
-      </div>
-
-      {/* stat tiles */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(4,1fr)",
-        gap: 6, padding: "8px 12px", flexShrink: 0,
-      }}>
-        {[
-          ["SIGNALS",   signalCount,  CY],
-          ["JOBS",      jobCount,     CY],
-          ["COVERED",   covered,      GREEN],
-          ["UNCOVERED", uncovered,    RED],
-        ].map(([label, val, col]) => (
-          <div key={label} style={{
-            background: "rgba(255,255,255,0.03)", border: `1px solid ${col}33`,
-            borderRadius: 4, padding: "5px 8px", textAlign: "center",
+    <>
+      {/* Toggle button */}
+      <button
+        onClick={() => setOpen(v => !v)}
+        title="Swarm × Risk Coverage Monitor — F488"
+        style={{
+          position: "fixed", left: 16940, bottom: 8, zIndex: 78,
+          background: open ? CY + "cc" : "rgba(5,8,13,0.78)",
+          border: `1px solid ${open ? CY : CY + "44"}`,
+          borderRadius: 8,
+          color: open ? "#04060A" : CY,
+          cursor: "pointer",
+          padding: "6px 12px", fontSize: 10, letterSpacing: 2,
+          fontFamily: "'JetBrains Mono',monospace", fontWeight: 700,
+          boxShadow: `0 0 20px ${CY}${open ? "88" : "33"}`,
+          backdropFilter: "blur(6px)",
+          display: "flex", alignItems: "center", gap: 6,
+          transition: "all 0.2s",
+        }}
+      >
+        <span style={{ fontSize: 12 }}>◈</span>
+        SRISK
+        {unmitigated > 0 && (
+          <span style={{
+            background: RED + "33", color: RED,
+            borderRadius: 9, padding: "1px 5px",
+            fontSize: 9, fontWeight: 900, minWidth: 16, textAlign: "center",
           }}>
-            <div style={{ color: col, fontSize: 13, fontWeight: 700 }}>{loading ? "…" : val}</div>
-            <div style={{ color: MUTED, fontSize: 9, letterSpacing: 1 }}>{label}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* filter tabs + search */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: 6,
-        padding: "0 12px 6px", flexShrink: 0, flexWrap: "wrap",
-      }}>
-        {["ALL", "COVERED", "UNCOVERED"].map(f => (
-          <button key={f} onClick={() => setFilter(f)} style={TAB_STYLE(filter === f)}>
-            {f}
-          </button>
-        ))}
-        <input
-          value={search}
-          onChange={e => setSearch(e.target.value)}
-          placeholder="search signals…"
-          style={{
-            background: "rgba(255,255,255,0.04)", border: `1px solid ${MUTED}44`,
-            color: CY, fontFamily: MONO, fontSize: 10, borderRadius: 3,
-            padding: "2px 8px", outline: "none", flex: 1, minWidth: 100,
-          }}
-        />
-        <button
-          onClick={async () => {
-            if (assessing) return;
-            setAssessing(true); setAssessText("");
-            await runAssess(correlated, setAssessText, speak);
-            setAssessing(false);
-          }}
-          style={TAB_STYLE(false, CY)}
-        >
-          {assessing ? "…" : "▶ ASSESS"}
-        </button>
-      </div>
-
-      {assessText && (
-        <div style={{
-          margin: "0 12px 6px", padding: "6px 10px",
-          background: "rgba(41,231,255,0.06)", border: `1px solid ${CY}33`,
-          borderRadius: 4, color: CY, fontSize: 10, lineHeight: 1.5,
-          flexShrink: 0,
-        }}>
-          {assessText}
-        </div>
-      )}
-
-      {err && (
-        <div style={{ margin: "0 12px 6px", color: RED, fontSize: 10, flexShrink: 0 }}>
-          {err}
-        </div>
-      )}
-
-      {/* list */}
-      <div style={{ overflowY: "auto", flex: 1 }}>
-        {visible.length === 0 && !loading && (
-          <div style={{ color: MUTED, textAlign: "center", padding: 18, fontSize: 10 }}>
-            No signals match filter.
-          </div>
+            {unmitigated}
+          </span>
         )}
-        {visible.map((c, i) => {
-          const sig  = c.signal || {};
-          const isEx = expanded === i;
-          const col  = c.classification === "COVERED" ? GREEN : RED;
-          return (
-            <div key={i} style={{
-              borderBottom: `1px solid ${CY}0D`,
-              cursor: "pointer",
-            }} onClick={() => setExpanded(isEx ? null : i)}>
-              <div style={{
-                display: "flex", alignItems: "center", gap: 8,
-                padding: "7px 12px",
+      </button>
+
+      {open && (
+        <div style={{
+          position: "fixed", left: 18, bottom: 72, zIndex: 78,
+          width: "min(620px,96vw)", maxHeight: "min(680px,84vh)",
+          background: "rgba(4,6,14,0.97)",
+          border: `1px solid ${CY}33`,
+          borderRadius: 14, overflow: "hidden",
+          backdropFilter: "blur(12px)",
+          boxShadow: `0 0 60px ${CY}18`,
+          fontFamily: "'JetBrains Mono',monospace",
+          display: "flex", flexDirection: "column",
+        }}>
+          {/* Header */}
+          <div style={{
+            padding: "10px 14px", borderBottom: `1px solid ${CY}22`,
+            display: "flex", alignItems: "center", gap: 8,
+          }}>
+            <span style={{
+              width: 9, height: 9, borderRadius: "50%",
+              background: CY, boxShadow: `0 0 10px ${CY}`,
+              display: "inline-block",
+              animation: loading ? "sriskpulse 1s ease-in-out infinite" : "none",
+            }} />
+            <span style={{ color: CY, fontSize: 11, letterSpacing: 3, fontWeight: 700 }}>
+              SWARM × RISK COVERAGE MONITOR
+            </span>
+            <span style={{ marginLeft: "auto", color: DIM, fontSize: 9 }}>
+              {loading ? "SYNCING" : ts ? `UPDATED ${ts}` : "—"} · {POLL_MS / 1000}s
+            </span>
+            <button onClick={() => setOpen(false)} style={{
+              background: "none", border: "none", color: DIM,
+              cursor: "pointer", fontSize: 14, padding: "0 2px",
+            }}>✕</button>
+          </div>
+
+          {/* Stats tiles */}
+          <div style={{
+            display: "flex", gap: 8, padding: "10px 14px",
+            borderBottom: `1px solid ${CY}11`,
+          }}>
+            {[
+              { label: "SIGNALS",     val: rows.length,    col: CY },
+              { label: "SWARM JOBS",  val: jobCount,       col: "#A78BFA" },
+              { label: "COVERED",     val: covered,        col: GRN },
+              { label: "UNMITIGATED", val: unmitigated,    col: unmitigated > 0 ? RED : DIM },
+              { label: "COVERAGE",    val: `${pct}%`,      col: pct >= 80 ? GRN : pct >= 50 ? ORG : RED },
+            ].map(({ label, val, col }) => (
+              <div key={label} style={{
+                flex: 1, background: "rgba(255,255,255,0.03)",
+                border: `1px solid ${col}22`, borderRadius: 8,
+                padding: "8px 6px", textAlign: "center",
               }}>
-                <span style={{
-                  background: col, color: "#000", borderRadius: 3,
-                  padding: "1px 6px", fontSize: 8, fontWeight: 700, flexShrink: 0,
-                }}>
-                  {c.classification}
-                </span>
-                <span style={{
-                  background: sevCol(sig.severity) + "33",
-                  color: sevCol(sig.severity), borderRadius: 3,
-                  padding: "1px 5px", fontSize: 8, flexShrink: 0,
-                }}>
-                  {sig.severity || "?"}
-                </span>
-                <span style={{ color: CY, flex: 1, fontSize: 11 }}>
-                  {sig.name || sig.id || "Unknown Signal"}
-                </span>
-                <span style={{ color: MUTED, fontSize: 9 }}>
-                  {c.matches.length} job{c.matches.length !== 1 ? "s" : ""}
-                </span>
-                <span style={{ color: MUTED, fontSize: 9 }}>{isEx ? "▲" : "▼"}</span>
+                <div style={{ color: col, fontSize: 14, fontWeight: 900 }}>{val}</div>
+                <div style={{ color: DIM, fontSize: 7, letterSpacing: 1, marginTop: 2 }}>{label}</div>
               </div>
+            ))}
+          </div>
 
-              {isEx && (
-                <div style={{
-                  padding: "0 12px 8px 12px",
-                  background: "rgba(255,255,255,0.02)",
-                }}>
-                  {sig.description && (
-                    <div style={{
-                      color: MUTED, fontSize: 9, marginBottom: 6,
-                      lineHeight: 1.4,
-                    }}>
-                      {sig.description}
-                    </div>
-                  )}
-                  {c.matches.length === 0 ? (
-                    <div style={{ color: RED, fontSize: 9 }}>No swarm jobs cover this signal.</div>
-                  ) : (
-                    c.matches.slice(0, 5).map((m, mi) => {
-                      const job   = m.job || {};
-                      const maxSc = c.matches[0]?.sc || 1;
-                      const pct   = Math.round((m.sc / maxSc) * 100);
-                      const stCol =
-                        String(job.status || "").toLowerCase() === "running" ? GREEN :
-                        String(job.status || "").toLowerCase() === "failed"  ? RED   : AMBER;
-                      return (
-                        <div key={mi} style={{ marginBottom: 4 }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                            <span style={{
-                              background: stCol + "33", color: stCol,
-                              borderRadius: 3, padding: "1px 5px", fontSize: 8, flexShrink: 0,
-                            }}>
-                              {job.status || "?"}
-                            </span>
-                            <span style={{ color: CY, fontSize: 10, flex: 1 }}>
-                              {job.name || job.id || "Unknown Job"}
-                            </span>
-                            <span style={{ color: MUTED, fontSize: 8 }}>{m.sc}pt</span>
-                          </div>
-                          <div style={{
-                            height: 2, background: `${CY}22`,
-                            borderRadius: 1, margin: "2px 0 0",
-                          }}>
-                            <div style={{
-                              height: 2, width: `${pct}%`,
-                              background: col, borderRadius: 1,
-                            }} />
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
+          {/* Filter tabs */}
+          <div style={{
+            display: "flex", gap: 6, padding: "8px 14px",
+            borderBottom: `1px solid ${CY}11`,
+          }}>
+            {["ALL", "COVERED", "UNMITIGATED"].map(t => (
+              <button key={t} onClick={() => setTab(t)} style={{
+                background: tab === t ? CY + "22" : "none",
+                border: `1px solid ${tab === t ? CY + "88" : CY + "22"}`,
+                borderRadius: 6, color: tab === t ? CY : DIM,
+                cursor: "pointer", padding: "4px 10px",
+                fontSize: 9, letterSpacing: 1, fontWeight: 700,
+              }}>{t}</button>
+            ))}
+            <button onClick={assess} disabled={assessing} style={{
+              marginLeft: "auto",
+              background: assessing ? CY + "33" : "none",
+              border: `1px solid ${CY}55`, borderRadius: 6,
+              color: CY, cursor: assessing ? "not-allowed" : "pointer",
+              padding: "4px 10px", fontSize: 9, letterSpacing: 1,
+            }}>
+              {assessing ? "…" : "▶ ASSESS"}
+            </button>
+          </div>
+
+          {/* Brief */}
+          {brief && (
+            <div style={{
+              padding: "8px 14px", borderBottom: `1px solid ${CY}11`,
+              color: "#DCEBF5", fontSize: 11, lineHeight: 1.55,
+              background: "rgba(41,231,255,0.04)",
+            }}>{brief}</div>
+          )}
+
+          {/* Signal list */}
+          <div style={{ overflowY: "auto", flex: 1, padding: "8px 14px" }}>
+            {loading && !rows.length ? (
+              <div style={{ color: DIM, fontSize: 11, textAlign: "center", padding: 20 }}>
+                Loading swarm risk coverage…
+              </div>
+            ) : filtered.length === 0 ? (
+              <div style={{ color: DIM, fontSize: 11, textAlign: "center", padding: 20 }}>
+                No signals match this filter.
+              </div>
+            ) : filtered.map(row => (
+              <div key={row.id} style={{ marginBottom: 6 }}>
+                <div
+                  onClick={() => setExpanded(expanded === row.id ? null : row.id)}
+                  style={{
+                    background: row.covered ? "rgba(0,229,160,0.06)" : "rgba(255,68,68,0.06)",
+                    border: `1px solid ${row.covered ? GRN + "33" : RED + "22"}`,
+                    borderRadius: 8, padding: "8px 12px",
+                    cursor: "pointer", display: "flex", alignItems: "center", gap: 8,
+                  }}
+                >
+                  <span style={{
+                    width: 7, height: 7, borderRadius: "50%",
+                    background: severityColor(row.severity),
+                    boxShadow: `0 0 6px ${severityColor(row.severity)}`,
+                    flexShrink: 0,
+                  }} />
+                  <span style={{ color: "#DCEBF5", fontSize: 11, flex: 1, wordBreak: "break-word" }}>
+                    {row.title}
+                  </span>
+                  <span style={{
+                    fontSize: 8, letterSpacing: 1, fontWeight: 700,
+                    color: severityColor(row.severity),
+                    background: severityColor(row.severity) + "22",
+                    borderRadius: 4, padding: "2px 5px", flexShrink: 0,
+                  }}>
+                    {row.severity}
+                  </span>
+                  <span style={{
+                    fontSize: 8, letterSpacing: 1, fontWeight: 700,
+                    color: row.covered ? GRN : RED,
+                    background: (row.covered ? GRN : RED) + "22",
+                    borderRadius: 4, padding: "2px 6px", flexShrink: 0,
+                  }}>
+                    {row.covered ? `${row.matched.length} JOB${row.matched.length !== 1 ? "S" : ""}` : "UNMITIGATED"}
+                  </span>
+                  <span style={{ color: DIM, fontSize: 9, flexShrink: 0 }}>
+                    {expanded === row.id ? "▲" : "▼"}
+                  </span>
                 </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
 
-      {/* footer */}
-      <div style={{
-        borderTop: `1px solid ${RED}22`, padding: "5px 12px",
-        color: MUTED, fontSize: 9, letterSpacing: 1, flexShrink: 0,
-        display: "flex", justifyContent: "space-between",
-      }}>
-        <span>SWARM × RISK — {visible.length}/{correlated.length} signals</span>
-        <span>auto-refresh 60s</span>
-      </div>
-    </div>
+                {expanded === row.id && (
+                  <div style={{
+                    background: "rgba(255,255,255,0.02)", borderRadius: "0 0 8px 8px",
+                    border: `1px solid ${CY}11`, borderTop: "none",
+                    padding: "8px 12px",
+                  }}>
+                    {row.source && (
+                      <div style={{ color: DIM, fontSize: 9, marginBottom: 6, letterSpacing: 1 }}>
+                        SOURCE: {row.source}
+                      </div>
+                    )}
+                    {row.covered ? (
+                      <>
+                        <div style={{ color: GRN, fontSize: 9, letterSpacing: 1, marginBottom: 4 }}>
+                          COVERING SWARM JOBS:
+                        </div>
+                        {row.matched.map(j => (
+                          <div key={j.id} style={{
+                            display: "flex", alignItems: "center", gap: 6,
+                            padding: "4px 0", borderBottom: `1px solid ${CY}09`,
+                          }}>
+                            <span style={{
+                              fontSize: 8, color: CY,
+                              background: CY + "22",
+                              borderRadius: 4, padding: "1px 5px", flexShrink: 0,
+                            }}>{j.status}</span>
+                            <span style={{ color: "#DCEBF5", fontSize: 10 }}>{j.name}</span>
+                            {j.kind && (
+                              <span style={{ color: DIM, fontSize: 9, marginLeft: "auto" }}>
+                                {j.kind}
+                              </span>
+                            )}
+                          </div>
+                        ))}
+                      </>
+                    ) : (
+                      <div style={{ color: RED, fontSize: 10, fontStyle: "italic" }}>
+                        No active swarm job covers this risk signal — manual intervention required.
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div style={{
+            padding: "6px 14px", borderTop: `1px solid ${CY}11`,
+            color: DIM, fontSize: 9, letterSpacing: 1,
+          }}>
+            /entities/SwarmJob · /entities/RiskSignal · /v1/jarvis/agent/chat
+          </div>
+        </div>
+      )}
+
+      <style>{`@keyframes sriskpulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(1.4)}}`}</style>
+    </>
   );
 }
