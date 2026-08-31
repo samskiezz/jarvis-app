@@ -788,6 +788,7 @@ import DecisionRulesTaskMonitor from '@/components/cinematic/DecisionRulesTaskMo
 import InvestmentScenarioExposure from '@/components/cinematic/InvestmentScenarioExposure';
 import KnowledgeTaskGapDetector from '@/components/cinematic/KnowledgeTaskGapDetector';
 import ReportRiskCoverageMonitor from '@/components/cinematic/ReportRiskCoverageMonitor';
+import ScenarioKnowledgeGap from '@/components/cinematic/ScenarioKnowledgeGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2454,6 +2455,8 @@ function App() {
             <KnowledgeTaskGapDetector />
             {/* F492 (overnight 2026-08-31): Report × Risk Coverage Monitor (RRISK) — /v1/reports + /entities/RiskSignal; keyword cross-reference finds risks with formal report documentation (DOCUMENTED) vs undocumented blind spots (UNDOCUMENTED); coverage % tile; severity-sorted; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched report detail (title/type/author/summary/hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; red badge on critical gaps; ◈ RRISK button left:19520 bottom:8 zIndex:81; isRriskQuery+buildRriskScript wired in JarvisBrain; jarvis:rrisk-toggle event; 2-min auto-refresh; voice: "report risk/risk coverage/undocumented risks/rrisk/which risks have reports/risk document/formal risk/reported risk" */}
             <ReportRiskCoverageMonitor />
+            {/* F493 (overnight 2026-08-31): Scenario × Knowledge Gap Monitor (SKGAP) — /v1/scenario/list + /knowledge/; keyword cross-reference finds scenarios with supporting knowledge articles (GROUNDED) vs scenarios with no knowledge documentation (UNSUPPORTED — operational blind spots); coverage % tile; ALL/GROUNDED/UNSUPPORTED filter tabs + search; click-to-expand matched articles with relevance hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS via jarvis:speak-dossier; amber badge on unsupported count; ◈ SKGAP button left:20380 bottom:8 zIndex:82; isSkgapQuery+buildSkgapScript wired in JarvisBrain; jarvis:skgap-toggle event; 90-s auto-refresh; voice: "scenario knowledge/knowledge scenario/skgap/unsupported scenarios/scenario gap/knowledge gap scenarios/scenario coverage/scenario knowledge gap" */}
+            <ScenarioKnowledgeGap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
