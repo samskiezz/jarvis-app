@@ -797,6 +797,7 @@ import ScenarioOpsEventNexus from '@/components/cinematic/ScenarioOpsEventNexus'
 import SkillInvestigationNexus from '@/components/cinematic/SkillInvestigationNexus';
 import TaskRiskSignalCorrelator from '@/components/cinematic/TaskRiskSignalCorrelator';
 import DecisionRulesRiskNexus from '@/components/cinematic/DecisionRulesRiskNexus';
+import RulesInvestigationNexus from '@/components/cinematic/RulesInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2481,6 +2482,8 @@ function App() {
             <TaskRiskSignalCorrelator />
             {/* F502 (overnight 2026-08-31): Decision Rules × Risk Signal Nexus (RULSRSK) — /v1/rules + /entities/RiskSignal; keyword cross-reference finds WATCHTOWER rules actively triggered by live signals (TRIGGERED) vs IDLE rules; coverage % tile; ALL/TRIGGERED/IDLE filter tabs + search; click-to-expand matched signals with severity; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; red badge on critical triggers; ◈ RULSRSK button left:26400 bottom:8 zIndex:89; isRulsrskQuery+buildRulsrskScript wired in JarvisBrain; jarvis:rulsrsk-toggle event; 2-min auto-refresh; voice: "rules risk/triggered rules/rulsrsk/which rules are active/rule triggers/watchtower triggered/active rules/decision rules risk signals" */}
             <DecisionRulesRiskNexus />
+            {/* F503 (overnight 2026-08-31): Decision Rules × Investigation Nexus (RULSINV) — /v1/rules + /v1/investigations; keyword cross-reference finds ENFORCED rules (≥1 investigation links) vs UNENFORCED; enforcement coverage % tile; ALL/ENFORCED/UNENFORCED filter tabs + search; click-to-expand matched investigation detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence enforcement brief + TTS; amber badge on unenforced count; ◈ RULSINV button left:27260 bottom:8 zIndex:90; isRulsinvQuery+buildRulsinvScript wired in JarvisBrain; jarvis:rulsinv-toggle event; 2-min auto-refresh; voice: "rules investigations/investigation rules/rulsinv/which rules have investigations/enforced rules/unenforced rules" */}
+            <RulesInvestigationNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
