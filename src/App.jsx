@@ -793,6 +793,7 @@ import ContactScenarioNexus from '@/components/cinematic/ContactScenarioNexus';
 import SwarmJobInvestigationNexus from '@/components/cinematic/SwarmJobInvestigationNexus';
 import IntelProfileInvestigationNexus from '@/components/cinematic/IntelProfileInvestigationNexus';
 import DatasetInvestigationNexus from '@/components/cinematic/DatasetInvestigationNexus';
+import ScenarioOpsEventNexus from '@/components/cinematic/ScenarioOpsEventNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2469,6 +2470,8 @@ function App() {
             <IntelProfileInvestigationNexus />
             {/* F497 (overnight 2026-08-31): Dataset × Investigation Nexus (DINV) — /v1/datasets + /v1/investigations; keyword cross-reference finds datasets referenced by active investigations (REFERENCED) vs datasets with no case backing (UNREFERENCED — data blind spots); coverage % tile; ALL/REFERENCED/UNREFERENCED filter tabs + search; click-to-expand matched investigation detail (status/lead/summary); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; amber badge on unreferenced count; ◈ DINV button left:23820 bottom:8 zIndex:86; isDinvQuery+buildDinvScript wired in JarvisBrain; jarvis:dinv-toggle event; 90-s auto-refresh; voice: "dataset investigation/investigation data/dinv/which datasets support investigations/data coverage/investigation dataset" */}
             <DatasetInvestigationNexus />
+            {/* F498 (overnight 2026-08-31): Scenario × Ops Events Nexus (SCNOPS) — /v1/scenario/list + /v1/ops/events; keyword cross-reference finds TRIGGERED scenarios (ops event match) vs UNTRIGGERED; coverage % tile; ALL/TRIGGERED/UNTRIGGERED filter tabs + search; click-to-expand matched ops events with severity badge; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ SCNOPS button left:24680 bottom:8 zIndex:87; isScnopsQuery+buildScnopsScript wired in JarvisBrain; jarvis:scnops-toggle event; 90-s auto-refresh; voice: "scenario ops/ops scenario/scnops/triggered scenarios/which scenarios have events/scenario event match/ops triggered scenario" */}
+            <ScenarioOpsEventNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
