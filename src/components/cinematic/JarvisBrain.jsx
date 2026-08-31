@@ -56,6 +56,7 @@ import { isRtkmonQuery, buildRtkmonScript } from "./DecisionRulesTaskMonitor";
 import { isSwarmRiskQuery, buildSwarmRiskScript } from "./SwarmRiskCoverageMonitor";
 import { isInvscnQuery, buildInvscnScript } from "./InvestmentScenarioExposure";
 import { isKtgapQuery, buildKtgapScript } from "./KnowledgeTaskGapDetector";
+import { isContactInvQuery, buildContactInvScript } from "./ContactInvestigationLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -267,6 +268,9 @@ export default function JarvisBrain() {
       } else if (isKtgapQuery(q)) {
         answer = await buildKtgapScript();
         window.dispatchEvent(new CustomEvent("jarvis:ktgap-toggle"));
+      } else if (isContactInvQuery(q)) {
+        answer = await buildContactInvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:contact-inv-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
