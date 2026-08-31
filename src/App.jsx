@@ -790,6 +790,7 @@ import KnowledgeTaskGapDetector from '@/components/cinematic/KnowledgeTaskGapDet
 import ReportRiskCoverageMonitor from '@/components/cinematic/ReportRiskCoverageMonitor';
 import ScenarioKnowledgeGap from '@/components/cinematic/ScenarioKnowledgeGap';
 import ContactScenarioNexus from '@/components/cinematic/ContactScenarioNexus';
+import SwarmJobInvestigationNexus from '@/components/cinematic/SwarmJobInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2460,6 +2461,8 @@ function App() {
             <ScenarioKnowledgeGap />
             {/* F494 (overnight 2026-08-31): Contact × Scenario Nexus (CSCNX) — /entities/Contact + /v1/scenario/list; keyword cross-reference finds contacts referenced in active scenarios; KIND-badged rows; search + kind-filter tabs; click-to-expand matched scenarios with kind badge + description; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on match count; ◈ CSCNX button left:21240 bottom:8 zIndex:83; isCscnxQuery+buildCscnxScript wired in JarvisBrain; jarvis:cscnx-toggle event; 90-s auto-refresh; voice: "contact scenario/scenario contact/cscnx/who has scenarios/contact simulation/scenario for contacts/contact coverage" */}
             <ContactScenarioNexus />
+            {/* F495 (overnight 2026-08-31): Swarm × Investigation Nexus (SWRINV) — /entities/SwarmJob + /v1/investigations; keyword cross-reference finds COVERED vs UNASSIGNED investigations; coverage % tile; ALL/COVERED/UNASSIGNED filter tabs + search; click-to-expand matched swarm jobs with status badge + description; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; red badge on unassigned count; ◈ SWRINV button left:22100 bottom:8 zIndex:84; isSwrinvQuery+buildSwrinvScript wired in JarvisBrain; jarvis:swrinv-toggle event; 90-s auto-refresh; voice: "swarm investigation/investigation swarm/swrinv/automated case/swarm case coverage/which investigations have swarm/case automation/investigation automation" */}
+            <SwarmJobInvestigationNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
