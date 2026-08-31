@@ -786,6 +786,7 @@ import GraphNeighborhoodExplorer from '@/components/cinematic/GraphNeighborhoodE
 import ContactRiskNexus from '@/components/cinematic/ContactRiskNexus';
 import DecisionRulesTaskMonitor from '@/components/cinematic/DecisionRulesTaskMonitor';
 import InvestmentScenarioExposure from '@/components/cinematic/InvestmentScenarioExposure';
+import KnowledgeTaskGapDetector from '@/components/cinematic/KnowledgeTaskGapDetector';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2448,6 +2449,8 @@ function App() {
             <DecisionRulesTaskMonitor />
             {/* F489 (overnight 2026-08-31): Investment × Scenario Exposure Monitor (INVSCN) — /entities/Investment + /v1/scenario/list; keyword cross-reference; SCENARIO-MAPPED vs UNCOVERED investments; coverage % tile; search filter; click-to-expand matched scenarios with kind badge + relevance hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence exposure brief + TTS; amber badge on uncovered count; ◈ INVSCN button left:17800 bottom:8 zIndex:79; isInvscnQuery+buildInvscnScript wired in JarvisBrain; jarvis:invscn-toggle event; 90-s auto-refresh; voice: "investment scenario/portfolio scenario/which investments have scenarios/investment coverage/invscn/scenario for investments/uncovered investments/portfolio sim/investment simulation/simulation coverage" */}
             <InvestmentScenarioExposure />
+            {/* F490 (overnight 2026-08-31): Knowledge × Task Gap Detector (KTGAP) — /knowledge/ + /entities/Task; keyword cross-reference; GROUNDED tasks (≥1 matching knowledge article) vs UNGROUNDED tasks (no knowledge support — operational blind spots); coverage % tile; ALL/GROUNDED/UNGROUNDED filter tabs + search; click-to-expand matched articles; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on ungrounded count; ◈ KTGAP button left:18660 bottom:8 zIndex:80; isKtgapQuery+buildKtgapScript wired in JarvisBrain; jarvis:ktgap-toggle event; 90-s auto-refresh; voice: "knowledge task/task knowledge/knowledge gap/ktgap/task coverage/grounded task/ungrounded task/task support" */}
+            <KnowledgeTaskGapDetector />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
