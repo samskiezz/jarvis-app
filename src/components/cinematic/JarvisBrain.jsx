@@ -65,6 +65,7 @@ import { isIpinvQuery, buildIpinvScript } from "./IntelProfileInvestigationNexus
 import { isDinvQuery, buildDinvScript } from "./DatasetInvestigationNexus";
 import { isScnopsQuery, buildScnopsScript } from "./ScenarioOpsEventNexus";
 import { isSkillinvQuery, buildSkillinvScript } from "./SkillInvestigationNexus";
+import { isInvrskQuery, buildInvrskScript } from "./InvestmentRiskExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -300,6 +301,9 @@ export default function JarvisBrain() {
       } else if (isSkillinvQuery(q)) {
         answer = await buildSkillinvScript();
         window.dispatchEvent(new CustomEvent("jarvis:skillinv-toggle"));
+      } else if (isInvrskQuery(q)) {
+        answer = await buildInvrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invrsk-toggle"));
       } else if (isCscnxQuery(q)) {
         answer = await buildCscnxScript();
         window.dispatchEvent(new CustomEvent("jarvis:cscnx-toggle"));
