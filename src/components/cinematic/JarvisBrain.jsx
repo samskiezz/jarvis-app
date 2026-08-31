@@ -67,6 +67,7 @@ import { isScnopsQuery, buildScnopsScript } from "./ScenarioOpsEventNexus";
 import { isSkillinvQuery, buildSkillinvScript } from "./SkillInvestigationNexus";
 import { isInvrskQuery, buildInvrskScript } from "./InvestmentRiskExposure";
 import { isTrscQuery, buildTrscScript } from "./TaskRiskSignalCorrelator";
+import { isRulsrskQuery, buildRulsrskScript } from "./DecisionRulesRiskNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -311,6 +312,9 @@ export default function JarvisBrain() {
       } else if (isTrscQuery(q)) {
         answer = await buildTrscScript();
         window.dispatchEvent(new CustomEvent("jarvis:trsc-toggle"));
+      } else if (isRulsrskQuery(q)) {
+        answer = await buildRulsrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulsrsk-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {

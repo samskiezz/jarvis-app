@@ -796,6 +796,7 @@ import DatasetInvestigationNexus from '@/components/cinematic/DatasetInvestigati
 import ScenarioOpsEventNexus from '@/components/cinematic/ScenarioOpsEventNexus';
 import SkillInvestigationNexus from '@/components/cinematic/SkillInvestigationNexus';
 import TaskRiskSignalCorrelator from '@/components/cinematic/TaskRiskSignalCorrelator';
+import DecisionRulesRiskNexus from '@/components/cinematic/DecisionRulesRiskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2478,6 +2479,8 @@ function App() {
             <SkillInvestigationNexus />
             {/* F501 (overnight 2026-08-31): Task × Risk Signal Correlator (TRSC) voice wiring — /entities/Task + /entities/RiskSignal; keyword cross-reference; EXPOSED vs CLEAR tasks; isTrscQuery+buildTrscScript wired into JarvisBrain.ask(); jarvis:trsc-toggle dispatched; voice: "task risk signals/trsc/exposed tasks/tasks under risk/risk exposed tasks/task risk coverage/tasks with risks" */}
             <TaskRiskSignalCorrelator />
+            {/* F502 (overnight 2026-08-31): Decision Rules × Risk Signal Nexus (RULSRSK) — /v1/rules + /entities/RiskSignal; keyword cross-reference finds WATCHTOWER rules actively triggered by live signals (TRIGGERED) vs IDLE rules; coverage % tile; ALL/TRIGGERED/IDLE filter tabs + search; click-to-expand matched signals with severity; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; red badge on critical triggers; ◈ RULSRSK button left:26400 bottom:8 zIndex:89; isRulsrskQuery+buildRulsrskScript wired in JarvisBrain; jarvis:rulsrsk-toggle event; 2-min auto-refresh; voice: "rules risk/triggered rules/rulsrsk/which rules are active/rule triggers/watchtower triggered/active rules/decision rules risk signals" */}
+            <DecisionRulesRiskNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
