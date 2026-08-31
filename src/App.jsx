@@ -794,6 +794,7 @@ import SwarmJobInvestigationNexus from '@/components/cinematic/SwarmJobInvestiga
 import IntelProfileInvestigationNexus from '@/components/cinematic/IntelProfileInvestigationNexus';
 import DatasetInvestigationNexus from '@/components/cinematic/DatasetInvestigationNexus';
 import ScenarioOpsEventNexus from '@/components/cinematic/ScenarioOpsEventNexus';
+import SkillInvestigationNexus from '@/components/cinematic/SkillInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2472,6 +2473,8 @@ function App() {
             <DatasetInvestigationNexus />
             {/* F498 (overnight 2026-08-31): Scenario × Ops Events Nexus (SCNOPS) — /v1/scenario/list + /v1/ops/events; keyword cross-reference finds TRIGGERED scenarios (ops event match) vs UNTRIGGERED; coverage % tile; ALL/TRIGGERED/UNTRIGGERED filter tabs + search; click-to-expand matched ops events with severity badge; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ SCNOPS button left:24680 bottom:8 zIndex:87; isScnopsQuery+buildScnopsScript wired in JarvisBrain; jarvis:scnops-toggle event; 90-s auto-refresh; voice: "scenario ops/ops scenario/scnops/triggered scenarios/which scenarios have events/scenario event match/ops triggered scenario" */}
             <ScenarioOpsEventNexus />
+            {/* F499 (overnight 2026-08-31): Skill × Investigation Nexus (SKILLINV) — /v1/aip/skill + /v1/investigations; keyword cross-reference; BACKED vs UNSKILLED; coverage % tile; ALL/BACKED/UNSKILLED tabs + search; click-to-expand matched skills; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge; ◈ SKILLINV button left:25540 bottom:8 zIndex:88; isSkillinvQuery+buildSkillinvScript wired in JarvisBrain; jarvis:skillinv-toggle event; 90-s auto-refresh; voice: "skill investigation/which investigations have skills/skillinv/investigation skill coverage/skilled cases/unskilled investigation/skill case link" */}
+            <SkillInvestigationNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
