@@ -61,6 +61,7 @@ import { isRriskQuery, buildRriskScript } from "./ReportRiskCoverageMonitor";
 import { isSkgapQuery, buildSkgapScript } from "./ScenarioKnowledgeGap";
 import { isCscnxQuery, buildCscnxScript } from "./ContactScenarioNexus";
 import { isSwrinvQuery, buildSwrinvScript } from "./SwarmJobInvestigationNexus";
+import { isIpinvQuery, buildIpinvScript } from "./IntelProfileInvestigationNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -284,6 +285,9 @@ export default function JarvisBrain() {
       } else if (isSwrinvQuery(q)) {
         answer = await buildSwrinvScript();
         window.dispatchEvent(new CustomEvent("jarvis:swrinv-toggle"));
+      } else if (isIpinvQuery(q)) {
+        answer = await buildIpinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ipinv-toggle"));
       } else if (isCscnxQuery(q)) {
         answer = await buildCscnxScript();
         window.dispatchEvent(new CustomEvent("jarvis:cscnx-toggle"));
