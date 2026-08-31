@@ -784,6 +784,7 @@ import IntelProfileRoster from '@/components/cinematic/IntelProfileRoster';
 import DataIntakeMonitor from '@/components/cinematic/DataIntakeMonitor';
 import GraphNeighborhoodExplorer from '@/components/cinematic/GraphNeighborhoodExplorer';
 import ContactRiskNexus from '@/components/cinematic/ContactRiskNexus';
+import DecisionRulesTaskMonitor from '@/components/cinematic/DecisionRulesTaskMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2442,6 +2443,8 @@ function App() {
             <GraphNeighborhoodExplorer />
             {/* F486 (overnight 2026-08-31): Contact-Risk Nexus (CRISK) — /entities/Contact + /entities/RiskSignal; name+tag cross-reference; severity-sorted; click-to-expand signal detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk brief + TTS; red CRITICAL badge; ◈ CRISK button left:15220 bottom:8 zIndex:76; isContactRiskQuery+buildContactRiskScript wired in JarvisBrain; jarvis:crisk-toggle event; 90-s auto-refresh; voice: "contact risk/risk contacts/who is risky/contact exposure/crisk" */}
             <ContactRiskNexus />
+            {/* F487 (overnight 2026-08-31): Decision Rules × Task Monitor (RTKMON) — /v1/rules + /entities/Task; keyword cross-reference; RULE-BACKED vs UNMONITORED; coverage % tile; click-to-expand matched rules; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; red badge on unmonitored count; ◈ RTKMON button left:16080 bottom:8 zIndex:77; isRtkmonQuery+buildRtkmonScript wired in JarvisBrain; jarvis:rtkmon-toggle event; 2-min auto-refresh; voice: "rules task/task rules/rule coverage/task monitoring/rtkmon/which tasks have rules/unmonitored tasks/task decision rules" */}
+            <DecisionRulesTaskMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

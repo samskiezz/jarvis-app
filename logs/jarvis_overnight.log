@@ -76,3 +76,4 @@
 [2026-08-31] F484 Data Intake Monitor: DataIntakeMonitor.jsx created; isDataIntakeQuery+buildDataIntakeScript wired into JarvisBrain.ask(); jarvis:dint-toggle dispatched to open panel; /v1/datasets; bar-chart top-10 by row count + list view; total volume stat; ◈ DINT button left:13500 zIndex:74; 90-s auto-refresh; vite build exit 0.
 2026-08-31T01:18:44Z F485 GraphNeighborhoodExplorer — /v1/graph/centrality + /v1/graph/subgraph; GNEIGH panel; neighbors list + edge table; depth 1/2; seed picker; vite build exit 0
 [2026-08-31] F486 Contact-Risk Nexus (CRISK) — ContactRiskNexus.jsx created; /entities/Contact + /entities/RiskSignal cross-reference; wired JarvisBrain.ask() + App.jsx; vite build exit 0.
+[2026-08-31] F487 DONE: DecisionRulesTaskMonitor.jsx — /v1/rules + /entities/Task cross-reference; RULE-BACKED vs UNMONITORED; wired JarvisBrain+App.jsx; vite build exit 0

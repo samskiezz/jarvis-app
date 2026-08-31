@@ -52,6 +52,7 @@ import { isIntelProfileRosterQuery, buildIntelProfileRosterScript } from "./Inte
 import { isDataIntakeQuery, buildDataIntakeScript } from "./DataIntakeMonitor";
 import { isGraphNeighborhoodQuery, buildGraphNeighborhoodScript } from "./GraphNeighborhoodExplorer";
 import { isContactRiskQuery, buildContactRiskScript } from "./ContactRiskNexus";
+import { isRtkmonQuery, buildRtkmonScript } from "./DecisionRulesTaskMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -251,6 +252,9 @@ export default function JarvisBrain() {
       } else if (isContactRiskQuery(q)) {
         answer = await buildContactRiskScript();
         window.dispatchEvent(new CustomEvent("jarvis:crisk-toggle"));
+      } else if (isRtkmonQuery(q)) {
+        answer = await buildRtkmonScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rtkmon-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
