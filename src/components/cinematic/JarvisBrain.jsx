@@ -70,6 +70,7 @@ import { isTrscQuery, buildTrscScript } from "./TaskRiskSignalCorrelator";
 import { isRulsrskQuery, buildRulsrskScript } from "./DecisionRulesRiskNexus";
 import { isRulsinvQuery, buildRulsinvScript } from "./RulesInvestigationNexus";
 import { isRtcovQuery, buildRtcovScript } from "./ReportTaskCoverageMonitor";
+import { isOetaskQuery, buildOetaskScript } from "./OpsEventTaskCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -323,6 +324,9 @@ export default function JarvisBrain() {
       } else if (isRtcovQuery(q)) {
         answer = await buildRtcovScript();
         window.dispatchEvent(new CustomEvent("jarvis:rtcov-toggle"));
+      } else if (isOetaskQuery(q)) {
+        answer = await buildOetaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oetask-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
