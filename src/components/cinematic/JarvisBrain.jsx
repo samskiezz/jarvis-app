@@ -57,6 +57,7 @@ import { isSwarmRiskQuery, buildSwarmRiskScript } from "./SwarmRiskCoverageMonit
 import { isInvscnQuery, buildInvscnScript } from "./InvestmentScenarioExposure";
 import { isKtgapQuery, buildKtgapScript } from "./KnowledgeTaskGapDetector";
 import { isContactInvQuery, buildContactInvScript } from "./ContactInvestigationLinker";
+import { isRriskQuery, buildRriskScript } from "./ReportRiskCoverageMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -271,6 +272,9 @@ export default function JarvisBrain() {
       } else if (isContactInvQuery(q)) {
         answer = await buildContactInvScript();
         window.dispatchEvent(new CustomEvent("jarvis:contact-inv-toggle"));
+      } else if (isRriskQuery(q)) {
+        answer = await buildRriskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rrisk-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
