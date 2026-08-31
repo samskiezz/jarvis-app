@@ -54,6 +54,7 @@ import { isGraphNeighborhoodQuery, buildGraphNeighborhoodScript } from "./GraphN
 import { isContactRiskQuery, buildContactRiskScript } from "./ContactRiskNexus";
 import { isRtkmonQuery, buildRtkmonScript } from "./DecisionRulesTaskMonitor";
 import { isSwarmRiskQuery, buildSwarmRiskScript } from "./SwarmRiskCoverageMonitor";
+import { isInvscnQuery, buildInvscnScript } from "./InvestmentScenarioExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -259,6 +260,9 @@ export default function JarvisBrain() {
       } else if (isSwarmRiskQuery(q)) {
         answer = await buildSwarmRiskScript();
         window.dispatchEvent(new CustomEvent("jarvis:srisk-toggle"));
+      } else if (isInvscnQuery(q)) {
+        answer = await buildInvscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invscn-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {

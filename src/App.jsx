@@ -785,6 +785,7 @@ import DataIntakeMonitor from '@/components/cinematic/DataIntakeMonitor';
 import GraphNeighborhoodExplorer from '@/components/cinematic/GraphNeighborhoodExplorer';
 import ContactRiskNexus from '@/components/cinematic/ContactRiskNexus';
 import DecisionRulesTaskMonitor from '@/components/cinematic/DecisionRulesTaskMonitor';
+import InvestmentScenarioExposure from '@/components/cinematic/InvestmentScenarioExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2445,6 +2446,8 @@ function App() {
             <ContactRiskNexus />
             {/* F487 (overnight 2026-08-31): Decision Rules × Task Monitor (RTKMON) — /v1/rules + /entities/Task; keyword cross-reference; RULE-BACKED vs UNMONITORED; coverage % tile; click-to-expand matched rules; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; red badge on unmonitored count; ◈ RTKMON button left:16080 bottom:8 zIndex:77; isRtkmonQuery+buildRtkmonScript wired in JarvisBrain; jarvis:rtkmon-toggle event; 2-min auto-refresh; voice: "rules task/task rules/rule coverage/task monitoring/rtkmon/which tasks have rules/unmonitored tasks/task decision rules" */}
             <DecisionRulesTaskMonitor />
+            {/* F489 (overnight 2026-08-31): Investment × Scenario Exposure Monitor (INVSCN) — /entities/Investment + /v1/scenario/list; keyword cross-reference; SCENARIO-MAPPED vs UNCOVERED investments; coverage % tile; search filter; click-to-expand matched scenarios with kind badge + relevance hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence exposure brief + TTS; amber badge on uncovered count; ◈ INVSCN button left:17800 bottom:8 zIndex:79; isInvscnQuery+buildInvscnScript wired in JarvisBrain; jarvis:invscn-toggle event; 90-s auto-refresh; voice: "investment scenario/portfolio scenario/which investments have scenarios/investment coverage/invscn/scenario for investments/uncovered investments/portfolio sim/investment simulation/simulation coverage" */}
+            <InvestmentScenarioExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
