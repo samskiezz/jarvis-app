@@ -792,6 +792,7 @@ import ScenarioKnowledgeGap from '@/components/cinematic/ScenarioKnowledgeGap';
 import ContactScenarioNexus from '@/components/cinematic/ContactScenarioNexus';
 import SwarmJobInvestigationNexus from '@/components/cinematic/SwarmJobInvestigationNexus';
 import IntelProfileInvestigationNexus from '@/components/cinematic/IntelProfileInvestigationNexus';
+import DatasetInvestigationNexus from '@/components/cinematic/DatasetInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2466,6 +2467,8 @@ function App() {
             <SwarmJobInvestigationNexus />
             {/* F496 (overnight 2026-08-31): Intel Profile × Investigation Nexus (IPINV) — /entities/IntelProfile + /v1/investigations; keyword cross-reference finds tracked subjects with linked investigations (LINKED) vs profiles with no formal case (UNLINKED); coverage % tile; threat-level badges; ALL/LINKED/UNLINKED filter tabs + search; click-to-expand matched investigations with status + lead + summary; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence dossier + TTS; amber badge on unlinked count; ◈ IPINV button left:22960 bottom:8 zIndex:85; isIpinvQuery+buildIpinvScript wired in JarvisBrain; jarvis:ipinv-toggle event; 90-s auto-refresh; voice: "intel profile investigations/threat actor cases/who is being investigated/tracked subjects with cases/subject investigation/profile cases/ipinv" */}
             <IntelProfileInvestigationNexus />
+            {/* F497 (overnight 2026-08-31): Dataset × Investigation Nexus (DINV) — /v1/datasets + /v1/investigations; keyword cross-reference finds datasets referenced by active investigations (REFERENCED) vs datasets with no case backing (UNREFERENCED — data blind spots); coverage % tile; ALL/REFERENCED/UNREFERENCED filter tabs + search; click-to-expand matched investigation detail (status/lead/summary); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; amber badge on unreferenced count; ◈ DINV button left:23820 bottom:8 zIndex:86; isDinvQuery+buildDinvScript wired in JarvisBrain; jarvis:dinv-toggle event; 90-s auto-refresh; voice: "dataset investigation/investigation data/dinv/which datasets support investigations/data coverage/investigation dataset" */}
+            <DatasetInvestigationNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
