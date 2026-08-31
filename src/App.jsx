@@ -781,6 +781,7 @@ import DecisionRulesBrowser from '@/components/cinematic/DecisionRulesBrowser';
 import SecurityAuditConsole from '@/components/cinematic/SecurityAuditConsole';
 import KnowledgeReportAuditor from '@/components/cinematic/KnowledgeReportAuditor';
 import IntelProfileRoster from '@/components/cinematic/IntelProfileRoster';
+import DataIntakeMonitor from '@/components/cinematic/DataIntakeMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2433,6 +2434,8 @@ function App() {
             <KnowledgeReportAuditor />
             {/* F483 (overnight 2026-08-30): Intel Profile Roster — /entities/IntelProfile; searchable threat-sorted roster; threat-level summary bar; per-subject ASSESS → /v1/jarvis/agent/chat 2-sentence dossier + TTS; red CRITICAL badge; ◈ IPRO button left:11180 zIndex:70; isIntelProfileRosterQuery+buildIntelProfileRosterScript wired in JarvisBrain; jarvis:intel-roster-toggle event; 60-s auto-refresh; voice: "intel roster/tracked entities/who are we tracking/target roster/subject roster/subject list/ipro" */}
             <IntelProfileRoster />
+            {/* F484 (overnight 2026-08-31): Data Intake Monitor (DINT) — /v1/datasets; bar-chart view of top-10 datasets by row count + list view; total volume stat; ◈ DINT button left:13500 bottom:8 zIndex:74; isDataIntakeQuery+buildDataIntakeScript wired in JarvisBrain; jarvis:dint-toggle event; 90-s auto-refresh; voice: "data intake/dataset monitor/dint/data volume/row count/dataset rows/data distribution" */}
+            <DataIntakeMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
