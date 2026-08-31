@@ -795,6 +795,7 @@ import IntelProfileInvestigationNexus from '@/components/cinematic/IntelProfileI
 import DatasetInvestigationNexus from '@/components/cinematic/DatasetInvestigationNexus';
 import ScenarioOpsEventNexus from '@/components/cinematic/ScenarioOpsEventNexus';
 import SkillInvestigationNexus from '@/components/cinematic/SkillInvestigationNexus';
+import TaskRiskSignalCorrelator from '@/components/cinematic/TaskRiskSignalCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2475,6 +2476,8 @@ function App() {
             <ScenarioOpsEventNexus />
             {/* F499 (overnight 2026-08-31): Skill × Investigation Nexus (SKILLINV) — /v1/aip/skill + /v1/investigations; keyword cross-reference; BACKED vs UNSKILLED; coverage % tile; ALL/BACKED/UNSKILLED tabs + search; click-to-expand matched skills; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge; ◈ SKILLINV button left:25540 bottom:8 zIndex:88; isSkillinvQuery+buildSkillinvScript wired in JarvisBrain; jarvis:skillinv-toggle event; 90-s auto-refresh; voice: "skill investigation/which investigations have skills/skillinv/investigation skill coverage/skilled cases/unskilled investigation/skill case link" */}
             <SkillInvestigationNexus />
+            {/* F501 (overnight 2026-08-31): Task × Risk Signal Correlator (TRSC) voice wiring — /entities/Task + /entities/RiskSignal; keyword cross-reference; EXPOSED vs CLEAR tasks; isTrscQuery+buildTrscScript wired into JarvisBrain.ask(); jarvis:trsc-toggle dispatched; voice: "task risk signals/trsc/exposed tasks/tasks under risk/risk exposed tasks/task risk coverage/tasks with risks" */}
+            <TaskRiskSignalCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
