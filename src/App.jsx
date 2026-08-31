@@ -798,6 +798,7 @@ import SkillInvestigationNexus from '@/components/cinematic/SkillInvestigationNe
 import TaskRiskSignalCorrelator from '@/components/cinematic/TaskRiskSignalCorrelator';
 import DecisionRulesRiskNexus from '@/components/cinematic/DecisionRulesRiskNexus';
 import RulesInvestigationNexus from '@/components/cinematic/RulesInvestigationNexus';
+import ReportTaskCoverageMonitor from '@/components/cinematic/ReportTaskCoverageMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2484,6 +2485,8 @@ function App() {
             <DecisionRulesRiskNexus />
             {/* F503 (overnight 2026-08-31): Decision Rules × Investigation Nexus (RULSINV) — /v1/rules + /v1/investigations; keyword cross-reference finds ENFORCED rules (≥1 investigation links) vs UNENFORCED; enforcement coverage % tile; ALL/ENFORCED/UNENFORCED filter tabs + search; click-to-expand matched investigation detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence enforcement brief + TTS; amber badge on unenforced count; ◈ RULSINV button left:27260 bottom:8 zIndex:90; isRulsinvQuery+buildRulsinvScript wired in JarvisBrain; jarvis:rulsinv-toggle event; 2-min auto-refresh; voice: "rules investigations/investigation rules/rulsinv/which rules have investigations/enforced rules/unenforced rules" */}
             <RulesInvestigationNexus />
+            {/* F504 (overnight 2026-08-31): Report × Task Coverage Monitor (RTCOV) — /v1/reports + /entities/Task; keyword cross-reference; BACKED vs UNMATCHED tasks; coverage % tile; ALL/BACKED/UNMATCHED filter tabs + search; click-to-expand matched report detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unmatched count; ◈ RTCOV button left:28120 bottom:8 zIndex:91; isRtcovQuery+buildRtcovScript wired in JarvisBrain; jarvis:rtcov-toggle event; 90-s auto-refresh; voice: "report task/task report/rtcov/undocumented tasks/task coverage/tasks backed by reports/which tasks have reports" */}
+            <ReportTaskCoverageMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
