@@ -803,6 +803,7 @@ import LiveWorldRiskCorrelator from '@/components/cinematic/LiveWorldRiskCorrela
 import SkillRiskCoverageMonitor from '@/components/cinematic/SkillRiskCoverageMonitor';
 import DatasetScenarioCoverageMonitor from '@/components/cinematic/DatasetScenarioCoverageMonitor';
 import ContactKnowledgeNexus from '@/components/cinematic/ContactKnowledgeNexus';
+import IntelProfileSkillAlignment from '@/components/cinematic/IntelProfileSkillAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2499,6 +2500,8 @@ function App() {
             <DatasetScenarioCoverageMonitor />
             {/* F511 (overnight 2026-09-01): Contact × Knowledge Nexus (CKNOW) — /entities/Contact + /knowledge/; keyword cross-reference; DOCUMENTED vs UNDOCUMENTED contacts; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ CKNOW button left:31560 bottom:8 zIndex:95; isCknowQuery+buildCknowScript wired in JarvisBrain; jarvis:cknow-toggle event; 90-s auto-refresh; voice: "contact knowledge/cknow/who is documented/documented contacts/contact articles/knowledge contacts/undocumented contact/intel on contact" */}
             <ContactKnowledgeNexus />
+            {/* F512 (overnight 2026-09-01): Intel Profile × Skill Domain Alignment (INTELSKILL) — /entities/IntelProfile + /v1/aip/skill; keyword cross-reference; COVERED (≥1 skill domain matches profile) vs BLIND (no skill alignment — response capability gap); coverage % tile; ALL/COVERED/BLIND filter tabs + search; click-to-expand matched skill domains with score badge; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence skill-coverage brief + TTS; orange badge on blind count; ◈ INTELSKILL button left:65160 bottom:8 zIndex:126; isIntelskillQuery+buildIntelskillScript wired in JarvisBrain; jarvis:intelskill-toggle event; 90-s auto-refresh; voice: "intel skill/threat skill/intelskill/skill threat gap/actor skill gap/operator skill coverage/which profiles lack skill" */}
+            <IntelProfileSkillAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
