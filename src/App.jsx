@@ -805,6 +805,7 @@ import DatasetScenarioCoverageMonitor from '@/components/cinematic/DatasetScenar
 import ContactKnowledgeNexus from '@/components/cinematic/ContactKnowledgeNexus';
 import IntelProfileSkillAlignment from '@/components/cinematic/IntelProfileSkillAlignment';
 import ReportScenarioCoverageMonitor from '@/components/cinematic/ReportScenarioCoverageMonitor';
+import TaskScenarioExposure from '@/components/cinematic/TaskScenarioExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2505,6 +2506,8 @@ function App() {
             <IntelProfileSkillAlignment />
             {/* F513 (overnight 2026-09-01): Report × Scenario Coverage Monitor (RSCNCOV) — /v1/reports + /v1/scenario/list; keyword cross-reference; MODELED vs UNMODELED reports; coverage % tile; ALL/MODELED/UNMODELED filter tabs + search; click-to-expand matched scenarios with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unmodeled count; ◈ RSCNCOV button left:32420 bottom:8 zIndex:96; isRscncovQuery+buildRscncovScript wired in JarvisBrain; jarvis:rscncov-toggle event; 90-s auto-refresh; voice: "report scenario/scenario report/rscncov/which reports have scenarios/report simulation/scenario backed reports" */}
             <ReportScenarioCoverageMonitor />
+            {/* F514 (overnight 2026-09-01): Task × Scenario Exposure Monitor (TASKSCN) — /entities/Task + /v1/scenario/list; keyword cross-reference; COVERED (≥1 scenario matches) vs UNPLANNED tasks; coverage % tile; ALL/COVERED/UNPLANNED filter tabs + search; click-to-expand matched scenarios with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unplanned count; ◈ TASKSCN button left:33280 bottom:8 zIndex:97; isTaskScenarioQuery+buildTaskScenarioScript wired in JarvisBrain; jarvis:taskscn-toggle event; 90-s auto-refresh; voice: "task scenario/scenario task/taskscn/which tasks have scenarios/unplanned tasks/scenario-backed tasks" */}
+            <TaskScenarioExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

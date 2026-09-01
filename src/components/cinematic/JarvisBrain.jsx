@@ -81,6 +81,7 @@ import { isIprskQuery, buildIprskScript } from "./IntelProfileRiskLinker";
 import { isCknowQuery, buildCknowScript } from "./ContactKnowledgeNexus";
 import { isIntelskillQuery, buildIntelskillScript } from "./IntelProfileSkillAlignment";
 import { isRscncovQuery, buildRscncovScript } from "./ReportScenarioCoverageMonitor";
+import { isTaskScenarioQuery, buildTaskScenarioScript } from "./TaskScenarioExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -367,6 +368,9 @@ export default function JarvisBrain() {
       } else if (isRscncovQuery(q)) {
         answer = await buildRscncovScript();
         window.dispatchEvent(new CustomEvent("jarvis:rscncov-toggle"));
+      } else if (isTaskScenarioQuery(q)) {
+        answer = await buildTaskScenarioScript();
+        window.dispatchEvent(new CustomEvent("jarvis:taskscn-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
