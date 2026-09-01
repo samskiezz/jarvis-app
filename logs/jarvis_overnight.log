@@ -115,3 +115,4 @@
 2026-09-01 F522 TEXMON TaskExecutionCoverageMonitor.jsx: /entities/Task+/entities/SwarmJob+/v1/investigations cross-ref; FULL/SWARM_ONLY/CASE_ONLY/MANUAL; JarvisBrain wired; App.jsx mounted; vite build exit 0
 [2026-09-01] F523 ContactSwarmCoverage.jsx — Contact × Swarm Coverage Monitor (CSWRM); /entities/Contact + /entities/SwarmJob; isContactSwarmQuery+buildContactSwarmScript wired JarvisBrain; mounted App.jsx; vite build exit 0
 2026-09-01 F524 SwarmDatasetNexus.jsx — SwarmJob × Dataset Nexus (SWRDSET); /entities/SwarmJob + /v1/datasets cross-ref; GROUNDED/UNGROUNDED tabs; ASSESS → agent/chat + TTS; ◈ SWRDSET btn left:38440; JarvisBrain wired; vite build exit 0
+[2026-09-01] F525 InvestmentInvestigationNexus (INVINV): /entities/Investment + /v1/investigations cross-reference; LINKED/CLEAN filter; ASSESS via /v1/jarvis/agent/chat + TTS; ◈ INVINV btn left:39300 zIndex:104; mounted App.jsx; wired JarvisBrain.ask(); vite build exit 0.

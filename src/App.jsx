@@ -814,6 +814,7 @@ import DatasetKnowledgeNexus from '@/components/cinematic/DatasetKnowledgeNexus'
 import TaskExecutionCoverageMonitor from '@/components/cinematic/TaskExecutionCoverageMonitor';
 import ContactSwarmCoverage from '@/components/cinematic/ContactSwarmCoverage';
 import SwarmDatasetNexus from '@/components/cinematic/SwarmDatasetNexus';
+import InvestmentInvestigationNexus from '@/components/cinematic/InvestmentInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2532,6 +2533,8 @@ function App() {
             <ContactSwarmCoverage />
             {/* F524 (overnight 2026-09-01): SwarmJob × Dataset Nexus (SWRDSET) — /entities/SwarmJob + /v1/datasets; keyword cross-reference; GROUNDED vs UNGROUNDED swarm jobs; coverage % tile; ALL/GROUNDED/UNGROUNDED filter tabs + search; click-to-expand matched datasets (kind badge + row count + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-readiness brief + TTS; amber badge on ungrounded count; ◈ SWRDSET button left:38440 bottom:8 zIndex:103; isSwrdsetQuery+buildSwrdsetScript wired in JarvisBrain; jarvis:swrdset-toggle event; 90-s auto-refresh; voice: "swarm dataset/dataset swarm/swrdset/which swarm jobs have data/swarm data coverage/grounded swarm/ungrounded swarm" */}
             <SwarmDatasetNexus />
+            {/* F525 (overnight 2026-09-01): Investment × Investigation Nexus (INVINV) — /entities/Investment + /v1/investigations; keyword cross-reference; LINKED vs CLEAN investments; coverage % tile; ALL/LINKED/CLEAN filter tabs + search; click-to-expand matched investigations; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on linked count; ◈ INVINV button left:39300 bottom:8 zIndex:104; isInvinvQuery+buildInvinvScript wired in JarvisBrain; jarvis:invinv-toggle event; 90-s auto-refresh */}
+            <InvestmentInvestigationNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

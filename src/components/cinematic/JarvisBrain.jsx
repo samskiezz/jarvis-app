@@ -92,6 +92,7 @@ import { isInvknowQuery, buildInvknowScript } from "./InvestmentKnowledgeAdvisor
 import { isTexmonQuery, buildTexmonScript } from "./TaskExecutionCoverageMonitor";
 import { isContactSwarmQuery, buildContactSwarmScript } from "./ContactSwarmCoverage";
 import { isSwrdsetQuery, buildSwrdsetScript } from "./SwarmDatasetNexus";
+import { isInvinvQuery, buildInvinvScript } from "./InvestmentInvestigationNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -410,6 +411,9 @@ export default function JarvisBrain() {
       } else if (isSwrdsetQuery(q)) {
         answer = await buildSwrdsetScript();
         window.dispatchEvent(new CustomEvent("jarvis:swrdset-toggle"));
+      } else if (isInvinvQuery(q)) {
+        answer = await buildInvinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invinv-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
