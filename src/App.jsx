@@ -800,6 +800,7 @@ import DecisionRulesRiskNexus from '@/components/cinematic/DecisionRulesRiskNexu
 import RulesInvestigationNexus from '@/components/cinematic/RulesInvestigationNexus';
 import ReportTaskCoverageMonitor from '@/components/cinematic/ReportTaskCoverageMonitor';
 import LiveWorldRiskCorrelator from '@/components/cinematic/LiveWorldRiskCorrelator';
+import SkillRiskCoverageMonitor from '@/components/cinematic/SkillRiskCoverageMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2490,6 +2491,8 @@ function App() {
             <ReportTaskCoverageMonitor />
             {/* F507 (overnight 2026-09-01): Live World × Risk Correlator (LWRISK) — /functions/getLiveIntel + /entities/RiskSignal; keyword cross-reference; CORRELATED vs DORMANT risks; coverage % tile; ALL/CORRELATED/DORMANT filter tabs + search; click-to-expand matched event detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on dormant count; ◈ LWRISK button left:28980 bottom:8 zIndex:92; isLwriskQuery+buildLwriskScript wired in JarvisBrain; jarvis:lwrisk-toggle event; 90-s auto-refresh; voice: "live world risk/world event risk/lwrisk/real world risk/event correlation/intel risk/live risk correlation/world backed risk" */}
             <LiveWorldRiskCorrelator />
+            {/* F508 (overnight 2026-09-01): Skill × Risk Coverage Monitor (SKRSK) — /v1/aip/skill + /entities/RiskSignal; keyword cross-reference; COVERED vs UNCOVERED risks; coverage % tile; ALL/COVERED/UNCOVERED filter tabs + search; click-to-expand matched skills with domain+score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on uncovered count; ◈ SKRSK button left:29840 bottom:8 zIndex:93; isSkrskQuery+buildSkrskScript wired in JarvisBrain; jarvis:skrsk-toggle event; 90-s auto-refresh; voice: "skill risk/risk skill/skrsk/skill coverage risk/what skills cover risks/risk skill coverage" */}
+            <SkillRiskCoverageMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
