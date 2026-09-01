@@ -95,6 +95,7 @@ import { isSwrdsetQuery, buildSwrdsetScript } from "./SwarmDatasetNexus";
 import { isInvinvQuery, buildInvinvScript } from "./InvestmentInvestigationNexus";
 import { isSwrscnQuery, buildSwrscnScript } from "./SwarmScenarioNexus";
 import { isInvoevQuery, buildInvoevScript } from "./InvestmentOpsEventNexus";
+import { isCdataQuery, buildCdataScript } from "./ContactDatasetNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -422,6 +423,9 @@ export default function JarvisBrain() {
       } else if (isInvoevQuery(q)) {
         answer = await buildInvoevScript();
         window.dispatchEvent(new CustomEvent("jarvis:invoev-toggle"));
+      } else if (isCdataQuery(q)) {
+        answer = await buildCdataScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cdata-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {

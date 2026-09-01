@@ -817,6 +817,7 @@ import SwarmDatasetNexus from '@/components/cinematic/SwarmDatasetNexus';
 import InvestmentInvestigationNexus from '@/components/cinematic/InvestmentInvestigationNexus';
 import SwarmScenarioNexus from '@/components/cinematic/SwarmScenarioNexus';
 import InvestmentOpsEventNexus from '@/components/cinematic/InvestmentOpsEventNexus';
+import ContactDatasetNexus from '@/components/cinematic/ContactDatasetNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2541,6 +2542,8 @@ function App() {
             <SwarmScenarioNexus />
             {/* F527 (overnight 2026-09-01): Investment × Ops Event Nexus (INVOEV) — /entities/Investment + /v1/ops/events; keyword cross-reference; SIGNALED vs QUIET investments; coverage % tile; ALL/SIGNALED/QUIET filter tabs + search; click-to-expand ops event detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence financial-ops brief + TTS; amber badge on signaled count; ◈ INVOEV button left:41020 bottom:8 zIndex:106; isInvoevQuery+buildInvoevScript wired in JarvisBrain; jarvis:invoev-toggle event; 90-s auto-refresh; voice: "investment ops/portfolio events/invoev/ops signaled investment/which investments have ops events/investment incident" */}
             <InvestmentOpsEventNexus />
+            {/* F528 (overnight 2026-09-01): Contact × Dataset Nexus (CDATA) — /entities/Contact + /v1/datasets; keyword cross-reference; ASSOCIATED (≥1 dataset keyword-matches) vs UNLINKED contacts; coverage % tile; ALL/ASSOCIATED/UNLINKED filter tabs + search; click-to-expand matched datasets with kind badge + row count + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unlinked count; ◈ CDATA button left:41880 bottom:8 zIndex:107; isCdataQuery+buildCdataScript wired in JarvisBrain; jarvis:cdata-toggle event; 90-s auto-refresh; voice: "contact dataset/cdata/which contacts have data/contact data coverage/documented contacts/dataset contact" */}
+            <ContactDatasetNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
