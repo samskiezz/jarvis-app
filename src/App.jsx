@@ -810,6 +810,7 @@ import SwarmKnowledgeNexus from '@/components/cinematic/SwarmKnowledgeNexus';
 import OpsEventKnowledgeNexus from '@/components/cinematic/OpsEventKnowledgeNexus';
 import SkillTaskNexus from '@/components/cinematic/SkillTaskNexus';
 import ReportKnowledgeLinker from '@/components/cinematic/ReportKnowledgeLinker';
+import DatasetKnowledgeNexus from '@/components/cinematic/DatasetKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2520,6 +2521,8 @@ function App() {
             <SkillTaskNexus />
             {/* F518 (overnight 2026-09-01): Report × Knowledge Linker (RLNK) — /v1/reports + /knowledge/articles; keyword cross-reference; LINKED reports (≥1 article backs them) vs BLIND reports (no knowledge support); coverage % tile; ALL/LINKED/BLIND filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on blind count; ◈ RLNK button left:383760 bottom:8 zIndex:177; isRlnkQuery+buildRlnkScript wired in JarvisBrain; jarvis:rlnk-toggle event; 90-s auto-refresh; voice: "report knowledge/knowledge report/rlnk/report link/report articles/linked report/document knowledge/report coverage/report to knowledge/knowledge backing/reports without knowledge/knowledge linker" */}
             <ReportKnowledgeLinker />
+            {/* F520 (overnight 2026-09-01): Dataset × Knowledge Nexus (DATKNO) — /v1/datasets + /knowledge/; keyword cross-reference; DOCUMENTED datasets (≥1 article keyword-matches) vs UNDOCUMENTED (knowledge blind spots); coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-intelligence brief + TTS; amber badge on undocumented count; ◈ DATKNO button left:36720 bottom:8 zIndex:101; isDatknopQuery+buildDatknopScript wired in JarvisBrain; jarvis:datkno-toggle event; 90-s auto-refresh; voice: "dataset knowledge/knowledge dataset/datkno/documented datasets/which datasets have documentation/dataset knowledge gap/dataset articles" */}
+            <DatasetKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

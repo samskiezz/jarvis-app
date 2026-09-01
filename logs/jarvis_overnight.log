@@ -110,3 +110,4 @@
 2026-09-01T10:20:02Z F517 SkillTaskNexus (STASK): /v1/aip/skill + /entities/Task nexus; BACKED/UNSKILLED cross-ref; isStaskQuery+buildStaskScript wired JarvisBrain; mounted App.jsx; vite build exit 0
 2026-09-01  — F518 RLNK: ReportKnowledgeLinker.jsx mounted in App.jsx + isRlnkQuery/buildRlnkScript wired into JarvisBrain.ask(); /v1/reports + /knowledge/articles; jarvis:rlnk-toggle; vite build exit 0.
 2026-09-01 F519 System Health Scorecard voice wiring — imported isHealthScoreQuery+buildHealthScoreScript into JarvisBrain.jsx; 'health score/system score/overall health' now speaks composite 0-100 score + opens panel; vite build exit 0.
+2026-09-01 F520 DatasetKnowledgeNexus (DATKNO): /v1/datasets + /knowledge/ cross-ref; DOCUMENTED/UNDOCUMENTED coverage; isDatknopQuery+buildDatknopScript wired JarvisBrain; mounted App.jsx; vite build exit 0
