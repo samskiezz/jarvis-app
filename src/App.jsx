@@ -806,6 +806,7 @@ import ContactKnowledgeNexus from '@/components/cinematic/ContactKnowledgeNexus'
 import IntelProfileSkillAlignment from '@/components/cinematic/IntelProfileSkillAlignment';
 import ReportScenarioCoverageMonitor from '@/components/cinematic/ReportScenarioCoverageMonitor';
 import TaskScenarioExposure from '@/components/cinematic/TaskScenarioExposure';
+import SwarmKnowledgeNexus from '@/components/cinematic/SwarmKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2508,6 +2509,8 @@ function App() {
             <ReportScenarioCoverageMonitor />
             {/* F514 (overnight 2026-09-01): Task × Scenario Exposure Monitor (TASKSCN) — /entities/Task + /v1/scenario/list; keyword cross-reference; COVERED (≥1 scenario matches) vs UNPLANNED tasks; coverage % tile; ALL/COVERED/UNPLANNED filter tabs + search; click-to-expand matched scenarios with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unplanned count; ◈ TASKSCN button left:33280 bottom:8 zIndex:97; isTaskScenarioQuery+buildTaskScenarioScript wired in JarvisBrain; jarvis:taskscn-toggle event; 90-s auto-refresh; voice: "task scenario/scenario task/taskscn/which tasks have scenarios/unplanned tasks/scenario-backed tasks" */}
             <TaskScenarioExposure />
+            {/* F515 (overnight 2026-09-01): SwarmJob × Knowledge Nexus (SWRKNO) — /entities/SwarmJob + /knowledge/; keyword cross-reference; GROUNDED (≥1 article matches) vs UNGROUNDED swarm jobs (no knowledge backing); coverage % tile; ALL/GROUNDED/UNGROUNDED filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational knowledge-gap assessment + TTS; amber badge on ungrounded count; ◈ SWRKNO button left:34140 bottom:8 zIndex:98; isSwrknoQuery+buildSwrknoScript wired in JarvisBrain; jarvis:swrkno-toggle event; 90-s auto-refresh; voice: "swarm knowledge/knowledge swarm/swrkno/grounded swarm/supported swarm jobs/ungrounded swarm/swarm knowledge coverage" */}
+            <SwarmKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
