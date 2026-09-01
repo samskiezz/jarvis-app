@@ -801,6 +801,7 @@ import RulesInvestigationNexus from '@/components/cinematic/RulesInvestigationNe
 import ReportTaskCoverageMonitor from '@/components/cinematic/ReportTaskCoverageMonitor';
 import LiveWorldRiskCorrelator from '@/components/cinematic/LiveWorldRiskCorrelator';
 import SkillRiskCoverageMonitor from '@/components/cinematic/SkillRiskCoverageMonitor';
+import DatasetScenarioCoverageMonitor from '@/components/cinematic/DatasetScenarioCoverageMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2493,6 +2494,8 @@ function App() {
             <LiveWorldRiskCorrelator />
             {/* F508 (overnight 2026-09-01): Skill × Risk Coverage Monitor (SKRSK) — /v1/aip/skill + /entities/RiskSignal; keyword cross-reference; COVERED vs UNCOVERED risks; coverage % tile; ALL/COVERED/UNCOVERED filter tabs + search; click-to-expand matched skills with domain+score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on uncovered count; ◈ SKRSK button left:29840 bottom:8 zIndex:93; isSkrskQuery+buildSkrskScript wired in JarvisBrain; jarvis:skrsk-toggle event; 90-s auto-refresh; voice: "skill risk/risk skill/skrsk/skill coverage risk/what skills cover risks/risk skill coverage" */}
             <SkillRiskCoverageMonitor />
+            {/* F509 (overnight 2026-09-01): Dataset × Scenario Coverage Monitor (DSCNCOV) — /v1/datasets + /v1/scenario/list; keyword cross-reference; MODELED vs UNMODELED datasets; coverage % tile; ALL/MODELED/UNMODELED filter tabs + search; click-to-expand matched scenarios with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unmodeled count; ◈ DSCNCOV button left:30700 bottom:8 zIndex:94; isDatasetScenarioQuery+buildDatasetScenarioScript wired in JarvisBrain; jarvis:dscncov-toggle event; 90-s auto-refresh; voice: "dataset scenario/scenario dataset/dscncov/which datasets are modeled/dataset simulation/scenario data coverage" */}
+            <DatasetScenarioCoverageMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
