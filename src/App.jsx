@@ -807,6 +807,7 @@ import IntelProfileSkillAlignment from '@/components/cinematic/IntelProfileSkill
 import ReportScenarioCoverageMonitor from '@/components/cinematic/ReportScenarioCoverageMonitor';
 import TaskScenarioExposure from '@/components/cinematic/TaskScenarioExposure';
 import SwarmKnowledgeNexus from '@/components/cinematic/SwarmKnowledgeNexus';
+import OpsEventKnowledgeNexus from '@/components/cinematic/OpsEventKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2511,6 +2512,8 @@ function App() {
             <TaskScenarioExposure />
             {/* F515 (overnight 2026-09-01): SwarmJob × Knowledge Nexus (SWRKNO) — /entities/SwarmJob + /knowledge/; keyword cross-reference; GROUNDED (≥1 article matches) vs UNGROUNDED swarm jobs (no knowledge backing); coverage % tile; ALL/GROUNDED/UNGROUNDED filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational knowledge-gap assessment + TTS; amber badge on ungrounded count; ◈ SWRKNO button left:34140 bottom:8 zIndex:98; isSwrknoQuery+buildSwrknoScript wired in JarvisBrain; jarvis:swrkno-toggle event; 90-s auto-refresh; voice: "swarm knowledge/knowledge swarm/swrkno/grounded swarm/supported swarm jobs/ungrounded swarm/swarm knowledge coverage" */}
             <SwarmKnowledgeNexus />
+            {/* F516 (overnight 2026-09-01): Ops Events × Knowledge Nexus (OEVKNO) — /v1/ops/events + /knowledge/; keyword cross-reference; CONTEXTUALIZED (≥1 article matches) vs UNCONTEXTUALIZED events (no knowledge backing — operational blind spots); coverage % tile; ALL/CONTEXTUALIZED/UNCONTEXTUALIZED filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on uncontextualized count; ◈ OEVKNO button left:35000 bottom:8 zIndex:99; isOevknoQuery+buildOevknoScript wired in JarvisBrain; jarvis:oevkno-toggle event; 90-s auto-refresh; voice: "ops event knowledge/event context/oevkno/uncontextualized events/operational knowledge/ops knowledge/what do we know about events/knowledge backed events" */}
+            <OpsEventKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
