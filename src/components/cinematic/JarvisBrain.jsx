@@ -85,6 +85,7 @@ import { isTaskScenarioQuery, buildTaskScenarioScript } from "./TaskScenarioExpo
 import { isSwrknoQuery, buildSwrknoScript } from "./SwarmKnowledgeNexus";
 import { isOevknoQuery, buildOevknoScript } from "./OpsEventKnowledgeNexus";
 import { isStaskQuery, buildStaskScript } from "./SkillTaskNexus";
+import { isRlnkQuery, buildRlnkScript } from "./ReportKnowledgeLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -383,6 +384,9 @@ export default function JarvisBrain() {
       } else if (isStaskQuery(q)) {
         answer = await buildStaskScript();
         window.dispatchEvent(new CustomEvent("jarvis:stask-toggle"));
+      } else if (isRlnkQuery(q)) {
+        answer = await buildRlnkScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rlnk-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
