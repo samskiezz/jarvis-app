@@ -815,6 +815,7 @@ import TaskExecutionCoverageMonitor from '@/components/cinematic/TaskExecutionCo
 import ContactSwarmCoverage from '@/components/cinematic/ContactSwarmCoverage';
 import SwarmDatasetNexus from '@/components/cinematic/SwarmDatasetNexus';
 import InvestmentInvestigationNexus from '@/components/cinematic/InvestmentInvestigationNexus';
+import SwarmScenarioNexus from '@/components/cinematic/SwarmScenarioNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2535,6 +2536,8 @@ function App() {
             <SwarmDatasetNexus />
             {/* F525 (overnight 2026-09-01): Investment × Investigation Nexus (INVINV) — /entities/Investment + /v1/investigations; keyword cross-reference; LINKED vs CLEAN investments; coverage % tile; ALL/LINKED/CLEAN filter tabs + search; click-to-expand matched investigations; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on linked count; ◈ INVINV button left:39300 bottom:8 zIndex:104; isInvinvQuery+buildInvinvScript wired in JarvisBrain; jarvis:invinv-toggle event; 90-s auto-refresh */}
             <InvestmentInvestigationNexus />
+            {/* F526 (overnight 2026-09-01): SwarmJob × Scenario Nexus (SWRSCN) — /entities/SwarmJob + /v1/scenario/list; keyword cross-reference; BACKED (≥1 scenario matches) vs UNSCRIPTED swarm jobs; coverage % tile; ALL/BACKED/UNSCRIPTED filter tabs + search; click-to-expand matched scenarios with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational readiness brief + TTS; amber badge on unscripted count; ◈ SWRSCN button left:40160 bottom:8 zIndex:105; isSwrscnQuery+buildSwrscnScript wired in JarvisBrain; jarvis:swrscn-toggle event; 90-s auto-refresh; voice: "swarm scenario/scenario swarm/swrscn/which swarm jobs have scenarios/swarm playbook/unscripted swarm/swarm scenario coverage/swarm simulation" */}
+            <SwarmScenarioNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
