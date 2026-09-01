@@ -799,6 +799,7 @@ import TaskRiskSignalCorrelator from '@/components/cinematic/TaskRiskSignalCorre
 import DecisionRulesRiskNexus from '@/components/cinematic/DecisionRulesRiskNexus';
 import RulesInvestigationNexus from '@/components/cinematic/RulesInvestigationNexus';
 import ReportTaskCoverageMonitor from '@/components/cinematic/ReportTaskCoverageMonitor';
+import LiveWorldRiskCorrelator from '@/components/cinematic/LiveWorldRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2487,6 +2488,8 @@ function App() {
             <RulesInvestigationNexus />
             {/* F504 (overnight 2026-08-31): Report × Task Coverage Monitor (RTCOV) — /v1/reports + /entities/Task; keyword cross-reference; BACKED vs UNMATCHED tasks; coverage % tile; ALL/BACKED/UNMATCHED filter tabs + search; click-to-expand matched report detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unmatched count; ◈ RTCOV button left:28120 bottom:8 zIndex:91; isRtcovQuery+buildRtcovScript wired in JarvisBrain; jarvis:rtcov-toggle event; 90-s auto-refresh; voice: "report task/task report/rtcov/undocumented tasks/task coverage/tasks backed by reports/which tasks have reports" */}
             <ReportTaskCoverageMonitor />
+            {/* F507 (overnight 2026-09-01): Live World × Risk Correlator (LWRISK) — /functions/getLiveIntel + /entities/RiskSignal; keyword cross-reference; CORRELATED vs DORMANT risks; coverage % tile; ALL/CORRELATED/DORMANT filter tabs + search; click-to-expand matched event detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on dormant count; ◈ LWRISK button left:28980 bottom:8 zIndex:92; isLwriskQuery+buildLwriskScript wired in JarvisBrain; jarvis:lwrisk-toggle event; 90-s auto-refresh; voice: "live world risk/world event risk/lwrisk/real world risk/event correlation/intel risk/live risk correlation/world backed risk" */}
+            <LiveWorldRiskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
