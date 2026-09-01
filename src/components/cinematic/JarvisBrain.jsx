@@ -96,6 +96,7 @@ import { isInvinvQuery, buildInvinvScript } from "./InvestmentInvestigationNexus
 import { isSwrscnQuery, buildSwrscnScript } from "./SwarmScenarioNexus";
 import { isInvoevQuery, buildInvoevScript } from "./InvestmentOpsEventNexus";
 import { isCdataQuery, buildCdataScript } from "./ContactDatasetNexus";
+import { isIpscenQuery, buildIpscenScript } from "./IntelProfileScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -426,6 +427,9 @@ export default function JarvisBrain() {
       } else if (isCdataQuery(q)) {
         answer = await buildCdataScript();
         window.dispatchEvent(new CustomEvent("jarvis:cdata-toggle"));
+      } else if (isIpscenQuery(q)) {
+        answer = await buildIpscenScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
