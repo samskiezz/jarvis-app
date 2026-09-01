@@ -816,6 +816,7 @@ import ContactSwarmCoverage from '@/components/cinematic/ContactSwarmCoverage';
 import SwarmDatasetNexus from '@/components/cinematic/SwarmDatasetNexus';
 import InvestmentInvestigationNexus from '@/components/cinematic/InvestmentInvestigationNexus';
 import SwarmScenarioNexus from '@/components/cinematic/SwarmScenarioNexus';
+import InvestmentOpsEventNexus from '@/components/cinematic/InvestmentOpsEventNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2538,6 +2539,8 @@ function App() {
             <InvestmentInvestigationNexus />
             {/* F526 (overnight 2026-09-01): SwarmJob × Scenario Nexus (SWRSCN) — /entities/SwarmJob + /v1/scenario/list; keyword cross-reference; BACKED (≥1 scenario matches) vs UNSCRIPTED swarm jobs; coverage % tile; ALL/BACKED/UNSCRIPTED filter tabs + search; click-to-expand matched scenarios with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational readiness brief + TTS; amber badge on unscripted count; ◈ SWRSCN button left:40160 bottom:8 zIndex:105; isSwrscnQuery+buildSwrscnScript wired in JarvisBrain; jarvis:swrscn-toggle event; 90-s auto-refresh; voice: "swarm scenario/scenario swarm/swrscn/which swarm jobs have scenarios/swarm playbook/unscripted swarm/swarm scenario coverage/swarm simulation" */}
             <SwarmScenarioNexus />
+            {/* F527 (overnight 2026-09-01): Investment × Ops Event Nexus (INVOEV) — /entities/Investment + /v1/ops/events; keyword cross-reference; SIGNALED vs QUIET investments; coverage % tile; ALL/SIGNALED/QUIET filter tabs + search; click-to-expand ops event detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence financial-ops brief + TTS; amber badge on signaled count; ◈ INVOEV button left:41020 bottom:8 zIndex:106; isInvoevQuery+buildInvoevScript wired in JarvisBrain; jarvis:invoev-toggle event; 90-s auto-refresh; voice: "investment ops/portfolio events/invoev/ops signaled investment/which investments have ops events/investment incident" */}
+            <InvestmentOpsEventNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

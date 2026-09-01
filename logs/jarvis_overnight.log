@@ -117,3 +117,4 @@
 2026-09-01 F524 SwarmDatasetNexus.jsx — SwarmJob × Dataset Nexus (SWRDSET); /entities/SwarmJob + /v1/datasets cross-ref; GROUNDED/UNGROUNDED tabs; ASSESS → agent/chat + TTS; ◈ SWRDSET btn left:38440; JarvisBrain wired; vite build exit 0
 [2026-09-01] F525 InvestmentInvestigationNexus (INVINV): /entities/Investment + /v1/investigations cross-reference; LINKED/CLEAN filter; ASSESS via /v1/jarvis/agent/chat + TTS; ◈ INVINV btn left:39300 zIndex:104; mounted App.jsx; wired JarvisBrain.ask(); vite build exit 0.
 [2026-09-01] F526 SwarmScenarioNexus.jsx created; isSwrscnQuery+buildSwrscnScript wired into JarvisBrain.ask(); mounted in App.jsx; vite build exit 0.
+[2026-09-01] F527 InvestmentOpsEventNexus.jsx created; /entities/Investment + /v1/ops/events cross-reference; SIGNALED/QUIET filter tabs; ASSESS via /v1/jarvis/agent/chat + TTS; ◈ INVOEV btn left:41020 zIndex:106; isInvoevQuery+buildInvoevScript wired JarvisBrain.ask(); mounted App.jsx; vite build exit 0.
