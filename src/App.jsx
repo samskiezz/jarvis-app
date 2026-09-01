@@ -802,6 +802,7 @@ import ReportTaskCoverageMonitor from '@/components/cinematic/ReportTaskCoverage
 import LiveWorldRiskCorrelator from '@/components/cinematic/LiveWorldRiskCorrelator';
 import SkillRiskCoverageMonitor from '@/components/cinematic/SkillRiskCoverageMonitor';
 import DatasetScenarioCoverageMonitor from '@/components/cinematic/DatasetScenarioCoverageMonitor';
+import ContactKnowledgeNexus from '@/components/cinematic/ContactKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2496,6 +2497,8 @@ function App() {
             <SkillRiskCoverageMonitor />
             {/* F509 (overnight 2026-09-01): Dataset × Scenario Coverage Monitor (DSCNCOV) — /v1/datasets + /v1/scenario/list; keyword cross-reference; MODELED vs UNMODELED datasets; coverage % tile; ALL/MODELED/UNMODELED filter tabs + search; click-to-expand matched scenarios with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unmodeled count; ◈ DSCNCOV button left:30700 bottom:8 zIndex:94; isDatasetScenarioQuery+buildDatasetScenarioScript wired in JarvisBrain; jarvis:dscncov-toggle event; 90-s auto-refresh; voice: "dataset scenario/scenario dataset/dscncov/which datasets are modeled/dataset simulation/scenario data coverage" */}
             <DatasetScenarioCoverageMonitor />
+            {/* F511 (overnight 2026-09-01): Contact × Knowledge Nexus (CKNOW) — /entities/Contact + /knowledge/; keyword cross-reference; DOCUMENTED vs UNDOCUMENTED contacts; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ CKNOW button left:31560 bottom:8 zIndex:95; isCknowQuery+buildCknowScript wired in JarvisBrain; jarvis:cknow-toggle event; 90-s auto-refresh; voice: "contact knowledge/cknow/who is documented/documented contacts/contact articles/knowledge contacts/undocumented contact/intel on contact" */}
+            <ContactKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

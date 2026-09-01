@@ -78,6 +78,7 @@ import { isSkrskQuery, buildSkrskScript } from "./SkillRiskCoverageMonitor";
 import { isDatasetScenarioQuery, buildDatasetScenarioScript } from "./DatasetScenarioCoverageMonitor";
 import { isIprscQuery, buildIprscScript } from "./IntelProfileRiskCorrelator";
 import { isIprskQuery, buildIprskScript } from "./IntelProfileRiskLinker";
+import { isCknowQuery, buildCknowScript } from "./ContactKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -355,6 +356,9 @@ export default function JarvisBrain() {
       } else if (isIprskQuery(q)) {
         answer = await buildIprskScript();
         window.dispatchEvent(new CustomEvent("jarvis:iprsk-toggle"));
+      } else if (isCknowQuery(q)) {
+        answer = await buildCknowScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cknow-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
