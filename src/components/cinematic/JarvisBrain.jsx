@@ -90,6 +90,7 @@ import { isHealthScoreQuery, buildHealthScoreScript } from "./SystemHealthScorec
 import { isDatknopQuery, buildDatknopScript } from "./DatasetKnowledgeNexus";
 import { isInvknowQuery, buildInvknowScript } from "./InvestmentKnowledgeAdvisor";
 import { isTexmonQuery, buildTexmonScript } from "./TaskExecutionCoverageMonitor";
+import { isContactSwarmQuery, buildContactSwarmScript } from "./ContactSwarmCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -402,6 +403,9 @@ export default function JarvisBrain() {
         window.dispatchEvent(new CustomEvent("jarvis:invknow-toggle"));
       } else if (isTexmonQuery(q)) {
         answer = await buildTexmonScript();
+      } else if (isContactSwarmQuery(q)) {
+        answer = await buildContactSwarmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cswrm-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {

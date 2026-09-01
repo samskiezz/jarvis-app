@@ -113,3 +113,4 @@
 2026-09-01 F520 DatasetKnowledgeNexus (DATKNO): /v1/datasets + /knowledge/ cross-ref; DOCUMENTED/UNDOCUMENTED coverage; isDatknopQuery+buildDatknopScript wired JarvisBrain; mounted App.jsx; vite build exit 0
 2026-09-01 F521 InvestmentKnowledgeAdvisor voice wiring (INVKNOW): imported isInvknowQuery+buildInvknowScript into JarvisBrain.jsx; /entities/Investment + /knowledge/ cross-ref; 'investment knowledge/dark holdings/invknow' triggers portfolio-knowledge brief + opens INVKNOW panel; vite build exit 0
 2026-09-01 F522 TEXMON TaskExecutionCoverageMonitor.jsx: /entities/Task+/entities/SwarmJob+/v1/investigations cross-ref; FULL/SWARM_ONLY/CASE_ONLY/MANUAL; JarvisBrain wired; App.jsx mounted; vite build exit 0
+[2026-09-01] F523 ContactSwarmCoverage.jsx — Contact × Swarm Coverage Monitor (CSWRM); /entities/Contact + /entities/SwarmJob; isContactSwarmQuery+buildContactSwarmScript wired JarvisBrain; mounted App.jsx; vite build exit 0
