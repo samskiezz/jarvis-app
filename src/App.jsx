@@ -811,6 +811,7 @@ import OpsEventKnowledgeNexus from '@/components/cinematic/OpsEventKnowledgeNexu
 import SkillTaskNexus from '@/components/cinematic/SkillTaskNexus';
 import ReportKnowledgeLinker from '@/components/cinematic/ReportKnowledgeLinker';
 import DatasetKnowledgeNexus from '@/components/cinematic/DatasetKnowledgeNexus';
+import TaskExecutionCoverageMonitor from '@/components/cinematic/TaskExecutionCoverageMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2523,6 +2524,8 @@ function App() {
             <ReportKnowledgeLinker />
             {/* F520 (overnight 2026-09-01): Dataset × Knowledge Nexus (DATKNO) — /v1/datasets + /knowledge/; keyword cross-reference; DOCUMENTED datasets (≥1 article keyword-matches) vs UNDOCUMENTED (knowledge blind spots); coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-intelligence brief + TTS; amber badge on undocumented count; ◈ DATKNO button left:36720 bottom:8 zIndex:101; isDatknopQuery+buildDatknopScript wired in JarvisBrain; jarvis:datkno-toggle event; 90-s auto-refresh; voice: "dataset knowledge/knowledge dataset/datkno/documented datasets/which datasets have documentation/dataset knowledge gap/dataset articles" */}
             <DatasetKnowledgeNexus />
+            {/* F522 (overnight 2026-09-01): Task Execution Coverage Monitor (TEXMON) — /entities/Task + /entities/SwarmJob + /v1/investigations; keyword cross-reference; FULL (swarm+case) / SWARM_ONLY / CASE_ONLY / MANUAL (unautomated) task coverage; red badge on MANUAL count; coverage % tile; ALL/FULL/SWARM_ONLY/CASE_ONLY/MANUAL filter tabs + search; click-to-expand matched swarm jobs and investigation cases; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational readiness brief + TTS; ◈ TEXMON button left:882320 bottom:8 zIndex:584; isTexmonQuery+buildTexmonScript wired in JarvisBrain; jarvis:texmon-toggle event; 90-s auto-refresh; voice: "task execution/texmon/which tasks have swarm/swarm task coverage/task automation/manual tasks/unautomated tasks" */}
+            <TaskExecutionCoverageMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
