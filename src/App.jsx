@@ -808,6 +808,7 @@ import ReportScenarioCoverageMonitor from '@/components/cinematic/ReportScenario
 import TaskScenarioExposure from '@/components/cinematic/TaskScenarioExposure';
 import SwarmKnowledgeNexus from '@/components/cinematic/SwarmKnowledgeNexus';
 import OpsEventKnowledgeNexus from '@/components/cinematic/OpsEventKnowledgeNexus';
+import SkillTaskNexus from '@/components/cinematic/SkillTaskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2514,6 +2515,8 @@ function App() {
             <SwarmKnowledgeNexus />
             {/* F516 (overnight 2026-09-01): Ops Events × Knowledge Nexus (OEVKNO) — /v1/ops/events + /knowledge/; keyword cross-reference; CONTEXTUALIZED (≥1 article matches) vs UNCONTEXTUALIZED events (no knowledge backing — operational blind spots); coverage % tile; ALL/CONTEXTUALIZED/UNCONTEXTUALIZED filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on uncontextualized count; ◈ OEVKNO button left:35000 bottom:8 zIndex:99; isOevknoQuery+buildOevknoScript wired in JarvisBrain; jarvis:oevkno-toggle event; 90-s auto-refresh; voice: "ops event knowledge/event context/oevkno/uncontextualized events/operational knowledge/ops knowledge/what do we know about events/knowledge backed events" */}
             <OpsEventKnowledgeNexus />
+            {/* F517 (overnight 2026-09-01): Skill × Task Nexus (STASK) — /v1/aip/skill + /entities/Task; keyword cross-reference; BACKED tasks (≥1 skill matches) vs UNSKILLED; coverage % tile; ALL/BACKED/UNSKILLED filter tabs + search; click-to-expand matched skills with domain+score+hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational capability assessment + TTS; amber badge on unskilled count; ◈ STASK button left:35860 bottom:8 zIndex:100; isStaskQuery+buildStaskScript wired in JarvisBrain; jarvis:stask-toggle event; 90-s auto-refresh; voice: "skill task/stask/task skill/skill-backed tasks/unskilled tasks/skill coverage task/task skill coverage/which tasks have skill/task capability" */}
+            <SkillTaskNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

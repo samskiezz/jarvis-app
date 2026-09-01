@@ -107,3 +107,4 @@
 [2026-09-01] F514 Task × Scenario Exposure (TASKSCN): TaskScenarioExposure.jsx created; /entities/Task + /v1/scenario/list cross-reference; COVERED/UNPLANNED; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; mounted App.jsx; intent wired JarvisBrain; vite build exit 0.
 [2026-09-01] F515 SwarmJob × Knowledge Nexus (SWRKNO): SwarmKnowledgeNexus.jsx created; /entities/SwarmJob + /knowledge/ cross-ref; GROUNDED/UNGROUNDED coverage; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; mounted App.jsx; isSwrknoQuery+buildSwrknoScript wired JarvisBrain.ask(); vite build exit 0.
 2026-09-01T09:18:21Z F516 OEVKNO — OpsEventKnowledgeNexus.jsx created; /v1/ops/events + /knowledge/ cross-ref; wired JarvisBrain + App.jsx; vite build exit 0
+2026-09-01T10:20:02Z F517 SkillTaskNexus (STASK): /v1/aip/skill + /entities/Task nexus; BACKED/UNSKILLED cross-ref; isStaskQuery+buildStaskScript wired JarvisBrain; mounted App.jsx; vite build exit 0
