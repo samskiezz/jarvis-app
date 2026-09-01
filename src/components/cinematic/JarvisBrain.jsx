@@ -86,6 +86,7 @@ import { isSwrknoQuery, buildSwrknoScript } from "./SwarmKnowledgeNexus";
 import { isOevknoQuery, buildOevknoScript } from "./OpsEventKnowledgeNexus";
 import { isStaskQuery, buildStaskScript } from "./SkillTaskNexus";
 import { isRlnkQuery, buildRlnkScript } from "./ReportKnowledgeLinker";
+import { isHealthScoreQuery, buildHealthScoreScript } from "./SystemHealthScorecard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -384,6 +385,9 @@ export default function JarvisBrain() {
       } else if (isStaskQuery(q)) {
         answer = await buildStaskScript();
         window.dispatchEvent(new CustomEvent("jarvis:stask-toggle"));
+      } else if (isHealthScoreQuery(q)) {
+        answer = await buildHealthScoreScript();
+        window.dispatchEvent(new CustomEvent("jarvis:healthscore-toggle"));
       } else if (isRlnkQuery(q)) {
         answer = await buildRlnkScript();
         window.dispatchEvent(new CustomEvent("jarvis:rlnk-toggle"));
