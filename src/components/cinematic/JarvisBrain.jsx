@@ -103,6 +103,7 @@ import { isInvSwjQuery, buildInvSwjScript } from "./InvestmentSwarmJobCoverage";
 import { isIpscenQuery, buildIpscenScript } from "./IntelProfileScenarioCoverage";
 import { isSjintelQuery, buildSjintelScript } from "./SwarmIntelProfileCoverage";
 import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
+import { isSjoeQuery, buildSjoeScript } from "./SwarmJobOpsEventsCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -450,6 +451,9 @@ export default function JarvisBrain() {
       } else if (isAsrcQuery(q)) {
         answer = await buildAsrcScript();
         window.dispatchEvent(new CustomEvent("jarvis:asrc-toggle"));
+      } else if (isSjoeQuery(q)) {
+        answer = await buildSjoeScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sjoe-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));
