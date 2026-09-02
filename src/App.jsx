@@ -824,6 +824,7 @@ import TaskDatasetNexus from '@/components/cinematic/TaskDatasetNexus';
 import DecisionRulesDatasetNexus from '@/components/cinematic/DecisionRulesDatasetNexus';
 import ScenarioInvestmentCoverage from '@/components/cinematic/ScenarioInvestmentCoverage';
 import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInvestigationCoverage';
+import ReportInvestigationNexus from '@/components/cinematic/ReportInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2559,6 +2560,8 @@ function App() {
             <ScenarioInvestmentCoverage />
             {/* F541 (overnight 2026-09-02): Graph Node × Investigation Coverage (GNINV) voice wiring — GraphNodeInvestigationCoverage.jsx (F170; /v1/graph/centrality + /v1/investigations; INVESTIGATED/UNMONITORED tabs; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; jarvis:gninv-toggle; 90-s auto-refresh) was not yet mounted; isGninvQuery+buildGninvScript wired into JarvisBrain.ask(); "JARVIS, graph node investigation/node case coverage/uninvestigated nodes/which nodes have cases/gninv" now speaks investigated vs unmonitored high-influence node count + dispatches jarvis:gninv-toggle; vite build exit 0. */}
             <GraphNodeInvestigationCoverage />
+            {/* F543 (overnight 2026-09-02): Report × Investigation Nexus (RINV) — /v1/reports + /v1/investigations; keyword cross-reference; DOCUMENTED investigations (≥1 report keyword-matches) vs UNDOCUMENTED blind spot cases; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched reports (type badge + author + summary + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ RINV button left:47040 bottom:8 zIndex:113; isRinvQuery+buildRinvScript wired into JarvisBrain.ask(); jarvis:rinv-toggle event; 2-min auto-refresh; voice: "report investigation/investigation report/rinv/which investigations have reports/documented cases/undocumented investigations/case report coverage" */}
+            <ReportInvestigationNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
