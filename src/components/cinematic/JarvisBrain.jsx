@@ -97,6 +97,7 @@ import { isSwrscnQuery, buildSwrscnScript } from "./SwarmScenarioNexus";
 import { isInvoevQuery, buildInvoevScript } from "./InvestmentOpsEventNexus";
 import { isCdataQuery, buildCdataScript } from "./ContactDatasetNexus";
 import { isCoevtQuery, buildCoevtScript } from "./ContactOpsEventNexus";
+import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
 import { isIpscenQuery, buildIpscenScript } from "./IntelProfileScenarioCoverage";
 
 /**
@@ -430,6 +431,8 @@ export default function JarvisBrain() {
         window.dispatchEvent(new CustomEvent("jarvis:cdata-toggle"));
       } else if (isCoevtQuery(q)) {
         answer = await buildCoevtScript();
+      } else if (isCiprQuery(q)) {
+        answer = await buildCiprScript();
         window.dispatchEvent(new CustomEvent("jarvis:coevt-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
