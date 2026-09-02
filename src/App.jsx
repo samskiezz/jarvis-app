@@ -825,6 +825,7 @@ import DecisionRulesDatasetNexus from '@/components/cinematic/DecisionRulesDatas
 import ScenarioInvestmentCoverage from '@/components/cinematic/ScenarioInvestmentCoverage';
 import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInvestigationCoverage';
 import ReportInvestigationNexus from '@/components/cinematic/ReportInvestigationNexus';
+import TaskIntelProfileNexus from '@/components/cinematic/TaskIntelProfileNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2560,6 +2561,8 @@ function App() {
             <ScenarioInvestmentCoverage />
             {/* F541 (overnight 2026-09-02): Graph Node × Investigation Coverage (GNINV) voice wiring — GraphNodeInvestigationCoverage.jsx (F170; /v1/graph/centrality + /v1/investigations; INVESTIGATED/UNMONITORED tabs; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; jarvis:gninv-toggle; 90-s auto-refresh) was not yet mounted; isGninvQuery+buildGninvScript wired into JarvisBrain.ask(); "JARVIS, graph node investigation/node case coverage/uninvestigated nodes/which nodes have cases/gninv" now speaks investigated vs unmonitored high-influence node count + dispatches jarvis:gninv-toggle; vite build exit 0. */}
             <GraphNodeInvestigationCoverage />
+            {/* F544 (overnight 2026-09-02): Task × Intel Profile Nexus (TAINTEL) — /entities/Task + /entities/IntelProfile; keyword cross-reference; TRACKED tasks (≥1 intel profile keyword-matches) vs UNTRACKED (no intel backing); coverage % tile; ALL/TRACKED/UNTRACKED filter tabs + search; click-to-expand matched intel profiles with actor type badge + confidence + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intelligence-operations brief + TTS; amber badge on untracked count; ◈ TAINTEL button left:47900 bottom:8 zIndex:114; isTaintelQuery+buildTaintelScript wired in JarvisBrain; jarvis:taintel-toggle event; 90-s auto-refresh; voice: "task intel/intel task/taintel/which tasks have intel/intel-backed tasks/task intelligence/unintelligenced tasks/task profile coverage/intel task coverage" */}
+            <TaskIntelProfileNexus />
             {/* F543 (overnight 2026-09-02): Report × Investigation Nexus (RINV) — /v1/reports + /v1/investigations; keyword cross-reference; DOCUMENTED investigations (≥1 report keyword-matches) vs UNDOCUMENTED blind spot cases; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched reports (type badge + author + summary + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ RINV button left:47040 bottom:8 zIndex:113; isRinvQuery+buildRinvScript wired into JarvisBrain.ask(); jarvis:rinv-toggle event; 2-min auto-refresh; voice: "report investigation/investigation report/rinv/which investigations have reports/documented cases/undocumented investigations/case report coverage" */}
             <ReportInvestigationNexus />
             <Suspense fallback={<Loading />}>

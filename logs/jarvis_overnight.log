@@ -134,3 +134,4 @@
 2026-09-02 F541 Graph Node × Investigation Coverage (GNINV) voice wiring — GraphNodeInvestigationCoverage.jsx mounted App.jsx; isGninvQuery+buildGninvScript wired JarvisBrain.ask(); jarvis:gninv-toggle; vite build exit 0.
 [2026-09-02] F542 SCNINV — ScenarioInvestmentCoverage.jsx created; /v1/scenario/list + /entities/Investment cross-ref; MAPPED/UNMODELED tabs; ASSESS → /v1/jarvis/agent/chat + TTS; wired JarvisBrain.ask()+App.jsx; vite build exit 0.
 2026-09-02T13:21:01Z F543 RINV: ReportInvestigationNexus.jsx created — /v1/reports + /v1/investigations cross-reference; DOCUMENTED/UNDOCUMENTED tabs; ASSESS + TTS; JarvisBrain wired; App.jsx mounted; vite build exit 0.
+[2026-09-02] F544 Task × Intel Profile Nexus (TAINTEL): TaskIntelProfileNexus.jsx created; isTaintelQuery+buildTaintelScript wired into JarvisBrain.jsx; mounted in App.jsx; vite build exit 0.
