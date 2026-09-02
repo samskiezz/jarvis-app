@@ -828,6 +828,7 @@ import ReportInvestigationNexus from '@/components/cinematic/ReportInvestigation
 import TaskIntelProfileNexus from '@/components/cinematic/TaskIntelProfileNexus';
 import SwarmReportCoverageMonitor from '@/components/cinematic/SwarmReportCoverageMonitor';
 import IntelProfileDatasetNexus from '@/components/cinematic/IntelProfileDatasetNexus';
+import DecisionRulesContactNexus from '@/components/cinematic/DecisionRulesContactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2571,6 +2572,8 @@ function App() {
             <SwarmReportCoverageMonitor />
             {/* F549 (overnight 2026-09-02): Intel Profile × Dataset Nexus (IPDSET) — /entities/IntelProfile + /v1/datasets; keyword cross-reference; ASSOCIATED (≥1 dataset keyword-matches) vs UNDOCUMENTED intel profiles; coverage % tile; ALL/ASSOCIATED/UNDOCUMENTED filter tabs + search; click-to-expand matched datasets with kind badge + row count + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-data coverage brief + TTS; amber badge on undocumented count; ◈ IPDSET button left:49620 bottom:8 zIndex:116; isIpdsetQuery+buildIpdsetScript wired into JarvisBrain.ask(); jarvis:ipdset-toggle event; 90-s auto-refresh; voice: "intel profile dataset/ipdset/threat actor data/intel data coverage/which threats have datasets/threat dataset/actor dataset/intel data/profile dataset" */}
             <IntelProfileDatasetNexus />
+            {/* F550 (overnight 2026-09-02): Decision Rules × Contact Nexus (RULSCNT) — /v1/rules + /entities/Contact; keyword cross-reference; MONITORED contacts (≥1 rule keyword-matches) vs UNMONITORED; coverage % tile; ALL/MONITORED/UNMONITORED filter tabs + search; click-to-expand matched rules with severity badge + condition; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence rule-contact watch brief + TTS; amber badge on monitored count; ◈ RULSCNT button left:50480 bottom:8 zIndex:117; isRulscntQuery+buildRulscntScript wired into JarvisBrain.ask(); jarvis:rulscnt-toggle event; 2-min auto-refresh; voice: "rules contact/contact rules/rulscnt/monitored contacts/which contacts trigger rules/contact watchtower" */}
+            <DecisionRulesContactNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
