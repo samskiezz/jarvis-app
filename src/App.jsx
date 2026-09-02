@@ -822,6 +822,7 @@ import ContactOpsEventNexus from '@/components/cinematic/ContactOpsEventNexus';
 import DecisionRulesKnowledgeNexus from '@/components/cinematic/DecisionRulesKnowledgeNexus';
 import TaskDatasetNexus from '@/components/cinematic/TaskDatasetNexus';
 import DecisionRulesDatasetNexus from '@/components/cinematic/DecisionRulesDatasetNexus';
+import ScenarioInvestmentCoverage from '@/components/cinematic/ScenarioInvestmentCoverage';
 import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2554,6 +2555,8 @@ function App() {
             <DecisionRulesKnowledgeNexus />
             <TaskDatasetNexus />
             <DecisionRulesDatasetNexus />
+            {/* F542 (overnight 2026-09-02): Scenario × Investment Coverage (SCNINV) — /v1/scenario/list + /entities/Investment; keyword cross-reference; MAPPED investments (≥1 scenario matches) vs UNMODELED; coverage % tile; ALL/MAPPED/UNMODELED filter tabs + search; click-to-expand matched scenarios with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment-scenario readiness brief + TTS; amber badge on unmodeled count; ◈ SCNINV button left:46180 bottom:8 zIndex:112; isScninvQuery+buildScninvScript wired in JarvisBrain; jarvis:scninv-toggle event; 90-s auto-refresh; voice: "scenario investment/investment scenario/scninv/which investments have scenarios/investment planning/portfolio scenario coverage/investment simulation" */}
+            <ScenarioInvestmentCoverage />
             {/* F541 (overnight 2026-09-02): Graph Node × Investigation Coverage (GNINV) voice wiring — GraphNodeInvestigationCoverage.jsx (F170; /v1/graph/centrality + /v1/investigations; INVESTIGATED/UNMONITORED tabs; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; jarvis:gninv-toggle; 90-s auto-refresh) was not yet mounted; isGninvQuery+buildGninvScript wired into JarvisBrain.ask(); "JARVIS, graph node investigation/node case coverage/uninvestigated nodes/which nodes have cases/gninv" now speaks investigated vs unmonitored high-influence node count + dispatches jarvis:gninv-toggle; vite build exit 0. */}
             <GraphNodeInvestigationCoverage />
             <Suspense fallback={<Loading />}>
