@@ -108,6 +108,7 @@ import { isRulsknoQuery, buildRulsknoScript } from "./DecisionRulesKnowledgeNexu
 import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
 import { isTdsetQuery, buildTdsetScript } from "./TaskDatasetNexus";
 import { isRuldsetQuery, buildRuldsetScript } from "./DecisionRulesDatasetNexus";
+import { isGninvQuery, buildGninvScript } from "./GraphNodeInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -470,6 +471,9 @@ export default function JarvisBrain() {
       } else if (isRuldsetQuery(q)) {
         answer = await buildRuldsetScript();
         window.dispatchEvent(new CustomEvent("jarvis:ruldset-toggle"));
+      } else if (isGninvQuery(q)) {
+        answer = await buildGninvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gninv-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));

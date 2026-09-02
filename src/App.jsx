@@ -822,6 +822,7 @@ import ContactOpsEventNexus from '@/components/cinematic/ContactOpsEventNexus';
 import DecisionRulesKnowledgeNexus from '@/components/cinematic/DecisionRulesKnowledgeNexus';
 import TaskDatasetNexus from '@/components/cinematic/TaskDatasetNexus';
 import DecisionRulesDatasetNexus from '@/components/cinematic/DecisionRulesDatasetNexus';
+import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2553,6 +2554,8 @@ function App() {
             <DecisionRulesKnowledgeNexus />
             <TaskDatasetNexus />
             <DecisionRulesDatasetNexus />
+            {/* F541 (overnight 2026-09-02): Graph Node × Investigation Coverage (GNINV) voice wiring — GraphNodeInvestigationCoverage.jsx (F170; /v1/graph/centrality + /v1/investigations; INVESTIGATED/UNMONITORED tabs; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; jarvis:gninv-toggle; 90-s auto-refresh) was not yet mounted; isGninvQuery+buildGninvScript wired into JarvisBrain.ask(); "JARVIS, graph node investigation/node case coverage/uninvestigated nodes/which nodes have cases/gninv" now speaks investigated vs unmonitored high-influence node count + dispatches jarvis:gninv-toggle; vite build exit 0. */}
+            <GraphNodeInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
