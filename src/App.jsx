@@ -821,6 +821,7 @@ import ContactDatasetNexus from '@/components/cinematic/ContactDatasetNexus';
 import ContactOpsEventNexus from '@/components/cinematic/ContactOpsEventNexus';
 import DecisionRulesKnowledgeNexus from '@/components/cinematic/DecisionRulesKnowledgeNexus';
 import TaskDatasetNexus from '@/components/cinematic/TaskDatasetNexus';
+import DecisionRulesDatasetNexus from '@/components/cinematic/DecisionRulesDatasetNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2551,6 +2552,7 @@ function App() {
             <ContactOpsEventNexus />
             <DecisionRulesKnowledgeNexus />
             <TaskDatasetNexus />
+            <DecisionRulesDatasetNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

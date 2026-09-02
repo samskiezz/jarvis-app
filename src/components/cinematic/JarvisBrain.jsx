@@ -107,6 +107,7 @@ import { isSjoeQuery, buildSjoeScript } from "./SwarmJobOpsEventsCorrelator";
 import { isRulsknoQuery, buildRulsknoScript } from "./DecisionRulesKnowledgeNexus";
 import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
 import { isTdsetQuery, buildTdsetScript } from "./TaskDatasetNexus";
+import { isRuldsetQuery, buildRuldsetScript } from "./DecisionRulesDatasetNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -466,6 +467,9 @@ export default function JarvisBrain() {
       } else if (isTdsetQuery(q)) {
         answer = await buildTdsetScript();
         window.dispatchEvent(new CustomEvent("jarvis:tdset-toggle"));
+      } else if (isRuldsetQuery(q)) {
+        answer = await buildRuldsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ruldset-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));
