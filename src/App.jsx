@@ -103,6 +103,7 @@ import OpsRunbookGenerator from '@/components/cinematic/OpsRunbookGenerator';
 import OpsEventHeatmap from '@/components/cinematic/OpsEventHeatmap';
 import SkillDatasetCoverageAdvisor from '@/components/cinematic/SkillDatasetCoverageAdvisor';
 import DecisionRulesScenarioNexus from '@/components/cinematic/DecisionRulesScenarioNexus';
+import DecisionRulesSwarmNexus from '@/components/cinematic/DecisionRulesSwarmNexus';
 import IntelFusionBoard from '@/components/cinematic/IntelFusionBoard';
 import ContactInvestigationLinker from '@/components/cinematic/ContactInvestigationLinker';
 import ReportInvestigationTracer from '@/components/cinematic/ReportInvestigationTracer';
@@ -2577,6 +2578,8 @@ function App() {
             <DecisionRulesContactNexus />
             {/* F552 (overnight 2026-09-02): Decision Rules × Scenario Alignment Monitor (RULSCN) — /v1/rules + /v1/scenario/list; keyword cross-reference; SCRIPTED rules (≥1 scenario keyword-matches) vs UNSCRIPTED; coverage % tile; ALL/SCRIPTED/UNSCRIPTED filter tabs + search; click-to-expand matched scenarios with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence rule-scenario readiness brief + TTS; amber badge on unscripted count; ◈ RULSCN button left:51340 bottom:8 zIndex:118; isRulscnQuery+buildRulscnScript wired in JarvisBrain; jarvis:rulscn-toggle event; 2-min auto-refresh; voice: "rules scenario/scenario rules/rulscn/which rules have scenarios/rule playbook/scripted rules/unscripted rules/watchtower scenario coverage" */}
             <DecisionRulesScenarioNexus />
+            {/* F553 (overnight 2026-09-02): Decision Rules × SwarmJob Nexus (RULSWRM) — /v1/rules + /entities/SwarmJob; keyword cross-reference; ENFORCED rules (≥1 swarm job matches) vs UNAUTOMATED; coverage % tile; ALL/ENFORCED/UNAUTOMATED filter tabs; click-to-expand matched jobs; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unautomated count; ◈ RULSWRM button; 2-min auto-refresh */}
+            <DecisionRulesSwarmNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
