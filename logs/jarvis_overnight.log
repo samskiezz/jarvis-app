@@ -124,3 +124,4 @@
 2026-09-02T01:19:57Z F531 CIPR voice wiring: isCiprQuery+buildCiprScript imported into JarvisBrain.jsx; ContactIntelProfileCrossRef pre-existed + mounted; vite build exit 0.
 [2026-09-02] F532 SKOPS voice wiring — isSkopsQuery+buildSkopsScript wired into JarvisBrain.ask(); SkillOpsEventCoverage.jsx (pre-existing, F58) now responds to 'JARVIS, skill ops/skops/in-demand skills/dormant skills'; /v1/aip/skill + /v1/ops/events; vite build exit 0.
 [2026-09-02] F533 INVSWJ voice wiring: imported isInvSwjQuery+buildInvSwjScript into JarvisBrain.jsx; dispatches jarvis:invswj-toggle; vite build exit 0.
+[2026-09-02] F534 SJINTEL voice wiring: isSjintelQuery+buildSjintelScript imported into JarvisBrain.jsx; 'JARVIS, swarm intel/sjintel/threat hunting coverage' now speaks hunting/unhunted intel profile count + dispatches jarvis:sjintel-toggle; vite build exit 0.
