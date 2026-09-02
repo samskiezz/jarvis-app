@@ -113,6 +113,7 @@ import { isScninvQuery, buildScninvScript } from "./ScenarioInvestmentCoverage";
 import { isRinvQuery, buildRinvScript } from "./ReportInvestigationNexus";
 import { isTaintelQuery, buildTaintelScript } from "./TaskIntelProfileNexus";
 import { isRpopsQuery, buildRpopsScript } from "./ReportOpsEventCoverage";
+import { isSwrrptQuery, buildSwrrptScript } from "./SwarmReportCoverageMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -490,6 +491,9 @@ export default function JarvisBrain() {
       } else if (isRpopsQuery(q)) {
         answer = await buildRpopsScript();
         window.dispatchEvent(new CustomEvent("jarvis:rpops-toggle"));
+      } else if (isSwrrptQuery(q)) {
+        answer = await buildSwrrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:swrrpt-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));

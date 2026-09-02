@@ -826,6 +826,7 @@ import ScenarioInvestmentCoverage from '@/components/cinematic/ScenarioInvestmen
 import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInvestigationCoverage';
 import ReportInvestigationNexus from '@/components/cinematic/ReportInvestigationNexus';
 import TaskIntelProfileNexus from '@/components/cinematic/TaskIntelProfileNexus';
+import SwarmReportCoverageMonitor from '@/components/cinematic/SwarmReportCoverageMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2565,6 +2566,8 @@ function App() {
             <TaskIntelProfileNexus />
             {/* F543 (overnight 2026-09-02): Report × Investigation Nexus (RINV) — /v1/reports + /v1/investigations; keyword cross-reference; DOCUMENTED investigations (≥1 report keyword-matches) vs UNDOCUMENTED blind spot cases; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched reports (type badge + author + summary + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ RINV button left:47040 bottom:8 zIndex:113; isRinvQuery+buildRinvScript wired into JarvisBrain.ask(); jarvis:rinv-toggle event; 2-min auto-refresh; voice: "report investigation/investigation report/rinv/which investigations have reports/documented cases/undocumented investigations/case report coverage" */}
             <ReportInvestigationNexus />
+            {/* F546 (overnight 2026-09-02): SwarmJob × Report Coverage Monitor (SWRRPT) — /entities/SwarmJob + /v1/reports; keyword cross-reference; DOCUMENTED swarm jobs (≥1 report keyword-matches) vs UNDOCUMENTED; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched reports (type badge + author + summary + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ SWRRPT button left:48760 bottom:8 zIndex:115; isSwrrptQuery+buildSwrrptScript wired into JarvisBrain.ask(); jarvis:swrrpt-toggle event; 90-s auto-refresh; voice: "swarm report/swarm documentation/swrrpt/documented swarm/which swarm jobs have reports/swarm coverage/undocumented swarm" */}
+            <SwarmReportCoverageMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
