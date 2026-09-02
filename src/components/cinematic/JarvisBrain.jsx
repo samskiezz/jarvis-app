@@ -119,6 +119,7 @@ import { isSctmQuery, buildSctmScript } from "./AipSkillContactTaskMesh";
 import { isIpdsetQuery, buildIpdsetScript } from "./IntelProfileDatasetNexus";
 import { isRulscntQuery, buildRulscntScript } from "./DecisionRulesContactNexus";
 import { isSkdsQuery, buildSkdsScript } from "./SkillDatasetCoverageAdvisor";
+import { isRulscnQuery, buildRulscnScript } from "./DecisionRulesScenarioNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -514,6 +515,9 @@ export default function JarvisBrain() {
       } else if (isSkdsQuery(q)) {
         answer = await buildSkdsScript();
         window.dispatchEvent(new CustomEvent("jarvis:skds-toggle"));
+      } else if (isRulscnQuery(q)) {
+        answer = await buildRulscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulscn-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));

@@ -102,6 +102,7 @@ import InvestigationScenarioConvergence from '@/components/cinematic/Investigati
 import OpsRunbookGenerator from '@/components/cinematic/OpsRunbookGenerator';
 import OpsEventHeatmap from '@/components/cinematic/OpsEventHeatmap';
 import SkillDatasetCoverageAdvisor from '@/components/cinematic/SkillDatasetCoverageAdvisor';
+import DecisionRulesScenarioNexus from '@/components/cinematic/DecisionRulesScenarioNexus';
 import IntelFusionBoard from '@/components/cinematic/IntelFusionBoard';
 import ContactInvestigationLinker from '@/components/cinematic/ContactInvestigationLinker';
 import ReportInvestigationTracer from '@/components/cinematic/ReportInvestigationTracer';
@@ -2574,6 +2575,8 @@ function App() {
             <IntelProfileDatasetNexus />
             {/* F550 (overnight 2026-09-02): Decision Rules × Contact Nexus (RULSCNT) — /v1/rules + /entities/Contact; keyword cross-reference; MONITORED contacts (≥1 rule keyword-matches) vs UNMONITORED; coverage % tile; ALL/MONITORED/UNMONITORED filter tabs + search; click-to-expand matched rules with severity badge + condition; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence rule-contact watch brief + TTS; amber badge on monitored count; ◈ RULSCNT button left:50480 bottom:8 zIndex:117; isRulscntQuery+buildRulscntScript wired into JarvisBrain.ask(); jarvis:rulscnt-toggle event; 2-min auto-refresh; voice: "rules contact/contact rules/rulscnt/monitored contacts/which contacts trigger rules/contact watchtower" */}
             <DecisionRulesContactNexus />
+            {/* F552 (overnight 2026-09-02): Decision Rules × Scenario Alignment Monitor (RULSCN) — /v1/rules + /v1/scenario/list; keyword cross-reference; SCRIPTED rules (≥1 scenario keyword-matches) vs UNSCRIPTED; coverage % tile; ALL/SCRIPTED/UNSCRIPTED filter tabs + search; click-to-expand matched scenarios with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence rule-scenario readiness brief + TTS; amber badge on unscripted count; ◈ RULSCN button left:51340 bottom:8 zIndex:118; isRulscnQuery+buildRulscnScript wired in JarvisBrain; jarvis:rulscn-toggle event; 2-min auto-refresh; voice: "rules scenario/scenario rules/rulscn/which rules have scenarios/rule playbook/scripted rules/unscripted rules/watchtower scenario coverage" */}
+            <DecisionRulesScenarioNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
