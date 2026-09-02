@@ -137,3 +137,4 @@
 [2026-09-02] F544 Task × Intel Profile Nexus (TAINTEL): TaskIntelProfileNexus.jsx created; isTaintelQuery+buildTaintelScript wired into JarvisBrain.jsx; mounted in App.jsx; vite build exit 0.
 2026-09-02 F545 RPOPS: wired isRpopsQuery+buildRpopsScript into JarvisBrain.jsx for ReportOpsEventCoverage (/v1/reports + /v1/ops/events); vite build exit 0
 [2026-09-02] F546 SwarmReportCoverageMonitor (SWRRPT) — /entities/SwarmJob × /v1/reports; DOCUMENTED vs UNDOCUMENTED; coverage tile; filter tabs; ASSESS → /v1/jarvis/agent/chat + TTS; isSwrrptQuery+buildSwrrptScript wired JarvisBrain; jarvis:swrrpt-toggle; vite build exit 0.
+2026-09-02 F547 Contact × Task Linker voice wiring (CTTASK) — imported isCttaskQuery+buildCttaskScript from ContactTaskLinker.jsx into JarvisBrain.jsx; added else-if branch dispatching jarvis:cttask-toggle; /entities/Contact + /entities/Task real endpoints; vite build exit 0.
