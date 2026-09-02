@@ -99,6 +99,7 @@ import { isCdataQuery, buildCdataScript } from "./ContactDatasetNexus";
 import { isCoevtQuery, buildCoevtScript } from "./ContactOpsEventNexus";
 import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
 import { isSkopsQuery, buildSkopsScript } from "./SkillOpsEventCoverage";
+import { isInvSwjQuery, buildInvSwjScript } from "./InvestmentSwarmJobCoverage";
 import { isIpscenQuery, buildIpscenScript } from "./IntelProfileScenarioCoverage";
 
 /**
@@ -438,6 +439,9 @@ export default function JarvisBrain() {
       } else if (isSkopsQuery(q)) {
         answer = await buildSkopsScript();
         window.dispatchEvent(new CustomEvent("jarvis:skops-toggle"));
+      } else if (isInvSwjQuery(q)) {
+        answer = await buildInvSwjScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invswj-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));
