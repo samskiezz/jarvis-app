@@ -116,6 +116,7 @@ import { isRpopsQuery, buildRpopsScript } from "./ReportOpsEventCoverage";
 import { isSwrrptQuery, buildSwrrptScript } from "./SwarmReportCoverageMonitor";
 import { isCttaskQuery, buildCttaskScript } from "./ContactTaskLinker";
 import { isSctmQuery, buildSctmScript } from "./AipSkillContactTaskMesh";
+import { isIpdsetQuery, buildIpdsetScript } from "./IntelProfileDatasetNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -502,6 +503,9 @@ export default function JarvisBrain() {
       } else if (isSctmQuery(q)) {
         answer = await buildSctmScript();
         window.dispatchEvent(new CustomEvent("jarvis:sctm-toggle"));
+      } else if (isIpdsetQuery(q)) {
+        answer = await buildIpdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ipdset-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));

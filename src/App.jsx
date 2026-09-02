@@ -827,6 +827,7 @@ import GraphNodeInvestigationCoverage from '@/components/cinematic/GraphNodeInve
 import ReportInvestigationNexus from '@/components/cinematic/ReportInvestigationNexus';
 import TaskIntelProfileNexus from '@/components/cinematic/TaskIntelProfileNexus';
 import SwarmReportCoverageMonitor from '@/components/cinematic/SwarmReportCoverageMonitor';
+import IntelProfileDatasetNexus from '@/components/cinematic/IntelProfileDatasetNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2568,6 +2569,8 @@ function App() {
             <ReportInvestigationNexus />
             {/* F546 (overnight 2026-09-02): SwarmJob × Report Coverage Monitor (SWRRPT) — /entities/SwarmJob + /v1/reports; keyword cross-reference; DOCUMENTED swarm jobs (≥1 report keyword-matches) vs UNDOCUMENTED; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched reports (type badge + author + summary + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ SWRRPT button left:48760 bottom:8 zIndex:115; isSwrrptQuery+buildSwrrptScript wired into JarvisBrain.ask(); jarvis:swrrpt-toggle event; 90-s auto-refresh; voice: "swarm report/swarm documentation/swrrpt/documented swarm/which swarm jobs have reports/swarm coverage/undocumented swarm" */}
             <SwarmReportCoverageMonitor />
+            {/* F549 (overnight 2026-09-02): Intel Profile × Dataset Nexus (IPDSET) — /entities/IntelProfile + /v1/datasets; keyword cross-reference; ASSOCIATED (≥1 dataset keyword-matches) vs UNDOCUMENTED intel profiles; coverage % tile; ALL/ASSOCIATED/UNDOCUMENTED filter tabs + search; click-to-expand matched datasets with kind badge + row count + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-data coverage brief + TTS; amber badge on undocumented count; ◈ IPDSET button left:49620 bottom:8 zIndex:116; isIpdsetQuery+buildIpdsetScript wired into JarvisBrain.ask(); jarvis:ipdset-toggle event; 90-s auto-refresh; voice: "intel profile dataset/ipdset/threat actor data/intel data coverage/which threats have datasets/threat dataset/actor dataset/intel data/profile dataset" */}
+            <IntelProfileDatasetNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
