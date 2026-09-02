@@ -819,6 +819,7 @@ import SwarmScenarioNexus from '@/components/cinematic/SwarmScenarioNexus';
 import InvestmentOpsEventNexus from '@/components/cinematic/InvestmentOpsEventNexus';
 import ContactDatasetNexus from '@/components/cinematic/ContactDatasetNexus';
 import ContactOpsEventNexus from '@/components/cinematic/ContactOpsEventNexus';
+import DecisionRulesKnowledgeNexus from '@/components/cinematic/DecisionRulesKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2547,6 +2548,7 @@ function App() {
             <ContactDatasetNexus />
             {/* F530 (overnight 2026-09-02): Contact × Ops Events Nexus (COEVT) — /entities/Contact + /v1/ops/events; keyword cross-reference; INVOLVED contacts (≥1 ops-event keyword-matches) vs CLEAR; coverage % tile; ALL/INVOLVED/CLEAR filter tabs + search; click-to-expand matched ops events with severity badge + source + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational contact assessment + TTS; amber badge on involved count; ◈ COEVT button left:42740 bottom:8 zIndex:108; isCoevtQuery+buildCoevtScript wired in JarvisBrain; jarvis:coevt-toggle event; 90-s auto-refresh; voice: "contact ops/ops contact/coevt/which contacts have ops events/contact incident/ops involved contacts" */}
             <ContactOpsEventNexus />
+            <DecisionRulesKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
