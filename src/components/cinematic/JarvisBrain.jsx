@@ -136,6 +136,7 @@ import { isLwinvQuery, buildLwinvScript } from "./LiveWorldInvestmentCorrelator"
 import { isLwrulsQuery, buildLwrulsScript } from "./LiveWorldDecisionRulesCorrelator";
 import { isLwrptQuery, buildLwrptScript } from "./LiveWorldReportCorrelator";
 import { isLwdsetQuery, buildLwdsetScript } from "./LiveWorldDatasetCorrelator";
+import { isLwopsQuery, buildLwopsScript } from "./LiveWorldOpsEventsCorrelator";
 import { isOmbrfQuery, buildOmbrfScript } from "./OperationalMorningBriefing";
 import { isSkasQuery, buildSkasScript } from "./AipSkillScenarioCoverage";
 
@@ -584,6 +585,9 @@ export default function JarvisBrain() {
       } else if (isLwdsetQuery(q)) {
         answer = await buildLwdsetScript();
         window.dispatchEvent(new CustomEvent("jarvis:lwdset-toggle"));
+      } else if (isLwopsQuery(q)) {
+        answer = await buildLwopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwops-toggle"));
       } else if (isOmbrfQuery(q)) {
         answer = await buildOmbrfScript();
         window.dispatchEvent(new CustomEvent("jarvis:ombrf-toggle"));
