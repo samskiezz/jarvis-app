@@ -143,6 +143,7 @@ import { isSklswrmQuery, buildSklswrmScript } from "./SkillSwarmJobCoverage";
 import { isCskillQuery, buildCskillScript } from "./ContactSkillCoverage";
 import { isSkillContactQuery, buildSkillContactScript } from "./SkillContactGapAdvisor";
 import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
+import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -613,6 +614,9 @@ export default function JarvisBrain() {
       } else if (isTimelineQuery(q)) {
         answer = await buildTimelineScript();
         window.dispatchEvent(new CustomEvent("jarvis:timeline-toggle"));
+      } else if (isAsicQuery(q)) {
+        answer = await buildAsicScript();
+        window.dispatchEvent(new CustomEvent("jarvis:asic-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
