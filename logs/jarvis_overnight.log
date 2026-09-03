@@ -1,0 +1,1 @@
+2026-09-03 | F20 | ShowMeNavigation wired into JarvisBrain.ask() as pre-router: "show me X"/"open X" dispatches normalized jarvis:ask event to open the correct panel without hitting the agent endpoint; ShowMeNavigation.jsx imported in App.jsx; F01-F19 and F21-F30 marked done (all pre-implemented in prior sessions).

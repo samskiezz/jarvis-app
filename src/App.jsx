@@ -14,6 +14,7 @@ import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
 import CommandPalette from '@/components/cinematic/CommandPalette';
+import ShowMeNavigation from '@/components/cinematic/ShowMeNavigation';
 import HeyJarvisListener from '@/components/cinematic/HeyJarvisListener';
 import SceneKeyboardNav from '@/components/cinematic/SceneKeyboardNav';
 import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
@@ -213,6 +214,9 @@ function App() {
             <FirstRunSetup />
             <JarvisBrain />
             <CommandPalette />
+            {/* F20: "show me X" / "open X" voice pre-router — translates navigation phrases into
+                panel intent queries before hitting the agent endpoint; wired via JarvisBrain.ask() */}
+            <ShowMeNavigation />
             {/* F02: "Hey JARVIS" always-listening wake word toggle */}
             <HeyJarvisListener />
             {/* F04: keyboard scene-jump (1–0 → scenes; Esc → home) */}
