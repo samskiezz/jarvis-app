@@ -122,6 +122,8 @@ import { isSkdsQuery, buildSkdsScript } from "./SkillDatasetCoverageAdvisor";
 import { isRulscnQuery, buildRulscnScript } from "./DecisionRulesScenarioNexus";
 import { isRulswrmQuery, buildRulswrmScript } from "./DecisionRulesSwarmNexus";
 import { isLwknoQuery, buildLwknoScript } from "./LiveWorldKnowledgeNexus";
+import { isDsrskQuery, buildDsrskScript } from "./DatasetRiskAnalyzer";
+import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -526,6 +528,12 @@ export default function JarvisBrain() {
       } else if (isLwknoQuery(q)) {
         answer = await buildLwknoScript();
         window.dispatchEvent(new CustomEvent("jarvis:lwkno-toggle"));
+      } else if (isDsrskQuery(q)) {
+        answer = await buildDsrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:dsrsk-toggle"));
+      } else if (isDsriskQuery(q)) {
+        answer = await buildDsriskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:dsrisk-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));
