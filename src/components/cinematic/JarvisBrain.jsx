@@ -121,6 +121,7 @@ import { isRulscntQuery, buildRulscntScript } from "./DecisionRulesContactNexus"
 import { isSkdsQuery, buildSkdsScript } from "./SkillDatasetCoverageAdvisor";
 import { isRulscnQuery, buildRulscnScript } from "./DecisionRulesScenarioNexus";
 import { isRulswrmQuery, buildRulswrmScript } from "./DecisionRulesSwarmNexus";
+import { isLwknoQuery, buildLwknoScript } from "./LiveWorldKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -522,6 +523,9 @@ export default function JarvisBrain() {
       } else if (isRulswrmQuery(q)) {
         answer = await buildRulswrmScript();
         window.dispatchEvent(new CustomEvent("jarvis:rulswrm-toggle"));
+      } else if (isLwknoQuery(q)) {
+        answer = await buildLwknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwkno-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));

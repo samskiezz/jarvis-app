@@ -104,6 +104,7 @@ import OpsEventHeatmap from '@/components/cinematic/OpsEventHeatmap';
 import SkillDatasetCoverageAdvisor from '@/components/cinematic/SkillDatasetCoverageAdvisor';
 import DecisionRulesScenarioNexus from '@/components/cinematic/DecisionRulesScenarioNexus';
 import DecisionRulesSwarmNexus from '@/components/cinematic/DecisionRulesSwarmNexus';
+import LiveWorldKnowledgeNexus from '@/components/cinematic/LiveWorldKnowledgeNexus';
 import IntelFusionBoard from '@/components/cinematic/IntelFusionBoard';
 import ContactInvestigationLinker from '@/components/cinematic/ContactInvestigationLinker';
 import ReportInvestigationTracer from '@/components/cinematic/ReportInvestigationTracer';
@@ -2580,6 +2581,7 @@ function App() {
             <DecisionRulesScenarioNexus />
             {/* F553 (overnight 2026-09-02): Decision Rules × SwarmJob Nexus (RULSWRM) — /v1/rules + /entities/SwarmJob; keyword cross-reference; ENFORCED rules (≥1 swarm job matches) vs UNAUTOMATED; coverage % tile; ALL/ENFORCED/UNAUTOMATED filter tabs; click-to-expand matched jobs; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unautomated count; ◈ RULSWRM button; 2-min auto-refresh */}
             <DecisionRulesSwarmNexus />
+            <LiveWorldKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
