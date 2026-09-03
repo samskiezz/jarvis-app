@@ -136,6 +136,7 @@ import { isLwinvQuery, buildLwinvScript } from "./LiveWorldInvestmentCorrelator"
 import { isLwrulsQuery, buildLwrulsScript } from "./LiveWorldDecisionRulesCorrelator";
 import { isLwrptQuery, buildLwrptScript } from "./LiveWorldReportCorrelator";
 import { isLwdsetQuery, buildLwdsetScript } from "./LiveWorldDatasetCorrelator";
+import { isOmbrfQuery, buildOmbrfScript } from "./OperationalMorningBriefing";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -582,6 +583,9 @@ export default function JarvisBrain() {
       } else if (isLwdsetQuery(q)) {
         answer = await buildLwdsetScript();
         window.dispatchEvent(new CustomEvent("jarvis:lwdset-toggle"));
+      } else if (isOmbrfQuery(q)) {
+        answer = await buildOmbrfScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ombrf-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));

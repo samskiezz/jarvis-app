@@ -277,6 +277,7 @@ import LiveWorldInvestmentCorrelator from '@/components/cinematic/LiveWorldInves
 import LiveWorldDecisionRulesCorrelator from '@/components/cinematic/LiveWorldDecisionRulesCorrelator';
 import LiveWorldReportCorrelator from '@/components/cinematic/LiveWorldReportCorrelator';
 import LiveWorldDatasetCorrelator from '@/components/cinematic/LiveWorldDatasetCorrelator';
+import OperationalMorningBriefing from '@/components/cinematic/OperationalMorningBriefing';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
@@ -2614,6 +2615,8 @@ function App() {
             <LiveWorldReportCorrelator />
             {/* F566 (overnight 2026-09-03): Live World × Dataset Correlator (LWDSET) — /functions/getLiveIntel + /v1/datasets; keyword cross-reference; WORLD-SIGNALED datasets (≥1 live event keyword-matches) vs DATA-DARK; coverage % tile; ALL/WORLD-SIGNALED/DATA-DARK filter tabs + search; click-to-expand event detail (SEISMIC/CRYPTO/FX badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on dark count; ◈ LWDSET button left:61660 bottom:8 zIndex:130; isLwdsetQuery+buildLwdsetScript wired in JarvisBrain; jarvis:lwdset-toggle event; 90-s auto-refresh; voice: "live world dataset/lwdset/world dataset/dataset signal/real world data" */}
             <LiveWorldDatasetCorrelator />
+            {/* F567 (overnight 2026-09-03): Operational Morning Briefing (OMBRF) — composite daily SITREP; fetches /entities/Task + /entities/RiskSignal + /entities/SwarmJob + /v1/investigations + /v1/ops/events + /v1/jarvis/system/status; 6 stat tiles; OVERVIEW/BLOCKED/RISKS/CASES tabs; BRIEF ME → /v1/jarvis/agent/chat + /v1/voice/tts spoken narrative; red badge on critical risk count; amber badge on blocked task count; ◈ OMBRF button left:62520 bottom:8 zIndex:131; isOmbrfQuery+buildOmbrfScript wired in JarvisBrain; jarvis:ombrf-toggle event; 5-min auto-refresh; voice: "ombrf/morning briefing/daily briefing/brief me/operational briefing/daily sitrep/morning sitrep/sitrep/operational summary" */}
+            <OperationalMorningBriefing />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
