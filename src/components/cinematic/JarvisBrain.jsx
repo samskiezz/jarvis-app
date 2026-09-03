@@ -140,6 +140,8 @@ import { isLwopsQuery, buildLwopsScript } from "./LiveWorldOpsEventsCorrelator";
 import { isOmbrfQuery, buildOmbrfScript } from "./OperationalMorningBriefing";
 import { isSkasQuery, buildSkasScript } from "./AipSkillScenarioCoverage";
 import { isSklswrmQuery, buildSklswrmScript } from "./SkillSwarmJobCoverage";
+import { isCskillQuery, buildCskillScript } from "./ContactSkillCoverage";
+import { isSkillContactQuery, buildSkillContactScript } from "./SkillContactGapAdvisor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -601,6 +603,12 @@ export default function JarvisBrain() {
       } else if (isSklswrmQuery(q)) {
         answer = await buildSklswrmScript();
         window.dispatchEvent(new CustomEvent("jarvis:sklswrm-toggle"));
+      } else if (isCskillQuery(q)) {
+        answer = await buildCskillScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cskill-toggle"));
+      } else if (isSkillContactQuery(q)) {
+        answer = await buildSkillContactScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skillcontact-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
