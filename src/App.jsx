@@ -271,6 +271,7 @@ import LiveWorldTaskCorrelator from '@/components/cinematic/LiveWorldTaskCorrela
 import LiveWorldScenarioCorrelator from '@/components/cinematic/LiveWorldScenarioCorrelator';
 import LiveWorldSwarmCorrelator from '@/components/cinematic/LiveWorldSwarmCorrelator';
 import LiveWorldIntelProfileCorrelator from '@/components/cinematic/LiveWorldIntelProfileCorrelator';
+import LiveWorldContactCorrelator from '@/components/cinematic/LiveWorldContactCorrelator';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
@@ -2597,6 +2598,8 @@ function App() {
             <LiveWorldSwarmCorrelator />
             {/* F561 (overnight 2026-09-03): Live World × Intel Profile Correlator (LWINTEL) — /functions/getLiveIntel + /entities/IntelProfile; keyword cross-reference; WORLD-FLAGGED intel profiles (≥1 live event keyword-matches) vs DORMANT; coverage % tile; ALL/WORLD-FLAGGED/DORMANT filter tabs + search; click-to-expand event detail (SEISMIC/CRYPTO/FX kind badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-actor assessment + TTS; red badge on world-flagged count; ◈ LWINTEL button left:57360 bottom:8 zIndex:125; isLwintelQuery+buildLwintelScript wired in JarvisBrain; jarvis:lwintel-toggle event; 90-s auto-refresh; voice: "live world intel/lwintel/world intel profile/active threats/real world threat actor/world flagged profile/live threat actor/threat actor signal" */}
             <LiveWorldIntelProfileCorrelator />
+            {/* F562 (overnight 2026-09-03): Live World × Contact Correlator (LWCNT) — /functions/getLiveIntel + /entities/Contact; keyword cross-reference; WORLD-MENTIONED contacts (≥1 live event keyword-matches) vs UNMENTIONED; coverage % tile; ALL/WORLD-MENTIONED/UNMENTIONED filter tabs + search; click-to-expand event detail (SEISMIC/CRYPTO/FX kind badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational contact assessment + TTS; amber badge on world-mentioned count; ◈ LWCNT button left:58220 bottom:8 zIndex:126; isLwcntQuery+buildLwcntScript wired in JarvisBrain; jarvis:lwcnt-toggle event; 90-s auto-refresh; voice: "live world contact/lwcnt/world contact/contact signal/world-mentioned contact" */}
+            <LiveWorldContactCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
