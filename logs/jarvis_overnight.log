@@ -146,3 +146,4 @@
 2026-09-02 F553 RULSWRM: DecisionRulesSwarmNexus.jsx created; /v1/rules + /entities/SwarmJob cross-ref; ENFORCED/UNAUTOMATED filter; ASSESS via /v1/jarvis/agent/chat + TTS; wired JarvisBrain.ask() + App.jsx; vite build exit 0
 2026-09-03 F554 LWKNO LiveWorldKnowledgeNexus.jsx — /functions/getLiveIntel + /knowledge/ cross-ref; CONTEXTUALIZED/UNCONTEXTUALIZED event blind spots; isLwknoQuery+buildLwknoScript wired into JarvisBrain.ask(); mounted App.jsx; vite build exit 0
 2026-09-03T01:16:12Z F555 DSRSK+DSRISK dual voice wiring: imported isDsrskQuery/buildDsrskScript + isDsriskQuery/buildDsriskScript into JarvisBrain.jsx; both DatasetRisk* panels now respond to voice queries; vite build exit 0
+[2026-09-03] F556 IPOEV voice wiring: isIpoevQuery+buildIpoevScript imported into JarvisBrain.jsx; IntelProfileOpsEventCoverage.jsx now responds to "intel profile ops/ipoev/threat actor ops/uncovered threats" intents; vite build exit 0.
