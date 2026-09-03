@@ -105,6 +105,7 @@ import OpsEventHeatmap from '@/components/cinematic/OpsEventHeatmap';
 import SkillDatasetCoverageAdvisor from '@/components/cinematic/SkillDatasetCoverageAdvisor';
 import DecisionRulesScenarioNexus from '@/components/cinematic/DecisionRulesScenarioNexus';
 import DecisionRulesSwarmNexus from '@/components/cinematic/DecisionRulesSwarmNexus';
+import DecisionRulesIntelProfileNexus from '@/components/cinematic/DecisionRulesIntelProfileNexus';
 import LiveWorldKnowledgeNexus from '@/components/cinematic/LiveWorldKnowledgeNexus';
 import IntelFusionBoard from '@/components/cinematic/IntelFusionBoard';
 import ContactInvestigationLinker from '@/components/cinematic/ContactInvestigationLinker';
@@ -2599,6 +2600,8 @@ function App() {
             <DecisionRulesScenarioNexus />
             {/* F553 (overnight 2026-09-02): Decision Rules × SwarmJob Nexus (RULSWRM) — /v1/rules + /entities/SwarmJob; keyword cross-reference; ENFORCED rules (≥1 swarm job matches) vs UNAUTOMATED; coverage % tile; ALL/ENFORCED/UNAUTOMATED filter tabs; click-to-expand matched jobs; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unautomated count; ◈ RULSWRM button; 2-min auto-refresh */}
             <DecisionRulesSwarmNexus />
+            {/* F574 (overnight 2026-09-03): Decision Rules × IntelProfile Nexus (RULSINTEL) — /v1/rules + /entities/IntelProfile; keyword cross-reference; MONITORED profiles (≥1 rule keyword-matches) vs UNMONITORED; coverage % tile; ALL/MONITORED/UNMONITORED filter tabs + search; click-to-expand matched rules with severity badge + target + condition; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on monitored count; ◈ RULSINTEL button left:65100 bottom:8 zIndex:134; isRulsintelQuery+buildRulsintelScript wired in JarvisBrain; jarvis:rulsintel-toggle event; 2-min auto-refresh; voice: "rules intel/intel rules/rulsintel/which intel profiles trigger rules/watchtower intel coverage/intel under watch/profile watchtower" */}
+            <DecisionRulesIntelProfileNexus />
             <LiveWorldKnowledgeNexus />
             {/* F557 (overnight 2026-09-03): Entity Pulse Dashboard (EPULSE) — /entities/{Task,Contact,RiskSignal,IntelProfile,SwarmJob,Investment}; parallel fetch every 30 s; animated count tiles + delta from localStorage; total badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ EPULSE button left:53920 bottom:8 zIndex:121; isEpulseQuery+buildEpulseScript wired in JarvisBrain; jarvis:epulse-toggle event; voice: "entity pulse/pulse dashboard/epulse/live counts/all entities/entity counts/entity monitor" */}
             <EntityPulseDashboard />
