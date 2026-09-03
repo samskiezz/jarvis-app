@@ -270,6 +270,7 @@ import EntityPulseDashboard from '@/components/cinematic/EntityPulseDashboard';
 import LiveWorldTaskCorrelator from '@/components/cinematic/LiveWorldTaskCorrelator';
 import LiveWorldScenarioCorrelator from '@/components/cinematic/LiveWorldScenarioCorrelator';
 import LiveWorldSwarmCorrelator from '@/components/cinematic/LiveWorldSwarmCorrelator';
+import LiveWorldIntelProfileCorrelator from '@/components/cinematic/LiveWorldIntelProfileCorrelator';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
@@ -2594,6 +2595,8 @@ function App() {
             <LiveWorldScenarioCorrelator />
             {/* F560 (overnight 2026-09-03): Live World × SwarmJob Correlator (LWSWRM) — /functions/getLiveIntel + /entities/SwarmJob; keyword cross-reference; WORLD-SIGNALED vs UNRELATED swarm jobs; coverage % tile; ALL/WORLD-SIGNALED/UNRELATED filter tabs + search; click-to-expand event detail (SEISMIC/CRYPTO/FX badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unrelated count; ◈ LWSWRM button left:56500 bottom:8 zIndex:124; isLwswrmQuery+buildLwswrmScript wired in JarvisBrain; jarvis:lwswrm-toggle event; 90-s auto-refresh; voice: "live world swarm/lwswrm/world swarm/swarm trigger/real world swarm" */}
             <LiveWorldSwarmCorrelator />
+            {/* F561 (overnight 2026-09-03): Live World × Intel Profile Correlator (LWINTEL) — /functions/getLiveIntel + /entities/IntelProfile; keyword cross-reference; WORLD-FLAGGED intel profiles (≥1 live event keyword-matches) vs DORMANT; coverage % tile; ALL/WORLD-FLAGGED/DORMANT filter tabs + search; click-to-expand event detail (SEISMIC/CRYPTO/FX kind badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-actor assessment + TTS; red badge on world-flagged count; ◈ LWINTEL button left:57360 bottom:8 zIndex:125; isLwintelQuery+buildLwintelScript wired in JarvisBrain; jarvis:lwintel-toggle event; 90-s auto-refresh; voice: "live world intel/lwintel/world intel profile/active threats/real world threat actor/world flagged profile/live threat actor/threat actor signal" */}
+            <LiveWorldIntelProfileCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
