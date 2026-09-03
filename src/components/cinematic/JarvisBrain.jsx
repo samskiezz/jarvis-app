@@ -131,6 +131,7 @@ import { isLwscnQuery, buildLwscnScript } from "./LiveWorldScenarioCorrelator";
 import { isLwswrmQuery, buildLwswrmScript } from "./LiveWorldSwarmCorrelator";
 import { isLwintelQuery, buildLwintelScript } from "./LiveWorldIntelProfileCorrelator";
 import { isLwcntQuery, buildLwcntScript } from "./LiveWorldContactCorrelator";
+import { isLwinvQuery, buildLwinvScript } from "./LiveWorldInvestmentCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -562,6 +563,9 @@ export default function JarvisBrain() {
       } else if (isLwcntQuery(q)) {
         answer = await buildLwcntScript();
         window.dispatchEvent(new CustomEvent("jarvis:lwcnt-toggle"));
+      } else if (isLwinvQuery(q)) {
+        answer = await buildLwinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwinv-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));
