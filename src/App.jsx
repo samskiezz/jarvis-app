@@ -275,6 +275,7 @@ import LiveWorldContactCorrelator from '@/components/cinematic/LiveWorldContactC
 import LiveWorldInvestmentCorrelator from '@/components/cinematic/LiveWorldInvestmentCorrelator';
 import LiveWorldDecisionRulesCorrelator from '@/components/cinematic/LiveWorldDecisionRulesCorrelator';
 import LiveWorldReportCorrelator from '@/components/cinematic/LiveWorldReportCorrelator';
+import LiveWorldDatasetCorrelator from '@/components/cinematic/LiveWorldDatasetCorrelator';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
@@ -2608,6 +2609,8 @@ function App() {
             <LiveWorldDecisionRulesCorrelator />
             {/* F565 (overnight 2026-09-03): Live World × Report Correlator (LWRPT) — /functions/getLiveIntel + /v1/reports; keyword cross-reference; COVERED reports (≥1 live event keyword-matches) vs UNMATCHED; coverage % tile; ALL/COVERED/UNMATCHED filter tabs + search; click-to-expand event detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on covered count; ◈ LWRPT button left:60800 bottom:8 zIndex:129 */}
             <LiveWorldReportCorrelator />
+            {/* F566 (overnight 2026-09-03): Live World × Dataset Correlator (LWDSET) — /functions/getLiveIntel + /v1/datasets; keyword cross-reference; WORLD-SIGNALED datasets (≥1 live event keyword-matches) vs DATA-DARK; coverage % tile; ALL/WORLD-SIGNALED/DATA-DARK filter tabs + search; click-to-expand event detail (SEISMIC/CRYPTO/FX badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on dark count; ◈ LWDSET button left:61660 bottom:8 zIndex:130; isLwdsetQuery+buildLwdsetScript wired in JarvisBrain; jarvis:lwdset-toggle event; 90-s auto-refresh; voice: "live world dataset/lwdset/world dataset/dataset signal/real world data" */}
+            <LiveWorldDatasetCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

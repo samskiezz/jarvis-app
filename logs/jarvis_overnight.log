@@ -156,3 +156,4 @@
 2026-09-03 F563 LWINV: LiveWorldInvestmentCorrelator.jsx — /functions/getLiveIntel × /entities/Investment; WORLD-SIGNALED/QUIET tabs; ASSESS→/v1/jarvis/agent/chat+TTS; isLwinvQuery+buildLwinvScript wired JarvisBrain; mounted App.jsx; vite build exit 0.
 [2026-09-03] F564 LiveWorldDecisionRulesCorrelator (LWRULS): /functions/getLiveIntel + /v1/rules cross-ref; severity-triggered rules panel; JarvisBrain wired; vite build exit 0.
 [2026-09-03] F565 Live World × Report Correlator (LWRPT) — LiveWorldReportCorrelator.jsx created; /functions/getLiveIntel + /v1/reports cross-reference; isLwrptQuery+buildLwrptScript wired into JarvisBrain; mounted App.jsx; vite build exit 0.
+2026-09-03 F566 LiveWorldDatasetCorrelator (LWDSET): /functions/getLiveIntel + /v1/datasets cross-ref; WORLD-SIGNALED vs DATA-DARK datasets; coverage tile; filter tabs; ASSESS→agent/chat+TTS; ◈ LWDSET btn left:61660 zIndex:130; wired JarvisBrain; mounted App.jsx; vite build exit 0.
