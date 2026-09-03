@@ -2,11 +2,11 @@
 .venv/
 venv/
 
-# Logs (runtime/temp logs excluded; overnight build audit trail kept)
-/logs/*.log
-!/logs/jarvis_overnight.log
+# Logs — keep the overnight run log; ignore everything else
+/logs/*
 *.log
 npm-debug.log*
+!/logs/jarvis_overnight.log
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
