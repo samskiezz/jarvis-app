@@ -269,6 +269,7 @@ import IntelProfileOpsEventCoverage from '@/components/cinematic/IntelProfileOps
 import EntityPulseDashboard from '@/components/cinematic/EntityPulseDashboard';
 import LiveWorldTaskCorrelator from '@/components/cinematic/LiveWorldTaskCorrelator';
 import LiveWorldScenarioCorrelator from '@/components/cinematic/LiveWorldScenarioCorrelator';
+import LiveWorldSwarmCorrelator from '@/components/cinematic/LiveWorldSwarmCorrelator';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
@@ -2591,6 +2592,8 @@ function App() {
             <LiveWorldTaskCorrelator />
             {/* F559: Live World × Scenario Correlator (LWSCN) — /functions/getLiveIntel + /v1/scenario/list; TRIGGERED/UNTRIGGERED scenarios; ◈ LWSCN btn left:55640 zIndex:123 */}
             <LiveWorldScenarioCorrelator />
+            {/* F560 (overnight 2026-09-03): Live World × SwarmJob Correlator (LWSWRM) — /functions/getLiveIntel + /entities/SwarmJob; keyword cross-reference; WORLD-SIGNALED vs UNRELATED swarm jobs; coverage % tile; ALL/WORLD-SIGNALED/UNRELATED filter tabs + search; click-to-expand event detail (SEISMIC/CRYPTO/FX badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unrelated count; ◈ LWSWRM button left:56500 bottom:8 zIndex:124; isLwswrmQuery+buildLwswrmScript wired in JarvisBrain; jarvis:lwswrm-toggle event; 90-s auto-refresh; voice: "live world swarm/lwswrm/world swarm/swarm trigger/real world swarm" */}
+            <LiveWorldSwarmCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
