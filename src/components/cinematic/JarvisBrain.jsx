@@ -125,6 +125,7 @@ import { isLwknoQuery, buildLwknoScript } from "./LiveWorldKnowledgeNexus";
 import { isDsrskQuery, buildDsrskScript } from "./DatasetRiskAnalyzer";
 import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
 import { isIpoevQuery, buildIpoevScript } from "./IntelProfileOpsEventCoverage";
+import { isEpulseQuery, buildEpulseScript } from "./EntityPulseDashboard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -538,6 +539,9 @@ export default function JarvisBrain() {
       } else if (isIpoevQuery(q)) {
         answer = await buildIpoevScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipoev-toggle"));
+      } else if (isEpulseQuery(q)) {
+        answer = await buildEpulseScript();
+        window.dispatchEvent(new CustomEvent("jarvis:epulse-toggle"));
       } else if (isIpscenQuery(q)) {
         answer = await buildIpscenScript();
         window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));

@@ -266,6 +266,7 @@ import GraphCommunityIntelProfileCoverage from '@/components/cinematic/GraphComm
 import KnowledgeLiveIntelCoverage from '@/components/cinematic/KnowledgeLiveIntelCoverage';
 import GraphCommunityDatasetCoverage from '@/components/cinematic/GraphCommunityDatasetCoverage';
 import IntelProfileOpsEventCoverage from '@/components/cinematic/IntelProfileOpsEventCoverage';
+import EntityPulseDashboard from '@/components/cinematic/EntityPulseDashboard';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
@@ -2582,6 +2583,8 @@ function App() {
             {/* F553 (overnight 2026-09-02): Decision Rules × SwarmJob Nexus (RULSWRM) — /v1/rules + /entities/SwarmJob; keyword cross-reference; ENFORCED rules (≥1 swarm job matches) vs UNAUTOMATED; coverage % tile; ALL/ENFORCED/UNAUTOMATED filter tabs; click-to-expand matched jobs; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unautomated count; ◈ RULSWRM button; 2-min auto-refresh */}
             <DecisionRulesSwarmNexus />
             <LiveWorldKnowledgeNexus />
+            {/* F557 (overnight 2026-09-03): Entity Pulse Dashboard (EPULSE) — /entities/{Task,Contact,RiskSignal,IntelProfile,SwarmJob,Investment}; parallel fetch every 30 s; animated count tiles + delta from localStorage; total badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ EPULSE button left:53920 bottom:8 zIndex:121; isEpulseQuery+buildEpulseScript wired in JarvisBrain; jarvis:epulse-toggle event; voice: "entity pulse/pulse dashboard/epulse/live counts/all entities/entity counts/entity monitor" */}
+            <EntityPulseDashboard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
