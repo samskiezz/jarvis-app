@@ -268,6 +268,7 @@ import GraphCommunityDatasetCoverage from '@/components/cinematic/GraphCommunity
 import IntelProfileOpsEventCoverage from '@/components/cinematic/IntelProfileOpsEventCoverage';
 import EntityPulseDashboard from '@/components/cinematic/EntityPulseDashboard';
 import LiveWorldTaskCorrelator from '@/components/cinematic/LiveWorldTaskCorrelator';
+import LiveWorldScenarioCorrelator from '@/components/cinematic/LiveWorldScenarioCorrelator';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
@@ -2588,6 +2589,8 @@ function App() {
             <EntityPulseDashboard />
             {/* F558 (overnight 2026-09-03): Live World × Task Correlator (LWTASK) — /functions/getLiveIntel + /entities/Task; keyword cross-reference; WORLD-SIGNALED vs UNRELATED tasks; coverage % tile; ALL/WORLD-SIGNALED/UNRELATED filter tabs + search; click-to-expand event detail (SEISMIC/CRYPTO/FX kind badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unrelated count; ◈ LWTASK button left:54780 bottom:8 zIndex:122; isLwtaskQuery+buildLwtaskScript wired in JarvisBrain; jarvis:lwtask-toggle event; 90-s auto-refresh; voice: "live world task/lwtask/world task/world-signaled tasks/task context/real world task" */}
             <LiveWorldTaskCorrelator />
+            {/* F559: Live World × Scenario Correlator (LWSCN) — /functions/getLiveIntel + /v1/scenario/list; TRIGGERED/UNTRIGGERED scenarios; ◈ LWSCN btn left:55640 zIndex:123 */}
+            <LiveWorldScenarioCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

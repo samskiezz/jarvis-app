@@ -149,3 +149,4 @@
 [2026-09-03] F556 IPOEV voice wiring: isIpoevQuery+buildIpoevScript imported into JarvisBrain.jsx; IntelProfileOpsEventCoverage.jsx now responds to "intel profile ops/ipoev/threat actor ops/uncovered threats" intents; vite build exit 0.
 [2026-09-03] F557 EntityPulseDashboard (EPULSE) — parallel-poll all 6 entity endpoints every 30 s; animated count tiles + localStorage delta tracking; ASSESS → agent/chat + TTS; ◈ EPULSE btn; vite build exit 0.
 2026-09-03 F558 LiveWorldTaskCorrelator (LWTASK): /functions/getLiveIntel + /entities/Task cross-ref; WORLD-SIGNALED vs UNRELATED tasks; ◈ LWTASK btn; isLwtaskQuery+buildLwtaskScript → JarvisBrain; jarvis:lwtask-toggle → App.jsx; vite build exit 0.
+2026-09-03 F559 LiveWorldScenarioCorrelator (LWSCN): /functions/getLiveIntel + /v1/scenario/list cross-ref; TRIGGERED vs UNTRIGGERED scenarios; ◈ LWSCN btn left:55640 zIndex:123; isLwscnQuery+buildLwscnScript → JarvisBrain; jarvis:lwscn-toggle → App.jsx; vite build exit 0.
