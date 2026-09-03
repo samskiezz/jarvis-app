@@ -267,6 +267,7 @@ import KnowledgeLiveIntelCoverage from '@/components/cinematic/KnowledgeLiveInte
 import GraphCommunityDatasetCoverage from '@/components/cinematic/GraphCommunityDatasetCoverage';
 import IntelProfileOpsEventCoverage from '@/components/cinematic/IntelProfileOpsEventCoverage';
 import EntityPulseDashboard from '@/components/cinematic/EntityPulseDashboard';
+import LiveWorldTaskCorrelator from '@/components/cinematic/LiveWorldTaskCorrelator';
 import ContactInvestmentCoverage from '@/components/cinematic/ContactInvestmentCoverage';
 import GraphNodeIntelCoverage from '@/components/cinematic/GraphNodeIntelCoverage';
 import SceneIntelProfileCoverage from '@/components/cinematic/SceneIntelProfileCoverage';
@@ -2585,6 +2586,8 @@ function App() {
             <LiveWorldKnowledgeNexus />
             {/* F557 (overnight 2026-09-03): Entity Pulse Dashboard (EPULSE) — /entities/{Task,Contact,RiskSignal,IntelProfile,SwarmJob,Investment}; parallel fetch every 30 s; animated count tiles + delta from localStorage; total badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ EPULSE button left:53920 bottom:8 zIndex:121; isEpulseQuery+buildEpulseScript wired in JarvisBrain; jarvis:epulse-toggle event; voice: "entity pulse/pulse dashboard/epulse/live counts/all entities/entity counts/entity monitor" */}
             <EntityPulseDashboard />
+            {/* F558 (overnight 2026-09-03): Live World × Task Correlator (LWTASK) — /functions/getLiveIntel + /entities/Task; keyword cross-reference; WORLD-SIGNALED vs UNRELATED tasks; coverage % tile; ALL/WORLD-SIGNALED/UNRELATED filter tabs + search; click-to-expand event detail (SEISMIC/CRYPTO/FX kind badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unrelated count; ◈ LWTASK button left:54780 bottom:8 zIndex:122; isLwtaskQuery+buildLwtaskScript wired in JarvisBrain; jarvis:lwtask-toggle event; 90-s auto-refresh; voice: "live world task/lwtask/world task/world-signaled tasks/task context/real world task" */}
+            <LiveWorldTaskCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

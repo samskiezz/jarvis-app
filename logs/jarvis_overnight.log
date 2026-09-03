@@ -148,3 +148,4 @@
 2026-09-03T01:16:12Z F555 DSRSK+DSRISK dual voice wiring: imported isDsrskQuery/buildDsrskScript + isDsriskQuery/buildDsriskScript into JarvisBrain.jsx; both DatasetRisk* panels now respond to voice queries; vite build exit 0
 [2026-09-03] F556 IPOEV voice wiring: isIpoevQuery+buildIpoevScript imported into JarvisBrain.jsx; IntelProfileOpsEventCoverage.jsx now responds to "intel profile ops/ipoev/threat actor ops/uncovered threats" intents; vite build exit 0.
 [2026-09-03] F557 EntityPulseDashboard (EPULSE) — parallel-poll all 6 entity endpoints every 30 s; animated count tiles + localStorage delta tracking; ASSESS → agent/chat + TTS; ◈ EPULSE btn; vite build exit 0.
+2026-09-03 F558 LiveWorldTaskCorrelator (LWTASK): /functions/getLiveIntel + /entities/Task cross-ref; WORLD-SIGNALED vs UNRELATED tasks; ◈ LWTASK btn; isLwtaskQuery+buildLwtaskScript → JarvisBrain; jarvis:lwtask-toggle → App.jsx; vite build exit 0.
