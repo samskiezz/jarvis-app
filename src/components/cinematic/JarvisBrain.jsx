@@ -5,6 +5,7 @@ import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
 import { isRiskQuery, buildRiskScript } from "./RiskBoard";
+import { isImpactMatrixQuery, buildImpactMatrixScript } from "./ScenarioImpactMatrix";
 import { isTaskQuery, buildTaskScript } from "./TaskBoard";
 import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
 import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
@@ -227,6 +228,9 @@ export default function JarvisBrain() {
         answer = await buildStatusScript();
       } else if (isMarketsQuery(q)) {
         answer = await buildMarketsScript();
+      } else if (isImpactMatrixQuery(q)) {
+        answer = await buildImpactMatrixScript();
+        window.dispatchEvent(new CustomEvent("jarvis:matrix-toggle"));
       } else if (isRiskQuery(q)) {
         answer = await buildRiskScript();
       } else if (isTaskQuery(q)) {

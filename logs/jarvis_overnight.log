@@ -157,3 +157,4 @@
 [2026-09-03] F564 LiveWorldDecisionRulesCorrelator (LWRULS): /functions/getLiveIntel + /v1/rules cross-ref; severity-triggered rules panel; JarvisBrain wired; vite build exit 0.
 [2026-09-03] F565 Live World × Report Correlator (LWRPT) — LiveWorldReportCorrelator.jsx created; /functions/getLiveIntel + /v1/reports cross-reference; isLwrptQuery+buildLwrptScript wired into JarvisBrain; mounted App.jsx; vite build exit 0.
 2026-09-03 F566 LiveWorldDatasetCorrelator (LWDSET): /functions/getLiveIntel + /v1/datasets cross-ref; WORLD-SIGNALED vs DATA-DARK datasets; coverage tile; filter tabs; ASSESS→agent/chat+TTS; ◈ LWDSET btn left:61660 zIndex:130; wired JarvisBrain; mounted App.jsx; vite build exit 0.
+2026-09-03 F31 ScenarioImpactMatrix: /v1/scenario/list → 3×3 impact×probability risk grid; isImpactMatrixQuery+buildImpactMatrixScript wired into JarvisBrain.ask() before isRiskQuery; mounted App.jsx; vite build exit 0.

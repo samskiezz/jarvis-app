@@ -32,6 +32,7 @@ import BrainGrowthSparkline from '@/components/cinematic/BrainGrowthSparkline';
 import MultiVoiceToggle from '@/components/cinematic/MultiVoiceToggle';
 import ServiceDiagnostics from '@/components/cinematic/ServiceDiagnostics';
 import ScenarioLauncher from '@/components/cinematic/ScenarioLauncher';
+import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
 import DocumentSearch from '@/components/cinematic/DocumentSearch';
 import OpsEventStream from '@/components/cinematic/OpsEventStream';
 import GraphNetworkExplorer from '@/components/cinematic/GraphNetworkExplorer';
@@ -898,6 +899,8 @@ function App() {
             <ServiceDiagnostics />
             {/* F37: scenario launcher — SIM button bottom strip; /v1/scenario/list + POST /v1/scenario/run; filter + run + outcome; "JARVIS, scenarios" voice trigger */}
             <ScenarioLauncher />
+            {/* F31/new: scenario impact matrix — ◫ MATRIX toggle; /v1/scenario/list → 3×3 impact×probability risk grid; click → /v1/jarvis/agent/chat AI brief; "JARVIS, impact matrix/risk matrix" voice trigger */}
+            <ScenarioImpactMatrix />
             {/* F38: document search — ◈ DOCS button; /v1/reports + /knowledge/; filter + click speaks JARVIS summary via TTS; "JARVIS, documents" voice trigger */}
             <DocumentSearch />
             {/* F43: ops event stream — ⬡ OPS button; /v1/ops/events 15-s poll; severity-filtered cards; CRITICAL events spoken via TTS; "JARVIS, ops" voice trigger */}
