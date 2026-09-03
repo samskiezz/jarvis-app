@@ -145,6 +145,7 @@ import { isSkillContactQuery, buildSkillContactScript } from "./SkillContactGapA
 import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
 import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
 import { isRulsintelQuery, buildRulsintelScript } from "./DecisionRulesIntelProfileNexus";
+import { isRulrptQuery, buildRulrptScript } from "./DecisionRulesReportsNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -621,6 +622,9 @@ export default function JarvisBrain() {
       } else if (isRulsintelQuery(q)) {
         answer = await buildRulsintelScript();
         window.dispatchEvent(new CustomEvent("jarvis:rulsintel-toggle"));
+      } else if (isRulrptQuery(q)) {
+        answer = await buildRulrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulrpt-toggle"));
       } else if (isPathQuery(q)) {
         answer = await buildPathScript(q);
       } else if (isAmbientQuery(q)) {
