@@ -168,6 +168,7 @@ import { isGcoeQuery, buildGcoeScript } from "./GraphCentralityOpsEvents";
 import { isKnorskQuery, buildKnorskScript } from "./KnowledgeRiskNexus";
 import { isReminvQuery, buildReminvScript } from "./RemindersInvestigationNexus";
 import { isRptinvQuery, buildRptinvScript } from "./ReportsInvestigationNexus";
+import { isRemtaskQuery, buildRemtaskScript } from "./RemindersTaskNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -704,6 +705,9 @@ export default function JarvisBrain() {
       } else if (isRptinvQuery(q)) {
         answer = await buildRptinvScript();
         window.dispatchEvent(new CustomEvent("jarvis:rptinv-toggle"));
+      } else if (isRemtaskQuery(q)) {
+        answer = await buildRemtaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remtask-toggle"));
       } else if (isGrrulsQuery(q)) {
         answer = await buildGrrulsScript();
         window.dispatchEvent(new CustomEvent("jarvis:grruls-toggle"));
