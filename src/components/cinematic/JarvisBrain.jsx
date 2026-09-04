@@ -150,6 +150,7 @@ import { isSceneAnchorMonitorQuery, buildSceneAnchorMonitorScript } from "./AllS
 import { isDpdigQuery, buildDpdigScript } from "./DailyPriorityDigest";
 import { isGrknoQuery, buildGrknoScript } from "./GraphKnowledgeNexus";
 import { isGrscnQuery, buildGrscnScript } from "./GraphScenarioCoverage";
+import { isGtmxQuery, buildGtmxScript } from "./GraphTimeMachinePanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -638,6 +639,9 @@ export default function JarvisBrain() {
       } else if (isGrscnQuery(q)) {
         answer = await buildGrscnScript();
         window.dispatchEvent(new CustomEvent("jarvis:grscn-toggle"));
+      } else if (isGtmxQuery(q)) {
+        answer = await buildGtmxScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gtmx-toggle"));
       } else if (isSceneAnchorMonitorQuery(q)) {
         answer = await buildSceneAnchorMonitorScript();
         window.dispatchEvent(new CustomEvent("jarvis:sacm-toggle"));

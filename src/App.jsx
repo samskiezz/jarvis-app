@@ -852,6 +852,7 @@ import DecisionRulesContactNexus from '@/components/cinematic/DecisionRulesConta
 import DailyPriorityDigest from '@/components/cinematic/DailyPriorityDigest';
 import GraphKnowledgeNexus from '@/components/cinematic/GraphKnowledgeNexus';
 import GraphScenarioCoverage from '@/components/cinematic/GraphScenarioCoverage';
+import GraphTimeMachinePanel from '@/components/cinematic/GraphTimeMachinePanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2639,6 +2640,8 @@ function App() {
             <GraphKnowledgeNexus />
             {/* F579 (overnight 2026-09-04): Graph × Scenario Coverage (GRSCN) — /v1/graph/centrality + /v1/scenario/list; keyword cross-reference; MODELED nodes (≥1 scenario matches) vs UNMODELED; coverage % tile; ALL/MODELED/UNMODELED filter tabs + search; click-to-expand matched scenarios; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-scenario readiness brief + TTS; amber badge on unmodeled count; ◈ GRSCN button left:68540 bottom:8 zIndex:138; isGrscnQuery+buildGrscnScript wired into JarvisBrain.ask(); jarvis:grscn-toggle event; 90-s auto-refresh */}
             <GraphScenarioCoverage />
+            {/* F580 (overnight 2026-09-04): Graph Time Machine Panel voice wiring (GTMX) — /v1/graph-time/at + /v1/graph-time/playback + /v1/jarvis/agent/chat; point-in-time graph snapshot (AT tab) + growth sparkline (GROWTH tab); isGtmxQuery+buildGtmxScript wired into JarvisBrain.ask(); jarvis:gtmx-toggle event; voice: "graph time machine/graph snapshot/graph at/temporal graph/gtmx/historical graph/graph as of/how big was the graph/graph in the past/graph time/past graph"; ◷ GTMX button left:652800 bottom:8 zIndex:237 */}
+            <GraphTimeMachinePanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
