@@ -862,6 +862,7 @@ import GraphTaskNexus from '@/components/cinematic/GraphTaskNexus';
 import GraphDatasetNexus from '@/components/cinematic/GraphDatasetNexus';
 import GraphRemindersNexus from '@/components/cinematic/GraphRemindersNexus';
 import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
+import KnowledgeRiskNexus from '@/components/cinematic/KnowledgeRiskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2667,6 +2668,8 @@ function App() {
             <GraphRemindersNexus />
             {/* F586 (overnight 2026-09-04): Swarm × Task Advisor (SWTASK) — parallel-fetches /entities/Task + /entities/SwarmJob; keyword-correlates active tasks against running/queued swarm jobs → AUTOMATABLE vs MANUAL; stat tiles (tasks/jobs/automatable/manual); ALL/AUTOMATABLE/MANUAL filter tabs; ▶ ADVISE → /v1/jarvis/agent/chat AI recommendation + TTS; isSwarmTaskQuery+buildSwarmTaskScript wired into JarvisBrain.ask(); jarvis:swarmtask-toggle event; 60-s auto-refresh; ◈ SWTASK button left:6316 bottom:8 zIndex:65; voice: "swarm task/task automation/automate tasks/task advisor/swtask/automation advisor/which tasks/assign tasks" */}
             <SwarmTaskAdvisor />
+            {/* F595 (overnight 2026-09-04): Knowledge × RiskSignal Nexus (KNORSK) — /knowledge/ + /entities/RiskSignal; keyword cross-reference; BACKED risks (≥1 article keyword-matches) vs BLIND (no knowledge backing); coverage % tile; ALL/BACKED/BLIND filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on blind count; ◈ KNORSK button left:77140 bottom:8 zIndex:148; isKnorskQuery+buildKnorskScript wired into JarvisBrain.ask(); jarvis:knorsk-toggle event; 90-s auto-refresh; voice: "knowledge risk/risk knowledge/knorsk/which risks have knowledge/knowledge-backed risks/risk knowledge gap/risk articles/knowledge signal" */}
+            <KnowledgeRiskNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -186,3 +186,4 @@
 [2026-09-04] F592 GCAS voice wiring: imported isGcasQuery+buildGcasScript into JarvisBrain.jsx; /v1/graph/centrality+/v1/aip/skill; jarvis:gcas-toggle; vite build exit 0.
 [2026-09-04] F593 GRREM: GraphRemindersNexus.jsx created; /v1/graph/centrality + /reminders/list cross-ref; REMINDED/UNREMINDED tabs; ASSESS → /v1/jarvis/agent/chat + TTS; isGrremQuery+buildGrremScript wired JarvisBrain.jsx; mounted App.jsx; vite build exit 0.
 [2026-09-04] F594 GCOE voice wiring: isGcoeQuery+buildGcoeScript imported into JarvisBrain.jsx; GraphCentralityOpsEvents.jsx (pre-existing, already mounted) now responds to 'JARVIS, graph ops/gcoe/monitored nodes/graph ops events'; vite build exit 0.
+[2026-09-04] F595 Knowledge × RiskSignal Nexus (KNORSK) — KnowledgeRiskNexus.jsx created; /knowledge/ × /entities/RiskSignal cross-ref; BACKED/BLIND tabs; ASSESS → /v1/jarvis/agent/chat + TTS; isKnorskQuery+buildKnorskScript wired JarvisBrain.jsx; mounted App.jsx; vite build exit 0.
