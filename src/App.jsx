@@ -867,6 +867,7 @@ import RemindersInvestigationNexus from '@/components/cinematic/RemindersInvesti
 import ReportsInvestigationNexus from '@/components/cinematic/ReportsInvestigationNexus';
 import RemindersTaskNexus from '@/components/cinematic/RemindersTaskNexus';
 import RemindersRiskSignalNexus from '@/components/cinematic/RemindersRiskSignalNexus';
+import RemindersContactNexus from '@/components/cinematic/RemindersContactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2681,6 +2682,7 @@ function App() {
             <RemindersTaskNexus />
             {/* F599 (overnight 2026-09-04): Reminders × Risk Signal Nexus (REMRSK) — /reminders/list + /entities/RiskSignal; keyword cross-reference; RISK-BACKED vs UNLINKED reminders; coverage % tile; ALL/RISK-BACKED/UNLINKED filter tabs + search; click-to-expand matched signals with severity badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unlinked count; ◈ REMRSK button left:80580 bottom:8 zIndex:152; isRemrskQuery+buildRemrskScript wired into JarvisBrain.ask(); jarvis:remrsk-toggle event; 90-s auto-refresh; voice: "reminders risk/risk reminders/remrsk/risk-backed reminders/unlinked reminders/floating risk notes" */}
             <RemindersRiskSignalNexus />
+            <RemindersContactNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
