@@ -177,3 +177,4 @@
 2026-09-04T06:20:56Z F583 GRRULS: GraphDecisionRulesNexus.jsx created; /v1/graph/centrality + /v1/rules cross-ref; MONITORED/UNMONITORED nodes; wired JarvisBrain.jsx + App.jsx; vite build exit 0
 2026-09-04 | F584 | DONE | Graph × SwarmJob Coverage (GRSWRM) — GraphSwarmCoverage.jsx created; /v1/graph/centrality + /entities/SwarmJob cross-reference; AUTOMATED/UNAUTOMATED tabs; ASSESS → /v1/jarvis/agent/chat + TTS; isGrswrmQuery+buildGrswrmScript wired in JarvisBrain.jsx; mounted App.jsx; vite build exit 0.
 [2026-09-04] F585 Graph × Contact Nexus (GRCNT) — /v1/graph/centrality + /entities/Contact; ASSOCIATED vs UNLINKED nodes; GraphContactNexus.jsx created + mounted App.jsx + JarvisBrain.jsx wired; vite build exit 0.
+2026-09-04 overnight: F586 SwarmTaskAdvisor mounted in App.jsx + wired in JarvisBrain.jsx — /entities/Task + /entities/SwarmJob → AUTOMATABLE vs MANUAL task panel + voice intent; build EXIT:0
