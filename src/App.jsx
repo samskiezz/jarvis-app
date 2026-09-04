@@ -863,6 +863,7 @@ import GraphDatasetNexus from '@/components/cinematic/GraphDatasetNexus';
 import GraphRemindersNexus from '@/components/cinematic/GraphRemindersNexus';
 import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
 import KnowledgeRiskNexus from '@/components/cinematic/KnowledgeRiskNexus';
+import RemindersInvestigationNexus from '@/components/cinematic/RemindersInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2670,6 +2671,8 @@ function App() {
             <SwarmTaskAdvisor />
             {/* F595 (overnight 2026-09-04): Knowledge × RiskSignal Nexus (KNORSK) — /knowledge/ + /entities/RiskSignal; keyword cross-reference; BACKED risks (≥1 article keyword-matches) vs BLIND (no knowledge backing); coverage % tile; ALL/BACKED/BLIND filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on blind count; ◈ KNORSK button left:77140 bottom:8 zIndex:148; isKnorskQuery+buildKnorskScript wired into JarvisBrain.ask(); jarvis:knorsk-toggle event; 90-s auto-refresh; voice: "knowledge risk/risk knowledge/knorsk/which risks have knowledge/knowledge-backed risks/risk knowledge gap/risk articles/knowledge signal" */}
             <KnowledgeRiskNexus />
+            {/* F596 (overnight 2026-09-04): Reminders × Investigation Nexus (REMINV) — /reminders/list + /v1/investigations; keyword cross-reference; CASE-LINKED reminders vs ORPHANED; coverage % tile; ALL/CASE-LINKED/ORPHANED filter tabs + search; click-to-expand matched investigation detail; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on orphaned count; ◈ REMINV button left:78000 bottom:8 zIndex:149; isReminvQuery+buildReminvScript wired into JarvisBrain.ask(); jarvis:reminv-toggle event; 90-s auto-refresh; voice: "reminders investigation/reminv/case reminders/orphaned reminders/reminder cases/linked reminders" */}
+            <RemindersInvestigationNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

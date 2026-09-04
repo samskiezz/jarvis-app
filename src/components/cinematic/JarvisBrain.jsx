@@ -166,6 +166,7 @@ import { isGcasQuery, buildGcasScript } from "./GraphCentralityAipSkillCoverage"
 import { isGrremQuery, buildGrremScript } from "./GraphRemindersNexus";
 import { isGcoeQuery, buildGcoeScript } from "./GraphCentralityOpsEvents";
 import { isKnorskQuery, buildKnorskScript } from "./KnowledgeRiskNexus";
+import { isReminvQuery, buildReminvScript } from "./RemindersInvestigationNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -696,6 +697,9 @@ export default function JarvisBrain() {
       } else if (isKnorskQuery(q)) {
         answer = await buildKnorskScript();
         window.dispatchEvent(new CustomEvent("jarvis:knorsk-toggle"));
+      } else if (isReminvQuery(q)) {
+        answer = await buildReminvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:reminv-toggle"));
       } else if (isGrrulsQuery(q)) {
         answer = await buildGrrulsScript();
         window.dispatchEvent(new CustomEvent("jarvis:grruls-toggle"));
