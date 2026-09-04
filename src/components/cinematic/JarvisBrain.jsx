@@ -159,6 +159,7 @@ import { isGrcntQuery, buildGrcntScript } from "./GraphContactNexus";
 import { isGrinvQuery, buildGrinvScript } from "./GraphInvestmentNexus";
 import { isGrtaskQuery, buildGrtaskScript } from "./GraphTaskNexus";
 import { isSwarmTaskQuery, buildSwarmTaskScript } from "./SwarmTaskAdvisor";
+import { isGnsrskQuery, buildGnsrskScript } from "./GraphNodeRiskSignalCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -668,6 +669,9 @@ export default function JarvisBrain() {
       } else if (isGrswrmQuery(q)) {
         answer = await buildGrswrmScript();
         window.dispatchEvent(new CustomEvent("jarvis:grswrm-toggle"));
+      } else if (isGnsrskQuery(q)) {
+        answer = await buildGnsrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gnsrsk-toggle"));
       } else if (isGrrulsQuery(q)) {
         answer = await buildGrrulsScript();
         window.dispatchEvent(new CustomEvent("jarvis:grruls-toggle"));
