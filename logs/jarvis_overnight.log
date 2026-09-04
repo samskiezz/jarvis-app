@@ -182,3 +182,4 @@
 2026-09-04 F588 GraphTaskNexus.jsx — /v1/graph/centrality × /entities/Task; TASKED/UNTASKED coverage; JarvisBrain isGrtaskQuery+buildGrtaskScript; jarvis:grtask-toggle; vite build exit 0
 [2026-09-04] F589 GNSRSK: GraphNodeRiskSignalCoverage voice wiring — isGnsrskQuery+buildGnsrskScript imported into JarvisBrain.jsx; 'graph node risk/gnsrsk/exposed graph nodes' speaks exposed vs clear node count via /v1/graph/centrality + /entities/RiskSignal; vite build exit 0.
 [2026-09-04] F590 GraphDatasetNexus (GRDSET): /v1/graph/centrality × /v1/datasets; BACKED/DATA-DARK cross-ref; coverage tile; ASSESS → /v1/jarvis/agent/chat + TTS; vite build exit 0.
+2026-09-04 | F591 | Graph Node × Intel Profile Coverage voice wiring (GNINTEL) | VERIFIED | imported isGnintelQuery+buildGnintelScript into JarvisBrain.jsx; GraphNodeIntelCoverage.jsx already mounted in App.jsx; /v1/graph/centrality + /entities/IntelProfile real endpoints; vite build exit 0.
