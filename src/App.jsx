@@ -854,6 +854,7 @@ import GraphKnowledgeNexus from '@/components/cinematic/GraphKnowledgeNexus';
 import GraphScenarioCoverage from '@/components/cinematic/GraphScenarioCoverage';
 import GraphTimeMachinePanel from '@/components/cinematic/GraphTimeMachinePanel';
 import GraphReportsNexus from '@/components/cinematic/GraphReportsNexus';
+import GraphDecisionRulesNexus from '@/components/cinematic/GraphDecisionRulesNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2645,6 +2646,7 @@ function App() {
             <GraphTimeMachinePanel />
             {/* F582 (overnight 2026-09-04): Graph × Reports Nexus (GRRPT) — /v1/graph/centrality + /v1/reports; keyword cross-reference; DOCUMENTED nodes (≥1 report matches) vs UNREPORTED; coverage % tile; ALL/DOCUMENTED/UNREPORTED filter tabs + search; click-to-expand matched reports with type badge + author + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-reporting intelligence brief + TTS; amber badge on unreported count; ◈ GRRPT button left:70260 bottom:8 zIndex:140; isGrrptQuery+buildGrrptScript wired into JarvisBrain.ask(); jarvis:grrpt-toggle event; 90-s auto-refresh; voice: "graph reports/reports graph/grrpt/reported nodes/unreported nodes/node report coverage/graph reporting" */}
             <GraphReportsNexus />
+            <GraphDecisionRulesNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
