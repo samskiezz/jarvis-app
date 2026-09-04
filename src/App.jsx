@@ -857,6 +857,7 @@ import GraphReportsNexus from '@/components/cinematic/GraphReportsNexus';
 import GraphDecisionRulesNexus from '@/components/cinematic/GraphDecisionRulesNexus';
 import GraphSwarmCoverage from '@/components/cinematic/GraphSwarmCoverage';
 import GraphContactNexus from '@/components/cinematic/GraphContactNexus';
+import GraphInvestmentNexus from '@/components/cinematic/GraphInvestmentNexus';
 import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2653,6 +2654,8 @@ function App() {
             <GraphSwarmCoverage />
             {/* F585 (overnight 2026-09-04): Graph × Contact Nexus (GRCNT) — /v1/graph/centrality + /entities/Contact; keyword cross-reference; ASSOCIATED nodes (≥1 contact matches) vs UNLINKED; coverage % tile; ALL/ASSOCIATED/UNLINKED filter tabs + search; click-to-expand matched contacts; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unlinked count; ◈ GRCNT button left:72840 bottom:8 zIndex:143; isGrcntQuery+buildGrcntScript wired into JarvisBrain.ask(); jarvis:grcnt-toggle event; 90-s auto-refresh; voice: "graph contact/grcnt/which nodes have contacts/contact nodes/contact network/node contacts/graph people" */}
             <GraphContactNexus />
+            {/* F587 (overnight 2026-09-04): Graph × Investment Nexus (GRINV) — /v1/graph/centrality + /entities/Investment; keyword cross-reference; INVESTED nodes (≥1 investment keyword-matches) vs UNINVESTED (no investment backing); coverage % tile; ALL/INVESTED/UNINVESTED filter tabs + search; click-to-expand matched investments (amount/category/hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-investment intelligence brief + TTS; amber badge on uninvested count; ◈ GRINV button left:73700 bottom:8 zIndex:144; isGrinvQuery+buildGrinvScript wired into JarvisBrain.ask(); jarvis:grinv-toggle event; 90-s auto-refresh; voice: "graph investment/grinv/invested nodes/uninvested nodes/node investment coverage/graph portfolio/graph holding" */}
+            <GraphInvestmentNexus />
             {/* F586 (overnight 2026-09-04): Swarm × Task Advisor (SWTASK) — parallel-fetches /entities/Task + /entities/SwarmJob; keyword-correlates active tasks against running/queued swarm jobs → AUTOMATABLE vs MANUAL; stat tiles (tasks/jobs/automatable/manual); ALL/AUTOMATABLE/MANUAL filter tabs; ▶ ADVISE → /v1/jarvis/agent/chat AI recommendation + TTS; isSwarmTaskQuery+buildSwarmTaskScript wired into JarvisBrain.ask(); jarvis:swarmtask-toggle event; 60-s auto-refresh; ◈ SWTASK button left:6316 bottom:8 zIndex:65; voice: "swarm task/task automation/automate tasks/task advisor/swtask/automation advisor/which tasks/assign tasks" */}
             <SwarmTaskAdvisor />
             <Suspense fallback={<Loading />}>
