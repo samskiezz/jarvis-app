@@ -851,6 +851,7 @@ import IntelProfileDatasetNexus from '@/components/cinematic/IntelProfileDataset
 import DecisionRulesContactNexus from '@/components/cinematic/DecisionRulesContactNexus';
 import DailyPriorityDigest from '@/components/cinematic/DailyPriorityDigest';
 import GraphKnowledgeNexus from '@/components/cinematic/GraphKnowledgeNexus';
+import GraphScenarioCoverage from '@/components/cinematic/GraphScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2636,6 +2637,8 @@ function App() {
             <DailyPriorityDigest />
             {/* F578 (overnight 2026-09-04): Graph × Knowledge Nexus (GRKNO) — /v1/graph/centrality + /knowledge/; keyword cross-reference; DOCUMENTED nodes (≥1 article matches) vs DARK; coverage % tile; ALL/DOCUMENTED/DARK filter tabs + search; click-to-expand matched articles; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on dark count; ◈ GRKNO button left:67680 bottom:8 zIndex:137; isGrknoQuery+buildGrknoScript wired into JarvisBrain.ask(); jarvis:grkno-toggle event; 90-s auto-refresh */}
             <GraphKnowledgeNexus />
+            {/* F579 (overnight 2026-09-04): Graph × Scenario Coverage (GRSCN) — /v1/graph/centrality + /v1/scenario/list; keyword cross-reference; MODELED nodes (≥1 scenario matches) vs UNMODELED; coverage % tile; ALL/MODELED/UNMODELED filter tabs + search; click-to-expand matched scenarios; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-scenario readiness brief + TTS; amber badge on unmodeled count; ◈ GRSCN button left:68540 bottom:8 zIndex:138; isGrscnQuery+buildGrscnScript wired into JarvisBrain.ask(); jarvis:grscn-toggle event; 90-s auto-refresh */}
+            <GraphScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
