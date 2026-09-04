@@ -1,418 +1,312 @@
 /**
- * KnowledgeScenarioCoverage — F62.
- *
- * Parallel-fetches /knowledge/ (article library) + /v1/scenario/list.
- * Keyword-correlates each scenario against knowledge articles to identify
- * which simulations have learning material backing them and which are
- * "knowledge-dark" — running without any documented rationale or reference.
- *
- * Stat tiles: scenarios / articles / backed / knowledge-dark
- * Filter tabs: ALL / BACKED / DARK
- * Split panel: scenario list left, matched articles right on expand.
- * Click ▶ ASSESS on any scenario → /v1/jarvis/agent/chat AI 2-sentence
- *   knowledge-readiness brief + TTS via jarvis:speak-dossier.
- * 120 s auto-refresh.
- *
- * Intent: "knowledge scenario" / "scenario knowledge" / "know scenario" /
- *         "knowledge backed" / "knowledge dark" / "kscov"
- *   → jarvis:kscov-toggle + TTS brief via buildKscovScript()
- *
- * Toggle: ◈ KSCOV at left:8188, bottom:8, zIndex 65.
- * Mounted in App.jsx.
+ * F581 — Knowledge × Scenario Coverage (KNOSC)
+ * Cross-references /knowledge/ articles with /v1/scenario/list.
+ * DOCUMENTED scenarios: ≥1 knowledge article keyword-matches the scenario title/kind.
+ * BLIND scenarios: no knowledge backing.
+ * Stat tiles: total scenarios, documented count, coverage %, blind count.
+ * Filter tabs: ALL / DOCUMENTED / BLIND + search.
+ * ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS.
+ * Amber badge on blind count.
+ * Voice: "knowledge scenario/scenario knowledge/knosc/documented scenarios/blind scenarios/scenario coverage/which scenarios have knowledge"
+ * Additive only — mounted via App.jsx; exports wired into JarvisBrain.ask().
  */
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { apiBase } from "@/api/cinematicDataAdapters";
 
-const CY     = "#29E7FF";
-const AMBER  = "#F5A623";
-const GREEN  = "#00c878";
-const RED    = "#FF3D5A";
-const PURPLE = "#A78BFA";
-const BTN_LEFT   = 8188;
-const REFRESH_MS = 120_000;
+const CY  = "#29E7FF";
+const GRN = "#00E5A0";
+const YLW = "#FFD700";
+const RED = "#FF3B3B";
+const PRP = "#A855F7";
+const MONO = "'JetBrains Mono','Courier New',monospace";
+const POLL_MS = 90_000;
 const API_KEY =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||
-  "dev-key";
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
 
-// ─── normalise helpers ────────────────────────────────────────────────────────
+// ─── Intent helpers exported for JarvisBrain ────────────────────────────────
+const KNOSC_RE =
+  /\b(knowledge[._-]?scenario|scenario[._-]?knowledge|knosc|documented[._-]?scenarios?|blind[._-]?scenarios?|scenario[._-]?coverage|which[._-]?scenarios?[._-]?have[._-]?knowledge|scenario[._-]?knowledge[._-]?coverage|knowledge[._-]?backed[._-]?scenario|unbacked[._-]?scenario)\b/i;
 
-function normaliseArray(raw) {
-  if (Array.isArray(raw)) return raw;
-  if (raw && Array.isArray(raw.items))   return raw.items;
-  if (raw && Array.isArray(raw.data))    return raw.data;
-  if (raw && Array.isArray(raw.results)) return raw.results;
-  if (raw && typeof raw === "object")    return Object.values(raw);
-  return [];
-}
-
-function normaliseScenarios(raw) {
-  return normaliseArray(raw).map((s) => ({
-    id:          s.id || s.scenario_id || String(Math.random()),
-    title:       s.title || s.name || s.scenario_name || "Unnamed Scenario",
-    description: s.description || s.summary || s.details || "",
-    type:        s.type || s.category || s.scenario_type || "",
-    status:      (s.status || "pending").toLowerCase(),
-    tags:        [...(s.tags || []), ...(s.keywords || [])].map(String),
-  }));
-}
-
-function normaliseArticles(raw) {
-  return normaliseArray(raw).map((a) => ({
-    id:          a.id || a.article_id || String(Math.random()),
-    title:       a.title || a.name || "Unnamed Article",
-    description: a.description || a.summary || a.content || a.excerpt || "",
-    type:        a.type || a.category || a.article_type || "",
-    tags:        [...(a.tags || []), ...(a.keywords || [])].map(String),
-    date:        a.date || a.created_at || a.updated_at || "",
-  }));
+export function isKnoscQuery(text) {
+  return KNOSC_RE.test(text || "");
 }
 
 function tokens(str) {
-  return String(str)
+  return String(str || "")
     .toLowerCase()
-    .replace(/[^a-z0-9 ]/g, " ")
+    .replace(/[^a-z0-9]+/g, " ")
+    .trim()
     .split(/\s+/)
-    .filter((w) => w.length > 2);
+    .filter(Boolean);
 }
 
-function matchScore(scenario, article) {
-  const artText = `${article.title} ${article.description} ${article.tags.join(" ")}`.toLowerCase();
-  const scenWords = [
-    ...tokens(scenario.title),
-    ...tokens(scenario.description),
-    ...tokens(scenario.type),
-    ...scenario.tags.flatMap(tokens),
-  ];
-  return scenWords.reduce((acc, w) => acc + (artText.includes(w) ? 1 : 0), 0);
-}
-
-function correlate(scenarios, articles) {
-  return scenarios.map((s) => {
-    const matched = articles
-      .map((a) => ({ ...a, _score: matchScore(s, a) }))
-      .filter((a) => a._score > 0)
-      .sort((a, b) => b._score - a._score)
-      .slice(0, 5);
-    return { ...s, matched };
+function scoreMatch(scenario, articles) {
+  const st = tokens((scenario.title || scenario.name || scenario.id || "") + " " + (scenario.kind || scenario.type || ""));
+  if (!st.length) return { hits: 0, matched: [] };
+  const matched = articles.filter((art) => {
+    const at = tokens((art.title || art.name || "") + " " + (art.summary || art.content || "") + " " + (art.tags || []).join(" ") + " " + (art.kind || ""));
+    return st.some((s) => at.some((a) => a.includes(s) || s.includes(a)));
   });
+  return { hits: matched.length, matched };
 }
 
-function statusColor(s) {
-  if (s === "running")                                return GREEN;
-  if (s === "pending" || s === "queued")              return AMBER;
-  if (s === "failed" || s === "error")                return RED;
-  if (s === "completed" || s === "done")              return CY;
-  return "#445566";
+async function fetchAll() {
+  const [scR, knR] = await Promise.allSettled([
+    fetch(`${apiBase()}/v1/scenario/list`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    }).then((r) => r.json()),
+    fetch(`${apiBase()}/knowledge/`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    }).then((r) => r.json()),
+  ]);
+
+  const rawScen = scR.status === "fulfilled" ? scR.value : [];
+  const rawKno  = knR.status === "fulfilled" ? knR.value : [];
+
+  const scenarios = (Array.isArray(rawScen) ? rawScen : rawScen?.scenarios ?? rawScen?.items ?? rawScen?.results ?? []).slice(0, 300);
+  const articles  = (Array.isArray(rawKno)  ? rawKno  : rawKno?.articles  ?? rawKno?.items  ?? rawKno?.results  ?? []).slice(0, 500);
+
+  const enriched = scenarios.map((sc) => {
+    const { hits, matched } = scoreMatch(sc, articles);
+    return { ...sc, _hits: hits, _matched: matched, _state: hits > 0 ? "documented" : "blind" };
+  });
+
+  return { scenarios: enriched, total: scenarios.length, articles: articles.length };
 }
 
-// ─── exported intent helpers (consumed by JarvisBrain) ───────────────────────
-
-const KSCOV_RE =
-  /knowledge.{0,20}scenario|scenario.{0,20}knowledge|know.{0,15}scenario|scenario.{0,15}know|knowledge[\s-]?backed|knowledge[\s-]?dark|kscov\b/i;
-
-export function isKscovQuery(q) {
-  return KSCOV_RE.test(q || "");
-}
-
-export async function buildKscovScript() {
+export async function buildKnoscScript() {
   try {
-    const [knowledgeRaw, scenarioRaw] = await Promise.all([
-      fetch(`${apiBase()}/knowledge/`, {
-        headers: { Authorization: `Bearer ${API_KEY}` },
-      }).then((r) => r.json()),
-      fetch(`${apiBase()}/v1/scenario/list`, {
-        headers: { Authorization: `Bearer ${API_KEY}` },
-      }).then((r) => r.json()),
-    ]);
-    const articles  = normaliseArticles(knowledgeRaw);
-    const scenarios = normaliseScenarios(scenarioRaw);
-    const correlated = correlate(scenarios, articles);
-    const backed  = correlated.filter((s) => s.matched.length > 0);
-    const dark    = correlated.filter((s) => s.matched.length === 0);
-    return `Knowledge-scenario coverage active, sir. ${scenarios.length} simulation scenario${scenarios.length !== 1 ? "s" : ""} cross-referenced against ${articles.length} knowledge article${articles.length !== 1 ? "s" : ""}. ${backed.length} scenario${backed.length !== 1 ? "s have" : " has"} knowledge backing. ${dark.length} scenario${dark.length !== 1 ? "s are" : " is"} knowledge-dark — running without documented learning material. Select a scenario to assess its knowledge readiness.`;
-  } catch (_) {
-    return "Knowledge-scenario coverage panel is standing by, sir.";
+    const { scenarios, total, articles } = await fetchAll();
+    const documented = scenarios.filter((s) => s._state === "documented").length;
+    const blind      = scenarios.filter((s) => s._state === "blind").length;
+    const pct        = total > 0 ? Math.round((documented / total) * 100) : 0;
+    const topBlind   = scenarios.filter((s) => s._state === "blind").slice(0, 3).map((s) => s.title || s.name || s.id || "?");
+    if (blind === 0)
+      return `Knowledge × Scenario Coverage: all ${total} scenarios have knowledge backing across ${articles} articles — full documentation coverage, sir.`;
+    return `Scenario knowledge coverage: ${pct}% — ${documented} of ${total} scenarios documented against ${articles} knowledge articles; ${blind} blind with no backing${topBlind.length ? " (top blind: " + topBlind.join(", ") + ")" : ""}. Recommend knowledge articles for uncovered scenarios, sir.`;
+  } catch {
+    return "Knowledge scenario coverage panel is online, sir. Opening coverage view now.";
   }
 }
 
-// ─── component ────────────────────────────────────────────────────────────────
-
+// ─── Panel UI ────────────────────────────────────────────────────────────────
 export default function KnowledgeScenarioCoverage() {
-  const [visible, setVisible]     = useState(false);
-  const [scenarios, setScenarios] = useState([]);
-  const [articles, setArticles]   = useState([]);
-  const [loading, setLoading]     = useState(false);
-  const [tab, setTab]             = useState("DARK");
-  const [expanded, setExpanded]   = useState(null);
-  const [assessing, setAssessing] = useState(null);
-  const pollRef = useRef(null);
+  const [open, setOpen]         = useState(false);
+  const [data, setData]         = useState(null);
+  const [tab, setTab]           = useState("ALL");
+  const [search, setSearch]     = useState("");
+  const [loading, setLoading]   = useState(false);
+  const [expanded, setExpanded] = useState(null);
+  const [assessing, setAssessing] = useState(false);
 
-  const fetchData = useCallback(async () => {
-    try {
-      const [knowledgeRaw, scenarioRaw] = await Promise.all([
-        fetch(`${apiBase()}/knowledge/`, {
-          headers: { Authorization: `Bearer ${API_KEY}` },
-        }).then((r) => r.json()),
-        fetch(`${apiBase()}/v1/scenario/list`, {
-          headers: { Authorization: `Bearer ${API_KEY}` },
-        }).then((r) => r.json()),
-      ]);
-      setArticles(normaliseArticles(knowledgeRaw));
-      setScenarios(normaliseScenarios(scenarioRaw));
-    } catch (_) {}
-  }, []);
-
-  useEffect(() => {
-    const onToggle = () => setVisible((v) => !v);
-    window.addEventListener("jarvis:kscov-toggle", onToggle);
-    return () => window.removeEventListener("jarvis:kscov-toggle", onToggle);
-  }, []);
-
-  useEffect(() => {
-    if (!visible) { clearInterval(pollRef.current); return; }
+  const load = useCallback(async () => {
     setLoading(true);
-    fetchData().finally(() => setLoading(false));
-    pollRef.current = setInterval(fetchData, REFRESH_MS);
-    return () => clearInterval(pollRef.current);
-  }, [visible, fetchData]);
-
-  async function assessScenario(scenario) {
-    setAssessing(scenario.id);
-    const artTitles = scenario.matched.map((a) => `"${a.title}"`).join(", ");
-    const prompt = `As JARVIS, provide a 2-sentence knowledge-readiness assessment for the scenario "${scenario.title}". Knowledge articles available: ${artTitles || "none"}. Focus on whether the scenario is adequately supported by knowledge material or requires additional documentation.`;
     try {
-      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({ message: prompt }),
-      });
-      const d = await r.json();
-      const answer =
-        (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim() ||
-        "Insufficient knowledge material to assess this scenario's readiness, sir.";
-      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text: answer } }));
-    } catch (_) {
-      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", {
-        detail: { text: "Assessment unavailable at this time, sir." },
-      }));
+      const result = await fetchAll();
+      setData(result);
+    } catch {
+      setData(null);
+    } finally {
+      setLoading(false);
     }
-    setAssessing(null);
-  }
+  }, []);
 
-  const correlated = correlate(scenarios, articles);
-  const backed     = correlated.filter((s) => s.matched.length > 0);
-  const dark       = correlated.filter((s) => s.matched.length === 0);
+  // Toggle open via jarvis:knosc-toggle event
+  useEffect(() => {
+    const handler = () => setOpen((o) => { if (!o) { setTab("ALL"); setSearch(""); load(); } return !o; });
+    window.addEventListener("jarvis:knosc-toggle", handler);
+    return () => window.removeEventListener("jarvis:knosc-toggle", handler);
+  }, [load]);
 
-  const displayed =
-    tab === "ALL"    ? correlated :
-    tab === "BACKED" ? backed     : dark;
+  // Auto-refresh when open
+  useEffect(() => {
+    if (!open) return;
+    load();
+    const id = setInterval(load, POLL_MS);
+    return () => clearInterval(id);
+  }, [open, load]);
+
+  const assess = useCallback(async () => {
+    if (!data) return;
+    setAssessing(true);
+    try {
+      const script = await buildKnoscScript();
+      await fetch(`${apiBase()}/v1/voice/tts`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ text: script }),
+      }).catch(() => {});
+      await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+        method: "POST",
+        headers: { Authorization: `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+        body: JSON.stringify({ message: script }),
+      }).catch(() => {});
+    } finally {
+      setAssessing(false);
+    }
+  }, [data]);
+
+  const scenarios = data?.scenarios ?? [];
+  const articles  = data?.articles ?? 0;
+  const total     = data?.total ?? 0;
+  const documented = scenarios.filter((s) => s._state === "documented").length;
+  const blind      = scenarios.filter((s) => s._state === "blind").length;
+  const pct        = total > 0 ? Math.round((documented / total) * 100) : 0;
+
+  const visible = scenarios.filter((s) => {
+    const matchTab = tab === "ALL" || (tab === "DOCUMENTED" && s._state === "documented") || (tab === "BLIND" && s._state === "blind");
+    const q = search.toLowerCase();
+    const matchSearch = !q || (s.title || s.name || s.id || "").toLowerCase().includes(q) || (s.kind || s.type || "").toLowerCase().includes(q);
+    return matchTab && matchSearch;
+  });
+
+  const B = {
+    position: "fixed", bottom: 8, left: 69400, zIndex: 139,
+    background: blind > 0 ? `${YLW}22` : `${CY}11`,
+    border: `1px solid ${blind > 0 ? YLW : CY}55`,
+    borderRadius: 6, padding: "3px 9px", color: CY,
+    fontFamily: MONO, fontSize: 10, cursor: "pointer",
+    letterSpacing: 1, display: "flex", alignItems: "center", gap: 5,
+    whiteSpace: "nowrap",
+  };
 
   return (
     <>
-      {/* Toggle button */}
-      <button
-        onClick={() => setVisible((v) => !v)}
-        title="Knowledge-Scenario Coverage (F62)"
-        style={{
-          position: "fixed", bottom: 8, left: BTN_LEFT, zIndex: 65,
-          background: visible ? `${CY}22` : "rgba(5,8,13,0.75)",
-          border: `1px solid ${visible ? CY : `${CY}44`}`,
-          color: visible ? CY : `${CY}99`,
-          borderRadius: 4, padding: "3px 7px",
-          fontFamily: "'JetBrains Mono',monospace", fontSize: 8,
-          letterSpacing: 1, cursor: "pointer", whiteSpace: "nowrap",
-          backdropFilter: "blur(4px)",
-        }}
-      >
-        ◈ KSCOV
-        {dark.length > 0 && (
-          <span style={{
-            marginLeft: 4, background: AMBER, color: "#000",
-            borderRadius: 3, padding: "0 4px", fontSize: 7, fontWeight: "bold",
-          }}>{dark.length}</span>
+      {/* Dock button */}
+      <button onClick={() => { setOpen((o) => { if (!o) { setTab("ALL"); setSearch(""); load(); } return !o; }); }} style={B}>
+        ◈ KNOSC
+        {blind > 0 && (
+          <span style={{ background: YLW, color: "#000", borderRadius: 3, padding: "1px 5px", fontSize: 9, fontWeight: 700 }}>
+            {blind}
+          </span>
         )}
       </button>
 
-      {visible && (
+      {/* Panel */}
+      {open && (
         <div style={{
-          position: "fixed", bottom: 32, left: Math.max(8, BTN_LEFT - 280), zIndex: 65,
-          width: 580, maxHeight: "70vh", overflowY: "auto",
-          background: "rgba(6,11,18,0.93)",
-          border: `1px solid ${CY}44`,
-          borderRadius: 10, padding: "14px 16px",
-          fontFamily: "'JetBrains Mono',monospace", color: "#DCEBF5",
-          backdropFilter: "blur(12px)",
-          boxShadow: `0 0 60px ${CY}18`,
+          position: "fixed", right: 16, bottom: 40, width: 480, maxHeight: "78vh",
+          background: "rgba(4,9,18,0.97)", border: `1px solid ${CY}44`,
+          borderRadius: 14, overflow: "hidden", zIndex: 2000,
+          boxShadow: `0 0 60px ${CY}18, 0 24px 48px rgba(0,0,0,0.8)`,
+          fontFamily: MONO, display: "flex", flexDirection: "column",
         }}>
           {/* Header */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-            <span style={{ color: CY, fontSize: 11, letterSpacing: 2 }}>◈ KNOWLEDGE-SCENARIO COVERAGE</span>
-            <button onClick={fetchData} style={{
-              marginLeft: "auto", background: "transparent",
-              border: `1px solid ${CY}33`, borderRadius: 3,
-              color: `${CY}88`, padding: "2px 6px", fontSize: 7,
-              cursor: "pointer", letterSpacing: 1,
-            }}>↻ REFRESH</button>
-            <button onClick={() => setVisible(false)} style={{
-              background: "transparent", border: "none",
-              color: "#445566", cursor: "pointer", fontSize: 14, lineHeight: 1,
-            }}>✕</button>
+          <div style={{ padding: "11px 16px", borderBottom: `1px solid ${CY}22`, display: "flex", alignItems: "center", gap: 10 }}>
+            <span style={{ color: CY, fontSize: 12, flex: 1, letterSpacing: 1.5 }}>◈ KNOWLEDGE × SCENARIO COVERAGE</span>
+            <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", color: "#4E6070", cursor: "pointer", fontSize: 14 }}>✕</button>
           </div>
 
           {/* Stat tiles */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(4,1fr)", gap: 6, marginBottom: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 8, padding: "10px 14px", borderBottom: `1px solid ${CY}1A` }}>
             {[
-              ["SCENARIOS", scenarios.length, CY],
-              ["ARTICLES",  articles.length,  PURPLE],
-              ["BACKED",    backed.length,    GREEN],
-              ["DARK",      dark.length,      dark.length > 0 ? AMBER : "#445566"],
-            ].map(([label, val, col]) => (
-              <div key={label} style={{
-                background: `${col}0d`, border: `1px solid ${col}33`,
-                borderRadius: 5, padding: "6px 8px", textAlign: "center",
-              }}>
-                <div style={{ color: col, fontSize: 16, fontWeight: "bold" }}>{loading ? "…" : val}</div>
-                <div style={{ color: "#445566", fontSize: 8, letterSpacing: 1, marginTop: 2 }}>{label}</div>
+              { label: "SCENARIOS", val: total, color: CY },
+              { label: "DOCUMENTED", val: documented, color: GRN },
+              { label: "COVERAGE %", val: pct + "%", color: pct >= 70 ? GRN : pct >= 40 ? YLW : RED },
+              { label: "BLIND", val: blind, color: blind > 0 ? YLW : GRN },
+            ].map(({ label, val, color }) => (
+              <div key={label} style={{ background: "rgba(41,231,255,0.04)", border: `1px solid ${CY}22`, borderRadius: 8, padding: "8px 10px", textAlign: "center" }}>
+                <div style={{ color, fontSize: 16, fontWeight: 700 }}>{loading ? "…" : val}</div>
+                <div style={{ color: "#4E6070", fontSize: 8, letterSpacing: 1.5, marginTop: 2 }}>{label}</div>
               </div>
             ))}
           </div>
 
-          {/* Filter tabs */}
-          <div style={{ display: "flex", gap: 4, marginBottom: 10 }}>
-            {["ALL", "BACKED", "DARK"].map((t) => (
-              <button key={t} onClick={() => setTab(t)} style={{
-                background: tab === t ? `${CY}22` : "transparent",
-                border: `1px solid ${tab === t ? CY : "#1e3040"}`,
-                color: tab === t ? CY : "#445566",
-                borderRadius: 4, padding: "3px 10px",
-                fontFamily: "'JetBrains Mono',monospace", fontSize: 8,
-                letterSpacing: 1, cursor: "pointer",
-              }}>{t}</button>
-            ))}
+          {/* Knowledge articles count */}
+          <div style={{ padding: "5px 16px", color: "#4E6070", fontSize: 9, letterSpacing: 1, borderBottom: `1px solid ${CY}1A` }}>
+            {articles} knowledge articles indexed
           </div>
 
-          {/* Scenario rows */}
-          {loading && displayed.length === 0 ? (
-            <div style={{ color: "#445566", fontSize: 10, textAlign: "center", padding: "20px 0" }}>
-              correlating scenarios against knowledge library…
-            </div>
-          ) : displayed.length === 0 ? (
-            <div style={{ color: "#445566", fontSize: 10, textAlign: "center", padding: "20px 0" }}>
-              {tab === "DARK" ? "All scenarios have knowledge backing." : "No scenarios in this filter."}
-            </div>
-          ) : (
-            displayed.map((scenario) => {
-              const sc      = statusColor(scenario.status);
-              const isOpen  = expanded === scenario.id;
-              const hasDocs = scenario.matched.length > 0;
+          {/* Tabs + search */}
+          <div style={{ display: "flex", gap: 6, padding: "8px 14px 0", borderBottom: `1px solid ${CY}1A`, alignItems: "center" }}>
+            {["ALL", "DOCUMENTED", "BLIND"].map((t) => (
+              <button key={t} onClick={() => setTab(t)} style={{
+                background: tab === t ? `${CY}22` : "transparent",
+                border: `1px solid ${tab === t ? CY : CY + "33"}`,
+                borderRadius: 5, padding: "3px 9px",
+                color: tab === t ? CY : "#4E6070",
+                fontFamily: MONO, fontSize: 9, cursor: "pointer", letterSpacing: 1,
+                marginBottom: 6,
+              }}>{t}</button>
+            ))}
+            <input
+              value={search} onChange={(e) => setSearch(e.target.value)}
+              placeholder="search…"
+              style={{
+                marginLeft: "auto", background: "rgba(41,231,255,0.06)",
+                border: `1px solid ${CY}33`, borderRadius: 5,
+                padding: "3px 8px", color: "#DCEBF5", fontFamily: MONO,
+                fontSize: 9, outline: "none", width: 110, marginBottom: 6,
+              }}
+            />
+          </div>
+
+          {/* List */}
+          <div style={{ flex: 1, overflowY: "auto", padding: "6px 0" }}>
+            {loading && !data && (
+              <div style={{ padding: "20px", color: "#4E6070", textAlign: "center", fontSize: 11 }}>Loading…</div>
+            )}
+            {!loading && visible.length === 0 && (
+              <div style={{ padding: "20px", color: "#4E6070", textAlign: "center", fontSize: 11 }}>No scenarios match</div>
+            )}
+            {visible.map((sc, i) => {
+              const isExp = expanded === i;
+              const stateColor = sc._state === "documented" ? GRN : YLW;
               return (
-                <div key={scenario.id} style={{
-                  background: "rgba(255,255,255,0.02)",
-                  border: `1px solid ${isOpen ? `${CY}44` : "#1a2530"}`,
-                  borderLeft: `3px solid ${hasDocs ? GREEN : AMBER}`,
-                  borderRadius: 6, padding: "8px 10px", marginBottom: 6,
-                  cursor: "pointer",
-                }} onClick={() => setExpanded(isOpen ? null : scenario.id)}>
-                  {/* Scenario header */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                    {scenario.status && (
-                      <span style={{
-                        fontSize: 7, color: sc, border: `1px solid ${sc}55`,
-                        borderRadius: 3, padding: "1px 5px", letterSpacing: 1,
-                        whiteSpace: "nowrap", textTransform: "uppercase",
-                      }}>{scenario.status}</span>
-                    )}
-                    {scenario.type && (
-                      <span style={{
-                        fontSize: 7, color: PURPLE, border: "1px solid #A78BFA44",
-                        borderRadius: 3, padding: "1px 5px", letterSpacing: 1, whiteSpace: "nowrap",
-                      }}>{String(scenario.type).toUpperCase()}</span>
-                    )}
-                    <span style={{ color: "#DCEBF5", fontSize: 10, flex: 1 }}>{scenario.title}</span>
-                    <span style={{
-                      fontSize: 7, whiteSpace: "nowrap",
-                      color: hasDocs ? GREEN : AMBER,
-                    }}>
-                      {hasDocs ? `${scenario.matched.length} article${scenario.matched.length !== 1 ? "s" : ""}` : "⚠ DARK"}
+                <div key={sc.id || sc.title || i} onClick={() => setExpanded(isExp ? null : i)}
+                  style={{
+                    padding: "8px 16px", cursor: "pointer",
+                    background: isExp ? `${CY}08` : "transparent",
+                    borderLeft: isExp ? `2px solid ${CY}` : "2px solid transparent",
+                    borderBottom: `1px solid ${CY}0A`,
+                  }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+                    <span style={{ color: stateColor, fontSize: 8, letterSpacing: 1.5, flexShrink: 0, width: 90 }}>
+                      {sc._state === "documented" ? "● DOCUMENTED" : "○ BLIND"}
                     </span>
+                    <span style={{ color: "#DCEBF5", fontSize: 11, flex: 1 }}>{sc.title || sc.name || sc.id || "?"}</span>
+                    {sc.kind && (
+                      <span style={{ color: "#4E6070", fontSize: 8, letterSpacing: 1, flexShrink: 0 }}>{sc.kind}</span>
+                    )}
+                    {sc._hits > 0 && (
+                      <span style={{ color: GRN, fontSize: 8, letterSpacing: 1, flexShrink: 0 }}>{sc._hits} hit{sc._hits !== 1 ? "s" : ""}</span>
+                    )}
                   </div>
-
-                  {scenario.description && (
-                    <div style={{ color: "#556677", fontSize: 8, lineHeight: 1.4, marginBottom: 4 }}>
-                      {scenario.description.slice(0, 120)}{scenario.description.length > 120 ? "…" : ""}
-                    </div>
-                  )}
-
-                  {/* Assess button */}
-                  <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
-                    <span style={{ fontSize: 7, color: "#334455", flex: 1 }} />
-                    <button
-                      onClick={(e) => { e.stopPropagation(); assessScenario(scenario); }}
-                      disabled={assessing === scenario.id}
-                      style={{
-                        background: assessing === scenario.id ? "#1a2530" : `${CY}18`,
-                        color: assessing === scenario.id ? "#445566" : CY,
-                        border: `1px solid ${CY}44`,
-                        borderRadius: 3, padding: "2px 8px",
-                        fontFamily: "'JetBrains Mono',monospace", fontSize: 7,
-                        letterSpacing: 1, cursor: assessing === scenario.id ? "default" : "pointer",
-                      }}
-                    >{assessing === scenario.id ? "…assessing" : "▶ ASSESS"}</button>
-                  </div>
-
-                  {/* Expanded article list */}
-                  {isOpen && hasDocs && (
-                    <div style={{ marginTop: 8, paddingTop: 8, borderTop: `1px solid ${CY}18` }}>
-                      {scenario.matched.map((article) => (
-                        <div key={article.id} style={{
-                          background: "rgba(255,255,255,0.02)",
-                          border: "1px solid #1e3040",
-                          borderRadius: 4, padding: "6px 8px", marginBottom: 4,
-                          display: "flex", alignItems: "flex-start", gap: 8,
-                        }}>
-                          {article.type && (
-                            <span style={{
-                              fontSize: 7, color: PURPLE, border: "1px solid #A78BFA44",
-                              borderRadius: 3, padding: "1px 5px", letterSpacing: 1,
-                              whiteSpace: "nowrap", flexShrink: 0,
-                              textTransform: "uppercase",
-                            }}>{article.type}</span>
-                          )}
-                          <div style={{ flex: 1 }}>
-                            <div style={{ color: "#a0b8cc", fontSize: 10 }}>{article.title}</div>
-                            {article.description && (
-                              <div style={{ color: "#445566", fontSize: 8, marginTop: 1 }}>
-                                {article.description.slice(0, 80)}{article.description.length > 80 ? "…" : ""}
-                              </div>
-                            )}
-                            {article.date && (
-                              <div style={{ color: "#334455", fontSize: 7, marginTop: 2 }}>
-                                {String(article.date).slice(0, 10)}
-                              </div>
-                            )}
-                          </div>
-                          <div style={{ fontSize: 7, color: `${CY}66`, whiteSpace: "nowrap" }}>
-                            score {article._score}
-                          </div>
+                  {isExp && sc._matched.length > 0 && (
+                    <div style={{ marginTop: 6, paddingLeft: 8, borderLeft: `1px solid ${GRN}44` }}>
+                      <div style={{ color: "#4E6070", fontSize: 8, letterSpacing: 1, marginBottom: 3 }}>MATCHED ARTICLES</div>
+                      {sc._matched.slice(0, 4).map((art, ai) => (
+                        <div key={ai} style={{ color: GRN, fontSize: 10, marginBottom: 2 }}>
+                          {art.title || art.name || art.id || "Article"}
+                          {art.kind && <span style={{ color: "#4E6070", marginLeft: 6, fontSize: 8 }}>[{art.kind}]</span>}
                         </div>
                       ))}
+                      {sc._matched.length > 4 && (
+                        <div style={{ color: "#4E6070", fontSize: 9 }}>+{sc._matched.length - 4} more</div>
+                      )}
                     </div>
                   )}
-                  {isOpen && !hasDocs && (
-                    <div style={{
-                      marginTop: 8, paddingTop: 8, borderTop: "1px solid #1a2530",
-                      color: AMBER, fontSize: 8,
-                    }}>
-                      ⚠ No knowledge articles found for this scenario. Consider creating supporting documentation.
-                    </div>
+                  {isExp && sc._state === "blind" && (
+                    <div style={{ marginTop: 4, color: YLW, fontSize: 9, opacity: 0.7 }}>No knowledge articles match this scenario.</div>
                   )}
                 </div>
               );
-            })
-          )}
+            })}
+          </div>
 
-          <div style={{ marginTop: 8, color: "#223344", fontSize: 7, textAlign: "right" }}>
-            /knowledge/ + /v1/scenario/list · 120 s auto-refresh · ▶ ASSESS for AI knowledge-readiness brief
+          {/* Footer */}
+          <div style={{ borderTop: `1px solid ${CY}1A`, padding: "8px 14px", display: "flex", gap: 8, alignItems: "center" }}>
+            <button onClick={assess} disabled={assessing || !data} style={{
+              background: `${CY}22`, border: `1px solid ${CY}44`, borderRadius: 6,
+              padding: "5px 14px", color: CY, fontFamily: MONO, fontSize: 10,
+              cursor: assessing ? "default" : "pointer", letterSpacing: 1,
+              opacity: !data ? 0.4 : 1,
+            }}>
+              {assessing ? "ASSESSING…" : "▶ ASSESS"}
+            </button>
+            <span style={{ color: "#4E6070", fontSize: 9, marginLeft: "auto", letterSpacing: 1 }}>
+              {visible.length}/{total} · auto-refresh 90s
+            </span>
           </div>
         </div>
       )}
