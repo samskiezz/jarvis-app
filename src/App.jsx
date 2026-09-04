@@ -849,6 +849,7 @@ import TaskIntelProfileNexus from '@/components/cinematic/TaskIntelProfileNexus'
 import SwarmReportCoverageMonitor from '@/components/cinematic/SwarmReportCoverageMonitor';
 import IntelProfileDatasetNexus from '@/components/cinematic/IntelProfileDatasetNexus';
 import DecisionRulesContactNexus from '@/components/cinematic/DecisionRulesContactNexus';
+import DailyPriorityDigest from '@/components/cinematic/DailyPriorityDigest';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2630,6 +2631,8 @@ function App() {
             <SkillSwarmJobCoverage />
             {/* F567 (overnight 2026-09-03): Operational Morning Briefing (OMBRF) — composite daily SITREP; fetches /entities/Task + /entities/RiskSignal + /entities/SwarmJob + /v1/investigations + /v1/ops/events + /v1/jarvis/system/status; 6 stat tiles; OVERVIEW/BLOCKED/RISKS/CASES tabs; BRIEF ME → /v1/jarvis/agent/chat + /v1/voice/tts spoken narrative; red badge on critical risk count; amber badge on blocked task count; ◈ OMBRF button left:62520 bottom:8 zIndex:131; isOmbrfQuery+buildOmbrfScript wired in JarvisBrain; jarvis:ombrf-toggle event; 5-min auto-refresh; voice: "ombrf/morning briefing/daily briefing/brief me/operational briefing/daily sitrep/morning sitrep/sitrep/operational summary" */}
             <OperationalMorningBriefing />
+            {/* F577 (overnight 2026-09-04): Daily Priority Digest (DPDIG) — /entities/Task + /entities/RiskSignal + /v1/investigations + /v1/ops/events; urgency-ranked unified priority list; CRITICAL/HIGH/OPEN filter tabs + search; stat tiles; click-to-expand detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + TTS; red badge on critical count; ◈ DPDIG button left:66820 bottom:8 zIndex:136; isDpdigQuery+buildDpdigScript wired into JarvisBrain.ask(); jarvis:dpdig-toggle event; 60-s auto-refresh; voice: "daily priorities/priority digest/dpdig/what needs attention/top priorities/urgent items/action items" */}
+            <DailyPriorityDigest />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
