@@ -163,6 +163,7 @@ import { isSwarmTaskQuery, buildSwarmTaskScript } from "./SwarmTaskAdvisor";
 import { isGnsrskQuery, buildGnsrskScript } from "./GraphNodeRiskSignalCoverage";
 import { isGnintelQuery, buildGnintelScript } from "./GraphNodeIntelCoverage";
 import { isGcasQuery, buildGcasScript } from "./GraphCentralityAipSkillCoverage";
+import { isGrremQuery, buildGrremScript } from "./GraphRemindersNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -684,6 +685,9 @@ export default function JarvisBrain() {
       } else if (isGcasQuery(q)) {
         answer = await buildGcasScript();
         window.dispatchEvent(new CustomEvent("jarvis:gcas-toggle"));
+      } else if (isGrremQuery(q)) {
+        answer = await buildGrremScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grrem-toggle"));
       } else if (isGrrulsQuery(q)) {
         answer = await buildGrrulsScript();
         window.dispatchEvent(new CustomEvent("jarvis:grruls-toggle"));

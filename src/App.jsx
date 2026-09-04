@@ -860,6 +860,7 @@ import GraphContactNexus from '@/components/cinematic/GraphContactNexus';
 import GraphInvestmentNexus from '@/components/cinematic/GraphInvestmentNexus';
 import GraphTaskNexus from '@/components/cinematic/GraphTaskNexus';
 import GraphDatasetNexus from '@/components/cinematic/GraphDatasetNexus';
+import GraphRemindersNexus from '@/components/cinematic/GraphRemindersNexus';
 import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2662,6 +2663,8 @@ function App() {
             <GraphTaskNexus />
             {/* F590 (overnight 2026-09-04): Graph × Dataset Nexus (GRDSET) — /v1/graph/centrality + /v1/datasets; keyword cross-reference; BACKED nodes (≥1 dataset keyword-matches) vs DATA-DARK (no dataset backing); coverage % tile; ALL/BACKED/DATA-DARK filter tabs + search; click-to-expand matched datasets with kind badge + row count + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-data intelligence brief + TTS; amber badge on data-dark count; ◈ GRDSET button left:75420 bottom:8 zIndex:146; isGrdsetQuery+buildGrdsetScript wired into JarvisBrain.ask(); jarvis:grdset-toggle event; 90-s auto-refresh; voice: "graph dataset/dataset graph/grdset/backed nodes/data dark nodes/node dataset coverage/which nodes have data/graph data" */}
             <GraphDatasetNexus />
+            {/* F593 (overnight 2026-09-04): Graph × Reminders Nexus (GRREM) — /v1/graph/centrality + /reminders/list; keyword cross-reference; REMINDED nodes (≥1 reminder keyword-matches) vs UNREMINDED (no reminder backing); coverage % tile; ALL/REMINDED/UNREMINDED filter tabs + search; click-to-expand matched reminders with kind badge + status + content + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational-memory brief + TTS; amber badge on unreminded count; ◈ GRREM button left:76280 bottom:8 zIndex:147; isGrremQuery+buildGrremScript wired into JarvisBrain.ask(); jarvis:grrem-toggle event; 90-s auto-refresh; voice: "graph reminders/grrem/reminder nodes/node reminder coverage/which nodes have reminders/graph memory" */}
+            <GraphRemindersNexus />
             {/* F586 (overnight 2026-09-04): Swarm × Task Advisor (SWTASK) — parallel-fetches /entities/Task + /entities/SwarmJob; keyword-correlates active tasks against running/queued swarm jobs → AUTOMATABLE vs MANUAL; stat tiles (tasks/jobs/automatable/manual); ALL/AUTOMATABLE/MANUAL filter tabs; ▶ ADVISE → /v1/jarvis/agent/chat AI recommendation + TTS; isSwarmTaskQuery+buildSwarmTaskScript wired into JarvisBrain.ask(); jarvis:swarmtask-toggle event; 60-s auto-refresh; ◈ SWTASK button left:6316 bottom:8 zIndex:65; voice: "swarm task/task automation/automate tasks/task advisor/swtask/automation advisor/which tasks/assign tasks" */}
             <SwarmTaskAdvisor />
             <Suspense fallback={<Loading />}>
