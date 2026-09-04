@@ -152,6 +152,7 @@ import { isGrknoQuery, buildGrknoScript } from "./GraphKnowledgeNexus";
 import { isGrscnQuery, buildGrscnScript } from "./GraphScenarioCoverage";
 import { isGtmxQuery, buildGtmxScript } from "./GraphTimeMachinePanel";
 import { isKnoscQuery, buildKnoscScript } from "./KnowledgeScenarioCoverage";
+import { isGrrptQuery, buildGrrptScript } from "./GraphReportsNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -646,6 +647,9 @@ export default function JarvisBrain() {
       } else if (isKnoscQuery(q)) {
         answer = await buildKnoscScript();
         window.dispatchEvent(new CustomEvent("jarvis:knosc-toggle"));
+      } else if (isGrrptQuery(q)) {
+        answer = await buildGrrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grrpt-toggle"));
       } else if (isSceneAnchorMonitorQuery(q)) {
         answer = await buildSceneAnchorMonitorScript();
         window.dispatchEvent(new CustomEvent("jarvis:sacm-toggle"));

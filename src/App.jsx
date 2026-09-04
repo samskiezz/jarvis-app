@@ -853,6 +853,7 @@ import DailyPriorityDigest from '@/components/cinematic/DailyPriorityDigest';
 import GraphKnowledgeNexus from '@/components/cinematic/GraphKnowledgeNexus';
 import GraphScenarioCoverage from '@/components/cinematic/GraphScenarioCoverage';
 import GraphTimeMachinePanel from '@/components/cinematic/GraphTimeMachinePanel';
+import GraphReportsNexus from '@/components/cinematic/GraphReportsNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2642,6 +2643,8 @@ function App() {
             <GraphScenarioCoverage />
             {/* F580 (overnight 2026-09-04): Graph Time Machine Panel voice wiring (GTMX) — /v1/graph-time/at + /v1/graph-time/playback + /v1/jarvis/agent/chat; point-in-time graph snapshot (AT tab) + growth sparkline (GROWTH tab); isGtmxQuery+buildGtmxScript wired into JarvisBrain.ask(); jarvis:gtmx-toggle event; voice: "graph time machine/graph snapshot/graph at/temporal graph/gtmx/historical graph/graph as of/how big was the graph/graph in the past/graph time/past graph"; ◷ GTMX button left:652800 bottom:8 zIndex:237 */}
             <GraphTimeMachinePanel />
+            {/* F582 (overnight 2026-09-04): Graph × Reports Nexus (GRRPT) — /v1/graph/centrality + /v1/reports; keyword cross-reference; DOCUMENTED nodes (≥1 report matches) vs UNREPORTED; coverage % tile; ALL/DOCUMENTED/UNREPORTED filter tabs + search; click-to-expand matched reports with type badge + author + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-reporting intelligence brief + TTS; amber badge on unreported count; ◈ GRRPT button left:70260 bottom:8 zIndex:140; isGrrptQuery+buildGrrptScript wired into JarvisBrain.ask(); jarvis:grrpt-toggle event; 90-s auto-refresh; voice: "graph reports/reports graph/grrpt/reported nodes/unreported nodes/node report coverage/graph reporting" */}
+            <GraphReportsNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
