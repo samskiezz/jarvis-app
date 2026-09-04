@@ -157,6 +157,7 @@ import { isGrrulsQuery, buildGrrulsScript } from "./GraphDecisionRulesNexus";
 import { isGrswrmQuery, buildGrswrmScript } from "./GraphSwarmCoverage";
 import { isGrcntQuery, buildGrcntScript } from "./GraphContactNexus";
 import { isGrinvQuery, buildGrinvScript } from "./GraphInvestmentNexus";
+import { isGrtaskQuery, buildGrtaskScript } from "./GraphTaskNexus";
 import { isSwarmTaskQuery, buildSwarmTaskScript } from "./SwarmTaskAdvisor";
 
 /**
@@ -661,6 +662,9 @@ export default function JarvisBrain() {
       } else if (isGrinvQuery(q)) {
         answer = await buildGrinvScript();
         window.dispatchEvent(new CustomEvent("jarvis:grinv-toggle"));
+      } else if (isGrtaskQuery(q)) {
+        answer = await buildGrtaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grtask-toggle"));
       } else if (isGrswrmQuery(q)) {
         answer = await buildGrswrmScript();
         window.dispatchEvent(new CustomEvent("jarvis:grswrm-toggle"));
