@@ -864,6 +864,7 @@ import GraphRemindersNexus from '@/components/cinematic/GraphRemindersNexus';
 import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
 import KnowledgeRiskNexus from '@/components/cinematic/KnowledgeRiskNexus';
 import RemindersInvestigationNexus from '@/components/cinematic/RemindersInvestigationNexus';
+import ReportsInvestigationNexus from '@/components/cinematic/ReportsInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2673,6 +2674,8 @@ function App() {
             <KnowledgeRiskNexus />
             {/* F596 (overnight 2026-09-04): Reminders × Investigation Nexus (REMINV) — /reminders/list + /v1/investigations; keyword cross-reference; CASE-LINKED reminders vs ORPHANED; coverage % tile; ALL/CASE-LINKED/ORPHANED filter tabs + search; click-to-expand matched investigation detail; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on orphaned count; ◈ REMINV button left:78000 bottom:8 zIndex:149; isReminvQuery+buildReminvScript wired into JarvisBrain.ask(); jarvis:reminv-toggle event; 90-s auto-refresh; voice: "reminders investigation/reminv/case reminders/orphaned reminders/reminder cases/linked reminders" */}
             <RemindersInvestigationNexus />
+            {/* F597 (overnight 2026-09-04): Reports × Investigation Nexus (RPTINV) — /v1/reports + /v1/investigations; keyword cross-reference; DOCUMENTED investigations (≥1 report keyword-matches) vs UNDOCUMENTED (no report backing); coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched reports with type badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on open undocumented count; ◈ RPTINV button left:78860 bottom:8 zIndex:150; isRptinvQuery+buildRptinvScript wired into JarvisBrain.ask(); jarvis:rptinv-toggle event; 90-s auto-refresh; voice: "reports investigation/rptinv/documented cases/investigation report coverage/which cases have reports/report coverage/undocumented investigations" */}
+            <ReportsInvestigationNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
