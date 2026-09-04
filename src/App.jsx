@@ -856,6 +856,7 @@ import GraphTimeMachinePanel from '@/components/cinematic/GraphTimeMachinePanel'
 import GraphReportsNexus from '@/components/cinematic/GraphReportsNexus';
 import GraphDecisionRulesNexus from '@/components/cinematic/GraphDecisionRulesNexus';
 import GraphSwarmCoverage from '@/components/cinematic/GraphSwarmCoverage';
+import GraphContactNexus from '@/components/cinematic/GraphContactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2649,6 +2650,8 @@ function App() {
             <GraphReportsNexus />
             <GraphDecisionRulesNexus />
             <GraphSwarmCoverage />
+            {/* F585 (overnight 2026-09-04): Graph × Contact Nexus (GRCNT) — /v1/graph/centrality + /entities/Contact; keyword cross-reference; ASSOCIATED nodes (≥1 contact matches) vs UNLINKED; coverage % tile; ALL/ASSOCIATED/UNLINKED filter tabs + search; click-to-expand matched contacts; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unlinked count; ◈ GRCNT button left:72840 bottom:8 zIndex:143; isGrcntQuery+buildGrcntScript wired into JarvisBrain.ask(); jarvis:grcnt-toggle event; 90-s auto-refresh; voice: "graph contact/grcnt/which nodes have contacts/contact nodes/contact network/node contacts/graph people" */}
+            <GraphContactNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
