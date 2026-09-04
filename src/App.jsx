@@ -859,6 +859,7 @@ import GraphSwarmCoverage from '@/components/cinematic/GraphSwarmCoverage';
 import GraphContactNexus from '@/components/cinematic/GraphContactNexus';
 import GraphInvestmentNexus from '@/components/cinematic/GraphInvestmentNexus';
 import GraphTaskNexus from '@/components/cinematic/GraphTaskNexus';
+import GraphDatasetNexus from '@/components/cinematic/GraphDatasetNexus';
 import SwarmTaskAdvisor from '@/components/cinematic/SwarmTaskAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2659,6 +2660,8 @@ function App() {
             <GraphInvestmentNexus />
             {/* F588 (overnight 2026-09-04): Graph × Task Nexus (GRTASK) — /v1/graph/centrality + /entities/Task; keyword cross-reference; TASKED nodes (≥1 task keyword-matches) vs UNTASKED (no task backing); coverage % tile; ALL/TASKED/UNTASKED filter tabs + search; click-to-expand matched tasks with status badge + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational graph-task brief + TTS; amber badge on untasked count; ◈ GRTASK button left:74560 bottom:8 zIndex:145; isGrtaskQuery+buildGrtaskScript wired into JarvisBrain.ask(); jarvis:grtask-toggle event; 90-s auto-refresh; voice: "graph task/task graph/grtask/tasked nodes/untasked nodes/node task coverage/which nodes have tasks/graph missions" */}
             <GraphTaskNexus />
+            {/* F590 (overnight 2026-09-04): Graph × Dataset Nexus (GRDSET) — /v1/graph/centrality + /v1/datasets; keyword cross-reference; BACKED nodes (≥1 dataset keyword-matches) vs DATA-DARK (no dataset backing); coverage % tile; ALL/BACKED/DATA-DARK filter tabs + search; click-to-expand matched datasets with kind badge + row count + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence graph-data intelligence brief + TTS; amber badge on data-dark count; ◈ GRDSET button left:75420 bottom:8 zIndex:146; isGrdsetQuery+buildGrdsetScript wired into JarvisBrain.ask(); jarvis:grdset-toggle event; 90-s auto-refresh; voice: "graph dataset/dataset graph/grdset/backed nodes/data dark nodes/node dataset coverage/which nodes have data/graph data" */}
+            <GraphDatasetNexus />
             {/* F586 (overnight 2026-09-04): Swarm × Task Advisor (SWTASK) — parallel-fetches /entities/Task + /entities/SwarmJob; keyword-correlates active tasks against running/queued swarm jobs → AUTOMATABLE vs MANUAL; stat tiles (tasks/jobs/automatable/manual); ALL/AUTOMATABLE/MANUAL filter tabs; ▶ ADVISE → /v1/jarvis/agent/chat AI recommendation + TTS; isSwarmTaskQuery+buildSwarmTaskScript wired into JarvisBrain.ask(); jarvis:swarmtask-toggle event; 60-s auto-refresh; ◈ SWTASK button left:6316 bottom:8 zIndex:65; voice: "swarm task/task automation/automate tasks/task advisor/swtask/automation advisor/which tasks/assign tasks" */}
             <SwarmTaskAdvisor />
             <Suspense fallback={<Loading />}>

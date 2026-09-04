@@ -158,6 +158,7 @@ import { isGrswrmQuery, buildGrswrmScript } from "./GraphSwarmCoverage";
 import { isGrcntQuery, buildGrcntScript } from "./GraphContactNexus";
 import { isGrinvQuery, buildGrinvScript } from "./GraphInvestmentNexus";
 import { isGrtaskQuery, buildGrtaskScript } from "./GraphTaskNexus";
+import { isGrdsetQuery, buildGrdsetScript } from "./GraphDatasetNexus";
 import { isSwarmTaskQuery, buildSwarmTaskScript } from "./SwarmTaskAdvisor";
 import { isGnsrskQuery, buildGnsrskScript } from "./GraphNodeRiskSignalCoverage";
 
@@ -666,6 +667,9 @@ export default function JarvisBrain() {
       } else if (isGrtaskQuery(q)) {
         answer = await buildGrtaskScript();
         window.dispatchEvent(new CustomEvent("jarvis:grtask-toggle"));
+      } else if (isGrdsetQuery(q)) {
+        answer = await buildGrdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grdset-toggle"));
       } else if (isGrswrmQuery(q)) {
         answer = await buildGrswrmScript();
         window.dispatchEvent(new CustomEvent("jarvis:grswrm-toggle"));
