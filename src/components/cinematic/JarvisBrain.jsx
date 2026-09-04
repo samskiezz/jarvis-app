@@ -148,6 +148,7 @@ import { isRulsintelQuery, buildRulsintelScript } from "./DecisionRulesIntelProf
 import { isRulrptQuery, buildRulrptScript } from "./DecisionRulesReportsNexus";
 import { isSceneAnchorMonitorQuery, buildSceneAnchorMonitorScript } from "./AllScenesAnchorMonitor";
 import { isDpdigQuery, buildDpdigScript } from "./DailyPriorityDigest";
+import { isGrknoQuery, buildGrknoScript } from "./GraphKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -630,6 +631,9 @@ export default function JarvisBrain() {
       } else if (isDpdigQuery(q)) {
         answer = await buildDpdigScript();
         window.dispatchEvent(new CustomEvent("jarvis:dpdig-toggle"));
+      } else if (isGrknoQuery(q)) {
+        answer = await buildGrknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grkno-toggle"));
       } else if (isSceneAnchorMonitorQuery(q)) {
         answer = await buildSceneAnchorMonitorScript();
         window.dispatchEvent(new CustomEvent("jarvis:sacm-toggle"));

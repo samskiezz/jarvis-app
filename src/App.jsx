@@ -850,6 +850,7 @@ import SwarmReportCoverageMonitor from '@/components/cinematic/SwarmReportCovera
 import IntelProfileDatasetNexus from '@/components/cinematic/IntelProfileDatasetNexus';
 import DecisionRulesContactNexus from '@/components/cinematic/DecisionRulesContactNexus';
 import DailyPriorityDigest from '@/components/cinematic/DailyPriorityDigest';
+import GraphKnowledgeNexus from '@/components/cinematic/GraphKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2633,6 +2634,8 @@ function App() {
             <OperationalMorningBriefing />
             {/* F577 (overnight 2026-09-04): Daily Priority Digest (DPDIG) — /entities/Task + /entities/RiskSignal + /v1/investigations + /v1/ops/events; urgency-ranked unified priority list; CRITICAL/HIGH/OPEN filter tabs + search; stat tiles; click-to-expand detail; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + TTS; red badge on critical count; ◈ DPDIG button left:66820 bottom:8 zIndex:136; isDpdigQuery+buildDpdigScript wired into JarvisBrain.ask(); jarvis:dpdig-toggle event; 60-s auto-refresh; voice: "daily priorities/priority digest/dpdig/what needs attention/top priorities/urgent items/action items" */}
             <DailyPriorityDigest />
+            {/* F578 (overnight 2026-09-04): Graph × Knowledge Nexus (GRKNO) — /v1/graph/centrality + /knowledge/; keyword cross-reference; DOCUMENTED nodes (≥1 article matches) vs DARK; coverage % tile; ALL/DOCUMENTED/DARK filter tabs + search; click-to-expand matched articles; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on dark count; ◈ GRKNO button left:67680 bottom:8 zIndex:137; isGrknoQuery+buildGrknoScript wired into JarvisBrain.ask(); jarvis:grkno-toggle event; 90-s auto-refresh */}
+            <GraphKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
