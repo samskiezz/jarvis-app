@@ -203,3 +203,4 @@
 [2026-09-05] F609 REMSKL: RemindersSkillNexus.jsx — /reminders/list × /v1/aip/skill; SKILL-BACKED vs UNSKILLED; isRemslkQuery+buildRemslkScript in JarvisBrain; mounted App.jsx; vite build exit 0.
 [2026-09-05] F610 REMRULS — RemindersDecisionRulesNexus.jsx created; /reminders/list × /v1/rules; RULE-WATCHED vs UNWATCHED; isRemrulsQuery+buildRemrulsScript wired into JarvisBrain.ask(); jarvis:remruls-toggle; mounted App.jsx; vite build exit 0.
 [2026-09-05] F611 REMLW: RemindersLiveWorldNexus.jsx created + mounted App.jsx + JarvisBrain.jsx wired; /reminders/list × /functions/getLiveIntel WORLD-SIGNALED vs FLOATING; vite build exit 0.
+[2026-09-05] F612 SCINTEL — Scene Intelligence Overlay: /v1/cinematic/scene/{id} x10 + /entities/RiskSignal + /entities/Task keyword cross-reference; ACTIVE/QUIET scenes; SceneIntelligenceOverlay.jsx created; JarvisBrain+App.jsx wired; vite build exit 0

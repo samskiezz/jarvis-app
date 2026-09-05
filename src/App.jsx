@@ -879,6 +879,7 @@ import RemindersGraphNexus from '@/components/cinematic/RemindersGraphNexus';
 import RemindersSkillNexus from '@/components/cinematic/RemindersSkillNexus';
 import RemindersDecisionRulesNexus from '@/components/cinematic/RemindersDecisionRulesNexus';
 import RemindersLiveWorldNexus from '@/components/cinematic/RemindersLiveWorldNexus';
+import SceneIntelligenceOverlay from '@/components/cinematic/SceneIntelligenceOverlay';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2709,6 +2710,8 @@ function App() {
             <RemindersDecisionRulesNexus />
             {/* F611 (overnight 2026-09-05): Reminders × Live World Intel Nexus (REMLW) — /reminders/list + /functions/getLiveIntel; WORLD-SIGNALED vs FLOATING reminders; coverage % tile; ALL/WORLD-SIGNALED/FLOATING filter tabs + search; click-to-expand matched events with SEISMIC/CRYPTO/FX kind badges + hit count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on floating count; ◈ REMLW button left:90760 bottom:8 zIndex:164; isRemlwQuery+buildRemlwScript wired into JarvisBrain.ask(); jarvis:remlw-toggle event; 90-s auto-refresh; voice: "remlw/reminders world/live world reminders/world-signaled reminders/live intel reminders" */}
             <RemindersLiveWorldNexus />
+            {/* F612 (overnight 2026-09-05): Scene Intelligence Overlay (SCINTEL) — /v1/cinematic/scene/{id} (all 10) + /entities/RiskSignal + /entities/Task; keyword cross-reference; ACTIVE vs QUIET scenes; red badge on ACTIVE count; ◈ SCINTEL button left:91620 bottom:8 zIndex:165; isScintelQuery+buildScintelScript wired into JarvisBrain.ask(); jarvis:scintel-toggle event; 60-s auto-refresh */}
+            <SceneIntelligenceOverlay />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
