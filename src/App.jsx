@@ -883,6 +883,7 @@ import SceneIntelligenceOverlay from '@/components/cinematic/SceneIntelligenceOv
 import OpsEventScenarioCoverage from '@/components/cinematic/OpsEventScenarioCoverage';
 import SkillScenarioCoverageMonitor from '@/components/cinematic/SkillScenarioCoverageMonitor';
 import LiveWorldGraphNexus from '@/components/cinematic/LiveWorldGraphNexus';
+import LiveIntelContactAlerter from '@/components/cinematic/LiveIntelContactAlerter';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2721,6 +2722,8 @@ function App() {
             <SkillScenarioCoverageMonitor />
             {/* F615 (overnight 2026-09-05): Live World × Graph Node Nexus (LWGRPH) — /functions/getLiveIntel + /v1/graph/centrality; WORLD-SIGNALED vs DARK classification via keyword overlap; amber badge on world-signaled count; ◈ LWGRPH button left:94200 bottom:8 zIndex:168; isLwgrphQuery+buildLwgrphScript wired into JarvisBrain.ask(); jarvis:lwgrph-toggle event; 90-s auto-refresh */}
             <LiveWorldGraphNexus />
+            {/* F616 (overnight 2026-09-05): Live Intel × Contact Alerter (LICTX) — /functions/getLiveIntel + /entities/Contact; keyword cross-reference; RELEVANT vs GENERAL contacts per live event; ▶ ALERT → /v1/jarvis/agent/chat 2-sentence outreach recommendation + TTS; 5-min auto-refresh; ◈ LICTX button left:35820 bottom:8 zIndex:75; isLictxQuery+buildLictxScript wired into JarvisBrain.ask(); jarvis:lictx-toggle event */}
+            <LiveIntelContactAlerter />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

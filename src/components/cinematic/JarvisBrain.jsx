@@ -186,6 +186,7 @@ import { isRemlwQuery, buildRemlwScript } from "./RemindersLiveWorldNexus";
 import { isScintelQuery, buildScintelScript } from "./SceneIntelligenceOverlay";
 import { isSkscnQuery, buildSkscnScript } from "./SkillScenarioCoverageMonitor";
 import { isLwgrphQuery, buildLwgrphScript } from "./LiveWorldGraphNexus";
+import { isLictxQuery, buildLictxScript } from "./LiveIntelContactAlerter";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -789,6 +790,9 @@ export default function JarvisBrain() {
       } else if (isLwgrphQuery(q)) {
         answer = await buildLwgrphScript();
         window.dispatchEvent(new CustomEvent("jarvis:lwgrph-toggle"));
+      } else if (isLictxQuery(q)) {
+        answer = await buildLictxScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lictx-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
