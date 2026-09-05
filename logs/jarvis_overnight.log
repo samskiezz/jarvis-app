@@ -206,3 +206,4 @@
 [2026-09-05] F612 SCINTEL — Scene Intelligence Overlay: /v1/cinematic/scene/{id} x10 + /entities/RiskSignal + /entities/Task keyword cross-reference; ACTIVE/QUIET scenes; SceneIntelligenceOverlay.jsx created; JarvisBrain+App.jsx wired; vite build exit 0
 [2026-09-05] F613 OpsEventScenarioCoverage (OESCN): /v1/ops/events + /v1/scenario/list nexus; BACKED vs UNPLANNED; coverage tile; ASSESS → agent/chat + TTS; ◈ OESCN left:92480 zIndex:166; vite build exit 0.
 [2026-09-05] F614 Skill × Scenario Coverage Monitor (SKSCN): SkillScenarioCoverageMonitor.jsx created; isSkscnQuery+buildSkscnScript wired into JarvisBrain.ask(); mounted App.jsx; vite build exit 0.
+2026-09-05 F615 LiveWorldGraphNexus (LWGRPH) — /functions/getLiveIntel + /v1/graph/centrality; WORLD-SIGNALED vs DARK; LiveWorldGraphNexus.jsx created; wired JarvisBrain.jsx isLwgrphQuery+buildLwgrphScript; mounted App.jsx; backlog F614+F615 marked [x]; vite build exit 0.

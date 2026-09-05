@@ -882,6 +882,7 @@ import RemindersLiveWorldNexus from '@/components/cinematic/RemindersLiveWorldNe
 import SceneIntelligenceOverlay from '@/components/cinematic/SceneIntelligenceOverlay';
 import OpsEventScenarioCoverage from '@/components/cinematic/OpsEventScenarioCoverage';
 import SkillScenarioCoverageMonitor from '@/components/cinematic/SkillScenarioCoverageMonitor';
+import LiveWorldGraphNexus from '@/components/cinematic/LiveWorldGraphNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2718,6 +2719,8 @@ function App() {
             <OpsEventScenarioCoverage />
             {/* F614 (overnight 2026-09-05): Skill × Scenario Coverage Monitor (SKSCN) — /v1/aip/skill + /v1/scenario/list; keyword cross-reference; BACKED vs UNBACKED scenarios; coverage % tile; ALL/BACKED/UNBACKED filter tabs + search; click-to-expand matched skills with domain+score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unbacked count; ◈ SKSCN button left:93340 bottom:8 zIndex:167; isSkscnQuery+buildSkscnScript wired into JarvisBrain.ask(); jarvis:skscn-toggle event; 90-s auto-refresh; voice: "skill scenario/scenario skill/skscn/skill scenario coverage/which scenarios have skills/scenario skill gap" */}
             <SkillScenarioCoverageMonitor />
+            {/* F615 (overnight 2026-09-05): Live World × Graph Node Nexus (LWGRPH) — /functions/getLiveIntel + /v1/graph/centrality; WORLD-SIGNALED vs DARK classification via keyword overlap; amber badge on world-signaled count; ◈ LWGRPH button left:94200 bottom:8 zIndex:168; isLwgrphQuery+buildLwgrphScript wired into JarvisBrain.ask(); jarvis:lwgrph-toggle event; 90-s auto-refresh */}
+            <LiveWorldGraphNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
