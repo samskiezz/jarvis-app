@@ -889,6 +889,7 @@ import TaskKnowledgeNexus from '@/components/cinematic/TaskKnowledgeNexus';
 import LiveIntelInvestigationCorrelator from '@/components/cinematic/LiveIntelInvestigationCorrelator';
 import OpsEventDatasetNexus from '@/components/cinematic/OpsEventDatasetNexus';
 import PrioritizedActionQueue from '@/components/cinematic/PrioritizedActionQueue';
+import OpsEventClusterAnalyzer from '@/components/cinematic/OpsEventClusterAnalyzer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2739,6 +2740,8 @@ function App() {
             <OpsEventDatasetNexus />
             {/* F620 (overnight 2026-09-05): Prioritized Action Queue (PAQ) — /entities/Task + /entities/RiskSignal + /v1/investigations; priority-scored merged queue (BLOCKED task=90, CRITICAL risk=95, ESCALATED case=85, etc.); filter tabs ALL/TASK/RISK/CASE + search; click-to-expand + ▶ HANDLE → /v1/jarvis/agent/chat 2-sentence action advice + TTS; red badge on critical count; ◈ PAQ button left:96780 bottom:8 zIndex:171; isPaqQuery+buildPaqScript wired into JarvisBrain.ask(); jarvis:paq-toggle event; 60-s auto-refresh; voice: "action queue/priority queue/paq/what needs attention/top priorities/urgent queue/prioritized action" */}
             <PrioritizedActionQueue />
+            {/* F622 (overnight 2026-09-05): Ops Event Cluster Analyzer (OPSCLU) voice wiring — OpsEventClusterAnalyzer.jsx pre-existed (◈ OPSCLU btn left:72448 zIndex:110; /v1/ops/events; severity-scored service clusters; HOT/ELEVATED/QUIET filter tabs; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; 45-s auto-refresh; jarvis:opsclu-toggle) but was not mounted in App.jsx and had no JarvisBrain intent handler; imported isOpsClusterQuery+buildOpsClusterScript into JarvisBrain.jsx; mounted OpsEventClusterAnalyzer in App.jsx; "JARVIS, ops cluster/service cluster/event cluster/cluster analysis/service load/opsclu" now speaks hot-cluster count + top cluster names + dispatches jarvis:opsclu-toggle; /v1/ops/events real endpoint; vite build exit 0. */}
+            <OpsEventClusterAnalyzer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
