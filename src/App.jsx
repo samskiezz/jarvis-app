@@ -884,6 +884,7 @@ import OpsEventScenarioCoverage from '@/components/cinematic/OpsEventScenarioCov
 import SkillScenarioCoverageMonitor from '@/components/cinematic/SkillScenarioCoverageMonitor';
 import LiveWorldGraphNexus from '@/components/cinematic/LiveWorldGraphNexus';
 import LiveIntelContactAlerter from '@/components/cinematic/LiveIntelContactAlerter';
+import TaskKnowledgeNexus from '@/components/cinematic/TaskKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2724,6 +2725,8 @@ function App() {
             <LiveWorldGraphNexus />
             {/* F616 (overnight 2026-09-05): Live Intel × Contact Alerter (LICTX) — /functions/getLiveIntel + /entities/Contact; keyword cross-reference; RELEVANT vs GENERAL contacts per live event; ▶ ALERT → /v1/jarvis/agent/chat 2-sentence outreach recommendation + TTS; 5-min auto-refresh; ◈ LICTX button left:35820 bottom:8 zIndex:75; isLictxQuery+buildLictxScript wired into JarvisBrain.ask(); jarvis:lictx-toggle event */}
             <LiveIntelContactAlerter />
+            {/* F617 (overnight 2026-09-05): Task × Knowledge Coverage Nexus (TSKKNOW) — /entities/Task + /knowledge/; DOCUMENTED tasks (≥1 article keyword-matches) vs UNDOCUMENTED; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched articles with kind badge + summary + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; amber badge on undocumented count; ◈ TSKKNOW button left:95060 bottom:8 zIndex:169; isTskknowQuery+buildTskknowScript wired into JarvisBrain.ask(); jarvis:tskknow-toggle event; 90-s auto-refresh; voice: "tskknow/task knowledge/knowledge tasks/task documentation/documented tasks/undocumented tasks/which tasks have knowledge/task knowledge gap/knowledge-backed tasks" */}
+            <TaskKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
