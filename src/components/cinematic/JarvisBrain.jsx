@@ -183,6 +183,7 @@ import { isRemslkQuery, buildRemslkScript } from "./RemindersSkillNexus";
 import { isRemrulsQuery, buildRemrulsScript } from "./RemindersDecisionRulesNexus";
 import { isOescnQuery, buildOescnScript } from "./OpsEventScenarioCoverage";
 import { isRemlwQuery, buildRemlwScript } from "./RemindersLiveWorldNexus";
+import { isReminvstQuery, buildReminvstScript } from "./RemindersInvestmentNexus";
 import { isScintelQuery, buildScintelScript } from "./SceneIntelligenceOverlay";
 import { isSkscnQuery, buildSkscnScript } from "./SkillScenarioCoverageMonitor";
 import { isLwgrphQuery, buildLwgrphScript } from "./LiveWorldGraphNexus";
@@ -772,6 +773,9 @@ export default function JarvisBrain() {
       } else if (isRemlwQuery(q)) {
         answer = await buildRemlwScript();
         window.dispatchEvent(new CustomEvent("jarvis:remlw-toggle"));
+      } else if (isReminvstQuery(q)) {
+        answer = await buildReminvstScript();
+        window.dispatchEvent(new CustomEvent("jarvis:reminvst-toggle"));
       } else if (isScintelQuery(q)) {
         answer = await buildScintelScript();
         window.dispatchEvent(new CustomEvent("jarvis:scintel-toggle"));

@@ -879,6 +879,7 @@ import RemindersGraphNexus from '@/components/cinematic/RemindersGraphNexus';
 import RemindersSkillNexus from '@/components/cinematic/RemindersSkillNexus';
 import RemindersDecisionRulesNexus from '@/components/cinematic/RemindersDecisionRulesNexus';
 import RemindersLiveWorldNexus from '@/components/cinematic/RemindersLiveWorldNexus';
+import RemindersInvestmentNexus from '@/components/cinematic/RemindersInvestmentNexus';
 import SceneIntelligenceOverlay from '@/components/cinematic/SceneIntelligenceOverlay';
 import OpsEventScenarioCoverage from '@/components/cinematic/OpsEventScenarioCoverage';
 import SkillScenarioCoverageMonitor from '@/components/cinematic/SkillScenarioCoverageMonitor';
@@ -2718,6 +2719,8 @@ function App() {
             <RemindersDecisionRulesNexus />
             {/* F611 (overnight 2026-09-05): Reminders × Live World Intel Nexus (REMLW) — /reminders/list + /functions/getLiveIntel; WORLD-SIGNALED vs FLOATING reminders; coverage % tile; ALL/WORLD-SIGNALED/FLOATING filter tabs + search; click-to-expand matched events with SEISMIC/CRYPTO/FX kind badges + hit count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on floating count; ◈ REMLW button left:90760 bottom:8 zIndex:164; isRemlwQuery+buildRemlwScript wired into JarvisBrain.ask(); jarvis:remlw-toggle event; 90-s auto-refresh; voice: "remlw/reminders world/live world reminders/world-signaled reminders/live intel reminders" */}
             <RemindersLiveWorldNexus />
+            {/* F621 (overnight 2026-09-05): Reminders × Investment Nexus (REMINVST) — /reminders/list + /entities/Investment; keyword cross-reference; INVESTMENT-LINKED vs FLOATING reminders; coverage % tile; ALL/INVESTMENT-LINKED/FLOATING filter tabs + search; click-to-expand matched holdings with type badge + hits; ▶ ASSESS → /v1/jarvis/agent/chat portfolio-memory brief + TTS; amber badge on floating count; ◈ REMINVST button left:96780 bottom:8 zIndex:171; isReminvstQuery+buildReminvstScript wired into JarvisBrain.ask(); jarvis:reminvst-toggle event; 90-s auto-refresh; voice: "reminvst/reminders investment/investment reminders/portfolio reminders/which reminders match holdings/investment-linked reminders" */}
+            <RemindersInvestmentNexus />
             {/* F612 (overnight 2026-09-05): Scene Intelligence Overlay (SCINTEL) — /v1/cinematic/scene/{id} (all 10) + /entities/RiskSignal + /entities/Task; keyword cross-reference; ACTIVE vs QUIET scenes; red badge on ACTIVE count; ◈ SCINTEL button left:91620 bottom:8 zIndex:165; isScintelQuery+buildScintelScript wired into JarvisBrain.ask(); jarvis:scintel-toggle event; 60-s auto-refresh */}
             <SceneIntelligenceOverlay />
             {/* F613 (overnight 2026-09-05): Ops Event × Scenario Coverage (OESCN) — /v1/ops/events + /v1/scenario/list; keyword cross-reference; BACKED vs UNPLANNED ops events; coverage % tile; ALL/BACKED/UNPLANNED filter tabs + search; click-to-expand matched scenarios (kind badge + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unplanned count; ◈ OESCN button left:92480 bottom:8 zIndex:166; isOescnQuery+buildOescnScript wired into JarvisBrain.ask(); jarvis:oescn-toggle event; 90-s auto-refresh; voice: "ops event scenario/ops scenario coverage/oescn/unplanned events/event scenario/scenario ops" */}
