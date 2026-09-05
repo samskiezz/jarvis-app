@@ -871,6 +871,7 @@ import RemindersContactNexus from '@/components/cinematic/RemindersContactNexus'
 import RemindersKnowledgeNexus from '@/components/cinematic/RemindersKnowledgeNexus';
 import RemindersSwarmJobNexus from '@/components/cinematic/RemindersSwarmJobNexus';
 import RemindersIntelProfileNexus from '@/components/cinematic/RemindersIntelProfileNexus';
+import RemindersDatasetNexus from '@/components/cinematic/RemindersDatasetNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2689,6 +2690,7 @@ function App() {
             <RemindersKnowledgeNexus />
             <RemindersSwarmJobNexus />
             <RemindersIntelProfileNexus />
+            <RemindersDatasetNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
