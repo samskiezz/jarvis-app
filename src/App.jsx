@@ -890,6 +890,7 @@ import LiveIntelInvestigationCorrelator from '@/components/cinematic/LiveIntelIn
 import OpsEventDatasetNexus from '@/components/cinematic/OpsEventDatasetNexus';
 import PrioritizedActionQueue from '@/components/cinematic/PrioritizedActionQueue';
 import OpsEventClusterAnalyzer from '@/components/cinematic/OpsEventClusterAnalyzer';
+import LiveIntelScenarioAlignment from '@/components/cinematic/LiveIntelScenarioAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2742,6 +2743,8 @@ function App() {
             <PrioritizedActionQueue />
             {/* F622 (overnight 2026-09-05): Ops Event Cluster Analyzer (OPSCLU) voice wiring — OpsEventClusterAnalyzer.jsx pre-existed (◈ OPSCLU btn left:72448 zIndex:110; /v1/ops/events; severity-scored service clusters; HOT/ELEVATED/QUIET filter tabs; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; 45-s auto-refresh; jarvis:opsclu-toggle) but was not mounted in App.jsx and had no JarvisBrain intent handler; imported isOpsClusterQuery+buildOpsClusterScript into JarvisBrain.jsx; mounted OpsEventClusterAnalyzer in App.jsx; "JARVIS, ops cluster/service cluster/event cluster/cluster analysis/service load/opsclu" now speaks hot-cluster count + top cluster names + dispatches jarvis:opsclu-toggle; /v1/ops/events real endpoint; vite build exit 0. */}
             <OpsEventClusterAnalyzer />
+            {/* F623 (overnight 2026-09-05): Live Intel × Scenario Alignment (LISCEN) voice wiring — LiveIntelScenarioAlignment.jsx pre-existed (◈ LISCEN btn left:63480 zIndex:123; /functions/getLiveIntel + /v1/scenario/list; TRIGGERED/DORMANT cross-reference; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; 60-s auto-refresh; jarvis:liscen-toggle) but was not mounted in App.jsx and had no JarvisBrain intent handler; imported isLiscenQuery+buildLiscenScript into JarvisBrain.jsx; mounted LiveIntelScenarioAlignment in App.jsx; "JARVIS, live scenario/world scenario/liscen/intel scenario/scenario trigger/triggered scenario/live world scenario" now speaks triggered vs dormant scenario count + dispatches jarvis:liscen-toggle to open panel; /functions/getLiveIntel + /v1/scenario/list real endpoints; vite build exit 0. */}
+            <LiveIntelScenarioAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

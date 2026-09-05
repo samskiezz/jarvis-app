@@ -215,3 +215,4 @@
 2026-09-05 F620 GNOPS voice wiring: imported isGnopsQuery+buildGnopsScript into JarvisBrain.jsx; GraphNodeOpsEventCoverage.jsx already mounted; vite build exit 0.
 2026-09-05 | F621 | REMINVST | RemindersInvestmentNexus.jsx created + mounted App.jsx + voice-wired JarvisBrain.jsx; /reminders/list × /entities/Investment cross-ref; vite build exit 0
 [2026-09-05] F622 OPSCLU voice wiring: OpsEventClusterAnalyzer mounted in App.jsx; isOpsClusterQuery+buildOpsClusterScript imported into JarvisBrain.jsx; 'JARVIS, ops cluster/opsclu' now speaks hot-cluster count + opens OPSCLU panel; /v1/ops/events real endpoint; vite build exit 0.
+2026-09-05 F623 LISCEN: wired isLiscenQuery+buildLiscenScript into JarvisBrain.jsx; mounted LiveIntelScenarioAlignment in App.jsx; /functions/getLiveIntel + /v1/scenario/list; TRIGGERED/DORMANT scenario cross-reference; voice: live scenario/liscen; vite build exit 0.
