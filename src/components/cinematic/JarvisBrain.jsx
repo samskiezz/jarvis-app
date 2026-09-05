@@ -184,6 +184,7 @@ import { isRemrulsQuery, buildRemrulsScript } from "./RemindersDecisionRulesNexu
 import { isOescnQuery, buildOescnScript } from "./OpsEventScenarioCoverage";
 import { isRemlwQuery, buildRemlwScript } from "./RemindersLiveWorldNexus";
 import { isScintelQuery, buildScintelScript } from "./SceneIntelligenceOverlay";
+import { isSkscnQuery, buildSkscnScript } from "./SkillScenarioCoverageMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -781,6 +782,9 @@ export default function JarvisBrain() {
       } else if (isAmbientQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
         answer = "Toggling ambient reactor hum, sir.";
+      } else if (isSkscnQuery(q)) {
+        answer = await buildSkscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skscn-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

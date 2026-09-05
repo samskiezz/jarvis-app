@@ -881,6 +881,7 @@ import RemindersDecisionRulesNexus from '@/components/cinematic/RemindersDecisio
 import RemindersLiveWorldNexus from '@/components/cinematic/RemindersLiveWorldNexus';
 import SceneIntelligenceOverlay from '@/components/cinematic/SceneIntelligenceOverlay';
 import OpsEventScenarioCoverage from '@/components/cinematic/OpsEventScenarioCoverage';
+import SkillScenarioCoverageMonitor from '@/components/cinematic/SkillScenarioCoverageMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2715,6 +2716,8 @@ function App() {
             <SceneIntelligenceOverlay />
             {/* F613 (overnight 2026-09-05): Ops Event × Scenario Coverage (OESCN) — /v1/ops/events + /v1/scenario/list; keyword cross-reference; BACKED vs UNPLANNED ops events; coverage % tile; ALL/BACKED/UNPLANNED filter tabs + search; click-to-expand matched scenarios (kind badge + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unplanned count; ◈ OESCN button left:92480 bottom:8 zIndex:166; isOescnQuery+buildOescnScript wired into JarvisBrain.ask(); jarvis:oescn-toggle event; 90-s auto-refresh; voice: "ops event scenario/ops scenario coverage/oescn/unplanned events/event scenario/scenario ops" */}
             <OpsEventScenarioCoverage />
+            {/* F614 (overnight 2026-09-05): Skill × Scenario Coverage Monitor (SKSCN) — /v1/aip/skill + /v1/scenario/list; keyword cross-reference; BACKED vs UNBACKED scenarios; coverage % tile; ALL/BACKED/UNBACKED filter tabs + search; click-to-expand matched skills with domain+score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unbacked count; ◈ SKSCN button left:93340 bottom:8 zIndex:167; isSkscnQuery+buildSkscnScript wired into JarvisBrain.ask(); jarvis:skscn-toggle event; 90-s auto-refresh; voice: "skill scenario/scenario skill/skscn/skill scenario coverage/which scenarios have skills/scenario skill gap" */}
+            <SkillScenarioCoverageMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
