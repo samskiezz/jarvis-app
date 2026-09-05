@@ -181,6 +181,7 @@ import { isRemrptQuery, buildRemrptScript } from "./RemindersReportsNexus";
 import { isRemgrphQuery, buildRemgrphScript } from "./RemindersGraphNexus";
 import { isRemslkQuery, buildRemslkScript } from "./RemindersSkillNexus";
 import { isRemrulsQuery, buildRemrulsScript } from "./RemindersDecisionRulesNexus";
+import { isOescnQuery, buildOescnScript } from "./OpsEventScenarioCoverage";
 import { isRemlwQuery, buildRemlwScript } from "./RemindersLiveWorldNexus";
 import { isScintelQuery, buildScintelScript } from "./SceneIntelligenceOverlay";
 
@@ -757,6 +758,8 @@ export default function JarvisBrain() {
         window.dispatchEvent(new CustomEvent("jarvis:remskl-toggle"));
       } else if (isRemrulsQuery(q)) {
         answer = await buildRemrulsScript();
+      } else if (isOescnQuery(q)) {
+        answer = await buildOescnScript();
         window.dispatchEvent(new CustomEvent("jarvis:remruls-toggle"));
       } else if (isRemlwQuery(q)) {
         answer = await buildRemlwScript();
