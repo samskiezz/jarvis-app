@@ -878,6 +878,7 @@ import RemindersReportsNexus from '@/components/cinematic/RemindersReportsNexus'
 import RemindersGraphNexus from '@/components/cinematic/RemindersGraphNexus';
 import RemindersSkillNexus from '@/components/cinematic/RemindersSkillNexus';
 import RemindersDecisionRulesNexus from '@/components/cinematic/RemindersDecisionRulesNexus';
+import RemindersLiveWorldNexus from '@/components/cinematic/RemindersLiveWorldNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2706,6 +2707,8 @@ function App() {
             {/* F609 (overnight 2026-09-05): Reminders × AIP Skill Nexus (REMSKL) — /reminders/list + /v1/aip/skill; keyword cross-reference; SKILL-BACKED vs UNSKILLED reminders; coverage % tile; ALL/SKILL-BACKED/UNSKILLED filter tabs + search; click-to-expand matched skills with domain+score+hits; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unskilled count; ◈ REMSKL button left:89040 bottom:8 zIndex:162; isRemslkQuery+buildRemslkScript wired into JarvisBrain.ask(); jarvis:remskl-toggle event; 90-s auto-refresh; voice: "remskl/reminders skill/skill reminders/skill-backed reminders/unskilled reminders/reminder skill coverage" */}
             <RemindersSkillNexus />
             <RemindersDecisionRulesNexus />
+            {/* F611 (overnight 2026-09-05): Reminders × Live World Intel Nexus (REMLW) — /reminders/list + /functions/getLiveIntel; WORLD-SIGNALED vs FLOATING reminders; coverage % tile; ALL/WORLD-SIGNALED/FLOATING filter tabs + search; click-to-expand matched events with SEISMIC/CRYPTO/FX kind badges + hit count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on floating count; ◈ REMLW button left:90760 bottom:8 zIndex:164; isRemlwQuery+buildRemlwScript wired into JarvisBrain.ask(); jarvis:remlw-toggle event; 90-s auto-refresh; voice: "remlw/reminders world/live world reminders/world-signaled reminders/live intel reminders" */}
+            <RemindersLiveWorldNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
