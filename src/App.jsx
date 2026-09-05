@@ -875,6 +875,7 @@ import RemindersDatasetNexus from '@/components/cinematic/RemindersDatasetNexus'
 import RemindersOpsEventNexus from '@/components/cinematic/RemindersOpsEventNexus';
 import RemindersScenarioNexus from '@/components/cinematic/RemindersScenarioNexus';
 import RemindersReportsNexus from '@/components/cinematic/RemindersReportsNexus';
+import RemindersGraphNexus from '@/components/cinematic/RemindersGraphNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2698,6 +2699,8 @@ function App() {
             <RemindersScenarioNexus />
             {/* F607 (overnight 2026-09-05): Reminders × Reports Nexus (REMRPT) — /reminders/list + /v1/reports; keyword cross-reference; REPORT-BACKED vs FLOATING reminders; coverage % tile; ALL/REPORT-BACKED/FLOATING filter tabs + search; click-to-expand matched reports with type badge + author + summary + hits; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on floating count; ◈ REMRPT button left:87320 bottom:8 zIndex:160; isRemrptQuery+buildRemrptScript wired into JarvisBrain.ask(); jarvis:remrpt-toggle event; 90-s auto-refresh; voice: "remrpt/reminders report/report reminders/report-backed reminders/floating report notes/reminder report coverage" */}
             <RemindersReportsNexus />
+            {/* F608 (overnight 2026-09-05): Reminders × Graph Node Coverage (REMGRPH) — /reminders/list + /v1/graph/centrality; keyword cross-reference; GRAPH-LINKED vs FLOATING reminders; coverage % tile; ALL/GRAPH-LINKED/FLOATING filter tabs + search; click-to-expand matched nodes with centrality score + hits; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on floating count; ◈ REMGRPH button left:88180 bottom:8 zIndex:161; isRemgrphQuery+buildRemgrphScript wired into JarvisBrain.ask(); jarvis:remgrph-toggle event; 90-s auto-refresh; voice: "remgrph/reminders graph/graph reminders/graph-linked reminders/node reminders/reminder node coverage" */}
+            <RemindersGraphNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
