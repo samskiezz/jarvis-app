@@ -171,6 +171,7 @@ import { isRptinvQuery, buildRptinvScript } from "./ReportsInvestigationNexus";
 import { isRemtaskQuery, buildRemtaskScript } from "./RemindersTaskNexus";
 import { isRemrskQuery, buildRemrskScript } from "./RemindersRiskSignalNexus";
 import { isRemcntQuery, buildRemcntScript } from "./RemindersContactNexus";
+import { isRemknoQuery, buildRemknoScript } from "./RemindersKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -716,6 +717,9 @@ export default function JarvisBrain() {
       } else if (isRemcntQuery(q)) {
         answer = await buildRemcntScript();
         window.dispatchEvent(new CustomEvent("jarvis:remcnt-toggle"));
+      } else if (isRemknoQuery(q)) {
+        answer = await buildRemknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remkno-toggle"));
       } else if (isGrrulsQuery(q)) {
         answer = await buildGrrulsScript();
         window.dispatchEvent(new CustomEvent("jarvis:grruls-toggle"));
