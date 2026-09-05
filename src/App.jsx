@@ -877,6 +877,7 @@ import RemindersScenarioNexus from '@/components/cinematic/RemindersScenarioNexu
 import RemindersReportsNexus from '@/components/cinematic/RemindersReportsNexus';
 import RemindersGraphNexus from '@/components/cinematic/RemindersGraphNexus';
 import RemindersSkillNexus from '@/components/cinematic/RemindersSkillNexus';
+import RemindersDecisionRulesNexus from '@/components/cinematic/RemindersDecisionRulesNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2704,6 +2705,7 @@ function App() {
             <RemindersGraphNexus />
             {/* F609 (overnight 2026-09-05): Reminders × AIP Skill Nexus (REMSKL) — /reminders/list + /v1/aip/skill; keyword cross-reference; SKILL-BACKED vs UNSKILLED reminders; coverage % tile; ALL/SKILL-BACKED/UNSKILLED filter tabs + search; click-to-expand matched skills with domain+score+hits; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unskilled count; ◈ REMSKL button left:89040 bottom:8 zIndex:162; isRemslkQuery+buildRemslkScript wired into JarvisBrain.ask(); jarvis:remskl-toggle event; 90-s auto-refresh; voice: "remskl/reminders skill/skill reminders/skill-backed reminders/unskilled reminders/reminder skill coverage" */}
             <RemindersSkillNexus />
+            <RemindersDecisionRulesNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

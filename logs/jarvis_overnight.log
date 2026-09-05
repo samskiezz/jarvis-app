@@ -201,3 +201,4 @@
 2026-09-05 F607 REMRPT: RemindersReportsNexus.jsx created; /reminders/list + /v1/reports cross-reference; REPORT-BACKED vs FLOATING tabs; ASSESS → agent/chat + TTS; ◈ REMRPT left:87320 zIndex:160; isRemrptQuery+buildRemrptScript wired in JarvisBrain.ask(); mounted App.jsx; vite build exit 0.
 [2026-09-05] F608 REMGRPH: RemindersGraphNexus.jsx created; /reminders/list + /v1/graph/centrality cross-ref; GRAPH-LINKED vs FLOATING; isRemgrphQuery+buildRemgrphScript wired into JarvisBrain.jsx; mounted App.jsx; vite build exit 0.
 [2026-09-05] F609 REMSKL: RemindersSkillNexus.jsx — /reminders/list × /v1/aip/skill; SKILL-BACKED vs UNSKILLED; isRemslkQuery+buildRemslkScript in JarvisBrain; mounted App.jsx; vite build exit 0.
+[2026-09-05] F610 REMRULS — RemindersDecisionRulesNexus.jsx created; /reminders/list × /v1/rules; RULE-WATCHED vs UNWATCHED; isRemrulsQuery+buildRemrulsScript wired into JarvisBrain.ask(); jarvis:remruls-toggle; mounted App.jsx; vite build exit 0.
