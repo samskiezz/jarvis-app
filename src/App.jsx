@@ -886,6 +886,7 @@ import LiveWorldGraphNexus from '@/components/cinematic/LiveWorldGraphNexus';
 import LiveIntelContactAlerter from '@/components/cinematic/LiveIntelContactAlerter';
 import TaskKnowledgeNexus from '@/components/cinematic/TaskKnowledgeNexus';
 import LiveIntelInvestigationCorrelator from '@/components/cinematic/LiveIntelInvestigationCorrelator';
+import OpsEventDatasetNexus from '@/components/cinematic/OpsEventDatasetNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2730,6 +2731,8 @@ function App() {
             <TaskKnowledgeNexus />
             {/* F618 (overnight 2026-09-05): Live Intel × Investigation Correlator (LIIC) — /functions/getLiveIntel + /v1/investigations; keyword cross-reference; FLAGGED investigations (≥1 live event match) vs CLEAR; coverage % tile; ALL/FLAGGED/CLEAR filter tabs + search; click-to-expand matched events (QUAKE/CRYPTO/FX kind badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence correlation brief + TTS; amber badge on flagged count; ◈ LIIC button left:215040 bottom:8 zIndex:140; isLiicQuery+buildLiicScript wired into JarvisBrain.ask(); jarvis:liic-toggle event; 5-min auto-refresh; voice: "live intel correlator/liic/investigation alert/world events investigations/quake cases/intel case match/flagged investigations/world alert cases/correlate investigations" */}
             <LiveIntelInvestigationCorrelator />
+            {/* F619 (overnight 2026-09-05): Ops Events × Dataset Nexus (OEVDSET) — /v1/ops/events + /v1/datasets; keyword cross-reference; DATA-BACKED ops events (≥1 dataset keyword-matches) vs DATA-DARK; coverage % tile; ALL/BACKED/DATA-DARK filter tabs + search; click-to-expand matched datasets (kind badge + row count + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-intelligence brief + TTS; amber badge on data-dark count; ◈ OEVDSET button left:95920 bottom:8 zIndex:170; isOevdsetQuery+buildOevdsetScript wired into JarvisBrain.ask(); jarvis:oevdset-toggle event; 90-s auto-refresh; voice: "ops event dataset/dataset ops/oevdset/data-backed ops/ops data coverage/which ops events have data" */}
+            <OpsEventDatasetNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
