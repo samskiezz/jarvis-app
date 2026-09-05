@@ -887,6 +887,7 @@ import LiveIntelContactAlerter from '@/components/cinematic/LiveIntelContactAler
 import TaskKnowledgeNexus from '@/components/cinematic/TaskKnowledgeNexus';
 import LiveIntelInvestigationCorrelator from '@/components/cinematic/LiveIntelInvestigationCorrelator';
 import OpsEventDatasetNexus from '@/components/cinematic/OpsEventDatasetNexus';
+import PrioritizedActionQueue from '@/components/cinematic/PrioritizedActionQueue';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2733,6 +2734,8 @@ function App() {
             <LiveIntelInvestigationCorrelator />
             {/* F619 (overnight 2026-09-05): Ops Events × Dataset Nexus (OEVDSET) — /v1/ops/events + /v1/datasets; keyword cross-reference; DATA-BACKED ops events (≥1 dataset keyword-matches) vs DATA-DARK; coverage % tile; ALL/BACKED/DATA-DARK filter tabs + search; click-to-expand matched datasets (kind badge + row count + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-intelligence brief + TTS; amber badge on data-dark count; ◈ OEVDSET button left:95920 bottom:8 zIndex:170; isOevdsetQuery+buildOevdsetScript wired into JarvisBrain.ask(); jarvis:oevdset-toggle event; 90-s auto-refresh; voice: "ops event dataset/dataset ops/oevdset/data-backed ops/ops data coverage/which ops events have data" */}
             <OpsEventDatasetNexus />
+            {/* F620 (overnight 2026-09-05): Prioritized Action Queue (PAQ) — /entities/Task + /entities/RiskSignal + /v1/investigations; priority-scored merged queue (BLOCKED task=90, CRITICAL risk=95, ESCALATED case=85, etc.); filter tabs ALL/TASK/RISK/CASE + search; click-to-expand + ▶ HANDLE → /v1/jarvis/agent/chat 2-sentence action advice + TTS; red badge on critical count; ◈ PAQ button left:96780 bottom:8 zIndex:171; isPaqQuery+buildPaqScript wired into JarvisBrain.ask(); jarvis:paq-toggle event; 60-s auto-refresh; voice: "action queue/priority queue/paq/what needs attention/top priorities/urgent queue/prioritized action" */}
+            <PrioritizedActionQueue />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

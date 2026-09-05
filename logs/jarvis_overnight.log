@@ -211,3 +211,4 @@
 [2026-09-05] F617 Task × Knowledge Coverage Nexus (TSKKNOW) — TaskKnowledgeNexus.jsx created; /entities/Task + /knowledge/ cross-ref; DOCUMENTED vs UNDOCUMENTED; wired into JarvisBrain.jsx + App.jsx; vite build exit 0.
 [2026-09-05] F618 Live Intel × Investigation Correlator (LIIC): mounted LiveIntelInvestigationCorrelator.jsx in App.jsx; wired isLiicQuery+buildLiicScript into JarvisBrain.jsx; /functions/getLiveIntel + /v1/investigations; vite build exit 0.
 [2026-09-05] F619 OpsEventDatasetNexus — /v1/ops/events + /v1/datasets cross-reference (DATA-BACKED/DATA-DARK); OpsEventDatasetNexus.jsx created; wired into JarvisBrain.jsx + App.jsx; vite build exit 0.
+2026-09-05 F620 PrioritizedActionQueue (PAQ) — /entities/Task + /entities/RiskSignal + /v1/investigations; priority-scored unified action queue; ◈ PAQ btn left:96780 zIndex:171; isPaqQuery+buildPaqScript wired JarvisBrain; jarvis:paq-toggle; 60-s refresh; vite build exit 0
