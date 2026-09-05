@@ -885,6 +885,7 @@ import SkillScenarioCoverageMonitor from '@/components/cinematic/SkillScenarioCo
 import LiveWorldGraphNexus from '@/components/cinematic/LiveWorldGraphNexus';
 import LiveIntelContactAlerter from '@/components/cinematic/LiveIntelContactAlerter';
 import TaskKnowledgeNexus from '@/components/cinematic/TaskKnowledgeNexus';
+import LiveIntelInvestigationCorrelator from '@/components/cinematic/LiveIntelInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2727,6 +2728,8 @@ function App() {
             <LiveIntelContactAlerter />
             {/* F617 (overnight 2026-09-05): Task × Knowledge Coverage Nexus (TSKKNOW) — /entities/Task + /knowledge/; DOCUMENTED tasks (≥1 article keyword-matches) vs UNDOCUMENTED; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched articles with kind badge + summary + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; amber badge on undocumented count; ◈ TSKKNOW button left:95060 bottom:8 zIndex:169; isTskknowQuery+buildTskknowScript wired into JarvisBrain.ask(); jarvis:tskknow-toggle event; 90-s auto-refresh; voice: "tskknow/task knowledge/knowledge tasks/task documentation/documented tasks/undocumented tasks/which tasks have knowledge/task knowledge gap/knowledge-backed tasks" */}
             <TaskKnowledgeNexus />
+            {/* F618 (overnight 2026-09-05): Live Intel × Investigation Correlator (LIIC) — /functions/getLiveIntel + /v1/investigations; keyword cross-reference; FLAGGED investigations (≥1 live event match) vs CLEAR; coverage % tile; ALL/FLAGGED/CLEAR filter tabs + search; click-to-expand matched events (QUAKE/CRYPTO/FX kind badges + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence correlation brief + TTS; amber badge on flagged count; ◈ LIIC button left:215040 bottom:8 zIndex:140; isLiicQuery+buildLiicScript wired into JarvisBrain.ask(); jarvis:liic-toggle event; 5-min auto-refresh; voice: "live intel correlator/liic/investigation alert/world events investigations/quake cases/intel case match/flagged investigations/world alert cases/correlate investigations" */}
+            <LiveIntelInvestigationCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
