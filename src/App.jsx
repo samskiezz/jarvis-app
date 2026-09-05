@@ -874,6 +874,7 @@ import RemindersIntelProfileNexus from '@/components/cinematic/RemindersIntelPro
 import RemindersDatasetNexus from '@/components/cinematic/RemindersDatasetNexus';
 import RemindersOpsEventNexus from '@/components/cinematic/RemindersOpsEventNexus';
 import RemindersScenarioNexus from '@/components/cinematic/RemindersScenarioNexus';
+import RemindersReportsNexus from '@/components/cinematic/RemindersReportsNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2695,6 +2696,8 @@ function App() {
             <RemindersDatasetNexus />
             <RemindersOpsEventNexus />
             <RemindersScenarioNexus />
+            {/* F607 (overnight 2026-09-05): Reminders × Reports Nexus (REMRPT) — /reminders/list + /v1/reports; keyword cross-reference; REPORT-BACKED vs FLOATING reminders; coverage % tile; ALL/REPORT-BACKED/FLOATING filter tabs + search; click-to-expand matched reports with type badge + author + summary + hits; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on floating count; ◈ REMRPT button left:87320 bottom:8 zIndex:160; isRemrptQuery+buildRemrptScript wired into JarvisBrain.ask(); jarvis:remrpt-toggle event; 90-s auto-refresh; voice: "remrpt/reminders report/report reminders/report-backed reminders/floating report notes/reminder report coverage" */}
+            <RemindersReportsNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
