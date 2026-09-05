@@ -193,3 +193,4 @@
 [2026-09-04] F599 REMRSK: RemindersRiskSignalNexus.jsx created; /reminders/list + /entities/RiskSignal cross-reference; RISK-BACKED vs UNLINKED reminders; wired into JarvisBrain.ask() + App.jsx; vite build exit 0.
 [2026-09-04] F600 REMCNT: RemindersContactNexus.jsx — /reminders/list × /entities/Contact cross-ref; CONTACT-LINKED vs UNLINKED; JarvisBrain intent wired; App.jsx mounted; vite build exit 0.
 [2026-09-05] F601 REMKNO: RemindersKnowledgeNexus.jsx — /reminders/list × /knowledge/; KNOWLEDGE-BACKED vs FLOATING reminders; isRemknoQuery+buildRemknoScript wired JarvisBrain; mounted App.jsx; vite build exit 0.
+[2026-09-05] F602 REMSWRM: RemindersSwarmJobNexus.jsx created; /reminders/list + /entities/SwarmJob cross-reference; SWARM-BACKED vs UNAUTOMATED; isRemswrmQuery+buildRemswrmScript wired into JarvisBrain.ask(); mounted App.jsx; vite build exit 0.
