@@ -215,6 +215,7 @@ import { isKnowopsQuery, buildKnowopsScript } from "./KnowledgeOpsEventsNexus";
 import { isOaltaskQuery, buildOaltaskScript } from "./OpsAlertTaskCoverage";
 import { isLiveTickerQuery, buildLiveTickerScript } from "./LiveMarketTicker";
 import { isModelRegistryQuery, buildModelRegistryScript } from "./ScenarioModelRegistry";
+import { isOalknowQuery, buildOalknowScript } from "./OpsAlertsKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -904,6 +905,9 @@ export default function JarvisBrain() {
       } else if (isModelRegistryQuery(q)) {
         answer = await buildModelRegistryScript();
         window.dispatchEvent(new CustomEvent("jarvis:model-registry-toggle"));
+      } else if (isOalknowQuery(q)) {
+        answer = await buildOalknowScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalknow-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

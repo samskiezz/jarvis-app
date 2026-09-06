@@ -910,6 +910,7 @@ import KnowledgeOpsEventsNexus from '@/components/cinematic/KnowledgeOpsEventsNe
 import OpsAlertTaskCoverage from '@/components/cinematic/OpsAlertTaskCoverage';
 import { LiveMarketTicker } from '@/components/cinematic/LiveMarketTicker';
 import ScenarioModelRegistry from '@/components/cinematic/ScenarioModelRegistry';
+import OpsAlertsKnowledgeNexus from '@/components/cinematic/OpsAlertsKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2801,6 +2802,8 @@ function App() {
             <LiveMarketTicker />
             {/* F645 (overnight 2026-09-06): Scenario Model Registry voice wiring (MODELS) — ScenarioModelRegistry.jsx pre-existed (F37; /v1/scenario/models; trained/untrained model catalog; drift status strip; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence model brief + TTS; 60-s auto-refresh; ⬢ MODELS button left:70760 bottom:18; jarvis:model-registry-toggle) but was not mounted in App.jsx and had no JarvisBrain intent handler; imported isModelRegistryQuery+buildModelRegistryScript into JarvisBrain.jsx; mounted ScenarioModelRegistry in App.jsx; "JARVIS, model registry/scenario models/available models/prediction models/what models/drift status/trained models/model catalog" now speaks trained vs untrained model count + dispatches jarvis:model-registry-toggle to open panel; /v1/scenario/models real endpoint; vite build exit 0. */}
             <ScenarioModelRegistry />
+            {/* F646 (overnight 2026-09-06): Ops Alerts × Knowledge Nexus (OALKNOW) — /v1/ops/alerts + /knowledge/; keyword cross-reference; DOCUMENTED alerts (≥1 article keyword-matches) vs BLIND (no knowledge backing); coverage % tile; ALL/DOCUMENTED/BLIND filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on blind count; ◈ OALKNOW button left:108820 bottom:8 zIndex:185; isOalknowQuery+buildOalknowScript wired into JarvisBrain.ask(); jarvis:oalknow-toggle event; 90-s auto-refresh; voice: "oalknow/ops alert knowledge/alert knowledge/knowledge-backed alerts/alert triage knowledge/blind alerts/which alerts have knowledge/alert knowledge coverage" */}
+            <OpsAlertsKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
