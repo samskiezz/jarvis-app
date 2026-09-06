@@ -892,6 +892,7 @@ import PrioritizedActionQueue from '@/components/cinematic/PrioritizedActionQueu
 import OpsEventClusterAnalyzer from '@/components/cinematic/OpsEventClusterAnalyzer';
 import LiveIntelScenarioAlignment from '@/components/cinematic/LiveIntelScenarioAlignment';
 import TaskGraphPriorityRanker from '@/components/cinematic/TaskGraphPriorityRanker';
+import InvestmentRulesNexus from '@/components/cinematic/InvestmentRulesNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2748,6 +2749,8 @@ function App() {
             <LiveIntelScenarioAlignment />
             {/* F624 (overnight 2026-09-06): Task Graph Priority Ranker (TGPR) voice wiring — TaskGraphPriorityRanker.jsx pre-existed (◆ TGPR btn left:73600 bottom:8 zIndex:111; /entities/Task + /v1/graph/centrality; HIGH-PRIORITY/ROUTINE cross-reference; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence priority brief + TTS; 90-s auto-refresh; jarvis:tgpr-toggle) but was not mounted in App.jsx and had no JarvisBrain intent handler; imported isTgprQuery+buildTgprScript into JarvisBrain.jsx; mounted TaskGraphPriorityRanker in App.jsx; "JARVIS, task graph/task priority graph/graph task rank/tgpr/tasks by network importance/high centrality tasks/network task priority/which tasks matter most/network priority" now speaks high-priority vs routine task count + top high-priority task names + dispatches jarvis:tgpr-toggle; /entities/Task + /v1/graph/centrality real endpoints; vite build exit 0. */}
             <TaskGraphPriorityRanker />
+            {/* F625 (overnight 2026-09-06): Investment × Rules Nexus (INVRULS) — /entities/Investment + /v1/rules; keyword cross-reference; RULE-COVERED investments (≥1 rule keyword-matches) vs UNMONITORED; coverage % tile; ALL/RULE-COVERED/UNMONITORED filter tabs + search; click-to-expand matched rules with severity+enabled status; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio monitoring brief + TTS; amber badge on unmonitored count; ◈ INVRULS button left:97640 bottom:8 zIndex:172; isInvrulesQuery+buildInvrulesScript wired into JarvisBrain.ask(); jarvis:invruls-toggle event; 90-s auto-refresh; voice: "invruls/investment rules/rules investment/portfolio rules/holdings under rules/rule-covered investments/which investments have watchtower rules/portfolio watchtower"; InvestmentRulesNexus.jsx created; mounted App.jsx; vite build exit 0. */}
+            <InvestmentRulesNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
