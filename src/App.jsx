@@ -815,6 +815,7 @@ import IntelProfileInvestigationNexus from '@/components/cinematic/IntelProfileI
 import DatasetInvestigationNexus from '@/components/cinematic/DatasetInvestigationNexus';
 import ScenarioOpsEventNexus from '@/components/cinematic/ScenarioOpsEventNexus';
 import SkillInvestigationNexus from '@/components/cinematic/SkillInvestigationNexus';
+import SkillInvestigationAdvisor from '@/components/cinematic/SkillInvestigationAdvisor';
 import TaskRiskSignalCorrelator from '@/components/cinematic/TaskRiskSignalCorrelator';
 import DecisionRulesRiskNexus from '@/components/cinematic/DecisionRulesRiskNexus';
 import RulesInvestigationNexus from '@/components/cinematic/RulesInvestigationNexus';
@@ -2588,6 +2589,8 @@ function App() {
             <ScenarioOpsEventNexus />
             {/* F499 (overnight 2026-08-31): Skill × Investigation Nexus (SKILLINV) — /v1/aip/skill + /v1/investigations; keyword cross-reference; BACKED vs UNSKILLED; coverage % tile; ALL/BACKED/UNSKILLED tabs + search; click-to-expand matched skills; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge; ◈ SKILLINV button left:25540 bottom:8 zIndex:88; isSkillinvQuery+buildSkillinvScript wired in JarvisBrain; jarvis:skillinv-toggle event; 90-s auto-refresh; voice: "skill investigation/which investigations have skills/skillinv/investigation skill coverage/skilled cases/unskilled investigation/skill case link" */}
             <SkillInvestigationNexus />
+            {/* F640 (overnight 2026-09-06): Skill × Investigation Advisor (SKIINV) voice wiring — /v1/aip/skill + /v1/investigations; NEEDED skills (≥1 case references) vs IDLE (surplus coverage); isSkiinvQuery+buildSkiinvScript wired into JarvisBrain.ask(); jarvis:skiinv-toggle event; voice: "skill investigation/investigation skill/case skill gap/skiinv/skills for cases" */}
+            <SkillInvestigationAdvisor />
             {/* F501 (overnight 2026-08-31): Task × Risk Signal Correlator (TRSC) voice wiring — /entities/Task + /entities/RiskSignal; keyword cross-reference; EXPOSED vs CLEAR tasks; isTrscQuery+buildTrscScript wired into JarvisBrain.ask(); jarvis:trsc-toggle dispatched; voice: "task risk signals/trsc/exposed tasks/tasks under risk/risk exposed tasks/task risk coverage/tasks with risks" */}
             <TaskRiskSignalCorrelator />
             {/* F502 (overnight 2026-08-31): Decision Rules × Risk Signal Nexus (RULSRSK) — /v1/rules + /entities/RiskSignal; keyword cross-reference finds WATCHTOWER rules actively triggered by live signals (TRIGGERED) vs IDLE rules; coverage % tile; ALL/TRIGGERED/IDLE filter tabs + search; click-to-expand matched signals with severity; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; red badge on critical triggers; ◈ RULSRSK button left:26400 bottom:8 zIndex:89; isRulsrskQuery+buildRulsrskScript wired in JarvisBrain; jarvis:rulsrsk-toggle event; 2-min auto-refresh; voice: "rules risk/triggered rules/rulsrsk/which rules are active/rule triggers/watchtower triggered/active rules/decision rules risk signals" */}

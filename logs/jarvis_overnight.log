@@ -232,3 +232,4 @@
 2026-09-06T13:20:01Z F636 OALINV: wired OpsAlertInvestigationCoverage into JarvisBrain.ask() + mounted in App.jsx; /v1/ops/alerts + /v1/investigations; vite build exit 0
 2026-09-06T14:19:39Z F637 LIILINK: LiveIntelInvestigationLinker voice wiring — mounted in App.jsx + wired isLiilinkQuery+buildLiilinkScript into JarvisBrain.jsx; /functions/getLiveIntel + /v1/investigations real endpoints; vite build exit 0.
 [2026-09-06] F639 Risk Signal × Graph Centrality (RSGC) voice wiring — RiskSignalGraphCentrality.jsx mounted in App.jsx; isRsgcQuery+buildRsgcScript wired into JarvisBrain.jsx; /entities/RiskSignal + /v1/graph/centrality; vite build exit 0
+[2026-09-06] F640 SKIINV: SkillInvestigationAdvisor.jsx voice-wired into JarvisBrain.ask() + mounted App.jsx; /v1/aip/skill + /v1/investigations real endpoints; vite build exit 0.

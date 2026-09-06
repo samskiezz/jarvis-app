@@ -144,6 +144,7 @@ import { isCskillQuery, buildCskillScript } from "./ContactSkillCoverage";
 import { isSkillContactQuery, buildSkillContactScript } from "./SkillContactGapAdvisor";
 import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
 import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
+import { isSkiinvQuery, buildSkiinvScript } from "./SkillInvestigationAdvisor";
 import { isRulsintelQuery, buildRulsintelScript } from "./DecisionRulesIntelProfileNexus";
 import { isRulrptQuery, buildRulrptScript } from "./DecisionRulesReportsNexus";
 import { isSceneAnchorMonitorQuery, buildSceneAnchorMonitorScript } from "./AllScenesAnchorMonitor";
@@ -680,6 +681,9 @@ export default function JarvisBrain() {
       } else if (isTimelineQuery(q)) {
         answer = await buildTimelineScript();
         window.dispatchEvent(new CustomEvent("jarvis:timeline-toggle"));
+      } else if (isSkiinvQuery(q)) {
+        answer = await buildSkiinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skiinv-toggle"));
       } else if (isAsicQuery(q)) {
         answer = await buildAsicScript();
         window.dispatchEvent(new CustomEvent("jarvis:asic-toggle"));
