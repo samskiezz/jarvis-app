@@ -199,6 +199,7 @@ import { isKoepQuery, buildKoepScript } from "./KnowledgeOpsEventPulse";
 import { isTgprQuery, buildTgprScript } from "./TaskGraphPriorityRanker";
 import { isInvrulesQuery, buildInvrulesScript } from "./InvestmentRulesNexus";
 import { isRiskRepQuery, buildRiskRepScript } from "./RiskReportMapper";
+import { isCntinvQuery, buildCntinvScript } from "./ContactInvestmentNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -841,6 +842,9 @@ export default function JarvisBrain() {
       } else if (isRiskRepQuery(q)) {
         answer = await buildRiskRepScript();
         window.dispatchEvent(new CustomEvent("jarvis:risk-report-mapper-toggle"));
+      } else if (isCntinvQuery(q)) {
+        answer = await buildCntinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cntinv-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

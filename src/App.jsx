@@ -894,6 +894,7 @@ import LiveIntelScenarioAlignment from '@/components/cinematic/LiveIntelScenario
 import TaskGraphPriorityRanker from '@/components/cinematic/TaskGraphPriorityRanker';
 import InvestmentRulesNexus from '@/components/cinematic/InvestmentRulesNexus';
 import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
+import ContactInvestmentNexus from '@/components/cinematic/ContactInvestmentNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2754,6 +2755,8 @@ function App() {
             <InvestmentRulesNexus />
             {/* F626 (overnight 2026-09-06): Risk Report Mapper (F74) — parallel-fetches /entities/RiskSignal + /v1/reports; keyword-correlates risk signals against report titles/summaries to classify each risk as EVIDENCED (≥1 report covers it) or NAKED (intelligence gap — no report); isRiskRepQuery+buildRiskRepScript wired into JarvisBrain.ask(); jarvis:risk-report-mapper-toggle event; voice: "risk report mapper/risk reports/evidence gap/naked risk/report coverage/which risks have reports/evidenced risks/risk coverage map" */}
             <RiskReportMapper />
+            {/* F628 (overnight 2026-09-06): Contact × Investment Nexus (CNTINV) — /entities/Contact + /entities/Investment; keyword cross-reference; PORTFOLIO-LINKED contacts vs UNLINKED; coverage % tile; ALL/PORTFOLIO-LINKED/UNLINKED filter tabs + search; click-to-expand matched holdings; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unlinked count; ◈ CNTINV button left:99360 bottom:8 zIndex:174; isCntinvQuery+buildCntinvScript wired into JarvisBrain.ask(); jarvis:cntinv-toggle event; 90-s auto-refresh; voice: "cntinv/contact investment/investment contact/contacts with investments/portfolio contact/who has investments/contact portfolio/contact holding" */}
+            <ContactInvestmentNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
