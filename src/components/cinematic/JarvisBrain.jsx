@@ -211,6 +211,7 @@ import { isOalinvQuery, buildOalinvScript } from "./OpsAlertInvestigationCoverag
 import { isLiilinkQuery, buildLiilinkScript } from "./LiveIntelInvestigationLinker";
 import { isOeipQuery, buildOeipScript } from "./OpsEventsIntelProfileNexus";
 import { isRsgcQuery, buildRsgcScript } from "./RiskSignalGraphCentrality";
+import { isKnowopsQuery, buildKnowopsScript } from "./KnowledgeOpsEventsNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -889,6 +890,9 @@ export default function JarvisBrain() {
       } else if (isRsgcQuery(q)) {
         answer = await buildRsgcScript();
         window.dispatchEvent(new CustomEvent("jarvis:rsgc-toggle"));
+      } else if (isKnowopsQuery(q)) {
+        answer = await buildKnowopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:knowops-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
