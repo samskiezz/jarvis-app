@@ -898,6 +898,7 @@ import ContactInvestmentNexus from '@/components/cinematic/ContactInvestmentNexu
 import ContactSwarmJobNexus from '@/components/cinematic/ContactSwarmJobNexus';
 import ContactSkillNexus from '@/components/cinematic/ContactSkillNexus';
 import InvestmentKnowledgeNexus from '@/components/cinematic/InvestmentKnowledgeNexus';
+import GraphNodeDecisionRulesNexus from '@/components/cinematic/GraphNodeDecisionRulesNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2766,6 +2767,8 @@ function App() {
             <ContactSkillNexus />
             {/* F632 (overnight 2026-09-06): Investment × Knowledge Nexus (INVKNO) — /entities/Investment + /knowledge/; keyword cross-reference; DOCUMENTED holdings (≥1 article keyword-matches) vs UNDOCUMENTED; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched articles with kind badge + hits; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on undocumented count; ◈ INVKNO button left:102800 bottom:8 zIndex:178; isInvknoQuery+buildInvknoScript wired into JarvisBrain.ask(); jarvis:invkno-toggle event; 90-s auto-refresh; voice: "invkno/investment knowledge/knowledge investment/documented holdings/which investments have articles/investment intel/portfolio knowledge" */}
             <InvestmentKnowledgeNexus />
+            {/* F633 (overnight 2026-09-06): Graph Node × Decision Rules Nexus (GNDRULS) — /v1/graph/centrality + /v1/rules; keyword cross-reference; WATCHED nodes (≥1 rule keyword-matches) vs DARK (no watchtower coverage); coverage % tile; ALL/WATCHED/DARK filter tabs + search; click-to-expand matched rules with severity+enabled+hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-monitoring brief + TTS; amber badge on dark count; ◈ GNDRULS button left:103660 bottom:8 zIndex:179; isGndRulsQuery+buildGndRulsScript wired into JarvisBrain.ask(); jarvis:gndruls-toggle event; 90-s auto-refresh; voice: "gndruls/graph rules/node rules/watched nodes/dark nodes/which nodes have rules/graph watchtower/node coverage/rule watched nodes/network rules/graph monitor" */}
+            <GraphNodeDecisionRulesNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -203,6 +203,7 @@ import { isCntinvQuery, buildCntinvScript } from "./ContactInvestmentNexus";
 import { isCntswrmQuery, buildCntswrmScript } from "./ContactSwarmJobNexus";
 import { isCntskQuery, buildCntskScript } from "./ContactSkillNexus";
 import { isInvknoQuery, buildInvknoScript } from "./InvestmentKnowledgeNexus";
+import { isGndRulsQuery, buildGndRulsScript } from "./GraphNodeDecisionRulesNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -857,6 +858,9 @@ export default function JarvisBrain() {
       } else if (isInvknoQuery(q)) {
         answer = await buildInvknoScript();
         window.dispatchEvent(new CustomEvent("jarvis:invkno-toggle"));
+      } else if (isGndRulsQuery(q)) {
+        answer = await buildGndRulsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gndruls-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
