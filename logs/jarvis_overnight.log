@@ -222,3 +222,4 @@
 2026-09-06T03:25:37Z F626 Risk Report Mapper (RISKREPMAP) — RiskReportMapper.jsx wired; /entities/RiskSignal + /v1/reports; isRiskRepQuery+buildRiskRepScript in JarvisBrain; mounted App.jsx; vite build exit 0.
 [2026-09-06] F627 RemindersSwarmJobNexus.jsx created — /reminders/list × /entities/SwarmJob nexus; AUTOMATED vs UNAUTOMATED; JarvisBrain pre-wired; App.jsx pre-mounted; vite build exit 0.
 2026-09-06T05:19:29Z | F628 | CNTINV | ContactInvestmentNexus.jsx | /entities/Contact + /entities/Investment keyword cross-ref | vite build exit 0
+2026-09-06 | F629 | Contact × SwarmJob Nexus (CNTSWRM) | ContactSwarmJobNexus.jsx created; isCntswrmQuery+buildCntswrmScript wired into JarvisBrain.ask(); mounted App.jsx; vite build exit 0.

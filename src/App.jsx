@@ -895,6 +895,7 @@ import TaskGraphPriorityRanker from '@/components/cinematic/TaskGraphPriorityRan
 import InvestmentRulesNexus from '@/components/cinematic/InvestmentRulesNexus';
 import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
 import ContactInvestmentNexus from '@/components/cinematic/ContactInvestmentNexus';
+import ContactSwarmJobNexus from '@/components/cinematic/ContactSwarmJobNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2757,6 +2758,8 @@ function App() {
             <RiskReportMapper />
             {/* F628 (overnight 2026-09-06): Contact × Investment Nexus (CNTINV) — /entities/Contact + /entities/Investment; keyword cross-reference; PORTFOLIO-LINKED contacts vs UNLINKED; coverage % tile; ALL/PORTFOLIO-LINKED/UNLINKED filter tabs + search; click-to-expand matched holdings; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unlinked count; ◈ CNTINV button left:99360 bottom:8 zIndex:174; isCntinvQuery+buildCntinvScript wired into JarvisBrain.ask(); jarvis:cntinv-toggle event; 90-s auto-refresh; voice: "cntinv/contact investment/investment contact/contacts with investments/portfolio contact/who has investments/contact portfolio/contact holding" */}
             <ContactInvestmentNexus />
+            {/* F629 (overnight 2026-09-06): Contact × SwarmJob Nexus (CNTSWRM) — /entities/Contact + /entities/SwarmJob; keyword cross-reference; AUTOMATED contacts vs UNAUTOMATED; coverage % tile; ALL/AUTOMATED/UNAUTOMATED filter tabs + search; click-to-expand matched jobs; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unautomated count; ◈ CNTSWRM button left:100220 bottom:8 zIndex:175; isCntswrmQuery+buildCntswrmScript wired into JarvisBrain.ask(); jarvis:cntswrm-toggle event; 90-s auto-refresh; voice: "cntswrm/contact swarm/swarm contact/automated contact/who has swarm/contact automation/swarm-backed contact/contact job" */}
+            <ContactSwarmJobNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
