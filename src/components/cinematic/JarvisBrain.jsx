@@ -205,6 +205,7 @@ import { isCntskQuery, buildCntskScript } from "./ContactSkillNexus";
 import { isInvknoQuery, buildInvknoScript } from "./InvestmentKnowledgeNexus";
 import { isGndRulsQuery, buildGndRulsScript } from "./GraphNodeDecisionRulesNexus";
 import { isCntopsQuery, buildCntopsScript } from "./ContactOpsEventsNexus";
+import { isTattrQuery, buildTattrScript } from "./ThreatAttributionMapper";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -865,6 +866,9 @@ export default function JarvisBrain() {
       } else if (isCntopsQuery(q)) {
         answer = await buildCntopsScript();
         window.dispatchEvent(new CustomEvent("jarvis:cntops-toggle"));
+      } else if (isTattrQuery(q)) {
+        answer = await buildTattrScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tattr-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
