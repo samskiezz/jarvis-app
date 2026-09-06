@@ -903,6 +903,7 @@ import ContactOpsEventsNexus from '@/components/cinematic/ContactOpsEventsNexus'
 import ThreatAttributionMapper from '@/components/cinematic/ThreatAttributionMapper';
 import OpsAlertInvestigationCoverage from '@/components/cinematic/OpsAlertInvestigationCoverage';
 import LiveIntelInvestigationLinker from '@/components/cinematic/LiveIntelInvestigationLinker';
+import OpsEventsIntelProfileNexus from '@/components/cinematic/OpsEventsIntelProfileNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2781,6 +2782,8 @@ function App() {
             <OpsAlertInvestigationCoverage />
             {/* F637 (overnight 2026-09-06): Live Intel × Investigation Linker (LIILINK) — /functions/getLiveIntel + /v1/investigations; keyword cross-reference; LINKED live events (≥1 open case keyword-matches) vs UNLINKED; stat tiles (events/investigations/linked/unlinked); ALL/LINKED/UNLINKED filter tabs + search; click-to-expand matched investigations with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence case-correlation brief + TTS via jarvis:speak-dossier; 5-min auto-refresh; ◈ LIILINK button left:30360 bottom:8 zIndex:60; isLiilinkQuery+buildLiilinkScript wired into JarvisBrain.ask(); jarvis:liilink-toggle event; voice: "live intel investigation/intel case link/which investigations match live events/liilink/live event case/case intel match/investigat live intel" */}
             <LiveIntelInvestigationLinker />
+            {/* F638 (overnight 2026-09-06): Ops Events × Intel Profile Nexus (OEIP) — /v1/ops/events + /entities/IntelProfile; keyword cross-reference; FLAGGED profiles (≥1 ops event keyword-matches) vs CLEAR; stat tiles (profiles/flagged/clear/overlap%); ALL/FLAGGED/CLEAR filter tabs + search; click-to-expand matched events with severity badge + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-operations brief + TTS; 90-s auto-refresh; ◈ OEIP button left:105380 bottom:8 zIndex:181; isOeipQuery+buildOeipScript wired into JarvisBrain.ask(); jarvis:oeip-toggle event; voice: "oeip/ops intel/intel ops/threat ops/which intel profiles have ops events/profile in ops/actor ops events/intel in operations" */}
+            <OpsEventsIntelProfileNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
