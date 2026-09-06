@@ -909,6 +909,7 @@ import RiskSignalGraphCentrality from '@/components/cinematic/RiskSignalGraphCen
 import KnowledgeOpsEventsNexus from '@/components/cinematic/KnowledgeOpsEventsNexus';
 import OpsAlertTaskCoverage from '@/components/cinematic/OpsAlertTaskCoverage';
 import { LiveMarketTicker } from '@/components/cinematic/LiveMarketTicker';
+import ScenarioModelRegistry from '@/components/cinematic/ScenarioModelRegistry';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2798,6 +2799,8 @@ function App() {
             <OpsAlertTaskCoverage />
             {/* F644 (overnight 2026-09-06): LiveMarketTicker voice wiring — /functions/getLiveIntel; "JARVIS, live ticker/market strip/price ticker/lticker/show ticker/live prices/bottom ticker/market prices" now speaks top-mover crypto+FX summary; LiveMarketTicker renders fixed bottom strip; isLiveTickerQuery+buildLiveTickerScript wired into JarvisBrain.ask(); /functions/getLiveIntel real endpoint; vite build exit 0 */}
             <LiveMarketTicker />
+            {/* F645 (overnight 2026-09-06): Scenario Model Registry voice wiring (MODELS) — ScenarioModelRegistry.jsx pre-existed (F37; /v1/scenario/models; trained/untrained model catalog; drift status strip; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence model brief + TTS; 60-s auto-refresh; ⬢ MODELS button left:70760 bottom:18; jarvis:model-registry-toggle) but was not mounted in App.jsx and had no JarvisBrain intent handler; imported isModelRegistryQuery+buildModelRegistryScript into JarvisBrain.jsx; mounted ScenarioModelRegistry in App.jsx; "JARVIS, model registry/scenario models/available models/prediction models/what models/drift status/trained models/model catalog" now speaks trained vs untrained model count + dispatches jarvis:model-registry-toggle to open panel; /v1/scenario/models real endpoint; vite build exit 0. */}
+            <ScenarioModelRegistry />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
