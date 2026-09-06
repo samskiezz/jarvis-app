@@ -902,6 +902,7 @@ import GraphNodeDecisionRulesNexus from '@/components/cinematic/GraphNodeDecisio
 import ContactOpsEventsNexus from '@/components/cinematic/ContactOpsEventsNexus';
 import ThreatAttributionMapper from '@/components/cinematic/ThreatAttributionMapper';
 import OpsAlertInvestigationCoverage from '@/components/cinematic/OpsAlertInvestigationCoverage';
+import LiveIntelInvestigationLinker from '@/components/cinematic/LiveIntelInvestigationLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2778,6 +2779,8 @@ function App() {
             <ThreatAttributionMapper />
             {/* F636 (overnight 2026-09-06): Ops Alert × Investigation Coverage (OALINV) voice wiring — OpsAlertInvestigationCoverage.jsx (F174; /v1/ops/alerts + /v1/investigations; INVESTIGATED alerts (≥1 case keyword-matches) vs UNINVESTIGATED (blind spots); stat tiles; ALL/INVESTIGATED/UNINVESTIGATED tabs + search; click-to-expand matched cases with status + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; orange badge on uninvestigated count; ◈ OALINV button left:59000 bottom:8 zIndex:115; isOalinvQuery+buildOalinvScript wired into JarvisBrain.ask(); jarvis:oalinv-toggle event; 60-s auto-refresh; voice: "alert investigation/uninvestigated alerts/ops alert case/oalinv/untracked alerts/alert case coverage") was not mounted in App.jsx and had no JarvisBrain intent handler; mounted OpsAlertInvestigationCoverage in App.jsx; vite build exit 0. */}
             <OpsAlertInvestigationCoverage />
+            {/* F637 (overnight 2026-09-06): Live Intel × Investigation Linker (LIILINK) — /functions/getLiveIntel + /v1/investigations; keyword cross-reference; LINKED live events (≥1 open case keyword-matches) vs UNLINKED; stat tiles (events/investigations/linked/unlinked); ALL/LINKED/UNLINKED filter tabs + search; click-to-expand matched investigations with relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence case-correlation brief + TTS via jarvis:speak-dossier; 5-min auto-refresh; ◈ LIILINK button left:30360 bottom:8 zIndex:60; isLiilinkQuery+buildLiilinkScript wired into JarvisBrain.ask(); jarvis:liilink-toggle event; voice: "live intel investigation/intel case link/which investigations match live events/liilink/live event case/case intel match/investigat live intel" */}
+            <LiveIntelInvestigationLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
