@@ -908,6 +908,7 @@ import OpsEventsIntelProfileNexus from '@/components/cinematic/OpsEventsIntelPro
 import RiskSignalGraphCentrality from '@/components/cinematic/RiskSignalGraphCentrality';
 import KnowledgeOpsEventsNexus from '@/components/cinematic/KnowledgeOpsEventsNexus';
 import OpsAlertTaskCoverage from '@/components/cinematic/OpsAlertTaskCoverage';
+import { LiveMarketTicker } from '@/components/cinematic/LiveMarketTicker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2795,6 +2796,8 @@ function App() {
             <KnowledgeOpsEventsNexus />
             {/* F642 (overnight 2026-09-06): Ops Alert × Task Coverage Monitor (OALTASK) — /v1/ops/alerts + /entities/Task; keyword cross-reference; FLAGGED tasks (≥1 alert keyword-matches) vs CLEAR; stat tiles (tasks/flagged/clear/exposure%); ALL/FLAGGED/CLEAR filter tabs + search; click-to-expand matched alerts with severity badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + TTS; 90-s auto-refresh; ◈ OALTASK button left:107100 bottom:8 zIndex:183; isOaltaskQuery+buildOaltaskScript wired into JarvisBrain.ask(); jarvis:oaltask-toggle event; voice: "oaltask/ops alert task/alert task coverage/which tasks have alerts/task alerts/flagged tasks/task alert match/alert-flagged tasks" */}
             <OpsAlertTaskCoverage />
+            {/* F644 (overnight 2026-09-06): LiveMarketTicker voice wiring — /functions/getLiveIntel; "JARVIS, live ticker/market strip/price ticker/lticker/show ticker/live prices/bottom ticker/market prices" now speaks top-mover crypto+FX summary; LiveMarketTicker renders fixed bottom strip; isLiveTickerQuery+buildLiveTickerScript wired into JarvisBrain.ask(); /functions/getLiveIntel real endpoint; vite build exit 0 */}
+            <LiveMarketTicker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
