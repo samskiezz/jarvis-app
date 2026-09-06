@@ -1,10 +1,11 @@
 /**
- * RemindersTaskNexus — F598
- * "JARVIS, reminders task / task reminders / remtask / floating reminders / task-linked reminders"
+ * RemindersTaskNexus — F631
+ * "JARVIS, remtask / reminder task / task reminder / task-backed reminders /
+ *  floating reminders / orphan reminders / reminders without tasks"
  * Cross-references /reminders/list against /entities/Task.
- * TASK-LINKED reminders (≥1 task keyword-matches) vs FLOATING (no task backing).
- * Coverage % tile; ALL/TASK-LINKED/FLOATING filter tabs + search; click-to-expand matched tasks.
- * ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS.
+ * TASK-BACKED reminders (≥1 task keyword-matches) vs FLOATING (no task backing).
+ * Coverage % tile; ALL/TASK-BACKED/FLOATING filter tabs + search; click-to-expand matched tasks.
+ * ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task-memory brief + TTS.
  * Additive only — mounted via App.jsx; intent helpers exported for JarvisBrain.
  */
 import { useEffect, useState, useCallback } from "react";
@@ -15,14 +16,17 @@ const GRN = "#00E5A0";
 const AMB = "#FFA500";
 const RED = "#FF4444";
 const DIM = "#8899AA";
+const PRP = "#B06EFF";
 
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
 
-const POLL_MS = 90_000;
+const POLL_MS  = 90_000;
+const BTN_LEFT = 101_940;
+const Z_INDEX  = 177;
 
 const REMTASK_RE =
-  /\bremtask\b|\breminders?.tasks?\b|\btasks?.reminders?\b|\bfloating.?reminders?\b|\btask.?linked.?reminders?\b|\breminder.?task.?coverage\b|\breminders?.with.?tasks?\b/i;
+  /\bremtask\b|\breminder.?task\b|\btask.?reminder\b|\btask.?backed.?remind\b|\bfloating.?remind\b|\borphan.?remind\b|\breminders?.without.?task\b|\bremind.?without.?task\b/i;
 
 export function isRemtaskQuery(text) {
   return REMTASK_RE.test(text || "");
@@ -47,11 +51,11 @@ function normaliseReminders(data) {
     data.reminders || data.items || data.results ||
     (Array.isArray(data) ? data : []);
   return raw.map((r, i) => ({
-    id:      r.id || `rem-${i}`,
-    content: r.content || r.text || r.title || r.note || `Reminder ${i + 1}`,
-    kind:    (r.kind || r.type || "reminder").toLowerCase(),
-    status:  (r.status || "pending").toLowerCase(),
-    tags:    r.tags || [],
+    id:    r.id || `rem-${i}`,
+    title: r.title || r.text || r.body || r.content || `Reminder ${i + 1}`,
+    kind:  (r.kind || r.type || r.category || "reminder").toLowerCase(),
+    status: r.status || r.state || "pending",
+    tags:  r.tags || [],
   }));
 }
 
@@ -61,54 +65,74 @@ function normaliseTasks(data) {
     data.tasks || data.items || data.results ||
     (Array.isArray(data) ? data : []);
   return raw.map((t, i) => ({
-    id:     t.id || `task-${i}`,
-    title:  t.title || t.name || t.task || `Task ${i + 1}`,
-    status: (t.status || "PENDING").toUpperCase(),
-    tags:   t.tags || [],
+    id:       t.id || `tsk-${i}`,
+    title:    t.title || t.name || t.description || `Task ${i + 1}`,
+    status:   (t.status || t.state || "pending").toUpperCase(),
+    priority: (t.priority || "medium").toUpperCase(),
+    tags:     t.tags || [],
   }));
 }
 
 function crossRef(reminders, tasks) {
   return reminders.map((rem) => {
-    const haystack = `${rem.content} ${(rem.tags || []).join(" ")}`;
+    const haystack = `${rem.title} ${rem.kind} ${(rem.tags || []).join(" ")}`;
     const matches = tasks
       .map((t) => {
-        const hits = overlap(haystack, `${t.title} ${(t.tags || []).join(" ")}`);
+        const needle = `${t.title} ${(t.tags || []).join(" ")}`;
+        const hits = overlap(haystack, needle);
         return hits > 0 ? { ...t, hits } : null;
       })
       .filter(Boolean)
-      .sort((a, b) => b.hits - a.hits)
-      .slice(0, 5);
-    return { ...rem, tasks: matches, linked: matches.length > 0 };
+      .sort((a, b) => b.hits - a.hits);
+    return { ...rem, backed: matches.length > 0, tasks: matches };
   });
 }
 
 export async function buildRemtaskScript() {
   try {
     const base = apiBase();
-    const [remRes, taskRes] = await Promise.all([
-      fetch(`${base}/reminders/list`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
-      fetch(`${base}/entities/Task`,  { headers: { Authorization: `Bearer ${API_KEY}` } }),
+    const [remRes, tskRes] = await Promise.all([
+      fetch(`${base}/reminders/list`,  { headers: { Authorization: `Bearer ${API_KEY}` } }),
+      fetch(`${base}/entities/Task`,   { headers: { Authorization: `Bearer ${API_KEY}` } }),
     ]);
-    const [remData, taskData] = await Promise.all([remRes.json(), taskRes.json()]);
+    const [remData, tskData] = await Promise.all([remRes.json(), tskRes.json()]);
     const reminders = normaliseReminders(remData);
-    const tasks     = normaliseTasks(taskData);
+    const tasks     = normaliseTasks(tskData);
     const rows      = crossRef(reminders, tasks);
-    const linked    = rows.filter((r) => r.linked).length;
-    const floating  = rows.length - linked;
-    const pct       = rows.length ? Math.round((linked / rows.length) * 100) : 0;
+    const backed    = rows.filter((r) => r.backed).length;
+    const floating  = rows.length - backed;
+    const pct       = rows.length ? Math.round((backed / rows.length) * 100) : 0;
     if (!rows.length) return "No reminders found in the system, sir.";
-    const topFloating = rows.filter((r) => !r.linked).slice(0, 2).map((r) => r.content.slice(0, 40)).join("; ");
+    const topFloating = rows
+      .filter((r) => !r.backed)
+      .slice(0, 2)
+      .map((r) => r.title.slice(0, 40))
+      .join("; ");
     return (
-      `${linked} of ${rows.length} reminders are task-linked (${pct}% coverage). ` +
+      `${backed} of ${rows.length} reminders are task-backed (${pct}% task coverage). ` +
       (floating > 0
-        ? `${floating} floating reminder${floating !== 1 ? "s" : ""} have no matching task — potential orphaned action items: ${topFloating || "unknown"}.`
-        : "All reminders have associated task backing.")
+        ? `${floating} reminder${floating !== 1 ? "s" : ""} have no matching task — potential orphaned action items: ${topFloating || "unknown"}.`
+        : "All reminders have an associated task — full task-memory alignment confirmed.")
     );
   } catch {
     return "Unable to reach reminders or task endpoints, sir.";
   }
 }
+
+const KIND_COLOR = {
+  note:     CY,
+  task:     GRN,
+  alert:    RED,
+  reminder: PRP,
+};
+
+const STATUS_COLOR = {
+  DONE:        GRN,
+  COMPLETED:   GRN,
+  IN_PROGRESS: AMB,
+  BLOCKED:     RED,
+  PENDING:     DIM,
+};
 
 export default function RemindersTaskNexus() {
   const [open,      setOpen]      = useState(false);
@@ -117,24 +141,30 @@ export default function RemindersTaskNexus() {
   const [tab,       setTab]       = useState("ALL");
   const [search,    setSearch]    = useState("");
   const [expanded,  setExpanded]  = useState(null);
-  const [assessing, setAssessing] = useState(false);
   const [brief,     setBrief]     = useState("");
+  const [assessing, setAssessing] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
       const base = apiBase();
-      const [remRes, taskRes] = await Promise.all([
+      const [remRes, tskRes] = await Promise.all([
         fetch(`${base}/reminders/list`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
         fetch(`${base}/entities/Task`,  { headers: { Authorization: `Bearer ${API_KEY}` } }),
       ]);
-      const [remData, taskData] = await Promise.all([remRes.json(), taskRes.json()]);
-      setRows(crossRef(normaliseReminders(remData), normaliseTasks(taskData)));
+      const [remData, tskData] = await Promise.all([remRes.json(), tskRes.json()]);
+      setRows(crossRef(normaliseReminders(remData), normaliseTasks(tskData)));
     } catch {
-      /* non-fatal */
+      setRows([]);
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    const handler = () => { setOpen((v) => !v); };
+    window.addEventListener("jarvis:remtask-toggle", handler);
+    return () => window.removeEventListener("jarvis:remtask-toggle", handler);
   }, []);
 
   useEffect(() => {
@@ -144,153 +174,119 @@ export default function RemindersTaskNexus() {
     return () => clearInterval(id);
   }, [open, load]);
 
-  useEffect(() => {
-    const toggle = () => setOpen((o) => !o);
-    window.addEventListener("jarvis:remtask-toggle", toggle);
-    return () => window.removeEventListener("jarvis:remtask-toggle", toggle);
-  }, []);
+  const backed   = rows.filter((r) => r.backed).length;
+  const floating = rows.length - backed;
+  const pct      = rows.length ? Math.round((backed / rows.length) * 100) : 0;
 
-  const assess = useCallback(async () => {
+  const visible = rows.filter((r) => {
+    const matchTab =
+      tab === "ALL"         ? true :
+      tab === "TASK-BACKED" ? r.backed :
+      !r.backed;
+    const q = search.toLowerCase();
+    const matchSearch = !q || r.title.toLowerCase().includes(q) || r.kind.includes(q);
+    return matchTab && matchSearch;
+  });
+
+  async function assess() {
+    if (assessing || rows.length === 0) return;
     setAssessing(true);
     setBrief("");
     try {
-      const base = apiBase();
-      const linked   = rows.filter((r) => r.linked);
-      const floating = rows.filter((r) => !r.linked);
-      const resp = await fetch(`${base}/v1/jarvis/agent/chat`, {
+      const base   = apiBase();
+      const script = await buildRemtaskScript();
+      const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({
-          message:
-            `Assess reminder-to-task linkage: ${rows.length} reminders total, ` +
-            `${linked.length} are task-linked, ` +
-            `${floating.length} are floating with no associated task. ` +
-            `Top floating reminders: ${floating.slice(0, 3).map((r) => r.content.slice(0, 40)).join("; ") || "none"}. ` +
-            "Give a 2-sentence operational-memory and task-coverage assessment with recommended action.",
-        }),
+        body: JSON.stringify({ message: `Reminder-task alignment assessment: ${script}. Provide a concise 2-sentence operational brief.` }),
       });
-      const d = await resp.json();
+      const d    = await r.json();
       const text = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
       setBrief(text);
       if (text) {
         window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
       }
     } catch {
-      setBrief("Assessment unavailable.");
+      setBrief("Unable to reach reasoning core, sir.");
     } finally {
       setAssessing(false);
     }
-  }, [rows]);
-
-  const linked   = rows.filter((r) => r.linked).length;
-  const floating = rows.length - linked;
-  const pct      = rows.length ? Math.round((linked / rows.length) * 100) : 0;
-
-  const visible = rows
-    .filter((r) => {
-      if (tab === "TASK-LINKED") return r.linked;
-      if (tab === "FLOATING")    return !r.linked;
-      return true;
-    })
-    .filter((r) => {
-      if (!search) return true;
-      const q = search.toLowerCase();
-      return (
-        r.content.toLowerCase().includes(q) ||
-        r.kind.toLowerCase().includes(q) ||
-        r.status.toLowerCase().includes(q)
-      );
-    });
-
-  const KIND_COLOR = {
-    note: CY, task: GRN, alert: RED, reminder: AMB,
-  };
-
-  const STATUS_COLOR = {
-    DONE: GRN, COMPLETE: GRN, COMPLETED: GRN,
-    PENDING: AMB, IN_PROGRESS: CY, BLOCKED: RED,
-  };
-
-  const BTN_LEFT = 79_720;
-  const BTN_STYLE = {
-    position: "fixed",
-    left: BTN_LEFT,
-    bottom: 8,
-    zIndex: 151,
-    padding: "4px 10px",
-    background: "rgba(5,8,13,0.82)",
-    border: `1px solid ${floating > 0 ? AMB : CY}55`,
-    borderRadius: 6,
-    cursor: "pointer",
-    color: CY,
-    fontFamily: "'JetBrains Mono',monospace",
-    fontSize: 10,
-    letterSpacing: 1,
-    display: "flex",
-    alignItems: "center",
-    gap: 5,
-    backdropFilter: "blur(6px)",
-  };
-
-  const PANEL = {
-    position: "fixed",
-    left: BTN_LEFT - 340,
-    bottom: 38,
-    zIndex: 151,
-    width: 400,
-    maxHeight: "70vh",
-    overflowY: "auto",
-    background: "rgba(6,10,16,0.94)",
-    border: `1px solid ${CY}44`,
-    borderRadius: 10,
-    padding: 14,
-    fontFamily: "'JetBrains Mono',monospace",
-    color: "#DCEBF5",
-    backdropFilter: "blur(10px)",
-    boxShadow: `0 0 40px ${CY}18`,
-  };
+  }
 
   const tabStyle = (t) => ({
-    padding: "3px 8px",
-    border: `1px solid ${tab === t ? CY : CY + "33"}`,
+    background:   tab === t ? `${PRP}22` : "transparent",
+    border:       `1px solid ${tab === t ? PRP : DIM}44`,
     borderRadius: 4,
-    cursor: "pointer",
-    background: tab === t ? CY + "22" : "transparent",
-    color: tab === t ? CY : DIM,
-    fontSize: 10,
+    color:        tab === t ? PRP : DIM,
+    cursor:       "pointer",
+    fontSize:     9,
     letterSpacing: 1,
+    padding:      "3px 7px",
   });
+
+  const badge = floating > 0 ? floating : null;
 
   return (
     <>
+      {/* floating button */}
       <button
-        style={BTN_STYLE}
-        onClick={() => setOpen((o) => !o)}
+        onClick={() => setOpen((v) => !v)}
         title="Reminders × Task Nexus (REMTASK)"
+        style={{
+          position:      "fixed",
+          left:          BTN_LEFT,
+          bottom:        8,
+          zIndex:        Z_INDEX,
+          background:    open ? `${PRP}22` : "rgba(5,8,13,0.75)",
+          border:        `1px solid ${PRP}${open ? "99" : "44"}`,
+          borderRadius:  5,
+          color:         PRP,
+          cursor:        "pointer",
+          fontSize:      9,
+          letterSpacing: 1,
+          padding:       "4px 8px",
+          backdropFilter: "blur(6px)",
+          whiteSpace:    "nowrap",
+        }}
       >
         ◈ REMTASK
-        {floating > 0 && (
-          <span style={{ background: AMB, color: "#000", borderRadius: 4, padding: "1px 5px", fontSize: 9 }}>
-            {floating}
+        {badge ? (
+          <span style={{ marginLeft: 4, background: AMB, color: "#000", borderRadius: 3, padding: "0 4px", fontSize: 9 }}>
+            {badge}
           </span>
-        )}
+        ) : null}
       </button>
 
+      {/* panel */}
       {open && (
-        <div style={PANEL}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-            <span style={{ color: CY, fontSize: 11, letterSpacing: 2 }}>REMINDERS × TASK NEXUS</span>
-            <button
-              onClick={() => setOpen(false)}
-              style={{ background: "none", border: "none", color: DIM, cursor: "pointer", fontSize: 14 }}
-            >✕</button>
+        <div
+          style={{
+            position:      "fixed",
+            left:          BTN_LEFT,
+            bottom:        36,
+            zIndex:        Z_INDEX + 1,
+            width:         340,
+            maxHeight:     "70vh",
+            overflowY:     "auto",
+            background:    "rgba(4,7,12,0.96)",
+            border:        `1px solid ${PRP}44`,
+            borderRadius:  8,
+            padding:       "12px 14px",
+            backdropFilter: "blur(14px)",
+            boxShadow:     `0 0 28px ${PRP}22`,
+            fontFamily:    "monospace",
+          }}
+        >
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+            <span style={{ color: PRP, fontSize: 11, letterSpacing: 2, fontWeight: "bold" }}>REMINDERS × TASK NEXUS</span>
+            <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", color: DIM, cursor: "pointer", fontSize: 14 }}>✕</button>
           </div>
 
           {/* stat tiles */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6, marginBottom: 10 }}>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr", gap: 6, marginBottom: 10 }}>
             {[
               { label: "REMINDERS",   value: rows.length, color: CY },
-              { label: "TASK-LINKED", value: linked,      color: linked > 0 ? GRN : DIM },
+              { label: "TASK-BACKED", value: backed,      color: GRN },
               { label: "FLOATING",    value: floating,    color: floating > 0 ? AMB : GRN },
             ].map(({ label, value, color }) => (
               <div
@@ -306,7 +302,7 @@ export default function RemindersTaskNexus() {
           {/* coverage bar */}
           <div style={{ marginBottom: 10 }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-              <span style={{ color: DIM, fontSize: 9, letterSpacing: 1 }}>TASK LINKAGE COVERAGE</span>
+              <span style={{ color: DIM, fontSize: 9, letterSpacing: 1 }}>TASK COVERAGE</span>
               <span style={{ color: pct >= 70 ? GRN : pct >= 40 ? AMB : RED, fontSize: 10, fontWeight: "bold" }}>{pct}%</span>
             </div>
             <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2 }}>
@@ -316,7 +312,7 @@ export default function RemindersTaskNexus() {
 
           {/* filter tabs */}
           <div style={{ display: "flex", gap: 5, marginBottom: 8 }}>
-            {["ALL", "TASK-LINKED", "FLOATING"].map((t) => (
+            {["ALL", "TASK-BACKED", "FLOATING"].map((t) => (
               <button key={t} style={tabStyle(t)} onClick={() => setTab(t)}>{t}</button>
             ))}
           </div>
@@ -326,7 +322,7 @@ export default function RemindersTaskNexus() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="search reminders…"
-            style={{ width: "100%", boxSizing: "border-box", background: "rgba(0,0,0,0.4)", border: `1px solid ${CY}33`, borderRadius: 5, color: "#DCEBF5", padding: "5px 8px", fontSize: 11, marginBottom: 8, outline: "none" }}
+            style={{ width: "100%", boxSizing: "border-box", background: "rgba(0,0,0,0.4)", border: `1px solid ${PRP}33`, borderRadius: 5, color: "#DCEBF5", padding: "5px 8px", fontSize: 11, marginBottom: 8, outline: "none" }}
           />
 
           {/* list */}
@@ -337,32 +333,36 @@ export default function RemindersTaskNexus() {
             {visible.map((rem) => (
               <div
                 key={rem.id}
-                style={{ background: "rgba(0,0,0,0.35)", border: `1px solid ${rem.linked ? GRN : AMB}33`, borderRadius: 6, padding: "7px 9px", cursor: "pointer" }}
+                style={{ background: "rgba(0,0,0,0.35)", border: `1px solid ${rem.backed ? PRP : AMB}33`, borderRadius: 6, padding: "7px 9px", cursor: "pointer" }}
                 onClick={() => setExpanded(expanded === rem.id ? null : rem.id)}
               >
                 <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
-                  <span style={{ color: rem.linked ? GRN : AMB, fontSize: 10 }}>{rem.linked ? "●" : "○"}</span>
-                  <span style={{ color: KIND_COLOR[rem.kind] || CY, fontSize: 9, border: `1px solid ${(KIND_COLOR[rem.kind] || CY)}44`, borderRadius: 3, padding: "1px 4px" }}>{rem.kind}</span>
-                  <span style={{ color: "#DCEBF5", fontSize: 11, flex: 1 }}>{rem.content.slice(0, 60)}{rem.content.length > 60 ? "…" : ""}</span>
-                  <span style={{ color: rem.linked ? GRN : DIM, fontSize: 9 }}>{rem.linked ? `${rem.tasks.length} task${rem.tasks.length !== 1 ? "s" : ""}` : "FLOATING"}</span>
+                  <span style={{ color: rem.backed ? PRP : AMB, fontSize: 10 }}>{rem.backed ? "●" : "○"}</span>
+                  <span style={{ color: "#DCEBF5", fontSize: 11, flex: 1 }}>{rem.title.slice(0, 44)}</span>
+                  <span style={{ color: KIND_COLOR[rem.kind] || DIM, fontSize: 9, border: `1px solid ${(KIND_COLOR[rem.kind] || DIM)}44`, borderRadius: 3, padding: "1px 4px" }}>
+                    {rem.kind.toUpperCase()}
+                  </span>
+                  <span style={{ color: rem.backed ? PRP : DIM, fontSize: 9 }}>
+                    {rem.backed ? `${rem.tasks.length} task${rem.tasks.length !== 1 ? "s" : ""}` : "FLOATING"}
+                  </span>
                 </div>
 
                 {expanded === rem.id && (
-                  <div style={{ marginTop: 6, borderTop: `1px solid ${CY}22`, paddingTop: 6 }}>
-                    {rem.linked ? (
+                  <div style={{ marginTop: 6, borderTop: `1px solid ${PRP}22`, paddingTop: 6 }}>
+                    {rem.backed ? (
                       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
                         {rem.tasks.map((t) => (
-                          <div key={t.id} style={{ background: "rgba(0,229,160,0.04)", border: `1px solid ${GRN}33`, borderRadius: 4, padding: "5px 7px" }}>
+                          <div key={t.id} style={{ background: "rgba(176,110,255,0.04)", border: `1px solid ${PRP}33`, borderRadius: 4, padding: "5px 7px" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                              <span style={{ color: STATUS_COLOR[t.status] || CY, fontSize: 9, border: `1px solid ${(STATUS_COLOR[t.status] || CY)}44`, borderRadius: 3, padding: "1px 4px" }}>{t.status}</span>
-                              <span style={{ color: "#DCEBF5", fontSize: 10, flex: 1 }}>{t.title}</span>
+                              <span style={{ color: STATUS_COLOR[t.status] || DIM, fontSize: 9, border: `1px solid ${(STATUS_COLOR[t.status] || DIM)}44`, borderRadius: 3, padding: "1px 4px" }}>{t.status}</span>
+                              <span style={{ color: "#DCEBF5", fontSize: 10, flex: 1 }}>{t.title.slice(0, 36)}</span>
                               <span style={{ color: DIM, fontSize: 9 }}>hits: {t.hits}</span>
                             </div>
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div style={{ color: DIM, fontSize: 10 }}>No tasks matched this reminder — floating action item.</div>
+                      <div style={{ color: DIM, fontSize: 10 }}>No task matches this reminder — orphaned action item with no task backing.</div>
                     )}
                   </div>
                 )}
@@ -371,16 +371,16 @@ export default function RemindersTaskNexus() {
           </div>
 
           {/* assess */}
-          <div style={{ marginTop: 10, borderTop: `1px solid ${CY}22`, paddingTop: 8 }}>
+          <div style={{ marginTop: 10, borderTop: `1px solid ${PRP}22`, paddingTop: 8 }}>
             <button
               onClick={assess}
               disabled={assessing || rows.length === 0}
-              style={{ background: `${CY}18`, border: `1px solid ${CY}55`, borderRadius: 5, color: CY, padding: "5px 12px", cursor: "pointer", fontSize: 10, letterSpacing: 1, width: "100%", opacity: assessing ? 0.6 : 1 }}
+              style={{ background: `${PRP}18`, border: `1px solid ${PRP}55`, borderRadius: 5, color: PRP, padding: "5px 12px", cursor: "pointer", fontSize: 10, letterSpacing: 1, width: "100%", opacity: assessing ? 0.6 : 1 }}
             >
               {assessing ? "▶ ASSESSING…" : "▶ ASSESS"}
             </button>
             {brief && (
-              <div style={{ marginTop: 8, color: "#DCEBF5", fontSize: 10, lineHeight: 1.5, borderLeft: `2px solid ${CY}`, paddingLeft: 8 }}>
+              <div style={{ marginTop: 8, color: "#DCEBF5", fontSize: 10, lineHeight: 1.5, borderLeft: `2px solid ${PRP}`, paddingLeft: 8 }}>
                 {brief}
               </div>
             )}

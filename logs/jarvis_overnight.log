@@ -224,3 +224,4 @@
 2026-09-06T05:19:29Z | F628 | CNTINV | ContactInvestmentNexus.jsx | /entities/Contact + /entities/Investment keyword cross-ref | vite build exit 0
 2026-09-06 | F629 | Contact × SwarmJob Nexus (CNTSWRM) | ContactSwarmJobNexus.jsx created; isCntswrmQuery+buildCntswrmScript wired into JarvisBrain.ask(); mounted App.jsx; vite build exit 0.
 2026-09-06 | F630 | Contact × AIP Skill Nexus (CNTSK) | ContactSkillNexus.jsx created; isCntskQuery+buildCntskScript wired into JarvisBrain.ask(); mounted App.jsx; vite build exit 0.
+2026-09-06 | F631 | Reminders × Task Nexus (REMTASK) | RemindersTaskNexus.jsx full implementation; /reminders/list + /entities/Task keyword cross-ref; isRemtaskQuery+buildRemtaskScript pre-wired in JarvisBrain; mounted App.jsx; vite build exit 0.
