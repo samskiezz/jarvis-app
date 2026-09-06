@@ -899,6 +899,7 @@ import ContactSwarmJobNexus from '@/components/cinematic/ContactSwarmJobNexus';
 import ContactSkillNexus from '@/components/cinematic/ContactSkillNexus';
 import InvestmentKnowledgeNexus from '@/components/cinematic/InvestmentKnowledgeNexus';
 import GraphNodeDecisionRulesNexus from '@/components/cinematic/GraphNodeDecisionRulesNexus';
+import ContactOpsEventsNexus from '@/components/cinematic/ContactOpsEventsNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2769,6 +2770,8 @@ function App() {
             <InvestmentKnowledgeNexus />
             {/* F633 (overnight 2026-09-06): Graph Node × Decision Rules Nexus (GNDRULS) — /v1/graph/centrality + /v1/rules; keyword cross-reference; WATCHED nodes (≥1 rule keyword-matches) vs DARK (no watchtower coverage); coverage % tile; ALL/WATCHED/DARK filter tabs + search; click-to-expand matched rules with severity+enabled+hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network-monitoring brief + TTS; amber badge on dark count; ◈ GNDRULS button left:103660 bottom:8 zIndex:179; isGndRulsQuery+buildGndRulsScript wired into JarvisBrain.ask(); jarvis:gndruls-toggle event; 90-s auto-refresh; voice: "gndruls/graph rules/node rules/watched nodes/dark nodes/which nodes have rules/graph watchtower/node coverage/rule watched nodes/network rules/graph monitor" */}
             <GraphNodeDecisionRulesNexus />
+            {/* F634 (overnight 2026-09-06): Contact × Ops Events Nexus (CNTOPS) — /entities/Contact + /v1/ops/events; keyword cross-reference; LINKED contacts (≥1 ops event keyword-matches) vs CLEAR (no ops event signal); coverage % tile; ALL/LINKED/CLEAR filter tabs + search; click-to-expand matched events with severity badge+hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational-contact brief + TTS; amber badge on linked count; ◈ CNTOPS button left:104520 bottom:8 zIndex:180; isCntopsQuery+buildCntopsScript wired into JarvisBrain.ask(); jarvis:cntops-toggle event; 90-s auto-refresh; voice: "cntops/contact ops/ops contact/contacts in ops/operational contacts/which contacts have ops events/contact events/ops event contacts" */}
+            <ContactOpsEventsNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
