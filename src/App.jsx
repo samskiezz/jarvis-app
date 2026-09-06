@@ -907,6 +907,7 @@ import LiveIntelInvestigationLinker from '@/components/cinematic/LiveIntelInvest
 import OpsEventsIntelProfileNexus from '@/components/cinematic/OpsEventsIntelProfileNexus';
 import RiskSignalGraphCentrality from '@/components/cinematic/RiskSignalGraphCentrality';
 import KnowledgeOpsEventsNexus from '@/components/cinematic/KnowledgeOpsEventsNexus';
+import OpsAlertTaskCoverage from '@/components/cinematic/OpsAlertTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2792,6 +2793,8 @@ function App() {
             <RiskSignalGraphCentrality />
             {/* F641 (overnight 2026-09-06): Knowledge × Ops Events Nexus (KNOWOPS) — /knowledge/ + /v1/ops/events; keyword cross-reference; SIGNALLED articles (≥1 ops event keyword-matches) vs QUIET; coverage % tile; ALL/SIGNALLED/QUIET filter tabs + search; click-to-expand matched events with severity badge+hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-ops brief + TTS; 90-s auto-refresh; ◈ KNOWOPS button left:106240 bottom:8 zIndex:182; isKnowopsQuery+buildKnowopsScript wired into JarvisBrain.ask(); jarvis:knowops-toggle event; voice: "knowops/knowledge ops/ops knowledge/knowledge in ops/knowledge events/which articles mention ops events/knowledge ops signal/article ops event/ops event knowledge" */}
             <KnowledgeOpsEventsNexus />
+            {/* F642 (overnight 2026-09-06): Ops Alert × Task Coverage Monitor (OALTASK) — /v1/ops/alerts + /entities/Task; keyword cross-reference; FLAGGED tasks (≥1 alert keyword-matches) vs CLEAR; stat tiles (tasks/flagged/clear/exposure%); ALL/FLAGGED/CLEAR filter tabs + search; click-to-expand matched alerts with severity badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + TTS; 90-s auto-refresh; ◈ OALTASK button left:107100 bottom:8 zIndex:183; isOaltaskQuery+buildOaltaskScript wired into JarvisBrain.ask(); jarvis:oaltask-toggle event; voice: "oaltask/ops alert task/alert task coverage/which tasks have alerts/task alerts/flagged tasks/task alert match/alert-flagged tasks" */}
+            <OpsAlertTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

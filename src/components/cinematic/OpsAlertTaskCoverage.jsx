@@ -1,438 +1,401 @@
 /**
- * F192 — Ops Alert × Task Response Tracker (OPSTASK)
- *
- * Parallel-fetches /v1/ops/alerts + /entities/Task, then keyword-correlates
- * each active ops alert (name/severity/service/description/tags) against
- * the task backlog (title/notes/tags/status) to surface:
- *   TASKED   — at least one task aligns with this alert (response underway)
- *   UNTASKED — no task coverage (alert has no actionable response assigned)
- *
- * Stat tiles: alerts / tasks / tasked / untasked
- * Filter tabs: ALL | TASKED | UNTASKED
- * Expand any alert → matched tasks with status chip + relevance score.
- * Red badge on untasked count.
- * ▶ ASSESS: 2-sentence ops-alert task coverage brief via
- *   /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
- *
- * Toggle:  ◈ OPSTASK  at bottom:8 left:69080, zIndex:133.
- * Event:   jarvis:opstask-toggle
- * Voice:   "ops alert task / alert task / opstask / alert response /
- *           unresponded alerts / tasked alerts / alert coverage /
- *           which alerts have tasks / ops task response"
- * Refresh: 60 s auto-poll.
+ * OpsAlertTaskCoverage — F642
+ * "JARVIS, oaltask / ops alert task / alert task coverage / which tasks have alerts /
+ *  task alerts / flagged tasks / task alert match / alert-flagged tasks"
+ * Cross-references /v1/ops/alerts against /entities/Task by keyword.
+ * FLAGGED tasks (≥1 alert keyword-matches) vs CLEAR (no alert signal).
+ * Coverage % tile; ALL/FLAGGED/CLEAR filter tabs + search; click-to-expand matched alerts.
+ * ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + TTS.
+ * Additive only — mounted via App.jsx; intent helpers exported for JarvisBrain.
  */
-import { useCallback, useEffect, useRef, useState } from "react";
-import { COLORS as C, SHELL as S } from "@/domain/colors";
+import { useEffect, useState, useCallback } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const BTN_LEFT = 69080;
-const POLL_MS  = 60_000;
-const RED      = "#F87171";
+const CY  = "#29E7FF";
+const GRN = "#00E5A0";
+const AMB = "#FFA500";
+const RED = "#FF4444";
+const ORG = "#FF6B35";
+const DIM = "#8899AA";
 
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
 
-function apiBase() {
-  const env = typeof import.meta !== "undefined" ? import.meta.env : {};
-  if (env.VITE_API_BASE_URL) return env.VITE_API_BASE_URL;
-  if (typeof window !== "undefined" && window.location) {
-    const { protocol, hostname } = window.location;
-    return `${protocol}//${hostname}:${env.VITE_API_PORT || "8001"}`;
-  }
-  return "http://localhost:8001";
-}
+const POLL_MS  = 90_000;
+const BTN_LEFT = 107_100;
+const Z_INDEX  = 183;
 
-// ── exported intent helpers ───────────────────────────────────────────────────
+const OALTASK_RE =
+  /\boaltask\b|\bops.?alert.?task\b|\balert.?task.?coverage\b|\bwhich.?tasks.?have.?alerts?\b|\btask.?alerts?\b|\bflagged.?tasks?\b|\btask.?alert.?match\b|\balert.?flagged.?tasks?\b|\bops.?task.?alerts?\b|\btask.?ops.?alerts?\b/i;
 
-const OPSTASK_RE =
-  /\b(ops\s+alert\s+task|alert\s+task|opstask|alert\s+response\s+task|unresponded\s+alert|tasked\s+alert|alert\s+coverage|which\s+alerts?\s+(have|lack)\s+task|ops\s+task\s+response|alert\s+action\s+plan|task\s+response\s+coverage)\b/i;
-
-export function isOpstaskQuery(q) { return OPSTASK_RE.test(q); }
-
-export async function buildOpstaskScript() {
-  try {
-    const base = apiBase();
-    const hdr  = { Authorization: `Bearer ${API_KEY}` };
-    const [alertRes, taskRes] = await Promise.all([
-      fetch(`${base}/v1/ops/alerts`,  { headers: hdr }),
-      fetch(`${base}/entities/Task`,  { headers: hdr }),
-    ]);
-    const alerts = normaliseAlerts(await alertRes.json());
-    const tasks  = normaliseTasks(await taskRes.json());
-
-    const tasked   = alerts.filter((al) => tasks.some((t) => relevance(al, t) > 0)).length;
-    const untasked = alerts.length - tasked;
-
-    const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-      body: JSON.stringify({
-        message:
-          `JARVIS ops alert × task coverage: ${alerts.length} active operational alerts, ` +
-          `${tasks.length} tasks in backlog, ${tasked} alerts have matching response tasks, ` +
-          `${untasked} alerts have no task coverage — response gap. ` +
-          `Give a 2-sentence ops-alert task response coverage brief — formal British butler tone, first person.`,
-      }),
-    });
-    const d = await r.json();
-    return (d.answer || "Ops alert task response coverage analysis complete, sir.").trim();
-  } catch {
-    return "Ops alert task response analysis unavailable at this time, sir.";
-  }
-}
-
-// ── normalise helpers ─────────────────────────────────────────────────────────
-
-function normaliseAlerts(raw) {
-  const arr = Array.isArray(raw)         ? raw
-    : Array.isArray(raw?.alerts)        ? raw.alerts
-    : Array.isArray(raw?.data)          ? raw.data
-    : Array.isArray(raw?.results)       ? raw.results
-    : Array.isArray(raw?.items)         ? raw.items
-    : [];
-  return arr.map((a, i) => ({
-    id:          a.id          || a.alert_id  || String(i),
-    name:        a.name        || a.title     || a.message || a.summary || `Alert ${i + 1}`,
-    severity:    a.severity    || a.level     || a.priority || "",
-    service:     a.service     || a.source    || a.component || a.system || "",
-    status:      a.status      || a.state     || "",
-    tags:        Array.isArray(a.tags) ? a.tags.join(" ") : (a.tags || ""),
-    description: (a.description || a.details || a.body || "").toString().slice(0, 300),
-  }));
-}
-
-function normaliseTasks(raw) {
-  const arr = Array.isArray(raw)         ? raw
-    : Array.isArray(raw?.tasks)         ? raw.tasks
-    : Array.isArray(raw?.data)          ? raw.data
-    : Array.isArray(raw?.items)         ? raw.items
-    : Array.isArray(raw?.results)       ? raw.results
-    : [];
-  return arr.map((t, i) => ({
-    id:     t.id     || String(i),
-    title:  t.title  || t.name   || `Task ${i + 1}`,
-    status: t.status || t.state  || "",
-    tags:   Array.isArray(t.tags) ? t.tags.join(" ") : (t.tags || ""),
-    notes:  (t.notes || t.description || t.details || t.body || "").toString().slice(0, 300),
-  }));
+export function isOaltaskQuery(text) {
+  return OALTASK_RE.test(text || "");
 }
 
 function keywords(str) {
-  return String(str || "")
+  return (str || "")
     .toLowerCase()
-    .split(/[\s_\-.,/|:@()\[\]"']+/)
-    .filter((w) => w.length >= 3);
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w.length > 3);
 }
 
-function relevance(alert, task) {
-  const aw = keywords(`${alert.name} ${alert.service} ${alert.description} ${alert.tags} ${alert.severity}`.slice(0, 400));
-  const tw = keywords(`${task.title} ${task.notes.slice(0, 400)} ${task.tags} ${task.status}`);
-  return aw.filter((w) => tw.some((a) => a.includes(w) || w.includes(a))).length;
+function overlap(a, b) {
+  const sa = new Set(keywords(a));
+  return keywords(b).filter((w) => sa.has(w)).length;
 }
 
-function buildLinked(alerts, tasks) {
-  return alerts.map((al) => {
-    const matched = tasks
-      .map((t) => ({ ...t, score: relevance(al, t) }))
-      .filter((t) => t.score > 0)
-      .sort((a, b) => b.score - a.score);
-    return { ...al, tasks: matched, tasked: matched.length > 0 };
+function normaliseTasks(data) {
+  if (!data) return [];
+  const arr = Array.isArray(data)
+    ? data
+    : Array.isArray(data?.tasks)
+    ? data.tasks
+    : Array.isArray(data?.items)
+    ? data.items
+    : [];
+  return arr.map((t, i) => ({
+    id:          t.id          || String(i),
+    title:       t.title       || t.name  || t.label || `Task ${i + 1}`,
+    status:      (t.status     || t.state || "UNKNOWN").toString().toUpperCase(),
+    description: t.description || t.body  || t.detail || t.notes || "",
+    tags:        Array.isArray(t.tags) ? t.tags.join(" ") : (t.tags || ""),
+  }));
+}
+
+function normaliseAlerts(data) {
+  if (!data) return [];
+  const arr = Array.isArray(data)
+    ? data
+    : Array.isArray(data?.alerts)
+    ? data.alerts
+    : Array.isArray(data?.data)
+    ? data.data
+    : [];
+  return arr.map((a, i) => ({
+    id:       a.id       || a.alert_id  || String(i),
+    title:    a.title    || a.name      || a.summary || `Alert ${i + 1}`,
+    severity: (a.severity || a.level    || "INFO").toString().toUpperCase(),
+    source:   a.source   || a.service   || a.origin || "",
+    message:  a.message  || a.description || a.body || "",
+  }));
+}
+
+function crossRef(tasks, alerts) {
+  return tasks.map((task) => {
+    const haystack = `${task.title} ${task.description} ${task.tags}`;
+    const matches = alerts
+      .map((al) => {
+        const needle = `${al.title} ${al.source} ${al.message}`;
+        const hits = overlap(haystack, needle);
+        return hits > 0 ? { ...al, hits } : null;
+      })
+      .filter(Boolean)
+      .sort((a, b) => b.hits - a.hits);
+    return { ...task, flagged: matches.length > 0, alerts: matches };
   });
 }
 
-function severityColor(sev) {
-  const s = String(sev || "").toLowerCase();
-  if (s.includes("crit") || s === "p1") return RED;
-  if (s.includes("high") || s === "p2") return "#FB923C";
-  if (s.includes("med")  || s === "p3") return "#FACC15";
-  if (s.includes("low")  || s === "p4") return "#4ADE80";
-  return "#94A3B8";
+export async function buildOaltaskScript() {
+  try {
+    const base = apiBase();
+    const hdr = { Authorization: `Bearer ${API_KEY}` };
+    const [taskRes, alertRes] = await Promise.all([
+      fetch(`${base}/entities/Task`,      { headers: hdr }),
+      fetch(`${base}/v1/ops/alerts`,      { headers: hdr }),
+    ]);
+    const [taskData, alertData] = await Promise.all([taskRes.json(), alertRes.json()]);
+    const tasks  = normaliseTasks(taskData);
+    const alerts = normaliseAlerts(alertData);
+    const rows   = crossRef(tasks, alerts);
+    const flagged = rows.filter((r) => r.flagged).length;
+    const clear   = rows.length - flagged;
+    const pct = rows.length ? Math.round((flagged / rows.length) * 100) : 0;
+    if (!rows.length) return "No tasks found in the mission queue, sir.";
+    const topFlagged = rows
+      .filter((r) => r.flagged)
+      .slice(0, 2)
+      .map((r) => r.title)
+      .join("; ");
+    return (
+      `${flagged} of ${rows.length} tasks are flagged by active ops alerts (${pct}% alert exposure). ` +
+      (flagged > 0
+        ? `Alert-flagged tasks include: ${topFlagged || "unknown"} — these missions intersect with live operational alerts.`
+        : `${clear} task${clear !== 1 ? "s" : ""} show no alert correlation — mission queue appears operationally clear.`)
+    );
+  } catch {
+    return "Unable to reach ops alerts or task endpoints, sir.";
+  }
 }
 
-function statusColor(st) {
-  const s = String(st || "").toLowerCase();
-  if (s.includes("done") || s.includes("complet")) return "#4ADE80";
-  if (s.includes("prog") || s.includes("active"))  return C.blue;
-  if (s.includes("block") || s.includes("hold"))   return RED;
-  return "#94A3B8";
-}
+const SEV_COLOR = {
+  CRITICAL: RED,
+  HIGH:     ORG,
+  MEDIUM:   AMB,
+  WARNING:  AMB,
+  INFO:     CY,
+  LOW:      GRN,
+};
 
-// ── component ─────────────────────────────────────────────────────────────────
-
-const TABS = ["ALL", "TASKED", "UNTASKED"];
+const STATUS_COLOR = {
+  DONE:        GRN,
+  COMPLETE:    GRN,
+  COMPLETED:   GRN,
+  IN_PROGRESS: CY,
+  PENDING:     AMB,
+  BLOCKED:     RED,
+  CANCELLED:   DIM,
+};
 
 export default function OpsAlertTaskCoverage() {
   const [open,      setOpen]      = useState(false);
-  const [alerts,    setAlerts]    = useState([]);
-  const [tasks,     setTasks]     = useState([]);
+  const [rows,      setRows]      = useState([]);
   const [loading,   setLoading]   = useState(false);
   const [filter,    setFilter]    = useState("ALL");
   const [search,    setSearch]    = useState("");
   const [expanded,  setExpanded]  = useState(null);
   const [assessing, setAssessing] = useState(false);
-  const [lastFetch, setLastFetch] = useState(null);
-  const timerRef = useRef(null);
+  const [brief,     setBrief]     = useState("");
 
   const load = useCallback(async () => {
     setLoading(true);
     try {
       const base = apiBase();
-      const hdr  = { Authorization: `Bearer ${API_KEY}` };
-      const [alertRes, taskRes] = await Promise.all([
-        fetch(`${base}/v1/ops/alerts`, { headers: hdr }),
-        fetch(`${base}/entities/Task`, { headers: hdr }),
+      const hdr = { Authorization: `Bearer ${API_KEY}` };
+      const [taskRes, alertRes] = await Promise.all([
+        fetch(`${base}/entities/Task`,  { headers: hdr }),
+        fetch(`${base}/v1/ops/alerts`,  { headers: hdr }),
       ]);
-      setAlerts(normaliseAlerts(await alertRes.json()));
-      setTasks(normaliseTasks(await taskRes.json()));
-      setLastFetch(new Date());
-    } catch { /* backend unreachable */ }
-    finally { setLoading(false); }
+      const [taskData, alertData] = await Promise.all([taskRes.json(), alertRes.json()]);
+      const tasks  = normaliseTasks(taskData);
+      const alerts = normaliseAlerts(alertData);
+      setRows(crossRef(tasks, alerts));
+    } catch {
+      /* silently ignore fetch errors */
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
+    const handler = () => { setOpen((p) => !p); if (!rows.length) load(); };
+    window.addEventListener("jarvis:oaltask-toggle", handler);
+    return () => window.removeEventListener("jarvis:oaltask-toggle", handler);
+  }, [load, rows.length]);
+
+  useEffect(() => {
+    if (!open) return;
     load();
-    timerRef.current = setInterval(load, POLL_MS);
-    return () => clearInterval(timerRef.current);
-  }, [load]);
+    const id = setInterval(load, POLL_MS);
+    return () => clearInterval(id);
+  }, [open, load]);
 
-  useEffect(() => {
-    const onToggle = () => setOpen((v) => !v);
-    window.addEventListener("jarvis:opstask-toggle", onToggle);
-    return () => window.removeEventListener("jarvis:opstask-toggle", onToggle);
-  }, []);
+  const flagged = rows.filter((r) => r.flagged).length;
+  const clear   = rows.length - flagged;
+  const pct     = rows.length ? Math.round((flagged / rows.length) * 100) : 0;
 
-  useEffect(() => {
-    const onAsk = (e) => {
-      const q = (e.detail?.text || e.detail?.query || "");
-      if (isOpstaskQuery(q)) setOpen(true);
-    };
-    window.addEventListener("jarvis:ask", onAsk);
-    return () => window.removeEventListener("jarvis:ask", onAsk);
-  }, []);
-
-  const linked   = buildLinked(alerts, tasks);
-  const tasked   = linked.filter((al) => al.tasked).length;
-  const untasked = linked.filter((al) => !al.tasked).length;
-
-  const visible = linked
-    .filter((al) => {
-      if (filter === "TASKED")   return al.tasked;
-      if (filter === "UNTASKED") return !al.tasked;
+  const visible = rows
+    .filter((r) => {
+      if (filter === "FLAGGED") return r.flagged;
+      if (filter === "CLEAR")   return !r.flagged;
       return true;
     })
-    .filter((al) => {
-      if (!search) return true;
-      const q = search.toLowerCase();
-      return al.name.toLowerCase().includes(q) || al.service.toLowerCase().includes(q) || al.description.toLowerCase().includes(q);
-    });
+    .filter((r) =>
+      !search ||
+      r.title.toLowerCase().includes(search.toLowerCase()) ||
+      r.status.toLowerCase().includes(search.toLowerCase())
+    );
 
-  async function assess() {
+  const assess = async () => {
     setAssessing(true);
-    const text = await buildOpstaskScript();
-    setAssessing(false);
-    window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
-  }
+    setBrief("");
+    try {
+      const summary = await buildOaltaskScript();
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+        body: JSON.stringify({ message: `JARVIS ops-alert task brief: ${summary}` }),
+      });
+      const d = await r.json();
+      const text = d.response || d.message || d.content || summary;
+      setBrief(text);
+      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
+    } catch {
+      setBrief("Assessment unavailable — check backend connectivity, sir.");
+    } finally {
+      setAssessing(false);
+    }
+  };
 
   return (
     <>
-      {/* Toggle button */}
+      {/* HUD button */}
       <button
-        onClick={() => setOpen((v) => !v)}
-        title="Ops Alert × Task Response Tracker (◈ OPSTASK)"
+        onClick={() => { setOpen((p) => !p); if (!rows.length) load(); }}
         style={{
-          position: "fixed", bottom: 8, left: BTN_LEFT, zIndex: 133,
-          background: open ? `${RED}22` : "rgba(2,6,10,0.82)",
-          border: `1px solid ${open ? RED : S.border}`,
-          borderRadius: S.radius, color: open ? RED : S.textHi,
-          fontFamily: S.mono, fontSize: S.fs.xxs, letterSpacing: 1,
-          padding: "3px 7px", cursor: "pointer",
-          boxShadow: open ? `0 0 8px ${RED}44` : "none",
-          transition: "all 0.15s",
+          position: "fixed",
+          left:     BTN_LEFT,
+          bottom:   8,
+          zIndex:   Z_INDEX,
+          background: flagged > 0 ? `${ORG}22` : "rgba(0,0,0,0.55)",
+          border:   `1px solid ${flagged > 0 ? ORG : CY}55`,
+          borderRadius: 5,
+          color:    flagged > 0 ? ORG : CY,
+          padding:  "3px 8px",
+          fontSize: 9,
+          letterSpacing: 1,
+          cursor:   "pointer",
+          backdropFilter: "blur(4px)",
         }}
       >
-        ◈ OPSTASK{untasked > 0 && (
-          <span style={{
-            marginLeft: 4,
-            background: RED,
-            color: "#000",
-            borderRadius: 8, padding: "0 4px", fontSize: 9,
-          }}>{untasked}</span>
+        ◈ OALTASK
+        {flagged > 0 && (
+          <span style={{ marginLeft: 5, background: ORG, color: "#000", borderRadius: 9, padding: "0 5px", fontSize: 8, fontWeight: 700 }}>
+            {flagged}
+          </span>
         )}
       </button>
 
       {/* Panel */}
       {open && (
-        <div style={{
-          position: "fixed", zIndex: 133,
-          bottom: 36, left: Math.max(8, BTN_LEFT - 280),
-          width: 360,
-          background: S.glass, backdropFilter: S.blur, WebkitBackdropFilter: S.blur,
-          border: `1px solid ${S.border}`, borderTop: `2px solid ${RED}`,
-          borderRadius: S.radius,
-          boxShadow: "0 4px 28px rgba(0,0,0,0.55)",
-          fontFamily: S.mono, fontSize: S.fs.xs,
-          display: "flex", flexDirection: "column",
-          maxHeight: "70vh", overflow: "hidden",
-        }}>
-          {/* Header */}
-          <div style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "8px 12px", borderBottom: `1px solid ${S.border}`,
-          }}>
-            <span style={{ color: RED, letterSpacing: 2, fontWeight: 700, fontSize: S.fs.xxs }}>
-              OPS ALERT — TASK RESPONSE TRACKER
-            </span>
-            <button
-              onClick={assess}
-              disabled={assessing || alerts.length === 0}
-              style={{
-                background: "transparent", border: `1px solid ${C.blue}`,
-                color: C.blue, borderRadius: S.radius, padding: "2px 8px",
-                fontFamily: S.mono, fontSize: S.fs.xxs, cursor: "pointer",
-                opacity: (assessing || alerts.length === 0) ? 0.4 : 1,
-              }}
-            >
-              {assessing ? "…" : "▶ ASSESS"}
-            </button>
+        <div
+          style={{
+            position: "fixed",
+            left: Math.min(BTN_LEFT, window.innerWidth - 360),
+            bottom: 36,
+            zIndex: Z_INDEX + 1,
+            width: 340,
+            maxHeight: 480,
+            overflow: "hidden",
+            display: "flex",
+            flexDirection: "column",
+            background: "rgba(6,12,22,0.97)",
+            border: `1px solid ${CY}33`,
+            borderRadius: 8,
+            padding: 14,
+            fontFamily: "monospace",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          {/* header */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+            <span style={{ color: CY, fontSize: 11, letterSpacing: 2 }}>OPS ALERTS × TASKS</span>
+            <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", color: DIM, cursor: "pointer", fontSize: 12 }}>✕</button>
           </div>
 
-          {/* Stat tiles */}
-          <div style={{
-            display: "grid", gridTemplateColumns: "repeat(4,1fr)",
-            gap: 6, padding: "8px 12px",
-          }}>
+          {/* stat tiles */}
+          <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
             {[
-              { label: "ALERTS",   val: alerts.length, color: RED       },
-              { label: "TASKS",    val: tasks.length,  color: C.neon    },
-              { label: "TASKED",   val: tasked,         color: "#4ADE80" },
-              { label: "UNTASKED", val: untasked,       color: RED       },
-            ].map(({ label, val, color }) => (
-              <div key={label} style={{
-                background: "rgba(0,0,0,0.3)", borderRadius: 6,
-                padding: "5px 4px", textAlign: "center",
-              }}>
-                <div style={{ color, fontSize: S.fs.lg, fontWeight: 700 }}>{val}</div>
-                <div style={{ color: S.text, fontSize: "8px", letterSpacing: 1 }}>{label}</div>
+              { label: "TASKS",    value: rows.length, col: CY },
+              { label: "FLAGGED",  value: flagged,     col: ORG },
+              { label: "CLEAR",    value: clear,        col: GRN },
+              { label: "EXPOSURE", value: `${pct}%`,   col: pct >= 50 ? ORG : GRN },
+            ].map((t) => (
+              <div key={t.label} style={{ flex: 1, background: `${t.col}11`, border: `1px solid ${t.col}33`, borderRadius: 5, padding: "5px 4px", textAlign: "center" }}>
+                <div style={{ color: t.col, fontSize: 12, fontWeight: 700 }}>{t.value}</div>
+                <div style={{ color: DIM, fontSize: 7, letterSpacing: 1 }}>{t.label}</div>
               </div>
             ))}
           </div>
 
-          {/* Filter tabs */}
-          <div style={{ display: "flex", gap: 4, padding: "0 12px 4px" }}>
-            {TABS.map((t) => (
-              <button key={t} onClick={() => setFilter(t)} style={{
-                flex: 1,
-                background: filter === t ? `${RED}22` : "transparent",
-                border: `1px solid ${filter === t ? RED : S.border}`,
-                color: filter === t ? RED : S.text,
-                borderRadius: S.radius, padding: "2px 0",
-                fontFamily: S.mono, fontSize: "8px", letterSpacing: 1, cursor: "pointer",
-              }}>{t}</button>
+          {/* search */}
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="search tasks…"
+            style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${CY}33`, borderRadius: 4, color: "#DCEBF5", padding: "4px 8px", fontSize: 10, marginBottom: 6, outline: "none" }}
+          />
+
+          {/* filter tabs */}
+          <div style={{ display: "flex", gap: 4, marginBottom: 8 }}>
+            {["ALL", "FLAGGED", "CLEAR"].map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                style={{
+                  flex: 1,
+                  background: filter === f ? `${CY}22` : "transparent",
+                  border: `1px solid ${filter === f ? CY : CY + "33"}`,
+                  borderRadius: 4,
+                  color: filter === f ? CY : DIM,
+                  padding: "3px 0",
+                  fontSize: 8,
+                  cursor: "pointer",
+                  letterSpacing: 1,
+                }}
+              >
+                {f}
+              </button>
             ))}
           </div>
 
-          {/* Search */}
-          <div style={{ padding: "0 12px 6px" }}>
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="search alerts…"
-              style={{
-                width: "100%", boxSizing: "border-box",
-                background: "rgba(0,0,0,0.3)",
-                border: `1px solid ${S.border}`, borderRadius: S.radius,
-                color: S.textHi, fontFamily: S.mono, fontSize: "9px",
-                padding: "3px 7px", outline: "none",
-              }}
-            />
-          </div>
-
-          {/* Alert list */}
-          <div style={{ overflowY: "auto", flex: 1, padding: "0 12px 10px" }}>
-            {loading && alerts.length === 0 ? (
-              <div style={{ color: S.text, padding: "12px 0" }}>Loading…</div>
-            ) : visible.length === 0 ? (
-              <div style={{ color: S.text, padding: "12px 0" }}>No alerts match.</div>
-            ) : visible.map((al) => (
-              <div key={al.id} style={{ marginBottom: 6 }}>
-                <div
-                  onClick={() => setExpanded(expanded === al.id ? null : al.id)}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 6,
-                    padding: "5px 8px", borderRadius: 6, cursor: "pointer",
-                    background: "rgba(0,0,0,0.25)",
-                    borderLeft: `3px solid ${al.tasked ? "#4ADE80" : RED}`,
-                  }}
-                >
-                  <span style={{ color: al.tasked ? "#4ADE80" : RED, fontSize: 10, width: 10 }}>
-                    {al.tasked ? "●" : "○"}
-                  </span>
-                  <span style={{ flex: 1, color: S.textHi, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {al.name}
-                  </span>
-                  {al.severity && (
-                    <span style={{
-                      fontSize: "7px", padding: "1px 4px", borderRadius: 4,
-                      background: `${severityColor(al.severity)}22`,
-                      color: severityColor(al.severity),
-                      border: `1px solid ${severityColor(al.severity)}44`,
-                      whiteSpace: "nowrap",
-                    }}>
-                      {String(al.severity).toUpperCase().slice(0, 8)}
-                    </span>
-                  )}
+          {/* list */}
+          <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
+            {loading && <div style={{ color: DIM, fontSize: 10, textAlign: "center", padding: 16 }}>Loading…</div>}
+            {!loading && visible.length === 0 && (
+              <div style={{ color: DIM, fontSize: 10, textAlign: "center", padding: 16 }}>No tasks match filter.</div>
+            )}
+            {visible.map((task) => (
+              <div
+                key={task.id}
+                onClick={() => setExpanded(expanded === task.id ? null : task.id)}
+                style={{
+                  background: task.flagged ? `${ORG}09` : "rgba(255,255,255,0.02)",
+                  border: `1px solid ${task.flagged ? ORG + "33" : CY + "1A"}`,
+                  borderRadius: 5,
+                  padding: "6px 8px",
+                  cursor: "pointer",
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
                   <span style={{
-                    fontSize: "9px", whiteSpace: "nowrap",
-                    color: al.tasked ? "#4ADE80" : RED,
-                    minWidth: 72, textAlign: "right",
+                    fontSize: 8,
+                    border: `1px solid ${task.flagged ? ORG : GRN}44`,
+                    borderRadius: 3,
+                    padding: "1px 4px",
+                    color: task.flagged ? ORG : GRN,
+                    letterSpacing: 1,
                   }}>
-                    {al.tasked ? `${al.tasks.length} TASK${al.tasks.length !== 1 ? "S" : ""}` : "UNTASKED"}
+                    {task.flagged ? "FLAGGED" : "CLEAR"}
                   </span>
-                  <span style={{ color: S.text, fontSize: 9 }}>{expanded === al.id ? "▴" : "▾"}</span>
+                  <span style={{ color: "#DCEBF5", fontSize: 10, flex: 1 }}>{task.title}</span>
+                  {task.flagged && (
+                    <span style={{ color: DIM, fontSize: 9 }}>{task.alerts.length} al</span>
+                  )}
                 </div>
+                {task.status && (
+                  <div style={{ color: STATUS_COLOR[task.status] || DIM, fontSize: 9, marginLeft: 16 }}>
+                    {task.status}
+                  </div>
+                )}
 
-                {expanded === al.id && (
-                  <div style={{
-                    margin: "2px 0 2px 18px",
-                    background: "rgba(0,0,0,0.18)", borderRadius: 4,
-                    padding: "5px 8px",
-                  }}>
-                    {al.service && (
-                      <div style={{ color: S.text, fontSize: "8px", marginBottom: 3 }}>
-                        SERVICE: <span style={{ color: S.textHi }}>{al.service}</span>
+                {expanded === task.id && (
+                  <div style={{ marginTop: 6, borderTop: `1px solid ${ORG}22`, paddingTop: 6 }}>
+                    {task.flagged ? (
+                      <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+                        {task.alerts.map((al) => (
+                          <div key={al.id} style={{ background: "rgba(255,107,53,0.04)", border: `1px solid ${ORG}33`, borderRadius: 4, padding: "5px 7px" }}>
+                            <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                              <span style={{
+                                color: SEV_COLOR[al.severity] || CY,
+                                fontSize: 9,
+                                border: `1px solid ${(SEV_COLOR[al.severity] || CY)}44`,
+                                borderRadius: 3,
+                                padding: "1px 4px",
+                              }}>
+                                {al.severity}
+                              </span>
+                              <span style={{ color: "#DCEBF5", fontSize: 10, flex: 1 }}>{al.title}</span>
+                              <span style={{ color: DIM, fontSize: 9 }}>hits: {al.hits}</span>
+                            </div>
+                            {al.source && (
+                              <div style={{ color: DIM, fontSize: 8, marginTop: 2 }}>{al.source}</div>
+                            )}
+                          </div>
+                        ))}
                       </div>
-                    )}
-                    {al.description && (
-                      <div style={{ color: S.text, fontSize: "8px", marginBottom: 4, lineHeight: 1.4 }}>
-                        {al.description.slice(0, 120)}{al.description.length > 120 ? "…" : ""}
-                      </div>
-                    )}
-                    {al.tasked ? al.tasks.map((t) => (
-                      <div key={t.id} style={{
-                        display: "flex", alignItems: "center", gap: 6,
-                        padding: "3px 0", borderBottom: `1px solid ${S.border}22`,
-                      }}>
-                        {t.status && (
-                          <span style={{
-                            fontSize: "7px", padding: "1px 4px", borderRadius: 4,
-                            background: `${statusColor(t.status)}22`,
-                            color: statusColor(t.status),
-                            border: `1px solid ${statusColor(t.status)}44`,
-                            whiteSpace: "nowrap",
-                          }}>
-                            {String(t.status).toUpperCase().slice(0, 10)}
-                          </span>
-                        )}
-                        <span style={{ flex: 1, color: S.textHi, fontSize: "9px", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {t.title}
-                        </span>
-                        <span style={{ color: S.text, fontSize: "8px", whiteSpace: "nowrap" }}>
-                          rel:{t.score}
-                        </span>
-                      </div>
-                    )) : (
-                      <div style={{ color: RED, fontSize: "9px", padding: "2px 0" }}>
-                        No response tasks found for this alert.
-                      </div>
+                    ) : (
+                      <div style={{ color: DIM, fontSize: 10 }}>No ops alerts matched this task — mission appears clear.</div>
                     )}
                   </div>
                 )}
@@ -440,12 +403,31 @@ export default function OpsAlertTaskCoverage() {
             ))}
           </div>
 
-          {/* Footer */}
-          <div style={{
-            padding: "4px 12px", borderTop: `1px solid ${S.border}`,
-            color: S.text, fontSize: "8px", letterSpacing: 0.5,
-          }}>
-            /v1/ops/alerts · /entities/Task · {lastFetch ? lastFetch.toLocaleTimeString("en-GB") : "—"}
+          {/* assess */}
+          <div style={{ marginTop: 10, borderTop: `1px solid ${ORG}22`, paddingTop: 8 }}>
+            <button
+              onClick={assess}
+              disabled={assessing || rows.length === 0}
+              style={{
+                background: `${ORG}18`,
+                border: `1px solid ${ORG}55`,
+                borderRadius: 5,
+                color: ORG,
+                padding: "5px 12px",
+                cursor: "pointer",
+                fontSize: 10,
+                letterSpacing: 1,
+                width: "100%",
+                opacity: assessing ? 0.6 : 1,
+              }}
+            >
+              {assessing ? "▶ ASSESSING…" : "▶ ASSESS"}
+            </button>
+            {brief && (
+              <div style={{ marginTop: 8, color: "#DCEBF5", fontSize: 10, lineHeight: 1.5, borderLeft: `2px solid ${ORG}`, paddingLeft: 8 }}>
+                {brief}
+              </div>
+            )}
           </div>
         </div>
       )}
