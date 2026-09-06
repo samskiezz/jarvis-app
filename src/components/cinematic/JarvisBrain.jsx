@@ -201,6 +201,7 @@ import { isInvrulesQuery, buildInvrulesScript } from "./InvestmentRulesNexus";
 import { isRiskRepQuery, buildRiskRepScript } from "./RiskReportMapper";
 import { isCntinvQuery, buildCntinvScript } from "./ContactInvestmentNexus";
 import { isCntswrmQuery, buildCntswrmScript } from "./ContactSwarmJobNexus";
+import { isCntskQuery, buildCntskScript } from "./ContactSkillNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -849,6 +850,9 @@ export default function JarvisBrain() {
       } else if (isCntswrmQuery(q)) {
         answer = await buildCntswrmScript();
         window.dispatchEvent(new CustomEvent("jarvis:cntswrm-toggle"));
+      } else if (isCntskQuery(q)) {
+        answer = await buildCntskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cntsk-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

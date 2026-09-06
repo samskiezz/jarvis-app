@@ -896,6 +896,7 @@ import InvestmentRulesNexus from '@/components/cinematic/InvestmentRulesNexus';
 import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
 import ContactInvestmentNexus from '@/components/cinematic/ContactInvestmentNexus';
 import ContactSwarmJobNexus from '@/components/cinematic/ContactSwarmJobNexus';
+import ContactSkillNexus from '@/components/cinematic/ContactSkillNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2760,6 +2761,8 @@ function App() {
             <ContactInvestmentNexus />
             {/* F629 (overnight 2026-09-06): Contact × SwarmJob Nexus (CNTSWRM) — /entities/Contact + /entities/SwarmJob; keyword cross-reference; AUTOMATED contacts vs UNAUTOMATED; coverage % tile; ALL/AUTOMATED/UNAUTOMATED filter tabs + search; click-to-expand matched jobs; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unautomated count; ◈ CNTSWRM button left:100220 bottom:8 zIndex:175; isCntswrmQuery+buildCntswrmScript wired into JarvisBrain.ask(); jarvis:cntswrm-toggle event; 90-s auto-refresh; voice: "cntswrm/contact swarm/swarm contact/automated contact/who has swarm/contact automation/swarm-backed contact/contact job" */}
             <ContactSwarmJobNexus />
+            {/* F630 (overnight 2026-09-06): Contact × AIP Skill Nexus (CNTSK) — /entities/Contact + /v1/aip/skill; keyword cross-reference; SKILLED contacts vs UNSKILLED; coverage % tile; ALL/SKILLED/UNSKILLED filter tabs + search; click-to-expand matched skills; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unskilled count; ◈ CNTSK button left:101080 bottom:8 zIndex:176; isCntskQuery+buildCntskScript wired into JarvisBrain.ask(); jarvis:cntsk-toggle event; 90-s auto-refresh; voice: "cntsk/contact skill/skill contact/skilled contacts/which contacts have skills/contact skill coverage/contact capability/expert contacts" */}
+            <ContactSkillNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
