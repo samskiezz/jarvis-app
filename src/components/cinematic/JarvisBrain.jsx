@@ -209,6 +209,7 @@ import { isTattrQuery, buildTattrScript } from "./ThreatAttributionMapper";
 import { isOalinvQuery, buildOalinvScript } from "./OpsAlertInvestigationCoverage";
 import { isLiilinkQuery, buildLiilinkScript } from "./LiveIntelInvestigationLinker";
 import { isOeipQuery, buildOeipScript } from "./OpsEventsIntelProfileNexus";
+import { isRsgcQuery, buildRsgcScript } from "./RiskSignalGraphCentrality";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -881,6 +882,9 @@ export default function JarvisBrain() {
       } else if (isOeipQuery(q)) {
         answer = await buildOeipScript();
         window.dispatchEvent(new CustomEvent("jarvis:oeip-toggle"));
+      } else if (isRsgcQuery(q)) {
+        answer = await buildRsgcScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rsgc-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

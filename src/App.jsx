@@ -904,6 +904,7 @@ import ThreatAttributionMapper from '@/components/cinematic/ThreatAttributionMap
 import OpsAlertInvestigationCoverage from '@/components/cinematic/OpsAlertInvestigationCoverage';
 import LiveIntelInvestigationLinker from '@/components/cinematic/LiveIntelInvestigationLinker';
 import OpsEventsIntelProfileNexus from '@/components/cinematic/OpsEventsIntelProfileNexus';
+import RiskSignalGraphCentrality from '@/components/cinematic/RiskSignalGraphCentrality';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2784,6 +2785,7 @@ function App() {
             <LiveIntelInvestigationLinker />
             {/* F638 (overnight 2026-09-06): Ops Events × Intel Profile Nexus (OEIP) — /v1/ops/events + /entities/IntelProfile; keyword cross-reference; FLAGGED profiles (≥1 ops event keyword-matches) vs CLEAR; stat tiles (profiles/flagged/clear/overlap%); ALL/FLAGGED/CLEAR filter tabs + search; click-to-expand matched events with severity badge + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-operations brief + TTS; 90-s auto-refresh; ◈ OEIP button left:105380 bottom:8 zIndex:181; isOeipQuery+buildOeipScript wired into JarvisBrain.ask(); jarvis:oeip-toggle event; voice: "oeip/ops intel/intel ops/threat ops/which intel profiles have ops events/profile in ops/actor ops events/intel in operations" */}
             <OpsEventsIntelProfileNexus />
+            <RiskSignalGraphCentrality />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
