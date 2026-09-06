@@ -1,10 +1,12 @@
 /**
- * RemindersRiskSignalNexus — F599
- * "JARVIS, reminders risk / risk reminders / remrsk / risk-backed reminders / floating risk notes"
- * Cross-references /reminders/list against /entities/RiskSignal.
- * RISK-BACKED reminders (≥1 risk-signal keyword-matches) vs UNLINKED (no signal backing).
- * Coverage % tile; ALL/RISK-BACKED/UNLINKED filter tabs + search; click-to-expand matched signals.
- * ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS.
+ * RemindersRiskSignalNexus — F643
+ * "JARVIS, remrsk / reminders risk / risk reminders / risk-linked reminders /
+ *  risk signal notes / which reminders match risk signals / reminder risk /
+ *  risky reminders / reminder threat signal"
+ * Cross-references /reminders/list against /entities/RiskSignal by keyword.
+ * RISK-LINKED reminders (≥1 signal keyword-matches) vs FLOATING (no risk backing).
+ * Coverage % tile; ALL/RISK-LINKED/FLOATING filter tabs + search; click-to-expand matched signals.
+ * ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-memory brief + TTS.
  * Additive only — mounted via App.jsx; intent helpers exported for JarvisBrain.
  */
 import { useEffect, useState, useCallback } from "react";
@@ -14,15 +16,18 @@ const CY  = "#29E7FF";
 const GRN = "#00E5A0";
 const AMB = "#FFA500";
 const RED = "#FF4444";
+const ORG = "#FF6B35";
 const DIM = "#8899AA";
 
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
 
-const POLL_MS = 90_000;
+const POLL_MS  = 90_000;
+const BTN_LEFT = 107_960;
+const Z_INDEX  = 184;
 
 const REMRSK_RE =
-  /\bremrsk\b|\breminders?.risks?\b|\brisk.?reminders?\b|\brisk.?backed.?reminders?\b|\bunlinked.?reminders?\b|\breminder.?risk.?coverage\b|\bfloating.?risk.?notes?\b|\breminder.?signals?\b/i;
+  /\bremrsk\b|\breminders?.risk\b|\brisk.?reminders?\b|\brisk.?linked.?remind\b|\brisk.?signal.?notes?\b|\bwhich.?reminders?.match.?risk\b|\breminder.?risk\b|\brisky.?reminders?\b|\breminder.?threat.?signal\b|\bthreat.?remind\b/i;
 
 export function isRemrskQuery(text) {
   return REMRSK_RE.test(text || "");
@@ -47,11 +52,11 @@ function normaliseReminders(data) {
     data.reminders || data.items || data.results ||
     (Array.isArray(data) ? data : []);
   return raw.map((r, i) => ({
-    id:      r.id || `rem-${i}`,
-    content: r.content || r.text || r.title || r.note || `Reminder ${i + 1}`,
-    kind:    (r.kind || r.type || "reminder").toLowerCase(),
-    status:  (r.status || "pending").toLowerCase(),
-    tags:    r.tags || [],
+    id:    r.id    || `rem-${i}`,
+    title: r.title || r.text || r.body || r.content || `Reminder ${i + 1}`,
+    kind:  (r.kind || r.type || r.category || "reminder").toLowerCase(),
+    status: r.status || r.state || "pending",
+    tags:  Array.isArray(r.tags) ? r.tags.join(" ") : (r.tags || ""),
   }));
 }
 
@@ -61,67 +66,89 @@ function normaliseSignals(data) {
     data.signals || data.items || data.results ||
     (Array.isArray(data) ? data : []);
   return raw.map((s, i) => ({
-    id:       s.id || `sig-${i}`,
-    title:    s.title || s.name || s.signal || `Signal ${i + 1}`,
-    severity: (s.severity || s.level || "MEDIUM").toUpperCase(),
-    source:   s.source || s.origin || "",
-    tags:     s.tags || [],
+    id:          s.id          || `sig-${i}`,
+    title:       s.title       || s.name  || s.label || `Signal ${i + 1}`,
+    severity:    (s.severity   || s.level || s.priority || "INFO").toString().toUpperCase(),
+    description: s.description || s.body  || s.detail || s.notes || "",
+    source:      s.source      || s.origin || s.service || "",
   }));
 }
 
 function crossRef(reminders, signals) {
   return reminders.map((rem) => {
-    const haystack = `${rem.content} ${(rem.tags || []).join(" ")}`;
+    const haystack = `${rem.title} ${rem.kind} ${rem.tags}`;
     const matches = signals
-      .map((s) => {
-        const hits = overlap(haystack, `${s.title} ${(s.tags || []).join(" ")} ${s.source}`);
-        return hits > 0 ? { ...s, hits } : null;
+      .map((sig) => {
+        const needle = `${sig.title} ${sig.description} ${sig.source}`;
+        const hits = overlap(haystack, needle);
+        return hits > 0 ? { ...sig, hits } : null;
       })
       .filter(Boolean)
-      .sort((a, b) => b.hits - a.hits)
-      .slice(0, 5);
-    return { ...rem, signals: matches, backed: matches.length > 0 };
+      .sort((a, b) => {
+        const sevOrder = { CRITICAL: 4, HIGH: 3, MEDIUM: 2, LOW: 1, INFO: 0 };
+        const diff = (sevOrder[b.severity] || 0) - (sevOrder[a.severity] || 0);
+        return diff !== 0 ? diff : b.hits - a.hits;
+      });
+    return { ...rem, linked: matches.length > 0, signals: matches };
   });
 }
 
 export async function buildRemrskScript() {
   try {
     const base = apiBase();
+    const hdr  = { Authorization: `Bearer ${API_KEY}` };
     const [remRes, sigRes] = await Promise.all([
-      fetch(`${base}/reminders/list`,    { headers: { Authorization: `Bearer ${API_KEY}` } }),
-      fetch(`${base}/entities/RiskSignal`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
+      fetch(`${base}/reminders/list`,    { headers: hdr }),
+      fetch(`${base}/entities/RiskSignal`, { headers: hdr }),
     ]);
     const [remData, sigData] = await Promise.all([remRes.json(), sigRes.json()]);
     const reminders = normaliseReminders(remData);
     const signals   = normaliseSignals(sigData);
     const rows      = crossRef(reminders, signals);
-    const backed    = rows.filter((r) => r.backed).length;
-    const unlinked  = rows.length - backed;
-    const pct       = rows.length ? Math.round((backed / rows.length) * 100) : 0;
+    const linked    = rows.filter((r) => r.linked).length;
+    const floating  = rows.length - linked;
+    const pct       = rows.length ? Math.round((linked / rows.length) * 100) : 0;
     if (!rows.length) return "No reminders found in the system, sir.";
-    const criticalBacked = rows
-      .filter((r) => r.backed && r.signals.some((s) => s.severity === "CRITICAL"))
+    const topLinked = rows
+      .filter((r) => r.linked)
+      .slice(0, 2)
+      .map((r) => r.title)
+      .join("; ");
+    const criticalLinked = rows
+      .filter((r) => r.linked && r.signals.some((s) => s.severity === "CRITICAL"))
       .length;
     return (
-      `${backed} of ${rows.length} reminders are backed by active risk signals (${pct}% coverage). ` +
-      (criticalBacked > 0
-        ? `${criticalBacked} reminder${criticalBacked !== 1 ? "s" : ""} reference CRITICAL signals — immediate attention required.`
-        : unlinked > 0
-        ? `${unlinked} reminder${unlinked !== 1 ? "s" : ""} have no associated risk signal — these may be uncontextualised action items.`
-        : "All reminders have active risk signal backing.")
+      `${linked} of ${rows.length} reminders are linked to active risk signals (${pct}% risk coverage). ` +
+      (linked > 0
+        ? `${criticalLinked > 0 ? `${criticalLinked} reminder${criticalLinked !== 1 ? "s" : ""} intersect CRITICAL signals — ` : ""}Risk-linked reminders include: ${topLinked || "unknown"}.`
+        : `${floating} reminder${floating !== 1 ? "s" : ""} show no risk-signal correlation — threat landscape appears disconnected from active notes.`)
     );
   } catch {
-    return "Unable to reach reminders or risk-signal endpoints, sir.";
+    return "Unable to reach reminders or risk signal endpoints, sir.";
   }
 }
 
-const SEV_COLOR = { CRITICAL: RED, HIGH: AMB, MEDIUM: CY, LOW: GRN };
+const SEV_COLOR = {
+  CRITICAL: RED,
+  HIGH:     ORG,
+  MEDIUM:   AMB,
+  WARNING:  AMB,
+  INFO:     CY,
+  LOW:      GRN,
+};
+
+const KIND_COLOR = {
+  note:      CY,
+  task:      GRN,
+  alert:     RED,
+  reminder:  AMB,
+};
 
 export default function RemindersRiskSignalNexus() {
   const [open,      setOpen]      = useState(false);
   const [rows,      setRows]      = useState([]);
   const [loading,   setLoading]   = useState(false);
-  const [tab,       setTab]       = useState("ALL");
+  const [filter,    setFilter]    = useState("ALL");
   const [search,    setSearch]    = useState("");
   const [expanded,  setExpanded]  = useState(null);
   const [assessing, setAssessing] = useState(false);
@@ -131,18 +158,25 @@ export default function RemindersRiskSignalNexus() {
     setLoading(true);
     try {
       const base = apiBase();
+      const hdr  = { Authorization: `Bearer ${API_KEY}` };
       const [remRes, sigRes] = await Promise.all([
-        fetch(`${base}/reminders/list`,    { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${base}/entities/RiskSignal`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${base}/reminders/list`,     { headers: hdr }),
+        fetch(`${base}/entities/RiskSignal`, { headers: hdr }),
       ]);
       const [remData, sigData] = await Promise.all([remRes.json(), sigRes.json()]);
       setRows(crossRef(normaliseReminders(remData), normaliseSignals(sigData)));
     } catch {
-      /* non-fatal */
+      /* silently ignore fetch errors */
     } finally {
       setLoading(false);
     }
   }, []);
+
+  useEffect(() => {
+    const handler = () => { setOpen((p) => !p); if (!rows.length) load(); };
+    window.addEventListener("jarvis:remrsk-toggle", handler);
+    return () => window.removeEventListener("jarvis:remrsk-toggle", handler);
+  }, [load, rows.length]);
 
   useEffect(() => {
     if (!open) return;
@@ -151,178 +185,111 @@ export default function RemindersRiskSignalNexus() {
     return () => clearInterval(id);
   }, [open, load]);
 
-  useEffect(() => {
-    const toggle = () => setOpen((o) => !o);
-    window.addEventListener("jarvis:remrsk-toggle", toggle);
-    return () => window.removeEventListener("jarvis:remrsk-toggle", toggle);
-  }, []);
-
-  const assess = useCallback(async () => {
-    setAssessing(true);
-    setBrief("");
-    try {
-      const base  = apiBase();
-      const backed   = rows.filter((r) => r.backed);
-      const unlinked = rows.filter((r) => !r.backed);
-      const critSigs = backed
-        .flatMap((r) => r.signals.filter((s) => s.severity === "CRITICAL"))
-        .slice(0, 3)
-        .map((s) => s.title.slice(0, 40))
-        .join("; ");
-      const resp = await fetch(`${base}/v1/jarvis/agent/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({
-          message:
-            `Assess reminder-to-risk-signal linkage: ${rows.length} reminders total, ` +
-            `${backed.length} are backed by active risk signals, ` +
-            `${unlinked.length} are unlinked with no risk context. ` +
-            (critSigs ? `Critical signals referenced: ${critSigs}. ` : "") +
-            "Give a 2-sentence operational memory and risk-signal coverage assessment with recommended action.",
-        }),
-      });
-      const d = await resp.json();
-      const text = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
-      setBrief(text);
-      if (text) {
-        window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
-      }
-    } catch {
-      setBrief("Assessment unavailable.");
-    } finally {
-      setAssessing(false);
-    }
-  }, [rows]);
-
-  const backed   = rows.filter((r) => r.backed).length;
-  const unlinked = rows.length - backed;
-  const pct      = rows.length ? Math.round((backed / rows.length) * 100) : 0;
+  const linked   = rows.filter((r) => r.linked).length;
+  const floating = rows.length - linked;
+  const pct      = rows.length ? Math.round((linked / rows.length) * 100) : 0;
 
   const visible = rows
     .filter((r) => {
-      if (tab === "RISK-BACKED") return r.backed;
-      if (tab === "UNLINKED")    return !r.backed;
+      if (filter === "RISK-LINKED") return r.linked;
+      if (filter === "FLOATING")    return !r.linked;
       return true;
     })
-    .filter((r) => {
-      if (!search) return true;
-      const q = search.toLowerCase();
-      return (
-        r.content.toLowerCase().includes(q) ||
-        r.kind.toLowerCase().includes(q) ||
-        r.status.toLowerCase().includes(q)
-      );
-    });
+    .filter((r) =>
+      !search ||
+      r.title.toLowerCase().includes(search.toLowerCase()) ||
+      r.kind.toLowerCase().includes(search.toLowerCase())
+    );
 
-  const KIND_COLOR = { note: CY, task: GRN, alert: RED, reminder: AMB };
-
-  const BTN_LEFT = 80_580;
-  const BTN_STYLE = {
-    position: "fixed",
-    left: BTN_LEFT,
-    bottom: 8,
-    zIndex: 152,
-    padding: "4px 10px",
-    background: "rgba(5,8,13,0.82)",
-    border: `1px solid ${unlinked > 0 ? AMB : CY}55`,
-    borderRadius: 6,
-    cursor: "pointer",
-    color: CY,
-    fontFamily: "'JetBrains Mono',monospace",
-    fontSize: 10,
-    letterSpacing: 1,
-    display: "flex",
-    alignItems: "center",
-    gap: 5,
-    backdropFilter: "blur(6px)",
+  const assess = async () => {
+    setAssessing(true);
+    setBrief("");
+    try {
+      const summary = await buildRemrskScript();
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+        body:    JSON.stringify({ message: `JARVIS reminders-risk brief: ${summary}` }),
+      });
+      const d    = await r.json();
+      const text = d.response || d.message || d.content || summary;
+      setBrief(text);
+      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
+    } catch {
+      setBrief("Assessment unavailable — check backend connectivity, sir.");
+    } finally {
+      setAssessing(false);
+    }
   };
-
-  const PANEL = {
-    position: "fixed",
-    left: BTN_LEFT - 340,
-    bottom: 38,
-    zIndex: 152,
-    width: 400,
-    maxHeight: "70vh",
-    overflowY: "auto",
-    background: "rgba(6,10,16,0.94)",
-    border: `1px solid ${CY}44`,
-    borderRadius: 10,
-    padding: 14,
-    fontFamily: "'JetBrains Mono',monospace",
-    color: "#DCEBF5",
-    backdropFilter: "blur(10px)",
-    boxShadow: `0 0 40px ${CY}18`,
-  };
-
-  const tabStyle = (t) => ({
-    padding: "3px 8px",
-    border: `1px solid ${tab === t ? CY : CY + "33"}`,
-    borderRadius: 4,
-    cursor: "pointer",
-    background: tab === t ? CY + "22" : "transparent",
-    color: tab === t ? CY : DIM,
-    fontSize: 10,
-    letterSpacing: 1,
-  });
 
   return (
     <>
+      {/* HUD button */}
       <button
-        style={BTN_STYLE}
-        onClick={() => setOpen((o) => !o)}
-        title="Reminders × Risk Signal Nexus (REMRSK)"
+        onClick={() => { setOpen((p) => !p); if (!rows.length) load(); }}
+        style={{
+          position:       "fixed",
+          left:           BTN_LEFT,
+          bottom:         8,
+          zIndex:         Z_INDEX,
+          background:     linked > 0 ? `${AMB}22` : "rgba(0,0,0,0.55)",
+          border:         `1px solid ${linked > 0 ? AMB : CY}55`,
+          borderRadius:   5,
+          color:          linked > 0 ? AMB : CY,
+          padding:        "3px 8px",
+          fontSize:       9,
+          letterSpacing:  1,
+          cursor:         "pointer",
+          backdropFilter: "blur(4px)",
+        }}
       >
         ◈ REMRSK
-        {unlinked > 0 && (
-          <span style={{ background: AMB, color: "#000", borderRadius: 4, padding: "1px 5px", fontSize: 9 }}>
-            {unlinked}
+        {linked > 0 && (
+          <span style={{ marginLeft: 5, background: AMB, color: "#000", borderRadius: 9, padding: "0 5px", fontSize: 8, fontWeight: 700 }}>
+            {linked}
           </span>
         )}
       </button>
 
+      {/* Panel */}
       {open && (
-        <div style={PANEL}>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-            <span style={{ color: CY, fontSize: 11, letterSpacing: 2 }}>REMINDERS × RISK SIGNAL NEXUS</span>
-            <button
-              onClick={() => setOpen(false)}
-              style={{ background: "none", border: "none", color: DIM, cursor: "pointer", fontSize: 14 }}
-            >✕</button>
+        <div
+          style={{
+            position:       "fixed",
+            left:           Math.min(BTN_LEFT, window.innerWidth - 360),
+            bottom:         36,
+            zIndex:         Z_INDEX + 1,
+            width:          340,
+            maxHeight:      480,
+            overflow:       "hidden",
+            display:        "flex",
+            flexDirection:  "column",
+            background:     "rgba(6,12,22,0.97)",
+            border:         `1px solid ${CY}33`,
+            borderRadius:   8,
+            padding:        14,
+            fontFamily:     "monospace",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          {/* header */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+            <span style={{ color: CY, fontSize: 11, letterSpacing: 2 }}>REMINDERS × RISK SIGNALS</span>
+            <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", color: DIM, cursor: "pointer", fontSize: 12 }}>✕</button>
           </div>
 
           {/* stat tiles */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 6, marginBottom: 10 }}>
+          <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
             {[
-              { label: "REMINDERS",   value: rows.length, color: CY },
-              { label: "RISK-BACKED", value: backed,      color: backed > 0 ? GRN : DIM },
-              { label: "UNLINKED",    value: unlinked,    color: unlinked > 0 ? AMB : GRN },
-            ].map(({ label, value, color }) => (
-              <div
-                key={label}
-                style={{ background: "rgba(0,0,0,0.4)", border: `1px solid ${color}33`, borderRadius: 6, padding: "6px 8px", textAlign: "center" }}
-              >
-                <div style={{ color, fontSize: 16, fontWeight: "bold" }}>{loading ? "…" : value}</div>
-                <div style={{ color: DIM, fontSize: 9, letterSpacing: 1 }}>{label}</div>
+              { label: "REMINDERS",   value: rows.length, col: CY  },
+              { label: "RISK-LINKED", value: linked,      col: AMB },
+              { label: "FLOATING",    value: floating,    col: GRN },
+              { label: "COVERAGE",    value: `${pct}%`,  col: pct >= 50 ? AMB : GRN },
+            ].map((t) => (
+              <div key={t.label} style={{ flex: 1, background: `${t.col}11`, border: `1px solid ${t.col}33`, borderRadius: 5, padding: "5px 4px", textAlign: "center" }}>
+                <div style={{ color: t.col, fontSize: 12, fontWeight: 700 }}>{t.value}</div>
+                <div style={{ color: DIM, fontSize: 7, letterSpacing: 1 }}>{t.label}</div>
               </div>
-            ))}
-          </div>
-
-          {/* coverage bar */}
-          <div style={{ marginBottom: 10 }}>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
-              <span style={{ color: DIM, fontSize: 9, letterSpacing: 1 }}>RISK SIGNAL LINKAGE COVERAGE</span>
-              <span style={{ color: pct >= 70 ? GRN : pct >= 40 ? AMB : RED, fontSize: 10, fontWeight: "bold" }}>{pct}%</span>
-            </div>
-            <div style={{ height: 4, background: "rgba(255,255,255,0.08)", borderRadius: 2 }}>
-              <div style={{ height: "100%", width: `${pct}%`, background: pct >= 70 ? GRN : pct >= 40 ? AMB : RED, borderRadius: 2, transition: "width 0.4s" }} />
-            </div>
-          </div>
-
-          {/* filter tabs */}
-          <div style={{ display: "flex", gap: 5, marginBottom: 8 }}>
-            {["ALL", "RISK-BACKED", "UNLINKED"].map((t) => (
-              <button key={t} style={tabStyle(t)} onClick={() => setTab(t)}>{t}</button>
             ))}
           </div>
 
@@ -331,46 +298,99 @@ export default function RemindersRiskSignalNexus() {
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="search reminders…"
-            style={{ width: "100%", boxSizing: "border-box", background: "rgba(0,0,0,0.4)", border: `1px solid ${CY}33`, borderRadius: 5, color: "#DCEBF5", padding: "5px 8px", fontSize: 11, marginBottom: 8, outline: "none" }}
+            style={{ background: "rgba(255,255,255,0.04)", border: `1px solid ${CY}33`, borderRadius: 4, color: "#DCEBF5", padding: "4px 8px", fontSize: 10, marginBottom: 6, outline: "none" }}
           />
 
+          {/* filter tabs */}
+          <div style={{ display: "flex", gap: 4, marginBottom: 8 }}>
+            {["ALL", "RISK-LINKED", "FLOATING"].map((f) => (
+              <button
+                key={f}
+                onClick={() => setFilter(f)}
+                style={{
+                  flex:       1,
+                  background: filter === f ? `${CY}22` : "transparent",
+                  border:     `1px solid ${filter === f ? CY : CY + "33"}`,
+                  borderRadius: 4,
+                  color:      filter === f ? CY : DIM,
+                  padding:    "3px 0",
+                  fontSize:   8,
+                  cursor:     "pointer",
+                  letterSpacing: 1,
+                }}
+              >
+                {f}
+              </button>
+            ))}
+          </div>
+
           {/* list */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-            {visible.length === 0 && !loading && (
-              <div style={{ color: DIM, fontSize: 11, textAlign: "center", padding: 12 }}>No reminders match.</div>
+          <div style={{ flex: 1, overflowY: "auto", display: "flex", flexDirection: "column", gap: 4 }}>
+            {loading && <div style={{ color: DIM, fontSize: 10, textAlign: "center", padding: 16 }}>Loading…</div>}
+            {!loading && visible.length === 0 && (
+              <div style={{ color: DIM, fontSize: 10, textAlign: "center", padding: 16 }}>No reminders match filter.</div>
             )}
             {visible.map((rem) => (
               <div
                 key={rem.id}
-                style={{ background: "rgba(0,0,0,0.35)", border: `1px solid ${rem.backed ? GRN : AMB}33`, borderRadius: 6, padding: "7px 9px", cursor: "pointer" }}
                 onClick={() => setExpanded(expanded === rem.id ? null : rem.id)}
+                style={{
+                  background: rem.linked ? `${AMB}09` : "rgba(255,255,255,0.02)",
+                  border:     `1px solid ${rem.linked ? AMB + "33" : CY + "1A"}`,
+                  borderRadius: 5,
+                  padding:    "6px 8px",
+                  cursor:     "pointer",
+                }}
               >
-                <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 2 }}>
-                  <span style={{ color: rem.backed ? GRN : AMB, fontSize: 10 }}>{rem.backed ? "●" : "○"}</span>
-                  <span style={{ color: KIND_COLOR[rem.kind] || CY, fontSize: 9, border: `1px solid ${(KIND_COLOR[rem.kind] || CY)}44`, borderRadius: 3, padding: "1px 4px" }}>{rem.kind}</span>
-                  <span style={{ color: "#DCEBF5", fontSize: 11, flex: 1 }}>{rem.content.slice(0, 60)}{rem.content.length > 60 ? "…" : ""}</span>
-                  <span style={{ color: rem.backed ? GRN : DIM, fontSize: 9 }}>{rem.backed ? `${rem.signals.length} signal${rem.signals.length !== 1 ? "s" : ""}` : "UNLINKED"}</span>
+                <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                  <span style={{
+                    fontSize: 8,
+                    border:   `1px solid ${rem.linked ? AMB : GRN}44`,
+                    borderRadius: 3,
+                    padding:  "1px 4px",
+                    color:    rem.linked ? AMB : GRN,
+                    letterSpacing: 1,
+                  }}>
+                    {rem.linked ? "RISK-LINKED" : "FLOATING"}
+                  </span>
+                  <span style={{ color: "#DCEBF5", fontSize: 10, flex: 1 }}>{rem.title}</span>
+                  {rem.linked && (
+                    <span style={{ color: DIM, fontSize: 9 }}>{rem.signals.length} sig</span>
+                  )}
                 </div>
+                {rem.kind && (
+                  <div style={{ color: KIND_COLOR[rem.kind] || DIM, fontSize: 9, marginLeft: 16, textTransform: "uppercase", letterSpacing: 1 }}>
+                    {rem.kind}
+                  </div>
+                )}
 
                 {expanded === rem.id && (
-                  <div style={{ marginTop: 6, borderTop: `1px solid ${CY}22`, paddingTop: 6 }}>
-                    {rem.backed ? (
+                  <div style={{ marginTop: 6, borderTop: `1px solid ${AMB}22`, paddingTop: 6 }}>
+                    {rem.linked ? (
                       <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
-                        {rem.signals.map((s) => (
-                          <div key={s.id} style={{ background: "rgba(0,229,160,0.04)", border: `1px solid ${(SEV_COLOR[s.severity] || CY)}33`, borderRadius: 4, padding: "5px 7px" }}>
+                        {rem.signals.map((sig) => (
+                          <div key={sig.id} style={{ background: "rgba(255,165,0,0.04)", border: `1px solid ${AMB}33`, borderRadius: 4, padding: "5px 7px" }}>
                             <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
-                              <span style={{ color: SEV_COLOR[s.severity] || CY, fontSize: 9, border: `1px solid ${(SEV_COLOR[s.severity] || CY)}44`, borderRadius: 3, padding: "1px 4px" }}>{s.severity}</span>
-                              <span style={{ color: "#DCEBF5", fontSize: 10, flex: 1 }}>{s.title}</span>
-                              <span style={{ color: DIM, fontSize: 9 }}>hits: {s.hits}</span>
+                              <span style={{
+                                color:     SEV_COLOR[sig.severity] || CY,
+                                fontSize:  9,
+                                border:    `1px solid ${(SEV_COLOR[sig.severity] || CY)}44`,
+                                borderRadius: 3,
+                                padding:   "1px 4px",
+                              }}>
+                                {sig.severity}
+                              </span>
+                              <span style={{ color: "#DCEBF5", fontSize: 10, flex: 1 }}>{sig.title}</span>
+                              <span style={{ color: DIM, fontSize: 9 }}>hits: {sig.hits}</span>
                             </div>
-                            {s.source && (
-                              <div style={{ color: DIM, fontSize: 9, marginTop: 2 }}>source: {s.source}</div>
+                            {sig.source && (
+                              <div style={{ color: DIM, fontSize: 8, marginTop: 2 }}>{sig.source}</div>
                             )}
                           </div>
                         ))}
                       </div>
                     ) : (
-                      <div style={{ color: DIM, fontSize: 10 }}>No risk signals matched this reminder — uncontextualised action item.</div>
+                      <div style={{ color: DIM, fontSize: 10 }}>No active risk signals matched this reminder — note appears threat-free.</div>
                     )}
                   </div>
                 )}
@@ -379,16 +399,27 @@ export default function RemindersRiskSignalNexus() {
           </div>
 
           {/* assess */}
-          <div style={{ marginTop: 10, borderTop: `1px solid ${CY}22`, paddingTop: 8 }}>
+          <div style={{ marginTop: 10, borderTop: `1px solid ${AMB}22`, paddingTop: 8 }}>
             <button
               onClick={assess}
               disabled={assessing || rows.length === 0}
-              style={{ background: `${CY}18`, border: `1px solid ${CY}55`, borderRadius: 5, color: CY, padding: "5px 12px", cursor: "pointer", fontSize: 10, letterSpacing: 1, width: "100%", opacity: assessing ? 0.6 : 1 }}
+              style={{
+                background: `${AMB}18`,
+                border:     `1px solid ${AMB}55`,
+                borderRadius: 5,
+                color:      AMB,
+                padding:    "5px 12px",
+                cursor:     "pointer",
+                fontSize:   10,
+                letterSpacing: 1,
+                width:      "100%",
+                opacity:    assessing ? 0.6 : 1,
+              }}
             >
               {assessing ? "▶ ASSESSING…" : "▶ ASSESS"}
             </button>
             {brief && (
-              <div style={{ marginTop: 8, color: "#DCEBF5", fontSize: 10, lineHeight: 1.5, borderLeft: `2px solid ${CY}`, paddingLeft: 8 }}>
+              <div style={{ marginTop: 8, color: "#DCEBF5", fontSize: 10, lineHeight: 1.5, borderLeft: `2px solid ${AMB}`, paddingLeft: 8 }}>
                 {brief}
               </div>
             )}

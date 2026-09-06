@@ -235,3 +235,4 @@
 [2026-09-06] F640 SKIINV: SkillInvestigationAdvisor.jsx voice-wired into JarvisBrain.ask() + mounted App.jsx; /v1/aip/skill + /v1/investigations real endpoints; vite build exit 0.
 [2026-09-06] F641 KNOWOPS: KnowledgeOpsEventsNexus.jsx created; isKnowopsQuery+buildKnowopsScript wired into JarvisBrain.jsx; mounted App.jsx; /knowledge/ + /v1/ops/events real endpoints; vite build exit 0.
 2026-09-06 F642 OALTASK: Ops Alert × Task Coverage Monitor — /v1/ops/alerts + /entities/Task cross-reference; FLAGGED/CLEAR tabs; ASSESS → /v1/jarvis/agent/chat + TTS; OpsAlertTaskCoverage.jsx created; wired JarvisBrain.jsx + App.jsx; vite build exit 0
+2026-09-06 F643 REMRSK: RemindersRiskSignalNexus.jsx rewritten with complete implementation; /reminders/list + /entities/RiskSignal cross-reference; RISK-LINKED/FLOATING tabs; ASSESS → /v1/jarvis/agent/chat + TTS; isRemrskQuery+buildRemrskScript already wired JarvisBrain.jsx + App.jsx (HEAD); vite build exit 0
