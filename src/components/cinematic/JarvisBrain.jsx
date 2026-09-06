@@ -196,6 +196,7 @@ import { isGnopsQuery, buildGnopsScript } from "./GraphNodeOpsEventCoverage";
 import { isOpsClusterQuery, buildOpsClusterScript } from "./OpsEventClusterAnalyzer";
 import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioAlignment";
 import { isKoepQuery, buildKoepScript } from "./KnowledgeOpsEventPulse";
+import { isTgprQuery, buildTgprScript } from "./TaskGraphPriorityRanker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -829,6 +830,9 @@ export default function JarvisBrain() {
       } else if (isKoepQuery(q)) {
         answer = await buildKoepScript();
         window.dispatchEvent(new CustomEvent("jarvis:koep-toggle"));
+      } else if (isTgprQuery(q)) {
+        answer = await buildTgprScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tgpr-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
