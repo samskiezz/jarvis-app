@@ -901,6 +901,7 @@ import InvestmentKnowledgeNexus from '@/components/cinematic/InvestmentKnowledge
 import GraphNodeDecisionRulesNexus from '@/components/cinematic/GraphNodeDecisionRulesNexus';
 import ContactOpsEventsNexus from '@/components/cinematic/ContactOpsEventsNexus';
 import ThreatAttributionMapper from '@/components/cinematic/ThreatAttributionMapper';
+import OpsAlertInvestigationCoverage from '@/components/cinematic/OpsAlertInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2775,6 +2776,8 @@ function App() {
             <ContactOpsEventsNexus />
             {/* F635 (overnight 2026-09-06): Intel Profile × Risk Signal Threat Attribution (TATTR) voice wiring — ThreatAttributionMapper.jsx (F171; /entities/IntelProfile + /entities/RiskSignal; ATTRIBUTED risks (≥1 actor keyword-matches) vs UNATTRIBUTED; coverage stat tiles; ALL/ATTRIBUTED/UNATTRIBUTED tabs + search; click-to-expand matched threat actors with actor-type badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence attribution brief + TTS; red badge on unattributed critical count; ◈ TATTR button left:57320 bottom:8 zIndex:112; isTattrQuery+buildTattrScript wired into JarvisBrain.ask(); jarvis:tattr-toggle event; 60-s auto-refresh; voice: "threat attribution/actor risk/who drives risk/intel attribution/which actors/tattr/risk actor/threat actor risk/attribution map") was not mounted in App.jsx and had no JarvisBrain intent handler; mounted ThreatAttributionMapper in App.jsx; vite build exit 0. */}
             <ThreatAttributionMapper />
+            {/* F636 (overnight 2026-09-06): Ops Alert × Investigation Coverage (OALINV) voice wiring — OpsAlertInvestigationCoverage.jsx (F174; /v1/ops/alerts + /v1/investigations; INVESTIGATED alerts (≥1 case keyword-matches) vs UNINVESTIGATED (blind spots); stat tiles; ALL/INVESTIGATED/UNINVESTIGATED tabs + search; click-to-expand matched cases with status + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; orange badge on uninvestigated count; ◈ OALINV button left:59000 bottom:8 zIndex:115; isOalinvQuery+buildOalinvScript wired into JarvisBrain.ask(); jarvis:oalinv-toggle event; 60-s auto-refresh; voice: "alert investigation/uninvestigated alerts/ops alert case/oalinv/untracked alerts/alert case coverage") was not mounted in App.jsx and had no JarvisBrain intent handler; mounted OpsAlertInvestigationCoverage in App.jsx; vite build exit 0. */}
+            <OpsAlertInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
