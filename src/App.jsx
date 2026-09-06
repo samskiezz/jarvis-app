@@ -893,6 +893,7 @@ import OpsEventClusterAnalyzer from '@/components/cinematic/OpsEventClusterAnaly
 import LiveIntelScenarioAlignment from '@/components/cinematic/LiveIntelScenarioAlignment';
 import TaskGraphPriorityRanker from '@/components/cinematic/TaskGraphPriorityRanker';
 import InvestmentRulesNexus from '@/components/cinematic/InvestmentRulesNexus';
+import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2751,6 +2752,8 @@ function App() {
             <TaskGraphPriorityRanker />
             {/* F625 (overnight 2026-09-06): Investment × Rules Nexus (INVRULS) — /entities/Investment + /v1/rules; keyword cross-reference; RULE-COVERED investments (≥1 rule keyword-matches) vs UNMONITORED; coverage % tile; ALL/RULE-COVERED/UNMONITORED filter tabs + search; click-to-expand matched rules with severity+enabled status; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio monitoring brief + TTS; amber badge on unmonitored count; ◈ INVRULS button left:97640 bottom:8 zIndex:172; isInvrulesQuery+buildInvrulesScript wired into JarvisBrain.ask(); jarvis:invruls-toggle event; 90-s auto-refresh; voice: "invruls/investment rules/rules investment/portfolio rules/holdings under rules/rule-covered investments/which investments have watchtower rules/portfolio watchtower"; InvestmentRulesNexus.jsx created; mounted App.jsx; vite build exit 0. */}
             <InvestmentRulesNexus />
+            {/* F626 (overnight 2026-09-06): Risk Report Mapper (F74) — parallel-fetches /entities/RiskSignal + /v1/reports; keyword-correlates risk signals against report titles/summaries to classify each risk as EVIDENCED (≥1 report covers it) or NAKED (intelligence gap — no report); isRiskRepQuery+buildRiskRepScript wired into JarvisBrain.ask(); jarvis:risk-report-mapper-toggle event; voice: "risk report mapper/risk reports/evidence gap/naked risk/report coverage/which risks have reports/evidenced risks/risk coverage map" */}
+            <RiskReportMapper />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
