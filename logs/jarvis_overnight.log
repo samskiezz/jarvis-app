@@ -220,3 +220,4 @@
 2026-09-06 F624 TGPR voice wiring: TaskGraphPriorityRanker.jsx mounted App.jsx + isTgprQuery/buildTgprScript wired JarvisBrain.jsx; /entities/Task + /v1/graph/centrality; vite build exit 0
 [2026-09-06] F625 Investment × Rules Nexus (INVRULS) — InvestmentRulesNexus.jsx created; /entities/Investment + /v1/rules keyword cross-reference; RULE-COVERED vs UNMONITORED; isInvrulesQuery+buildInvrulesScript wired; mounted App.jsx; vite build exit 0.
 2026-09-06T03:25:37Z F626 Risk Report Mapper (RISKREPMAP) — RiskReportMapper.jsx wired; /entities/RiskSignal + /v1/reports; isRiskRepQuery+buildRiskRepScript in JarvisBrain; mounted App.jsx; vite build exit 0.
+[2026-09-06] F627 RemindersSwarmJobNexus.jsx created — /reminders/list × /entities/SwarmJob nexus; AUTOMATED vs UNAUTOMATED; JarvisBrain pre-wired; App.jsx pre-mounted; vite build exit 0.
