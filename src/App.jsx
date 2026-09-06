@@ -897,6 +897,7 @@ import RiskReportMapper from '@/components/cinematic/RiskReportMapper';
 import ContactInvestmentNexus from '@/components/cinematic/ContactInvestmentNexus';
 import ContactSwarmJobNexus from '@/components/cinematic/ContactSwarmJobNexus';
 import ContactSkillNexus from '@/components/cinematic/ContactSkillNexus';
+import InvestmentKnowledgeNexus from '@/components/cinematic/InvestmentKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2763,6 +2764,8 @@ function App() {
             <ContactSwarmJobNexus />
             {/* F630 (overnight 2026-09-06): Contact × AIP Skill Nexus (CNTSK) — /entities/Contact + /v1/aip/skill; keyword cross-reference; SKILLED contacts vs UNSKILLED; coverage % tile; ALL/SKILLED/UNSKILLED filter tabs + search; click-to-expand matched skills; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on unskilled count; ◈ CNTSK button left:101080 bottom:8 zIndex:176; isCntskQuery+buildCntskScript wired into JarvisBrain.ask(); jarvis:cntsk-toggle event; 90-s auto-refresh; voice: "cntsk/contact skill/skill contact/skilled contacts/which contacts have skills/contact skill coverage/contact capability/expert contacts" */}
             <ContactSkillNexus />
+            {/* F632 (overnight 2026-09-06): Investment × Knowledge Nexus (INVKNO) — /entities/Investment + /knowledge/; keyword cross-reference; DOCUMENTED holdings (≥1 article keyword-matches) vs UNDOCUMENTED; coverage % tile; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched articles with kind badge + hits; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on undocumented count; ◈ INVKNO button left:102800 bottom:8 zIndex:178; isInvknoQuery+buildInvknoScript wired into JarvisBrain.ask(); jarvis:invkno-toggle event; 90-s auto-refresh; voice: "invkno/investment knowledge/knowledge investment/documented holdings/which investments have articles/investment intel/portfolio knowledge" */}
+            <InvestmentKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

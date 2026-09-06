@@ -225,3 +225,4 @@
 2026-09-06 | F629 | Contact × SwarmJob Nexus (CNTSWRM) | ContactSwarmJobNexus.jsx created; isCntswrmQuery+buildCntswrmScript wired into JarvisBrain.ask(); mounted App.jsx; vite build exit 0.
 2026-09-06 | F630 | Contact × AIP Skill Nexus (CNTSK) | ContactSkillNexus.jsx created; isCntskQuery+buildCntskScript wired into JarvisBrain.ask(); mounted App.jsx; vite build exit 0.
 2026-09-06 | F631 | Reminders × Task Nexus (REMTASK) | RemindersTaskNexus.jsx full implementation; /reminders/list + /entities/Task keyword cross-ref; isRemtaskQuery+buildRemtaskScript pre-wired in JarvisBrain; mounted App.jsx; vite build exit 0.
+[2026-09-06] F632 InvestmentKnowledgeNexus.jsx — /entities/Investment × /knowledge/; DOCUMENTED/UNDOCUMENTED filter; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ INVKNO btn left:102800 zIndex:178; isInvknoQuery+buildInvknoScript wired JarvisBrain.ask(); jarvis:invkno-toggle; mounted App.jsx; vite build exit 0.
