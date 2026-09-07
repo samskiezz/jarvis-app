@@ -228,6 +228,7 @@ import { isOalfinQuery, buildOalfinScript } from "./OpsAlertsInvestmentNexus";
 import { isAcsnQuery, buildAcsnScript } from "./AcousticContactMonitor";
 import { isOalrptQuery, buildOalrptScript } from "./OpsAlertsReportNexus";
 import { isQifQuery, buildQifScript } from "./QuadIntelFusion";
+import { isOalgrphQuery, buildOalgrphScript } from "./OpsAlertsGraphNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -953,6 +954,9 @@ export default function JarvisBrain() {
       } else if (isQifQuery(q)) {
         answer = await buildQifScript();
         window.dispatchEvent(new CustomEvent("jarvis:qif-toggle"));
+      } else if (isOalgrphQuery(q)) {
+        answer = await buildOalgrphScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalgrph-toggle"));
       } else if (isAcsnQuery(q)) {
         answer = await buildAcsnScript();
         window.dispatchEvent(new CustomEvent("jarvis:acsn-toggle"));

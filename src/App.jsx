@@ -923,6 +923,7 @@ import OpsAlertsInvestmentNexus from '@/components/cinematic/OpsAlertsInvestment
 import AcousticContactMonitor from '@/components/cinematic/AcousticContactMonitor';
 import QuadIntelFusion from '@/components/cinematic/QuadIntelFusion';
 import OpsAlertsReportNexus from '@/components/cinematic/OpsAlertsReportNexus';
+import OpsAlertsGraphNexus from '@/components/cinematic/OpsAlertsGraphNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2834,6 +2835,8 @@ function App() {
             <OpsAlertsReportNexus />
             {/* F658 (overnight 2026-09-07): Quad Intel Fusion voice wiring (QIF) — QuadIntelFusion.jsx; /entities/RiskSignal + /entities/Task + /v1/investigations + /functions/getLiveIntel; QUAD_LOCKED/TRIPLE_FUSED/DUAL_CORRELATED/ISOLATED cross-reference; fusion % tile; ALL/QUAD_LOCKED/TRIPLE_FUSED/DUAL_CORRELATED/ISOLATED filter tabs + search; click-to-expand matched tasks/cases/live events; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; cyan badge on quad-locked count; ◈ QIF button left:117420 bottom:8 zIndex:195; isQifQuery+buildQifScript wired into JarvisBrain.ask(); jarvis:qif-toggle event; 90-s auto-refresh; voice: "qif/quad intel fusion/quad intel/risk task investigation/fusion correlation/quad locked/intel fusion/quad intel corr"; vite build exit 0. */}
             <QuadIntelFusion />
+            {/* F659 (overnight 2026-09-07): Ops Alerts × Graph Node Nexus (OALGRPH) — OpsAlertsGraphNexus.jsx; /v1/ops/alerts + /v1/graph/centrality; CENTRAL vs PERIPHERAL; coverage % tile; ALL/CENTRAL/PERIPHERAL filter tabs + search; click-to-expand matched nodes with centrality score + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on peripheral count; ◈ OALGRPH button left:118280 bottom:8 zIndex:196; isOalgrphQuery+buildOalgrphScript wired into JarvisBrain.ask(); jarvis:oalgrph-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <OpsAlertsGraphNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

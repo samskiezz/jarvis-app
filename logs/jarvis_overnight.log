@@ -251,3 +251,4 @@
 [2026-09-07] F656 Acoustic Contact Monitor (ACSN): isAcsnQuery+buildAcsnScript wired into JarvisBrain.jsx; AcousticContactMonitor mounted in App.jsx; /v1/acoustic/contacts real endpoint (backed by server/routes/acoustic.py); vite build exit 0.
 2026-09-07 F657 OpsAlertsReportNexus.jsx (OALRPT) — /v1/ops/alerts x /v1/reports DOCUMENTED/BLIND cross-ref; isOalrptQuery+buildOalrptScript wired JarvisBrain.jsx; mounted App.jsx; vite build exit 0.
 2026-09-07 F658 QIF QuadIntelFusion voice wiring: isQifQuery+buildQifScript exported; mounted App.jsx; JarvisBrain wired; jarvis:qif-toggle; vite build exit 0
+[2026-09-07] F659 OpsAlertsGraphNexus — /v1/ops/alerts × /v1/graph/centrality; CENTRAL vs PERIPHERAL; coverage tile; ALL/CENTRAL/PERIPHERAL tabs+search; expand nodes with centrality+hits; ASSESS+TTS; ◈ OALGRPH left:118280; isOalgrphQuery+buildOalgrphScript wired JarvisBrain; mounted App.jsx; vite build exit 0.
