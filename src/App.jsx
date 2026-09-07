@@ -933,6 +933,7 @@ import AcousticRiskSignalNexus from '@/components/cinematic/AcousticRiskSignalNe
 import AcousticInvestigationNexus from '@/components/cinematic/AcousticInvestigationNexus';
 import AcousticTaskNexus from '@/components/cinematic/AcousticTaskNexus';
 import AcousticIntelProfileNexus from '@/components/cinematic/AcousticIntelProfileNexus';
+import AcousticKnowledgeNexus from '@/components/cinematic/AcousticKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2864,6 +2865,8 @@ function App() {
             <AcousticTaskNexus />
             {/* F669 (overnight 2026-09-07): Acoustic × Intel Profile Nexus (ACIP) — AcousticIntelProfileNexus.jsx; /v1/acoustic/contacts + /entities/IntelProfile; ATTRIBUTED contacts (≥1 intel profile keyword-match) vs SILENT; ALL/ATTRIBUTED/SILENT filter tabs + search; click-to-expand matched profiles (threat-level badge + actor-type + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on attributed count; ◈ ACIP button left:126020 bottom:8 zIndex:205; isAcipQuery+buildAcipScript wired into JarvisBrain.ask(); jarvis:acip-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticIntelProfileNexus />
+            {/* F670 (overnight 2026-09-07): Acoustic × Knowledge Nexus (ACKNO) — AcousticKnowledgeNexus.jsx; /v1/acoustic/contacts + /knowledge/articles; DOCUMENTED contacts (≥1 keyword overlap with article title/tags) vs UNDOCUMENTED; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched articles (kind badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ ACKNO button left:126880 bottom:8 zIndex:206; isAcknoQuery+buildAcknoScript wired into JarvisBrain.ask(); jarvis:ackno-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
