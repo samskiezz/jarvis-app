@@ -921,6 +921,7 @@ import OpsAlertsDatasetNexus from '@/components/cinematic/OpsAlertsDatasetNexus'
 import OpsAlertsRemindersNexus from '@/components/cinematic/OpsAlertsRemindersNexus';
 import OpsAlertsInvestmentNexus from '@/components/cinematic/OpsAlertsInvestmentNexus';
 import AcousticContactMonitor from '@/components/cinematic/AcousticContactMonitor';
+import OpsAlertsReportNexus from '@/components/cinematic/OpsAlertsReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2828,6 +2829,8 @@ function App() {
             <OpsAlertsInvestmentNexus />
             {/* F656 (overnight 2026-09-07): Acoustic Contact Monitor voice wiring — AcousticContactMonitor.jsx (backed by server/routes/acoustic.py; /v1/acoustic/contacts; isAcsnQuery+buildAcsnScript wired into JarvisBrain.ask(); jarvis:acsn-toggle; voice: "acoustic/acoustic contacts/contact map/yamnet/acsn") was not mounted in App.jsx and had no JarvisBrain intent handler; mounted + wired; vite build exit 0. */}
             <AcousticContactMonitor />
+            {/* F657 (overnight 2026-09-07): Ops Alerts × Report Coverage Monitor — OpsAlertsReportNexus.jsx; /v1/ops/alerts + /v1/reports; DOCUMENTED vs BLIND; isOalrptQuery+buildOalrptScript wired into JarvisBrain.ask(); jarvis:oalrpt-toggle; vite build exit 0. */}
+            <OpsAlertsReportNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
