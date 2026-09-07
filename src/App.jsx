@@ -926,6 +926,7 @@ import OpsAlertsReportNexus from '@/components/cinematic/OpsAlertsReportNexus';
 import OpsAlertsGraphNexus from '@/components/cinematic/OpsAlertsGraphNexus';
 import OpsAlertsRulesNexus from '@/components/cinematic/OpsAlertsRulesNexus';
 import OpsAlertsSkillNexus from '@/components/cinematic/OpsAlertsSkillNexus';
+import ContactIntelKnowledgeTrifecta from '@/components/cinematic/ContactIntelKnowledgeTrifecta';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2843,6 +2844,8 @@ function App() {
             <OpsAlertsRulesNexus />
             {/* F661 (overnight 2026-09-07): Ops Alerts × Skill Nexus (OALSKILL) — OpsAlertsSkillNexus.jsx; /v1/ops/alerts + /v1/aip/skill; SKILL-BACKED alerts (≥1 skill keyword-matches) vs UNSKILLED; coverage % tile; ALL/SKILL-BACKED/UNSKILLED filter tabs + search; click-to-expand matched skills with domain+score+hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unskilled count; ◈ OALSKILL button left:120000 bottom:8 zIndex:198; isOalskillQuery+buildOalskillScript wired into JarvisBrain.ask(); jarvis:oalskill-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <OpsAlertsSkillNexus />
+            {/* F662 (overnight 2026-09-07): Contact × Intel Profile × Knowledge Trifecta (CIKTRI) — ContactIntelKnowledgeTrifecta.jsx; /entities/Contact + /entities/IntelProfile + /knowledge/articles; TRIPLE/PROFILED/RESEARCHED/DARK classification; coverage tiles; ALL/TRIPLE/PROFILED/RESEARCHED/DARK filter tabs + search; click-to-expand intel profiles + knowledge articles; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ CIKTRI button left:120860 bottom:8 zIndex:199; isCiktriQuery+buildCiktriScript wired into JarvisBrain.ask(); jarvis:ciktri-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <ContactIntelKnowledgeTrifecta />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
