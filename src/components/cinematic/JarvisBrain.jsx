@@ -222,6 +222,7 @@ import { isOalscnQuery, buildOalscnScript } from "./OpsAlertsScenarioNexus";
 import { isOalipQuery, buildOalipScript } from "./OpsAlertsIntelProfileNexus";
 import { isOalcontQuery, buildOalcontScript } from "./OpsAlertsContactNexus";
 import { isOaldsetQuery, buildOaldsetScript } from "./OpsAlertsDatasetNexus";
+import { isOalremQuery, buildOalremScript } from "./OpsAlertsRemindersNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -932,6 +933,9 @@ export default function JarvisBrain() {
       } else if (isOaldsetQuery(q)) {
         answer = await buildOaldsetScript();
         window.dispatchEvent(new CustomEvent("jarvis:oaldset-toggle"));
+      } else if (isOalremQuery(q)) {
+        answer = await buildOalremScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalrem-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

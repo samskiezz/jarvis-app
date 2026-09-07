@@ -917,6 +917,7 @@ import OpsAlertsScenarioNexus from '@/components/cinematic/OpsAlertsScenarioNexu
 import OpsAlertsIntelProfileNexus from '@/components/cinematic/OpsAlertsIntelProfileNexus';
 import OpsAlertsContactNexus from '@/components/cinematic/OpsAlertsContactNexus';
 import OpsAlertsDatasetNexus from '@/components/cinematic/OpsAlertsDatasetNexus';
+import OpsAlertsRemindersNexus from '@/components/cinematic/OpsAlertsRemindersNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2817,6 +2818,8 @@ function App() {
             <OpsAlertsContactNexus />
             {/* F652 (overnight 2026-09-07): Ops Alerts × Dataset Nexus (OALDSET) — /v1/ops/alerts + /v1/datasets; keyword cross-reference; DATASET-BACKED alerts (≥1 dataset keyword-matches) vs DATA-DARK (no dataset backing); coverage % tile; ALL/DATASET-BACKED/DATA-DARK filter tabs + search; click-to-expand matched datasets with kind badge + row count + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on data-dark count; ◈ OALDSET button left:113980 bottom:8 zIndex:191; isOaldsetQuery+buildOaldsetScript wired into JarvisBrain.ask(); jarvis:oaldset-toggle event; 90-s auto-refresh; voice: "oaldset/ops alert dataset/dataset alerts/which alerts have datasets/alert data coverage/dataset-backed alerts/data-linked alerts/alert dataset match" */}
             <OpsAlertsDatasetNexus />
+            {/* F653 (overnight 2026-09-07): Ops Alerts × Reminders Nexus (OALREM) — /v1/ops/alerts + /reminders/list; keyword cross-reference; NOTED alerts (≥1 reminder keyword-matches) vs UNTRACKED (no reminder backing); coverage % tile; ALL/NOTED/UNTRACKED filter tabs + search; click-to-expand matched reminders with kind badge + status + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on untracked count; ◈ OALREM button left:114840 bottom:8 zIndex:192; isOalremQuery+buildOalremScript wired into JarvisBrain.ask(); jarvis:oalrem-toggle event; 90-s auto-refresh; voice: "oalrem/ops alert reminders/alert reminders/which alerts have reminders/reminder-backed alerts/untracked alerts/alert memory/reminder coverage" */}
+            <OpsAlertsRemindersNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

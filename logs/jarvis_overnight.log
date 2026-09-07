@@ -245,3 +245,4 @@
 2026-09-07 F650 OpsAlertsIntelProfileNexus — /v1/ops/alerts + /entities/IntelProfile; PROFILED vs ANONYMOUS; isOalipQuery+buildOalipScript wired; mounted App.jsx; vite build exit 0.
 2026-09-07 F651 OpsAlertsContactNexus (OALCONT): /v1/ops/alerts × /entities/Contact cross-ref; CONTACTED/UNCONTACTED; coverage tile; ASSESS → /v1/jarvis/agent/chat + TTS; jarvis:oalcont-toggle; isOalcontQuery+buildOalcontScript wired into JarvisBrain; mounted App.jsx; vite build exit 0.
 2026-09-07T00:00:00Z F652 OALDSET — OpsAlertsDatasetNexus.jsx created; /v1/ops/alerts × /v1/datasets cross-ref; mounted App.jsx; isOaldsetQuery+buildOaldsetScript wired JarvisBrain.jsx; vite build exit 0.
+2026-09-07 F653 OpsAlertsRemindersNexus (OALREM): /v1/ops/alerts + /reminders/list cross-reference; NOTED vs UNTRACKED alerts; vite build exit 0; committed jarvis-overnight.
