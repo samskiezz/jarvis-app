@@ -916,6 +916,7 @@ import OpsAlertsSwarmJobNexus from '@/components/cinematic/OpsAlertsSwarmJobNexu
 import OpsAlertsScenarioNexus from '@/components/cinematic/OpsAlertsScenarioNexus';
 import OpsAlertsIntelProfileNexus from '@/components/cinematic/OpsAlertsIntelProfileNexus';
 import OpsAlertsContactNexus from '@/components/cinematic/OpsAlertsContactNexus';
+import OpsAlertsDatasetNexus from '@/components/cinematic/OpsAlertsDatasetNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2814,6 +2815,8 @@ function App() {
             <OpsAlertsScenarioNexus />
             <OpsAlertsIntelProfileNexus />
             <OpsAlertsContactNexus />
+            {/* F652 (overnight 2026-09-07): Ops Alerts × Dataset Nexus (OALDSET) — /v1/ops/alerts + /v1/datasets; keyword cross-reference; DATASET-BACKED alerts (≥1 dataset keyword-matches) vs DATA-DARK (no dataset backing); coverage % tile; ALL/DATASET-BACKED/DATA-DARK filter tabs + search; click-to-expand matched datasets with kind badge + row count + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on data-dark count; ◈ OALDSET button left:113980 bottom:8 zIndex:191; isOaldsetQuery+buildOaldsetScript wired into JarvisBrain.ask(); jarvis:oaldset-toggle event; 90-s auto-refresh; voice: "oaldset/ops alert dataset/dataset alerts/which alerts have datasets/alert data coverage/dataset-backed alerts/data-linked alerts/alert dataset match" */}
+            <OpsAlertsDatasetNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
