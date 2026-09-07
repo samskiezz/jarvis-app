@@ -232,6 +232,7 @@ import { isOalgrphQuery, buildOalgrphScript } from "./OpsAlertsGraphNexus";
 import { isOalruleQuery, buildOalruleScript } from "./OpsAlertsRulesNexus";
 import { isOalskillQuery, buildOalskillScript } from "./OpsAlertsSkillNexus";
 import { isCiktriQuery, buildCiktriScript } from "./ContactIntelKnowledgeTrifecta";
+import { isTasoevQuery, buildTasoevScript } from "./TaskOpsEventsCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -969,6 +970,9 @@ export default function JarvisBrain() {
       } else if (isCiktriQuery(q)) {
         answer = await buildCiktriScript();
         window.dispatchEvent(new CustomEvent("jarvis:ciktri-toggle"));
+      } else if (isTasoevQuery(q)) {
+        answer = await buildTasoevScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tasoev-toggle"));
       } else if (isAcsnQuery(q)) {
         answer = await buildAcsnScript();
         window.dispatchEvent(new CustomEvent("jarvis:acsn-toggle"));

@@ -927,6 +927,7 @@ import OpsAlertsGraphNexus from '@/components/cinematic/OpsAlertsGraphNexus';
 import OpsAlertsRulesNexus from '@/components/cinematic/OpsAlertsRulesNexus';
 import OpsAlertsSkillNexus from '@/components/cinematic/OpsAlertsSkillNexus';
 import ContactIntelKnowledgeTrifecta from '@/components/cinematic/ContactIntelKnowledgeTrifecta';
+import TaskOpsEventsCorrelator from '@/components/cinematic/TaskOpsEventsCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2846,6 +2847,8 @@ function App() {
             <OpsAlertsSkillNexus />
             {/* F662 (overnight 2026-09-07): Contact × Intel Profile × Knowledge Trifecta (CIKTRI) — ContactIntelKnowledgeTrifecta.jsx; /entities/Contact + /entities/IntelProfile + /knowledge/articles; TRIPLE/PROFILED/RESEARCHED/DARK classification; coverage tiles; ALL/TRIPLE/PROFILED/RESEARCHED/DARK filter tabs + search; click-to-expand intel profiles + knowledge articles; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ CIKTRI button left:120860 bottom:8 zIndex:199; isCiktriQuery+buildCiktriScript wired into JarvisBrain.ask(); jarvis:ciktri-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <ContactIntelKnowledgeTrifecta />
+            {/* F663 (overnight 2026-09-07): Task × Ops Events Correlator (TASOEV) — TaskOpsEventsCorrelator.jsx; /entities/Task + /v1/ops/events; MATCHED tasks (≥1 ops event keyword-matches) vs UNTRACKED; coverage % tile; ALL/MATCHED/UNTRACKED filter tabs + search; click-to-expand matched events (severity badge + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on untracked count; ◈ TASOEV button left:121720 bottom:8 zIndex:200; isTasoevQuery+buildTasoevScript wired into JarvisBrain.ask(); jarvis:tasoev-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <TaskOpsEventsCorrelator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
