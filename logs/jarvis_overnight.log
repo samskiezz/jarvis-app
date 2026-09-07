@@ -256,3 +256,4 @@
 2026-09-07 F661 OpsAlertsSkillNexus: /v1/ops/alerts × /v1/aip/skill nexus; SKILL-BACKED vs UNSKILLED; OALSKILL btn; JarvisBrain wired; App.jsx mounted; vite build exit 0
 2026-09-07 F662 ContactIntelKnowledgeTrifecta (CIKTRI): /entities/Contact × /entities/IntelProfile × /knowledge/articles; TRIPLE/PROFILED/RESEARCHED/DARK; ◈ CIKTRI btn left:120860 zIndex:199; isCiktriQuery+buildCiktriScript wired JarvisBrain; jarvis:ciktri-toggle; mounted App.jsx; vite build exit 0
 [2026-09-07] F663 Task × Ops Events Correlator (TASOEV): TaskOpsEventsCorrelator.jsx created; /entities/Task + /v1/ops/events; MATCHED/UNTRACKED cross-reference; coverage tile; ASSESS; mounted App.jsx; JarvisBrain wired; vite build exit 0.
+[2026-09-07T17:20:13Z] F664 AIPKRSTRI — voice-wired AipSkillKnowledgeRiskTriple.jsx into JarvisBrain.jsx (isAipkrstriQuery+buildAipkrstriScript+jarvis:aipkrstri-toggle); /v1/aip/skill+/knowledge/+/entities/RiskSignal real endpoints; vite build exit 0.
