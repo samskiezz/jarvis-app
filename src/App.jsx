@@ -929,6 +929,7 @@ import OpsAlertsSkillNexus from '@/components/cinematic/OpsAlertsSkillNexus';
 import ContactIntelKnowledgeTrifecta from '@/components/cinematic/ContactIntelKnowledgeTrifecta';
 import TaskOpsEventsCorrelator from '@/components/cinematic/TaskOpsEventsCorrelator';
 import RiskScenarioTaskTriple from '@/components/cinematic/RiskScenarioTaskTriple';
+import AcousticRiskSignalNexus from '@/components/cinematic/AcousticRiskSignalNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2852,6 +2853,8 @@ function App() {
             <TaskOpsEventsCorrelator />
             {/* F665 (overnight 2026-09-07): Risk Signal × Scenario × Task Triple Convergence (RSTSTRI) — RiskScenarioTaskTriple.jsx; /entities/RiskSignal + /v1/scenario/list + /entities/Task; CONVERGENT (both scenario+task), SCRIPTED (scenario only), TASKED (task only), BLIND (neither); coverage % tile; ALL/CONVERGENT/SCRIPTED/TASKED/BLIND filter tabs + search; click-to-expand matched scenarios+tasks; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on blind count; ◈ RSTSTRI button left:122580 bottom:8 zIndex:201; isRststriQuery+buildRststriScript wired into JarvisBrain.ask(); jarvis:rststri-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <RiskScenarioTaskTriple />
+            {/* F666 (overnight 2026-09-07): Acoustic × Risk Signal Nexus (ACRSK) — AcousticRiskSignalNexus.jsx; /v1/acoustic/contacts + /entities/RiskSignal; FLAGGED contacts (≥1 risk keyword-match) vs PASSIVE; coverage % tile; ALL/FLAGGED/PASSIVE filter tabs + search; click-to-expand matched signals (severity badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on flagged count; ◈ ACRSK button left:123440 bottom:8 zIndex:202; isAcrskQuery+buildAcrskScript wired into JarvisBrain.ask(); jarvis:acrsk-toggle event; 90-s auto-refresh; voice: "acrsk/acoustic risk/acoustic threat/sound risk/acoustic signal risk/acoustic sensor risk/sensor risk"; vite build exit 0. */}
+            <AcousticRiskSignalNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

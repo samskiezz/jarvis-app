@@ -235,6 +235,7 @@ import { isCiktriQuery, buildCiktriScript } from "./ContactIntelKnowledgeTrifect
 import { isTasoevQuery, buildTasoevScript } from "./TaskOpsEventsCorrelator";
 import { isAipkrstriQuery, buildAipkrstriScript } from "./AipSkillKnowledgeRiskTriple";
 import { isRststriQuery, buildRststriScript } from "./RiskScenarioTaskTriple";
+import { isAcrskQuery, buildAcrskScript } from "./AcousticRiskSignalNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -981,6 +982,9 @@ export default function JarvisBrain() {
       } else if (isRststriQuery(q)) {
         answer = await buildRststriScript();
         window.dispatchEvent(new CustomEvent("jarvis:rststri-toggle"));
+      } else if (isAcrskQuery(q)) {
+        answer = await buildAcrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acrsk-toggle"));
       } else if (isAcsnQuery(q)) {
         answer = await buildAcsnScript();
         window.dispatchEvent(new CustomEvent("jarvis:acsn-toggle"));
