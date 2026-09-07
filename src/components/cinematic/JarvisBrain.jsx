@@ -93,6 +93,7 @@ import { isInvknowQuery, buildInvknowScript } from "./InvestmentKnowledgeAdvisor
 import { isTexmonQuery, buildTexmonScript } from "./TaskExecutionCoverageMonitor";
 import { isContactSwarmQuery, buildContactSwarmScript } from "./ContactSwarmCoverage";
 import { isSwrdsetQuery, buildSwrdsetScript } from "./SwarmDatasetNexus";
+import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
 import { isInvinvQuery, buildInvinvScript } from "./InvestmentInvestigationNexus";
 import { isSwrscnQuery, buildSwrscnScript } from "./SwarmScenarioNexus";
 import { isInvoevQuery, buildInvoevScript } from "./InvestmentOpsEventNexus";
@@ -544,6 +545,9 @@ export default function JarvisBrain() {
       } else if (isSwrdsetQuery(q)) {
         answer = await buildSwrdsetScript();
         window.dispatchEvent(new CustomEvent("jarvis:swrdset-toggle"));
+      } else if (isSwarmDatasetQuery(q)) {
+        answer = await buildSwarmDatasetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sdtrk-toggle"));
       } else if (isInvinvQuery(q)) {
         answer = await buildInvinvScript();
         window.dispatchEvent(new CustomEvent("jarvis:invinv-toggle"));
