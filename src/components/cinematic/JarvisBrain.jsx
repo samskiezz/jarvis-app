@@ -238,6 +238,7 @@ import { isRststriQuery, buildRststriScript } from "./RiskScenarioTaskTriple";
 import { isAcrskQuery, buildAcrskScript } from "./AcousticRiskSignalNexus";
 import { isAcinvQuery, buildAcinvScript } from "./AcousticInvestigationNexus";
 import { isActaskQuery, buildActaskScript } from "./AcousticTaskNexus";
+import { isAcipQuery, buildAcipScript } from "./AcousticIntelProfileNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -993,6 +994,9 @@ export default function JarvisBrain() {
       } else if (isActaskQuery(q)) {
         answer = await buildActaskScript();
         window.dispatchEvent(new CustomEvent("jarvis:actask-toggle"));
+      } else if (isAcipQuery(q)) {
+        answer = await buildAcipScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acip-toggle"));
       } else if (isAcsnQuery(q)) {
         answer = await buildAcsnScript();
         window.dispatchEvent(new CustomEvent("jarvis:acsn-toggle"));

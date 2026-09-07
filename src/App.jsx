@@ -932,6 +932,7 @@ import RiskScenarioTaskTriple from '@/components/cinematic/RiskScenarioTaskTripl
 import AcousticRiskSignalNexus from '@/components/cinematic/AcousticRiskSignalNexus';
 import AcousticInvestigationNexus from '@/components/cinematic/AcousticInvestigationNexus';
 import AcousticTaskNexus from '@/components/cinematic/AcousticTaskNexus';
+import AcousticIntelProfileNexus from '@/components/cinematic/AcousticIntelProfileNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2861,6 +2862,8 @@ function App() {
             <AcousticInvestigationNexus />
             {/* F668 (overnight 2026-09-07): Acoustic × Task Nexus (ACTASK) — AcousticTaskNexus.jsx; /v1/acoustic/contacts + /entities/Task; MATCHED contacts (≥1 keyword overlap with task title/description) vs UNTRACKED; ALL/MATCHED/UNTRACKED filter tabs + search; click-to-expand matched tasks (status badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on matched count; ◈ ACTASK button left:125160 bottom:8 zIndex:204; isActaskQuery+buildActaskScript wired into JarvisBrain.ask(); jarvis:actask-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticTaskNexus />
+            {/* F669 (overnight 2026-09-07): Acoustic × Intel Profile Nexus (ACIP) — AcousticIntelProfileNexus.jsx; /v1/acoustic/contacts + /entities/IntelProfile; ATTRIBUTED contacts (≥1 intel profile keyword-match) vs SILENT; ALL/ATTRIBUTED/SILENT filter tabs + search; click-to-expand matched profiles (threat-level badge + actor-type + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on attributed count; ◈ ACIP button left:126020 bottom:8 zIndex:205; isAcipQuery+buildAcipScript wired into JarvisBrain.ask(); jarvis:acip-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticIntelProfileNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
