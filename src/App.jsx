@@ -921,6 +921,7 @@ import OpsAlertsDatasetNexus from '@/components/cinematic/OpsAlertsDatasetNexus'
 import OpsAlertsRemindersNexus from '@/components/cinematic/OpsAlertsRemindersNexus';
 import OpsAlertsInvestmentNexus from '@/components/cinematic/OpsAlertsInvestmentNexus';
 import AcousticContactMonitor from '@/components/cinematic/AcousticContactMonitor';
+import QuadIntelFusion from '@/components/cinematic/QuadIntelFusion';
 import OpsAlertsReportNexus from '@/components/cinematic/OpsAlertsReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2831,6 +2832,8 @@ function App() {
             <AcousticContactMonitor />
             {/* F657 (overnight 2026-09-07): Ops Alerts × Report Coverage Monitor — OpsAlertsReportNexus.jsx; /v1/ops/alerts + /v1/reports; DOCUMENTED vs BLIND; isOalrptQuery+buildOalrptScript wired into JarvisBrain.ask(); jarvis:oalrpt-toggle; vite build exit 0. */}
             <OpsAlertsReportNexus />
+            {/* F658 (overnight 2026-09-07): Quad Intel Fusion voice wiring (QIF) — QuadIntelFusion.jsx; /entities/RiskSignal + /entities/Task + /v1/investigations + /functions/getLiveIntel; QUAD_LOCKED/TRIPLE_FUSED/DUAL_CORRELATED/ISOLATED cross-reference; fusion % tile; ALL/QUAD_LOCKED/TRIPLE_FUSED/DUAL_CORRELATED/ISOLATED filter tabs + search; click-to-expand matched tasks/cases/live events; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; cyan badge on quad-locked count; ◈ QIF button left:117420 bottom:8 zIndex:195; isQifQuery+buildQifScript wired into JarvisBrain.ask(); jarvis:qif-toggle event; 90-s auto-refresh; voice: "qif/quad intel fusion/quad intel/risk task investigation/fusion correlation/quad locked/intel fusion/quad intel corr"; vite build exit 0. */}
+            <QuadIntelFusion />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
