@@ -218,6 +218,7 @@ import { isModelRegistryQuery, buildModelRegistryScript } from "./ScenarioModelR
 import { isOalknowQuery, buildOalknowScript } from "./OpsAlertsKnowledgeNexus";
 import { isOalrskQuery, buildOalrskScript } from "./OpsAlertsRiskSignalNexus";
 import { isOalswrmQuery, buildOalswrmScript } from "./OpsAlertsSwarmJobNexus";
+import { isOalscnQuery, buildOalscnScript } from "./OpsAlertsScenarioNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -916,6 +917,9 @@ export default function JarvisBrain() {
       } else if (isOalswrmQuery(q)) {
         answer = await buildOalswrmScript();
         window.dispatchEvent(new CustomEvent("jarvis:oalswrm-toggle"));
+      } else if (isOalscnQuery(q)) {
+        answer = await buildOalscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalscn-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
