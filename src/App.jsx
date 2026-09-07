@@ -930,6 +930,7 @@ import ContactIntelKnowledgeTrifecta from '@/components/cinematic/ContactIntelKn
 import TaskOpsEventsCorrelator from '@/components/cinematic/TaskOpsEventsCorrelator';
 import RiskScenarioTaskTriple from '@/components/cinematic/RiskScenarioTaskTriple';
 import AcousticRiskSignalNexus from '@/components/cinematic/AcousticRiskSignalNexus';
+import AcousticInvestigationNexus from '@/components/cinematic/AcousticInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2855,6 +2856,8 @@ function App() {
             <RiskScenarioTaskTriple />
             {/* F666 (overnight 2026-09-07): Acoustic × Risk Signal Nexus (ACRSK) — AcousticRiskSignalNexus.jsx; /v1/acoustic/contacts + /entities/RiskSignal; FLAGGED contacts (≥1 risk keyword-match) vs PASSIVE; coverage % tile; ALL/FLAGGED/PASSIVE filter tabs + search; click-to-expand matched signals (severity badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on flagged count; ◈ ACRSK button left:123440 bottom:8 zIndex:202; isAcrskQuery+buildAcrskScript wired into JarvisBrain.ask(); jarvis:acrsk-toggle event; 90-s auto-refresh; voice: "acrsk/acoustic risk/acoustic threat/sound risk/acoustic signal risk/acoustic sensor risk/sensor risk"; vite build exit 0. */}
             <AcousticRiskSignalNexus />
+            {/* F667 (overnight 2026-09-07): Acoustic × Investigation Nexus (ACINV) — AcousticInvestigationNexus.jsx; /v1/acoustic/contacts + /v1/investigations; LINKED contacts (≥1 keyword overlap with investigation title/summary) vs SILENT; coverage % tile; ALL/LINKED/SILENT filter tabs + search; click-to-expand matched investigations (status badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on linked count; ◈ ACINV button left:124300 bottom:8 zIndex:203; isAcinvQuery+buildAcinvScript wired into JarvisBrain.ask(); jarvis:acinv-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticInvestigationNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
