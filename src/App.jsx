@@ -912,6 +912,7 @@ import { LiveMarketTicker } from '@/components/cinematic/LiveMarketTicker';
 import ScenarioModelRegistry from '@/components/cinematic/ScenarioModelRegistry';
 import OpsAlertsKnowledgeNexus from '@/components/cinematic/OpsAlertsKnowledgeNexus';
 import OpsAlertsRiskSignalNexus from '@/components/cinematic/OpsAlertsRiskSignalNexus';
+import OpsAlertsSwarmJobNexus from '@/components/cinematic/OpsAlertsSwarmJobNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2806,6 +2807,7 @@ function App() {
             {/* F646 (overnight 2026-09-06): Ops Alerts × Knowledge Nexus (OALKNOW) — /v1/ops/alerts + /knowledge/; keyword cross-reference; DOCUMENTED alerts (≥1 article keyword-matches) vs BLIND (no knowledge backing); coverage % tile; ALL/DOCUMENTED/BLIND filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on blind count; ◈ OALKNOW button left:108820 bottom:8 zIndex:185; isOalknowQuery+buildOalknowScript wired into JarvisBrain.ask(); jarvis:oalknow-toggle event; 90-s auto-refresh; voice: "oalknow/ops alert knowledge/alert knowledge/knowledge-backed alerts/alert triage knowledge/blind alerts/which alerts have knowledge/alert knowledge coverage" */}
             <OpsAlertsKnowledgeNexus />
             <OpsAlertsRiskSignalNexus />
+            <OpsAlertsSwarmJobNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
