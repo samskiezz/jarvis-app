@@ -248,3 +248,4 @@
 2026-09-07 F653 OpsAlertsRemindersNexus (OALREM): /v1/ops/alerts + /reminders/list cross-reference; NOTED vs UNTRACKED alerts; vite build exit 0; committed jarvis-overnight.
 [2026-09-07] F654 SwarmDatasetTracker voice wiring: isSwarmDatasetQuery+buildSwarmDatasetScript imported into JarvisBrain.jsx; mounted SwarmDatasetTracker in App.jsx; endpoints /entities/SwarmJob + /v1/datasets; vite build exit 0.
 2026-09-07 F655 OpsAlertsInvestmentNexus (OALFIN): /v1/ops/alerts x /entities/Investment; EXPOSED/CLEAR filter; ◈ OALFIN btn left:115700 zIndex:193; isOalfinQuery+buildOalfinScript wired JarvisBrain; jarvis:oalfin-toggle; vite build exit 0.
+[2026-09-07] F656 Acoustic Contact Monitor (ACSN): isAcsnQuery+buildAcsnScript wired into JarvisBrain.jsx; AcousticContactMonitor mounted in App.jsx; /v1/acoustic/contacts real endpoint (backed by server/routes/acoustic.py); vite build exit 0.

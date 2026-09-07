@@ -920,6 +920,7 @@ import OpsAlertsContactNexus from '@/components/cinematic/OpsAlertsContactNexus'
 import OpsAlertsDatasetNexus from '@/components/cinematic/OpsAlertsDatasetNexus';
 import OpsAlertsRemindersNexus from '@/components/cinematic/OpsAlertsRemindersNexus';
 import OpsAlertsInvestmentNexus from '@/components/cinematic/OpsAlertsInvestmentNexus';
+import AcousticContactMonitor from '@/components/cinematic/AcousticContactMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2825,6 +2826,8 @@ function App() {
             <OpsAlertsRemindersNexus />
             {/* F655 (overnight 2026-09-07): Ops Alerts × Investment Nexus (OALFIN) — /v1/ops/alerts + /entities/Investment; keyword cross-reference; EXPOSED alerts (≥1 investment keyword-matches) vs CLEAR (no investment signal); coverage % tile; ALL/EXPOSED/CLEAR filter tabs + search; click-to-expand matched investments with kind badge + status + value + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on exposed count; ◈ OALFIN button left:115700 bottom:8 zIndex:193; isOalfinQuery+buildOalfinScript wired into JarvisBrain.ask(); jarvis:oalfin-toggle event; 90-s auto-refresh; voice: "oalfin/ops alert investment/alert investment/which alerts involve investments/investment-backed alerts/investment alert coverage/exposed investments/financial alerts" */}
             <OpsAlertsInvestmentNexus />
+            {/* F656 (overnight 2026-09-07): Acoustic Contact Monitor voice wiring — AcousticContactMonitor.jsx (backed by server/routes/acoustic.py; /v1/acoustic/contacts; isAcsnQuery+buildAcsnScript wired into JarvisBrain.ask(); jarvis:acsn-toggle; voice: "acoustic/acoustic contacts/contact map/yamnet/acsn") was not mounted in App.jsx and had no JarvisBrain intent handler; mounted + wired; vite build exit 0. */}
+            <AcousticContactMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
