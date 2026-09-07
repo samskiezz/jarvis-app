@@ -915,6 +915,7 @@ import OpsAlertsRiskSignalNexus from '@/components/cinematic/OpsAlertsRiskSignal
 import OpsAlertsSwarmJobNexus from '@/components/cinematic/OpsAlertsSwarmJobNexus';
 import OpsAlertsScenarioNexus from '@/components/cinematic/OpsAlertsScenarioNexus';
 import OpsAlertsIntelProfileNexus from '@/components/cinematic/OpsAlertsIntelProfileNexus';
+import OpsAlertsContactNexus from '@/components/cinematic/OpsAlertsContactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2812,6 +2813,7 @@ function App() {
             <OpsAlertsSwarmJobNexus />
             <OpsAlertsScenarioNexus />
             <OpsAlertsIntelProfileNexus />
+            <OpsAlertsContactNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

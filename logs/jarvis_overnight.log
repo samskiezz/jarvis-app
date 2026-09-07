@@ -243,3 +243,4 @@
 2026-09-07T01:17:49Z F648 OpsAlertsSwarmJobNexus (OALSWRM): /v1/ops/alerts x /entities/SwarmJob nexus; OpsAlertsSwarmJobNexus.jsx created + mounted App.jsx + wired JarvisBrain; vite build exit 0
 2026-09-07T02:17:24Z F649 OpsAlertsScenarioNexus (OALSCN): /v1/ops/alerts x /v1/scenario/list cross-ref; SCENARIO-BACKED/UNPLANNED tabs; ASSESS→/v1/jarvis/agent/chat+TTS; OpsAlertsScenarioNexus.jsx created; mounted App.jsx; wired JarvisBrain.jsx; vite build exit 0
 2026-09-07 F650 OpsAlertsIntelProfileNexus — /v1/ops/alerts + /entities/IntelProfile; PROFILED vs ANONYMOUS; isOalipQuery+buildOalipScript wired; mounted App.jsx; vite build exit 0.
+2026-09-07 F651 OpsAlertsContactNexus (OALCONT): /v1/ops/alerts × /entities/Contact cross-ref; CONTACTED/UNCONTACTED; coverage tile; ASSESS → /v1/jarvis/agent/chat + TTS; jarvis:oalcont-toggle; isOalcontQuery+buildOalcontScript wired into JarvisBrain; mounted App.jsx; vite build exit 0.
