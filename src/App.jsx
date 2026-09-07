@@ -919,6 +919,7 @@ import OpsAlertsIntelProfileNexus from '@/components/cinematic/OpsAlertsIntelPro
 import OpsAlertsContactNexus from '@/components/cinematic/OpsAlertsContactNexus';
 import OpsAlertsDatasetNexus from '@/components/cinematic/OpsAlertsDatasetNexus';
 import OpsAlertsRemindersNexus from '@/components/cinematic/OpsAlertsRemindersNexus';
+import OpsAlertsInvestmentNexus from '@/components/cinematic/OpsAlertsInvestmentNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2822,6 +2823,8 @@ function App() {
             <OpsAlertsDatasetNexus />
             {/* F653 (overnight 2026-09-07): Ops Alerts × Reminders Nexus (OALREM) — /v1/ops/alerts + /reminders/list; keyword cross-reference; NOTED alerts (≥1 reminder keyword-matches) vs UNTRACKED (no reminder backing); coverage % tile; ALL/NOTED/UNTRACKED filter tabs + search; click-to-expand matched reminders with kind badge + status + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on untracked count; ◈ OALREM button left:114840 bottom:8 zIndex:192; isOalremQuery+buildOalremScript wired into JarvisBrain.ask(); jarvis:oalrem-toggle event; 90-s auto-refresh; voice: "oalrem/ops alert reminders/alert reminders/which alerts have reminders/reminder-backed alerts/untracked alerts/alert memory/reminder coverage" */}
             <OpsAlertsRemindersNexus />
+            {/* F655 (overnight 2026-09-07): Ops Alerts × Investment Nexus (OALFIN) — /v1/ops/alerts + /entities/Investment; keyword cross-reference; EXPOSED alerts (≥1 investment keyword-matches) vs CLEAR (no investment signal); coverage % tile; ALL/EXPOSED/CLEAR filter tabs + search; click-to-expand matched investments with kind badge + status + value + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on exposed count; ◈ OALFIN button left:115700 bottom:8 zIndex:193; isOalfinQuery+buildOalfinScript wired into JarvisBrain.ask(); jarvis:oalfin-toggle event; 90-s auto-refresh; voice: "oalfin/ops alert investment/alert investment/which alerts involve investments/investment-backed alerts/investment alert coverage/exposed investments/financial alerts" */}
+            <OpsAlertsInvestmentNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

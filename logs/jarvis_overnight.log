@@ -247,3 +247,4 @@
 2026-09-07T00:00:00Z F652 OALDSET — OpsAlertsDatasetNexus.jsx created; /v1/ops/alerts × /v1/datasets cross-ref; mounted App.jsx; isOaldsetQuery+buildOaldsetScript wired JarvisBrain.jsx; vite build exit 0.
 2026-09-07 F653 OpsAlertsRemindersNexus (OALREM): /v1/ops/alerts + /reminders/list cross-reference; NOTED vs UNTRACKED alerts; vite build exit 0; committed jarvis-overnight.
 [2026-09-07] F654 SwarmDatasetTracker voice wiring: isSwarmDatasetQuery+buildSwarmDatasetScript imported into JarvisBrain.jsx; mounted SwarmDatasetTracker in App.jsx; endpoints /entities/SwarmJob + /v1/datasets; vite build exit 0.
+2026-09-07 F655 OpsAlertsInvestmentNexus (OALFIN): /v1/ops/alerts x /entities/Investment; EXPOSED/CLEAR filter; ◈ OALFIN btn left:115700 zIndex:193; isOalfinQuery+buildOalfinScript wired JarvisBrain; jarvis:oalfin-toggle; vite build exit 0.
