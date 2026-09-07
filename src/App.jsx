@@ -928,6 +928,7 @@ import OpsAlertsRulesNexus from '@/components/cinematic/OpsAlertsRulesNexus';
 import OpsAlertsSkillNexus from '@/components/cinematic/OpsAlertsSkillNexus';
 import ContactIntelKnowledgeTrifecta from '@/components/cinematic/ContactIntelKnowledgeTrifecta';
 import TaskOpsEventsCorrelator from '@/components/cinematic/TaskOpsEventsCorrelator';
+import RiskScenarioTaskTriple from '@/components/cinematic/RiskScenarioTaskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2849,6 +2850,8 @@ function App() {
             <ContactIntelKnowledgeTrifecta />
             {/* F663 (overnight 2026-09-07): Task × Ops Events Correlator (TASOEV) — TaskOpsEventsCorrelator.jsx; /entities/Task + /v1/ops/events; MATCHED tasks (≥1 ops event keyword-matches) vs UNTRACKED; coverage % tile; ALL/MATCHED/UNTRACKED filter tabs + search; click-to-expand matched events (severity badge + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on untracked count; ◈ TASOEV button left:121720 bottom:8 zIndex:200; isTasoevQuery+buildTasoevScript wired into JarvisBrain.ask(); jarvis:tasoev-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <TaskOpsEventsCorrelator />
+            {/* F665 (overnight 2026-09-07): Risk Signal × Scenario × Task Triple Convergence (RSTSTRI) — RiskScenarioTaskTriple.jsx; /entities/RiskSignal + /v1/scenario/list + /entities/Task; CONVERGENT (both scenario+task), SCRIPTED (scenario only), TASKED (task only), BLIND (neither); coverage % tile; ALL/CONVERGENT/SCRIPTED/TASKED/BLIND filter tabs + search; click-to-expand matched scenarios+tasks; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on blind count; ◈ RSTSTRI button left:122580 bottom:8 zIndex:201; isRststriQuery+buildRststriScript wired into JarvisBrain.ask(); jarvis:rststri-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <RiskScenarioTaskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
