@@ -925,6 +925,7 @@ import QuadIntelFusion from '@/components/cinematic/QuadIntelFusion';
 import OpsAlertsReportNexus from '@/components/cinematic/OpsAlertsReportNexus';
 import OpsAlertsGraphNexus from '@/components/cinematic/OpsAlertsGraphNexus';
 import OpsAlertsRulesNexus from '@/components/cinematic/OpsAlertsRulesNexus';
+import OpsAlertsSkillNexus from '@/components/cinematic/OpsAlertsSkillNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2840,6 +2841,8 @@ function App() {
             <OpsAlertsGraphNexus />
             {/* F660 (overnight 2026-09-07): Ops Alerts × Rules Nexus (OALRULE) — OpsAlertsRulesNexus.jsx; /v1/ops/alerts + /v1/rules; RULE-TRIGGERED alerts (≥1 rule keyword-matches) vs UNMATCHED; coverage % tile; ALL/RULE-TRIGGERED/UNMATCHED filter tabs + search; click-to-expand matched rules with severity badge + hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unmatched count; ◈ OALRULE button left:119140 bottom:8 zIndex:197; isOalruleQuery+buildOalruleScript wired into JarvisBrain.ask(); jarvis:oalrule-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <OpsAlertsRulesNexus />
+            {/* F661 (overnight 2026-09-07): Ops Alerts × Skill Nexus (OALSKILL) — OpsAlertsSkillNexus.jsx; /v1/ops/alerts + /v1/aip/skill; SKILL-BACKED alerts (≥1 skill keyword-matches) vs UNSKILLED; coverage % tile; ALL/SKILL-BACKED/UNSKILLED filter tabs + search; click-to-expand matched skills with domain+score+hits; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unskilled count; ◈ OALSKILL button left:120000 bottom:8 zIndex:198; isOalskillQuery+buildOalskillScript wired into JarvisBrain.ask(); jarvis:oalskill-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <OpsAlertsSkillNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
