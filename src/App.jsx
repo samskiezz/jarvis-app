@@ -945,6 +945,7 @@ import AcousticInvestmentNexus from '@/components/cinematic/AcousticInvestmentNe
 import AcousticContactNexus from '@/components/cinematic/AcousticContactNexus';
 import AcousticGraphNexus from '@/components/cinematic/AcousticGraphNexus';
 import AcousticRemindersNexus from '@/components/cinematic/AcousticRemindersNexus';
+import AcousticSkillNexus from '@/components/cinematic/AcousticSkillNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2900,6 +2901,8 @@ function App() {
             <AcousticGraphNexus />
             {/* F681 (overnight 2026-09-08): Acoustic × Reminders Nexus (ACREM) — AcousticRemindersNexus.jsx; /v1/acoustic/contacts × /reminders/list; NOTED contacts (≥1 keyword overlap with reminder content/text/body) vs UNRECORDED; ALL/NOTED/UNRECORDED filter tabs + search; click-to-expand matched reminders (title, content); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence acoustic reminders brief + TTS; amber badge on noted count; ◈ ACREM button left:136340 bottom:8 zIndex:217; isAcremQuery+buildAcremScript wired into JarvisBrain.ask(); jarvis:acrem-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticRemindersNexus />
+            {/* F682 (overnight 2026-09-08): Acoustic × Skill Nexus (ACSKILL) — AcousticSkillNexus.jsx; /v1/acoustic/contacts × /v1/aip/skill; SKILLED contacts (≥1 skill domain keyword-match) vs UNSKILLED; ALL/SKILLED/UNSKILLED filter tabs + search; click-to-expand matched skills (domain badge, score, description); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence sensor-capability brief + TTS; amber badge on skilled count; ◈ ACSKILL button left:137200 bottom:8 zIndex:218; isAcskillQuery+buildAcskillScript wired into JarvisBrain.ask(); jarvis:acskill-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticSkillNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
