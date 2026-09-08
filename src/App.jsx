@@ -944,6 +944,7 @@ import AcousticRulesNexus from '@/components/cinematic/AcousticRulesNexus';
 import AcousticInvestmentNexus from '@/components/cinematic/AcousticInvestmentNexus';
 import AcousticContactNexus from '@/components/cinematic/AcousticContactNexus';
 import AcousticGraphNexus from '@/components/cinematic/AcousticGraphNexus';
+import AcousticRemindersNexus from '@/components/cinematic/AcousticRemindersNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2897,6 +2898,8 @@ function App() {
             <AcousticContactNexus />
             {/* F680 (overnight 2026-09-08): Acoustic × Graph Centrality Nexus (ACGRPH) — AcousticGraphNexus.jsx; /v1/acoustic/contacts × /v1/graph/centrality; GRAPH-LINKED contacts (≥1 keyword overlap with high-centrality graph node label/entity) vs UNLINKED; ALL/GRAPH-LINKED/UNLINKED filter tabs + search; stat tiles (GRAPH-LINKED, UNLINKED, COVERAGE%); click-to-expand matched nodes (label, type, centrality score, entity); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence acoustic graph intelligence brief + TTS; blue badge on linked count; ◈ ACGRPH button left:135480 bottom:8 zIndex:216; isAcgrphQuery+buildAcgrphScript wired into JarvisBrain.ask(); jarvis:acgrph-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticGraphNexus />
+            {/* F681 (overnight 2026-09-08): Acoustic × Reminders Nexus (ACREM) — AcousticRemindersNexus.jsx; /v1/acoustic/contacts × /reminders/list; NOTED contacts (≥1 keyword overlap with reminder content/text/body) vs UNRECORDED; ALL/NOTED/UNRECORDED filter tabs + search; click-to-expand matched reminders (title, content); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence acoustic reminders brief + TTS; amber badge on noted count; ◈ ACREM button left:136340 bottom:8 zIndex:217; isAcremQuery+buildAcremScript wired into JarvisBrain.ask(); jarvis:acrem-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticRemindersNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
