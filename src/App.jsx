@@ -941,6 +941,7 @@ import AcousticReportNexus from '@/components/cinematic/AcousticReportNexus';
 import AcousticOpsEventsNexus from '@/components/cinematic/AcousticOpsEventsNexus';
 import AcousticOpsAlertsNexus from '@/components/cinematic/AcousticOpsAlertsNexus';
 import AcousticRulesNexus from '@/components/cinematic/AcousticRulesNexus';
+import AcousticInvestmentNexus from '@/components/cinematic/AcousticInvestmentNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2888,6 +2889,8 @@ function App() {
             <AcousticOpsAlertsNexus />
             {/* F677 (overnight 2026-09-08): Acoustic × Rules Nexus (ACRULS) — AcousticRulesNexus.jsx; /v1/acoustic/contacts × /v1/rules; MONITORED contacts (≥1 WATCHTOWER rule keyword-match) vs UNMONITORED; ALL/MONITORED/UNMONITORED filter tabs + search; click-to-expand matched rules (severity badge); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + TTS; amber badge on monitored count; ◈ ACRULS button left:132900 bottom:8 zIndex:213; isAcrulsQuery+buildAcrulsScript wired into JarvisBrain.ask(); jarvis:acruls-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticRulesNexus />
+            {/* F678 (overnight 2026-09-08): Acoustic × Investment Nexus (ACINVST) — AcousticInvestmentNexus.jsx; /v1/acoustic/contacts × /entities/Investment; LINKED contacts (≥1 investment keyword-match) vs UNLINKED; ALL/LINKED/UNLINKED filter tabs + search; click-to-expand matched investments (kind badge); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-sensor brief + TTS; amber badge on linked count; ◈ ACINVST button left:133760 bottom:8 zIndex:214; isAcinvstQuery+buildAcinvstScript wired into JarvisBrain.ask(); jarvis:acinvst-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticInvestmentNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

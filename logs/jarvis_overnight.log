@@ -270,3 +270,4 @@
 2026-09-08: F675 AcousticOpsEventsNexus (ACOPS) — /v1/acoustic/contacts × /v1/ops/events; CORRELATED vs QUIET; amber badge on correlated; severity badges on matched ops events; ASSESS → /v1/jarvis/agent/chat + TTS; isAcopsQuery+buildAcopsScript wired into JarvisBrain; jarvis:acops-toggle; left:131180 zIndex:211; vite build exit 0; committed + pushed jarvis-overnight
 2026-09-08T05:22:59Z F676 ACAL: AcousticOpsAlertsNexus.jsx added; /v1/acoustic/contacts × /v1/ops/alerts; ALERTED/CLEAR tabs; ASSESS+TTS; JarvisBrain+App.jsx wired; vite build exit 0.
 2026-09-08T06:21:24Z F677 ACRULS: AcousticRulesNexus.jsx — /v1/acoustic/contacts × /v1/rules — MONITORED/UNMONITORED tabs — mounted App.jsx — JarvisBrain wired — vite build exit 0
+2026-09-08 F678 Acoustic × Investment Nexus (ACINVST): AcousticInvestmentNexus.jsx created; /v1/acoustic/contacts × /entities/Investment; LINKED/UNLINKED tabs; KindBadge; ASSESS+TTS; wired JarvisBrain+App.jsx; vite build exit 0.
