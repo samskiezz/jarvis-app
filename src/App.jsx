@@ -943,6 +943,7 @@ import AcousticOpsAlertsNexus from '@/components/cinematic/AcousticOpsAlertsNexu
 import AcousticRulesNexus from '@/components/cinematic/AcousticRulesNexus';
 import AcousticInvestmentNexus from '@/components/cinematic/AcousticInvestmentNexus';
 import AcousticContactNexus from '@/components/cinematic/AcousticContactNexus';
+import AcousticGraphNexus from '@/components/cinematic/AcousticGraphNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2894,6 +2895,8 @@ function App() {
             <AcousticInvestmentNexus />
             {/* F679 (overnight 2026-09-08): Acoustic × Contact Nexus (ACCNT) — AcousticContactNexus.jsx; /v1/acoustic/contacts × /entities/Contact; IDENTIFIED contacts (≥1 keyword overlap with known contact name/role/org) vs UNIDENTIFIED; ALL/IDENTIFIED/UNIDENTIFIED filter tabs + search; stat tiles (IDENTIFIED, UNIDENTIFIED, COVERAGE%); click-to-expand matched known contacts (name, role, org, email); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence acoustic identity brief + TTS; amber badge on identified count; ◈ ACCNT button left:134620 bottom:8 zIndex:215; isAccntQuery+buildAccntScript wired into JarvisBrain.ask(); jarvis:accnt-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticContactNexus />
+            {/* F680 (overnight 2026-09-08): Acoustic × Graph Centrality Nexus (ACGRPH) — AcousticGraphNexus.jsx; /v1/acoustic/contacts × /v1/graph/centrality; GRAPH-LINKED contacts (≥1 keyword overlap with high-centrality graph node label/entity) vs UNLINKED; ALL/GRAPH-LINKED/UNLINKED filter tabs + search; stat tiles (GRAPH-LINKED, UNLINKED, COVERAGE%); click-to-expand matched nodes (label, type, centrality score, entity); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence acoustic graph intelligence brief + TTS; blue badge on linked count; ◈ ACGRPH button left:135480 bottom:8 zIndex:216; isAcgrphQuery+buildAcgrphScript wired into JarvisBrain.ask(); jarvis:acgrph-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticGraphNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

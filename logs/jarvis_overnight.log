@@ -272,3 +272,4 @@
 2026-09-08T06:21:24Z F677 ACRULS: AcousticRulesNexus.jsx — /v1/acoustic/contacts × /v1/rules — MONITORED/UNMONITORED tabs — mounted App.jsx — JarvisBrain wired — vite build exit 0
 2026-09-08 F678 Acoustic × Investment Nexus (ACINVST): AcousticInvestmentNexus.jsx created; /v1/acoustic/contacts × /entities/Investment; LINKED/UNLINKED tabs; KindBadge; ASSESS+TTS; wired JarvisBrain+App.jsx; vite build exit 0.
 2026-09-08T08:19:59Z F679 ACCNT: AcousticContactNexus.jsx added; /v1/acoustic/contacts × /entities/Contact; IDENTIFIED/UNIDENTIFIED tabs; COVERAGE% tile; ASSESS+TTS; wired JarvisBrain+App.jsx; vite build exit 0.
+[2026-09-08] F680 Acoustic × Graph Centrality Nexus (ACGRPH) — AcousticGraphNexus.jsx; /v1/acoustic/contacts × /v1/graph/centrality; GRAPH-LINKED/UNLINKED tabs; ◈ ACGRPH button left:135480 zIndex:216; isAcgrphQuery+buildAcgrphScript wired into JarvisBrain; jarvis:acgrph-toggle; vite build exit 0.
