@@ -940,6 +940,7 @@ import AcousticScenarioNexus from '@/components/cinematic/AcousticScenarioNexus'
 import AcousticReportNexus from '@/components/cinematic/AcousticReportNexus';
 import AcousticOpsEventsNexus from '@/components/cinematic/AcousticOpsEventsNexus';
 import AcousticOpsAlertsNexus from '@/components/cinematic/AcousticOpsAlertsNexus';
+import AcousticRulesNexus from '@/components/cinematic/AcousticRulesNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2885,6 +2886,8 @@ function App() {
             <AcousticOpsEventsNexus />
             {/* F676 (overnight 2026-09-08): Acoustic × Ops Alerts Nexus (ACAL) — AcousticOpsAlertsNexus.jsx; /v1/acoustic/contacts × /v1/ops/alerts; ALERTED contacts (≥1 keyword overlap with ops alert title/body) vs CLEAR; ALL/ALERTED/CLEAR filter tabs + search; click-to-expand matched ops alerts (severity badge + source); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence sensor-alert brief + TTS; amber badge on alerted count; ◈ ACAL button left:132040 bottom:8 zIndex:212; isAcalQuery+buildAcalScript wired into JarvisBrain.ask(); jarvis:acal-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticOpsAlertsNexus />
+            {/* F677 (overnight 2026-09-08): Acoustic × Rules Nexus (ACRULS) — AcousticRulesNexus.jsx; /v1/acoustic/contacts × /v1/rules; MONITORED contacts (≥1 WATCHTOWER rule keyword-match) vs UNMONITORED; ALL/MONITORED/UNMONITORED filter tabs + search; click-to-expand matched rules (severity badge); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational brief + TTS; amber badge on monitored count; ◈ ACRULS button left:132900 bottom:8 zIndex:213; isAcrulsQuery+buildAcrulsScript wired into JarvisBrain.ask(); jarvis:acruls-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticRulesNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
