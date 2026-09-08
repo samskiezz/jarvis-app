@@ -937,6 +937,7 @@ import AcousticKnowledgeNexus from '@/components/cinematic/AcousticKnowledgeNexu
 import AcousticSwarmJobNexus from '@/components/cinematic/AcousticSwarmJobNexus';
 import AcousticDatasetNexus from '@/components/cinematic/AcousticDatasetNexus';
 import AcousticScenarioNexus from '@/components/cinematic/AcousticScenarioNexus';
+import AcousticReportNexus from '@/components/cinematic/AcousticReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2876,6 +2877,8 @@ function App() {
             <AcousticDatasetNexus />
             {/* F673 (overnight 2026-09-08): Acoustic × Scenario Nexus (ACSCN) — AcousticScenarioNexus.jsx; /v1/acoustic/contacts + /v1/scenario/list; SCENARIO-BACKED contacts (≥1 keyword overlap with scenario name/description) vs UNSCRIPTED; ALL/SCENARIO-BACKED/UNSCRIPTED filter tabs + search; click-to-expand matched scenarios (active badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on scenario-backed count; ◈ ACSCN button left:129460 bottom:8 zIndex:209; isAcscnQuery+buildAcscnScript wired into JarvisBrain.ask(); jarvis:acscn-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticScenarioNexus />
+            {/* F674 (overnight 2026-09-08): Acoustic × Report Nexus (ACRPT) — AcousticReportNexus.jsx; /v1/acoustic/contacts + /v1/reports; DOCUMENTED contacts (≥1 report keyword-match) vs UNDOCUMENTED (intelligence gap); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched reports (type badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ ACRPT button left:130320 bottom:8 zIndex:210; isAcrptQuery+buildAcrptScript wired into JarvisBrain.ask(); jarvis:acrpt-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticReportNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
