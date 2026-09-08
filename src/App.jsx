@@ -951,6 +951,7 @@ import AcousticKnowledgeRiskTriple from '@/components/cinematic/AcousticKnowledg
 import AcousticTaskInvestigationTriple from '@/components/cinematic/AcousticTaskInvestigationTriple';
 import AcousticSkillScenarioTriple from '@/components/cinematic/AcousticSkillScenarioTriple';
 import AcousticGraphIntelTriple from '@/components/cinematic/AcousticGraphIntelTriple';
+import AcousticRulesContactTriple from '@/components/cinematic/AcousticRulesContactTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2918,6 +2919,8 @@ function App() {
             <AcousticSkillScenarioTriple />
             {/* F687 Acoustic × Graph Communities × Intel Profile Triple Nexus */}
             <AcousticGraphIntelTriple />
+            {/* F688 (overnight 2026-09-08): Acoustic × Rules × Contact Triple Nexus (ACRLCNT) — AcousticRulesContactTriple.jsx; /v1/acoustic/contacts × /v1/rules × /entities/Contact; FULLY_WATCHED/RULE_ONLY/CONTACT_ONLY/DARK tabs; 5 stat tiles (CONTACTS, FULLY WATCHED, RULE ONLY, CONTACT ONLY, COVERAGE%); click-to-expand matched rules+directory contacts; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence monitoring brief + TTS; amber badge on DARK count; ◈ ACRLCNT button left:142360 bottom:8 zIndex:224; isAcrlcntQuery+buildAcrlcntScript wired into JarvisBrain.ask(); jarvis:acrlcnt-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticRulesContactTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
