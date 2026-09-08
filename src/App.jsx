@@ -952,6 +952,7 @@ import AcousticTaskInvestigationTriple from '@/components/cinematic/AcousticTask
 import AcousticSkillScenarioTriple from '@/components/cinematic/AcousticSkillScenarioTriple';
 import AcousticGraphIntelTriple from '@/components/cinematic/AcousticGraphIntelTriple';
 import AcousticRulesContactTriple from '@/components/cinematic/AcousticRulesContactTriple';
+import AcousticReportInvestmentTriple from '@/components/cinematic/AcousticReportInvestmentTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2921,6 +2922,8 @@ function App() {
             <AcousticGraphIntelTriple />
             {/* F688 (overnight 2026-09-08): Acoustic × Rules × Contact Triple Nexus (ACRLCNT) — AcousticRulesContactTriple.jsx; /v1/acoustic/contacts × /v1/rules × /entities/Contact; FULLY_WATCHED/RULE_ONLY/CONTACT_ONLY/DARK tabs; 5 stat tiles (CONTACTS, FULLY WATCHED, RULE ONLY, CONTACT ONLY, COVERAGE%); click-to-expand matched rules+directory contacts; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence monitoring brief + TTS; amber badge on DARK count; ◈ ACRLCNT button left:142360 bottom:8 zIndex:224; isAcrlcntQuery+buildAcrlcntScript wired into JarvisBrain.ask(); jarvis:acrlcnt-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticRulesContactTriple />
+            {/* F689 (overnight 2026-09-08): Acoustic × Report × Investment Triple Nexus (ACRPINV) — AcousticReportInvestmentTriple.jsx; /v1/acoustic/contacts × /v1/reports × /entities/Investment; FULLY_DOCUMENTED/REPORT_ONLY/INVESTMENT_ONLY/DARK tabs; 5 stat tiles (CONTACTS, FULLY DOCUMENTED, REPORT ONLY, INVEST ONLY, COVERAGE%); click-to-expand matched reports+investments; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence financial intelligence brief + TTS; red badge on DARK count; ◈ ACRPINV button left:143220 bottom:8 zIndex:225; isAcrpinvQuery+buildAcrpinvScript wired into JarvisBrain.ask(); jarvis:acrpinv-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticReportInvestmentTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
