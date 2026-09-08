@@ -953,6 +953,7 @@ import AcousticSkillScenarioTriple from '@/components/cinematic/AcousticSkillSce
 import AcousticGraphIntelTriple from '@/components/cinematic/AcousticGraphIntelTriple';
 import AcousticRulesContactTriple from '@/components/cinematic/AcousticRulesContactTriple';
 import AcousticReportInvestmentTriple from '@/components/cinematic/AcousticReportInvestmentTriple';
+import AcousticMasterIntelScore from '@/components/cinematic/AcousticMasterIntelScore';
 import KnowledgeFreshnessPanel from '@/components/cinematic/KnowledgeFreshnessPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2925,6 +2926,8 @@ function App() {
             <AcousticRulesContactTriple />
             {/* F689 (overnight 2026-09-08): Acoustic × Report × Investment Triple Nexus (ACRPINV) — AcousticReportInvestmentTriple.jsx; /v1/acoustic/contacts × /v1/reports × /entities/Investment; FULLY_DOCUMENTED/REPORT_ONLY/INVESTMENT_ONLY/DARK tabs; 5 stat tiles (CONTACTS, FULLY DOCUMENTED, REPORT ONLY, INVEST ONLY, COVERAGE%); click-to-expand matched reports+investments; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence financial intelligence brief + TTS; red badge on DARK count; ◈ ACRPINV button left:143220 bottom:8 zIndex:225; isAcrpinvQuery+buildAcrpinvScript wired into JarvisBrain.ask(); jarvis:acrpinv-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticReportInvestmentTriple />
+            {/* F690 (overnight 2026-09-08): Acoustic Master Intelligence Score (ACMSCORE) — AcousticMasterIntelScore.jsx; /v1/acoustic/contacts × /entities/RiskSignal × /entities/IntelProfile × /v1/investigations; composite 0-100 score per contact; HIGH_VALUE/PARTIAL/BACKGROUND tiers; score breakdown bars; click-to-expand matched entities; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat brief + TTS; red badge on high-value count; ◈ ACMSCORE button left:144080 bottom:8 zIndex:226; isAcmscoreQuery+buildAcmscoreScript wired into JarvisBrain.ask(); jarvis:acmscore-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticMasterIntelScore />
             {/* F172 (overnight 2026-09-08): knowledge freshness panel — 🌿 FRESH button (left:55080, bottom:8, zIndex:65); polls /knowledge/ every 5 min; enriches each article with days-since-update; sorted oldest-first; GREEN(<7d)/YELLOW(7-30d)/RED(>30d) staleness dot + fmtDays label; RED badge on button showing stale count; click article → dispatches jarvis:open-document-search; ▶ FRESH / Alt+F shortcut + jarvis:knowledge-freshness-toggle event; isKnowledgeFreshnessQuery+buildKnowledgeFreshnessScript wired in JarvisBrain; "knowledge freshness"/"stale articles"/"outdated knowledge"/"corpus freshness"/"stale knowledge"/"knowledge gaps"/"knowledge health"/"knowledge age" voice trigger */}
             <KnowledgeFreshnessPanel />
             <Suspense fallback={<Loading />}>
