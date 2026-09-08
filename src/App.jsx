@@ -934,6 +934,7 @@ import AcousticInvestigationNexus from '@/components/cinematic/AcousticInvestiga
 import AcousticTaskNexus from '@/components/cinematic/AcousticTaskNexus';
 import AcousticIntelProfileNexus from '@/components/cinematic/AcousticIntelProfileNexus';
 import AcousticKnowledgeNexus from '@/components/cinematic/AcousticKnowledgeNexus';
+import AcousticSwarmJobNexus from '@/components/cinematic/AcousticSwarmJobNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2867,6 +2868,8 @@ function App() {
             <AcousticIntelProfileNexus />
             {/* F670 (overnight 2026-09-07): Acoustic × Knowledge Nexus (ACKNO) — AcousticKnowledgeNexus.jsx; /v1/acoustic/contacts + /knowledge/articles; DOCUMENTED contacts (≥1 keyword overlap with article title/tags) vs UNDOCUMENTED; ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched articles (kind badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ ACKNO button left:126880 bottom:8 zIndex:206; isAcknoQuery+buildAcknoScript wired into JarvisBrain.ask(); jarvis:ackno-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticKnowledgeNexus />
+            {/* F671 (overnight 2026-09-08): Acoustic × SwarmJob Nexus (ACSWRM) — AcousticSwarmJobNexus.jsx; /v1/acoustic/contacts + /entities/SwarmJob; ASSIGNED contacts (≥1 keyword overlap with swarm job name/description) vs UNASSIGNED; ALL/ASSIGNED/UNASSIGNED filter tabs + search; click-to-expand matched jobs (status badge + progress% + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on assigned count; ◈ ACSWRM button left:127740 bottom:8 zIndex:207; isAcswrmQuery+buildAcswrmScript wired into JarvisBrain.ask(); jarvis:acswrm-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticSwarmJobNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
