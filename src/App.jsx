@@ -942,6 +942,7 @@ import AcousticOpsEventsNexus from '@/components/cinematic/AcousticOpsEventsNexu
 import AcousticOpsAlertsNexus from '@/components/cinematic/AcousticOpsAlertsNexus';
 import AcousticRulesNexus from '@/components/cinematic/AcousticRulesNexus';
 import AcousticInvestmentNexus from '@/components/cinematic/AcousticInvestmentNexus';
+import AcousticContactNexus from '@/components/cinematic/AcousticContactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2891,6 +2892,8 @@ function App() {
             <AcousticRulesNexus />
             {/* F678 (overnight 2026-09-08): Acoustic × Investment Nexus (ACINVST) — AcousticInvestmentNexus.jsx; /v1/acoustic/contacts × /entities/Investment; LINKED contacts (≥1 investment keyword-match) vs UNLINKED; ALL/LINKED/UNLINKED filter tabs + search; click-to-expand matched investments (kind badge); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio-sensor brief + TTS; amber badge on linked count; ◈ ACINVST button left:133760 bottom:8 zIndex:214; isAcinvstQuery+buildAcinvstScript wired into JarvisBrain.ask(); jarvis:acinvst-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticInvestmentNexus />
+            {/* F679 (overnight 2026-09-08): Acoustic × Contact Nexus (ACCNT) — AcousticContactNexus.jsx; /v1/acoustic/contacts × /entities/Contact; IDENTIFIED contacts (≥1 keyword overlap with known contact name/role/org) vs UNIDENTIFIED; ALL/IDENTIFIED/UNIDENTIFIED filter tabs + search; stat tiles (IDENTIFIED, UNIDENTIFIED, COVERAGE%); click-to-expand matched known contacts (name, role, org, email); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence acoustic identity brief + TTS; amber badge on identified count; ◈ ACCNT button left:134620 bottom:8 zIndex:215; isAccntQuery+buildAccntScript wired into JarvisBrain.ask(); jarvis:accnt-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticContactNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

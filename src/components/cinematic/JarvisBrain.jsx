@@ -248,6 +248,7 @@ import { isAcopsQuery, buildAcopsScript } from "./AcousticOpsEventsNexus";
 import { isAcalQuery, buildAcalScript } from "./AcousticOpsAlertsNexus";
 import { isAcrulsQuery, buildAcrulsScript } from "./AcousticRulesNexus";
 import { isAcinvstQuery, buildAcinvstScript } from "./AcousticInvestmentNexus";
+import { isAccntQuery, buildAccntScript } from "./AcousticContactNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1030,6 +1031,9 @@ export default function JarvisBrain() {
       } else if (isAcinvstQuery(q)) {
         answer = await buildAcinvstScript();
         window.dispatchEvent(new CustomEvent("jarvis:acinvst-toggle"));
+      } else if (isAccntQuery(q)) {
+        answer = await buildAccntScript();
+        window.dispatchEvent(new CustomEvent("jarvis:accnt-toggle"));
       } else if (isAcscnQuery(q)) {
         answer = await buildAcscnScript();
         window.dispatchEvent(new CustomEvent("jarvis:acscn-toggle"));
