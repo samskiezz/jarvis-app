@@ -939,6 +939,7 @@ import AcousticDatasetNexus from '@/components/cinematic/AcousticDatasetNexus';
 import AcousticScenarioNexus from '@/components/cinematic/AcousticScenarioNexus';
 import AcousticReportNexus from '@/components/cinematic/AcousticReportNexus';
 import AcousticOpsEventsNexus from '@/components/cinematic/AcousticOpsEventsNexus';
+import AcousticOpsAlertsNexus from '@/components/cinematic/AcousticOpsAlertsNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2882,6 +2883,8 @@ function App() {
             <AcousticReportNexus />
             {/* F675 (overnight 2026-09-08): Acoustic × Ops Events Nexus (ACOPS) — AcousticOpsEventsNexus.jsx; /v1/acoustic/contacts × /v1/ops/events; CORRELATED contacts (≥1 keyword overlap with ops event title/body) vs QUIET; ALL/CORRELATED/QUIET filter tabs + search; click-to-expand matched ops events (severity badge + source); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence sensor-operational brief + TTS; amber badge on correlated count; ◈ ACOPS button left:131180 bottom:8 zIndex:211; isAcopsQuery+buildAcopsScript wired into JarvisBrain.ask(); jarvis:acops-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticOpsEventsNexus />
+            {/* F676 (overnight 2026-09-08): Acoustic × Ops Alerts Nexus (ACAL) — AcousticOpsAlertsNexus.jsx; /v1/acoustic/contacts × /v1/ops/alerts; ALERTED contacts (≥1 keyword overlap with ops alert title/body) vs CLEAR; ALL/ALERTED/CLEAR filter tabs + search; click-to-expand matched ops alerts (severity badge + source); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence sensor-alert brief + TTS; amber badge on alerted count; ◈ ACAL button left:132040 bottom:8 zIndex:212; isAcalQuery+buildAcalScript wired into JarvisBrain.ask(); jarvis:acal-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticOpsAlertsNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
