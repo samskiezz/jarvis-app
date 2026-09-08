@@ -948,6 +948,7 @@ import AcousticRemindersNexus from '@/components/cinematic/AcousticRemindersNexu
 import AcousticSkillNexus from '@/components/cinematic/AcousticSkillNexus';
 import AcousticLiveWorldNexus from '@/components/cinematic/AcousticLiveWorldNexus';
 import AcousticKnowledgeRiskTriple from '@/components/cinematic/AcousticKnowledgeRiskTriple';
+import AcousticTaskInvestigationTriple from '@/components/cinematic/AcousticTaskInvestigationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2909,6 +2910,8 @@ function App() {
             <AcousticLiveWorldNexus />
             {/* F684 (overnight 2026-09-08): Acoustic × Knowledge × Risk Triple Nexus (ACKRTRI) — AcousticKnowledgeRiskTriple.jsx; /v1/acoustic/contacts × /knowledge/ × /entities/RiskSignal; FULLY_COVERED/KNOWLEDGE_ONLY/RISK_ONLY/DARK tabs; coverage% tile; click-to-expand matched articles+signals; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence triple coverage brief + TTS; red badge on DARK count; ◈ ACKRTRI button left:138920 bottom:8 zIndex:220; isAckrtriQuery+buildAckrtriScript wired into JarvisBrain.ask(); jarvis:ackrtri-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticKnowledgeRiskTriple />
+            {/* F685 (overnight 2026-09-08): Acoustic × Task × Investigation Triple Nexus (ACTKIINV) — AcousticTaskInvestigationTriple.jsx; /v1/acoustic/contacts × /entities/Task × /v1/investigations; FULLY_OPERATIONAL/TASKED_ONLY/CASED_ONLY/UNTRACKED tabs; 5 stat tiles (CONTACTS, FULL OPS, TASKED, CASED, COVERAGE%); click-to-expand matched tasks+investigations; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence triple ops brief + TTS; amber badge on FULL OPS count; ◈ ACTKIINV button left:139780 bottom:8 zIndex:221; isActkiinvQuery+buildActkiinvScript wired into JarvisBrain.ask(); jarvis:actkiinv-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticTaskInvestigationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
