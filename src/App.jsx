@@ -938,6 +938,7 @@ import AcousticSwarmJobNexus from '@/components/cinematic/AcousticSwarmJobNexus'
 import AcousticDatasetNexus from '@/components/cinematic/AcousticDatasetNexus';
 import AcousticScenarioNexus from '@/components/cinematic/AcousticScenarioNexus';
 import AcousticReportNexus from '@/components/cinematic/AcousticReportNexus';
+import AcousticOpsEventsNexus from '@/components/cinematic/AcousticOpsEventsNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2879,6 +2880,8 @@ function App() {
             <AcousticScenarioNexus />
             {/* F674 (overnight 2026-09-08): Acoustic × Report Nexus (ACRPT) — AcousticReportNexus.jsx; /v1/acoustic/contacts + /v1/reports; DOCUMENTED contacts (≥1 report keyword-match) vs UNDOCUMENTED (intelligence gap); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + search; click-to-expand matched reports (type badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on undocumented count; ◈ ACRPT button left:130320 bottom:8 zIndex:210; isAcrptQuery+buildAcrptScript wired into JarvisBrain.ask(); jarvis:acrpt-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticReportNexus />
+            {/* F675 (overnight 2026-09-08): Acoustic × Ops Events Nexus (ACOPS) — AcousticOpsEventsNexus.jsx; /v1/acoustic/contacts × /v1/ops/events; CORRELATED contacts (≥1 keyword overlap with ops event title/body) vs QUIET; ALL/CORRELATED/QUIET filter tabs + search; click-to-expand matched ops events (severity badge + source); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence sensor-operational brief + TTS; amber badge on correlated count; ◈ ACOPS button left:131180 bottom:8 zIndex:211; isAcopsQuery+buildAcopsScript wired into JarvisBrain.ask(); jarvis:acops-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticOpsEventsNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
