@@ -256,6 +256,7 @@ import { isAclwQuery, buildAclwScript } from "./AcousticLiveWorldNexus";
 import { isAckrtriQuery, buildAckrtriScript } from "./AcousticKnowledgeRiskTriple";
 import { isActkiinvQuery, buildActkiinvScript } from "./AcousticTaskInvestigationTriple";
 import { isAcskscnQuery, buildAcskscnScript } from "./AcousticSkillScenarioTriple";
+import { isAcgcipQuery, buildAcgcipScript } from "./AcousticGraphIntelTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1067,6 +1068,9 @@ export default function JarvisBrain() {
       } else if (isAcskscnQuery(q)) {
         answer = await buildAcskscnScript();
         window.dispatchEvent(new CustomEvent("jarvis:acskscn-toggle"));
+      } else if (isAcgcipQuery(q)) {
+        answer = await buildAcgcipScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acgcip-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

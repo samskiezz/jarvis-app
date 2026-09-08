@@ -950,6 +950,7 @@ import AcousticLiveWorldNexus from '@/components/cinematic/AcousticLiveWorldNexu
 import AcousticKnowledgeRiskTriple from '@/components/cinematic/AcousticKnowledgeRiskTriple';
 import AcousticTaskInvestigationTriple from '@/components/cinematic/AcousticTaskInvestigationTriple';
 import AcousticSkillScenarioTriple from '@/components/cinematic/AcousticSkillScenarioTriple';
+import AcousticGraphIntelTriple from '@/components/cinematic/AcousticGraphIntelTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2915,6 +2916,8 @@ function App() {
             <AcousticTaskInvestigationTriple />
             {/* F686 Acoustic × Skill × Scenario Triple Nexus */}
             <AcousticSkillScenarioTriple />
+            {/* F687 Acoustic × Graph Communities × Intel Profile Triple Nexus */}
+            <AcousticGraphIntelTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
