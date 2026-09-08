@@ -946,6 +946,7 @@ import AcousticContactNexus from '@/components/cinematic/AcousticContactNexus';
 import AcousticGraphNexus from '@/components/cinematic/AcousticGraphNexus';
 import AcousticRemindersNexus from '@/components/cinematic/AcousticRemindersNexus';
 import AcousticSkillNexus from '@/components/cinematic/AcousticSkillNexus';
+import AcousticLiveWorldNexus from '@/components/cinematic/AcousticLiveWorldNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2903,6 +2904,8 @@ function App() {
             <AcousticRemindersNexus />
             {/* F682 (overnight 2026-09-08): Acoustic × Skill Nexus (ACSKILL) — AcousticSkillNexus.jsx; /v1/acoustic/contacts × /v1/aip/skill; SKILLED contacts (≥1 skill domain keyword-match) vs UNSKILLED; ALL/SKILLED/UNSKILLED filter tabs + search; click-to-expand matched skills (domain badge, score, description); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence sensor-capability brief + TTS; amber badge on skilled count; ◈ ACSKILL button left:137200 bottom:8 zIndex:218; isAcskillQuery+buildAcskillScript wired into JarvisBrain.ask(); jarvis:acskill-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticSkillNexus />
+            {/* F683 (overnight 2026-09-08): Acoustic × Live World Intel Nexus (ACLW) — AcousticLiveWorldNexus.jsx; /v1/acoustic/contacts × /functions/getLiveIntel (seismic/crypto/FX); WORLD-SIGNALED contacts (≥1 keyword overlap with live event name/tags) vs BACKGROUND; ALL/WORLD-SIGNALED/BACKGROUND filter tabs + search; 4 stat tiles (CONTACTS, LIVE EVENTS, WORLD-SIGNALED, COVERAGE%); click-to-expand matched events (KIND badge SEISMIC/CRYPTO/FX, description, hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence acoustic world intelligence brief + TTS; amber badge on signaled count; ◈ ACLW button left:138060 bottom:8 zIndex:219; isAclwQuery+buildAclwScript wired into JarvisBrain.ask(); jarvis:aclw-toggle event; 5-min auto-refresh; vite build exit 0. */}
+            <AcousticLiveWorldNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

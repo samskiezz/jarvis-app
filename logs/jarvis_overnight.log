@@ -275,3 +275,4 @@
 [2026-09-08] F680 Acoustic × Graph Centrality Nexus (ACGRPH) — AcousticGraphNexus.jsx; /v1/acoustic/contacts × /v1/graph/centrality; GRAPH-LINKED/UNLINKED tabs; ◈ ACGRPH button left:135480 zIndex:216; isAcgrphQuery+buildAcgrphScript wired into JarvisBrain; jarvis:acgrph-toggle; vite build exit 0.
 2026-09-08 F681 AcousticRemindersNexus.jsx — /v1/acoustic/contacts × /reminders/list; NOTED/UNRECORDED tabs; ▶ ASSESS + TTS; ◈ ACREM btn left:136340 zIndex:217; JarvisBrain wired; vite build exit 0
 [2026-09-08] F682 Acoustic × Skill Nexus (ACSKILL) — AcousticSkillNexus.jsx; /v1/acoustic/contacts × /v1/aip/skill; SKILLED/UNSKILLED tabs; domain badge + score; ASSESS→TTS; left:137200 zIndex:218; vite build exit 0.
+2026-09-08 F683 AcousticLiveWorldNexus (ACLW): /v1/acoustic/contacts × /functions/getLiveIntel (seismic/crypto/FX); WORLD-SIGNALED tabs; 4 stat tiles; ASSESS+TTS; isAclwQuery+buildAclwScript wired JarvisBrain; jarvis:aclw-toggle; 5-min poll; vite build exit 0.
