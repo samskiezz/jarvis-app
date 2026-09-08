@@ -949,6 +949,7 @@ import AcousticSkillNexus from '@/components/cinematic/AcousticSkillNexus';
 import AcousticLiveWorldNexus from '@/components/cinematic/AcousticLiveWorldNexus';
 import AcousticKnowledgeRiskTriple from '@/components/cinematic/AcousticKnowledgeRiskTriple';
 import AcousticTaskInvestigationTriple from '@/components/cinematic/AcousticTaskInvestigationTriple';
+import AcousticSkillScenarioTriple from '@/components/cinematic/AcousticSkillScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2912,6 +2913,8 @@ function App() {
             <AcousticKnowledgeRiskTriple />
             {/* F685 (overnight 2026-09-08): Acoustic × Task × Investigation Triple Nexus (ACTKIINV) — AcousticTaskInvestigationTriple.jsx; /v1/acoustic/contacts × /entities/Task × /v1/investigations; FULLY_OPERATIONAL/TASKED_ONLY/CASED_ONLY/UNTRACKED tabs; 5 stat tiles (CONTACTS, FULL OPS, TASKED, CASED, COVERAGE%); click-to-expand matched tasks+investigations; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence triple ops brief + TTS; amber badge on FULL OPS count; ◈ ACTKIINV button left:139780 bottom:8 zIndex:221; isActkiinvQuery+buildActkiinvScript wired into JarvisBrain.ask(); jarvis:actkiinv-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticTaskInvestigationTriple />
+            {/* F686 Acoustic × Skill × Scenario Triple Nexus */}
+            <AcousticSkillScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
