@@ -947,6 +947,7 @@ import AcousticGraphNexus from '@/components/cinematic/AcousticGraphNexus';
 import AcousticRemindersNexus from '@/components/cinematic/AcousticRemindersNexus';
 import AcousticSkillNexus from '@/components/cinematic/AcousticSkillNexus';
 import AcousticLiveWorldNexus from '@/components/cinematic/AcousticLiveWorldNexus';
+import AcousticKnowledgeRiskTriple from '@/components/cinematic/AcousticKnowledgeRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2906,6 +2907,8 @@ function App() {
             <AcousticSkillNexus />
             {/* F683 (overnight 2026-09-08): Acoustic × Live World Intel Nexus (ACLW) — AcousticLiveWorldNexus.jsx; /v1/acoustic/contacts × /functions/getLiveIntel (seismic/crypto/FX); WORLD-SIGNALED contacts (≥1 keyword overlap with live event name/tags) vs BACKGROUND; ALL/WORLD-SIGNALED/BACKGROUND filter tabs + search; 4 stat tiles (CONTACTS, LIVE EVENTS, WORLD-SIGNALED, COVERAGE%); click-to-expand matched events (KIND badge SEISMIC/CRYPTO/FX, description, hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence acoustic world intelligence brief + TTS; amber badge on signaled count; ◈ ACLW button left:138060 bottom:8 zIndex:219; isAclwQuery+buildAclwScript wired into JarvisBrain.ask(); jarvis:aclw-toggle event; 5-min auto-refresh; vite build exit 0. */}
             <AcousticLiveWorldNexus />
+            {/* F684 (overnight 2026-09-08): Acoustic × Knowledge × Risk Triple Nexus (ACKRTRI) — AcousticKnowledgeRiskTriple.jsx; /v1/acoustic/contacts × /knowledge/ × /entities/RiskSignal; FULLY_COVERED/KNOWLEDGE_ONLY/RISK_ONLY/DARK tabs; coverage% tile; click-to-expand matched articles+signals; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence triple coverage brief + TTS; red badge on DARK count; ◈ ACKRTRI button left:138920 bottom:8 zIndex:220; isAckrtriQuery+buildAckrtriScript wired into JarvisBrain.ask(); jarvis:ackrtri-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticKnowledgeRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
