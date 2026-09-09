@@ -306,3 +306,4 @@
 [2026-09-09] F710 InvestmentKnowledgeNexus.jsx — /entities/Investment × /knowledge/ nexus; DOCUMENTED/UNDOCUMENTED filter; 5 stat tiles; voice: invkno; vite build exit 0.
 [2026-09-09] F711 ContactScenarioNexus2.jsx — /entities/Contact × /v1/scenario/list nexus; SCENARIO-LINKED/UNLINKED filter; 5 stat tiles; voice: cntscn2; wired JarvisBrain + App.jsx; vite build exit 0.
 [2026-09-09] F712 Contact × Task × Knowledge Triple Nexus (CTKNTRI) — ContactTaskKnowledgeTriple.jsx created; /entities/Contact × /entities/Task × /knowledge/ 3-way cross-reference; FULLY_GROUNDED/TASK_ONLY/KNOWLEDGE_ONLY/DARK classification; ◈ CTKNTRI button left:888340 zIndex:247; mounted App.jsx; wired JarvisBrain.ask(); vite build exit 0; pushed jarvis-overnight.
+2026-09-09 F713 INVOPS Investment×OpsEvents Nexus: InvestmentOpsEventsNexus.jsx created + JarvisBrain+App wired; vite build exit 0
