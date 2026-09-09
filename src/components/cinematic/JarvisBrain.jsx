@@ -269,6 +269,7 @@ import { isAcrldsetQuery, buildAcrldsetScript } from "./AcousticRulesDatasetTrip
 import { isActdsetQuery, buildActdsetScript } from "./AcousticTaskDatasetTriple";
 import { isAcipscnQuery, buildAcipscnScript } from "./AcousticIntelProfileScenarioTriple";
 import { isActrskQuery, buildActrskScript } from "./AcousticContactRiskTriple";
+import { isAcoaipQuery, buildAcoaipScript } from "./AcousticOpsAlertsIntelTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1115,6 +1116,9 @@ export default function JarvisBrain() {
       } else if (isActrskQuery(q)) {
         answer = await buildActrskScript();
         window.dispatchEvent(new CustomEvent("jarvis:actrsk-toggle"));
+      } else if (isAcoaipQuery(q)) {
+        answer = await buildAcoaipScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acoaip-toggle"));
       } else if (isOpsalinvQuery(q)) {
         answer = await buildOpsalinvScript();
         window.dispatchEvent(new CustomEvent("jarvis:opsalinv-toggle"));
