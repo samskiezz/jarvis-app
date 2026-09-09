@@ -968,6 +968,7 @@ import AcousticSceneNexus from '@/components/cinematic/AcousticSceneNexus';
 import OpsAlertKnowledgeCoverage from '@/components/cinematic/OpsAlertKnowledgeCoverage';
 import OpsEventRiskSignalNexus from '@/components/cinematic/OpsEventRiskSignalNexus';
 import OpsEventInvestigationNexus from '@/components/cinematic/OpsEventInvestigationNexus';
+import LiveIntelRulesNexus from '@/components/cinematic/LiveIntelRulesNexus';
 import OpsAlertInvestigationNexus from '@/components/cinematic/OpsAlertInvestigationNexus';
 import KnowledgeFreshnessPanel from '@/components/cinematic/KnowledgeFreshnessPanel';
 
@@ -2973,6 +2974,8 @@ function App() {
             <OpsEventRiskSignalNexus />
             {/* F704 (overnight 2026-09-09): Ops Events × Investigation Nexus (OEINV) — OpsEventInvestigationNexus.jsx; /v1/ops/events × /v1/investigations; keyword cross-reference; CASE-BACKED events (≥1 investigation keyword-match) vs UNTRACKED; 5 stat tiles (events/investigations/case-backed/untracked/coverage%); ALL/CASE-BACKED/UNTRACKED filter tabs + search; click-to-expand matched investigation detail (status/lead/summary/hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on case-backed count; ◈ OEINV button left:156120 bottom:8 zIndex:240; isOeinvQuery+buildOeinvScript wired into JarvisBrain.ask(); jarvis:oeinv-toggle event; 90-s auto-refresh. */}
             <OpsEventInvestigationNexus />
+            {/* F705 (overnight 2026-09-09): Live Intel × Decision Rules Nexus (LIRULES) — LiveIntelRulesNexus.jsx; /functions/getLiveIntel × /v1/rules; keyword cross-reference; TRIGGERED rules (≥1 live event keyword-match) vs DORMANT; 5 stat tiles (rules/live events/triggered/dormant/activation%); ALL/TRIGGERED/DORMANT filter tabs + search; click-to-expand matched live events with KIND badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence Watchtower live-signal activation brief + TTS; red badge on triggered count; ◈ LIRULES button left:883180 bottom:8 zIndex:241; isLirulesQuery+buildLirulesScript wired into JarvisBrain.ask(); jarvis:lirules-toggle event; 5-min auto-refresh. */}
+            <LiveIntelRulesNexus />
             {/* F172 (overnight 2026-09-08): knowledge freshness panel — 🌿 FRESH button (left:55080, bottom:8, zIndex:65); polls /knowledge/ every 5 min; enriches each article with days-since-update; sorted oldest-first; GREEN(<7d)/YELLOW(7-30d)/RED(>30d) staleness dot + fmtDays label; RED badge on button showing stale count; click article → dispatches jarvis:open-document-search; ▶ FRESH / Alt+F shortcut + jarvis:knowledge-freshness-toggle event; isKnowledgeFreshnessQuery+buildKnowledgeFreshnessScript wired in JarvisBrain; "knowledge freshness"/"stale articles"/"outdated knowledge"/"corpus freshness"/"stale knowledge"/"knowledge gaps"/"knowledge health"/"knowledge age" voice trigger */}
             <KnowledgeFreshnessPanel />
             <Suspense fallback={<Loading />}>

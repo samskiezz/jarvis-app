@@ -275,6 +275,7 @@ import { isAcsceneQuery, buildAcsceneScript } from "./AcousticSceneNexus";
 import { isOalknoQuery, buildOalknoScript } from "./OpsAlertKnowledgeCoverage";
 import { isOerskQuery, buildOerskScript } from "./OpsEventRiskSignalNexus";
 import { isOeinvQuery, buildOeinvScript } from "./OpsEventInvestigationNexus";
+import { isLirulesQuery, buildLirulesScript } from "./LiveIntelRulesNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1133,6 +1134,9 @@ export default function JarvisBrain() {
       } else if (isOalknoQuery(q)) {
         answer = await buildOalknoScript();
         window.dispatchEvent(new CustomEvent("jarvis:oalkno-toggle"));
+      } else if (isLirulesQuery(q)) {
+        answer = await buildLirulesScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lirules-toggle"));
       } else if (isOeinvQuery(q)) {
         answer = await buildOeinvScript();
         window.dispatchEvent(new CustomEvent("jarvis:oeinv-toggle"));
