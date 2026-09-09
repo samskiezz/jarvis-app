@@ -963,6 +963,7 @@ import AcousticTaskDatasetTriple from '@/components/cinematic/AcousticTaskDatase
 import AcousticIntelProfileScenarioTriple from '@/components/cinematic/AcousticIntelProfileScenarioTriple';
 import AcousticContactRiskTriple from '@/components/cinematic/AcousticContactRiskTriple';
 import AcousticOpsAlertsIntelTriple from '@/components/cinematic/AcousticOpsAlertsIntelTriple';
+import AcousticSwarmRiskTriple from '@/components/cinematic/AcousticSwarmRiskTriple';
 import OpsAlertInvestigationNexus from '@/components/cinematic/OpsAlertInvestigationNexus';
 import KnowledgeFreshnessPanel from '@/components/cinematic/KnowledgeFreshnessPanel';
 
@@ -2958,6 +2959,8 @@ function App() {
             <AcousticContactRiskTriple />
             {/* F699 (overnight 2026-09-09): Acoustic × Ops Alerts × Intel Profile Triple Nexus (ACOAIP) — AcousticOpsAlertsIntelTriple.jsx; /v1/acoustic/contacts × /v1/ops/alerts × /entities/IntelProfile; FULLY_ATTRIBUTED/ALERTED_ONLY/PROFILED_ONLY/DARK tabs; 5 stat tiles; click-to-expand matched ops alerts (severity badge) + matched intel profiles (threat-level badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; red badge on FULLY_ATTRIBUTED count; ◈ ACOAIP button left:151820 bottom:8 zIndex:235; isAcoaipQuery+buildAcoaipScript wired into JarvisBrain.ask(); jarvis:acoaip-toggle event; 90-s auto-refresh. */}
             <AcousticOpsAlertsIntelTriple />
+            {/* F700 (overnight 2026-09-09): Acoustic × SwarmJob × Risk Signal Triple Nexus (ACSWRSK) — AcousticSwarmRiskTriple.jsx; /v1/acoustic/contacts × /entities/SwarmJob × /entities/RiskSignal; FULLY_COVERED/SWARM_ONLY/RISK_ONLY/DARK tabs; 5 stat tiles; click-to-expand matched swarm jobs (status+progress badge) + matched risk signals (severity badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; green badge on FULLY_COVERED count; ◈ ACSWRSK button left:152680 bottom:8 zIndex:236; isAcswrskQuery+buildAcswrskScript wired into JarvisBrain.ask(); jarvis:acswrsk-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticSwarmRiskTriple />
             {/* F172 (overnight 2026-09-08): knowledge freshness panel — 🌿 FRESH button (left:55080, bottom:8, zIndex:65); polls /knowledge/ every 5 min; enriches each article with days-since-update; sorted oldest-first; GREEN(<7d)/YELLOW(7-30d)/RED(>30d) staleness dot + fmtDays label; RED badge on button showing stale count; click article → dispatches jarvis:open-document-search; ▶ FRESH / Alt+F shortcut + jarvis:knowledge-freshness-toggle event; isKnowledgeFreshnessQuery+buildKnowledgeFreshnessScript wired in JarvisBrain; "knowledge freshness"/"stale articles"/"outdated knowledge"/"corpus freshness"/"stale knowledge"/"knowledge gaps"/"knowledge health"/"knowledge age" voice trigger */}
             <KnowledgeFreshnessPanel />
             <Suspense fallback={<Loading />}>
