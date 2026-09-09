@@ -966,6 +966,7 @@ import AcousticOpsAlertsIntelTriple from '@/components/cinematic/AcousticOpsAler
 import AcousticSwarmRiskTriple from '@/components/cinematic/AcousticSwarmRiskTriple';
 import AcousticSceneNexus from '@/components/cinematic/AcousticSceneNexus';
 import OpsAlertKnowledgeCoverage from '@/components/cinematic/OpsAlertKnowledgeCoverage';
+import OpsEventRiskSignalNexus from '@/components/cinematic/OpsEventRiskSignalNexus';
 import OpsAlertInvestigationNexus from '@/components/cinematic/OpsAlertInvestigationNexus';
 import KnowledgeFreshnessPanel from '@/components/cinematic/KnowledgeFreshnessPanel';
 
@@ -2967,6 +2968,8 @@ function App() {
             <AcousticSceneNexus />
             {/* F702 (overnight 2026-09-09): Ops Alert × Knowledge Coverage Monitor (OALKNO) — OpsAlertKnowledgeCoverage.jsx; /v1/ops/alerts × /knowledge/; keyword cross-reference; CONTEXTUALIZED alerts (≥1 article match) vs UNCONTEXTUALIZED (no KB backing); 4 stat tiles (alerts/contextualized/uncontextualized/coverage%); ALL/CONTEXTUALIZED/UNCONTEXTUALIZED filter tabs + search; click-to-expand matched articles with kind badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on uncontextualized count; ◈ OALKNO button left:154400 bottom:8 zIndex:238; isOalknoQuery+buildOalknoScript wired into JarvisBrain.ask(); jarvis:oalkno-toggle event; 90-s auto-refresh. */}
             <OpsAlertKnowledgeCoverage />
+            {/* F703 (overnight 2026-09-09): Ops Events × Risk Signal Nexus (OERSK) — OpsEventRiskSignalNexus.jsx; /v1/ops/events × /entities/RiskSignal; keyword cross-reference; SIGNAL-BACKED events (≥1 risk signal match) vs QUIET (no risk backing); 5 stat tiles (events/risk signals/signal-backed/quiet/coverage%); ALL/SIGNAL-BACKED/QUIET filter tabs + search; click-to-expand matched signals with severity badge + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; red badge on signal-backed count; ◈ OERSK button left:155260 bottom:8 zIndex:239; isOerskQuery+buildOerskScript wired into JarvisBrain.ask(); jarvis:oersk-toggle event; 90-s auto-refresh. */}
+            <OpsEventRiskSignalNexus />
             {/* F172 (overnight 2026-09-08): knowledge freshness panel — 🌿 FRESH button (left:55080, bottom:8, zIndex:65); polls /knowledge/ every 5 min; enriches each article with days-since-update; sorted oldest-first; GREEN(<7d)/YELLOW(7-30d)/RED(>30d) staleness dot + fmtDays label; RED badge on button showing stale count; click article → dispatches jarvis:open-document-search; ▶ FRESH / Alt+F shortcut + jarvis:knowledge-freshness-toggle event; isKnowledgeFreshnessQuery+buildKnowledgeFreshnessScript wired in JarvisBrain; "knowledge freshness"/"stale articles"/"outdated knowledge"/"corpus freshness"/"stale knowledge"/"knowledge gaps"/"knowledge health"/"knowledge age" voice trigger */}
             <KnowledgeFreshnessPanel />
             <Suspense fallback={<Loading />}>
