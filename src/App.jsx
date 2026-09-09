@@ -961,6 +961,7 @@ import AcousticReportScenarioTriple from '@/components/cinematic/AcousticReportS
 import AcousticRulesDatasetTriple from '@/components/cinematic/AcousticRulesDatasetTriple';
 import AcousticTaskDatasetTriple from '@/components/cinematic/AcousticTaskDatasetTriple';
 import AcousticIntelProfileScenarioTriple from '@/components/cinematic/AcousticIntelProfileScenarioTriple';
+import AcousticContactRiskTriple from '@/components/cinematic/AcousticContactRiskTriple';
 import OpsAlertInvestigationNexus from '@/components/cinematic/OpsAlertInvestigationNexus';
 import KnowledgeFreshnessPanel from '@/components/cinematic/KnowledgeFreshnessPanel';
 
@@ -2952,6 +2953,8 @@ function App() {
             <AcousticTaskDatasetTriple />
             {/* F697 (overnight 2026-09-09): Acoustic × Intel Profile × Scenario Triple Nexus (ACIPSCN) — AcousticIntelProfileScenarioTriple.jsx; /v1/acoustic/contacts × /entities/IntelProfile × /v1/scenario/list; FULLY_PLANNED/INTEL_ONLY/SCENARIO_ONLY/DARK tabs; 5 stat tiles; click-to-expand matched profiles+scenarios; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; amber badge on DARK count; ◈ ACIPSCN button left:150100 bottom:8 zIndex:233; isAcipscnQuery+buildAcipscnScript wired into JarvisBrain.ask(); jarvis:acipscn-toggle event; 90-s auto-refresh; vite build exit 0. */}
             <AcousticIntelProfileScenarioTriple />
+            {/* F698 (overnight 2026-09-09): Acoustic × Directory Contact × Risk Signal Triple Nexus (ACTRSK) — AcousticContactRiskTriple.jsx; /v1/acoustic/contacts × /entities/Contact × /entities/RiskSignal; FULLY_EXPOSED/IDENTIFIED_ONLY/RISKY_ONLY/CLEAR tabs; 5 stat tiles; click-to-expand matched contacts+signals; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; red badge on FULLY_EXPOSED count; ◈ ACTRSK button left:150960 bottom:8 zIndex:234; isActrskQuery+buildActrskScript wired into JarvisBrain.ask(); jarvis:actrsk-toggle event; 90-s auto-refresh; vite build exit 0. */}
+            <AcousticContactRiskTriple />
             {/* F172 (overnight 2026-09-08): knowledge freshness panel — 🌿 FRESH button (left:55080, bottom:8, zIndex:65); polls /knowledge/ every 5 min; enriches each article with days-since-update; sorted oldest-first; GREEN(<7d)/YELLOW(7-30d)/RED(>30d) staleness dot + fmtDays label; RED badge on button showing stale count; click article → dispatches jarvis:open-document-search; ▶ FRESH / Alt+F shortcut + jarvis:knowledge-freshness-toggle event; isKnowledgeFreshnessQuery+buildKnowledgeFreshnessScript wired in JarvisBrain; "knowledge freshness"/"stale articles"/"outdated knowledge"/"corpus freshness"/"stale knowledge"/"knowledge gaps"/"knowledge health"/"knowledge age" voice trigger */}
             <KnowledgeFreshnessPanel />
             <Suspense fallback={<Loading />}>
