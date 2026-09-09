@@ -278,6 +278,7 @@ import { isOerskQuery, buildOerskScript } from "./OpsEventRiskSignalNexus";
 import { isOeinvQuery, buildOeinvScript } from "./OpsEventInvestigationNexus";
 import { isLirulesQuery, buildLirulesScript } from "./LiveIntelRulesNexus";
 import { isKnoevtQuery, buildKnoevtScript } from "./KnowledgeOpsEventNexus";
+import { isKnoscnQuery, buildKnoscnScript } from "./KnowledgeScenarioNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1145,6 +1146,9 @@ export default function JarvisBrain() {
       } else if (isKnoevtQuery(q)) {
         answer = await buildKnoevtScript();
         window.dispatchEvent(new CustomEvent("jarvis:knoevt-toggle"));
+      } else if (isKnoscnQuery(q)) {
+        answer = await buildKnoscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:knoscn-toggle"));
       } else if (isOeinvQuery(q)) {
         answer = await buildOeinvScript();
         window.dispatchEvent(new CustomEvent("jarvis:oeinv-toggle"));
