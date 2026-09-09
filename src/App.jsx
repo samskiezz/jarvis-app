@@ -970,6 +970,7 @@ import OpsEventRiskSignalNexus from '@/components/cinematic/OpsEventRiskSignalNe
 import OpsEventInvestigationNexus from '@/components/cinematic/OpsEventInvestigationNexus';
 import LiveIntelRulesNexus from '@/components/cinematic/LiveIntelRulesNexus';
 import KnowledgeOpsEventNexus from '@/components/cinematic/KnowledgeOpsEventNexus';
+import TaskGraphKnowledgeTriple from '@/components/cinematic/TaskGraphKnowledgeTriple';
 import OpsAlertInvestigationNexus from '@/components/cinematic/OpsAlertInvestigationNexus';
 import KnowledgeFreshnessPanel from '@/components/cinematic/KnowledgeFreshnessPanel';
 
@@ -2979,6 +2980,8 @@ function App() {
             <LiveIntelRulesNexus />
             {/* F706 (overnight 2026-09-09): Knowledge × Ops Events Nexus (KNOEVT) — KnowledgeOpsEventNexus.jsx; /knowledge/ × /v1/ops/events; keyword cross-reference; REFERENCED articles (≥1 ops event keyword-match) vs UNREFERENCED; 5 stat tiles (articles/ops events/referenced/unreferenced/coverage%); ALL/REFERENCED/UNREFERENCED filter tabs + search; click-to-expand article detail + hit count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge coverage brief + TTS; ◈ KNOEVT button left:884040 bottom:8 zIndex:242; isKnoevtQuery+buildKnoevtScript wired into JarvisBrain.ask(); jarvis:knoevt-toggle event; 90-s auto-refresh. */}
             <KnowledgeOpsEventNexus />
+            {/* F707 (overnight 2026-09-09): Task × Graph Centrality × Knowledge Triple (TGKNTRI) — TaskGraphKnowledgeTriple.jsx; /entities/Task × /v1/graph/centrality × /knowledge/; keyword cross-reference; FULLY_GROUNDED/NODE_ONLY/ARTICLE_ONLY/DARK classification; 5 stat tiles (tasks/grounded/node/article/dark); ALL/FULLY_GROUNDED/NODE_ONLY/ARTICLE_ONLY/DARK filter tabs + search; click-to-expand matched nodes + articles per task; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; amber badge on DARK count; ◈ TGKNTRI button left:884900 bottom:8 zIndex:243; isTgkntriQuery+buildTgkntriScript wired into JarvisBrain.ask(); jarvis:tgkntri-toggle event; 90-s auto-refresh. */}
+            <TaskGraphKnowledgeTriple />
             {/* F172 (overnight 2026-09-08): knowledge freshness panel — 🌿 FRESH button (left:55080, bottom:8, zIndex:65); polls /knowledge/ every 5 min; enriches each article with days-since-update; sorted oldest-first; GREEN(<7d)/YELLOW(7-30d)/RED(>30d) staleness dot + fmtDays label; RED badge on button showing stale count; click article → dispatches jarvis:open-document-search; ▶ FRESH / Alt+F shortcut + jarvis:knowledge-freshness-toggle event; isKnowledgeFreshnessQuery+buildKnowledgeFreshnessScript wired in JarvisBrain; "knowledge freshness"/"stale articles"/"outdated knowledge"/"corpus freshness"/"stale knowledge"/"knowledge gaps"/"knowledge health"/"knowledge age" voice trigger */}
             <KnowledgeFreshnessPanel />
             <Suspense fallback={<Loading />}>

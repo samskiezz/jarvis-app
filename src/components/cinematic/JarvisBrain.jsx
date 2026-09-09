@@ -235,6 +235,7 @@ import { isCiktriQuery, buildCiktriScript } from "./ContactIntelKnowledgeTrifect
 import { isTasoevQuery, buildTasoevScript } from "./TaskOpsEventsCorrelator";
 import { isAipkrstriQuery, buildAipkrstriScript } from "./AipSkillKnowledgeRiskTriple";
 import { isRststriQuery, buildRststriScript } from "./RiskScenarioTaskTriple";
+import { isTgkntriQuery, buildTgkntriScript } from "./TaskGraphKnowledgeTriple";
 import { isAcrskQuery, buildAcrskScript } from "./AcousticRiskSignalNexus";
 import { isAcinvQuery, buildAcinvScript } from "./AcousticInvestigationNexus";
 import { isActaskQuery, buildActaskScript } from "./AcousticTaskNexus";
@@ -1023,6 +1024,9 @@ export default function JarvisBrain() {
       } else if (isRststriQuery(q)) {
         answer = await buildRststriScript();
         window.dispatchEvent(new CustomEvent("jarvis:rststri-toggle"));
+      } else if (isTgkntriQuery(q)) {
+        answer = await buildTgkntriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tgkntri-toggle"));
       } else if (isAcrskQuery(q)) {
         answer = await buildAcrskScript();
         window.dispatchEvent(new CustomEvent("jarvis:acrsk-toggle"));
