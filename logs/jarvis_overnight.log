@@ -304,3 +304,4 @@
 [2026-09-09] F708 Knowledge × Scenario Nexus (KNOSCN) — KnowledgeScenarioNexus.jsx; /knowledge/ × /v1/scenario/list; 5 stat tiles; SCRIPTED/UNSCRIPTED filter; ASSESS → agent chat + TTS; wired JarvisBrain + App.jsx; vite build exit 0.
 [2026-09-09] F709 SWARMCOVER — mounted pre-existing SwarmRiskCoverageMap.jsx in App.jsx; wired isSwarmCoverageQuery+buildSwarmCoverageScript into JarvisBrain.ask(); endpoints: /entities/SwarmJob + /entities/RiskSignal; vite build exit 0.
 [2026-09-09] F710 InvestmentKnowledgeNexus.jsx — /entities/Investment × /knowledge/ nexus; DOCUMENTED/UNDOCUMENTED filter; 5 stat tiles; voice: invkno; vite build exit 0.
+[2026-09-09] F711 ContactScenarioNexus2.jsx — /entities/Contact × /v1/scenario/list nexus; SCENARIO-LINKED/UNLINKED filter; 5 stat tiles; voice: cntscn2; wired JarvisBrain + App.jsx; vite build exit 0.

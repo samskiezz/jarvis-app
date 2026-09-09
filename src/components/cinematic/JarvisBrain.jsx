@@ -205,6 +205,7 @@ import { isCntinvQuery, buildCntinvScript } from "./ContactInvestmentNexus";
 import { isCntswrmQuery, buildCntswrmScript } from "./ContactSwarmJobNexus";
 import { isCntskQuery, buildCntskScript } from "./ContactSkillNexus";
 import { isInvknoQuery, buildInvknoScript } from "./InvestmentKnowledgeNexus";
+import { isCntscn2Query, buildCntscn2Script } from "./ContactScenarioNexus2";
 import { isGndRulsQuery, buildGndRulsScript } from "./GraphNodeDecisionRulesNexus";
 import { isCntopsQuery, buildCntopsScript } from "./ContactOpsEventsNexus";
 import { isTattrQuery, buildTattrScript } from "./ThreatAttributionMapper";
@@ -940,6 +941,9 @@ export default function JarvisBrain() {
       } else if (isInvknoQuery(q)) {
         answer = await buildInvknoScript();
         window.dispatchEvent(new CustomEvent("jarvis:invkno-toggle"));
+      } else if (isCntscn2Query(q)) {
+        answer = await buildCntscn2Script();
+        window.dispatchEvent(new CustomEvent("jarvis:cntscn2-toggle"));
       } else if (isGndRulsQuery(q)) {
         answer = await buildGndRulsScript();
         window.dispatchEvent(new CustomEvent("jarvis:gndruls-toggle"));
