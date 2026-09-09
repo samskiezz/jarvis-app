@@ -972,6 +972,7 @@ import LiveIntelRulesNexus from '@/components/cinematic/LiveIntelRulesNexus';
 import KnowledgeOpsEventNexus from '@/components/cinematic/KnowledgeOpsEventNexus';
 import TaskGraphKnowledgeTriple from '@/components/cinematic/TaskGraphKnowledgeTriple';
 import KnowledgeScenarioNexus from '@/components/cinematic/KnowledgeScenarioNexus';
+import SwarmRiskCoverageMap from '@/components/cinematic/SwarmRiskCoverageMap';
 import OpsAlertInvestigationNexus from '@/components/cinematic/OpsAlertInvestigationNexus';
 import KnowledgeFreshnessPanel from '@/components/cinematic/KnowledgeFreshnessPanel';
 
@@ -2985,6 +2986,8 @@ function App() {
             <TaskGraphKnowledgeTriple />
             {/* F708 (overnight 2026-09-09): Knowledge × Scenario Nexus (KNOSCN) — KnowledgeScenarioNexus.jsx; /knowledge/ × /v1/scenario/list; keyword cross-reference; SCRIPTED articles (≥1 scenario keyword-match) vs UNSCRIPTED; 5 stat tiles (articles/scenarios/scripted/unscripted/coverage%); ALL/SCRIPTED/UNSCRIPTED filter tabs + search; click-to-expand matched scenarios (kind badge, name, hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge-scenario coverage brief + TTS; amber badge on unscripted count; ◈ KNOSCN button left:885760 bottom:8 zIndex:244; isKnoscnQuery+buildKnoscnScript wired into JarvisBrain.ask(); jarvis:knoscn-toggle event; 90-s auto-refresh. */}
             <KnowledgeScenarioNexus />
+            {/* F709 (overnight 2026-09-09): Swarm × Risk Coverage Map (SWARMCOVER) — SwarmRiskCoverageMap.jsx; /entities/SwarmJob × /entities/RiskSignal; cross-references active jobs against open risk signals; COVERED vs UNCOVERED risk classification; isSwarmCoverageQuery+buildSwarmCoverageScript wired into JarvisBrain.ask(); jarvis:swarmcoverage-toggle event; ⬡ COVER button left:5276 bottom:8 zIndex:65. */}
+            <SwarmRiskCoverageMap />
             {/* F172 (overnight 2026-09-08): knowledge freshness panel — 🌿 FRESH button (left:55080, bottom:8, zIndex:65); polls /knowledge/ every 5 min; enriches each article with days-since-update; sorted oldest-first; GREEN(<7d)/YELLOW(7-30d)/RED(>30d) staleness dot + fmtDays label; RED badge on button showing stale count; click article → dispatches jarvis:open-document-search; ▶ FRESH / Alt+F shortcut + jarvis:knowledge-freshness-toggle event; isKnowledgeFreshnessQuery+buildKnowledgeFreshnessScript wired in JarvisBrain; "knowledge freshness"/"stale articles"/"outdated knowledge"/"corpus freshness"/"stale knowledge"/"knowledge gaps"/"knowledge health"/"knowledge age" voice trigger */}
             <KnowledgeFreshnessPanel />
             <Suspense fallback={<Loading />}>

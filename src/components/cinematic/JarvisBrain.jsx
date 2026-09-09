@@ -279,6 +279,7 @@ import { isOeinvQuery, buildOeinvScript } from "./OpsEventInvestigationNexus";
 import { isLirulesQuery, buildLirulesScript } from "./LiveIntelRulesNexus";
 import { isKnoevtQuery, buildKnoevtScript } from "./KnowledgeOpsEventNexus";
 import { isKnoscnQuery, buildKnoscnScript } from "./KnowledgeScenarioNexus";
+import { isSwarmCoverageQuery, buildSwarmCoverageScript } from "./SwarmRiskCoverageMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1158,6 +1159,9 @@ export default function JarvisBrain() {
       } else if (isOpsalinvQuery(q)) {
         answer = await buildOpsalinvScript();
         window.dispatchEvent(new CustomEvent("jarvis:opsalinv-toggle"));
+      } else if (isSwarmCoverageQuery(q)) {
+        answer = await buildSwarmCoverageScript();
+        window.dispatchEvent(new CustomEvent("jarvis:swarmcoverage-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
