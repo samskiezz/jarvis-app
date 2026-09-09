@@ -287,3 +287,4 @@
 2026-09-08T21:18:10Z F691 ACODED Acoustic×OpsEvents×Dataset Triple Nexus; AcousticOpDatasetTriple.jsx created; wired JarvisBrain+App.jsx; vite build exit 0
 2026-09-08T22:18:19Z | F692 | AcousticScenarioSkillTriple.jsx | /v1/acoustic/contacts × /v1/scenario/list × /v1/aip/skill | FULLY_OPERATIONALIZED/SCENARIO_ONLY/SKILL_ONLY/DARK | isAcscnsklQuery+buildAcscnsklScript → JarvisBrain; jarvis:acscnskl-toggle; left:145800 zIndex:228; vite build exit 0
 2026-09-08T23:22:21Z F693 AcousticSwarmKnowledgeTriple (ACSKNO) — /v1/acoustic/contacts × /entities/SwarmJob × /knowledge/; FULLY_OPERATIONALIZED/SWARM_ONLY/KNOWLEDGE_ONLY/DARK; left:146660 zIndex:229; wired JarvisBrain+App.jsx; vite build exit 0
+2026-09-09T00:18:54Z | F694 OPSALINV | OpsAlertInvestigationNexus.jsx — /v1/ops/alerts × /v1/investigations; CASED/UNCASED tabs; ASSESS+TTS; red badge; vite build exit 0
