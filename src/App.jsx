@@ -993,6 +993,7 @@ import OpsEventTaskScenarioTriple from '@/components/cinematic/OpsEventTaskScena
 import ScenarioReportSkillTriple from '@/components/cinematic/ScenarioReportSkillTriple';
 import DatasetReportKnowledgeTriple from '@/components/cinematic/DatasetReportKnowledgeTriple';
 import SceneReportSkillTriple from '@/components/cinematic/SceneReportSkillTriple';
+import SwarmContactNexus from '@/components/cinematic/SwarmContactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3044,6 +3045,8 @@ function App() {
             <DatasetReportKnowledgeTriple />
             {/* F731 (overnight 2026-09-10): Scene × Report × Skill Triple Nexus (SCERPTSKL) — SceneReportSkillTriple.jsx; all 10 /v1/cinematic/scene/{id} × /v1/reports × /v1/aip/skill; classifies each scene FULLY_COVERED (report+skill)/REPORT_ONLY/SKILL_ONLY/DARK; 5 stat tiles; ALL/FULLY_COVERED/REPORT_ONLY/SKILL_ONLY/DARK filter tabs + search; expand scene → matched reports (source badge + hits) + skills (domain badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SCERPTSKL button left:901240 bottom:8 zIndex:590; isScerptsklQuery+buildScerptsklScript wired into JarvisBrain.ask(); jarvis:scerptskl-toggle event; 90-s auto-refresh; voice: scerptskl/scene report skill/covered scenes/dark scenes/scene coverage triple. */}
             <SceneReportSkillTriple />
+            {/* F732 (overnight 2026-09-10): SwarmJob × Contact Nexus (SWRCNT) — SwarmContactNexus.jsx; /entities/SwarmJob × /entities/Contact; keyword cross-reference; ASSIGNED vs UNASSIGNED contacts; coverage % tile; ALL/ASSIGNED/UNASSIGNED filter tabs + search; click-to-expand matched jobs (status badge + description + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unassigned count; ◈ SWRCNT button left:902100 bottom:8 zIndex:591; isSwrcntQuery+buildSwrcntScript wired into JarvisBrain.ask(); jarvis:swrcnt-toggle event; 90-s auto-refresh; voice: swrcnt/swarm contact/contact swarm/which contacts have swarm/swarm assigned contacts/unassigned contacts. */}
+            <SwarmContactNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

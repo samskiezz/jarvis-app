@@ -301,6 +301,7 @@ import { isOetsctriQuery, buildOetsctriScript } from "./OpsEventTaskScenarioTrip
 import { isSrskltriQuery, buildSrskltriScript } from "./ScenarioReportSkillTriple";
 import { isDrkntriQuery, buildDrkntriScript } from "./DatasetReportKnowledgeTriple";
 import { isScerptsklQuery, buildScerptsklScript } from "./SceneReportSkillTriple";
+import { isSwrcntQuery, buildSwrcntScript } from "./SwarmContactNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1245,6 +1246,9 @@ export default function JarvisBrain() {
       } else if (isScerptsklQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:scerptskl-toggle"));
         answer = await buildScerptsklScript();
+      } else if (isSwrcntQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:swrcnt-toggle"));
+        answer = await buildSwrcntScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
