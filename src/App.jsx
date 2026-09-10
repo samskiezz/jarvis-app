@@ -1000,6 +1000,7 @@ import IntelProfileOpsSwarmTriple from '@/components/cinematic/IntelProfileOpsSw
 import InvestigationDatasetKnowledgeTriple from '@/components/cinematic/InvestigationDatasetKnowledgeTriple';
 import OpsAlertContactKnowledgeTriple from '@/components/cinematic/OpsAlertContactKnowledgeTriple';
 import OpsAlertOpsEventKnowledgeTriple from '@/components/cinematic/OpsAlertOpsEventKnowledgeTriple';
+import OpsAlertScenarioRiskTriple from '@/components/cinematic/OpsAlertScenarioRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3065,6 +3066,8 @@ function App() {
             <OpsAlertContactKnowledgeTriple />
             {/* F739 (overnight 2026-09-10): Ops Alert × Ops Event × Knowledge Triple Nexus (OALOEKVTRI) — /v1/ops/alerts × /v1/ops/events × /knowledge/articles; FULLY_CONTEXTUALIZED/EVENTS_ONLY/KB_ONLY/DARK classification; filter tabs; expand alert → matched ops event + KB article; ◈ OALOEKVTRI button left:908120 bottom:8 zIndex:598; jarvis:oaloekvtri-toggle; 90-s auto-refresh */}
             <OpsAlertOpsEventKnowledgeTriple />
+            {/* F740 (overnight 2026-09-10): Ops Alert × Scenario × Risk Signal Triple Nexus (OALSCNRSK) — /v1/ops/alerts × /v1/scenario/list × /entities/RiskSignal; FULLY_MITIGATED/SCRIPTED_ONLY/RISK_BACKED/UNMITIGATED classification; filter tabs + search; click-to-expand matched scenario (kind) + risk signal (severity); ASSESS → /v1/jarvis/agent/chat + TTS; red badge on unmitigated count; ◈ OALSCNRSK button left:908980 bottom:8 zIndex:599; jarvis:oalscnrsk-toggle; 90-s auto-refresh */}
+            <OpsAlertScenarioRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
