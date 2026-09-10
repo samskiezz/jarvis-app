@@ -998,6 +998,7 @@ import ContactDecisionRulesNexus from '@/components/cinematic/ContactDecisionRul
 import KnowledgeOpsAlertScenarioTriple from '@/components/cinematic/KnowledgeOpsAlertScenarioTriple';
 import IntelProfileOpsSwarmTriple from '@/components/cinematic/IntelProfileOpsSwarmTriple';
 import InvestigationDatasetKnowledgeTriple from '@/components/cinematic/InvestigationDatasetKnowledgeTriple';
+import OpsAlertContactKnowledgeTriple from '@/components/cinematic/OpsAlertContactKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3059,6 +3060,8 @@ function App() {
             <IntelProfileOpsSwarmTriple />
             {/* F737 (overnight 2026-09-10): Investigation × Dataset × Knowledge Triple Nexus (IDKNTRI) — /v1/investigations × /v1/datasets × /knowledge/articles; FULLY_GROUNDED/DATASET_ONLY/KB_ONLY/DARK classification; 6 stat tiles; filter tabs + search; expand investigation → matched datasets + KB articles; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ IDKNTRI button left:906400 bottom:8 zIndex:596; jarvis:idkntri-toggle; 90-s auto-refresh */}
             <InvestigationDatasetKnowledgeTriple />
+            {/* F738 (overnight 2026-09-10): Ops Alert × Contact × Knowledge Triple Nexus (OALCKTRI) — /v1/ops/alerts × /entities/Contact × /knowledge/articles; FULLY_COVERED/CONTACT_ONLY/KB_ONLY/DARK classification; 6 stat tiles; filter tabs + search; expand alert → matched contacts + KB articles; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OALCKTRI button left:907260 bottom:8 zIndex:597; jarvis:oalcktri-toggle; 90-s auto-refresh */}
+            <OpsAlertContactKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
