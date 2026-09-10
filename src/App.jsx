@@ -994,6 +994,7 @@ import ScenarioReportSkillTriple from '@/components/cinematic/ScenarioReportSkil
 import DatasetReportKnowledgeTriple from '@/components/cinematic/DatasetReportKnowledgeTriple';
 import SceneReportSkillTriple from '@/components/cinematic/SceneReportSkillTriple';
 import SwarmContactNexus from '@/components/cinematic/SwarmContactNexus';
+import ContactDecisionRulesNexus from '@/components/cinematic/ContactDecisionRulesNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3047,6 +3048,8 @@ function App() {
             <SceneReportSkillTriple />
             {/* F732 (overnight 2026-09-10): SwarmJob × Contact Nexus (SWRCNT) — SwarmContactNexus.jsx; /entities/SwarmJob × /entities/Contact; keyword cross-reference; ASSIGNED vs UNASSIGNED contacts; coverage % tile; ALL/ASSIGNED/UNASSIGNED filter tabs + search; click-to-expand matched jobs (status badge + description + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; amber badge on unassigned count; ◈ SWRCNT button left:902100 bottom:8 zIndex:591; isSwrcntQuery+buildSwrcntScript wired into JarvisBrain.ask(); jarvis:swrcnt-toggle event; 90-s auto-refresh; voice: swrcnt/swarm contact/contact swarm/which contacts have swarm/swarm assigned contacts/unassigned contacts. */}
             <SwarmContactNexus />
+            {/* F733 (overnight 2026-09-10): Contact × Decision Rules Nexus (CNTRULS) — ContactDecisionRulesNexus.jsx; /entities/Contact × /v1/rules; keyword cross-reference; RULE-WATCHED vs UNMONITORED contacts; 4 stat tiles; ALL/RULE-WATCHED/UNMONITORED filter tabs + search; click-to-expand matched rules (severity badge + enabled status + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence monitoring brief + TTS; amber badge on unmonitored count; ◈ CNTRULS button left:902960 bottom:8 zIndex:592; isCntRulsQuery+buildCntRulsScript wired into JarvisBrain.ask(); jarvis:cntruls-toggle event; 90-s auto-refresh; voice: cntruls/contact rules/rules contact/which contacts have rules/monitored contacts/unmonitored contacts/contact watchtower. */}
+            <ContactDecisionRulesNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

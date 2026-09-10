@@ -10,3 +10,4 @@
 2026-09-10T00:00:05Z [F731] backlog: docs/JARVIS_FEATURE_BACKLOG.md F731 marked [x]
 2026-09-10T00:00:06Z [overnight] DONE — 1 feature built (F731)
 2026-09-10T15:18:38Z F732 SwarmContactNexus.jsx — /entities/SwarmJob × /entities/Contact nexus; ASSIGNED/UNASSIGNED; 4 stat tiles; ▶ ASSESS wired; ◈ SWRCNT btn; JarvisBrain+App.jsx wired; vite build exit 0.
+2026-09-10T16:18:21Z F733 ContactDecisionRulesNexus.jsx — /entities/Contact × /v1/rules nexus; RULE-WATCHED/UNMONITORED; 4 stat tiles; ▶ ASSESS wired; ◈ CNTRULS btn left:902960 zIndex:592; JarvisBrain+App.jsx wired; vite build exit 0.
