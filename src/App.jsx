@@ -992,6 +992,7 @@ import WorldIntelPanel from '@/components/cinematic/WorldIntelPanel';
 import OpsEventTaskScenarioTriple from '@/components/cinematic/OpsEventTaskScenarioTriple';
 import ScenarioReportSkillTriple from '@/components/cinematic/ScenarioReportSkillTriple';
 import DatasetReportKnowledgeTriple from '@/components/cinematic/DatasetReportKnowledgeTriple';
+import SceneReportSkillTriple from '@/components/cinematic/SceneReportSkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3041,6 +3042,8 @@ function App() {
             <ScenarioReportSkillTriple />
             {/* F730 (overnight 2026-09-10): Dataset × Report × Knowledge Triple Nexus (DRKNTRI) — DatasetReportKnowledgeTriple.jsx; /v1/datasets × /v1/reports × /knowledge/articles; classifies each dataset FULLY_DOCUMENTED (report+KB)/REPORT_ONLY/KNOWLEDGE_ONLY/DARK; 5 stat tiles; ALL/FULLY_DOCUMENTED/REPORT_ONLY/KNOWLEDGE_ONLY/DARK filter tabs + search; click-to-expand matched reports (type badge) + articles (kind badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; dark badge on DARK count; ◈ DRKNTRI button left:900380 bottom:8 zIndex:589; isDrkntriQuery+buildDrkntriScript wired into JarvisBrain.ask(); jarvis:drkntri-toggle event; 90-s auto-refresh; voice: drkntri/dataset report knowledge/dataset documentation/dark datasets/dataset knowledge gap/documented datasets/dataset coverage triple. */}
             <DatasetReportKnowledgeTriple />
+            {/* F731 (overnight 2026-09-10): Scene × Report × Skill Triple Nexus (SCERPTSKL) — SceneReportSkillTriple.jsx; all 10 /v1/cinematic/scene/{id} × /v1/reports × /v1/aip/skill; classifies each scene FULLY_COVERED (report+skill)/REPORT_ONLY/SKILL_ONLY/DARK; 5 stat tiles; ALL/FULLY_COVERED/REPORT_ONLY/SKILL_ONLY/DARK filter tabs + search; expand scene → matched reports (source badge + hits) + skills (domain badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SCERPTSKL button left:901240 bottom:8 zIndex:590; isScerptsklQuery+buildScerptsklScript wired into JarvisBrain.ask(); jarvis:scerptskl-toggle event; 90-s auto-refresh; voice: scerptskl/scene report skill/covered scenes/dark scenes/scene coverage triple. */}
+            <SceneReportSkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

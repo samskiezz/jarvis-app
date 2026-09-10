@@ -1,7 +1,11 @@
-2026-09-10 07:24 UTC | F724 SkillLearningTracker | polls /v1/aip/skill; localStorage velocity history (IMPROVING/DECLINING/STABLE); ▶ BRIEF via /v1/jarvis/agent/chat + TTS; build PASS
-[2026-09-10] F725 World Intel Panel (WINP) voice wiring + mount: imported isWinpQuery+buildWinpScript into JarvisBrain.jsx; mounted WorldIntelPanel in App.jsx; also fixed F724 SkillLearningTracker (LTRACK) missing JarvisBrain voice handler; vite build exit 0.
-[2026-09-10] F726 SJKSTRI voice wiring — isSjkstriQuery+buildSjkstriScript+jarvis:sjkstri-toggle added to JarvisBrain.jsx; SwarmJobKnowledgeScenarioTriple was mounted in App.jsx with no voice handler; now speaks FULLY PREPARED/KB-ONLY/SCRIPTED/DARK breakdown; vite build exit 0.
-[2026-09-10 10:26:23 UTC] F727 DONE: LiveIntelKnowledgeRiskTriple.jsx rewritten (LKRCTX); JarvisBrain wired isLkrctxQuery+buildLkrctxScript+jarvis:lkrctx-toggle; /functions/getLiveIntel × /knowledge/articles × /entities/RiskSignal; FULL/INTEL_ONLY/RISK_ONLY/BLIND classification; vite build exit 0
-2026-09-10 F728 OETSCTRI ops events × task × scenario triple: OpsEventTaskScenarioTriple.jsx created; /v1/ops/events × /entities/Task × /v1/scenario/list; FULLY_PLANNED/TASKED_ONLY/SCRIPTED_ONLY/UNPLANNED classification; 5 stat tiles; expand tasks+scenarios; ASSESS→agent/chat+TTS; button left:898660 zIndex:587; wired JarvisBrain+App.jsx; build exit 0; branch jarvis-overnight
-[2026-09-10] F729 Scenario × Report × Skill Triple Coverage (SRSKLTRI) — ScenarioReportSkillTriple.jsx created; /v1/scenario/list × /v1/reports × /v1/aip/skill; JarvisBrain.jsx wired; App.jsx mounted; vite build exit 0.
-[2026-09-10] F730 DONE: DatasetReportKnowledgeTriple.jsx created (DRKNTRI); /v1/datasets × /v1/reports × /knowledge/articles; FULLY_DOCUMENTED/REPORT_ONLY/KNOWLEDGE_ONLY/DARK classification; 5 stat tiles; filter tabs + search; ASSESS→/v1/jarvis/agent/chat+TTS; isDrkntriQuery+buildDrkntriScript wired into JarvisBrain.jsx; mounted in App.jsx; vite build exit 0; branch jarvis-overnight
+2026-09-10T00:00:00Z [overnight] branch=jarvis-overnight run=F731
+2026-09-10T00:00:01Z [F731] SCERPTSKL — Scene × Report × Skill Triple Nexus
+2026-09-10T00:00:01Z [F731] new file: src/components/cinematic/SceneReportSkillTriple.jsx
+2026-09-10T00:00:02Z [F731] endpoints: 10x /v1/cinematic/scene/{id} + /v1/reports + /v1/aip/skill
+2026-09-10T00:00:02Z [F731] classification: FULLY_COVERED / REPORT_ONLY / SKILL_ONLY / DARK
+2026-09-10T00:00:03Z [F731] mounted in App.jsx after DatasetReportKnowledgeTriple
+2026-09-10T00:00:03Z [F731] wired in JarvisBrain.jsx: isScerptsklQuery + buildScerptsklScript
+2026-09-10T00:00:04Z [F731] event: jarvis:scerptskl-toggle | button: ◈ SCERPTSKL left:901240 zIndex:590
+2026-09-10T00:00:05Z [F731] vite build: exit 0
+2026-09-10T00:00:05Z [F731] backlog: docs/JARVIS_FEATURE_BACKLOG.md F731 marked [x]
+2026-09-10T00:00:06Z [overnight] DONE — 1 feature built (F731)
