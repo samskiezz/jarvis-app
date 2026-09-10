@@ -295,6 +295,7 @@ import { isIptscntriQuery, buildIptscntriScript } from "./IntelProfileTaskScenar
 import { isTcoevtQuery, buildTcoevtScript } from "./TaskContactOpsEventsTriple";
 import { isSkillLearningQuery, buildSkillLearningScript } from "./SkillLearningTracker";
 import { isWinpQuery, buildWinpScript } from "./WorldIntelPanel";
+import { isSjkstriQuery, buildSjkstriScript } from "./SwarmJobKnowledgeScenarioTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1221,6 +1222,9 @@ export default function JarvisBrain() {
         window.dispatchEvent(new CustomEvent("jarvis:ltrack-toggle"));
       } else if (isWinpQuery(q)) {
         answer = await buildWinpScript();
+      } else if (isSjkstriQuery(q)) {
+        answer = await buildSjkstriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sjkstri-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
