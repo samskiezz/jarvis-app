@@ -991,6 +991,7 @@ import KnowledgeFreshnessPanel from '@/components/cinematic/KnowledgeFreshnessPa
 import WorldIntelPanel from '@/components/cinematic/WorldIntelPanel';
 import OpsEventTaskScenarioTriple from '@/components/cinematic/OpsEventTaskScenarioTriple';
 import ScenarioReportSkillTriple from '@/components/cinematic/ScenarioReportSkillTriple';
+import DatasetReportKnowledgeTriple from '@/components/cinematic/DatasetReportKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3038,6 +3039,8 @@ function App() {
             <OpsEventTaskScenarioTriple />
             {/* F729 (overnight 2026-09-10): Scenario × Report × Skill Triple Coverage (SRSKLTRI) — ScenarioReportSkillTriple.jsx; /v1/scenario/list × /v1/reports × /v1/aip/skill; classifies each scenario FULLY_BACKED (report+skill)/REPORT_ONLY/SKILL_ONLY/DARK; 5 stat tiles (SCENARIOS/FULLY BACKED/REPORT ONLY/SKILL ONLY/DARK); ALL/FULLY_BACKED/REPORT_ONLY/SKILL_ONLY/DARK filter tabs + search; click-to-expand matched reports (source badge) + matched skills (domain badge + score); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario readiness brief + TTS; dark badge on DARK count; ◈ SRSKLTRI button left:899520 bottom:8 zIndex:588; isSrskltriQuery+buildSrskltriScript wired into JarvisBrain.ask(); jarvis:srskltri-toggle event; 90-s auto-refresh; voice: srskltri/scenario report skill/scenario backing/backed scenario/dark scenario/scenario capability/scenario readiness triple/fully backed scenario. */}
             <ScenarioReportSkillTriple />
+            {/* F730 (overnight 2026-09-10): Dataset × Report × Knowledge Triple Nexus (DRKNTRI) — DatasetReportKnowledgeTriple.jsx; /v1/datasets × /v1/reports × /knowledge/articles; classifies each dataset FULLY_DOCUMENTED (report+KB)/REPORT_ONLY/KNOWLEDGE_ONLY/DARK; 5 stat tiles; ALL/FULLY_DOCUMENTED/REPORT_ONLY/KNOWLEDGE_ONLY/DARK filter tabs + search; click-to-expand matched reports (type badge) + articles (kind badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; dark badge on DARK count; ◈ DRKNTRI button left:900380 bottom:8 zIndex:589; isDrkntriQuery+buildDrkntriScript wired into JarvisBrain.ask(); jarvis:drkntri-toggle event; 90-s auto-refresh; voice: drkntri/dataset report knowledge/dataset documentation/dark datasets/dataset knowledge gap/documented datasets/dataset coverage triple. */}
+            <DatasetReportKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
