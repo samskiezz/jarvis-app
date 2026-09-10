@@ -990,6 +990,7 @@ import OpsAlertInvestigationNexus from '@/components/cinematic/OpsAlertInvestiga
 import KnowledgeFreshnessPanel from '@/components/cinematic/KnowledgeFreshnessPanel';
 import WorldIntelPanel from '@/components/cinematic/WorldIntelPanel';
 import OpsEventTaskScenarioTriple from '@/components/cinematic/OpsEventTaskScenarioTriple';
+import ScenarioReportSkillTriple from '@/components/cinematic/ScenarioReportSkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3035,6 +3036,8 @@ function App() {
             <WorldIntelPanel />
             {/* F728 (overnight 2026-09-10): Ops Events × Task × Scenario Triple Coverage Monitor (OETSCTRI) — OpsEventTaskScenarioTriple.jsx; /v1/ops/events × /entities/Task × /v1/scenario/list; classifies each event FULLY_PLANNED (task+scenario)/TASKED_ONLY/SCRIPTED_ONLY/UNPLANNED; 5 stat tiles (EVENTS/FULLY_PLANNED/TASKED/SCRIPTED/UNPLANNED); ALL/FULLY_PLANNED/TASKED_ONLY/SCRIPTED_ONLY/UNPLANNED filter tabs + search; click-to-expand matched tasks (priority badge) + matched scenarios (kind badge, hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ops readiness brief + TTS; amber badge on UNPLANNED count; ◈ OETSCTRI button left:898660 bottom:8 zIndex:587; isOetsctriQuery+buildOetsctriScript wired into JarvisBrain.ask(); jarvis:oetsctri-toggle event; 90-s auto-refresh; voice: oetsctri/ops task scenario/ops triple coverage/unplanned ops/ops readiness triple/ops scenario coverage/fully planned events. */}
             <OpsEventTaskScenarioTriple />
+            {/* F729 (overnight 2026-09-10): Scenario × Report × Skill Triple Coverage (SRSKLTRI) — ScenarioReportSkillTriple.jsx; /v1/scenario/list × /v1/reports × /v1/aip/skill; classifies each scenario FULLY_BACKED (report+skill)/REPORT_ONLY/SKILL_ONLY/DARK; 5 stat tiles (SCENARIOS/FULLY BACKED/REPORT ONLY/SKILL ONLY/DARK); ALL/FULLY_BACKED/REPORT_ONLY/SKILL_ONLY/DARK filter tabs + search; click-to-expand matched reports (source badge) + matched skills (domain badge + score); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario readiness brief + TTS; dark badge on DARK count; ◈ SRSKLTRI button left:899520 bottom:8 zIndex:588; isSrskltriQuery+buildSrskltriScript wired into JarvisBrain.ask(); jarvis:srskltri-toggle event; 90-s auto-refresh; voice: srskltri/scenario report skill/scenario backing/backed scenario/dark scenario/scenario capability/scenario readiness triple/fully backed scenario. */}
+            <ScenarioReportSkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
