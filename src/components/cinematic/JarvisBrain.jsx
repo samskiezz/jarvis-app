@@ -293,6 +293,8 @@ import { isCoerskQuery, buildCoerskScript } from "./ContactOpsRiskTriple";
 import { isKriinvtriQuery, buildKriinvtriScript } from "./KnowledgeRiskInvestigationTriple";
 import { isIptscntriQuery, buildIptscntriScript } from "./IntelProfileTaskScenarioTriple";
 import { isTcoevtQuery, buildTcoevtScript } from "./TaskContactOpsEventsTriple";
+import { isSkillLearningQuery, buildSkillLearningScript } from "./SkillLearningTracker";
+import { isWinpQuery, buildWinpScript } from "./WorldIntelPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1214,6 +1216,11 @@ export default function JarvisBrain() {
       } else if (isTcoevtQuery(q)) {
         answer = await buildTcoevtScript();
         window.dispatchEvent(new CustomEvent("jarvis:tcoevt-toggle"));
+      } else if (isSkillLearningQuery(q)) {
+        answer = await buildSkillLearningScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ltrack-toggle"));
+      } else if (isWinpQuery(q)) {
+        answer = await buildWinpScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

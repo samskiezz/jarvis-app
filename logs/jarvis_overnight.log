@@ -1,1 +1,2 @@
 2026-09-10 07:24 UTC | F724 SkillLearningTracker | polls /v1/aip/skill; localStorage velocity history (IMPROVING/DECLINING/STABLE); ▶ BRIEF via /v1/jarvis/agent/chat + TTS; build PASS
+[2026-09-10] F725 World Intel Panel (WINP) voice wiring + mount: imported isWinpQuery+buildWinpScript into JarvisBrain.jsx; mounted WorldIntelPanel in App.jsx; also fixed F724 SkillLearningTracker (LTRACK) missing JarvisBrain voice handler; vite build exit 0.

@@ -988,6 +988,7 @@ import KnowledgeScenarioNexus from '@/components/cinematic/KnowledgeScenarioNexu
 import SwarmRiskCoverageMap from '@/components/cinematic/SwarmRiskCoverageMap';
 import OpsAlertInvestigationNexus from '@/components/cinematic/OpsAlertInvestigationNexus';
 import KnowledgeFreshnessPanel from '@/components/cinematic/KnowledgeFreshnessPanel';
+import WorldIntelPanel from '@/components/cinematic/WorldIntelPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3029,6 +3030,8 @@ function App() {
             <SwarmRiskCoverageMap />
             {/* F172 (overnight 2026-09-08): knowledge freshness panel — 🌿 FRESH button (left:55080, bottom:8, zIndex:65); polls /knowledge/ every 5 min; enriches each article with days-since-update; sorted oldest-first; GREEN(<7d)/YELLOW(7-30d)/RED(>30d) staleness dot + fmtDays label; RED badge on button showing stale count; click article → dispatches jarvis:open-document-search; ▶ FRESH / Alt+F shortcut + jarvis:knowledge-freshness-toggle event; isKnowledgeFreshnessQuery+buildKnowledgeFreshnessScript wired in JarvisBrain; "knowledge freshness"/"stale articles"/"outdated knowledge"/"corpus freshness"/"stale knowledge"/"knowledge gaps"/"knowledge health"/"knowledge age" voice trigger */}
             <KnowledgeFreshnessPanel />
+            {/* F725 (overnight 2026-09-10): World Intel Panel (WINP) — WorldIntelPanel.jsx; /v1/jarvis/world/summary + /subjects + /endpoints + /research-targets; stat tiles (topics/subjects/endpoints/cells); SUMMARY/SUBJECTS/ENDPOINTS/TARGETS tabs; master_topic filter chips; ◉ WINP button left:529680 bottom:8 zIndex:209; isWinpQuery+buildWinpScript wired into JarvisBrain.ask(); also wired F724 SkillLearningTracker (LTRACK) into JarvisBrain.ask() (was mounted but missing voice handler); jarvis:winp-toggle event; voice: world intel/world subjects/world pack/winp/world endpoints/intelligence pack/world topics/research targets. */}
+            <WorldIntelPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
