@@ -995,6 +995,7 @@ import DatasetReportKnowledgeTriple from '@/components/cinematic/DatasetReportKn
 import SceneReportSkillTriple from '@/components/cinematic/SceneReportSkillTriple';
 import SwarmContactNexus from '@/components/cinematic/SwarmContactNexus';
 import ContactDecisionRulesNexus from '@/components/cinematic/ContactDecisionRulesNexus';
+import KnowledgeOpsAlertScenarioTriple from '@/components/cinematic/KnowledgeOpsAlertScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3050,6 +3051,8 @@ function App() {
             <SwarmContactNexus />
             {/* F733 (overnight 2026-09-10): Contact × Decision Rules Nexus (CNTRULS) — ContactDecisionRulesNexus.jsx; /entities/Contact × /v1/rules; keyword cross-reference; RULE-WATCHED vs UNMONITORED contacts; 4 stat tiles; ALL/RULE-WATCHED/UNMONITORED filter tabs + search; click-to-expand matched rules (severity badge + enabled status + hit count); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence monitoring brief + TTS; amber badge on unmonitored count; ◈ CNTRULS button left:902960 bottom:8 zIndex:592; isCntRulsQuery+buildCntRulsScript wired into JarvisBrain.ask(); jarvis:cntruls-toggle event; 90-s auto-refresh; voice: cntruls/contact rules/rules contact/which contacts have rules/monitored contacts/unmonitored contacts/contact watchtower. */}
             <ContactDecisionRulesNexus />
+            {/* F734 (overnight 2026-09-10): Knowledge × Ops Alerts × Scenario Triple Nexus (KAOSTRI) — KnowledgeOpsAlertScenarioTriple.jsx; /knowledge/articles × /v1/ops/alerts × /v1/scenario/list; classifies each article FULLY_COVERED (alert+scenario)/ALERT_ONLY/SCENARIO_ONLY/DARK; 6 stat tiles (ARTICLES/FULLY COVERED/ALERT ONLY/SCENARIO ONLY/DARK/COVERAGE%); ALL/FULLY_COVERED/ALERT_ONLY/SCENARIO_ONLY/DARK filter tabs + search; click-to-expand matched alerts (type badge) + scenarios (category badge); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage gap brief + TTS; ◈ KAOSTRI button left:903820 bottom:8 zIndex:593; isKaostriQuery+buildKaostriScript wired into JarvisBrain.ask(); jarvis:kaostri-toggle event; 90-s auto-refresh; voice: kaostri/knowledge alert scenario/knowledge ops scenario/dark knowledge/knowledge coverage triple/ops alert scenario triple/scenario knowledge alert. */}
+            <KnowledgeOpsAlertScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
