@@ -289,6 +289,7 @@ import { isIscovQuery, buildIscovScript } from "./InvestigationSkillCoverage";
 import { isCtkinvtriQuery, buildCtkinvtriScript } from "./ContactKnowledgeInvestmentTriple";
 import { isTsknowQuery, buildTsknowScript } from "./TaskScenarioKnowledgeTriple";
 import { isIrscntriQuery, buildIrscntriScript } from "./InvestmentRiskScenarioTriple";
+import { isCoerskQuery, buildCoerskScript } from "./ContactOpsRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1198,6 +1199,9 @@ export default function JarvisBrain() {
       } else if (isIrscntriQuery(q)) {
         answer = await buildIrscntriScript();
         window.dispatchEvent(new CustomEvent("jarvis:irscntri-toggle"));
+      } else if (isCoerskQuery(q)) {
+        answer = await buildCoerskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:coersk-toggle"));
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
