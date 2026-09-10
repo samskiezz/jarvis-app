@@ -1,389 +1,556 @@
-import { useState, useEffect, useCallback } from 'react';
+/**
+ * LiveIntelKnowledgeRiskTriple — F727
+ * "JARVIS, lkrctx / live intel context / world context / intel knowledge risk /
+ *  fully contextualized / live world triple / context monitor / intel triple"
+ * Cross-references /functions/getLiveIntel × /knowledge/ × /entities/RiskSignal.
+ * FULLY_CONTEXTUALIZED: live event ≥1 KB article AND ≥1 risk signal
+ * INTEL_ONLY: ≥1 KB article, no risk signal
+ * RISK_ONLY: ≥1 risk signal, no KB article
+ * BLIND: no KB context, no risk signal
+ * Coverage % tile; ALL/FULL/INTEL_ONLY/RISK_ONLY/BLIND filter tabs + search.
+ * ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence triple-context brief + TTS.
+ * Additive only — mounted via App.jsx; intent helpers exported for JarvisBrain.
+ */
+import { useEffect, useState, useCallback } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = '';
+const CY  = "#29E7FF";
+const GRN = "#00E5A0";
+const AMB = "#FFA500";
+const RED = "#FF4444";
+const PRP = "#B06EFF";
+const DIM = "#8899AA";
 
-const LKRSTRI_RE = /\b(lkrstri|live[._-]?intel[._-]?knowledge|knowledge[._-]?risk[._-]?intel|live[._-]?knowledge[._-]?risk|intel[._-]?kb[._-]?risk|fully[._-]?known[._-]?intel|uncharted[._-]?intel|live[._-]?risk[._-]?kb|kb[._-]?risk[._-]?intel|intel[._-]?knowledge[._-]?risk)\b/i;
+const API_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
 
-export function isLkrstriQuery(t) {
-  return LKRSTRI_RE.test(t || '');
-}
+const POLL_MS  = 90_000;
+const BTN_LEFT = 155_260;
+const Z_INDEX  = 239;
 
-function normaliseLiveIntel(raw) {
-  if (!raw) return [];
-  const arr = ['events', 'intel', 'items', 'results', 'data', 'records', 'signals'].reduce(
-    (a, k) => (a.length ? a : Array.isArray(raw?.[k]) ? raw[k] : []),
-    Array.isArray(raw) ? raw : [],
-  );
-  return arr.map((e, i) => ({
-    id:       e.id || String(i),
-    name:     e.name || e.title || e.event || e.headline || `Intel ${i + 1}`,
-    type:     e.type || e.category || e.kind || e.source || '',
-    severity: e.severity || e.level || e.priority || e.risk_level || '',
-    desc:     String(e.description || e.summary || e.detail || e.content || '').slice(0, 200),
-    tags:     Array.isArray(e.tags) ? e.tags.join(' ') : (e.tags || ''),
-    region:   e.region || e.location || e.geo || '',
-  }));
-}
+const LKRCTX_RE =
+  /\blkrctx\b|\blive.?intel.?context\b|\bworld.?context\b|\bintel.?knowledge.?risk\b|\bfully.?contextualiz\b|\blive.?world.?triple\b|\bcontext.?monitor\b|\bintel.?triple\b|\blive.?context\b|\bblind.?intel\b|\bworld.?triple.?context\b/i;
 
-function normaliseKbArticles(raw) {
-  if (!raw) return [];
-  const arr = ['articles', 'items', 'results', 'data', 'records', 'documents', 'entries'].reduce(
-    (a, k) => (a.length ? a : Array.isArray(raw?.[k]) ? raw[k] : []),
-    Array.isArray(raw) ? raw : [],
-  );
-  return arr.map((a, i) => ({
-    id:       a.id || String(i),
-    name:     a.name || a.title || a.heading || `Article ${i + 1}`,
-    category: a.category || a.type || a.domain || '',
-    topic:    a.topic || a.subject || '',
-    desc:     String(a.description || a.summary || a.content || a.body || '').slice(0, 200),
-    tags:     Array.isArray(a.tags) ? a.tags.join(' ') : (a.tags || ''),
-  }));
-}
-
-function normaliseRisks(raw) {
-  if (!raw) return [];
-  const arr = ['risk_signals', 'risks', 'signals', 'items', 'results', 'data', 'records'].reduce(
-    (a, k) => (a.length ? a : Array.isArray(raw?.[k]) ? raw[k] : []),
-    Array.isArray(raw) ? raw : [],
-  );
-  return arr.map((r, i) => ({
-    id:       r.id || String(i),
-    name:     r.name || r.title || r.signal || `Risk ${i + 1}`,
-    severity: r.severity || r.level || r.priority || '',
-    category: r.category || r.type || r.kind || '',
-    sector:   r.sector || r.domain || '',
-    desc:     String(r.description || r.summary || r.detail || '').slice(0, 200),
-    tags:     Array.isArray(r.tags) ? r.tags.join(' ') : (r.tags || ''),
-  }));
+export function isLkrctxQuery(text) {
+  return LKRCTX_RE.test(text || "");
 }
 
 function tokens(str) {
-  return String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(w => w.length > 2);
+  return (str || "")
+    .toLowerCase()
+    .replace(/[^a-z0-9\s]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w.length > 3);
 }
 
-function matchScore(intelToks, other) {
-  const otherToks = [
-    ...tokens(other.name || other.title || ''),
-    ...tokens(other.severity || other.level || ''),
-    ...tokens(other.category || other.type || other.domain || ''),
-    ...tokens(other.sector || other.topic || ''),
-    ...tokens(other.desc || other.description || other.summary || ''),
-    ...tokens(other.tags || ''),
-    ...tokens(other.region || other.geo || ''),
-  ].filter(Boolean);
-  if (!intelToks.size || !otherToks.length) return 0;
-  let hits = 0;
-  for (const t of otherToks) if (intelToks.has(t)) hits++;
-  return hits / Math.max(intelToks.size, otherToks.length);
+function overlap(a, b) {
+  const sa = new Set(tokens(a));
+  return tokens(b).filter((w) => sa.has(w)).length;
 }
 
-function correlate(intelItems, kbArticles, risks) {
-  return intelItems.map(evt => {
-    const toks = new Set([
-      ...tokens(evt.name),
-      ...tokens(evt.type),
-      ...tokens(evt.desc),
-      ...tokens(evt.tags),
-      ...tokens(evt.region),
-    ].filter(Boolean));
-
-    const matchedKb = kbArticles
-      .map(a => ({ ...a, _score: matchScore(toks, a) }))
-      .filter(x => x._score > 0)
-      .sort((a, b) => b._score - a._score)
-      .slice(0, 4);
-
-    const matchedRisks = risks
-      .map(r => ({ ...r, _score: matchScore(toks, r) }))
-      .filter(x => x._score > 0)
-      .sort((a, b) => b._score - a._score)
-      .slice(0, 4);
-
-    const hasKb   = matchedKb.length > 0;
-    const hasRisk = matchedRisks.length > 0;
-
-    let coverage;
-    if (hasKb && hasRisk)  coverage = 'FULLY KNOWN';
-    else if (hasKb)        coverage = 'KB-BACKED';
-    else if (hasRisk)      coverage = 'RISK-FLAGGED';
-    else                   coverage = 'UNCHARTED';
-
-    return { ...evt, _kb: matchedKb, _risks: matchedRisks, _coverage: coverage };
-  });
+function normaliseEvents(data) {
+  if (!data) return [];
+  const events = [];
+  if (Array.isArray(data?.quakes)) {
+    data.quakes.forEach((q, i) => events.push({
+      id: `quake-${i}`,
+      kind: "SEISMIC",
+      label: q.place || q.title || `M${q.mag} quake`,
+      description: `magnitude ${q.mag ?? "?"} at ${q.place || "unknown location"}`,
+    }));
+  }
+  if (Array.isArray(data?.crypto)) {
+    data.crypto.forEach((c, i) => events.push({
+      id: `crypto-${i}`,
+      kind: "CRYPTO",
+      label: c.symbol || c.name || `Crypto ${i + 1}`,
+      description: `${c.symbol || c.name} ${c.change_pct != null ? `${c.change_pct > 0 ? "+" : ""}${Number(c.change_pct).toFixed(2)}%` : ""}`,
+    }));
+  }
+  if (Array.isArray(data?.fx)) {
+    data.fx.forEach((f, i) => events.push({
+      id: `fx-${i}`,
+      kind: "FX",
+      label: f.pair || `FX ${i + 1}`,
+      description: `${f.pair} rate ${f.rate ?? "?"}`,
+    }));
+  }
+  return events;
 }
 
-export async function buildLkrstriScript() {
-  const [iR, kR, rR] = await Promise.allSettled([
-    fetch(`${API}/functions/getLiveIntel`).then(r => r.json()),
-    fetch(`${API}/knowledge/`).then(r => r.json()),
-    fetch(`${API}/entities/RiskSignal`).then(r => r.json()),
-  ]);
-  const intelItems = normaliseLiveIntel(iR.status === 'fulfilled' ? iR.value : []);
-  const kbArticles = normaliseKbArticles(kR.status === 'fulfilled' ? kR.value : []);
-  const risks      = normaliseRisks(rR.status === 'fulfilled' ? rR.value : []);
-  const enriched   = correlate(intelItems, kbArticles, risks);
-  const fk  = enriched.filter(e => e._coverage === 'FULLY KNOWN').length;
-  const kb  = enriched.filter(e => e._coverage === 'KB-BACKED').length;
-  const rf  = enriched.filter(e => e._coverage === 'RISK-FLAGGED').length;
-  const unc = enriched.filter(e => e._coverage === 'UNCHARTED').length;
-  return (
-    `Live Intel × Knowledge × Risk Signal Triple Coverage: ${intelItems.length} live intel events cross-referenced against ` +
-    `${kbArticles.length} KB articles and ${risks.length} risk signals. ` +
-    `${fk} FULLY KNOWN (KB-documented + risk signal — intelligence event with context and threat linkage); ` +
-    `${kb} KB-BACKED (KB article coverage, no risk signal linked); ` +
-    `${rf} RISK-FLAGGED (risk signal detected, no KB documentation); ` +
-    `${unc} UNCHARTED (no KB or risk signal — live intel with no context or threat record). ` +
-    `Most critical uncharted: ${enriched.filter(e => e._coverage === 'UNCHARTED').slice(0, 3).map(e => e.name).join(', ') || 'none'}.`
+function normaliseArticles(data) {
+  if (!data) return [];
+  const arr = Array.isArray(data)
+    ? data
+    : Array.isArray(data?.articles) ? data.articles
+    : Array.isArray(data?.items) ? data.items
+    : Array.isArray(data?.data) ? data.data
+    : [];
+  return arr.map((a, i) => ({
+    id: a.id || a.doc_id || `art-${i}`,
+    title: a.title || a.name || `Article ${i + 1}`,
+    summary: a.summary || a.description || a.body || "",
+    kind: a.kind || a.type || "article",
+  }));
+}
+
+function normaliseSignals(data) {
+  if (!data) return [];
+  const arr = Array.isArray(data)
+    ? data
+    : Array.isArray(data?.signals) ? data.signals
+    : Array.isArray(data?.items) ? data.items
+    : Array.isArray(data?.data) ? data.data
+    : [];
+  return arr.map((s, i) => ({
+    id: s.id || `sig-${i}`,
+    title: s.title || s.name || s.summary || `Signal ${i + 1}`,
+    severity: (s.severity || s.level || "MEDIUM").toString().toUpperCase(),
+    source: s.source || s.origin || "",
+    summary: s.summary || s.description || "",
+  }));
+}
+
+function classifyEvent(evt, articles, signals) {
+  const haystack = `${evt.label} ${evt.description}`;
+  const matchedArticles = articles.filter((a) =>
+    overlap(haystack, `${a.title} ${a.summary}`) > 0
   );
+  const matchedSignals = signals.filter((s) =>
+    overlap(haystack, `${s.title} ${s.summary} ${s.source}`) > 0
+  );
+  const hasKno = matchedArticles.length > 0;
+  const hasRsk = matchedSignals.length > 0;
+  let tier;
+  if (hasKno && hasRsk) tier = "FULL";
+  else if (hasKno)      tier = "INTEL_ONLY";
+  else if (hasRsk)      tier = "RISK_ONLY";
+  else                  tier = "BLIND";
+  return { ...evt, tier, matchedArticles, matchedSignals };
 }
 
-const PANEL_W = 680;
-const PANEL_H = 610;
-const CY = '#00CFFF';
-const AM = '#F59E0B';
-const GR = '#22C55E';
+export async function buildLkrctxScript() {
+  try {
+    const base = apiBase();
+    const hdr = { Authorization: `Bearer ${API_KEY}` };
+    const [liRes, knoRes, rskRes] = await Promise.all([
+      fetch(`${base}/functions/getLiveIntel`, { headers: hdr }),
+      fetch(`${base}/knowledge/articles?limit=200`, { headers: hdr }),
+      fetch(`${base}/entities/RiskSignal`, { headers: hdr }),
+    ]);
+    const [liData, knoData, rskData] = await Promise.all([
+      liRes.json(), knoRes.json(), rskRes.json(),
+    ]);
+    const events = normaliseEvents(liData);
+    const articles = normaliseArticles(knoData);
+    const signals = normaliseSignals(rskData);
+    const enriched = events.map((e) => classifyEvent(e, articles, signals));
+    const full      = enriched.filter((e) => e.tier === "FULL").length;
+    const intelOnly = enriched.filter((e) => e.tier === "INTEL_ONLY").length;
+    const riskOnly  = enriched.filter((e) => e.tier === "RISK_ONLY").length;
+    const blind     = enriched.filter((e) => e.tier === "BLIND").length;
+    const pct = events.length
+      ? Math.round(((full + intelOnly + riskOnly) / events.length) * 100)
+      : 0;
+    const topBlind = enriched
+      .filter((e) => e.tier === "BLIND")
+      .slice(0, 2)
+      .map((e) => e.label)
+      .join(", ");
+    const summary =
+      `Live intel triple-context scan: ${events.length} world events — ` +
+      `${full} FULL (KB+risk), ${intelOnly} INTEL_ONLY, ${riskOnly} RISK_ONLY, ${blind} BLIND (no context). ` +
+      `Coverage ${pct}%. Top uncontextualized: ${topBlind || "none"}.`;
+    const aiRes = await fetch(`${base}/v1/jarvis/agent/chat`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+      body: JSON.stringify({
+        message:
+          `World-events triple-context check: ${full} events fully contextualized (KB+risk), ` +
+          `${blind} blind (no backing). ` +
+          `${articles.length} KB articles, ${signals.length} risk signals indexed. ` +
+          `Provide a 2-sentence JARVIS operational awareness brief.`,
+      }),
+    });
+    const aiData = await aiRes.json();
+    return aiData?.response || aiData?.message || summary;
+  } catch (e) {
+    return `Live intel triple-context error: ${e.message}`;
+  }
+}
 
-const COVERAGE_COLOR = {
-  'FULLY KNOWN':   GR,
-  'KB-BACKED':     CY,
-  'RISK-FLAGGED':  AM,
-  'UNCHARTED':     '#555',
-};
+function tierColor(tier) {
+  if (tier === "FULL")       return GRN;
+  if (tier === "INTEL_ONLY") return CY;
+  if (tier === "RISK_ONLY")  return AMB;
+  return RED;
+}
 
-const chip = (label, color = CY) => (
-  <span style={{ fontSize: 9, padding: '1px 5px', borderRadius: 3, background: color + '22', color, border: `1px solid ${color}55`, marginLeft: 4, whiteSpace: 'nowrap' }}>
-    {label}
-  </span>
-);
+function kindColor(kind) {
+  if (kind === "SEISMIC") return "#FF6B35";
+  if (kind === "CRYPTO")  return "#F5D020";
+  if (kind === "FX")      return CY;
+  return DIM;
+}
 
-const ScoreBar = ({ score, color }) => (
-  <div style={{ height: 3, width: '100%', background: '#1a1a2a', borderRadius: 2, marginTop: 2 }}>
-    <div style={{ height: 3, width: `${Math.round(score * 100)}%`, background: color, borderRadius: 2, transition: 'width .4s' }} />
-  </div>
-);
-
-const TABS = ['ALL', 'FULLY KNOWN', 'KB-BACKED', 'RISK-FLAGGED', 'UNCHARTED'];
+function sevColor(sev) {
+  if (!sev) return DIM;
+  const s = sev.toUpperCase();
+  if (s === "CRITICAL") return RED;
+  if (s === "HIGH")     return "#FF6B35";
+  if (s === "MEDIUM")   return AMB;
+  return GRN;
+}
 
 export default function LiveIntelKnowledgeRiskTriple() {
-  const [open, setOpen]             = useState(false);
-  const [events, setEvents]         = useState([]);
-  const [loading, setLoading]       = useState(false);
-  const [tab, setTab]               = useState('ALL');
-  const [search, setSearch]         = useState('');
-  const [expanded, setExpanded]     = useState(null);
-  const [assessing, setAssessing]   = useState(false);
-  const [assessText, setAssessText] = useState('');
-  const [err, setErr]               = useState('');
+  const [open, setOpen]       = useState(false);
+  const [rows, setRows]       = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [err, setErr]         = useState(null);
+  const [tab, setTab]         = useState("ALL");
+  const [search, setSearch]   = useState("");
+  const [expanded, setExpanded] = useState(null);
+  const [brief, setBrief]     = useState("");
+  const [assessing, setAssessing] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
-    setErr('');
+    setErr(null);
     try {
-      const [iR, kR, rR] = await Promise.allSettled([
-        fetch(`${API}/functions/getLiveIntel`).then(r => r.json()),
-        fetch(`${API}/knowledge/`).then(r => r.json()),
-        fetch(`${API}/entities/RiskSignal`).then(r => r.json()),
+      const base = apiBase();
+      const hdr  = { Authorization: `Bearer ${API_KEY}` };
+      const [liRes, knoRes, rskRes] = await Promise.all([
+        fetch(`${base}/functions/getLiveIntel`, { headers: hdr }),
+        fetch(`${base}/knowledge/articles?limit=200`, { headers: hdr }),
+        fetch(`${base}/entities/RiskSignal`, { headers: hdr }),
       ]);
-      const raw_i = normaliseLiveIntel(iR.status === 'fulfilled' ? iR.value : []);
-      const raw_k = normaliseKbArticles(kR.status === 'fulfilled' ? kR.value : []);
-      const raw_r = normaliseRisks(rR.status === 'fulfilled' ? rR.value : []);
-      setEvents(correlate(raw_i, raw_k, raw_r));
+      const [liData, knoData, rskData] = await Promise.all([
+        liRes.json(), knoRes.json(), rskRes.json(),
+      ]);
+      const events   = normaliseEvents(liData);
+      const articles = normaliseArticles(knoData);
+      const signals  = normaliseSignals(rskData);
+      setRows(events.map((e) => classifyEvent(e, articles, signals)));
     } catch (e) {
-      setErr(String(e));
+      setErr(e.message);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    const toggle = () => setOpen(o => !o);
-    window.addEventListener('jarvis:lkrstri-toggle', toggle);
-    return () => window.removeEventListener('jarvis:lkrstri-toggle', toggle);
+    const handler = () => setOpen((o) => !o);
+    window.addEventListener("jarvis:lkrctx-toggle", handler);
+    return () => window.removeEventListener("jarvis:lkrctx-toggle", handler);
   }, []);
 
   useEffect(() => {
     if (!open) return;
     load();
-    const id = setInterval(load, 60_000);
-    return () => clearInterval(id);
+    const t = setInterval(load, POLL_MS);
+    return () => clearInterval(t);
   }, [open, load]);
 
-  const assess = useCallback(async () => {
+  const assess = async () => {
     setAssessing(true);
-    setAssessText('');
+    setBrief("");
     try {
-      const brief = await buildLkrstriScript();
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: `Live intel knowledge-risk coverage brief: ${brief}. Give a 2-sentence assessment of live intelligence coverage across KB articles and risk signals.` }),
+      const txt = await buildLkrctxScript();
+      setBrief(txt);
+      const ttsRes = await fetch(`${apiBase()}/v1/voice/tts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+        body: JSON.stringify({ text: txt }),
       });
-      const d = await r.json();
-      const msg = d.response || d.message || d.content || brief;
-      setAssessText(msg);
-      window.dispatchEvent(new CustomEvent('jarvis:speak-dossier', { detail: { text: msg } }));
+      if (ttsRes.ok) {
+        const blob = await ttsRes.blob();
+        new Audio(URL.createObjectURL(blob)).play().catch(() => {});
+      }
     } catch (e) {
-      setAssessText(String(e));
+      setBrief(`Assessment error: ${e.message}`);
     } finally {
       setAssessing(false);
     }
-  }, []);
+  };
 
-  if (!open) {
-    const uncCount = events.filter(e => e._coverage === 'UNCHARTED').length;
-    return (
-      <button
-        onClick={() => setOpen(true)}
-        title="Live Intel × Knowledge × Risk Signal Triple Coverage (LKRSTRI)"
-        style={{
-          position: 'fixed', left: 733360, bottom: 8, zIndex: 338,
-          background: uncCount > 0 ? '#F59E0B22' : '#0a0a1a',
-          border: `1px solid ${uncCount > 0 ? AM : CY + '44'}`,
-          color: uncCount > 0 ? AM : CY, borderRadius: 4,
-          padding: '3px 8px', fontSize: 10, cursor: 'pointer', fontFamily: 'monospace',
-        }}
-      >
-        ◈ LKRSTRI{uncCount > 0 ? ` ⚠${uncCount}` : ''}
-      </button>
-    );
-  }
+  const full      = rows.filter((r) => r.tier === "FULL").length;
+  const intelOnly = rows.filter((r) => r.tier === "INTEL_ONLY").length;
+  const riskOnly  = rows.filter((r) => r.tier === "RISK_ONLY").length;
+  const blind     = rows.filter((r) => r.tier === "BLIND").length;
+  const pct = rows.length ? Math.round(((full + intelOnly + riskOnly) / rows.length) * 100) : 0;
 
-  const fk  = events.filter(e => e._coverage === 'FULLY KNOWN').length;
-  const kb  = events.filter(e => e._coverage === 'KB-BACKED').length;
-  const rf  = events.filter(e => e._coverage === 'RISK-FLAGGED').length;
-  const unc = events.filter(e => e._coverage === 'UNCHARTED').length;
+  const TABS = ["ALL", "FULL", "INTEL_ONLY", "RISK_ONLY", "BLIND"];
 
-  const visible = events.filter(e =>
-    (tab === 'ALL' || e._coverage === tab) &&
-    (!search || e.name.toLowerCase().includes(search.toLowerCase()) ||
-      e.type.toLowerCase().includes(search.toLowerCase()) ||
-      e.desc.toLowerCase().includes(search.toLowerCase()))
-  );
+  const visible = rows.filter((r) => {
+    if (tab !== "ALL" && r.tier !== tab) return false;
+    if (search) {
+      const q = search.toLowerCase();
+      return (
+        r.label.toLowerCase().includes(q) ||
+        r.description.toLowerCase().includes(q) ||
+        r.matchedArticles.some((a) => a.title.toLowerCase().includes(q)) ||
+        r.matchedSignals.some((s) => s.title.toLowerCase().includes(q))
+      );
+    }
+    return true;
+  });
+
+  const btnStyle = {
+    position: "fixed",
+    bottom: 8,
+    left: BTN_LEFT,
+    zIndex: Z_INDEX,
+    background: blind > 0 ? `${RED}22` : `${GRN}22`,
+    border: `1px solid ${blind > 0 ? RED : GRN}66`,
+    borderRadius: 6,
+    color: blind > 0 ? RED : GRN,
+    padding: "3px 7px",
+    cursor: "pointer",
+    fontSize: 9,
+    letterSpacing: 1,
+    fontFamily: "'JetBrains Mono',ui-monospace,monospace",
+    userSelect: "none",
+  };
+
+  const panelStyle = {
+    position: "fixed",
+    bottom: 36,
+    left: Math.min(BTN_LEFT, (typeof window !== "undefined" ? window.innerWidth : 1920) - 420),
+    width: 420,
+    maxHeight: "72vh",
+    overflowY: "auto",
+    background: "#050D1AEE",
+    border: `1px solid ${CY}44`,
+    borderRadius: 8,
+    zIndex: Z_INDEX + 1,
+    display: "flex",
+    flexDirection: "column",
+    padding: 12,
+    fontFamily: "'JetBrains Mono',ui-monospace,monospace",
+    fontSize: 10,
+    color: "#DCEBF5",
+  };
 
   return (
-    <div style={{
-      position: 'fixed', right: 16, top: 16, width: PANEL_W, maxHeight: PANEL_H,
-      background: '#04040e', border: '1px solid #00CFFF33', borderRadius: 8,
-      zIndex: 6001, display: 'flex', flexDirection: 'column', fontFamily: 'monospace',
-      overflow: 'hidden', boxShadow: '0 0 24px #00CFFF18',
-    }}>
-      <div style={{ padding: '8px 12px', borderBottom: '1px solid #00CFFF22', display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 }}>
-        <span style={{ color: CY, fontWeight: 700, fontSize: 11 }}>◈ LIVE INTEL × KNOWLEDGE × RISK SIGNAL TRIPLE</span>
-        <span style={{ marginLeft: 'auto', fontSize: 10, color: '#888' }}>LKRSTRI</span>
-        {unc > 0 && <span style={{ fontSize: 10, color: AM, background: '#F59E0B22', border: '1px solid #F59E0B55', borderRadius: 3, padding: '1px 5px' }}>⚠ {unc} UNCHARTED</span>}
-        <button onClick={() => setOpen(false)} style={{ background: 'none', border: 'none', color: '#888', fontSize: 14, cursor: 'pointer', padding: 0 }}>✕</button>
-      </div>
-
-      <div style={{ display: 'flex', gap: 6, padding: '8px 12px', flexShrink: 0, flexWrap: 'wrap' }}>
-        {[
-          ['LIVE INTEL',   events.length, CY],
-          ['FULLY KNOWN',  fk,            GR],
-          ['KB-BACKED',    kb,            CY],
-          ['RISK-FLAGGED', rf,            AM],
-          ['UNCHARTED',    unc,           '#555'],
-        ].map(([label, val, color]) => (
-          <div key={label} style={{ flex: '1 1 80px', minWidth: 70, background: '#08080e', border: `1px solid ${color}33`, borderRadius: 5, padding: '5px 8px', textAlign: 'center' }}>
-            <div style={{ fontSize: 16, fontWeight: 700, color }}>{val}</div>
-            <div style={{ fontSize: 8, color: '#666', marginTop: 2 }}>{label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div style={{ padding: '0 12px 6px', flexShrink: 0 }}>
-        <div style={{ height: 6, borderRadius: 3, overflow: 'hidden', background: '#111', display: 'flex' }}>
-          {events.length > 0 && [
-            [fk, GR], [kb, CY], [rf, AM], [unc, '#444']
-          ].map(([v, c], i) => (
-            v > 0 ? <div key={i} style={{ flex: v, background: c, transition: 'flex .4s' }} /> : null
-          ))}
-        </div>
-      </div>
-
-      <div style={{ display: 'flex', gap: 4, padding: '0 12px 6px', flexShrink: 0, flexWrap: 'wrap' }}>
-        {TABS.map(t => (
-          <button key={t} onClick={() => setTab(t)} style={{
-            padding: '2px 8px', fontSize: 9, borderRadius: 3, cursor: 'pointer',
-            background: tab === t ? (COVERAGE_COLOR[t] || CY) + '33' : '#0a0a1a',
-            border: `1px solid ${tab === t ? (COVERAGE_COLOR[t] || CY) : '#333'}`,
-            color: tab === t ? (COVERAGE_COLOR[t] || CY) : '#888',
-          }}>{t}{t !== 'ALL' ? ` (${events.filter(e => e._coverage === t).length})` : ''}</button>
-        ))}
-      </div>
-
-      <div style={{ padding: '0 12px 6px', flexShrink: 0 }}>
-        <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search live intel…"
-          style={{ width: '100%', background: '#08080e', border: '1px solid #00CFFF33', borderRadius: 4, color: CY, fontSize: 10, padding: '4px 8px', outline: 'none', boxSizing: 'border-box' }} />
-      </div>
-
-      <div style={{ flex: 1, overflowY: 'auto', padding: '0 12px 8px' }}>
-        {loading && <div style={{ color: '#888', fontSize: 10, textAlign: 'center', padding: 16 }}>Loading…</div>}
-        {err && <div style={{ color: AM, fontSize: 10, padding: 8 }}>{err}</div>}
-        {!loading && visible.length === 0 && <div style={{ color: '#666', fontSize: 10, textAlign: 'center', padding: 16 }}>No intel events match filter.</div>}
-        {visible.map(evt => {
-          const color = COVERAGE_COLOR[evt._coverage] || CY;
-          const isExp = expanded === evt.id;
-          return (
-            <div key={evt.id} style={{ marginBottom: 5, border: `1px solid ${color}33`, borderRadius: 5, background: '#06060e', overflow: 'hidden' }}>
-              <div onClick={() => setExpanded(isExp ? null : evt.id)} style={{ padding: '6px 8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 6 }}>
-                <span style={{ fontSize: 10, color, minWidth: 0, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{evt.name}</span>
-                {evt.type && chip(evt.type, '#888')}
-                {evt.severity && chip(evt.severity, evt.severity?.toLowerCase?.().includes('crit') ? '#EF4444' : AM)}
-                {chip(evt._coverage, color)}
-                <span style={{ fontSize: 10, color: '#555', flexShrink: 0 }}>{isExp ? '▲' : '▼'}</span>
-              </div>
-              {isExp && (
-                <div style={{ borderTop: `1px solid ${color}22`, padding: '8px', display: 'flex', gap: 8 }}>
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 9, color: CY, marginBottom: 4, fontWeight: 600 }}>KB ARTICLES ({evt._kb.length})</div>
-                    {evt._kb.length === 0
-                      ? <div style={{ fontSize: 9, color: '#555', fontStyle: 'italic' }}>No KB article alignment</div>
-                      : evt._kb.map(a => (
-                        <div key={a.id} style={{ marginBottom: 5 }}>
-                          <div style={{ fontSize: 9, color: '#ccc', display: 'flex', alignItems: 'center', gap: 4 }}>
-                            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{a.name}</span>
-                            {a.category && chip(a.category, '#888')}
-                          </div>
-                          <ScoreBar score={a._score} color={CY} />
-                        </div>
-                      ))
-                    }
-                  </div>
-                  <div style={{ width: 1, background: '#1a1a2a', flexShrink: 0 }} />
-                  <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 9, color: AM, marginBottom: 4, fontWeight: 600 }}>RISK SIGNALS ({evt._risks.length})</div>
-                    {evt._risks.length === 0
-                      ? <div style={{ fontSize: 9, color: '#555', fontStyle: 'italic' }}>No risk signal alignment</div>
-                      : evt._risks.map(r => (
-                        <div key={r.id} style={{ marginBottom: 5 }}>
-                          <div style={{ fontSize: 9, color: '#ccc', display: 'flex', alignItems: 'center', gap: 4 }}>
-                            <span style={{ flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{r.name}</span>
-                            {r.severity && chip(r.severity, r.severity?.toLowerCase?.().includes('crit') ? '#EF4444' : AM)}
-                            {r.category && chip(r.category, '#888')}
-                          </div>
-                          <ScoreBar score={r._score} color={AM} />
-                        </div>
-                      ))
-                    }
-                  </div>
-                </div>
-              )}
-            </div>
-          );
-        })}
-      </div>
-
-      <div style={{ padding: '6px 12px', borderTop: '1px solid #00CFFF22', display: 'flex', gap: 8, alignItems: 'center', flexShrink: 0 }}>
-        <button onClick={load} disabled={loading} style={{ fontSize: 9, padding: '3px 10px', borderRadius: 3, background: '#0a0a1a', border: '1px solid #00CFFF44', color: CY, cursor: 'pointer' }}>
-          {loading ? '…' : '↻ REFRESH'}
-        </button>
-        <button onClick={assess} disabled={assessing} style={{ fontSize: 9, padding: '3px 10px', borderRadius: 3, background: assessing ? '#1a1a2a' : '#F59E0B22', border: `1px solid ${AM}55`, color: AM, cursor: 'pointer' }}>
-          {assessing ? '…' : '▶ ASSESS'}
-        </button>
-        {assessText && (
-          <span style={{ fontSize: 9, color: '#aaa', flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{assessText}</span>
+    <>
+      <button style={btnStyle} onClick={() => setOpen((o) => !o)}>
+        ◈ LKRCTX
+        {blind > 0 && (
+          <span style={{ marginLeft: 4, background: RED, color: "#fff", borderRadius: 3, padding: "0 4px" }}>
+            {blind}
+          </span>
         )}
-      </div>
-    </div>
+      </button>
+
+      {open && (
+        <div style={panelStyle}>
+          {/* header */}
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
+            <span style={{ color: CY, fontSize: 11, letterSpacing: 1 }}>◈ LIVE INTEL × KB × RISK TRIPLE</span>
+            <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", color: DIM, cursor: "pointer", fontSize: 13 }}>✕</button>
+          </div>
+
+          {/* stat tiles */}
+          <div style={{ display: "flex", gap: 6, marginBottom: 8 }}>
+            {[
+              { label: "EVENTS",     val: rows.length, color: CY  },
+              { label: "FULL",       val: full,        color: GRN },
+              { label: "INTEL_ONLY", val: intelOnly,   color: CY  },
+              { label: "RISK_ONLY",  val: riskOnly,    color: AMB },
+              { label: "BLIND",      val: blind,       color: RED },
+              { label: "COVERAGE",   val: `${pct}%`,   color: PRP },
+            ].map(({ label, val, color }) => (
+              <div
+                key={label}
+                style={{
+                  flex: 1, background: `${color}11`,
+                  border: `1px solid ${color}33`, borderRadius: 5,
+                  padding: "4px 6px", textAlign: "center",
+                }}
+              >
+                <div style={{ color, fontSize: 12, fontWeight: 700 }}>{val}</div>
+                <div style={{ color: DIM, fontSize: 7 }}>{label}</div>
+              </div>
+            ))}
+          </div>
+
+          {/* filter tabs */}
+          <div style={{ display: "flex", gap: 3, marginBottom: 6, flexWrap: "wrap" }}>
+            {TABS.map((t) => (
+              <button
+                key={t}
+                onClick={() => setTab(t)}
+                style={{
+                  flex: "1 1 auto",
+                  background: tab === t ? `${CY}22` : "transparent",
+                  border: `1px solid ${tab === t ? CY : DIM}44`,
+                  borderRadius: 4,
+                  color: tab === t ? CY : DIM,
+                  cursor: "pointer",
+                  fontSize: 8,
+                  padding: "3px 2px",
+                  letterSpacing: 0.4,
+                }}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+
+          {/* search */}
+          <input
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="search events, articles, signals…"
+            style={{
+              background: "#0A1628",
+              border: `1px solid ${CY}33`,
+              borderRadius: 4,
+              color: "#DCEBF5",
+              fontSize: 9,
+              padding: "4px 7px",
+              marginBottom: 8,
+              width: "100%",
+              boxSizing: "border-box",
+            }}
+          />
+
+          {loading && <div style={{ color: DIM, textAlign: "center", padding: 10 }}>loading…</div>}
+          {err     && <div style={{ color: RED, marginBottom: 6 }}>⚠ {err}</div>}
+
+          {/* rows */}
+          <div style={{ flex: 1, overflowY: "auto" }}>
+            {visible.map((row) => (
+              <div
+                key={row.id}
+                style={{
+                  marginBottom: 4,
+                  background: row.tier === "BLIND" ? `${RED}08` : `${tierColor(row.tier)}08`,
+                  border: `1px solid ${tierColor(row.tier)}33`,
+                  borderRadius: 5,
+                  overflow: "hidden",
+                }}
+              >
+                <div
+                  style={{
+                    display: "flex", alignItems: "center", gap: 5,
+                    padding: "5px 8px", cursor: "pointer",
+                  }}
+                  onClick={() => setExpanded(expanded === row.id ? null : row.id)}
+                >
+                  {/* kind badge */}
+                  <span style={{
+                    fontSize: 7, background: `${kindColor(row.kind)}22`,
+                    border: `1px solid ${kindColor(row.kind)}55`,
+                    color: kindColor(row.kind), borderRadius: 3,
+                    padding: "1px 4px", minWidth: 44, textAlign: "center",
+                  }}>
+                    {row.kind}
+                  </span>
+                  {/* tier badge */}
+                  <span style={{
+                    fontSize: 7, background: `${tierColor(row.tier)}22`,
+                    border: `1px solid ${tierColor(row.tier)}55`,
+                    color: tierColor(row.tier), borderRadius: 3,
+                    padding: "1px 4px", minWidth: 60, textAlign: "center",
+                  }}>
+                    {row.tier}
+                  </span>
+                  <span style={{
+                    color: "#DCEBF5", flex: 1, overflow: "hidden",
+                    textOverflow: "ellipsis", whiteSpace: "nowrap",
+                    fontSize: 10,
+                  }}>
+                    {row.label}
+                  </span>
+                  <span style={{ color: DIM, fontSize: 8 }}>
+                    {row.matchedArticles.length}KB {row.matchedSignals.length}RSK
+                  </span>
+                </div>
+                {expanded === row.id && (
+                  <div style={{ padding: "0 8px 8px 8px" }}>
+                    <div style={{ color: DIM, fontSize: 9, marginBottom: 4 }}>{row.description}</div>
+                    {row.matchedArticles.length > 0 && (
+                      <>
+                        <div style={{ color: CY, fontSize: 8, marginBottom: 3, letterSpacing: 1 }}>KB ARTICLES</div>
+                        {row.matchedArticles.slice(0, 3).map((a) => (
+                          <div key={a.id} style={{
+                            padding: "2px 0", borderBottom: `1px solid ${DIM}22`,
+                            color: "#DCEBF5", fontSize: 9,
+                          }}>
+                            <span style={{
+                              fontSize: 7, background: `${CY}22`, color: CY,
+                              borderRadius: 3, padding: "0 4px", marginRight: 5,
+                            }}>{a.kind}</span>
+                            {a.title}
+                          </div>
+                        ))}
+                      </>
+                    )}
+                    {row.matchedSignals.length > 0 && (
+                      <>
+                        <div style={{ color: AMB, fontSize: 8, marginTop: 5, marginBottom: 3, letterSpacing: 1 }}>RISK SIGNALS</div>
+                        {row.matchedSignals.slice(0, 3).map((s) => (
+                          <div key={s.id} style={{
+                            display: "flex", alignItems: "center", gap: 5,
+                            padding: "2px 0", borderBottom: `1px solid ${DIM}22`,
+                          }}>
+                            <span style={{
+                              fontSize: 7, background: `${sevColor(s.severity)}22`,
+                              color: sevColor(s.severity), borderRadius: 3, padding: "0 4px",
+                            }}>{s.severity}</span>
+                            <span style={{ color: "#DCEBF5", fontSize: 9, flex: 1 }}>{s.title}</span>
+                          </div>
+                        ))}
+                      </>
+                    )}
+                    {row.tier === "BLIND" && (
+                      <div style={{ color: RED, fontSize: 9, marginTop: 4 }}>
+                        ⚠ No knowledge base or risk signal backing — BLIND SPOT.
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
+            ))}
+            {!loading && visible.length === 0 && (
+              <div style={{ color: DIM, textAlign: "center", padding: 16 }}>
+                No events match current filter.
+              </div>
+            )}
+          </div>
+
+          {/* assess */}
+          <div style={{ marginTop: 10, borderTop: `1px solid ${CY}22`, paddingTop: 8 }}>
+            <button
+              onClick={assess}
+              disabled={assessing || rows.length === 0}
+              style={{
+                background: `${CY}18`,
+                border: `1px solid ${CY}55`,
+                borderRadius: 5,
+                color: CY,
+                padding: "5px 12px",
+                cursor: "pointer",
+                fontSize: 10,
+                letterSpacing: 1,
+                width: "100%",
+                opacity: assessing ? 0.6 : 1,
+              }}
+            >
+              {assessing ? "▶ ASSESSING…" : "▶ ASSESS"}
+            </button>
+            {brief && (
+              <div style={{
+                marginTop: 8, color: "#DCEBF5", fontSize: 10,
+                lineHeight: 1.5, borderLeft: `2px solid ${CY}`, paddingLeft: 8,
+              }}>
+                {brief}
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+    </>
   );
 }
