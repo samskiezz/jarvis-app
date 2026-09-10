@@ -996,6 +996,7 @@ import SceneReportSkillTriple from '@/components/cinematic/SceneReportSkillTripl
 import SwarmContactNexus from '@/components/cinematic/SwarmContactNexus';
 import ContactDecisionRulesNexus from '@/components/cinematic/ContactDecisionRulesNexus';
 import KnowledgeOpsAlertScenarioTriple from '@/components/cinematic/KnowledgeOpsAlertScenarioTriple';
+import IntelProfileOpsSwarmTriple from '@/components/cinematic/IntelProfileOpsSwarmTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3053,6 +3054,8 @@ function App() {
             <ContactDecisionRulesNexus />
             {/* F734 (overnight 2026-09-10): Knowledge × Ops Alerts × Scenario Triple Nexus (KAOSTRI) — KnowledgeOpsAlertScenarioTriple.jsx; /knowledge/articles × /v1/ops/alerts × /v1/scenario/list; classifies each article FULLY_COVERED (alert+scenario)/ALERT_ONLY/SCENARIO_ONLY/DARK; 6 stat tiles (ARTICLES/FULLY COVERED/ALERT ONLY/SCENARIO ONLY/DARK/COVERAGE%); ALL/FULLY_COVERED/ALERT_ONLY/SCENARIO_ONLY/DARK filter tabs + search; click-to-expand matched alerts (type badge) + scenarios (category badge); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage gap brief + TTS; ◈ KAOSTRI button left:903820 bottom:8 zIndex:593; isKaostriQuery+buildKaostriScript wired into JarvisBrain.ask(); jarvis:kaostri-toggle event; 90-s auto-refresh; voice: kaostri/knowledge alert scenario/knowledge ops scenario/dark knowledge/knowledge coverage triple/ops alert scenario triple/scenario knowledge alert. */}
             <KnowledgeOpsAlertScenarioTriple />
+            {/* F736 (overnight 2026-09-10): Intel Profile × Ops Events × SwarmJob Triple Nexus (IOESWRTRI) — /entities/IntelProfile × /v1/ops/events × /entities/SwarmJob; FULLY_COVERED/OPS_ONLY/SWARM_ONLY/DARK classification; 6 stat tiles; filter tabs + search; expand profile → matched ops events + swarm jobs; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; dark badge on DARK count; ◈ IOESWRTRI button left:905540 bottom:8 zIndex:595; jarvis:ioeswrtri-toggle; 90-s auto-refresh */}
+            <IntelProfileOpsSwarmTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

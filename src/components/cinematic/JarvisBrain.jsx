@@ -305,6 +305,7 @@ import { isSwrcntQuery, buildSwrcntScript } from "./SwarmContactNexus";
 import { isCntRulsQuery, buildCntRulsScript } from "./ContactDecisionRulesNexus";
 import { isKaostriQuery, buildKaostriScript } from "./KnowledgeOpsAlertScenarioTriple";
 import { isGrnrstriQuery, buildGrnrstriScript } from "./GraphNodeRiskSwarmTriple";
+import { isIoeswrtriQuery, buildIoeswrtriScript } from "./IntelProfileOpsSwarmTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1258,6 +1259,9 @@ export default function JarvisBrain() {
       } else if (isGrnrstriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:grnrstri-toggle"));
         answer = await buildGrnrstriScript();
+      } else if (isIoeswrtriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:ioeswrtri-toggle"));
+        answer = await buildIoeswrtriScript();
       } else if (isCntRulsQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:cntruls-toggle"));
         answer = await buildCntRulsScript();
