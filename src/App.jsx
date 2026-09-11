@@ -1005,6 +1005,7 @@ import InvestigationReportContactTriple from '@/components/cinematic/Investigati
 import DatasetSwarmOpsTriple from '@/components/cinematic/DatasetSwarmOpsTriple';
 import RiskSignalDatasetInvestigationTriple from '@/components/cinematic/RiskSignalDatasetInvestigationTriple';
 import IntelProfileInvestmentKnowledgeTriple from '@/components/cinematic/IntelProfileInvestmentKnowledgeTriple';
+import ContactIntelOpsTriple from '@/components/cinematic/ContactIntelOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3080,6 +3081,8 @@ function App() {
             <RiskSignalDatasetInvestigationTriple />
             {/* F744 (overnight 2026-09-11): Intel Profile × Investment × Knowledge Triple Nexus (IIPKVTRI) — IntelProfileInvestmentKnowledgeTriple.jsx; /entities/IntelProfile × /entities/Investment × /knowledge/articles; FULLY_CONTEXTUALIZED/INVESTMENT_ONLY/KB_ONLY/DARK classification; 6 stat tiles (PROFILES/FULLY CONTEXTUALIZED/INV ONLY/KB ONLY/DARK/COVERAGE%); ALL/FULLY_CONTEXTUALIZED/INVESTMENT_ONLY/KB_ONLY/DARK filter tabs + search; click-to-expand matched investments (sector badge + hits) + matched KB articles (kind badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-investment brief + TTS; dark badge on DARK count; ◈ IIPKVTRI button left:911660 bottom:8 zIndex:603; isIipkvtriQuery+buildIipkvtriScript wired into JarvisBrain.ask(); jarvis:iipkvtri-toggle event; 90-s auto-refresh; voice: iipkvtri/intel profile investment knowledge/threat actor investment/profile portfolio/dark intel profile/intel investment coverage */}
             <IntelProfileInvestmentKnowledgeTriple />
+            {/* F745 (overnight 2026-09-11): Contact × Intel Profile × Ops Events Triple Nexus (CIOETRI) — ContactIntelOpsTriple.jsx; /entities/Contact × /entities/IntelProfile × /v1/ops/events; FULLY_EXPOSED (intel profile+ops event match)/INTEL_ONLY/OPS_ONLY/DARK classification; filter tabs ALL/FULLY_EXPOSED/INTEL_ONLY/OPS_ONLY/DARK; click row → matched intel profile (cyan tag) + matched ops event (amber tag); ◈ CIOETRI button left:912520 bottom:8 zIndex:604; isCioetriQuery+buildCioetriScript wired into JarvisBrain.ask(); jarvis:cioetri-toggle event; 90-s auto-refresh; voice: cioetri/contact intel ops/contact intel profile ops/intel ops contact/contact intelligence coverage/exposed contact/dark contact/unlinked contact/contact nexus */}
+            <ContactIntelOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
