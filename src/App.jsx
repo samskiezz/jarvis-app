@@ -1001,6 +1001,7 @@ import InvestigationDatasetKnowledgeTriple from '@/components/cinematic/Investig
 import OpsAlertContactKnowledgeTriple from '@/components/cinematic/OpsAlertContactKnowledgeTriple';
 import OpsAlertOpsEventKnowledgeTriple from '@/components/cinematic/OpsAlertOpsEventKnowledgeTriple';
 import OpsAlertScenarioRiskTriple from '@/components/cinematic/OpsAlertScenarioRiskTriple';
+import InvestigationReportContactTriple from '@/components/cinematic/InvestigationReportContactTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3068,6 +3069,8 @@ function App() {
             <OpsAlertOpsEventKnowledgeTriple />
             {/* F740 (overnight 2026-09-10): Ops Alert × Scenario × Risk Signal Triple Nexus (OALSCNRSK) — /v1/ops/alerts × /v1/scenario/list × /entities/RiskSignal; FULLY_MITIGATED/SCRIPTED_ONLY/RISK_BACKED/UNMITIGATED classification; filter tabs + search; click-to-expand matched scenario (kind) + risk signal (severity); ASSESS → /v1/jarvis/agent/chat + TTS; red badge on unmitigated count; ◈ OALSCNRSK button left:908980 bottom:8 zIndex:599; jarvis:oalscnrsk-toggle; 90-s auto-refresh */}
             <OpsAlertScenarioRiskTriple />
+            {/* F741 (overnight 2026-09-11): Investigation × Report × Contact Triple Nexus (INVRPTCNT) — InvestigationReportContactTriple.jsx; /v1/investigations × /v1/reports × /entities/Contact; FULLY_DOCUMENTED (report+contact)/REPORT_ONLY/CONTACT_ONLY/DARK classification; 5 stat tiles (INVESTIGATIONS/FULLY DOC/RPT ONLY/CNT ONLY/DARK); ALL/FULLY_DOCUMENTED/REPORT_ONLY/CONTACT_ONLY/DARK filter tabs + search; click-to-expand matched report (type badge + hits) + matched contact (role badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence case documentation brief + TTS; red badge on DARK count; ◈ INVRPTCNT button left:909840 bottom:8 zIndex:600; isInvrptcntQuery+buildInvrptcntScript wired into JarvisBrain.ask(); jarvis:invrptcnt-toggle event; 90-s auto-refresh; voice: invrptcnt/investigation report contact/case report/contact report/documented investigation/unowned investigation/case documentation/investigation contact coverage/fully documented case/dark investigation. */}
+            <InvestigationReportContactTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

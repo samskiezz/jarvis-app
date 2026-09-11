@@ -18,3 +18,4 @@
 2026-09-10T21:18:46Z F738 OALCKTRI — OpsAlertContactKnowledgeTriple.jsx (/v1/ops/alerts × /entities/Contact × /knowledge/articles); FULLY_COVERED/CONTACT_ONLY/KB_ONLY/DARK; 6 tiles; filter+search+expand+ASSESS; left:907260 zIndex:597; vite build exit 0
 2026-09-10T22:19:04Z F739 OALOEKVTRI — OpsAlertOpsEventKnowledgeTriple.jsx; /v1/ops/alerts × /v1/ops/events × /knowledge/articles; FULLY_CONTEXTUALIZED/EVENTS_ONLY/KB_ONLY/DARK; left:908120 zIndex:598; vite build exit 0.
 [2026-09-10] F740 OpsAlertScenarioRiskTriple.jsx created — /v1/ops/alerts × /v1/scenario/list × /entities/RiskSignal triple nexus OALSCNRSK; vite build exit 0; pushed jarvis-overnight
+[2026-09-11] F741 INVRPTCNT — InvestigationReportContactTriple.jsx; /v1/investigations × /v1/reports × /entities/Contact; FULLY_DOCUMENTED/REPORT_ONLY/CONTACT_ONLY/DARK; vite build exit 0; mounted App.jsx; wired JarvisBrain.jsx.
