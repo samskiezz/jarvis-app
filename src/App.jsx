@@ -1011,6 +1011,7 @@ import AcousticTaskScenarioTriple from '@/components/cinematic/AcousticTaskScena
 import SwarmJobInvestigationReportTriple from '@/components/cinematic/SwarmJobInvestigationReportTriple';
 import AcousticDatasetKnowledgeTriple from '@/components/cinematic/AcousticDatasetKnowledgeTriple';
 import OpsAlertContactScenarioTriple from '@/components/cinematic/OpsAlertContactScenarioTriple';
+import AcousticOpsAlertInvestigationTriple from '@/components/cinematic/AcousticOpsAlertInvestigationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3098,6 +3099,8 @@ function App() {
             <AcousticDatasetKnowledgeTriple />
             {/* F750 (overnight 2026-09-11): Ops Alert × Contact × Scenario Triple Nexus (OACSTRI) — OpsAlertContactScenarioTriple.jsx; /v1/ops/alerts × /entities/Contact × /v1/scenario/list; FULLY_COVERED/CONTACT_ONLY/SCENARIO_ONLY/DARK classification; filter tabs ALL/FULLY_COVERED/CONTACT_ONLY/SCENARIO_ONLY/DARK + search; amber badge on DARK count; ◈ OACSTRI button left:916060 bottom:8 zIndex:609; isOacstriQuery+buildOacstriScript wired into JarvisBrain.ask(); jarvis:oacstri-toggle event; 90-s auto-refresh; voice: oacstri/ops alert contact scenario/alert contact scenario/ops triple/ops alert scenario contact/alert covered contacts/scenario ops alert/contact ops scenario/unplanned ops contact/alert coverage triple */}
             <OpsAlertContactScenarioTriple />
+            {/* F751 (overnight 2026-09-11): Acoustic × Ops Alert × Investigation Triple Nexus (ACALINV) — AcousticOpsAlertInvestigationTriple.jsx; /v1/acoustic/contacts × /v1/ops/alerts × /v1/investigations; FULLY_TRACKED/ALERTED_ONLY/INVESTIGATED_ONLY/DARK classification; filter tabs + search; red badge on DARK count; ◈ ACALINV button left:916920 bottom:8 zIndex:610; isAcalinvQuery+buildAcalinvScript wired into JarvisBrain.ask(); jarvis:acalinv-toggle event; 90-s auto-refresh */}
+            <AcousticOpsAlertInvestigationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -28,3 +28,4 @@
 2026-09-11 F748 SJIRTRI — SwarmJobInvestigationReportTriple.jsx (/entities/SwarmJob × /v1/investigations × /v1/reports); FULLY_DOCUMENTED/INVEST_ONLY/REPORT_ONLY/DARK; filter tabs + voice triggers; isSjirtriQuery+buildSjirtriScript wired JarvisBrain.jsx; mounted App.jsx; vite build exit 0.
 [2026-09-11] F749 ACDKNTRI — Acoustic × Dataset × Knowledge Triple Nexus; AcousticDatasetKnowledgeTriple.jsx created; wired JarvisBrain.jsx + App.jsx; vite build exit 0.
 2026-09-11 F750 OACSTRI — Ops Alert × Contact × Scenario Triple Nexus; OpsAlertContactScenarioTriple.jsx; /v1/ops/alerts × /entities/Contact × /v1/scenario/list; wired JarvisBrain.jsx + App.jsx; vite build exit 0.
+2026-09-11 F751 ACALINV — Acoustic × Ops Alert × Investigation Triple Nexus; AcousticOpsAlertInvestigationTriple.jsx; /v1/acoustic/contacts × /v1/ops/alerts × /v1/investigations; FULLY_TRACKED/ALERTED_ONLY/INVESTIGATED_ONLY/DARK; wired JarvisBrain.jsx + App.jsx; vite build exit 0.
