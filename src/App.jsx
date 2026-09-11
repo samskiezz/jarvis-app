@@ -1002,6 +1002,7 @@ import OpsAlertContactKnowledgeTriple from '@/components/cinematic/OpsAlertConta
 import OpsAlertOpsEventKnowledgeTriple from '@/components/cinematic/OpsAlertOpsEventKnowledgeTriple';
 import OpsAlertScenarioRiskTriple from '@/components/cinematic/OpsAlertScenarioRiskTriple';
 import InvestigationReportContactTriple from '@/components/cinematic/InvestigationReportContactTriple';
+import DatasetSwarmOpsTriple from '@/components/cinematic/DatasetSwarmOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3071,6 +3072,8 @@ function App() {
             <OpsAlertScenarioRiskTriple />
             {/* F741 (overnight 2026-09-11): Investigation × Report × Contact Triple Nexus (INVRPTCNT) — InvestigationReportContactTriple.jsx; /v1/investigations × /v1/reports × /entities/Contact; FULLY_DOCUMENTED (report+contact)/REPORT_ONLY/CONTACT_ONLY/DARK classification; 5 stat tiles (INVESTIGATIONS/FULLY DOC/RPT ONLY/CNT ONLY/DARK); ALL/FULLY_DOCUMENTED/REPORT_ONLY/CONTACT_ONLY/DARK filter tabs + search; click-to-expand matched report (type badge + hits) + matched contact (role badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence case documentation brief + TTS; red badge on DARK count; ◈ INVRPTCNT button left:909840 bottom:8 zIndex:600; isInvrptcntQuery+buildInvrptcntScript wired into JarvisBrain.ask(); jarvis:invrptcnt-toggle event; 90-s auto-refresh; voice: invrptcnt/investigation report contact/case report/contact report/documented investigation/unowned investigation/case documentation/investigation contact coverage/fully documented case/dark investigation. */}
             <InvestigationReportContactTriple />
+            {/* F742 (overnight 2026-09-11): Dataset × SwarmJob × Ops Events Triple Nexus (DSWEEVTRI) — DatasetSwarmOpsTriple.jsx; /v1/datasets × /entities/SwarmJob × /v1/ops/events; FULLY_AUTOMATED/SWARM_ONLY/OPS_ONLY/UNMONITORED classification; 6 stat tiles; filter tabs + search; expand dataset → matched swarm jobs (status badge) + matched ops events (severity badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; red badge on unmonitored count; ◈ DSWEEVTRI button left:910700 bottom:8 zIndex:601; jarvis:dsweevtri-toggle event; 90-s auto-refresh */}
+            <DatasetSwarmOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
