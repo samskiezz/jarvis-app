@@ -1020,6 +1020,7 @@ import TaskDatasetScenarioTriple from '@/components/cinematic/TaskDatasetScenari
 import InvestmentContactOpsTriple from '@/components/cinematic/InvestmentContactOpsTriple';
 import SkillOpsAlignment from '@/components/cinematic/SkillOpsAlignment';
 import IntelProfileDatasetReportTriple from '@/components/cinematic/IntelProfileDatasetReportTriple';
+import TaskContactKnowledgeTriple from '@/components/cinematic/TaskContactKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3125,6 +3126,8 @@ function App() {
             <SkillOpsAlignment />
             {/* F758 (overnight 2026-09-11): Intel Profile × Dataset × Report Triple Nexus (IPDRPT) — IntelProfileDatasetReportTriple.jsx; /entities/IntelProfile × /v1/datasets × /v1/reports; FULLY_COVERED (dataset+report match)/DATASET_ONLY/REPORT_ONLY/DARK classification; 6 stat tiles (PROFILES/FULLY COV./DATASET ONLY/REPORT ONLY/DARK/COVERAGE%); ALL/FULLY_COVERED/DATASET_ONLY/REPORT_ONLY/DARK filter tabs + search; click-to-expand matched dataset (kind badge + hits) + matched report (type badge + hits); amber badge on DARK count; ◈ IPDRPT button left:922940 bottom:8 zIndex:617; isIpdrptQuery+buildIpdrptScript wired into JarvisBrain.ask(); jarvis:ipdrpt-toggle event; 90-s auto-refresh; voice: ipdrpt/intel profile dataset/profile coverage/threat actor dataset/intel profile report/profile documentation */}
             <IntelProfileDatasetReportTriple />
+            {/* F760 (overnight 2026-09-11): Task × Contact × Knowledge Triple Nexus (TCKTRI) — TaskContactKnowledgeTriple.jsx; /entities/Task × /entities/Contact × /knowledge/; FULLY_STAFFED (contact+knowledge match)/CONTACT_ONLY/KNOWLEDGE_ONLY/DARK classification; 6 stat tiles (TASKS/FULLY STAFFED/CONTACT ONLY/KNOWLEDGE ONLY/DARK/COVERAGE%); ALL/FULLY_STAFFED/CONTACT_ONLY/KNOWLEDGE_ONLY/DARK filter tabs + search; click-to-expand matched contact (role badge + hits) + matched knowledge article (kind badge + hits); red badge on DARK count; ◈ TCKTRI button left:923800 bottom:8 zIndex:618; isTcktriQuery+buildTcktriScript wired into JarvisBrain.ask(); jarvis:tcktri-toggle event; 90-s auto-refresh; voice: tcktri/task contact knowledge/task staffing/staffed task/task knowledge coverage */}
+            <TaskContactKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
