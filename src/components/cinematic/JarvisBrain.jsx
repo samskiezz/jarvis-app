@@ -322,6 +322,7 @@ import { isAcdkntriQuery, buildAcdkntriScript } from "./AcousticDatasetKnowledge
 import { isOacstriQuery, buildOacstriScript } from "./OpsAlertContactScenarioTriple";
 import { isAcalinvQuery, buildAcalinvScript } from "./AcousticOpsAlertInvestigationTriple";
 import { isIgsklTriQuery, buildIgsklTriScript } from "./InvestmentGraphSkillTriple";
+import { isKioetrQuery, buildKioetrScript } from "./KnowledgeInvestigationOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1323,6 +1324,9 @@ export default function JarvisBrain() {
       } else if (isIgsklTriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:igskltri-toggle"));
         answer = await buildIgsklTriScript();
+      } else if (isKioetrQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:kioetr-toggle"));
+        answer = await buildKioetrScript();
       } else if (isSjirtriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sjirtri-toggle"));
         answer = await buildSjirtriScript();
