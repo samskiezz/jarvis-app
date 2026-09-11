@@ -1021,6 +1021,7 @@ import InvestmentContactOpsTriple from '@/components/cinematic/InvestmentContact
 import SkillOpsAlignment from '@/components/cinematic/SkillOpsAlignment';
 import IntelProfileDatasetReportTriple from '@/components/cinematic/IntelProfileDatasetReportTriple';
 import TaskContactKnowledgeTriple from '@/components/cinematic/TaskContactKnowledgeTriple';
+import UrgentSkillGapRadar from '@/components/cinematic/UrgentSkillGapRadar';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3128,6 +3129,8 @@ function App() {
             <IntelProfileDatasetReportTriple />
             {/* F760 (overnight 2026-09-11): Task × Contact × Knowledge Triple Nexus (TCKTRI) — TaskContactKnowledgeTriple.jsx; /entities/Task × /entities/Contact × /knowledge/; FULLY_STAFFED (contact+knowledge match)/CONTACT_ONLY/KNOWLEDGE_ONLY/DARK classification; 6 stat tiles (TASKS/FULLY STAFFED/CONTACT ONLY/KNOWLEDGE ONLY/DARK/COVERAGE%); ALL/FULLY_STAFFED/CONTACT_ONLY/KNOWLEDGE_ONLY/DARK filter tabs + search; click-to-expand matched contact (role badge + hits) + matched knowledge article (kind badge + hits); red badge on DARK count; ◈ TCKTRI button left:923800 bottom:8 zIndex:618; isTcktriQuery+buildTcktriScript wired into JarvisBrain.ask(); jarvis:tcktri-toggle event; 90-s auto-refresh; voice: tcktri/task contact knowledge/task staffing/staffed task/task knowledge coverage */}
             <TaskContactKnowledgeTriple />
+            {/* F762 (overnight 2026-09-11): urgent skill gap radar — ◈ URGAP button; crosses /v1/aip/skill × /entities/Task; danger index = priority_weight × (1 − skill_score/100); top-10 ranked gaps + danger bar; ASSESS → /v1/jarvis/agent/chat + TTS; "urgent gap"/"urgap" voice trigger; 120-s auto-refresh */}
+            <UrgentSkillGapRadar />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
