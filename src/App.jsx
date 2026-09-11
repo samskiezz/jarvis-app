@@ -1006,6 +1006,7 @@ import DatasetSwarmOpsTriple from '@/components/cinematic/DatasetSwarmOpsTriple'
 import RiskSignalDatasetInvestigationTriple from '@/components/cinematic/RiskSignalDatasetInvestigationTriple';
 import IntelProfileInvestmentKnowledgeTriple from '@/components/cinematic/IntelProfileInvestmentKnowledgeTriple';
 import ContactIntelOpsTriple from '@/components/cinematic/ContactIntelOpsTriple';
+import ContactScenarioRiskTriple from '@/components/cinematic/ContactScenarioRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3083,6 +3084,8 @@ function App() {
             <IntelProfileInvestmentKnowledgeTriple />
             {/* F745 (overnight 2026-09-11): Contact × Intel Profile × Ops Events Triple Nexus (CIOETRI) — ContactIntelOpsTriple.jsx; /entities/Contact × /entities/IntelProfile × /v1/ops/events; FULLY_EXPOSED (intel profile+ops event match)/INTEL_ONLY/OPS_ONLY/DARK classification; filter tabs ALL/FULLY_EXPOSED/INTEL_ONLY/OPS_ONLY/DARK; click row → matched intel profile (cyan tag) + matched ops event (amber tag); ◈ CIOETRI button left:912520 bottom:8 zIndex:604; isCioetriQuery+buildCioetriScript wired into JarvisBrain.ask(); jarvis:cioetri-toggle event; 90-s auto-refresh; voice: cioetri/contact intel ops/contact intel profile ops/intel ops contact/contact intelligence coverage/exposed contact/dark contact/unlinked contact/contact nexus */}
             <ContactIntelOpsTriple />
+            {/* F746 (overnight 2026-09-11): Contact × Scenario × Risk Signal Triple Nexus (CSRKTRI) — ContactScenarioRiskTriple.jsx; /entities/Contact × /v1/scenario/list × /entities/RiskSignal; FULLY_COVERED (scenario+risk match)/SCENARIO_ONLY/RISK_ONLY/DARK classification; 6 stat tiles (CONTACTS/FULLY CVR/SCN ONLY/RSK ONLY/DARK/COVERAGE%); ALL/FULLY_COVERED/SCENARIO_ONLY/RISK_ONLY/DARK filter tabs + search; click-to-expand matched scenarios (status badge + hits) + matched risk signals (severity badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk brief + TTS; red badge on DARK count; ◈ CSRKTRI button left:913380 bottom:8 zIndex:605; isCsrktriQuery+buildCsrktriScript wired into JarvisBrain.ask(); jarvis:csrktri-toggle event; 90-s auto-refresh; voice: csrktri/contact scenario risk/contact scenario/scenario risk contact/contact risk scenario/contact nexus risk/scenario covered contact/dark contact scenario/unlinked contact scenario/contact risk coverage */}
+            <ContactScenarioRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

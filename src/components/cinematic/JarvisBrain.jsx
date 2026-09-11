@@ -315,6 +315,7 @@ import { isDsweevtriQuery, buildDsweevtriScript } from "./DatasetSwarmOpsTriple"
 import { isRsdtriQuery, buildRsdtriScript } from "./RiskSignalDatasetInvestigationTriple";
 import { isIipkvtriQuery, buildIipkvtriScript } from "./IntelProfileInvestmentKnowledgeTriple";
 import { isCioetriQuery, buildCioetriScript } from "./ContactIntelOpsTriple";
+import { isCsrktriQuery, buildCsrktriScript } from "./ContactScenarioRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1298,6 +1299,9 @@ export default function JarvisBrain() {
       } else if (isCioetriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:cioetri-toggle"));
         answer = await buildCioetriScript();
+      } else if (isCsrktriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:csrktri-toggle"));
+        answer = await buildCsrktriScript();
       } else if (isCntRulsQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:cntruls-toggle"));
         answer = await buildCntRulsScript();
