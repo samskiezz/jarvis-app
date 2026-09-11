@@ -1009,6 +1009,7 @@ import ContactIntelOpsTriple from '@/components/cinematic/ContactIntelOpsTriple'
 import ContactScenarioRiskTriple from '@/components/cinematic/ContactScenarioRiskTriple';
 import AcousticTaskScenarioTriple from '@/components/cinematic/AcousticTaskScenarioTriple';
 import SwarmJobInvestigationReportTriple from '@/components/cinematic/SwarmJobInvestigationReportTriple';
+import AcousticDatasetKnowledgeTriple from '@/components/cinematic/AcousticDatasetKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3092,6 +3093,8 @@ function App() {
             <AcousticTaskScenarioTriple />
             {/* F748 (overnight 2026-09-11): SwarmJob × Investigation × Report Triple Nexus (SJIRTRI) — SwarmJobInvestigationReportTriple.jsx; /entities/SwarmJob × /v1/investigations × /v1/reports; FULLY_DOCUMENTED (inv+report match)/INVEST_ONLY/REPORT_ONLY/DARK classification; filter tabs ALL/FULLY_DOCUMENTED/INVEST_ONLY/REPORT_ONLY/DARK; matched investigation (cyan tag) + matched report (amber tag) per swarm job; ◈ SJIRTRI button left:915100 bottom:8 zIndex:607; isSjirtriQuery+buildSjirtriScript wired into JarvisBrain.ask(); jarvis:sjirtri-toggle event; 90-s auto-refresh; voice: sjirtri/swarm investigation report/swarm job investigation/swarm report investigation/job investigation report/swarm case report/swarm documented/job coverage report/swarm case coverage/swarm job nexus/documented swarm */}
             <SwarmJobInvestigationReportTriple />
+            {/* F749 (overnight 2026-09-11): Acoustic × Dataset × Knowledge Triple Nexus (ACDKNTRI) — AcousticDatasetKnowledgeTriple.jsx; /v1/acoustic/contacts × /v1/datasets × /knowledge/articles; FULLY_DOCUMENTED (dataset+article match)/DATA_ONLY/KNOWLEDGE_ONLY/DARK classification; filter tabs ALL/FULLY_DOCUMENTED/DATA_ONLY/KNOWLEDGE_ONLY/DARK + search; matched dataset (cyan tag+hits) + matched KB article (amber tag+hits) per acoustic contact; amber badge on DARK count; ◈ ACDKNTRI button left:915200 bottom:8 zIndex:608; isAcdkntriQuery+buildAcdkntriScript wired into JarvisBrain.ask(); jarvis:acdkntri-toggle event; 90-s auto-refresh; voice: acdkntri/acoustic dataset knowledge/acoustic data knowledge/sensor dataset knowledge/acoustic knowledge/acoustic data context/acoustic signal context/sensor knowledge gap/acoustic knowledge gap/acoustic data coverage */}
+            <AcousticDatasetKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
