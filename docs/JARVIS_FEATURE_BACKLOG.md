@@ -18,7 +18,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 `/v1/scenario/list` · `/v1/aip/skill` · `/v1/reports` · `/knowledge/*`
 
 ## Backlog (real features)
-- [ ] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it.
+- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. (pre-built: CommandPalette.jsx mounted in App.jsx; verified compiles; 2026-09-11)
 - [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
 - [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
 - [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
@@ -48,4 +48,5 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [ ] F28 Command history — store + replay recent JARVIS commands (localStorage).
 - [ ] F29 Multi-voice toggle — switch JARVIS TTS voice (ash/fable/onyx) live.
 - [ ] F30 Scene auto-tour — cycle the 10 scenes hands-free with spoken narration of each.
+- [x] F166 Live Brain Pulse — ambient pulsing orb (fixed bottom-right); polls /v1/cinematic/brain every 30 s; pulse speed from nodes+synapses delta; click → /v1/jarvis/agent/chat 2-sentence brief + TTS; "brain pulse"/"neural activity"/"live brain" voice trigger. (built + mounted; 2026-09-11)
 (Extend with more real features as endpoints allow. Prefer depth + real over count.)
