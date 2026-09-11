@@ -1007,6 +1007,7 @@ import RiskSignalDatasetInvestigationTriple from '@/components/cinematic/RiskSig
 import IntelProfileInvestmentKnowledgeTriple from '@/components/cinematic/IntelProfileInvestmentKnowledgeTriple';
 import ContactIntelOpsTriple from '@/components/cinematic/ContactIntelOpsTriple';
 import ContactScenarioRiskTriple from '@/components/cinematic/ContactScenarioRiskTriple';
+import AcousticTaskScenarioTriple from '@/components/cinematic/AcousticTaskScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3086,6 +3087,8 @@ function App() {
             <ContactIntelOpsTriple />
             {/* F746 (overnight 2026-09-11): Contact × Scenario × Risk Signal Triple Nexus (CSRKTRI) — ContactScenarioRiskTriple.jsx; /entities/Contact × /v1/scenario/list × /entities/RiskSignal; FULLY_COVERED (scenario+risk match)/SCENARIO_ONLY/RISK_ONLY/DARK classification; 6 stat tiles (CONTACTS/FULLY CVR/SCN ONLY/RSK ONLY/DARK/COVERAGE%); ALL/FULLY_COVERED/SCENARIO_ONLY/RISK_ONLY/DARK filter tabs + search; click-to-expand matched scenarios (status badge + hits) + matched risk signals (severity badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence risk brief + TTS; red badge on DARK count; ◈ CSRKTRI button left:913380 bottom:8 zIndex:605; isCsrktriQuery+buildCsrktriScript wired into JarvisBrain.ask(); jarvis:csrktri-toggle event; 90-s auto-refresh; voice: csrktri/contact scenario risk/contact scenario/scenario risk contact/contact risk scenario/contact nexus risk/scenario covered contact/dark contact scenario/unlinked contact scenario/contact risk coverage */}
             <ContactScenarioRiskTriple />
+            {/* F747 (overnight 2026-09-11): Acoustic × Task × Scenario Triple Nexus (ACTASKSCN) — AcousticTaskScenarioTriple.jsx; /v1/acoustic/contacts × /entities/Task × /v1/scenario/list; FULLY_OPERATIONAL (task+scenario match)/TASK_ONLY/SCENARIO_ONLY/DARK classification; filter tabs ALL/FULLY_OPERATIONAL/TASK_ONLY/SCENARIO_ONLY/DARK; matched task (cyan tag) + matched scenario (amber tag) per acoustic contact; ◈ ACTASKSCN button left:914240 bottom:8 zIndex:606; isActaskscnQuery+buildActaskscnScript wired into JarvisBrain.ask(); jarvis:actaskscn-toggle event; 90-s auto-refresh; voice: actaskscn/acoustic task scenario/acoustic scenario task/sensor task scenario/task scenario acoustic/acoustic mission scenario/acoustic operational/acoustic task plan/sensor mission plan/acoustic scenario coverage/task backed acoustic */}
+            <AcousticTaskScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
