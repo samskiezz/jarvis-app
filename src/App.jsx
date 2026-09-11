@@ -1018,6 +1018,7 @@ import SwarmReportContactTriple from '@/components/cinematic/SwarmReportContactT
 import TaskDatasetScenarioTriple from '@/components/cinematic/TaskDatasetScenarioTriple';
 import InvestmentContactOpsTriple from '@/components/cinematic/InvestmentContactOpsTriple';
 import SkillOpsAlignment from '@/components/cinematic/SkillOpsAlignment';
+import IntelProfileDatasetReportTriple from '@/components/cinematic/IntelProfileDatasetReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3119,6 +3120,8 @@ function App() {
             <InvestmentContactOpsTriple />
             {/* F757 (overnight 2026-09-11): Skill × Ops Events Alignment (SKLOPS) — SkillOpsAlignment.jsx; /v1/aip/skill + /v1/ops/events; keyword-correlates each skill (name/description/category) against live ops events to surface ENGAGED (skill covers an active event) vs INACTIVE (no operational demand); 4 stat tiles (events/skills/engaged/inactive); ALL/ENGAGED/INACTIVE filter tabs + search; expand skill → matched events with severity badge + service + relevance score; cyan badge on engaged count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational-readiness brief + TTS via jarvis:speak-dossier; isSklopsQuery+buildSklopsScript wired into JarvisBrain.ask(); jarvis:sklops-toggle event; ◈ SKLOPS button left:922080 bottom:8 zIndex:616; 90-s auto-refresh; voice: skill ops/ops skills/operational skills/active skills/which skills are needed/sklops */}
             <SkillOpsAlignment />
+            {/* F758 (overnight 2026-09-11): Intel Profile × Dataset × Report Triple Nexus (IPDRPT) — IntelProfileDatasetReportTriple.jsx; /entities/IntelProfile × /v1/datasets × /v1/reports; FULLY_COVERED (dataset+report match)/DATASET_ONLY/REPORT_ONLY/DARK classification; 6 stat tiles (PROFILES/FULLY COV./DATASET ONLY/REPORT ONLY/DARK/COVERAGE%); ALL/FULLY_COVERED/DATASET_ONLY/REPORT_ONLY/DARK filter tabs + search; click-to-expand matched dataset (kind badge + hits) + matched report (type badge + hits); amber badge on DARK count; ◈ IPDRPT button left:922940 bottom:8 zIndex:617; isIpdrptQuery+buildIpdrptScript wired into JarvisBrain.ask(); jarvis:ipdrpt-toggle event; 90-s auto-refresh; voice: ipdrpt/intel profile dataset/profile coverage/threat actor dataset/intel profile report/profile documentation */}
+            <IntelProfileDatasetReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

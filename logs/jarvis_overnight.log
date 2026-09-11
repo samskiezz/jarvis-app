@@ -34,3 +34,4 @@
 2026-09-11T13:19:54Z F754 SJRPCNT SwarmReportContactTriple.jsx — /entities/SwarmJob × /v1/reports × /entities/Contact — FULLY_BACKED/REPORT_ONLY/CONTACT_ONLY/DARK — wired JarvisBrain.jsx+App.jsx — vite build exit 0 — committed jarvis-overnight
 2026-09-11 14:19 UTC F755 Task × Dataset × Scenario Triple Nexus (TDSCTRI) — TaskDatasetScenarioTriple.jsx created; mounted App.jsx; wired JarvisBrain.jsx; vite build exit 0.
 2026-09-11T15:21:07Z F756 INVCOETRI: Investment × Contact × Ops Events Triple Nexus — InvestmentContactOpsTriple.jsx created; /entities/Investment × /entities/Contact × /v1/ops/events; FULLY_EXPOSED/CONTACT_ONLY/OPS_ONLY/DARK; mounted App.jsx; wired JarvisBrain.jsx; vite build exit 0
+2026-09-11T17:18:03Z F758 IPDRPT — IntelProfileDatasetReportTriple.jsx; /entities/IntelProfile × /v1/datasets × /v1/reports; FULLY_COVERED/DATASET_ONLY/REPORT_ONLY/DARK; mounted App.jsx; wired JarvisBrain.jsx; vite build exit 0.
