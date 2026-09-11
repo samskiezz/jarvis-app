@@ -326,6 +326,7 @@ import { isKioetrQuery, buildKioetrScript } from "./KnowledgeInvestigationOpsTri
 import { isSwarmReportContactQuery, buildSwarmReportContactScript } from "./SwarmReportContactTriple";
 import { isTdsctriQuery, buildTdsctriScript } from "./TaskDatasetScenarioTriple";
 import { isInvcoetriQuery, buildInvcoetriScript } from "./InvestmentContactOpsTriple";
+import { isSklopsQuery, buildSklopsScript } from "./SkillOpsAlignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1339,6 +1340,9 @@ export default function JarvisBrain() {
       } else if (isInvcoetriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:invcoetri-toggle"));
         answer = await buildInvcoetriScript();
+      } else if (isSklopsQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:sklops-toggle"));
+        answer = await buildSklopsScript();
       } else if (isSjirtriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sjirtri-toggle"));
         answer = await buildSjirtriScript();

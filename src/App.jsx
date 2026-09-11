@@ -1017,6 +1017,7 @@ import KnowledgeInvestigationOpsTriple from '@/components/cinematic/KnowledgeInv
 import SwarmReportContactTriple from '@/components/cinematic/SwarmReportContactTriple';
 import TaskDatasetScenarioTriple from '@/components/cinematic/TaskDatasetScenarioTriple';
 import InvestmentContactOpsTriple from '@/components/cinematic/InvestmentContactOpsTriple';
+import SkillOpsAlignment from '@/components/cinematic/SkillOpsAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3116,6 +3117,8 @@ function App() {
             <TaskDatasetScenarioTriple />
             {/* F756 (overnight 2026-09-11): Investment × Contact × Ops Events Triple Nexus (INVCOETRI) — InvestmentContactOpsTriple.jsx; /entities/Investment × /entities/Contact × /v1/ops/events; FULLY_EXPOSED (contact+ops event match)/CONTACT_ONLY/OPS_ONLY/DARK classification; 6 stat tiles; filter tabs ALL/FULLY_EXPOSED/CONTACT_ONLY/OPS_ONLY/DARK + search; red badge on DARK count; ◈ INVCOETRI button left:921220 bottom:8 zIndex:615; isInvcoetriQuery+buildInvcoetriScript wired into JarvisBrain.ask(); jarvis:invcoetri-toggle event; 90-s auto-refresh */}
             <InvestmentContactOpsTriple />
+            {/* F757 (overnight 2026-09-11): Skill × Ops Events Alignment (SKLOPS) — SkillOpsAlignment.jsx; /v1/aip/skill + /v1/ops/events; keyword-correlates each skill (name/description/category) against live ops events to surface ENGAGED (skill covers an active event) vs INACTIVE (no operational demand); 4 stat tiles (events/skills/engaged/inactive); ALL/ENGAGED/INACTIVE filter tabs + search; expand skill → matched events with severity badge + service + relevance score; cyan badge on engaged count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence operational-readiness brief + TTS via jarvis:speak-dossier; isSklopsQuery+buildSklopsScript wired into JarvisBrain.ask(); jarvis:sklops-toggle event; ◈ SKLOPS button left:922080 bottom:8 zIndex:616; 90-s auto-refresh; voice: skill ops/ops skills/operational skills/active skills/which skills are needed/sklops */}
+            <SkillOpsAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
