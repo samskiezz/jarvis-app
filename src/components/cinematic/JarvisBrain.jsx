@@ -325,6 +325,7 @@ import { isIgsklTriQuery, buildIgsklTriScript } from "./InvestmentGraphSkillTrip
 import { isKioetrQuery, buildKioetrScript } from "./KnowledgeInvestigationOpsTriple";
 import { isSwarmReportContactQuery, buildSwarmReportContactScript } from "./SwarmReportContactTriple";
 import { isTdsctriQuery, buildTdsctriScript } from "./TaskDatasetScenarioTriple";
+import { isInvcoetriQuery, buildInvcoetriScript } from "./InvestmentContactOpsTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1335,6 +1336,9 @@ export default function JarvisBrain() {
       } else if (isTdsctriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:tdsctri-toggle"));
         answer = await buildTdsctriScript();
+      } else if (isInvcoetriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:invcoetri-toggle"));
+        answer = await buildInvcoetriScript();
       } else if (isSjirtriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sjirtri-toggle"));
         answer = await buildSjirtriScript();

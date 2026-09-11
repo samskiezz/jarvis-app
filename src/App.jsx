@@ -1016,6 +1016,7 @@ import InvestmentGraphSkillTriple from '@/components/cinematic/InvestmentGraphSk
 import KnowledgeInvestigationOpsTriple from '@/components/cinematic/KnowledgeInvestigationOpsTriple';
 import SwarmReportContactTriple from '@/components/cinematic/SwarmReportContactTriple';
 import TaskDatasetScenarioTriple from '@/components/cinematic/TaskDatasetScenarioTriple';
+import InvestmentContactOpsTriple from '@/components/cinematic/InvestmentContactOpsTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3113,6 +3114,8 @@ function App() {
             <SwarmReportContactTriple />
             {/* F755 (overnight 2026-09-11): Task × Dataset × Scenario Triple Nexus (TDSCTRI) — TaskDatasetScenarioTriple.jsx; /entities/Task × /v1/datasets × /v1/scenario/list; FULLY_PLANNED (dataset+scenario match)/DATASET_ONLY/SCENARIO_ONLY/DARK classification; 6 stat tiles; filter tabs ALL/FULLY_PLANNED/DATASET_ONLY/SCENARIO_ONLY/DARK + search; red badge on DARK count; ◈ TDSCTRI button left:920360 bottom:8 zIndex:614; isTdsctriQuery+buildTdsctriScript wired into JarvisBrain.ask(); jarvis:tdsctri-toggle event; 90-s auto-refresh */}
             <TaskDatasetScenarioTriple />
+            {/* F756 (overnight 2026-09-11): Investment × Contact × Ops Events Triple Nexus (INVCOETRI) — InvestmentContactOpsTriple.jsx; /entities/Investment × /entities/Contact × /v1/ops/events; FULLY_EXPOSED (contact+ops event match)/CONTACT_ONLY/OPS_ONLY/DARK classification; 6 stat tiles; filter tabs ALL/FULLY_EXPOSED/CONTACT_ONLY/OPS_ONLY/DARK + search; red badge on DARK count; ◈ INVCOETRI button left:921220 bottom:8 zIndex:615; isInvcoetriQuery+buildInvcoetriScript wired into JarvisBrain.ask(); jarvis:invcoetri-toggle event; 90-s auto-refresh */}
+            <InvestmentContactOpsTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
