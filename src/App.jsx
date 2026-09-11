@@ -1010,6 +1010,7 @@ import ContactScenarioRiskTriple from '@/components/cinematic/ContactScenarioRis
 import AcousticTaskScenarioTriple from '@/components/cinematic/AcousticTaskScenarioTriple';
 import SwarmJobInvestigationReportTriple from '@/components/cinematic/SwarmJobInvestigationReportTriple';
 import AcousticDatasetKnowledgeTriple from '@/components/cinematic/AcousticDatasetKnowledgeTriple';
+import OpsAlertContactScenarioTriple from '@/components/cinematic/OpsAlertContactScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3095,6 +3096,8 @@ function App() {
             <SwarmJobInvestigationReportTriple />
             {/* F749 (overnight 2026-09-11): Acoustic × Dataset × Knowledge Triple Nexus (ACDKNTRI) — AcousticDatasetKnowledgeTriple.jsx; /v1/acoustic/contacts × /v1/datasets × /knowledge/articles; FULLY_DOCUMENTED (dataset+article match)/DATA_ONLY/KNOWLEDGE_ONLY/DARK classification; filter tabs ALL/FULLY_DOCUMENTED/DATA_ONLY/KNOWLEDGE_ONLY/DARK + search; matched dataset (cyan tag+hits) + matched KB article (amber tag+hits) per acoustic contact; amber badge on DARK count; ◈ ACDKNTRI button left:915200 bottom:8 zIndex:608; isAcdkntriQuery+buildAcdkntriScript wired into JarvisBrain.ask(); jarvis:acdkntri-toggle event; 90-s auto-refresh; voice: acdkntri/acoustic dataset knowledge/acoustic data knowledge/sensor dataset knowledge/acoustic knowledge/acoustic data context/acoustic signal context/sensor knowledge gap/acoustic knowledge gap/acoustic data coverage */}
             <AcousticDatasetKnowledgeTriple />
+            {/* F750 (overnight 2026-09-11): Ops Alert × Contact × Scenario Triple Nexus (OACSTRI) — OpsAlertContactScenarioTriple.jsx; /v1/ops/alerts × /entities/Contact × /v1/scenario/list; FULLY_COVERED/CONTACT_ONLY/SCENARIO_ONLY/DARK classification; filter tabs ALL/FULLY_COVERED/CONTACT_ONLY/SCENARIO_ONLY/DARK + search; amber badge on DARK count; ◈ OACSTRI button left:916060 bottom:8 zIndex:609; isOacstriQuery+buildOacstriScript wired into JarvisBrain.ask(); jarvis:oacstri-toggle event; 90-s auto-refresh; voice: oacstri/ops alert contact scenario/alert contact scenario/ops triple/ops alert scenario contact/alert covered contacts/scenario ops alert/contact ops scenario/unplanned ops contact/alert coverage triple */}
+            <OpsAlertContactScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
