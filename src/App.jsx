@@ -1015,6 +1015,7 @@ import AcousticOpsAlertInvestigationTriple from '@/components/cinematic/Acoustic
 import InvestmentGraphSkillTriple from '@/components/cinematic/InvestmentGraphSkillTriple';
 import KnowledgeInvestigationOpsTriple from '@/components/cinematic/KnowledgeInvestigationOpsTriple';
 import SwarmReportContactTriple from '@/components/cinematic/SwarmReportContactTriple';
+import TaskDatasetScenarioTriple from '@/components/cinematic/TaskDatasetScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3110,6 +3111,8 @@ function App() {
             <KnowledgeInvestigationOpsTriple />
             {/* F754 (overnight 2026-09-11): SwarmJob × Report × Contact Triple Nexus (SJRPCNT) — SwarmReportContactTriple.jsx; /entities/SwarmJob × /v1/reports × /entities/Contact; FULLY_BACKED (report+contact match)/REPORT_ONLY/CONTACT_ONLY/DARK classification; 6 stat tiles; filter tabs ALL/FULLY_BACKED/REPORT_ONLY/CONTACT_ONLY/DARK + search; amber badge on DARK count; ◈ SJRPCNT button left:919500 bottom:8 zIndex:613; isSwarmReportContactQuery+buildSwarmReportContactScript wired into JarvisBrain.ask(); jarvis:sjrpcnt-toggle event; 90-s auto-refresh */}
             <SwarmReportContactTriple />
+            {/* F755 (overnight 2026-09-11): Task × Dataset × Scenario Triple Nexus (TDSCTRI) — TaskDatasetScenarioTriple.jsx; /entities/Task × /v1/datasets × /v1/scenario/list; FULLY_PLANNED (dataset+scenario match)/DATASET_ONLY/SCENARIO_ONLY/DARK classification; 6 stat tiles; filter tabs ALL/FULLY_PLANNED/DATASET_ONLY/SCENARIO_ONLY/DARK + search; red badge on DARK count; ◈ TDSCTRI button left:920360 bottom:8 zIndex:614; isTdsctriQuery+buildTdsctriScript wired into JarvisBrain.ask(); jarvis:tdsctri-toggle event; 90-s auto-refresh */}
+            <TaskDatasetScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
