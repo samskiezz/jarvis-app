@@ -1003,6 +1003,7 @@ import OpsAlertOpsEventKnowledgeTriple from '@/components/cinematic/OpsAlertOpsE
 import OpsAlertScenarioRiskTriple from '@/components/cinematic/OpsAlertScenarioRiskTriple';
 import InvestigationReportContactTriple from '@/components/cinematic/InvestigationReportContactTriple';
 import DatasetSwarmOpsTriple from '@/components/cinematic/DatasetSwarmOpsTriple';
+import RiskSignalDatasetInvestigationTriple from '@/components/cinematic/RiskSignalDatasetInvestigationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3074,6 +3075,8 @@ function App() {
             <InvestigationReportContactTriple />
             {/* F742 (overnight 2026-09-11): Dataset × SwarmJob × Ops Events Triple Nexus (DSWEEVTRI) — DatasetSwarmOpsTriple.jsx; /v1/datasets × /entities/SwarmJob × /v1/ops/events; FULLY_AUTOMATED/SWARM_ONLY/OPS_ONLY/UNMONITORED classification; 6 stat tiles; filter tabs + search; expand dataset → matched swarm jobs (status badge) + matched ops events (severity badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; red badge on unmonitored count; ◈ DSWEEVTRI button left:910700 bottom:8 zIndex:601; jarvis:dsweevtri-toggle event; 90-s auto-refresh */}
             <DatasetSwarmOpsTriple />
+            {/* F743 (overnight 2026-09-11): Risk Signal × Dataset × Investigation Triple Nexus (RSDTRI) — RiskSignalDatasetInvestigationTriple.jsx; /entities/RiskSignal × /v1/datasets × /v1/investigations; FULLY_COVERED/DATASET_ONLY/CASE_ONLY/DARK classification; 6 stat tiles (SIGNALS/FULLY CVR/DS ONLY/CASE ONLY/DARK/COVERAGE%); ALL/FULLY_COVERED/DATASET_ONLY/CASE_ONLY/DARK filter tabs + search; click-to-expand matched datasets (format badge + hits) + matched investigations (status badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; red badge on DARK count; ◈ RSDTRI button left:910800 bottom:8 zIndex:602; isRsdtriQuery+buildRsdtriScript wired into JarvisBrain.ask(); jarvis:rsdtri-toggle event; 90-s auto-refresh; voice: rsdtri/risk signal dataset investigation/risk dataset case/risk signal nexus/uncovered risk signal/dark risk signal/risk coverage triple/signal coverage */}
+            <RiskSignalDatasetInvestigationTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
