@@ -321,6 +321,7 @@ import { isSjirtriQuery, buildSjirtriScript } from "./SwarmJobInvestigationRepor
 import { isAcdkntriQuery, buildAcdkntriScript } from "./AcousticDatasetKnowledgeTriple";
 import { isOacstriQuery, buildOacstriScript } from "./OpsAlertContactScenarioTriple";
 import { isAcalinvQuery, buildAcalinvScript } from "./AcousticOpsAlertInvestigationTriple";
+import { isIgsklTriQuery, buildIgsklTriScript } from "./InvestmentGraphSkillTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1319,6 +1320,9 @@ export default function JarvisBrain() {
       } else if (isAcalinvQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:acalinv-toggle"));
         answer = await buildAcalinvScript();
+      } else if (isIgsklTriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:igskltri-toggle"));
+        answer = await buildIgsklTriScript();
       } else if (isSjirtriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sjirtri-toggle"));
         answer = await buildSjirtriScript();

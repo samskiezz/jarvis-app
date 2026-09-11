@@ -1012,6 +1012,7 @@ import SwarmJobInvestigationReportTriple from '@/components/cinematic/SwarmJobIn
 import AcousticDatasetKnowledgeTriple from '@/components/cinematic/AcousticDatasetKnowledgeTriple';
 import OpsAlertContactScenarioTriple from '@/components/cinematic/OpsAlertContactScenarioTriple';
 import AcousticOpsAlertInvestigationTriple from '@/components/cinematic/AcousticOpsAlertInvestigationTriple';
+import InvestmentGraphSkillTriple from '@/components/cinematic/InvestmentGraphSkillTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3101,6 +3102,8 @@ function App() {
             <OpsAlertContactScenarioTriple />
             {/* F751 (overnight 2026-09-11): Acoustic × Ops Alert × Investigation Triple Nexus (ACALINV) — AcousticOpsAlertInvestigationTriple.jsx; /v1/acoustic/contacts × /v1/ops/alerts × /v1/investigations; FULLY_TRACKED/ALERTED_ONLY/INVESTIGATED_ONLY/DARK classification; filter tabs + search; red badge on DARK count; ◈ ACALINV button left:916920 bottom:8 zIndex:610; isAcalinvQuery+buildAcalinvScript wired into JarvisBrain.ask(); jarvis:acalinv-toggle event; 90-s auto-refresh */}
             <AcousticOpsAlertInvestigationTriple />
+            {/* F752 (overnight 2026-09-11): Investment × Graph Centrality × Skill Triple Nexus (IGSKLTRI) — InvestmentGraphSkillTriple.jsx; /entities/Investment × /v1/graph/centrality × /v1/aip/skill; FULLY_COVERED/NODE_ONLY/SKILL_ONLY/DARK classification; 6 stat tiles; filter tabs + search; amber badge on dark count; ◈ IGSKLTRI button left:917780 bottom:8 zIndex:611; isIgsklTriQuery+buildIgsklTriScript wired into JarvisBrain.ask(); jarvis:igskltri-toggle event; 90-s auto-refresh */}
+            <InvestmentGraphSkillTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
