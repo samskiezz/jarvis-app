@@ -1014,6 +1014,7 @@ import OpsAlertContactScenarioTriple from '@/components/cinematic/OpsAlertContac
 import AcousticOpsAlertInvestigationTriple from '@/components/cinematic/AcousticOpsAlertInvestigationTriple';
 import InvestmentGraphSkillTriple from '@/components/cinematic/InvestmentGraphSkillTriple';
 import KnowledgeInvestigationOpsTriple from '@/components/cinematic/KnowledgeInvestigationOpsTriple';
+import SwarmReportContactTriple from '@/components/cinematic/SwarmReportContactTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3107,6 +3108,8 @@ function App() {
             <InvestmentGraphSkillTriple />
             {/* F753 (overnight 2026-09-11): Knowledge × Investigation × Ops Events Triple Nexus (KIOETR) — KnowledgeInvestigationOpsTriple.jsx; /knowledge/ × /v1/investigations × /v1/ops/events; FULLY_COVERED/INVEST_ONLY/OPS_ONLY/DARK classification; 6 stat tiles; filter tabs ALL/FULLY_COVERED/INVEST_ONLY/OPS_ONLY/DARK + search; amber badge on DARK count; ◈ KIOETR button left:918640 bottom:8 zIndex:612; isKioetrQuery+buildKioetrScript wired into JarvisBrain.ask(); jarvis:kioetr-toggle event; 90-s auto-refresh */}
             <KnowledgeInvestigationOpsTriple />
+            {/* F754 (overnight 2026-09-11): SwarmJob × Report × Contact Triple Nexus (SJRPCNT) — SwarmReportContactTriple.jsx; /entities/SwarmJob × /v1/reports × /entities/Contact; FULLY_BACKED (report+contact match)/REPORT_ONLY/CONTACT_ONLY/DARK classification; 6 stat tiles; filter tabs ALL/FULLY_BACKED/REPORT_ONLY/CONTACT_ONLY/DARK + search; amber badge on DARK count; ◈ SJRPCNT button left:919500 bottom:8 zIndex:613; isSwarmReportContactQuery+buildSwarmReportContactScript wired into JarvisBrain.ask(); jarvis:sjrpcnt-toggle event; 90-s auto-refresh */}
+            <SwarmReportContactTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
