@@ -1004,6 +1004,7 @@ import OpsAlertScenarioRiskTriple from '@/components/cinematic/OpsAlertScenarioR
 import InvestigationReportContactTriple from '@/components/cinematic/InvestigationReportContactTriple';
 import DatasetSwarmOpsTriple from '@/components/cinematic/DatasetSwarmOpsTriple';
 import RiskSignalDatasetInvestigationTriple from '@/components/cinematic/RiskSignalDatasetInvestigationTriple';
+import IntelProfileInvestmentKnowledgeTriple from '@/components/cinematic/IntelProfileInvestmentKnowledgeTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3077,6 +3078,8 @@ function App() {
             <DatasetSwarmOpsTriple />
             {/* F743 (overnight 2026-09-11): Risk Signal × Dataset × Investigation Triple Nexus (RSDTRI) — RiskSignalDatasetInvestigationTriple.jsx; /entities/RiskSignal × /v1/datasets × /v1/investigations; FULLY_COVERED/DATASET_ONLY/CASE_ONLY/DARK classification; 6 stat tiles (SIGNALS/FULLY CVR/DS ONLY/CASE ONLY/DARK/COVERAGE%); ALL/FULLY_COVERED/DATASET_ONLY/CASE_ONLY/DARK filter tabs + search; click-to-expand matched datasets (format badge + hits) + matched investigations (status badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; red badge on DARK count; ◈ RSDTRI button left:910800 bottom:8 zIndex:602; isRsdtriQuery+buildRsdtriScript wired into JarvisBrain.ask(); jarvis:rsdtri-toggle event; 90-s auto-refresh; voice: rsdtri/risk signal dataset investigation/risk dataset case/risk signal nexus/uncovered risk signal/dark risk signal/risk coverage triple/signal coverage */}
             <RiskSignalDatasetInvestigationTriple />
+            {/* F744 (overnight 2026-09-11): Intel Profile × Investment × Knowledge Triple Nexus (IIPKVTRI) — IntelProfileInvestmentKnowledgeTriple.jsx; /entities/IntelProfile × /entities/Investment × /knowledge/articles; FULLY_CONTEXTUALIZED/INVESTMENT_ONLY/KB_ONLY/DARK classification; 6 stat tiles (PROFILES/FULLY CONTEXTUALIZED/INV ONLY/KB ONLY/DARK/COVERAGE%); ALL/FULLY_CONTEXTUALIZED/INVESTMENT_ONLY/KB_ONLY/DARK filter tabs + search; click-to-expand matched investments (sector badge + hits) + matched KB articles (kind badge + hits); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-investment brief + TTS; dark badge on DARK count; ◈ IIPKVTRI button left:911660 bottom:8 zIndex:603; isIipkvtriQuery+buildIipkvtriScript wired into JarvisBrain.ask(); jarvis:iipkvtri-toggle event; 90-s auto-refresh; voice: iipkvtri/intel profile investment knowledge/threat actor investment/profile portfolio/dark intel profile/intel investment coverage */}
+            <IntelProfileInvestmentKnowledgeTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
