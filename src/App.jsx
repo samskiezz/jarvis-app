@@ -1008,6 +1008,7 @@ import IntelProfileInvestmentKnowledgeTriple from '@/components/cinematic/IntelP
 import ContactIntelOpsTriple from '@/components/cinematic/ContactIntelOpsTriple';
 import ContactScenarioRiskTriple from '@/components/cinematic/ContactScenarioRiskTriple';
 import AcousticTaskScenarioTriple from '@/components/cinematic/AcousticTaskScenarioTriple';
+import SwarmJobInvestigationReportTriple from '@/components/cinematic/SwarmJobInvestigationReportTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3089,6 +3090,8 @@ function App() {
             <ContactScenarioRiskTriple />
             {/* F747 (overnight 2026-09-11): Acoustic × Task × Scenario Triple Nexus (ACTASKSCN) — AcousticTaskScenarioTriple.jsx; /v1/acoustic/contacts × /entities/Task × /v1/scenario/list; FULLY_OPERATIONAL (task+scenario match)/TASK_ONLY/SCENARIO_ONLY/DARK classification; filter tabs ALL/FULLY_OPERATIONAL/TASK_ONLY/SCENARIO_ONLY/DARK; matched task (cyan tag) + matched scenario (amber tag) per acoustic contact; ◈ ACTASKSCN button left:914240 bottom:8 zIndex:606; isActaskscnQuery+buildActaskscnScript wired into JarvisBrain.ask(); jarvis:actaskscn-toggle event; 90-s auto-refresh; voice: actaskscn/acoustic task scenario/acoustic scenario task/sensor task scenario/task scenario acoustic/acoustic mission scenario/acoustic operational/acoustic task plan/sensor mission plan/acoustic scenario coverage/task backed acoustic */}
             <AcousticTaskScenarioTriple />
+            {/* F748 (overnight 2026-09-11): SwarmJob × Investigation × Report Triple Nexus (SJIRTRI) — SwarmJobInvestigationReportTriple.jsx; /entities/SwarmJob × /v1/investigations × /v1/reports; FULLY_DOCUMENTED (inv+report match)/INVEST_ONLY/REPORT_ONLY/DARK classification; filter tabs ALL/FULLY_DOCUMENTED/INVEST_ONLY/REPORT_ONLY/DARK; matched investigation (cyan tag) + matched report (amber tag) per swarm job; ◈ SJIRTRI button left:915100 bottom:8 zIndex:607; isSjirtriQuery+buildSjirtriScript wired into JarvisBrain.ask(); jarvis:sjirtri-toggle event; 90-s auto-refresh; voice: sjirtri/swarm investigation report/swarm job investigation/swarm report investigation/job investigation report/swarm case report/swarm documented/job coverage report/swarm case coverage/swarm job nexus/documented swarm */}
+            <SwarmJobInvestigationReportTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
