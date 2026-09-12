@@ -13,3 +13,4 @@
 [2026-09-12] F31 DONE — AttentionNudge.jsx: after 5 min idle, fetches /entities/Task (pending count) + /entities/RiskSignal (critical count), speaks via /v1/voice/tts; ⚠ NUDGE toggle top-right; resets on jarvis:ask event; off by default; isNudgeQuery wired in JarvisBrain; mounted App.jsx; Vite build exit 0
 [2026-09-12] F32 Vitals Dashboard: mounted VitalsDashboard.jsx (real endpoints /v1/vitals/latest + /v1/vitals/trend); wired isVtlsQuery+buildVtlsScript in JarvisBrain; jarvis:vtls-toggle event; Vite build exit 0
 [2026-09-12] F33 SecurityComplianceDashboard: /v1/security/compliance/status + /v1/security/audit; scorecard tiles + audit chain log; isSecurityQuery wired JarvisBrain; jarvis:sec-toggle; Vite build exit 0
+2026-09-12 F34 ReportCategoryBreakdown.jsx — /v1/reports by category bar chart; ASSESS → agent+TTS. Build: PASS.

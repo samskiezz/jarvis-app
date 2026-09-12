@@ -1031,6 +1031,7 @@ import AipSkillInvestigationDatasetTriple from '@/components/cinematic/AipSkillI
 import AttentionNudge from '@/components/cinematic/AttentionNudge';
 import VitalsDashboard from '@/components/cinematic/VitalsDashboard';
 import SecurityComplianceDashboard from '@/components/cinematic/SecurityComplianceDashboard';
+import ReportCategoryBreakdown from '@/components/cinematic/ReportCategoryBreakdown';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1195,6 +1196,8 @@ function App() {
             <ReportSummariser />
             {/* F33: reports library — ⊞ RLIB button; fetches /v1/reports; stat tiles (total/generated/manual/recent-7d); ALL/GENERATED/MANUAL filter tabs + text search; expand row → body excerpt + meta chips; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRlibQuery+buildRlibScript wired in JarvisBrain; "reports/report library/rlib" voice trigger; 90-s refresh */}
             <ReportsLibrary />
+            {/* F34: report category breakdown — ◼ RCAT button; polls /v1/reports every 120s; groups by category/type; ranked bar chart; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; "report breakdown"/"report categories"/"rcb" voice trigger */}
+            <ReportCategoryBreakdown />
             {/* F51: biometric vitals monitor — ◈ VITALS button (left:10460); polls /v1/vitals/latest every 60 s; HR/HRV/SpO₂/steps/sleep/weight gauge cards + GaugeBar; always returns data (falls back to default schema); ▶ JARVIS ASSESS → /v1/jarvis/agent/chat 2-sentence health commentary + TTS; "JARVIS, vitals"/"biometrics"/"health metrics"/"body stats" voice trigger */}
             <VitalsMonitor />
             {/* F52: agent chat transcript — ◉ CHAT button (left:3512); persistent multi-turn chat panel wired to /v1/jarvis/agent/chat; keeps scrollable conversation history in localStorage (max 60 msgs); typed input separate from ephemeral JarvisBrain overlay; isChatQuery+buildChatScript already wired in JarvisBrain; "JARVIS, open chat"/"chat panel"/"agent chat" voice trigger */}
