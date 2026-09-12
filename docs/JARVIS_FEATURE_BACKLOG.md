@@ -18,12 +18,12 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 `/v1/scenario/list` · `/v1/aip/skill` · `/v1/reports` · `/knowledge/*`
 
 ## Backlog (real features)
-- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-09-12: CommandPalette.jsx implemented + mounted in App.jsx; lists all 10 cinematic scenes + all APEX pages; ⌘K/Ctrl+K toggle, arrow-key nav, Enter executes, Esc closes; build verified.]
-- [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
-- [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
-- [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
-- [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).
-- [ ] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins.
+- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-09-12: implemented in src/components/cinematic/CommandPalette.jsx, mounted via App.jsx; lists all pageRegistry pages + 10 cinematic scenes, keyboard nav (↑↓/Enter/Esc), real navigation on run]
+- [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. [2026-09-12: HeyJarvisListener.jsx (SpeechRecognition wake word) + WakeWordToggle.jsx + jarvisVoice.js; mounted in App.jsx; dispatches jarvis:ask to open JarvisBrain; ambient hum armed on toggle; build verified OK]
+- [x] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing. [2026-09-12: LiveTelemetryTicker.jsx polls both endpoints every 30 s; Pill readouts for CPU/MEM/LOAD/NODES/SYNAPSES; hides until first real data; mounted via App.jsx line 1137; build verified OK]
+- [x] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector. [2026-09-12: SceneKeyboardNav.jsx — global keydown listener maps 1–9→scene01–09, 0→scene10, Esc→/; skips when input/textarea focused; shows 1.6 s HUD badge confirming jump; uses CINEMATIC_SCENES registry; mounted via App.jsx; build verified exit 0]
+- [x] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS). [2026-09-12: SpokenStatusReport.jsx builds script from /v1/jarvis/system/status + /v1/cinematic/brain; wired in JarvisBrain.jsx via isStatusQuery/buildStatusScript/speak(); speaks via /v1/voice/tts; build verified exit 0]
+- [x] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins. [2026-09-12: LiveWorldIncidentFeed.jsx — polls getLiveIntel every 60 s; SVG equirectangular world map with magnitude-scaled hover-tooltip pins; scrolling incident list sorted by mag; M5+/M7+ stat tiles; ⚡ QUAKES button left:8700; voice intent isIncidentFeedQuery + buildIncidentFeedScript; mounted in App.jsx; build exit 0]
 - [ ] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers.
 - [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.
 - [ ] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical.
