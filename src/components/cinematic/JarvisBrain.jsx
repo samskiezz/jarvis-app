@@ -340,6 +340,7 @@ import { isVtlsQuery, buildVtlsScript } from "./VitalsDashboard";
 import { isSecurityQuery, buildSecurityScript } from "./SecurityComplianceDashboard";
 import { isRptlQuery, buildRptlScript } from "./ReportPublicationTimeline";
 import { isIpcnfQuery, buildIpcnfScript } from "./IntelProfileConfidence";
+import { isScemQuery, buildScemScript } from "./SceneIntelMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1395,6 +1396,9 @@ export default function JarvisBrain() {
       } else if (isIpcnfQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ipcnf-toggle"));
         answer = await buildIpcnfScript();
+      } else if (isScemQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:scem-toggle"));
+        answer = await buildScemScript();
       } else if (isSjirtriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sjirtri-toggle"));
         answer = await buildSjirtriScript();

@@ -1034,6 +1034,7 @@ import SecurityComplianceDashboard from '@/components/cinematic/SecurityComplian
 import ReportCategoryBreakdown from '@/components/cinematic/ReportCategoryBreakdown';
 import ReportPublicationTimeline from '@/components/cinematic/ReportPublicationTimeline';
 import IntelProfileConfidence from '@/components/cinematic/IntelProfileConfidence';
+import SceneIntelMatrix from '@/components/cinematic/SceneIntelMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3167,6 +3168,8 @@ function App() {
             <ReportPublicationTimeline />
             {/* F36 (overnight 2026-09-12): Intel Profile Confidence Dashboard — IntelProfileConfidence.jsx; /entities/IntelProfile grouped by confidence tier (high/medium/low/unknown); confidence bars + stat tiles + distribution strip; filter tabs + search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◎ IPCNF button left:6400 bottom:8 zIndex:87; isIpcnfQuery+buildIpcnfScript wired into JarvisBrain.ask(); jarvis:ipcnf-toggle event; 90-s auto-refresh; voice: intel confidence/profile confidence/ipcnf */}
             <IntelProfileConfidence />
+            {/* F37 (overnight 2026-09-12): All-Scenes Intelligence Matrix — SceneIntelMatrix.jsx; polls all 10 /v1/cinematic/scene/{id} + /v1/cinematic/brain; 10-cell 2×5 grid showing anchor count + top anchor per scene; SCENES/TOTAL ANCHORS/BRAIN NODES/SYNAPSES stat tiles; ▶ ASSESS → TTS via /v1/voice/tts; ◈ SCEM button left:928960 bottom:8 zIndex:624; isScemQuery+buildScemScript wired into JarvisBrain.ask(); jarvis:scem-toggle event; 120-s auto-refresh; voice: scene matrix/all scenes/scem/scene overview/cinematic matrix */}
+            <SceneIntelMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
