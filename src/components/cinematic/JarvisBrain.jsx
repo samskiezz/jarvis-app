@@ -338,6 +338,7 @@ import { isDrsctriQuery, buildDrsctriScript } from "./DatasetReportScenarioTripl
 import { isAsidtriQuery, buildAsidtriScript } from "./AipSkillInvestigationDatasetTriple";
 import { isVtlsQuery, buildVtlsScript } from "./VitalsDashboard";
 import { isSecurityQuery, buildSecurityScript } from "./SecurityComplianceDashboard";
+import { isRptlQuery, buildRptlScript } from "./ReportPublicationTimeline";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1387,6 +1388,9 @@ export default function JarvisBrain() {
       } else if (isSecurityQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sec-toggle"));
         answer = await buildSecurityScript();
+      } else if (isRptlQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:rptl-toggle"));
+        answer = await buildRptlScript();
       } else if (isSjirtriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sjirtri-toggle"));
         answer = await buildSjirtriScript();

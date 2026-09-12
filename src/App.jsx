@@ -1032,6 +1032,7 @@ import AttentionNudge from '@/components/cinematic/AttentionNudge';
 import VitalsDashboard from '@/components/cinematic/VitalsDashboard';
 import SecurityComplianceDashboard from '@/components/cinematic/SecurityComplianceDashboard';
 import ReportCategoryBreakdown from '@/components/cinematic/ReportCategoryBreakdown';
+import ReportPublicationTimeline from '@/components/cinematic/ReportPublicationTimeline';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3161,6 +3162,8 @@ function App() {
             <VitalsDashboard />
             {/* F33 (overnight 2026-09-12): Security Compliance Dashboard — SecurityComplianceDashboard.jsx; /v1/security/compliance/status + /v1/security/audit?n=20; scorecard tiles (chain integrity/revdb/tenancy/cross-org/clearance); scrolling audit chain; ▶ ASSESS → TTS; ⚑ SEC button; isSecurityQuery+buildSecurityScript wired into JarvisBrain; jarvis:sec-toggle event; 60-s/90-s auto-refresh; voice: security/compliance/audit/chain integrity/tenancy/revdb */}
             <SecurityComplianceDashboard />
+            {/* F35 (overnight 2026-09-12): Report Publication Timeline — ReportPublicationTimeline.jsx; /v1/reports grouped by creation date; 30-day daily-volume sparkline; stat tiles TOTAL/7-DAY/30-DAY/LATEST; recent-activity bar rows; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◷ RPTL button left:5540 bottom:8 zIndex:85; isRptlQuery+buildRptlScript wired into JarvisBrain.ask(); jarvis:rptl-toggle event; 120-s auto-refresh; voice: report timeline/publication rate/rptl/when were reports published */}
+            <ReportPublicationTimeline />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
