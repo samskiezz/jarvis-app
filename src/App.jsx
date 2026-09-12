@@ -1028,6 +1028,7 @@ import OpsAlertTaskRiskTriple from '@/components/cinematic/OpsAlertTaskRiskTripl
 import InvestigationContactRiskTriple from '@/components/cinematic/InvestigationContactRiskTriple';
 import DatasetReportScenarioTriple from '@/components/cinematic/DatasetReportScenarioTriple';
 import AipSkillInvestigationDatasetTriple from '@/components/cinematic/AipSkillInvestigationDatasetTriple';
+import AttentionNudge from '@/components/cinematic/AttentionNudge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3149,6 +3150,8 @@ function App() {
             <DatasetReportScenarioTriple />
             {/* F766 (overnight 2026-09-12): AipSkill × Investigation × Dataset Triple Nexus (ASIDTRI) — AipSkillInvestigationDatasetTriple.jsx; /v1/aip/skill × /v1/investigations × /v1/datasets; FULLY_EQUIPPED (inv+dataset match)/INV_ONLY/DATASET_ONLY/DARK classification; 4 stat tiles; ALL/FULLY_EQUIPPED/INV_ONLY/DATASET_ONLY/DARK filter tabs + search; amber badge on DARK count; ◈ ASIDTRI button left:928100 bottom:8 zIndex:623; isAsidtriQuery+buildAsidtriScript wired into JarvisBrain.ask(); jarvis:asidtri-toggle event; 90-s auto-refresh; voice: asidtri/skill investigation dataset/skill equipped/equipped skills/dark skills/dataset skill coverage/investigation skill coverage/skill dataset coverage/aip skill dataset/aip skill investigation */}
             <AipSkillInvestigationDatasetTriple />
+            {/* F31 (overnight 2026-09-12): AttentionNudge — after 5 min inactivity, fetches /entities/Task + /entities/RiskSignal, speaks via /v1/voice/tts; ⚠ NUDGE toggle top-right; resets on any jarvis:ask; off by default; isNudgeQuery+buildNudgeScript wired in JarvisBrain */}
+            <AttentionNudge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

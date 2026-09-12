@@ -15,6 +15,7 @@ import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isAnchorDrillQuery, buildAnchorScript } from "./PerSceneAnchorDrillDown";
 import { isAmbientQuery } from "./AmbientReactorHum";
+import { isNudgeQuery } from "./AttentionNudge";
 import { isShowMeQuery, buildShowMeScript } from "./ShowMeRouter";
 import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 import { isAlertQuery, buildAlertScript } from "./AlertToasts";
@@ -941,6 +942,9 @@ export default function JarvisBrain() {
       } else if (isAmbientQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
         answer = "Toggling ambient reactor hum, sir.";
+      } else if (isNudgeQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:nudge-toggle"));
+        answer = "Toggling attention nudge, sir.";
       } else if (isSkscnQuery(q)) {
         answer = await buildSkscnScript();
         window.dispatchEvent(new CustomEvent("jarvis:skscn-toggle"));
