@@ -1033,6 +1033,7 @@ import VitalsDashboard from '@/components/cinematic/VitalsDashboard';
 import SecurityComplianceDashboard from '@/components/cinematic/SecurityComplianceDashboard';
 import ReportCategoryBreakdown from '@/components/cinematic/ReportCategoryBreakdown';
 import ReportPublicationTimeline from '@/components/cinematic/ReportPublicationTimeline';
+import IntelProfileConfidence from '@/components/cinematic/IntelProfileConfidence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3164,6 +3165,8 @@ function App() {
             <SecurityComplianceDashboard />
             {/* F35 (overnight 2026-09-12): Report Publication Timeline — ReportPublicationTimeline.jsx; /v1/reports grouped by creation date; 30-day daily-volume sparkline; stat tiles TOTAL/7-DAY/30-DAY/LATEST; recent-activity bar rows; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◷ RPTL button left:5540 bottom:8 zIndex:85; isRptlQuery+buildRptlScript wired into JarvisBrain.ask(); jarvis:rptl-toggle event; 120-s auto-refresh; voice: report timeline/publication rate/rptl/when were reports published */}
             <ReportPublicationTimeline />
+            {/* F36 (overnight 2026-09-12): Intel Profile Confidence Dashboard — IntelProfileConfidence.jsx; /entities/IntelProfile grouped by confidence tier (high/medium/low/unknown); confidence bars + stat tiles + distribution strip; filter tabs + search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◎ IPCNF button left:6400 bottom:8 zIndex:87; isIpcnfQuery+buildIpcnfScript wired into JarvisBrain.ask(); jarvis:ipcnf-toggle event; 90-s auto-refresh; voice: intel confidence/profile confidence/ipcnf */}
+            <IntelProfileConfidence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
