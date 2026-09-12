@@ -1029,6 +1029,7 @@ import InvestigationContactRiskTriple from '@/components/cinematic/Investigation
 import DatasetReportScenarioTriple from '@/components/cinematic/DatasetReportScenarioTriple';
 import AipSkillInvestigationDatasetTriple from '@/components/cinematic/AipSkillInvestigationDatasetTriple';
 import AttentionNudge from '@/components/cinematic/AttentionNudge';
+import VitalsDashboard from '@/components/cinematic/VitalsDashboard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3152,6 +3153,8 @@ function App() {
             <AipSkillInvestigationDatasetTriple />
             {/* F31 (overnight 2026-09-12): AttentionNudge — after 5 min inactivity, fetches /entities/Task + /entities/RiskSignal, speaks via /v1/voice/tts; ⚠ NUDGE toggle top-right; resets on any jarvis:ask; off by default; isNudgeQuery+buildNudgeScript wired in JarvisBrain */}
             <AttentionNudge />
+            {/* F32 (overnight 2026-09-12): Vitals Dashboard — VitalsDashboard.jsx; /v1/vitals/latest + /v1/vitals/trend; HR/HRV/SpO2/steps/sleep/weight stat tiles; per-metric sparklines on expand; source badge (LIVE/DEFAULT SCHEMA); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ⊕ VTLS button left:151200 bottom:8 zIndex:126; isVtlsQuery+buildVtlsScript wired into JarvisBrain.ask(); jarvis:vtls-toggle event; 60-s auto-refresh; voice: vitals/biometrics/heart rate/hrv/spo2/steps/sleep/weight/vtls */}
+            <VitalsDashboard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
