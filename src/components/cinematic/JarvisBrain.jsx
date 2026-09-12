@@ -331,6 +331,7 @@ import { isIpdrptQuery, buildIpdrptScript } from "./IntelProfileDatasetReportTri
 import { isCsdtriQuery, buildCsdtriScript } from "./ContactScenarioDatasetTriple";
 import { isTcktriQuery, buildTcktriScript } from "./TaskContactKnowledgeTriple";
 import { isSskltriQuery, buildSskltriScript } from "./ScenarioSkillTaskTriple";
+import { isOaltriaxQuery, buildOaltriaxScript } from "./OpsAlertTaskRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1359,6 +1360,9 @@ export default function JarvisBrain() {
       } else if (isSskltriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sskltri-toggle"));
         answer = await buildSskltriScript();
+      } else if (isOaltriaxQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:oaltriax-toggle"));
+        answer = await buildOaltriaxScript();
       } else if (isSjirtriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sjirtri-toggle"));
         answer = await buildSjirtriScript();

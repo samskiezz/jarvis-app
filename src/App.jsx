@@ -1023,6 +1023,7 @@ import IntelProfileDatasetReportTriple from '@/components/cinematic/IntelProfile
 import TaskContactKnowledgeTriple from '@/components/cinematic/TaskContactKnowledgeTriple';
 import ScenarioSkillTaskTriple from '@/components/cinematic/ScenarioSkillTaskTriple';
 import UrgentSkillGapRadar from '@/components/cinematic/UrgentSkillGapRadar';
+import OpsAlertTaskRiskTriple from '@/components/cinematic/OpsAlertTaskRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3134,6 +3135,8 @@ function App() {
             <ScenarioSkillTaskTriple />
             {/* F762 (overnight 2026-09-11): urgent skill gap radar — ◈ URGAP button; crosses /v1/aip/skill × /entities/Task; danger index = priority_weight × (1 − skill_score/100); top-10 ranked gaps + danger bar; ASSESS → /v1/jarvis/agent/chat + TTS; "urgent gap"/"urgap" voice trigger; 120-s auto-refresh */}
             <UrgentSkillGapRadar />
+            {/* F763 (overnight 2026-09-12): Ops Alert × Task × RiskSignal Triple Nexus (OALTRIAX) — OpsAlertTaskRiskTriple.jsx; /v1/ops/alerts × /entities/Task × /entities/RiskSignal; FULLY_ACTIONABLE (task+risk match)/TASK_ONLY/RISK_ONLY/DARK classification; 4 stat tiles; ALL/FULLY_ACTIONABLE/TASK_ONLY/RISK_ONLY/DARK filter tabs + search; matched task (cyan) + matched risk signal (amber) per alert; orange badge on total; ◈ OALTRIAX button left:925520 bottom:8 zIndex:620; isOaltriaxQuery+buildOaltriaxScript wired into JarvisBrain.ask(); jarvis:oaltriax-toggle event; 90-s auto-refresh; voice: oaltriax/ops alert task risk/alert task coverage/actionable alerts/dark alerts/unactionable alerts/ops action coverage */}
+            <OpsAlertTaskRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
