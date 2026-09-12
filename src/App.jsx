@@ -1025,6 +1025,7 @@ import ScenarioSkillTaskTriple from '@/components/cinematic/ScenarioSkillTaskTri
 import UrgentSkillGapRadar from '@/components/cinematic/UrgentSkillGapRadar';
 import OpsAlertTaskRiskTriple from '@/components/cinematic/OpsAlertTaskRiskTriple';
 import InvestigationContactRiskTriple from '@/components/cinematic/InvestigationContactRiskTriple';
+import DatasetReportScenarioTriple from '@/components/cinematic/DatasetReportScenarioTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3140,6 +3141,8 @@ function App() {
             <OpsAlertTaskRiskTriple />
             {/* F764 (overnight 2026-09-12): Investigation × Contact × RiskSignal Triple Nexus (ICRSTRI) — InvestigationContactRiskTriple.jsx; /v1/investigations × /entities/Contact × /entities/RiskSignal; FULLY_COVERED (contact+risk match)/CONTACT_ONLY/RISK_ONLY/DARK classification; 4 stat tiles; ALL/FULLY_COVERED/CONTACT_ONLY/RISK_ONLY/DARK filter tabs + search; amber badge on DARK count; ◈ ICRSTRI button left:926380 bottom:8 zIndex:621; isIcrstriQuery+buildIcrstriScript wired into JarvisBrain.ask(); jarvis:icrstri-toggle event; 90-s auto-refresh; voice: icrstri/investigation contact risk/investigation coverage/covered investigations/dark investigations/investigation risk signal/contact risk investigation/risk investigation coverage */}
             <InvestigationContactRiskTriple />
+            {/* F765 (overnight 2026-09-12): Dataset × Report × Scenario Triple Nexus (DRSCTRI) — DatasetReportScenarioTriple.jsx; /v1/datasets × /v1/reports × /v1/scenario/list; FULLY_MODELED (report+scenario match)/REPORT_ONLY/SCENARIO_ONLY/DARK classification; 4 stat tiles; ALL/FULLY_MODELED/REPORT_ONLY/SCENARIO_ONLY/DARK filter tabs + search; amber badge on DARK count; ◈ DRSCTRI button left:927240 bottom:8 zIndex:622; isDrsctriQuery+buildDrsctriScript wired into JarvisBrain.ask(); jarvis:drsctri-toggle event; 90-s auto-refresh; voice: drsctri/dataset report scenario/dataset modeled/unmodeled dataset/dark dataset/dataset scenario coverage */}
+            <DatasetReportScenarioTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
