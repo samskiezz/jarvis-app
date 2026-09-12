@@ -54,6 +54,7 @@ import DailyObjectivesPlanner from '@/components/cinematic/DailyObjectivesPlanne
 import NexusControlPlane from '@/components/overnight/NexusControlPlane';
 import SkillScorecard from '@/components/cinematic/SkillScorecard';
 import LiveTelemetryTicker from '@/components/cinematic/LiveTelemetryTicker';
+import LiveWorldIncidentFeed from '@/components/cinematic/LiveWorldIncidentFeed';
 import StatusReporter from '@/components/cinematic/StatusReporter';
 import OvernightPanels from '@/components/overnight/OvernightPanels';
 import InvestmentWidget from '@/components/cinematic/InvestmentWidget';
@@ -1135,6 +1136,8 @@ function App() {
             <SkillScorecard />
             {/* F03: live telemetry ticker — thin top-bar HUD; polls /v1/jarvis/system/status (cpu/mem/load) + /v1/cinematic/brain (nodes/synapses) every 30 s; colour-coded pills; hides until first data arrives */}
             <LiveTelemetryTicker />
+            {/* F06: live world incident feed — ⚡ QUAKES button (left:8700); polls /functions/getLiveIntel every 60 s; SVG world map with magnitude-scaled pins + scrolling sorted incident list; "world incidents"/"earthquake feed"/"live quakes" voice trigger */}
+            <LiveWorldIncidentFeed />
             {/* F05: spoken status report — "JARVIS, status" or "status report" → fetches /v1/jarvis/system/status + /v1/cinematic/brain; speaks precise numbers via /v1/voice/tts; HUD card auto-dismisses after 14 s */}
             <StatusReporter />
             {/* F136: investment/wealth widget — ◆ WEALTH button (bottom strip); sources /entities/Investment + /entities/WealthSnapshot; holdings list with allocation bars, P&L, type-filter tabs; "JARVIS, investments/portfolio/wealth" jarvis:ask voice trigger; 60 s auto-refresh */}
