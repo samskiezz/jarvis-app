@@ -1024,6 +1024,7 @@ import TaskContactKnowledgeTriple from '@/components/cinematic/TaskContactKnowle
 import ScenarioSkillTaskTriple from '@/components/cinematic/ScenarioSkillTaskTriple';
 import UrgentSkillGapRadar from '@/components/cinematic/UrgentSkillGapRadar';
 import OpsAlertTaskRiskTriple from '@/components/cinematic/OpsAlertTaskRiskTriple';
+import InvestigationContactRiskTriple from '@/components/cinematic/InvestigationContactRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3137,6 +3138,8 @@ function App() {
             <UrgentSkillGapRadar />
             {/* F763 (overnight 2026-09-12): Ops Alert × Task × RiskSignal Triple Nexus (OALTRIAX) — OpsAlertTaskRiskTriple.jsx; /v1/ops/alerts × /entities/Task × /entities/RiskSignal; FULLY_ACTIONABLE (task+risk match)/TASK_ONLY/RISK_ONLY/DARK classification; 4 stat tiles; ALL/FULLY_ACTIONABLE/TASK_ONLY/RISK_ONLY/DARK filter tabs + search; matched task (cyan) + matched risk signal (amber) per alert; orange badge on total; ◈ OALTRIAX button left:925520 bottom:8 zIndex:620; isOaltriaxQuery+buildOaltriaxScript wired into JarvisBrain.ask(); jarvis:oaltriax-toggle event; 90-s auto-refresh; voice: oaltriax/ops alert task risk/alert task coverage/actionable alerts/dark alerts/unactionable alerts/ops action coverage */}
             <OpsAlertTaskRiskTriple />
+            {/* F764 (overnight 2026-09-12): Investigation × Contact × RiskSignal Triple Nexus (ICRSTRI) — InvestigationContactRiskTriple.jsx; /v1/investigations × /entities/Contact × /entities/RiskSignal; FULLY_COVERED (contact+risk match)/CONTACT_ONLY/RISK_ONLY/DARK classification; 4 stat tiles; ALL/FULLY_COVERED/CONTACT_ONLY/RISK_ONLY/DARK filter tabs + search; amber badge on DARK count; ◈ ICRSTRI button left:926380 bottom:8 zIndex:621; isIcrstriQuery+buildIcrstriScript wired into JarvisBrain.ask(); jarvis:icrstri-toggle event; 90-s auto-refresh; voice: icrstri/investigation contact risk/investigation coverage/covered investigations/dark investigations/investigation risk signal/contact risk investigation/risk investigation coverage */}
+            <InvestigationContactRiskTriple />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

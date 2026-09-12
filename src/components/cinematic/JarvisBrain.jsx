@@ -332,6 +332,7 @@ import { isCsdtriQuery, buildCsdtriScript } from "./ContactScenarioDatasetTriple
 import { isTcktriQuery, buildTcktriScript } from "./TaskContactKnowledgeTriple";
 import { isSskltriQuery, buildSskltriScript } from "./ScenarioSkillTaskTriple";
 import { isOaltriaxQuery, buildOaltriaxScript } from "./OpsAlertTaskRiskTriple";
+import { isIcrstriQuery, buildIcrstriScript } from "./InvestigationContactRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1363,6 +1364,9 @@ export default function JarvisBrain() {
       } else if (isOaltriaxQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:oaltriax-toggle"));
         answer = await buildOaltriaxScript();
+      } else if (isIcrstriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:icrstri-toggle"));
+        answer = await buildIcrstriScript();
       } else if (isSjirtriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sjirtri-toggle"));
         answer = await buildSjirtriScript();
