@@ -1,2 +1,3 @@
 2026-09-12 F01 ⌘K command palette — implemented in src/components/cinematic/CommandPalette.jsx (mounted via App.jsx); lists pageRegistry pages + 10 cinematic scenes; keyboard nav + Enter to navigate; build verified OK
 2026-09-12 F02 "Hey JARVIS" wake word — HeyJarvisListener.jsx (SpeechRecognition + WakeWordToggle + jarvisVoice.js) mounted in App.jsx; dispatches jarvis:ask on wake; ambient hum armed; build verified OK
+[2026-09-12] F03 DONE — LiveTelemetryTicker.jsx: polls /v1/jarvis/system/status + /v1/cinematic/brain every 30s; CPU/MEM/LOAD/NODES/SYNAPSES pills in fixed top bar; hides until real data arrives; mounted in App.jsx; Vite build exit 0

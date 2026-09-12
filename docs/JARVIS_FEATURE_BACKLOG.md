@@ -20,7 +20,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 ## Backlog (real features)
 - [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-09-12: implemented in src/components/cinematic/CommandPalette.jsx, mounted via App.jsx; lists all pageRegistry pages + 10 cinematic scenes, keyboard nav (↑↓/Enter/Esc), real navigation on run]
 - [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. [2026-09-12: HeyJarvisListener.jsx (SpeechRecognition wake word) + WakeWordToggle.jsx + jarvisVoice.js; mounted in App.jsx; dispatches jarvis:ask to open JarvisBrain; ambient hum armed on toggle; build verified OK]
-- [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
+- [x] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing. [2026-09-12: LiveTelemetryTicker.jsx polls both endpoints every 30 s; Pill readouts for CPU/MEM/LOAD/NODES/SYNAPSES; hides until first real data; mounted via App.jsx line 1137; build verified OK]
 - [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
 - [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).
 - [ ] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins.
