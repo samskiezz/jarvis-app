@@ -27,7 +27,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers. [2026-09-12: MarketsTicker.jsx — scrolling ticker strip polls /functions/getLiveIntel crypto+FX every 60 s; isMarketsQuery/buildMarketsScript wired in JarvisBrain.jsx; mounted in App.jsx; build exit 0]
 - [x] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier. [2026-09-12: EntityQuickSearch.jsx — queries /v1/graph/subgraph + /entities/IntelProfile; Ctrl+Shift+E shortcut; jarvis:entity-search event via JarvisBrain; click result dispatches jarvis:speak-dossier; mounted in App.jsx; build exit 0]
 - [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical. [2026-09-12: RiskBoard.jsx — polls /entities/RiskSignal every 90 s; severity-sorted (critical/high/medium/low) cards with red pulse on critical; isRiskQuery+buildRiskScript wired in JarvisBrain; ◈ RISKS button; mounted App.jsx; build verified]
-- [ ] F10 Task board — /entities/Task → live mission cards with status.
+- [x] F10 Task board — /entities/Task → live mission cards with status. [2026-09-12: TaskBoard.jsx polls /entities/Task every 90 s; status-sorted cards (in_progress→pending→blocked→completed); colour-coded by status; active tasks pulse cyan; TASKS button bottom-left; isTaskQuery+buildTaskScript wired in JarvisBrain; mounted App.jsx line 1068; Vite build exit 0]
 - [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
 - [ ] F12 Investigations list — /v1/investigations → open cases panel.
 - [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.

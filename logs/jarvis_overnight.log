@@ -7,3 +7,4 @@
 2026-09-12 F07 Markets ticker — MarketsTicker.jsx scrolling crypto+FX strip; isMarketsQuery/buildMarketsScript in JarvisBrain; mounted App.jsx; build exit 0.
 2026-09-12 F08 Entity quick-search — EntityQuickSearch.jsx; queries /v1/graph/subgraph + /entities/IntelProfile; Ctrl+Shift+E shortcut; dossier spoken via TTS; mounted App.jsx; build exit 0.
 2026-09-12 F09 DONE — RiskBoard.jsx: polls /entities/RiskSignal every 90 s; severity-sorted cards (critical→low); critical signals pulse red; isRiskQuery+buildRiskScript in JarvisBrain; mounted App.jsx; Vite build exit 0
+2026-09-12 F10 Task board — TaskBoard.jsx polls /entities/Task every 90 s; status-sorted mission cards (in_progress→pending→blocked→completed); isTaskQuery+buildTaskScript wired in JarvisBrain; TASKS button bottom-left; mounted App.jsx; Vite build exit 0.
