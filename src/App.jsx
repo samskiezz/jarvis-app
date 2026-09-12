@@ -1030,6 +1030,7 @@ import DatasetReportScenarioTriple from '@/components/cinematic/DatasetReportSce
 import AipSkillInvestigationDatasetTriple from '@/components/cinematic/AipSkillInvestigationDatasetTriple';
 import AttentionNudge from '@/components/cinematic/AttentionNudge';
 import VitalsDashboard from '@/components/cinematic/VitalsDashboard';
+import SecurityComplianceDashboard from '@/components/cinematic/SecurityComplianceDashboard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3155,6 +3156,8 @@ function App() {
             <AttentionNudge />
             {/* F32 (overnight 2026-09-12): Vitals Dashboard — VitalsDashboard.jsx; /v1/vitals/latest + /v1/vitals/trend; HR/HRV/SpO2/steps/sleep/weight stat tiles; per-metric sparklines on expand; source badge (LIVE/DEFAULT SCHEMA); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ⊕ VTLS button left:151200 bottom:8 zIndex:126; isVtlsQuery+buildVtlsScript wired into JarvisBrain.ask(); jarvis:vtls-toggle event; 60-s auto-refresh; voice: vitals/biometrics/heart rate/hrv/spo2/steps/sleep/weight/vtls */}
             <VitalsDashboard />
+            {/* F33 (overnight 2026-09-12): Security Compliance Dashboard — SecurityComplianceDashboard.jsx; /v1/security/compliance/status + /v1/security/audit?n=20; scorecard tiles (chain integrity/revdb/tenancy/cross-org/clearance); scrolling audit chain; ▶ ASSESS → TTS; ⚑ SEC button; isSecurityQuery+buildSecurityScript wired into JarvisBrain; jarvis:sec-toggle event; 60-s/90-s auto-refresh; voice: security/compliance/audit/chain integrity/tenancy/revdb */}
+            <SecurityComplianceDashboard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
