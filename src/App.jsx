@@ -1050,6 +1050,7 @@ import TaskPriorityQuadrant from '@/components/cinematic/TaskPriorityQuadrant';
 import OpsAlertInvestigationBoard from '@/components/cinematic/OpsAlertInvestigationBoard';
 import ScenarioKnowledgeDatasetNexus from '@/components/cinematic/ScenarioKnowledgeDatasetNexus';
 import OperationalPulseRing from '@/components/cinematic/OperationalPulseRing';
+import KnowledgeFreshnessTracker from '@/components/cinematic/KnowledgeFreshnessTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3214,6 +3215,8 @@ function App() {
             <OpsAlertInvestigationBoard />
             {/* F53 (overnight 2026-09-13): Scenario × Knowledge × Dataset Intelligence Nexus (SKDNEX) — ScenarioKnowledgeDatasetNexus.jsx; /v1/scenario/list × /knowledge/ × /v1/datasets; keyword cross-reference classifies each scenario as FULLY_GROUNDED (KB + dataset match) / KB_ONLY / DATA_ONLY / UNGROUNDED; 5 stat tiles (scenarios/KB articles/datasets/fully grounded/ungrounded); ALL/FULLY_GROUNDED/KB_ONLY/DATA_ONLY/UNGROUNDED filter tabs + search; expand row → matched KB articles (amber bars) + matched datasets (cyan bars); red pulse on ungrounded count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SKDNEX button left:938980 bottom:8 zIndex:636; isSkdnexQuery+buildSkdnexScript wired JarvisBrain; jarvis:skdnex-toggle event; 90-s auto-refresh; voice: skdnex/scenario knowledge/scenario dataset/grounded scenario/scenario grounding/scenario data */}
             <ScenarioKnowledgeDatasetNexus />
+            {/* F54 (overnight 2026-09-13): Knowledge Freshness Tracker (KFRESH) — KnowledgeFreshnessTracker.jsx; /knowledge/ → classify each article FRESH(≤7d)/AGING(8-30d)/STALE(31-90d)/EXPIRED(>90d); TOTAL/FRESH/AGING/STALE/EXPIRED stat tiles; age-sorted list with staleness badge; ALL/FRESH/AGING/STALE/EXPIRED filter tabs + search; red pulse on expired; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ KFRESH button left:939840 bottom:8 zIndex:637; isKfreshQuery+buildKfreshScript wired JarvisBrain; jarvis:kfresh-toggle event; 120-s auto-refresh; voice: knowledge freshness/stale knowledge/knowledge age/kfresh/expired knowledge/knowledge decay */}
+            <KnowledgeFreshnessTracker />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
