@@ -1045,6 +1045,7 @@ import IntelProfileScenarioTaskNexus from '@/components/cinematic/IntelProfileSc
 import OpsAlertTaskSkillReadiness from '@/components/cinematic/OpsAlertTaskSkillReadiness';
 import ContactIntelNexus from '@/components/cinematic/ContactIntelNexus';
 import SwarmDatasetKnowledgeNexus from '@/components/cinematic/SwarmDatasetKnowledgeNexus';
+import InvestmentRiskScenarioNexus from '@/components/cinematic/InvestmentRiskScenarioNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3199,6 +3200,8 @@ function App() {
             <ContactIntelNexus />
             {/* F49 (overnight 2026-09-13): SwarmJob × Dataset × Knowledge Coverage Nexus */}
             <SwarmDatasetKnowledgeNexus />
+            {/* F50 (overnight 2026-09-13): Investment × RiskSignal × Scenario Exposure Matrix (IRSNEX) — InvestmentRiskScenarioNexus.jsx; /entities/Investment × /entities/RiskSignal × /v1/scenario/list; FULLY_EXPOSED/RISK_ONLY/SCENARIO_ONLY/UNMONITORED classification; 5 stat tiles; filter tabs + search; red pulse on unmonitored; expand row → matched risk signals (red bars) + matched scenarios (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ IRSNEX button left:936400 bottom:8 zIndex:633; isIrsnexQuery+buildIrsnexScript wired JarvisBrain; jarvis:irsnex-toggle event; 90-s auto-refresh; voice: irsnex/investment exposure/unmonitored investment/investment risk scenario/risk exposure/scenario exposure */}
+            <InvestmentRiskScenarioNexus />
             {/* F46 (overnight 2026-09-13): Intel Profile × Scenario × Task Triple Nexus (IPSTINEX) — IntelProfileScenarioTaskNexus.jsx; /entities/IntelProfile × /v1/scenario/list × /entities/Task; FULLY_COVERED (profile has matching scenario + task)/SCENARIO_ONLY/TASK_ONLY/UNADDRESSED; 5 stat tiles (profiles/fully covered/scenarios/tasks/unaddressed); ALL/FULLY_COVERED/SCENARIO_ONLY/TASK_ONLY/UNADDRESSED filter tabs + search; red pulse on unaddressed count; expand row → matched scenarios (amber bars) + matched tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ IPSTINEX button left:932960 bottom:8 zIndex:629; isIpstinexQuery+buildIpstinexScript wired JarvisBrain; jarvis:ipstinex-toggle event; 90-s auto-refresh; voice: intel scenario task/ipstinex/unaddressed intel/profile coverage/intel task coverage/intel profile scenario */}
             <IntelProfileScenarioTaskNexus />
             <Suspense fallback={<Loading />}>
