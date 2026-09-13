@@ -18,7 +18,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 `/v1/scenario/list` · `/v1/aip/skill` · `/v1/reports` · `/knowledge/*`
 
 ## Backlog (real features)
-- [ ] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it.
+- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-09-13: CommandPalette.jsx implemented; lists all PAGES + 10 cinematic scenes, ⌘K/Ctrl+K toggle, search filter, ↑↓ nav, Enter navigates, Esc closes; mounted in App.jsx]
 - [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
 - [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
 - [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
