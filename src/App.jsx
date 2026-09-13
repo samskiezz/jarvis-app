@@ -1041,6 +1041,7 @@ import ReportKnowledgeCoverage from '@/components/cinematic/ReportKnowledgeCover
 import GraphCommunityView from '@/components/cinematic/GraphCommunityView';import EntityCountTrend from '@/components/cinematic/EntityCountTrend';
 import SkillKnowledgeReportMatrix from '@/components/cinematic/SkillKnowledgeReportMatrix';
 import InvestigationResourcingNexus from '@/components/cinematic/InvestigationResourcingNexus';
+import IntelProfileScenarioTaskNexus from '@/components/cinematic/IntelProfileScenarioTaskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3189,6 +3190,8 @@ function App() {
             <SkillKnowledgeReportMatrix />
             {/* F45 (overnight 2026-09-13): Investigation × Swarm Job × Task Resourcing Nexus (SJTINEX) — InvestigationResourcingNexus.jsx; /v1/investigations × /entities/SwarmJob × /entities/Task; FULLY_RESOURCED (swarm+task match)/SWARM_ONLY/TASK_ONLY/UNSUPPORTED classification; 4 stat tiles; ALL/FULLY_RESOURCED/SWARM_ONLY/TASK_ONLY/UNSUPPORTED filter tabs + search; red pulse on unsupported; expand row → matched swarm jobs (cyan bars) + matched tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SJTINEX button left:932100 bottom:8 zIndex:628; isSjtinexQuery+buildSjtinexScript wired JarvisBrain; jarvis:sjtinex-toggle event; 90-s auto-refresh; voice: investigation resourcing/sjtinex/unsupported investigation/swarm investigation/active investigation resourcing/investigation swarm job/task investigation coverage */}
             <InvestigationResourcingNexus />
+            {/* F46 (overnight 2026-09-13): Intel Profile × Scenario × Task Triple Nexus (IPSTINEX) — IntelProfileScenarioTaskNexus.jsx; /entities/IntelProfile × /v1/scenario/list × /entities/Task; FULLY_COVERED (profile has matching scenario + task)/SCENARIO_ONLY/TASK_ONLY/UNADDRESSED; 5 stat tiles (profiles/fully covered/scenarios/tasks/unaddressed); ALL/FULLY_COVERED/SCENARIO_ONLY/TASK_ONLY/UNADDRESSED filter tabs + search; red pulse on unaddressed count; expand row → matched scenarios (amber bars) + matched tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ IPSTINEX button left:932960 bottom:8 zIndex:629; isIpstinexQuery+buildIpstinexScript wired JarvisBrain; jarvis:ipstinex-toggle event; 90-s auto-refresh; voice: intel scenario task/ipstinex/unaddressed intel/profile coverage/intel task coverage/intel profile scenario */}
+            <IntelProfileScenarioTaskNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
