@@ -21,3 +21,4 @@
 [2026-09-13] F39 OpsEventsTimeline.jsx — /v1/ops/events 24-hour heatmap + events list; TOTAL/LAST HOUR/TYPES/CRITICAL stat tiles; isOpevQuery+buildOpevScript wired JarvisBrain; jarvis:opev-toggle; ◷ OPEV button; Vite build exit 0.
 2026-09-13 F40 KnowledgeCategoryHeatmap.jsx — /knowledge/ grouped by category; ranked bar chart; TOTAL/CATEGORIES/LARGEST/NO_CATEGORY tiles; isKcatQuery+buildKcatScript wired into JarvisBrain; jarvis:kcat-toggle; App.jsx mounted; Vite build exit 0
 [2026-09-13] F41 DONE — ReportKnowledgeCoverage.jsx: /v1/reports + /knowledge/ coverage matrix; backed/unbacked chips; coverage % badge (green ≥50%/amber <50%); ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RKCOV button left:192000; mounted App.jsx; Vite build exit 0
+[2026-09-13] F42 Graph Community Clusters — GraphCommunityView.jsx; /v1/graph/communities + /v1/graph/centrality; cluster cards, expand members, ASSESS → TTS; JarvisBrain wired; Vite build exit 0

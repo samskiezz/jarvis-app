@@ -1038,6 +1038,7 @@ import SceneIntelMatrix from '@/components/cinematic/SceneIntelMatrix';
 import IntelAcquisitionQueue from '@/components/cinematic/IntelAcquisitionQueue';
 import KnowledgeCategoryHeatmap from '@/components/cinematic/KnowledgeCategoryHeatmap';
 import ReportKnowledgeCoverage from '@/components/cinematic/ReportKnowledgeCoverage';
+import GraphCommunityView from '@/components/cinematic/GraphCommunityView';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3179,6 +3180,8 @@ function App() {
             <KnowledgeCategoryHeatmap />
             {/* F41: Report Knowledge Coverage — /v1/reports + /knowledge/ cross-reference; backed/unbacked chips; coverage % badge; ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RKCOV button left:192000 bottom:8 zIndex:72; 120-s auto-refresh; voice: report coverage/knowledge coverage/rkcov */}
             <ReportKnowledgeCoverage />
+            {/* F42 (overnight 2026-09-13): Graph Community Clusters — GraphCommunityView.jsx; /v1/graph/communities + /v1/graph/centrality; NODES/CLUSTERS/LARGEST/ISOLATED stat tiles; cluster cards with member count + top member; expand → all members with scores; ▶ ASSESS → /v1/voice/tts via jarvis:speak-dossier; ⬡ GCOM button left:930680 bottom:8 zIndex:626; isGcomQuery+buildGcomScript wired into JarvisBrain.ask(); jarvis:gcom-toggle event; 120-s auto-refresh; voice: graph communities/community clusters/gcom/entity clusters/community detection/graph partition */}
+            <GraphCommunityView />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

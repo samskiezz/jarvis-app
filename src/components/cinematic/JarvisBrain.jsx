@@ -343,6 +343,7 @@ import { isIpcnfQuery, buildIpcnfScript } from "./IntelProfileConfidence";
 import { isScemQuery, buildScemScript } from "./SceneIntelMatrix";
 import { isIaqQuery, buildIaqScript } from "./IntelAcquisitionQueue";
 import { isKcatQuery, buildKcatScript } from "./KnowledgeCategoryHeatmap";
+import { isGcomQuery, buildGcomScript } from "./GraphCommunityView";
 import { isOpevQuery, buildOpevScript } from "./OpsEventsTimeline";
 
 /**
@@ -1405,6 +1406,9 @@ export default function JarvisBrain() {
       } else if (isIaqQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:iaq-toggle"));
         answer = await buildIaqScript();
+      } else if (isGcomQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:gcom-toggle"));
+        answer = await buildGcomScript();
       } else if (isKcatQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:kcat-toggle"));
         answer = await buildKcatScript();
