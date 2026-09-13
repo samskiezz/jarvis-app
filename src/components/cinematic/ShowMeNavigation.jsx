@@ -89,6 +89,15 @@ const SHOW_ME_MAP = [
   [/\b(clock|uptime|system.time|live.clock)\b/i,                     "clock uptime"],
   [/\b(data.acquisition|scraping.status|ingest.status|ingest.job)\b/i, "data acquisition"],
 
+  // ── F20 extension: panels not yet covered by the compound entries above ───
+  // Compound natural-language triggers for panels with real jarvis:ask
+  // listeners that weren't reachable via "show me X" before this extension.
+  [/\b(communities|clusters?|network.group|graph.partition|community.detect)\b/i, "communities clusters network groups"],
+  [/\b(entity.?chronolog|chronolog|all.entities.feed|entities.?timeline|unified.timeline)\b/i, "entity chronolog entities timeline echron"],
+  [/\b(decision.?ledger|decision.?log|decision.?vault|decision.?record|logged.decision)\b/i, "decisions decision ledger decis"],
+  [/\b(ops.?cases?|case.?files?|case.?panel|case.?board|investigation.?cases?)\b/i, "ops cases case panel"],
+  [/\b(scene.?narrat|narrat.?scene|describe.?scene|story.?scene)\b/i, "narrate scene scene narrat"],
+
   // ── F20: short-form one-word "show X" data-drill shortcuts ────────────────
   // These cover bare "show tasks" / "show contacts" etc. that the compound
   // entries above miss (they require multi-word phrases). Ordered so they
@@ -102,6 +111,11 @@ const SHOW_ME_MAP = [
   [/\bvoice\b/i,                                                        "change voice"],
   [/\btour\b/i,                                                         "auto-tour"],
   [/\bambient\b/i,                                                      "ambient hum"],
+  // F20 extension: bare one-word drills for the newly-added panels above
+  [/\bdecisions?\b/i,                                                   "decisions decision ledger"],
+  [/\bops\b/i,                                                          "ops log"],
+  [/\bchronolog\b/i,                                                    "entity chronolog entities timeline"],
+  [/\bcommuniti|cluster\b/i,                                            "communities clusters network groups"],
 
   // ── Original core entries (preserved; act as broad fallbacks) ──────────────
   [/\b(risk|threat|hazard|signal|critical|vulnerab)/i,               "risks board"],

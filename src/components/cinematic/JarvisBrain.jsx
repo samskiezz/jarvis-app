@@ -1,6 +1,346 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
+import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
+import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
+import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
+import { isRiskQuery, buildRiskScript } from "./RiskBoard";
+import { isImpactMatrixQuery, buildImpactMatrixScript } from "./ScenarioImpactMatrix";
+import { isTaskQuery, buildTaskScript } from "./TaskBoard";
+import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
+import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
+import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
+import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
+import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
+import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
+import { isAnchorDrillQuery, buildAnchorScript } from "./PerSceneAnchorDrillDown";
+import { isAmbientQuery } from "./AmbientReactorHum";
+import { isNudgeQuery } from "./AttentionNudge";
+import { isShowMeQuery, buildShowMeScript } from "./ShowMeRouter";
+import { isClockQuery, buildClockScript } from "./LiveClockUptime";
+import { isAlertQuery, buildAlertScript } from "./AlertToasts";
+import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
+import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
+import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
+import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
+import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
+import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
+import { getActiveVoice, isVoiceQuery, buildVoiceScript, applyVoiceFromQuery } from "./MultiVoiceToggle";
+import { isTourQuery, buildTourScript } from "./SceneAutoTour";
+import { isOpsEventsQuery, buildOpsEventsScript } from "./OpsEventsFeed";
+import { isTbmQuery, buildTbmScript } from "./TaskBurndownMonitor";
+import { isIntelProfileQuery, buildIntelProfileScript } from "./IntelProfileDirectory";
+import { isCommunitiesQuery, buildCommunitiesScript } from "./GraphCommunitiesView";
+import { isSbbQuery, buildSbbScript } from "./SecondBrainBrowser";
+import { isScenarioRiskAdvisorQuery, buildScenarioRiskAdvisorScript } from "./ScenarioRiskAdvisor";
+import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
+import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
+import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
+import { isRemindersQuery, buildRemindersScript } from "./RemindersPanel";
+import { isMissionControlQuery, buildMissionControlScript } from "./MissionControlConsole";
+import { isInvtlQuery, buildInvtlScript } from "./InvestigationTimeline";
+import { isKsrecQuery, buildKsrecScript } from "./KnowledgeSkillRecommender";
+import { isLitaskQuery, buildLitaskScript } from "./LiveTaskUrgencySignal";
+import { isCrisisWarningQuery, buildCrisisWarningScript } from "./CrisisEarlyWarning";
+import { isGraphTimelineQuery, buildGraphTimelineScript } from "./GraphTimelineScrubber";
+import { isReportViewerQuery, buildReportViewerScript } from "./ReportViewer";
+import { isRulesBrowserQuery, buildRulesBrowserScript } from "./DecisionRulesBrowser";
+import { isSecurityAuditQuery, buildSecurityAuditScript } from "./SecurityAuditConsole";
+import { isKfmQuery, buildKfmScript } from "./KnowledgeFreshnessMonitor";
+import { isEvthmQuery, buildEvthmScript } from "./OpsEventHeatmap";
+import { isKrgapQuery, buildKrgapScript } from "./KnowledgeReportAuditor";
+import { isTaskRiskMatrixQuery, buildTaskRiskMatrixScript } from "./TaskRiskMatrix";
+import { isIntelProfileRosterQuery, buildIntelProfileRosterScript } from "./IntelProfileRoster";
+import { isDataIntakeQuery, buildDataIntakeScript } from "./DataIntakeMonitor";
+import { isGraphNeighborhoodQuery, buildGraphNeighborhoodScript } from "./GraphNeighborhoodExplorer";
+import { isContactRiskQuery, buildContactRiskScript } from "./ContactRiskNexus";
+import { isRtkmonQuery, buildRtkmonScript } from "./DecisionRulesTaskMonitor";
+import { isSwarmRiskQuery, buildSwarmRiskScript } from "./SwarmRiskCoverageMonitor";
+import { isInvscnQuery, buildInvscnScript } from "./InvestmentScenarioExposure";
+import { isKtgapQuery, buildKtgapScript } from "./KnowledgeTaskGapDetector";
+import { isContactInvQuery, buildContactInvScript } from "./ContactInvestigationLinker";
+import { isRriskQuery, buildRriskScript } from "./ReportRiskCoverageMonitor";
+import { isSkgapQuery, buildSkgapScript } from "./ScenarioKnowledgeGap";
+import { isCscnxQuery, buildCscnxScript } from "./ContactScenarioNexus";
+import { isSwrinvQuery, buildSwrinvScript } from "./SwarmJobInvestigationNexus";
+import { isIpinvQuery, buildIpinvScript } from "./IntelProfileInvestigationNexus";
+import { isDinvQuery, buildDinvScript } from "./DatasetInvestigationNexus";
+import { isScnopsQuery, buildScnopsScript } from "./ScenarioOpsEventNexus";
+import { isSkillinvQuery, buildSkillinvScript } from "./SkillInvestigationNexus";
+import { isInvrskQuery, buildInvrskScript } from "./InvestmentRiskExposure";
+import { isTrscQuery, buildTrscScript } from "./TaskRiskSignalCorrelator";
+import { isRulsrskQuery, buildRulsrskScript } from "./DecisionRulesRiskNexus";
+import { isRulsinvQuery, buildRulsinvScript } from "./RulesInvestigationNexus";
+import { isRtcovQuery, buildRtcovScript } from "./ReportTaskCoverageMonitor";
+import { isOetaskQuery, buildOetaskScript } from "./OpsEventTaskCorrelator";
+import { isThreatVelocityQuery, buildThreatVelocityScript } from "./ThreatVelocityMonitor";
+import { isSsscenQuery, buildSsscenScript } from "./SystemStatusScenarioCoverage";
+import { isLwriskQuery, buildLwriskScript } from "./LiveWorldRiskCorrelator";
+import { isSkrskQuery, buildSkrskScript } from "./SkillRiskCoverageMonitor";
+import { isDatasetScenarioQuery, buildDatasetScenarioScript } from "./DatasetScenarioCoverageMonitor";
+import { isIprscQuery, buildIprscScript } from "./IntelProfileRiskCorrelator";
+import { isIprskQuery, buildIprskScript } from "./IntelProfileRiskLinker";
+import { isCknowQuery, buildCknowScript } from "./ContactKnowledgeNexus";
+import { isIntelskillQuery, buildIntelskillScript } from "./IntelProfileSkillAlignment";
+import { isRscncovQuery, buildRscncovScript } from "./ReportScenarioCoverageMonitor";
+import { isTaskScenarioQuery, buildTaskScenarioScript } from "./TaskScenarioExposure";
+import { isSwrknoQuery, buildSwrknoScript } from "./SwarmKnowledgeNexus";
+import { isOevknoQuery, buildOevknoScript } from "./OpsEventKnowledgeNexus";
+import { isStaskQuery, buildStaskScript } from "./SkillTaskNexus";
+import { isRlnkQuery, buildRlnkScript } from "./ReportKnowledgeLinker";
+import { isHealthScoreQuery, buildHealthScoreScript } from "./SystemHealthScorecard";
+import { isDatknopQuery, buildDatknopScript } from "./DatasetKnowledgeNexus";
+import { isInvknowQuery, buildInvknowScript } from "./InvestmentKnowledgeAdvisor";
+import { isTexmonQuery, buildTexmonScript } from "./TaskExecutionCoverageMonitor";
+import { isContactSwarmQuery, buildContactSwarmScript } from "./ContactSwarmCoverage";
+import { isSwrdsetQuery, buildSwrdsetScript } from "./SwarmDatasetNexus";
+import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
+import { isInvinvQuery, buildInvinvScript } from "./InvestmentInvestigationNexus";
+import { isSwrscnQuery, buildSwrscnScript } from "./SwarmScenarioNexus";
+import { isInvoevQuery, buildInvoevScript } from "./InvestmentOpsEventNexus";
+import { isCdataQuery, buildCdataScript } from "./ContactDatasetNexus";
+import { isCoevtQuery, buildCoevtScript } from "./ContactOpsEventNexus";
+import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
+import { isSkopsQuery, buildSkopsScript } from "./SkillOpsEventCoverage";
+import { isInvSwjQuery, buildInvSwjScript } from "./InvestmentSwarmJobCoverage";
+import { isIpscenQuery, buildIpscenScript } from "./IntelProfileScenarioCoverage";
+import { isSjintelQuery, buildSjintelScript } from "./SwarmIntelProfileCoverage";
+import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
+import { isSjoeQuery, buildSjoeScript } from "./SwarmJobOpsEventsCorrelator";
+import { isRulsknoQuery, buildRulsknoScript } from "./DecisionRulesKnowledgeNexus";
+import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
+import { isTdsetQuery, buildTdsetScript } from "./TaskDatasetNexus";
+import { isRuldsetQuery, buildRuldsetScript } from "./DecisionRulesDatasetNexus";
+import { isGninvQuery, buildGninvScript } from "./GraphNodeInvestigationCoverage";
+import { isScninvQuery, buildScninvScript } from "./ScenarioInvestmentCoverage";
+import { isRinvQuery, buildRinvScript } from "./ReportInvestigationNexus";
+import { isTaintelQuery, buildTaintelScript } from "./TaskIntelProfileNexus";
+import { isRpopsQuery, buildRpopsScript } from "./ReportOpsEventCoverage";
+import { isSwrrptQuery, buildSwrrptScript } from "./SwarmReportCoverageMonitor";
+import { isCttaskQuery, buildCttaskScript } from "./ContactTaskLinker";
+import { isSctmQuery, buildSctmScript } from "./AipSkillContactTaskMesh";
+import { isIpdsetQuery, buildIpdsetScript } from "./IntelProfileDatasetNexus";
+import { isRulscntQuery, buildRulscntScript } from "./DecisionRulesContactNexus";
+import { isSkdsQuery, buildSkdsScript } from "./SkillDatasetCoverageAdvisor";
+import { isRulscnQuery, buildRulscnScript } from "./DecisionRulesScenarioNexus";
+import { isRulswrmQuery, buildRulswrmScript } from "./DecisionRulesSwarmNexus";
+import { isLwknoQuery, buildLwknoScript } from "./LiveWorldKnowledgeNexus";
+import { isDsrskQuery, buildDsrskScript } from "./DatasetRiskAnalyzer";
+import { isDsriskQuery, buildDsriskScript } from "./DatasetRiskCoverage";
+import { isIpoevQuery, buildIpoevScript } from "./IntelProfileOpsEventCoverage";
+import { isEpulseQuery, buildEpulseScript } from "./EntityPulseDashboard";
+import { isLwtaskQuery, buildLwtaskScript } from "./LiveWorldTaskCorrelator";
+import { isLwscnQuery, buildLwscnScript } from "./LiveWorldScenarioCorrelator";
+import { isLwswrmQuery, buildLwswrmScript } from "./LiveWorldSwarmCorrelator";
+import { isLwintelQuery, buildLwintelScript } from "./LiveWorldIntelProfileCorrelator";
+import { isLwcntQuery, buildLwcntScript } from "./LiveWorldContactCorrelator";
+import { isLwinvQuery, buildLwinvScript } from "./LiveWorldInvestmentCorrelator";
+import { isLwrulsQuery, buildLwrulsScript } from "./LiveWorldDecisionRulesCorrelator";
+import { isLwrptQuery, buildLwrptScript } from "./LiveWorldReportCorrelator";
+import { isLwdsetQuery, buildLwdsetScript } from "./LiveWorldDatasetCorrelator";
+import { isLwopsQuery, buildLwopsScript } from "./LiveWorldOpsEventsCorrelator";
+import { isOmbrfQuery, buildOmbrfScript } from "./OperationalMorningBriefing";
+import { isSkasQuery, buildSkasScript } from "./AipSkillScenarioCoverage";
+import { isSklswrmQuery, buildSklswrmScript } from "./SkillSwarmJobCoverage";
+import { isCskillQuery, buildCskillScript } from "./ContactSkillCoverage";
+import { isSkillContactQuery, buildSkillContactScript } from "./SkillContactGapAdvisor";
+import { isTimelineQuery, buildTimelineScript } from "./ThreatTimeline";
+import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
+import { isSkiinvQuery, buildSkiinvScript } from "./SkillInvestigationAdvisor";
+import { isRulsintelQuery, buildRulsintelScript } from "./DecisionRulesIntelProfileNexus";
+import { isRulrptQuery, buildRulrptScript } from "./DecisionRulesReportsNexus";
+import { isSceneAnchorMonitorQuery, buildSceneAnchorMonitorScript } from "./AllScenesAnchorMonitor";
+import { isDpdigQuery, buildDpdigScript } from "./DailyPriorityDigest";
+import { isGrknoQuery, buildGrknoScript } from "./GraphKnowledgeNexus";
+import { isGrscnQuery, buildGrscnScript } from "./GraphScenarioCoverage";
+import { isGtmxQuery, buildGtmxScript } from "./GraphTimeMachinePanel";
+import { isKnoscQuery, buildKnoscScript } from "./KnowledgeScenarioCoverage";
+import { isGrrptQuery, buildGrrptScript } from "./GraphReportsNexus";
+import { isGrrulsQuery, buildGrrulsScript } from "./GraphDecisionRulesNexus";
+import { isGrswrmQuery, buildGrswrmScript } from "./GraphSwarmCoverage";
+import { isGrcntQuery, buildGrcntScript } from "./GraphContactNexus";
+import { isGrinvQuery, buildGrinvScript } from "./GraphInvestmentNexus";
+import { isGrtaskQuery, buildGrtaskScript } from "./GraphTaskNexus";
+import { isGrdsetQuery, buildGrdsetScript } from "./GraphDatasetNexus";
+import { isSwarmTaskQuery, buildSwarmTaskScript } from "./SwarmTaskAdvisor";
+import { isGnsrskQuery, buildGnsrskScript } from "./GraphNodeRiskSignalCoverage";
+import { isGnintelQuery, buildGnintelScript } from "./GraphNodeIntelCoverage";
+import { isGcasQuery, buildGcasScript } from "./GraphCentralityAipSkillCoverage";
+import { isGrremQuery, buildGrremScript } from "./GraphRemindersNexus";
+import { isGcoeQuery, buildGcoeScript } from "./GraphCentralityOpsEvents";
+import { isKnorskQuery, buildKnorskScript } from "./KnowledgeRiskNexus";
+import { isReminvQuery, buildReminvScript } from "./RemindersInvestigationNexus";
+import { isRptinvQuery, buildRptinvScript } from "./ReportsInvestigationNexus";
+import { isRemtaskQuery, buildRemtaskScript } from "./RemindersTaskNexus";
+import { isRemrskQuery, buildRemrskScript } from "./RemindersRiskSignalNexus";
+import { isRemcntQuery, buildRemcntScript } from "./RemindersContactNexus";
+import { isRemknoQuery, buildRemknoScript } from "./RemindersKnowledgeNexus";
+import { isRemswrmQuery, buildRemswrmScript } from "./RemindersSwarmJobNexus";
+import { isRemintelQuery, buildRemintelScript } from "./RemindersIntelProfileNexus";
+import { isRemdsetQuery, buildRemdsetScript } from "./RemindersDatasetNexus";
+import { isRemopsQuery, buildRemopsScript } from "./RemindersOpsEventNexus";
+import { isRemscnQuery, buildRemscnScript } from "./RemindersScenarioNexus";
+import { isRemrptQuery, buildRemrptScript } from "./RemindersReportsNexus";
+import { isRemgrphQuery, buildRemgrphScript } from "./RemindersGraphNexus";
+import { isRemslkQuery, buildRemslkScript } from "./RemindersSkillNexus";
+import { isRemrulsQuery, buildRemrulsScript } from "./RemindersDecisionRulesNexus";
+import { isOescnQuery, buildOescnScript } from "./OpsEventScenarioCoverage";
+import { isRemlwQuery, buildRemlwScript } from "./RemindersLiveWorldNexus";
+import { isReminvstQuery, buildReminvstScript } from "./RemindersInvestmentNexus";
+import { isScintelQuery, buildScintelScript } from "./SceneIntelligenceOverlay";
+import { isSkscnQuery, buildSkscnScript } from "./SkillScenarioCoverageMonitor";
+import { isLwgrphQuery, buildLwgrphScript } from "./LiveWorldGraphNexus";
+import { isLictxQuery, buildLictxScript } from "./LiveIntelContactAlerter";
+import { isTskknowQuery, buildTskknowScript } from "./TaskKnowledgeNexus";
+import { isLiicQuery, buildLiicScript } from "./LiveIntelInvestigationCorrelator";
+import { isOevdsetQuery, buildOevdsetScript } from "./OpsEventDatasetNexus";
+import { isPaqQuery, buildPaqScript } from "./PrioritizedActionQueue";
+import { isGnopsQuery, buildGnopsScript } from "./GraphNodeOpsEventCoverage";
+import { isOpsClusterQuery, buildOpsClusterScript } from "./OpsEventClusterAnalyzer";
+import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioAlignment";
+import { isKoepQuery, buildKoepScript } from "./KnowledgeOpsEventPulse";
+import { isTgprQuery, buildTgprScript } from "./TaskGraphPriorityRanker";
+import { isInvrulesQuery, buildInvrulesScript } from "./InvestmentRulesNexus";
+import { isRiskRepQuery, buildRiskRepScript } from "./RiskReportMapper";
+import { isCntinvQuery, buildCntinvScript } from "./ContactInvestmentNexus";
+import { isCntswrmQuery, buildCntswrmScript } from "./ContactSwarmJobNexus";
+import { isCntskQuery, buildCntskScript } from "./ContactSkillNexus";
+import { isInvknoQuery, buildInvknoScript } from "./InvestmentKnowledgeNexus";
+import { isInvopsQuery, buildInvopsScript } from "./InvestmentOpsEventsNexus";
+import { isCntscn2Query, buildCntscn2Script } from "./ContactScenarioNexus2";
+import { isCtkntriQuery, buildCtkntriScript } from "./ContactTaskKnowledgeTriple";
+import { isGndRulsQuery, buildGndRulsScript } from "./GraphNodeDecisionRulesNexus";
+import { isCntopsQuery, buildCntopsScript } from "./ContactOpsEventsNexus";
+import { isTattrQuery, buildTattrScript } from "./ThreatAttributionMapper";
+import { isOalinvQuery, buildOalinvScript } from "./OpsAlertInvestigationCoverage";
+import { isLiilinkQuery, buildLiilinkScript } from "./LiveIntelInvestigationLinker";
+import { isOeipQuery, buildOeipScript } from "./OpsEventsIntelProfileNexus";
+import { isRsgcQuery, buildRsgcScript } from "./RiskSignalGraphCentrality";
+import { isKnowopsQuery, buildKnowopsScript } from "./KnowledgeOpsEventsNexus";
+import { isOaltaskQuery, buildOaltaskScript } from "./OpsAlertTaskCoverage";
+import { isLiveTickerQuery, buildLiveTickerScript } from "./LiveMarketTicker";
+import { isModelRegistryQuery, buildModelRegistryScript } from "./ScenarioModelRegistry";
+import { isOalknowQuery, buildOalknowScript } from "./OpsAlertsKnowledgeNexus";
+import { isOalrskQuery, buildOalrskScript } from "./OpsAlertsRiskSignalNexus";
+import { isOalswrmQuery, buildOalswrmScript } from "./OpsAlertsSwarmJobNexus";
+import { isOalscnQuery, buildOalscnScript } from "./OpsAlertsScenarioNexus";
+import { isOalipQuery, buildOalipScript } from "./OpsAlertsIntelProfileNexus";
+import { isOalcontQuery, buildOalcontScript } from "./OpsAlertsContactNexus";
+import { isOaldsetQuery, buildOaldsetScript } from "./OpsAlertsDatasetNexus";
+import { isOalremQuery, buildOalremScript } from "./OpsAlertsRemindersNexus";
+import { isOalfinQuery, buildOalfinScript } from "./OpsAlertsInvestmentNexus";
+import { isAcsnQuery, buildAcsnScript } from "./AcousticContactMonitor";
+import { isOalrptQuery, buildOalrptScript } from "./OpsAlertsReportNexus";
+import { isQifQuery, buildQifScript } from "./QuadIntelFusion";
+import { isOalgrphQuery, buildOalgrphScript } from "./OpsAlertsGraphNexus";
+import { isOalruleQuery, buildOalruleScript } from "./OpsAlertsRulesNexus";
+import { isOalskillQuery, buildOalskillScript } from "./OpsAlertsSkillNexus";
+import { isCiktriQuery, buildCiktriScript } from "./ContactIntelKnowledgeTrifecta";
+import { isTasoevQuery, buildTasoevScript } from "./TaskOpsEventsCorrelator";
+import { isAipkrstriQuery, buildAipkrstriScript } from "./AipSkillKnowledgeRiskTriple";
+import { isRststriQuery, buildRststriScript } from "./RiskScenarioTaskTriple";
+import { isTgkntriQuery, buildTgkntriScript } from "./TaskGraphKnowledgeTriple";
+import { isAcrskQuery, buildAcrskScript } from "./AcousticRiskSignalNexus";
+import { isAcinvQuery, buildAcinvScript } from "./AcousticInvestigationNexus";
+import { isActaskQuery, buildActaskScript } from "./AcousticTaskNexus";
+import { isAcipQuery, buildAcipScript } from "./AcousticIntelProfileNexus";
+import { isAcknoQuery, buildAcknoScript } from "./AcousticKnowledgeNexus";
+import { isAcswrmQuery, buildAcswrmScript } from "./AcousticSwarmJobNexus";
+import { isAcdsetQuery, buildAcdsetScript } from "./AcousticDatasetNexus";
+import { isAcscnQuery, buildAcscnScript } from "./AcousticScenarioNexus";
+import { isAcrptQuery, buildAcrptScript } from "./AcousticReportNexus";
+import { isAcopsQuery, buildAcopsScript } from "./AcousticOpsEventsNexus";
+import { isAcalQuery, buildAcalScript } from "./AcousticOpsAlertsNexus";
+import { isAcrulsQuery, buildAcrulsScript } from "./AcousticRulesNexus";
+import { isAcinvstQuery, buildAcinvstScript } from "./AcousticInvestmentNexus";
+import { isAccntQuery, buildAccntScript } from "./AcousticContactNexus";
+import { isAcgrphQuery, buildAcgrphScript } from "./AcousticGraphNexus";
+import { isAcremQuery, buildAcremScript } from "./AcousticRemindersNexus";
+import { isAcskillQuery, buildAcskillScript } from "./AcousticSkillNexus";
+import { isAclwQuery, buildAclwScript } from "./AcousticLiveWorldNexus";
+import { isAckrtriQuery, buildAckrtriScript } from "./AcousticKnowledgeRiskTriple";
+import { isActkiinvQuery, buildActkiinvScript } from "./AcousticTaskInvestigationTriple";
+import { isAcskscnQuery, buildAcskscnScript } from "./AcousticSkillScenarioTriple";
+import { isAcgcipQuery, buildAcgcipScript } from "./AcousticGraphIntelTriple";
+import { isAcrlcntQuery, buildAcrlcntScript } from "./AcousticRulesContactTriple";
+import { isAcrpinvQuery, buildAcrpinvScript } from "./AcousticReportInvestmentTriple";
+import { isAcmscoreQuery, buildAcmscoreScript } from "./AcousticMasterIntelScore";
+import { isAcodedQuery, buildAcodedScript } from "./AcousticOpDatasetTriple";
+import { isAcscnsklQuery, buildAcscnsklScript } from "./AcousticScenarioSkillTriple";
+import { isAcknoTripleQuery, buildAcknoTripleScript } from "./AcousticSwarmKnowledgeTriple";
+import { isOpsalinvQuery, buildOpsalinvScript } from "./OpsAlertInvestigationNexus";
+import { isAcrpscnQuery, buildAcrpscnScript } from "./AcousticReportScenarioTriple";
+import { isAcrldsetQuery, buildAcrldsetScript } from "./AcousticRulesDatasetTriple";
+import { isActdsetQuery, buildActdsetScript } from "./AcousticTaskDatasetTriple";
+import { isAcipscnQuery, buildAcipscnScript } from "./AcousticIntelProfileScenarioTriple";
+import { isActrskQuery, buildActrskScript } from "./AcousticContactRiskTriple";
+import { isAcoaipQuery, buildAcoaipScript } from "./AcousticOpsAlertsIntelTriple";
+import { isAcswrskQuery, buildAcswrskScript } from "./AcousticSwarmRiskTriple";
+import { isAcsceneQuery, buildAcsceneScript } from "./AcousticSceneNexus";
+import { isOalknoQuery, buildOalknoScript } from "./OpsAlertKnowledgeCoverage";
+import { isOerskQuery, buildOerskScript } from "./OpsEventRiskSignalNexus";
+import { isOeinvQuery, buildOeinvScript } from "./OpsEventInvestigationNexus";
+import { isLirulesQuery, buildLirulesScript } from "./LiveIntelRulesNexus";
+import { isKnoevtQuery, buildKnoevtScript } from "./KnowledgeOpsEventNexus";
+import { isKnoscnQuery, buildKnoscnScript } from "./KnowledgeScenarioNexus";
+import { isSwarmCoverageQuery, buildSwarmCoverageScript } from "./SwarmRiskCoverageMap";
+import { isTrsksklQuery, buildTrsksklScript } from "./TaskRiskSkillTripleNexus";
+import { isKnogphQuery, buildKnogphScript } from "./KnowledgeGraphCentralityNexus";
+import { isIscovQuery, buildIscovScript } from "./InvestigationSkillCoverage";
+import { isCtkinvtriQuery, buildCtkinvtriScript } from "./ContactKnowledgeInvestmentTriple";
+import { isTsknowQuery, buildTsknowScript } from "./TaskScenarioKnowledgeTriple";
+import { isIrscntriQuery, buildIrscntriScript } from "./InvestmentRiskScenarioTriple";
+import { isCoerskQuery, buildCoerskScript } from "./ContactOpsRiskTriple";
+import { isKriinvtriQuery, buildKriinvtriScript } from "./KnowledgeRiskInvestigationTriple";
+import { isIptscntriQuery, buildIptscntriScript } from "./IntelProfileTaskScenarioTriple";
+import { isTcoevtQuery, buildTcoevtScript } from "./TaskContactOpsEventsTriple";
+import { isSkillLearningQuery, buildSkillLearningScript } from "./SkillLearningTracker";
+import { isWinpQuery, buildWinpScript } from "./WorldIntelPanel";
+import { isSjkstriQuery, buildSjkstriScript } from "./SwarmJobKnowledgeScenarioTriple";
+import { isLkrctxQuery, buildLkrctxScript } from "./LiveIntelKnowledgeRiskTriple";
+import { isOetsctriQuery, buildOetsctriScript } from "./OpsEventTaskScenarioTriple";
+import { isSrskltriQuery, buildSrskltriScript } from "./ScenarioReportSkillTriple";
+import { isDrkntriQuery, buildDrkntriScript } from "./DatasetReportKnowledgeTriple";
+import { isScerptsklQuery, buildScerptsklScript } from "./SceneReportSkillTriple";
+import { isSwrcntQuery, buildSwrcntScript } from "./SwarmContactNexus";
+import { isCntRulsQuery, buildCntRulsScript } from "./ContactDecisionRulesNexus";
+import { isKaostriQuery, buildKaostriScript } from "./KnowledgeOpsAlertScenarioTriple";
+import { isGrnrstriQuery, buildGrnrstriScript } from "./GraphNodeRiskSwarmTriple";
+import { isIoeswrtriQuery, buildIoeswrtriScript } from "./IntelProfileOpsSwarmTriple";
+import { isIdkntriQuery, buildIdkntriScript } from "./InvestigationDatasetKnowledgeTriple";
+import { isOalcktriQuery, buildOalcktriScript } from "./OpsAlertContactKnowledgeTriple";
+import { isOaloekvtriQuery, buildOaloekvtriScript } from "./OpsAlertOpsEventKnowledgeTriple";
+import { isOalscnrskQuery, buildOalscnrskScript } from "./OpsAlertScenarioRiskTriple";
+import { isInvrptcntQuery, buildInvrptcntScript } from "./InvestigationReportContactTriple";
+import { isDsweevtriQuery, buildDsweevtriScript } from "./DatasetSwarmOpsTriple";
+import { isRsdtriQuery, buildRsdtriScript } from "./RiskSignalDatasetInvestigationTriple";
+import { isIipkvtriQuery, buildIipkvtriScript } from "./IntelProfileInvestmentKnowledgeTriple";
+import { isCioetriQuery, buildCioetriScript } from "./ContactIntelOpsTriple";
+import { isCsrktriQuery, buildCsrktriScript } from "./ContactScenarioRiskTriple";
+import { isActaskscnQuery, buildActaskscnScript } from "./AcousticTaskScenarioTriple";
+import { isSjirtriQuery, buildSjirtriScript } from "./SwarmJobInvestigationReportTriple";
+import { isAcdkntriQuery, buildAcdkntriScript } from "./AcousticDatasetKnowledgeTriple";
+import { isOacstriQuery, buildOacstriScript } from "./OpsAlertContactScenarioTriple";
+import { isAcalinvQuery, buildAcalinvScript } from "./AcousticOpsAlertInvestigationTriple";
+import { isIgsklTriQuery, buildIgsklTriScript } from "./InvestmentGraphSkillTriple";
+import { isKioetrQuery, buildKioetrScript } from "./KnowledgeInvestigationOpsTriple";
+import { isSwarmReportContactQuery, buildSwarmReportContactScript } from "./SwarmReportContactTriple";
+import { isTdsctriQuery, buildTdsctriScript } from "./TaskDatasetScenarioTriple";
+import { isInvcoetriQuery, buildInvcoetriScript } from "./InvestmentContactOpsTriple";
+import { isSklopsQuery, buildSklopsScript } from "./SkillOpsAlignment";
+import { isIpdrptQuery, buildIpdrptScript } from "./IntelProfileDatasetReportTriple";
+import { isCsdtriQuery, buildCsdtriScript } from "./ContactScenarioDatasetTriple";
+import { isTcktriQuery, buildTcktriScript } from "./TaskContactKnowledgeTriple";
+import { isSskltriQuery, buildSskltriScript } from "./ScenarioSkillTaskTriple";
+import { isOaltriaxQuery, buildOaltriaxScript } from "./OpsAlertTaskRiskTriple";
+import { isIcrstriQuery, buildIcrstriScript } from "./InvestigationContactRiskTriple";
+import { isDrsctriQuery, buildDrsctriScript } from "./DatasetReportScenarioTriple";
+import { isAsidtriQuery, buildAsidtriScript } from "./AipSkillInvestigationDatasetTriple";
+import { isVtlsQuery, buildVtlsScript } from "./VitalsDashboard";
+import { isSecurityQuery, buildSecurityScript } from "./SecurityComplianceDashboard";
+import { isRptlQuery, buildRptlScript } from "./ReportPublicationTimeline";
+import { isIpcnfQuery, buildIpcnfScript } from "./IntelProfileConfidence";
+import { isScemQuery, buildScemScript } from "./SceneIntelMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -55,7 +395,7 @@ export default function JarvisBrain() {
     try {
       const r = await fetch(`${apiBase()}/v1/voice/tts`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: answer }),
+        body: JSON.stringify({ text: answer, voice: getActiveVoice() }),
       });
       if (!r.ok) return;
       const url = URL.createObjectURL(await r.blob());
@@ -83,14 +423,1002 @@ export default function JarvisBrain() {
     if (scene) navigate(`/cinematic/${scene}`);
     let answer = "";
     try {
-      const pageContext = { route: window.location.pathname, scene };
-      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({ message: q, page_context: pageContext }),
-      });
-      const d = await r.json();
-      answer = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
+      if (isVoiceQuery(q)) {
+        const chosen = applyVoiceFromQuery(q);
+        answer = buildVoiceScript();
+        window.dispatchEvent(new CustomEvent("jarvis:voice-change", { detail: { voice: chosen } }));
+      } else if (isShowMeQuery(q)) {
+        answer = await buildShowMeScript(q);
+      } else if (isStatusQuery(q)) {
+        answer = await buildStatusScript();
+      } else if (isMarketsQuery(q)) {
+        answer = await buildMarketsScript();
+      } else if (isImpactMatrixQuery(q)) {
+        answer = await buildImpactMatrixScript();
+        window.dispatchEvent(new CustomEvent("jarvis:matrix-toggle"));
+      } else if (isRiskQuery(q)) {
+        answer = await buildRiskScript();
+      } else if (isTaskQuery(q)) {
+        answer = await buildTaskScript();
+      } else if (isDatasetsQuery(q)) {
+        answer = await buildDatasetsScript();
+      } else if (isInvestigationsQuery(q)) {
+        answer = await buildInvestigationsScript();
+      } else if (isScenarioQuery(q)) {
+        answer = await buildScenarioScript();
+      } else if (isDocumentQuery(q)) {
+        answer = await buildDocumentScript();
+      } else if (isSkillQuery(q)) {
+        answer = await buildSkillScript();
+      } else if (isBrainQuery(q)) {
+        answer = await buildBrainScript();
+      } else if (isAnchorDrillQuery(q)) {
+        answer = await buildAnchorScript();
+      } else if (isClockQuery(q)) {
+        answer = await buildClockScript();
+      } else if (isAlertQuery(q)) {
+        answer = await buildAlertScript();
+        window.dispatchEvent(new CustomEvent("jarvis:alerts-toggle"));
+      } else if (isInvestmentQuery(q)) {
+        answer = await buildInvestmentScript();
+      } else if (isContactsQuery(q)) {
+        answer = await buildContactsScript();
+      } else if (isSwarmQuery(q)) {
+        answer = await buildSwarmScript();
+      } else if (isCentralityQuery(q)) {
+        answer = await buildCentralityScript();
+      } else if (isDiagnosticsQuery(q)) {
+        answer = await buildDiagnosticsScript();
+      } else if (isHistoryQuery(q)) {
+        answer = buildHistoryScript();
+      } else if (isTourQuery(q)) {
+        answer = buildTourScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tour-start"));
+      } else if (isOpsEventsQuery(q)) {
+        answer = await buildOpsEventsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ops-events-toggle"));
+      } else if (isTbmQuery(q)) {
+        answer = await buildTbmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tbm-toggle"));
+      } else if (isIntelProfileQuery(q)) {
+        answer = await buildIntelProfileScript();
+      } else if (isCommunitiesQuery(q)) {
+        answer = await buildCommunitiesScript();
+        window.dispatchEvent(new CustomEvent("jarvis:communities-toggle"));
+      } else if (isSbbQuery(q)) {
+        answer = await buildSbbScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sbb-toggle"));
+      } else if (isScenarioRiskAdvisorQuery(q)) {
+        answer = await buildScenarioRiskAdvisorScript();
+        window.dispatchEvent(new CustomEvent("jarvis:srmadvisor-toggle"));
+      } else if (isAthrepQuery(q)) {
+        answer = await buildAthrepScript();
+        window.dispatchEvent(new CustomEvent("jarvis:athrep-toggle"));
+      } else if (isBnvmQuery(q)) {
+        answer = await buildBnvmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:bnvm-toggle"));
+      } else if (isMissionControlQuery(q)) {
+        answer = await buildMissionControlScript();
+      } else if (isRemindersQuery(q)) {
+        answer = await buildRemindersScript();
+      } else if (isInvtlQuery(q)) {
+        answer = await buildInvtlScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invtl-toggle"));
+      } else if (isKsrecQuery(q)) {
+        answer = await buildKsrecScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ksrec-toggle"));
+      } else if (isLitaskQuery(q)) {
+        answer = await buildLitaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:litask-toggle"));
+      } else if (isCrisisWarningQuery(q)) {
+        answer = await buildCrisisWarningScript();
+        window.dispatchEvent(new CustomEvent("jarvis:crisis-warning-toggle"));
+      } else if (isGraphTimelineQuery(q)) {
+        answer = await buildGraphTimelineScript();
+      } else if (isReportViewerQuery(q)) {
+        answer = await buildReportViewerScript();
+      } else if (isRulesBrowserQuery(q)) {
+        answer = await buildRulesBrowserScript();
+      } else if (isSecurityAuditQuery(q)) {
+        answer = await buildSecurityAuditScript();
+      } else if (isKfmQuery(q)) {
+        answer = await buildKfmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:kfm-toggle"));
+      } else if (isEvthmQuery(q)) {
+        answer = await buildEvthmScript();
+      } else if (isKrgapQuery(q)) {
+        answer = await buildKrgapScript();
+      } else if (isTaskRiskMatrixQuery(q)) {
+        answer = await buildTaskRiskMatrixScript();
+        window.dispatchEvent(new CustomEvent("jarvis:task-risk-matrix-toggle"));
+      } else if (isIntelProfileRosterQuery(q)) {
+        answer = await buildIntelProfileRosterScript();
+        window.dispatchEvent(new CustomEvent("jarvis:intel-roster-toggle"));
+      } else if (isDataIntakeQuery(q)) {
+        answer = await buildDataIntakeScript();
+        window.dispatchEvent(new CustomEvent("jarvis:dint-toggle"));
+      } else if (isGraphNeighborhoodQuery(q)) {
+        answer = await buildGraphNeighborhoodScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gneigh-toggle"));
+      } else if (isContactRiskQuery(q)) {
+        answer = await buildContactRiskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:crisk-toggle"));
+      } else if (isRtkmonQuery(q)) {
+        answer = await buildRtkmonScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rtkmon-toggle"));
+      } else if (isSwarmRiskQuery(q)) {
+        answer = await buildSwarmRiskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:srisk-toggle"));
+      } else if (isInvscnQuery(q)) {
+        answer = await buildInvscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invscn-toggle"));
+      } else if (isKtgapQuery(q)) {
+        answer = await buildKtgapScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ktgap-toggle"));
+      } else if (isContactInvQuery(q)) {
+        answer = await buildContactInvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:contact-inv-toggle"));
+      } else if (isRriskQuery(q)) {
+        answer = await buildRriskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rrisk-toggle"));
+      } else if (isSkgapQuery(q)) {
+        answer = await buildSkgapScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skgap-toggle"));
+      } else if (isSwrinvQuery(q)) {
+        answer = await buildSwrinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:swrinv-toggle"));
+      } else if (isIpinvQuery(q)) {
+        answer = await buildIpinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ipinv-toggle"));
+      } else if (isDinvQuery(q)) {
+        answer = await buildDinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:dinv-toggle"));
+      } else if (isScnopsQuery(q)) {
+        answer = await buildScnopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:scnops-toggle"));
+      } else if (isSkillinvQuery(q)) {
+        answer = await buildSkillinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skillinv-toggle"));
+      } else if (isInvrskQuery(q)) {
+        answer = await buildInvrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invrsk-toggle"));
+      } else if (isCscnxQuery(q)) {
+        answer = await buildCscnxScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cscnx-toggle"));
+      } else if (isTrscQuery(q)) {
+        answer = await buildTrscScript();
+        window.dispatchEvent(new CustomEvent("jarvis:trsc-toggle"));
+      } else if (isRulsrskQuery(q)) {
+        answer = await buildRulsrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulsrsk-toggle"));
+      } else if (isRulsinvQuery(q)) {
+        answer = await buildRulsinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulsinv-toggle"));
+      } else if (isRtcovQuery(q)) {
+        answer = await buildRtcovScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rtcov-toggle"));
+      } else if (isOetaskQuery(q)) {
+        answer = await buildOetaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oetask-toggle"));
+      } else if (isThreatVelocityQuery(q)) {
+        answer = await buildThreatVelocityScript();
+        window.dispatchEvent(new CustomEvent("jarvis:velocity-toggle"));
+      } else if (isSsscenQuery(q)) {
+        answer = await buildSsscenScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ssscen-toggle"));
+      } else if (isLwriskQuery(q)) {
+        answer = await buildLwriskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwrisk-toggle"));
+      } else if (isSkrskQuery(q)) {
+        answer = await buildSkrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skrsk-toggle"));
+      } else if (isDatasetScenarioQuery(q)) {
+        answer = await buildDatasetScenarioScript();
+        window.dispatchEvent(new CustomEvent("jarvis:dscncov-toggle"));
+      } else if (isIprscQuery(q)) {
+        answer = await buildIprscScript();
+        window.dispatchEvent(new CustomEvent("jarvis:iprsc-toggle"));
+      } else if (isIprskQuery(q)) {
+        answer = await buildIprskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:iprsk-toggle"));
+      } else if (isCknowQuery(q)) {
+        answer = await buildCknowScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cknow-toggle"));
+      } else if (isIntelskillQuery(q)) {
+        answer = await buildIntelskillScript();
+        window.dispatchEvent(new CustomEvent("jarvis:intelskill-toggle"));
+      } else if (isRscncovQuery(q)) {
+        answer = await buildRscncovScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rscncov-toggle"));
+      } else if (isTaskScenarioQuery(q)) {
+        answer = await buildTaskScenarioScript();
+        window.dispatchEvent(new CustomEvent("jarvis:taskscn-toggle"));
+      } else if (isSwrknoQuery(q)) {
+        answer = await buildSwrknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:swrkno-toggle"));
+      } else if (isOevknoQuery(q)) {
+        answer = await buildOevknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oevkno-toggle"));
+      } else if (isStaskQuery(q)) {
+        answer = await buildStaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:stask-toggle"));
+      } else if (isHealthScoreQuery(q)) {
+        answer = await buildHealthScoreScript();
+        window.dispatchEvent(new CustomEvent("jarvis:healthscore-toggle"));
+      } else if (isRlnkQuery(q)) {
+        answer = await buildRlnkScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rlnk-toggle"));
+      } else if (isDatknopQuery(q)) {
+        answer = await buildDatknopScript();
+        window.dispatchEvent(new CustomEvent("jarvis:datkno-toggle"));
+      } else if (isInvknowQuery(q)) {
+        answer = await buildInvknowScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invknow-toggle"));
+      } else if (isTexmonQuery(q)) {
+        answer = await buildTexmonScript();
+      } else if (isContactSwarmQuery(q)) {
+        answer = await buildContactSwarmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cswrm-toggle"));
+      } else if (isSwrdsetQuery(q)) {
+        answer = await buildSwrdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:swrdset-toggle"));
+      } else if (isSwarmDatasetQuery(q)) {
+        answer = await buildSwarmDatasetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sdtrk-toggle"));
+      } else if (isInvinvQuery(q)) {
+        answer = await buildInvinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invinv-toggle"));
+      } else if (isSwrscnQuery(q)) {
+        answer = await buildSwrscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:swrscn-toggle"));
+      } else if (isInvoevQuery(q)) {
+        answer = await buildInvoevScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invoev-toggle"));
+      } else if (isCdataQuery(q)) {
+        answer = await buildCdataScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cdata-toggle"));
+      } else if (isCoevtQuery(q)) {
+        answer = await buildCoevtScript();
+      } else if (isCiprQuery(q)) {
+        answer = await buildCiprScript();
+        window.dispatchEvent(new CustomEvent("jarvis:coevt-toggle"));
+      } else if (isSkopsQuery(q)) {
+        answer = await buildSkopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skops-toggle"));
+      } else if (isInvSwjQuery(q)) {
+        answer = await buildInvSwjScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invswj-toggle"));
+      } else if (isSjintelQuery(q)) {
+        answer = await buildSjintelScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sjintel-toggle"));
+      } else if (isAsrcQuery(q)) {
+        answer = await buildAsrcScript();
+        window.dispatchEvent(new CustomEvent("jarvis:asrc-toggle"));
+      } else if (isSjoeQuery(q)) {
+        answer = await buildSjoeScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sjoe-toggle"));
+      } else if (isRulsknoQuery(q)) {
+        answer = await buildRulsknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulskno-toggle"));
+      } else if (isCtrptQuery(q)) {
+        answer = await buildCtrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ctrpt-toggle"));
+      } else if (isTdsetQuery(q)) {
+        answer = await buildTdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tdset-toggle"));
+      } else if (isRuldsetQuery(q)) {
+        answer = await buildRuldsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ruldset-toggle"));
+      } else if (isGninvQuery(q)) {
+        answer = await buildGninvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gninv-toggle"));
+      } else if (isScninvQuery(q)) {
+        answer = await buildScninvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:scninv-toggle"));
+      } else if (isRinvQuery(q)) {
+        answer = await buildRinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rinv-toggle"));
+      } else if (isTaintelQuery(q)) {
+        answer = await buildTaintelScript();
+        window.dispatchEvent(new CustomEvent("jarvis:taintel-toggle"));
+      } else if (isRpopsQuery(q)) {
+        answer = await buildRpopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rpops-toggle"));
+      } else if (isSwrrptQuery(q)) {
+        answer = await buildSwrrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:swrrpt-toggle"));
+      } else if (isCttaskQuery(q)) {
+        answer = await buildCttaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cttask-toggle"));
+      } else if (isSctmQuery(q)) {
+        answer = await buildSctmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sctm-toggle"));
+      } else if (isIpdsetQuery(q)) {
+        answer = await buildIpdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ipdset-toggle"));
+      } else if (isRulscntQuery(q)) {
+        answer = await buildRulscntScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulscnt-toggle"));
+      } else if (isSkdsQuery(q)) {
+        answer = await buildSkdsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skds-toggle"));
+      } else if (isRulscnQuery(q)) {
+        answer = await buildRulscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulscn-toggle"));
+      } else if (isRulswrmQuery(q)) {
+        answer = await buildRulswrmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulswrm-toggle"));
+      } else if (isLwknoQuery(q)) {
+        answer = await buildLwknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwkno-toggle"));
+      } else if (isDsrskQuery(q)) {
+        answer = await buildDsrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:dsrsk-toggle"));
+      } else if (isDsriskQuery(q)) {
+        answer = await buildDsriskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:dsrisk-toggle"));
+      } else if (isIpoevQuery(q)) {
+        answer = await buildIpoevScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ipoev-toggle"));
+      } else if (isEpulseQuery(q)) {
+        answer = await buildEpulseScript();
+        window.dispatchEvent(new CustomEvent("jarvis:epulse-toggle"));
+      } else if (isLwtaskQuery(q)) {
+        answer = await buildLwtaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwtask-toggle"));
+      } else if (isLwscnQuery(q)) {
+        answer = await buildLwscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwscn-toggle"));
+      } else if (isLwswrmQuery(q)) {
+        answer = await buildLwswrmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwswrm-toggle"));
+      } else if (isLwintelQuery(q)) {
+        answer = await buildLwintelScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwintel-toggle"));
+      } else if (isLwcntQuery(q)) {
+        answer = await buildLwcntScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwcnt-toggle"));
+      } else if (isLwinvQuery(q)) {
+        answer = await buildLwinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwinv-toggle"));
+      } else if (isLwrulsQuery(q)) {
+        answer = await buildLwrulsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwruls-toggle"));
+      } else if (isLwrptQuery(q)) {
+        answer = await buildLwrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwrpt-toggle"));
+      } else if (isLwdsetQuery(q)) {
+        answer = await buildLwdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwdset-toggle"));
+      } else if (isLwopsQuery(q)) {
+        answer = await buildLwopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwops-toggle"));
+      } else if (isOmbrfQuery(q)) {
+        answer = await buildOmbrfScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ombrf-toggle"));
+      } else if (isSkasQuery(q)) {
+        answer = await buildSkasScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skas-toggle"));
+      } else if (isIpscenQuery(q)) {
+        answer = await buildIpscenScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ipscen-toggle"));
+      } else if (isSklswrmQuery(q)) {
+        answer = await buildSklswrmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sklswrm-toggle"));
+      } else if (isCskillQuery(q)) {
+        answer = await buildCskillScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cskill-toggle"));
+      } else if (isSkillContactQuery(q)) {
+        answer = await buildSkillContactScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skillcontact-toggle"));
+      } else if (isTimelineQuery(q)) {
+        answer = await buildTimelineScript();
+        window.dispatchEvent(new CustomEvent("jarvis:timeline-toggle"));
+      } else if (isSkiinvQuery(q)) {
+        answer = await buildSkiinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skiinv-toggle"));
+      } else if (isAsicQuery(q)) {
+        answer = await buildAsicScript();
+        window.dispatchEvent(new CustomEvent("jarvis:asic-toggle"));
+      } else if (isRulsintelQuery(q)) {
+        answer = await buildRulsintelScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulsintel-toggle"));
+      } else if (isRulrptQuery(q)) {
+        answer = await buildRulrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rulrpt-toggle"));
+      } else if (isDpdigQuery(q)) {
+        answer = await buildDpdigScript();
+        window.dispatchEvent(new CustomEvent("jarvis:dpdig-toggle"));
+      } else if (isGrknoQuery(q)) {
+        answer = await buildGrknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grkno-toggle"));
+      } else if (isGrscnQuery(q)) {
+        answer = await buildGrscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grscn-toggle"));
+      } else if (isGtmxQuery(q)) {
+        answer = await buildGtmxScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gtmx-toggle"));
+      } else if (isSwarmTaskQuery(q)) {
+        answer = await buildSwarmTaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:swarmtask-toggle"));
+      } else if (isKnoscQuery(q)) {
+        answer = await buildKnoscScript();
+        window.dispatchEvent(new CustomEvent("jarvis:knosc-toggle"));
+      } else if (isGrcntQuery(q)) {
+        answer = await buildGrcntScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grcnt-toggle"));
+      } else if (isGrinvQuery(q)) {
+        answer = await buildGrinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grinv-toggle"));
+      } else if (isGrtaskQuery(q)) {
+        answer = await buildGrtaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grtask-toggle"));
+      } else if (isGrdsetQuery(q)) {
+        answer = await buildGrdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grdset-toggle"));
+      } else if (isGrswrmQuery(q)) {
+        answer = await buildGrswrmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grswrm-toggle"));
+      } else if (isGnsrskQuery(q)) {
+        answer = await buildGnsrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gnsrsk-toggle"));
+      } else if (isGnintelQuery(q)) {
+        answer = await buildGnintelScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gnintel-toggle"));
+      } else if (isGcasQuery(q)) {
+        answer = await buildGcasScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gcas-toggle"));
+      } else if (isGcoeQuery(q)) {
+        answer = await buildGcoeScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gcoe-toggle"));
+      } else if (isGrremQuery(q)) {
+        answer = await buildGrremScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grrem-toggle"));
+      } else if (isKnorskQuery(q)) {
+        answer = await buildKnorskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:knorsk-toggle"));
+      } else if (isReminvQuery(q)) {
+        answer = await buildReminvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:reminv-toggle"));
+      } else if (isRptinvQuery(q)) {
+        answer = await buildRptinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rptinv-toggle"));
+      } else if (isRemtaskQuery(q)) {
+        answer = await buildRemtaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remtask-toggle"));
+      } else if (isRemrskQuery(q)) {
+        answer = await buildRemrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remrsk-toggle"));
+      } else if (isRemcntQuery(q)) {
+        answer = await buildRemcntScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remcnt-toggle"));
+      } else if (isRemknoQuery(q)) {
+        answer = await buildRemknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remkno-toggle"));
+      } else if (isRemswrmQuery(q)) {
+        answer = await buildRemswrmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remswrm-toggle"));
+      } else if (isRemintelQuery(q)) {
+        answer = await buildRemintelScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remintel-toggle"));
+      } else if (isRemdsetQuery(q)) {
+        answer = await buildRemdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remdset-toggle"));
+      } else if (isRemopsQuery(q)) {
+        answer = await buildRemopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remops-toggle"));
+      } else if (isRemscnQuery(q)) {
+        answer = await buildRemscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remscn-toggle"));
+      } else if (isRemrptQuery(q)) {
+        answer = await buildRemrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remrpt-toggle"));
+      } else if (isRemgrphQuery(q)) {
+        answer = await buildRemgrphScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remgrph-toggle"));
+      } else if (isRemslkQuery(q)) {
+        answer = await buildRemslkScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remskl-toggle"));
+      } else if (isRemrulsQuery(q)) {
+        answer = await buildRemrulsScript();
+      } else if (isOescnQuery(q)) {
+        answer = await buildOescnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remruls-toggle"));
+      } else if (isRemlwQuery(q)) {
+        answer = await buildRemlwScript();
+        window.dispatchEvent(new CustomEvent("jarvis:remlw-toggle"));
+      } else if (isReminvstQuery(q)) {
+        answer = await buildReminvstScript();
+        window.dispatchEvent(new CustomEvent("jarvis:reminvst-toggle"));
+      } else if (isScintelQuery(q)) {
+        answer = await buildScintelScript();
+        window.dispatchEvent(new CustomEvent("jarvis:scintel-toggle"));
+      } else if (isGrrulsQuery(q)) {
+        answer = await buildGrrulsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grruls-toggle"));
+      } else if (isGrrptQuery(q)) {
+        answer = await buildGrrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:grrpt-toggle"));
+      } else if (isSceneAnchorMonitorQuery(q)) {
+        answer = await buildSceneAnchorMonitorScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sacm-toggle"));
+      } else if (isPathQuery(q)) {
+        answer = await buildPathScript(q);
+      } else if (isAmbientQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
+        answer = "Toggling ambient reactor hum, sir.";
+      } else if (isNudgeQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:nudge-toggle"));
+        answer = "Toggling attention nudge, sir.";
+      } else if (isSkscnQuery(q)) {
+        answer = await buildSkscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:skscn-toggle"));
+      } else if (isLwgrphQuery(q)) {
+        answer = await buildLwgrphScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lwgrph-toggle"));
+      } else if (isLictxQuery(q)) {
+        answer = await buildLictxScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lictx-toggle"));
+      } else if (isTskknowQuery(q)) {
+        answer = await buildTskknowScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tskknow-toggle"));
+      } else if (isLiicQuery(q)) {
+        answer = await buildLiicScript();
+        window.dispatchEvent(new CustomEvent("jarvis:liic-toggle"));
+      } else if (isOevdsetQuery(q)) {
+        answer = await buildOevdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oevdset-toggle"));
+      } else if (isPaqQuery(q)) {
+        answer = await buildPaqScript();
+        window.dispatchEvent(new CustomEvent("jarvis:paq-toggle"));
+      } else if (isGnopsQuery(q)) {
+        answer = await buildGnopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gnops-toggle"));
+      } else if (isOpsClusterQuery(q)) {
+        answer = await buildOpsClusterScript();
+        window.dispatchEvent(new CustomEvent("jarvis:opsclu-toggle"));
+      } else if (isLiscenQuery(q)) {
+        answer = await buildLiscenScript();
+        window.dispatchEvent(new CustomEvent("jarvis:liscen-toggle"));
+      } else if (isKoepQuery(q)) {
+        answer = await buildKoepScript();
+        window.dispatchEvent(new CustomEvent("jarvis:koep-toggle"));
+      } else if (isTgprQuery(q)) {
+        answer = await buildTgprScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tgpr-toggle"));
+      } else if (isInvrulesQuery(q)) {
+        answer = await buildInvrulesScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invruls-toggle"));
+      } else if (isRiskRepQuery(q)) {
+        answer = await buildRiskRepScript();
+        window.dispatchEvent(new CustomEvent("jarvis:risk-report-mapper-toggle"));
+      } else if (isCntinvQuery(q)) {
+        answer = await buildCntinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cntinv-toggle"));
+      } else if (isCntswrmQuery(q)) {
+        answer = await buildCntswrmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cntswrm-toggle"));
+      } else if (isCntskQuery(q)) {
+        answer = await buildCntskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cntsk-toggle"));
+      } else if (isInvknoQuery(q)) {
+        answer = await buildInvknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invkno-toggle"));
+      } else if (isInvopsQuery(q)) {
+        answer = await buildInvopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:invops-toggle"));
+      } else if (isCntscn2Query(q)) {
+        answer = await buildCntscn2Script();
+        window.dispatchEvent(new CustomEvent("jarvis:cntscn2-toggle"));
+      } else if (isCtkntriQuery(q)) {
+        answer = await buildCtkntriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ctkntri-toggle"));
+      } else if (isGndRulsQuery(q)) {
+        answer = await buildGndRulsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:gndruls-toggle"));
+      } else if (isCntopsQuery(q)) {
+        answer = await buildCntopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:cntops-toggle"));
+      } else if (isTattrQuery(q)) {
+        answer = await buildTattrScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tattr-toggle"));
+      } else if (isOalinvQuery(q)) {
+        answer = await buildOalinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalinv-toggle"));
+      } else if (isLiilinkQuery(q)) {
+        answer = await buildLiilinkScript();
+        window.dispatchEvent(new CustomEvent("jarvis:liilink-toggle"));
+      } else if (isOeipQuery(q)) {
+        answer = await buildOeipScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oeip-toggle"));
+      } else if (isRsgcQuery(q)) {
+        answer = await buildRsgcScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rsgc-toggle"));
+      } else if (isKnowopsQuery(q)) {
+        answer = await buildKnowopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:knowops-toggle"));
+      } else if (isOaltaskQuery(q)) {
+        answer = await buildOaltaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oaltask-toggle"));
+      } else if (isLiveTickerQuery(q)) {
+        answer = await buildLiveTickerScript();
+      } else if (isModelRegistryQuery(q)) {
+        answer = await buildModelRegistryScript();
+        window.dispatchEvent(new CustomEvent("jarvis:model-registry-toggle"));
+      } else if (isOalknowQuery(q)) {
+        answer = await buildOalknowScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalknow-toggle"));
+      } else if (isOalrskQuery(q)) {
+        answer = await buildOalrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalrsk-toggle"));
+      } else if (isOalswrmQuery(q)) {
+        answer = await buildOalswrmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalswrm-toggle"));
+      } else if (isOalscnQuery(q)) {
+        answer = await buildOalscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalscn-toggle"));
+      } else if (isOalipQuery(q)) {
+        answer = await buildOalipScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalip-toggle"));
+      } else if (isOalcontQuery(q)) {
+        answer = await buildOalcontScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalcont-toggle"));
+      } else if (isOaldsetQuery(q)) {
+        answer = await buildOaldsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oaldset-toggle"));
+      } else if (isOalremQuery(q)) {
+        answer = await buildOalremScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalrem-toggle"));
+      } else if (isOalfinQuery(q)) {
+        answer = await buildOalfinScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalfin-toggle"));
+      } else if (isOalrptQuery(q)) {
+        answer = await buildOalrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalrpt-toggle"));
+      } else if (isQifQuery(q)) {
+        answer = await buildQifScript();
+        window.dispatchEvent(new CustomEvent("jarvis:qif-toggle"));
+      } else if (isOalgrphQuery(q)) {
+        answer = await buildOalgrphScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalgrph-toggle"));
+      } else if (isOalruleQuery(q)) {
+        answer = await buildOalruleScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalrule-toggle"));
+      } else if (isOalskillQuery(q)) {
+        answer = await buildOalskillScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalskill-toggle"));
+      } else if (isCiktriQuery(q)) {
+        answer = await buildCiktriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ciktri-toggle"));
+      } else if (isTasoevQuery(q)) {
+        answer = await buildTasoevScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tasoev-toggle"));
+      } else if (isAipkrstriQuery(q)) {
+        answer = await buildAipkrstriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:aipkrstri-toggle"));
+      } else if (isRststriQuery(q)) {
+        answer = await buildRststriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:rststri-toggle"));
+      } else if (isTgkntriQuery(q)) {
+        answer = await buildTgkntriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tgkntri-toggle"));
+      } else if (isAcrskQuery(q)) {
+        answer = await buildAcrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acrsk-toggle"));
+      } else if (isAcinvQuery(q)) {
+        answer = await buildAcinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acinv-toggle"));
+      } else if (isActaskQuery(q)) {
+        answer = await buildActaskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:actask-toggle"));
+      } else if (isAcipQuery(q)) {
+        answer = await buildAcipScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acip-toggle"));
+      } else if (isAcknoQuery(q)) {
+        answer = await buildAcknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ackno-toggle"));
+      } else if (isAcswrmQuery(q)) {
+        answer = await buildAcswrmScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acswrm-toggle"));
+      } else if (isAcdsetQuery(q)) {
+        answer = await buildAcdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acdset-toggle"));
+      } else if (isAcrptQuery(q)) {
+        answer = await buildAcrptScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acrpt-toggle"));
+      } else if (isAcopsQuery(q)) {
+        answer = await buildAcopsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acops-toggle"));
+      } else if (isAcalQuery(q)) {
+        answer = await buildAcalScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acal-toggle"));
+      } else if (isAcrulsQuery(q)) {
+        answer = await buildAcrulsScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acruls-toggle"));
+      } else if (isAcinvstQuery(q)) {
+        answer = await buildAcinvstScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acinvst-toggle"));
+      } else if (isAccntQuery(q)) {
+        answer = await buildAccntScript();
+        window.dispatchEvent(new CustomEvent("jarvis:accnt-toggle"));
+      } else if (isAcgrphQuery(q)) {
+        answer = await buildAcgrphScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acgrph-toggle"));
+      } else if (isAcremQuery(q)) {
+        answer = await buildAcremScript();
+      } else if (isAcskillQuery(q)) {
+        answer = await buildAcskillScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acrem-toggle"));
+      } else if (isAclwQuery(q)) {
+        answer = await buildAclwScript();
+        window.dispatchEvent(new CustomEvent("jarvis:aclw-toggle"));
+      } else if (isAcscnQuery(q)) {
+        answer = await buildAcscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acscn-toggle"));
+      } else if (isAcsnQuery(q)) {
+        answer = await buildAcsnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acsn-toggle"));
+      } else if (isAckrtriQuery(q)) {
+        answer = await buildAckrtriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ackrtri-toggle"));
+      } else if (isActkiinvQuery(q)) {
+        answer = await buildActkiinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:actkiinv-toggle"));
+      } else if (isAcskscnQuery(q)) {
+        answer = await buildAcskscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acskscn-toggle"));
+      } else if (isAcgcipQuery(q)) {
+        answer = await buildAcgcipScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acgcip-toggle"));
+      } else if (isAcrlcntQuery(q)) {
+        answer = await buildAcrlcntScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acrlcnt-toggle"));
+      } else if (isAcrpinvQuery(q)) {
+        answer = await buildAcrpinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acrpinv-toggle"));
+      } else if (isAcmscoreQuery(q)) {
+        answer = await buildAcmscoreScript();
+      } else if (isAcodedQuery(q)) {
+        answer = await buildAcodedScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acoded-toggle"));
+      } else if (isAcscnsklQuery(q)) {
+        answer = await buildAcscnsklScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acscnskl-toggle"));
+      } else if (isAcknoTripleQuery(q)) {
+        answer = await buildAcknoTripleScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acskno-toggle"));
+      } else if (isAcrpscnQuery(q)) {
+        answer = await buildAcrpscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acrpscn-toggle"));
+      } else if (isAcrldsetQuery(q)) {
+        answer = await buildAcrldsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acrldset-toggle"));
+      } else if (isActdsetQuery(q)) {
+        answer = await buildActdsetScript();
+        window.dispatchEvent(new CustomEvent("jarvis:actdset-toggle"));
+      } else if (isAcipscnQuery(q)) {
+        answer = await buildAcipscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acipscn-toggle"));
+      } else if (isActrskQuery(q)) {
+        answer = await buildActrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:actrsk-toggle"));
+      } else if (isAcoaipQuery(q)) {
+        answer = await buildAcoaipScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acoaip-toggle"));
+      } else if (isAcswrskQuery(q)) {
+        answer = await buildAcswrskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acswrsk-toggle"));
+      } else if (isAcsceneQuery(q)) {
+        answer = await buildAcsceneScript();
+        window.dispatchEvent(new CustomEvent("jarvis:acscene-toggle"));
+      } else if (isOalknoQuery(q)) {
+        answer = await buildOalknoScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oalkno-toggle"));
+      } else if (isLirulesQuery(q)) {
+        answer = await buildLirulesScript();
+        window.dispatchEvent(new CustomEvent("jarvis:lirules-toggle"));
+      } else if (isKnoevtQuery(q)) {
+        answer = await buildKnoevtScript();
+        window.dispatchEvent(new CustomEvent("jarvis:knoevt-toggle"));
+      } else if (isKnoscnQuery(q)) {
+        answer = await buildKnoscnScript();
+        window.dispatchEvent(new CustomEvent("jarvis:knoscn-toggle"));
+      } else if (isOeinvQuery(q)) {
+        answer = await buildOeinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oeinv-toggle"));
+      } else if (isOerskQuery(q)) {
+        answer = await buildOerskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:oersk-toggle"));
+      } else if (isOpsalinvQuery(q)) {
+        answer = await buildOpsalinvScript();
+        window.dispatchEvent(new CustomEvent("jarvis:opsalinv-toggle"));
+      } else if (isSwarmCoverageQuery(q)) {
+        answer = await buildSwarmCoverageScript();
+        window.dispatchEvent(new CustomEvent("jarvis:swarmcoverage-toggle"));
+      } else if (isTrsksklQuery(q)) {
+        answer = await buildTrsksklScript();
+        window.dispatchEvent(new CustomEvent("jarvis:trskskl-toggle"));
+      } else if (isKnogphQuery(q)) {
+        answer = await buildKnogphScript();
+        window.dispatchEvent(new CustomEvent("jarvis:knogph-toggle"));
+      } else if (isIscovQuery(q)) {
+        answer = await buildIscovScript();
+        window.dispatchEvent(new CustomEvent("jarvis:iscov-toggle"));
+      } else if (isCtkinvtriQuery(q)) {
+        answer = await buildCtkinvtriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ckinvtri-toggle"));
+      } else if (isTsknowQuery(q)) {
+        answer = await buildTsknowScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tsknow-toggle"));
+      } else if (isIrscntriQuery(q)) {
+        answer = await buildIrscntriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:irscntri-toggle"));
+      } else if (isCoerskQuery(q)) {
+        answer = await buildCoerskScript();
+        window.dispatchEvent(new CustomEvent("jarvis:coersk-toggle"));
+      } else if (isKriinvtriQuery(q)) {
+        answer = await buildKriinvtriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:kriinvtri-toggle"));
+      } else if (isIptscntriQuery(q)) {
+        answer = await buildIptscntriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:iptscntri-toggle"));
+      } else if (isTcoevtQuery(q)) {
+        answer = await buildTcoevtScript();
+        window.dispatchEvent(new CustomEvent("jarvis:tcoevt-toggle"));
+      } else if (isSkillLearningQuery(q)) {
+        answer = await buildSkillLearningScript();
+        window.dispatchEvent(new CustomEvent("jarvis:ltrack-toggle"));
+      } else if (isWinpQuery(q)) {
+        answer = await buildWinpScript();
+      } else if (isSjkstriQuery(q)) {
+        answer = await buildSjkstriScript();
+        window.dispatchEvent(new CustomEvent("jarvis:sjkstri-toggle"));
+      } else if (isLkrctxQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:lkrctx-toggle"));
+        answer = await buildLkrctxScript();
+      } else if (isOetsctriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:oetsctri-toggle"));
+        answer = await buildOetsctriScript();
+      } else if (isSrskltriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:srskltri-toggle"));
+        answer = await buildSrskltriScript();
+      } else if (isDrkntriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:drkntri-toggle"));
+        answer = await buildDrkntriScript();
+      } else if (isScerptsklQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:scerptskl-toggle"));
+        answer = await buildScerptsklScript();
+      } else if (isSwrcntQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:swrcnt-toggle"));
+        answer = await buildSwrcntScript();
+      } else if (isKaostriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:kaostri-toggle"));
+        answer = await buildKaostriScript();
+      } else if (isGrnrstriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:grnrstri-toggle"));
+        answer = await buildGrnrstriScript();
+      } else if (isIoeswrtriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:ioeswrtri-toggle"));
+        answer = await buildIoeswrtriScript();
+      } else if (isIdkntriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:idkntri-toggle"));
+        answer = await buildIdkntriScript();
+      } else if (isOalcktriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:oalcktri-toggle"));
+        answer = await buildOalcktriScript();
+      } else if (isOaloekvtriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:oaloekvtri-toggle"));
+        answer = await buildOaloekvtriScript();
+      } else if (isOalscnrskQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:oalscnrsk-toggle"));
+        answer = await buildOalscnrskScript();
+      } else if (isInvrptcntQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:invrptcnt-toggle"));
+        answer = await buildInvrptcntScript();
+      } else if (isDsweevtriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:dsweevtri-toggle"));
+        answer = await buildDsweevtriScript();
+      } else if (isRsdtriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:rsdtri-toggle"));
+        answer = await buildRsdtriScript();
+      } else if (isIipkvtriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:iipkvtri-toggle"));
+        answer = await buildIipkvtriScript();
+      } else if (isCioetriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:cioetri-toggle"));
+        answer = await buildCioetriScript();
+      } else if (isCsrktriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:csrktri-toggle"));
+        answer = await buildCsrktriScript();
+      } else if (isActaskscnQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:actaskscn-toggle"));
+        answer = await buildActaskscnScript();
+      } else if (isAcdkntriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:acdkntri-toggle"));
+        answer = await buildAcdkntriScript();
+      } else if (isOacstriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:oacstri-toggle"));
+        answer = await buildOacstriScript();
+      } else if (isAcalinvQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:acalinv-toggle"));
+        answer = await buildAcalinvScript();
+      } else if (isIgsklTriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:igskltri-toggle"));
+        answer = await buildIgsklTriScript();
+      } else if (isKioetrQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:kioetr-toggle"));
+        answer = await buildKioetrScript();
+      } else if (isSwarmReportContactQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:sjrpcnt-toggle"));
+        answer = await buildSwarmReportContactScript();
+      } else if (isTdsctriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:tdsctri-toggle"));
+        answer = await buildTdsctriScript();
+      } else if (isInvcoetriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:invcoetri-toggle"));
+        answer = await buildInvcoetriScript();
+      } else if (isSklopsQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:sklops-toggle"));
+        answer = await buildSklopsScript();
+      } else if (isIpdrptQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:ipdrpt-toggle"));
+        answer = await buildIpdrptScript();
+      } else if (isCsdtriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:csdtri-toggle"));
+        answer = await buildCsdtriScript();
+      } else if (isTcktriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:tcktri-toggle"));
+        answer = await buildTcktriScript();
+      } else if (isSskltriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:sskltri-toggle"));
+        answer = await buildSskltriScript();
+      } else if (isOaltriaxQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:oaltriax-toggle"));
+        answer = await buildOaltriaxScript();
+      } else if (isIcrstriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:icrstri-toggle"));
+        answer = await buildIcrstriScript();
+      } else if (isDrsctriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:drsctri-toggle"));
+        answer = await buildDrsctriScript();
+      } else if (isAsidtriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:asidtri-toggle"));
+        answer = await buildAsidtriScript();
+      } else if (isVtlsQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:vtls-toggle"));
+        answer = await buildVtlsScript();
+      } else if (isSecurityQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:sec-toggle"));
+        answer = await buildSecurityScript();
+      } else if (isRptlQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:rptl-toggle"));
+        answer = await buildRptlScript();
+      } else if (isIpcnfQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:ipcnf-toggle"));
+        answer = await buildIpcnfScript();
+      } else if (isScemQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:scem-toggle"));
+        answer = await buildScemScript();
+      } else if (isSjirtriQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:sjirtri-toggle"));
+        answer = await buildSjirtriScript();
+      } else if (isCntRulsQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:cntruls-toggle"));
+        answer = await buildCntRulsScript();
+      } else if (isEntitySearchQuery(q)) {
+        const term = extractEntitySearchTerm(q);
+        answer = await buildEntityDossierScript(term);
+        window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term } }));
+      } else {
+        const pageContext = { route: window.location.pathname, scene };
+        const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+          body: JSON.stringify({ message: q, page_context: pageContext }),
+        });
+        const d = await r.json();
+        answer = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
+      }
     } catch {
       answer = "I'm afraid I couldn't reach my reasoning core just now, sir.";
     }
