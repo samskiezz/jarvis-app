@@ -1039,6 +1039,7 @@ import IntelAcquisitionQueue from '@/components/cinematic/IntelAcquisitionQueue'
 import KnowledgeCategoryHeatmap from '@/components/cinematic/KnowledgeCategoryHeatmap';
 import ReportKnowledgeCoverage from '@/components/cinematic/ReportKnowledgeCoverage';
 import GraphCommunityView from '@/components/cinematic/GraphCommunityView';import EntityCountTrend from '@/components/cinematic/EntityCountTrend';
+import SkillKnowledgeReportMatrix from '@/components/cinematic/SkillKnowledgeReportMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3183,6 +3184,8 @@ function App() {
             {/* F42 (overnight 2026-09-13): Graph Community Clusters — GraphCommunityView.jsx; /v1/graph/communities + /v1/graph/centrality; NODES/CLUSTERS/LARGEST/ISOLATED stat tiles; cluster cards with member count + top member; expand → all members with scores; ▶ ASSESS → /v1/voice/tts via jarvis:speak-dossier; ⬡ GCOM button left:930680 bottom:8 zIndex:626; isGcomQuery+buildGcomScript wired into JarvisBrain.ask(); jarvis:gcom-toggle event; 120-s auto-refresh; voice: graph communities/community clusters/gcom/entity clusters/community detection/graph partition */}
             <GraphCommunityView />            {/* F31-ETREND (overnight 2026-09-13): entity count trend tracker — polls all 6 /entities/ types every 5 min; stores rolling count history in localStorage (max 48 readings); 6 mini SVG sparklines with trend arrows (▲/—/▼) per type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence growth brief + TTS; "entity trend"/"count trend"/"entity growth"/"etrend" voice trigger; jarvis:etrend-toggle event */}
             <EntityCountTrend />
+            {/* F44 (overnight 2026-09-13): Skill × Knowledge × Report Coverage Matrix — /v1/aip/skill + /knowledge/ + /v1/reports; FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED; red badge on undocumented count; ◈ SKRM button left:931240 bottom:8 zIndex:627; isSkrmQuery+buildSkrmScript wired JarvisBrain; jarvis:skrm-toggle event; 120-s auto-refresh; voice: skill knowledge/skill docs/skrm/undocumented skills/skill documentation/skill report coverage */}
+            <SkillKnowledgeReportMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

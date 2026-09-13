@@ -345,6 +345,7 @@ import { isIaqQuery, buildIaqScript } from "./IntelAcquisitionQueue";
 import { isKcatQuery, buildKcatScript } from "./KnowledgeCategoryHeatmap";
 import { isGcomQuery, buildGcomScript } from "./GraphCommunityView";
 import { isOpevQuery, buildOpevScript } from "./OpsEventsTimeline";
+import { isSkrmQuery, buildSkrmScript } from "./SkillKnowledgeReportMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1409,6 +1410,9 @@ export default function JarvisBrain() {
       } else if (isGcomQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:gcom-toggle"));
         answer = await buildGcomScript();
+      } else if (isSkrmQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:skrm-toggle"));
+        answer = await buildSkrmScript();
       } else if (isKcatQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:kcat-toggle"));
         answer = await buildKcatScript();

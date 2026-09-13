@@ -23,3 +23,4 @@
 [2026-09-13] F41 DONE — ReportKnowledgeCoverage.jsx: /v1/reports + /knowledge/ coverage matrix; backed/unbacked chips; coverage % badge (green ≥50%/amber <50%); ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RKCOV button left:192000; mounted App.jsx; Vite build exit 0
 [2026-09-13] F42 Graph Community Clusters — GraphCommunityView.jsx; /v1/graph/communities + /v1/graph/centrality; cluster cards, expand members, ASSESS → TTS; JarvisBrain wired; Vite build exit 0
 [2026-09-13] F43 EntityCountTrend — polls /entities/ x6 every 5min; localStorage rolling history (max 48); SVG sparklines + trend arrows (▲/—/▼); ASSESS→/v1/jarvis/agent/chat+TTS; voice: entity trend/count trend/etrend; EntityCountTrend.jsx mounted App.jsx; Vite build exit 0
+[2026-09-13] F44 SkillKnowledgeReportMatrix.jsx — /v1/aip/skill + /knowledge/ + /v1/reports; FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED; SKRM button + JarvisBrain wired; Vite build exit 0
