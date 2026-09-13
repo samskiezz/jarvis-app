@@ -1036,6 +1036,7 @@ import ReportPublicationTimeline from '@/components/cinematic/ReportPublicationT
 import IntelProfileConfidence from '@/components/cinematic/IntelProfileConfidence';
 import SceneIntelMatrix from '@/components/cinematic/SceneIntelMatrix';
 import IntelAcquisitionQueue from '@/components/cinematic/IntelAcquisitionQueue';
+import KnowledgeCategoryHeatmap from '@/components/cinematic/KnowledgeCategoryHeatmap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3173,6 +3174,8 @@ function App() {
             <SceneIntelMatrix />
             {/* F38 (overnight 2026-09-13): Intelligence Acquisition Queue — IntelAcquisitionQueue.jsx; polls /entities/RiskSignal + /v1/investigations + /knowledge/; surfaces topics with no matching knowledge article; severity-sorted gap list; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ⚡ IAQ button; isIaqQuery+buildIaqScript exported; 120-s auto-refresh; voice: intelligence acquisition/knowledge gap/iaq */}
             <IntelAcquisitionQueue />
+            {/* F40 (overnight 2026-09-13): Knowledge Category Heatmap — KnowledgeCategoryHeatmap.jsx; polls /knowledge/ every 120 s; groups articles by category/kind; ranked bar chart (top-3 green, next-3 cyan, rest amber); TOTAL/CATEGORIES/LARGEST/NO_CATEGORY stat tiles; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ KCAT button left:929820 bottom:8 zIndex:625; isKcatQuery+buildKcatScript wired into JarvisBrain.ask(); jarvis:kcat-toggle event; 120-s auto-refresh; voice: knowledge categories/knowledge heatmap/kcat/kb categories/knowledge distribution */}
+            <KnowledgeCategoryHeatmap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
