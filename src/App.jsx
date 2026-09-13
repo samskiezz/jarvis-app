@@ -1049,6 +1049,7 @@ import InvestmentRiskScenarioNexus from '@/components/cinematic/InvestmentRiskSc
 import TaskPriorityQuadrant from '@/components/cinematic/TaskPriorityQuadrant';
 import OpsAlertInvestigationBoard from '@/components/cinematic/OpsAlertInvestigationBoard';
 import ScenarioKnowledgeDatasetNexus from '@/components/cinematic/ScenarioKnowledgeDatasetNexus';
+import OperationalPulseRing from '@/components/cinematic/OperationalPulseRing';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3213,6 +3214,8 @@ function App() {
             <OpsAlertInvestigationBoard />
             {/* F53 (overnight 2026-09-13): Scenario × Knowledge × Dataset Intelligence Nexus (SKDNEX) — ScenarioKnowledgeDatasetNexus.jsx; /v1/scenario/list × /knowledge/ × /v1/datasets; keyword cross-reference classifies each scenario as FULLY_GROUNDED (KB + dataset match) / KB_ONLY / DATA_ONLY / UNGROUNDED; 5 stat tiles (scenarios/KB articles/datasets/fully grounded/ungrounded); ALL/FULLY_GROUNDED/KB_ONLY/DATA_ONLY/UNGROUNDED filter tabs + search; expand row → matched KB articles (amber bars) + matched datasets (cyan bars); red pulse on ungrounded count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SKDNEX button left:938980 bottom:8 zIndex:636; isSkdnexQuery+buildSkdnexScript wired JarvisBrain; jarvis:skdnex-toggle event; 90-s auto-refresh; voice: skdnex/scenario knowledge/scenario dataset/grounded scenario/scenario grounding/scenario data */}
             <ScenarioKnowledgeDatasetNexus />
+            {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
+            <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
