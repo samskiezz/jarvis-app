@@ -361,6 +361,7 @@ import { isSiracovQuery, buildSiracovScript } from "./ScenarioInvestigationRepor
 import { isTkirnexQuery, buildTkirnexScript } from "./TaskKnowledgeInvestigationReadiness";
 import { isRskrnexQuery, buildRskrnexScript } from "./RiskSignalKnowledgeReportNexus";
 import { isDbriefQuery, buildDbriefScript } from "./DailyBriefingPanel";
+import { isOafanaQuery, buildOafanaScript } from "./OpsAlertFrequencyAnalysis";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1485,6 +1486,9 @@ export default function JarvisBrain() {
       } else if (isDbriefQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:dbrief-toggle", { detail: { panel: "dbrief" } }));
         answer = await buildDbriefScript();
+      } else if (isOafanaQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:oafana-toggle", { detail: { panel: "oafana" } }));
+        answer = await buildOafanaScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
