@@ -1035,6 +1035,7 @@ import ReportCategoryBreakdown from '@/components/cinematic/ReportCategoryBreakd
 import ReportPublicationTimeline from '@/components/cinematic/ReportPublicationTimeline';
 import IntelProfileConfidence from '@/components/cinematic/IntelProfileConfidence';
 import SceneIntelMatrix from '@/components/cinematic/SceneIntelMatrix';
+import IntelAcquisitionQueue from '@/components/cinematic/IntelAcquisitionQueue';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3170,6 +3171,8 @@ function App() {
             <IntelProfileConfidence />
             {/* F37 (overnight 2026-09-12): All-Scenes Intelligence Matrix — SceneIntelMatrix.jsx; polls all 10 /v1/cinematic/scene/{id} + /v1/cinematic/brain; 10-cell 2×5 grid showing anchor count + top anchor per scene; SCENES/TOTAL ANCHORS/BRAIN NODES/SYNAPSES stat tiles; ▶ ASSESS → TTS via /v1/voice/tts; ◈ SCEM button left:928960 bottom:8 zIndex:624; isScemQuery+buildScemScript wired into JarvisBrain.ask(); jarvis:scem-toggle event; 120-s auto-refresh; voice: scene matrix/all scenes/scem/scene overview/cinematic matrix */}
             <SceneIntelMatrix />
+            {/* F38 (overnight 2026-09-13): Intelligence Acquisition Queue — IntelAcquisitionQueue.jsx; polls /entities/RiskSignal + /v1/investigations + /knowledge/; surfaces topics with no matching knowledge article; severity-sorted gap list; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ⚡ IAQ button; isIaqQuery+buildIaqScript exported; 120-s auto-refresh; voice: intelligence acquisition/knowledge gap/iaq */}
+            <IntelAcquisitionQueue />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

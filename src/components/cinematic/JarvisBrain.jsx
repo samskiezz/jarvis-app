@@ -341,6 +341,7 @@ import { isSecurityQuery, buildSecurityScript } from "./SecurityComplianceDashbo
 import { isRptlQuery, buildRptlScript } from "./ReportPublicationTimeline";
 import { isIpcnfQuery, buildIpcnfScript } from "./IntelProfileConfidence";
 import { isScemQuery, buildScemScript } from "./SceneIntelMatrix";
+import { isIaqQuery, buildIaqScript } from "./IntelAcquisitionQueue";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1399,6 +1400,9 @@ export default function JarvisBrain() {
       } else if (isScemQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:scem-toggle"));
         answer = await buildScemScript();
+      } else if (isIaqQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:iaq-toggle"));
+        answer = await buildIaqScript();
       } else if (isSjirtriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sjirtri-toggle"));
         answer = await buildSjirtriScript();

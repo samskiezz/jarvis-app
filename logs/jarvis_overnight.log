@@ -17,3 +17,4 @@
 2026-09-12 F35 DONE — ReportPublicationTimeline.jsx: /v1/reports grouped by date; 30-day sparkline + TOTAL/7-DAY/30-DAY/LATEST tiles; ASSESS→agent+TTS; ◷ RPTL button; isRptlQuery+buildRptlScript wired JarvisBrain; Vite build exit 0.
 [2026-09-12] F36 IntelProfileConfidence.jsx — /entities/IntelProfile confidence-tier dashboard; isIpcnfQuery+buildIpcnfScript wired JarvisBrain; mounted App.jsx; Vite build exit 0
 [2026-09-12] F37 SceneIntelMatrix.jsx — all 10 /v1/cinematic/scene/{id} + /v1/cinematic/brain; 10-cell anchor grid + stat tiles; isScemQuery+buildScemScript wired JarvisBrain; jarvis:scem-toggle; Vite build exit 0
+[2026-09-13] F38 IntelAcquisitionQueue — polls /entities/RiskSignal + /v1/investigations + /knowledge/; surfaces knowledge gaps sorted by severity; ASSESS → agent chat + TTS; ⚡ IAQ toggle; JarvisBrain wired; Vite build exit 0.
