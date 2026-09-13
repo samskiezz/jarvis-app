@@ -1040,6 +1040,7 @@ import KnowledgeCategoryHeatmap from '@/components/cinematic/KnowledgeCategoryHe
 import ReportKnowledgeCoverage from '@/components/cinematic/ReportKnowledgeCoverage';
 import GraphCommunityView from '@/components/cinematic/GraphCommunityView';import EntityCountTrend from '@/components/cinematic/EntityCountTrend';
 import SkillKnowledgeReportMatrix from '@/components/cinematic/SkillKnowledgeReportMatrix';
+import InvestigationResourcingNexus from '@/components/cinematic/InvestigationResourcingNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3186,6 +3187,8 @@ function App() {
             <EntityCountTrend />
             {/* F44 (overnight 2026-09-13): Skill × Knowledge × Report Coverage Matrix — /v1/aip/skill + /knowledge/ + /v1/reports; FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED; red badge on undocumented count; ◈ SKRM button left:931240 bottom:8 zIndex:627; isSkrmQuery+buildSkrmScript wired JarvisBrain; jarvis:skrm-toggle event; 120-s auto-refresh; voice: skill knowledge/skill docs/skrm/undocumented skills/skill documentation/skill report coverage */}
             <SkillKnowledgeReportMatrix />
+            {/* F45 (overnight 2026-09-13): Investigation × Swarm Job × Task Resourcing Nexus (SJTINEX) — InvestigationResourcingNexus.jsx; /v1/investigations × /entities/SwarmJob × /entities/Task; FULLY_RESOURCED (swarm+task match)/SWARM_ONLY/TASK_ONLY/UNSUPPORTED classification; 4 stat tiles; ALL/FULLY_RESOURCED/SWARM_ONLY/TASK_ONLY/UNSUPPORTED filter tabs + search; red pulse on unsupported; expand row → matched swarm jobs (cyan bars) + matched tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SJTINEX button left:932100 bottom:8 zIndex:628; isSjtinexQuery+buildSjtinexScript wired JarvisBrain; jarvis:sjtinex-toggle event; 90-s auto-refresh; voice: investigation resourcing/sjtinex/unsupported investigation/swarm investigation/active investigation resourcing/investigation swarm job/task investigation coverage */}
+            <InvestigationResourcingNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

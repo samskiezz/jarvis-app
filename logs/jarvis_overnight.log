@@ -24,3 +24,4 @@
 [2026-09-13] F42 Graph Community Clusters — GraphCommunityView.jsx; /v1/graph/communities + /v1/graph/centrality; cluster cards, expand members, ASSESS → TTS; JarvisBrain wired; Vite build exit 0
 [2026-09-13] F43 EntityCountTrend — polls /entities/ x6 every 5min; localStorage rolling history (max 48); SVG sparklines + trend arrows (▲/—/▼); ASSESS→/v1/jarvis/agent/chat+TTS; voice: entity trend/count trend/etrend; EntityCountTrend.jsx mounted App.jsx; Vite build exit 0
 [2026-09-13] F44 SkillKnowledgeReportMatrix.jsx — /v1/aip/skill + /knowledge/ + /v1/reports; FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED; SKRM button + JarvisBrain wired; Vite build exit 0
+[2026-09-13] F45 InvestigationResourcingNexus.jsx — /v1/investigations × /entities/SwarmJob × /entities/Task; FULLY_RESOURCED/SWARM_ONLY/TASK_ONLY/UNSUPPORTED; ◈ SJTINEX button; JarvisBrain wired; Vite build exit 0
