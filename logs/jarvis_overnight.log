@@ -27,3 +27,4 @@
 [2026-09-13] F45 InvestigationResourcingNexus.jsx — /v1/investigations × /entities/SwarmJob × /entities/Task; FULLY_RESOURCED/SWARM_ONLY/TASK_ONLY/UNSUPPORTED; ◈ SJTINEX button; JarvisBrain wired; Vite build exit 0
 [2026-09-13] F46 Intel Profile × Scenario × Task Triple Nexus (IPSTINEX) — IntelProfileScenarioTaskNexus.jsx; /entities/IntelProfile × /v1/scenario/list × /entities/Task; FULLY_COVERED/SCENARIO_ONLY/TASK_ONLY/UNADDRESSED; App.jsx+JarvisBrain wired; Vite build exit 0
 [2026-09-13] F47 OpsAlertTaskSkillReadiness.jsx — /v1/ops/alerts × /entities/Task × /v1/aip/skill triple nexus; FULLY_READY/TASK_ONLY/SKILL_ONLY/UNREADY classification; OATSKL button; wired App.jsx + JarvisBrain; Vite build exit 0
+[2026-09-13] F48 ContactIntelNexus.jsx — /entities/Contact × /v1/investigations × /entities/RiskSignal; FULLY_LINKED/INV_ONLY/RISK_ONLY/UNLINKED; CIRNEX button + JarvisBrain wired (isCirnexQuery+buildCirnexScript); mounted App.jsx; Vite build exit 0

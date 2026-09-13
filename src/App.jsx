@@ -1043,6 +1043,7 @@ import SkillKnowledgeReportMatrix from '@/components/cinematic/SkillKnowledgeRep
 import InvestigationResourcingNexus from '@/components/cinematic/InvestigationResourcingNexus';
 import IntelProfileScenarioTaskNexus from '@/components/cinematic/IntelProfileScenarioTaskNexus';
 import OpsAlertTaskSkillReadiness from '@/components/cinematic/OpsAlertTaskSkillReadiness';
+import ContactIntelNexus from '@/components/cinematic/ContactIntelNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3193,6 +3194,8 @@ function App() {
             <InvestigationResourcingNexus />
             {/* F47 (overnight 2026-09-13): Ops Alert × Task × Skill Response Readiness (OATSKL) — OpsAlertTaskSkillReadiness.jsx; /v1/ops/alerts × /entities/Task × /v1/aip/skill; FULLY_READY (task+skill match)/TASK_ONLY/SKILL_ONLY/UNREADY classification; red pulse on UNREADY; 5 stat tiles; filter tabs + search; expand → matched tasks (cyan) + matched skills (green); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OATSKL button left:933820 bottom:8 zIndex:630; isOatskLQuery+buildOatskLScript wired JarvisBrain; jarvis:oatskl-toggle event; 90-s auto-refresh; voice: ops alert readiness/oatskl/alert response readiness/alert task skill/response capability/unready alerts */}
             <OpsAlertTaskSkillReadiness />
+            {/* F48 (overnight 2026-09-13): Contact × Investigation × RiskSignal Intelligence Nexus (CIRNEX) — ContactIntelNexus.jsx; /entities/Contact × /v1/investigations × /entities/RiskSignal; FULLY_LINKED (contact has matching inv + risk)/INV_ONLY/RISK_ONLY/UNLINKED classification; 5 stat tiles; filter tabs + search; expand → matched investigations (amber bars) + matched risk signals (red bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ CIRNEX button left:934680 bottom:8 zIndex:631; isCirnexQuery+buildCirnexScript wired JarvisBrain; jarvis:cirnex-toggle event; 90-s auto-refresh; voice: cirnex/contact intelligence/contact investigation/contact risk/linked contacts/unlinked contacts */}
+            <ContactIntelNexus />
             {/* F46 (overnight 2026-09-13): Intel Profile × Scenario × Task Triple Nexus (IPSTINEX) — IntelProfileScenarioTaskNexus.jsx; /entities/IntelProfile × /v1/scenario/list × /entities/Task; FULLY_COVERED (profile has matching scenario + task)/SCENARIO_ONLY/TASK_ONLY/UNADDRESSED; 5 stat tiles (profiles/fully covered/scenarios/tasks/unaddressed); ALL/FULLY_COVERED/SCENARIO_ONLY/TASK_ONLY/UNADDRESSED filter tabs + search; red pulse on unaddressed count; expand row → matched scenarios (amber bars) + matched tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ IPSTINEX button left:932960 bottom:8 zIndex:629; isIpstinexQuery+buildIpstinexScript wired JarvisBrain; jarvis:ipstinex-toggle event; 90-s auto-refresh; voice: intel scenario task/ipstinex/unaddressed intel/profile coverage/intel task coverage/intel profile scenario */}
             <IntelProfileScenarioTaskNexus />
             <Suspense fallback={<Loading />}>
