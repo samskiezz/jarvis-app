@@ -1046,6 +1046,7 @@ import OpsAlertTaskSkillReadiness from '@/components/cinematic/OpsAlertTaskSkill
 import ContactIntelNexus from '@/components/cinematic/ContactIntelNexus';
 import SwarmDatasetKnowledgeNexus from '@/components/cinematic/SwarmDatasetKnowledgeNexus';
 import InvestmentRiskScenarioNexus from '@/components/cinematic/InvestmentRiskScenarioNexus';
+import TaskPriorityQuadrant from '@/components/cinematic/TaskPriorityQuadrant';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3204,6 +3205,8 @@ function App() {
             <InvestmentRiskScenarioNexus />
             {/* F46 (overnight 2026-09-13): Intel Profile × Scenario × Task Triple Nexus (IPSTINEX) — IntelProfileScenarioTaskNexus.jsx; /entities/IntelProfile × /v1/scenario/list × /entities/Task; FULLY_COVERED (profile has matching scenario + task)/SCENARIO_ONLY/TASK_ONLY/UNADDRESSED; 5 stat tiles (profiles/fully covered/scenarios/tasks/unaddressed); ALL/FULLY_COVERED/SCENARIO_ONLY/TASK_ONLY/UNADDRESSED filter tabs + search; red pulse on unaddressed count; expand row → matched scenarios (amber bars) + matched tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ IPSTINEX button left:932960 bottom:8 zIndex:629; isIpstinexQuery+buildIpstinexScript wired JarvisBrain; jarvis:ipstinex-toggle event; 90-s auto-refresh; voice: intel scenario task/ipstinex/unaddressed intel/profile coverage/intel task coverage/intel profile scenario */}
             <IntelProfileScenarioTaskNexus />
+            {/* F51 (overnight 2026-09-13): Task Priority Quadrant (TSKQUAD) — TaskPriorityQuadrant.jsx; /entities/Task; Eisenhower 2×2 grid: Q1=DO FIRST (high+urgent)/Q2=PLAN (high+not urgent)/Q3=DELEGATE (low+urgent)/Q4=SKIP (low+not urgent); urgency = task.urgent===true OR due ≤ 3 days; 4 stat tiles (TOTAL/DO FIRST/PLAN/DELEGATE); click quadrant → expand task list; red pulse on Q1 count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TSKQUAD button left:937260 bottom:8 zIndex:634; isTskquadQuery+buildTskquadScript wired JarvisBrain; jarvis:tskquad-toggle event; 90-s auto-refresh; voice: task quadrant/priority quadrant/eisenhower/tskquad/urgent tasks matrix */}
+            <TaskPriorityQuadrant />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
