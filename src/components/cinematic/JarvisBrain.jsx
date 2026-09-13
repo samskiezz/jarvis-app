@@ -356,6 +356,7 @@ import { isTskquadQuery, buildTskquadScript } from "./TaskPriorityQuadrant";
 import { isOaivcorrQuery, buildOaivcorrScript } from "./OpsAlertInvestigationBoard";
 import { isSkdnexQuery, buildSkdnexScript } from "./ScenarioKnowledgeDatasetNexus";
 import { isKfreshQuery, buildKfreshScript } from "./KnowledgeFreshnessTracker";
+import { isRskageQuery, buildRskageScript } from "./RiskSignalAgeTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1450,6 +1451,9 @@ export default function JarvisBrain() {
       } else if (isKfreshQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:kfresh-toggle"));
         answer = await buildKfreshScript();
+      } else if (isRskageQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:rskage-toggle"));
+        answer = await buildRskageScript();
       } else if (isSkdnexQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:skdnex-toggle"));
         answer = await buildSkdnexScript();

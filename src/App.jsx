@@ -1051,6 +1051,7 @@ import OpsAlertInvestigationBoard from '@/components/cinematic/OpsAlertInvestiga
 import ScenarioKnowledgeDatasetNexus from '@/components/cinematic/ScenarioKnowledgeDatasetNexus';
 import OperationalPulseRing from '@/components/cinematic/OperationalPulseRing';
 import KnowledgeFreshnessTracker from '@/components/cinematic/KnowledgeFreshnessTracker';
+import RiskSignalAgeTracker from '@/components/cinematic/RiskSignalAgeTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3217,6 +3218,8 @@ function App() {
             <ScenarioKnowledgeDatasetNexus />
             {/* F54 (overnight 2026-09-13): Knowledge Freshness Tracker (KFRESH) — KnowledgeFreshnessTracker.jsx; /knowledge/ → classify each article FRESH(≤7d)/AGING(8-30d)/STALE(31-90d)/EXPIRED(>90d); TOTAL/FRESH/AGING/STALE/EXPIRED stat tiles; age-sorted list with staleness badge; ALL/FRESH/AGING/STALE/EXPIRED filter tabs + search; red pulse on expired; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ KFRESH button left:939840 bottom:8 zIndex:637; isKfreshQuery+buildKfreshScript wired JarvisBrain; jarvis:kfresh-toggle event; 120-s auto-refresh; voice: knowledge freshness/stale knowledge/knowledge age/kfresh/expired knowledge/knowledge decay */}
             <KnowledgeFreshnessTracker />
+            {/* F55 (overnight 2026-09-13): Risk Signal Age & Decay Tracker (RSKAGE) — RiskSignalAgeTracker.jsx; /entities/RiskSignal → classify FRESH(≤1d)/RECENT(2-7d)/AGING(8-30d)/STALE(>30d); severity × age cross-view; stale critical/high signals pulse red as BLIND SPOT; TOTAL/FRESH/RECENT/AGING/STALE/STALE CRIT stat tiles; ALL/age/severity filter tabs + search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RSKAGE button left:940700 bottom:8 zIndex:638; isRskageQuery+buildRskageScript wired JarvisBrain; jarvis:rskage-toggle event; 90-s auto-refresh; voice: risk age/stale risk/risk decay/rskage/risk freshness/aged signals/stale signals */}
+            <RiskSignalAgeTracker />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
