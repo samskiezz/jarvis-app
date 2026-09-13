@@ -1047,6 +1047,7 @@ import ContactIntelNexus from '@/components/cinematic/ContactIntelNexus';
 import SwarmDatasetKnowledgeNexus from '@/components/cinematic/SwarmDatasetKnowledgeNexus';
 import InvestmentRiskScenarioNexus from '@/components/cinematic/InvestmentRiskScenarioNexus';
 import TaskPriorityQuadrant from '@/components/cinematic/TaskPriorityQuadrant';
+import OpsAlertInvestigationBoard from '@/components/cinematic/OpsAlertInvestigationBoard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3207,6 +3208,8 @@ function App() {
             <IntelProfileScenarioTaskNexus />
             {/* F51 (overnight 2026-09-13): Task Priority Quadrant (TSKQUAD) — TaskPriorityQuadrant.jsx; /entities/Task; Eisenhower 2×2 grid: Q1=DO FIRST (high+urgent)/Q2=PLAN (high+not urgent)/Q3=DELEGATE (low+urgent)/Q4=SKIP (low+not urgent); urgency = task.urgent===true OR due ≤ 3 days; 4 stat tiles (TOTAL/DO FIRST/PLAN/DELEGATE); click quadrant → expand task list; red pulse on Q1 count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TSKQUAD button left:937260 bottom:8 zIndex:634; isTskquadQuery+buildTskquadScript wired JarvisBrain; jarvis:tskquad-toggle event; 90-s auto-refresh; voice: task quadrant/priority quadrant/eisenhower/tskquad/urgent tasks matrix */}
             <TaskPriorityQuadrant />
+            {/* F52 (overnight 2026-09-13): Ops Alert × Investigation Correlation Board (OAIVCORR) — OpsAlertInvestigationBoard.jsx; /v1/ops/alerts × /v1/investigations; keyword cross-reference classifies each alert as LINKED (≥1 investigation matches) or STANDALONE (no investigation backing — blind spot); coverage % bar; ALERTS/INVESTIGATIONS/LINKED/STANDALONE stat tiles; ALL/LINKED/STANDALONE filter tabs + search; expand alert → matched investigations with relevance score bars (amber); red pulse on standalone count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OAIVCORR button left:938120 bottom:8 zIndex:635; isOaivcorrQuery+buildOaivcorrScript wired JarvisBrain; jarvis:oaivcorr-toggle event; 90-s auto-refresh; voice: oaivcorr/alert investigation/ops investigation/linked alerts/alert correlation/investigation correlation */}
+            <OpsAlertInvestigationBoard />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
