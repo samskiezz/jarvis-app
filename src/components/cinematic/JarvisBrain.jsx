@@ -348,6 +348,7 @@ import { isOpevQuery, buildOpevScript } from "./OpsEventsTimeline";
 import { isSkrmQuery, buildSkrmScript } from "./SkillKnowledgeReportMatrix";
 import { isSjtinexQuery, buildSjtinexScript } from "./InvestigationResourcingNexus";
 import { isIpstinexQuery, buildIpstinexScript } from "./IntelProfileScenarioTaskNexus";
+import { isOatskLQuery, buildOatskLScript } from "./OpsAlertTaskSkillReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1421,6 +1422,9 @@ export default function JarvisBrain() {
       } else if (isIpstinexQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ipstinex-toggle"));
         answer = await buildIpstinexScript();
+      } else if (isOatskLQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:oatskl-toggle"));
+        answer = await buildOatskLScript();
       } else if (isKcatQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:kcat-toggle"));
         answer = await buildKcatScript();
