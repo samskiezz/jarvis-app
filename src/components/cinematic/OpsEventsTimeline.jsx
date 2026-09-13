@@ -1,445 +1,416 @@
 /**
- * OpsEventsTimeline — F44 Ops Events Timeline.
- * Polls /v1/ops/events every 30 s; severity-sorted timeline with stat tiles,
- * ALL/CRITICAL/WARNING/INFO filter tabs + text search, expand for details,
- * ASSESS → /v1/jarvis/agent/chat 2-sentence ops brief + TTS.
- *
- * Button: ⊞ OPSEV (bottom strip, left:600 bottom:18)
- * Endpoint: /v1/ops/events
- * Voice trigger: "ops events" | "operational events" | "opsev" | "event timeline" | "event stream"
- * Additive only — mounted via App.jsx.
+ * OpsEventsTimeline — F39.
+ * Polls /v1/ops/events → 24-hour activity heatmap + scrollable events list.
+ * Stat tiles: TOTAL / LAST HOUR / TYPES / CRITICAL.
+ * ASSESS → /v1/jarvis/agent/chat + /v1/voice/tts.
+ * ◷ OPEV toggle button. 120-s auto-refresh.
+ * Voice: "ops events"/"operations timeline"/"opev".
+ * Additive only — mounted in App.jsx.
  */
-import { useEffect, useRef, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
+import { getActiveVoice } from "@/components/cinematic/MultiVoiceToggle";
 
 const CY  = "#29E7FF";
-const RED = "#FF3B6B";
-const AMB = "#F59E0B";
-const BLU = "#38BDF8";
-const GRN = "#00E676";
-const GRY = "#6E8AA0";
-const BG  = "rgba(5,10,18,0.96)";
+const AM  = "#F59E0B";
+const RD  = "#EF4444";
+const GR  = "#4ADE80";
+const DIM = "#1A2A36";
 
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
 
-function apiBase() {
-  const env = (typeof import.meta !== "undefined" && import.meta.env) || {};
-  if (env.VITE_API_BASE_URL) return env.VITE_API_BASE_URL;
-  if (typeof window !== "undefined" && window.location) {
-    const { protocol, hostname } = window.location;
-    return `${protocol}//${hostname}:${env.VITE_API_PORT || "8001"}`;
-  }
-  return "http://localhost:8001";
+const OPEV_RE =
+  /\bops\s?events?|operations?\s+timeline|opev\b|event\s+log|ops\s+log|operations?\s+log/i;
+
+function authHdr() {
+  return { Authorization: `Bearer ${API_KEY}` };
 }
 
-const VOICE_RE = /\bops\s*event|operational\s*event|event\s*timeline|event\s*stream|opsev\b/i;
-
-const SEV_META = {
-  CRITICAL: { color: RED,  icon: "⚠", label: "CRITICAL" },
-  WARNING:  { color: AMB,  icon: "◆", label: "WARNING"  },
-  INFO:     { color: BLU,  icon: "◎", label: "INFO"     },
-  DEBUG:    { color: GRY,  icon: "·", label: "DEBUG"    },
-};
-
-function sevMeta(sev) {
-  const k = (sev || "").toUpperCase();
-  return SEV_META[k] || { color: GRY, icon: "·", label: k || "UNKNOWN" };
-}
-
-function fmtTime(ts) {
-  if (!ts) return "—";
-  try {
-    return new Date(ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" });
-  } catch {
-    return ts;
-  }
+function hourOf(ts) {
+  if (!ts) return -1;
+  const d = new Date(ts);
+  if (isNaN(d)) return -1;
+  const now = new Date();
+  const diffMs = now - d;
+  const diffH = diffMs / 3_600_000;
+  if (diffH < 0 || diffH >= 24) return -1;
+  return 23 - Math.floor(diffH);
 }
 
 async function fetchEvents() {
-  const r = await fetch(`${apiBase()}/v1/ops/events`, {
-    headers: { Authorization: `Bearer ${API_KEY}` },
-  });
-  if (!r.ok) throw new Error(`${r.status}`);
+  const r = await fetch(`${apiBase()}/v1/ops/events`, { headers: authHdr() });
   const d = await r.json();
-  return Array.isArray(d)          ? d
-    : Array.isArray(d?.data)       ? d.data
-    : Array.isArray(d?.items)      ? d.items
-    : Array.isArray(d?.events)     ? d.events
-    : Array.isArray(d?.results)    ? d.results
+  const arr = Array.isArray(d) ? d
+    : Array.isArray(d?.data) ? d.data
+    : Array.isArray(d?.events) ? d.events
+    : Array.isArray(d?.items) ? d.items
     : [];
+  return arr.map((e) => ({
+    id: e.id || e._id || String(Math.random()),
+    title: e.title || e.name || e.message || e.event || e.description || "Unnamed event",
+    type: e.type || e.category || e.kind || "general",
+    severity: (e.severity || e.level || "info").toLowerCase(),
+    ts: e.timestamp || e.created_at || e.created || e.time || null,
+  }));
 }
 
-async function assessEvents(events) {
-  const base = apiBase();
-  const snippet = events.slice(0, 10).map((e) =>
-    `[${e.severity || "?"}] ${e.type || e.event_type || "event"}: ${e.description || e.message || JSON.stringify(e).slice(0, 80)}`
-  ).join("\n");
-  const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({
-      message:
-        `Ops events snapshot (last ${events.length} events):\n${snippet}\n\nGive a 2-sentence operational situational awareness brief. Be direct and specific.`,
-    }),
-  });
-  if (!r.ok) throw new Error(`assess ${r.status}`);
-  const d = await r.json();
-  return d?.response || d?.message || d?.content || d?.answer || JSON.stringify(d).slice(0, 300);
+function buildHeatmap(events) {
+  const counts = Array(24).fill(0);
+  for (const e of events) {
+    const h = hourOf(e.ts);
+    if (h >= 0) counts[h]++;
+  }
+  return counts;
 }
 
-async function speakText(text) {
-  const base = apiBase();
-  const r = await fetch(`${base}/v1/voice/tts`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${API_KEY}`,
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({ text, voice: "ash" }),
-  });
-  if (!r.ok) return;
-  const blob = await r.blob();
-  const url = URL.createObjectURL(blob);
-  const audio = new Audio(url);
-  audio.onended = () => URL.revokeObjectURL(url);
-  await audio.play();
+export function isOpevQuery(text) {
+  return OPEV_RE.test(text || "");
 }
 
-const TABS = ["ALL", "CRITICAL", "WARNING", "INFO"];
+export async function buildOpevScript() {
+  let events = [];
+  try {
+    events = await fetchEvents();
+  } catch (_) {}
+  if (!events.length)
+    return "Operations events log is empty or unreachable. All quiet on the ops timeline, sir.";
+  const total = events.length;
+  const now = new Date();
+  const lastHour = events.filter((e) => {
+    if (!e.ts) return false;
+    const d = new Date(e.ts);
+    return !isNaN(d) && (now - d) < 3_600_000;
+  }).length;
+  const types = [...new Set(events.map((e) => e.type))].slice(0, 3).join(", ");
+  const criticals = events.filter((e) =>
+    ["critical", "error", "high"].includes(e.severity)
+  ).length;
+  return (
+    `Operations events timeline: ${total} total events. ` +
+    `${lastHour} in the last hour. ${criticals} critical or error-level. ` +
+    `Event types active: ${types || "general"}. ` +
+    `System is ${criticals > 0 ? "showing elevated activity — recommend review" : "operating normally"}.`
+  );
+}
+
+function SevDot({ sev }) {
+  const clr =
+    ["critical", "error"].includes(sev) ? RD
+    : sev === "high" ? AM
+    : sev === "warning" ? AM
+    : sev === "info" ? CY
+    : GR;
+  return (
+    <span
+      style={{
+        display: "inline-block", width: 6, height: 6, borderRadius: "50%",
+        background: clr, flexShrink: 0, marginTop: 2,
+      }}
+    />
+  );
+}
 
 export default function OpsEventsTimeline() {
   const [open, setOpen]         = useState(false);
   const [events, setEvents]     = useState([]);
-  const [error, setError]       = useState(null);
+  const [heatmap, setHeatmap]   = useState(Array(24).fill(0));
   const [loading, setLoading]   = useState(false);
-  const [lastPoll, setLastPoll] = useState(null);
-  const [tab, setTab]           = useState("ALL");
-  const [search, setSearch]     = useState("");
-  const [expanded, setExpanded] = useState(null);
   const [assessing, setAssessing] = useState(false);
-  const [brief, setBrief]       = useState(null);
+  const [aiText, setAiText]     = useState("");
   const timerRef                = useRef(null);
 
-  const poll = useCallback(async () => {
+  const load = useCallback(async () => {
     setLoading(true);
-    setError(null);
     try {
-      const data = await fetchEvents();
-      data.sort((a, b) => {
-        const sev = { CRITICAL: 0, WARNING: 1, INFO: 2, DEBUG: 3 };
-        const sa = sev[(a.severity || "").toUpperCase()] ?? 9;
-        const sb = sev[(b.severity || "").toUpperCase()] ?? 9;
-        return sa !== sb ? sa - sb : (b.timestamp || "").localeCompare(a.timestamp || "");
+      const evs = await fetchEvents();
+      evs.sort((a, b) => {
+        const ta = a.ts ? new Date(a.ts).getTime() : 0;
+        const tb = b.ts ? new Date(b.ts).getTime() : 0;
+        return tb - ta;
       });
-      setEvents(data);
-      setLastPoll(new Date());
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setLoading(false);
-    }
+      setEvents(evs);
+      setHeatmap(buildHeatmap(evs));
+    } catch (_) {}
+    finally { setLoading(false); }
+  }, []);
+
+  useEffect(() => {
+    const handler = () => setOpen((o) => !o);
+    window.addEventListener("jarvis:opev-toggle", handler);
+    return () => window.removeEventListener("jarvis:opev-toggle", handler);
   }, []);
 
   useEffect(() => {
     if (!open) return;
-    poll();
-    timerRef.current = setInterval(poll, 30_000);
+    load();
+    timerRef.current = setInterval(load, 120_000);
     return () => clearInterval(timerRef.current);
-  }, [open, poll]);
+  }, [open, load]);
 
-  useEffect(() => {
-    const onAsk = (e) => {
-      const q = e?.detail?.query || "";
-      if (VOICE_RE.test(q)) setOpen(true);
-    };
-    window.addEventListener("jarvis:ask", onAsk);
-    return () => window.removeEventListener("jarvis:ask", onAsk);
-  }, []);
-
-  const filtered = events.filter((ev) => {
-    if (tab !== "ALL" && (ev.severity || "").toUpperCase() !== tab) return false;
-    if (search) {
-      const hay = JSON.stringify(ev).toLowerCase();
-      return hay.includes(search.toLowerCase());
-    }
-    return true;
-  });
-
-  const counts = {
-    total:    events.length,
-    critical: events.filter((e) => (e.severity || "").toUpperCase() === "CRITICAL").length,
-    warning:  events.filter((e) => (e.severity || "").toUpperCase() === "WARNING").length,
-    info:     events.filter((e) => (e.severity || "").toUpperCase() === "INFO").length,
-  };
-
-  const handleAssess = async () => {
-    if (!events.length) return;
+  async function assess() {
     setAssessing(true);
-    setBrief(null);
+    setAiText("");
     try {
-      const text = await assessEvents(events);
-      setBrief(text);
-      speakText(text).catch(() => {});
-    } catch (e) {
-      setBrief(`Error: ${e.message}`);
-    } finally {
-      setAssessing(false);
+      const script = await buildOpevScript();
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+        method: "POST",
+        headers: { ...authHdr(), "Content-Type": "application/json" },
+        body: JSON.stringify({
+          message: `Assess recent operations events: ${
+            events.slice(0, 5).map((e) => e.title).join(", ")
+          }. Provide a brief operational status summary.`,
+        }),
+      });
+      const d = await r.json();
+      const reply = d?.response || d?.message || d?.content || script;
+      setAiText(reply);
+      try {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
+          method: "POST",
+          headers: { ...authHdr(), "Content-Type": "application/json" },
+          body: JSON.stringify({ text: reply.slice(0, 400), voice: getActiveVoice() }),
+        });
+      } catch (_) {}
+    } catch (_) {
+      const fallback = await buildOpevScript();
+      setAiText(fallback);
     }
-  };
+    setAssessing(false);
+  }
+
+  const now = new Date();
+  const lastHourCount = events.filter((e) => {
+    if (!e.ts) return false;
+    const d = new Date(e.ts);
+    return !isNaN(d) && (now - d) < 3_600_000;
+  }).length;
+  const types = [...new Set(events.map((e) => e.type))].length;
+  const criticals = events.filter((e) =>
+    ["critical", "error", "high"].includes(e.severity)
+  ).length;
+
+  const maxCount = Math.max(...heatmap, 1);
 
   return (
     <>
+      {/* Toggle button */}
       <button
         onClick={() => setOpen((o) => !o)}
-        title="Ops Events Timeline — /v1/ops/events"
+        title="Operations Events Timeline (F39)"
         style={{
-          position: "fixed",
-          bottom: 18,
-          left: 600,
-          zIndex: 9999,
-          background: open ? `${RED}22` : "rgba(5,10,18,0.85)",
-          border: `1px solid ${open ? RED : RED + "55"}`,
-          borderRadius: 8,
-          color: open ? RED : GRY,
-          fontFamily: "'JetBrains Mono', monospace",
-          fontSize: 10,
-          letterSpacing: 1.5,
-          padding: "4px 10px",
-          cursor: "pointer",
+          position: "fixed", bottom: 10, left: 9560, zIndex: 100,
+          background: open ? `${CY}22` : "rgba(0,4,10,0.85)",
+          border: `1px solid ${open ? CY : CY + "44"}`,
+          borderRadius: 6, color: open ? CY : CY + "88",
+          fontSize: 10, letterSpacing: 1.5, padding: "4px 10px",
+          cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
           whiteSpace: "nowrap",
         }}
       >
-        ⊞ OPSEV
-        {counts.critical > 0 && (
-          <span style={{
-            marginLeft: 6,
-            background: RED,
-            color: "#fff",
-            borderRadius: 8,
-            fontSize: 9,
-            padding: "1px 5px",
-            fontWeight: "bold",
-          }}>
-            {counts.critical}
-          </span>
-        )}
+        ◷ OPEV{criticals > 0 && open ? ` ${criticals}!` : ""}
       </button>
 
       {open && (
         <div
           style={{
-            position: "fixed",
-            bottom: 50,
-            left: 540,
-            zIndex: 10002,
-            width: 420,
-            maxHeight: 520,
-            display: "flex",
-            flexDirection: "column",
-            background: BG,
-            border: `1px solid ${RED}44`,
-            borderTop: `2px solid ${RED}`,
-            borderRadius: 12,
-            boxShadow: `0 0 60px ${RED}18, 0 20px 40px rgba(0,0,0,0.8)`,
-            fontFamily: "'JetBrains Mono', monospace",
-            overflow: "hidden",
+            position: "fixed", bottom: 38, right: 16, zIndex: 150,
+            width: "min(580px, 96vw)", maxHeight: "75vh",
+            background: "rgba(4,8,16,0.97)",
+            border: `1px solid ${CY}44`, borderRadius: 14,
+            boxShadow: `0 0 60px ${CY}14, 0 20px 48px rgba(0,0,0,0.9)`,
+            fontFamily: "'JetBrains Mono',monospace",
+            display: "flex", flexDirection: "column", overflow: "hidden",
           }}
         >
           {/* Header */}
-          <div style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "10px 14px",
-            borderBottom: `1px solid ${RED}22`,
-            flexShrink: 0,
-          }}>
-            <span style={{ color: RED, fontSize: 11, letterSpacing: 2 }}>⊞ OPS EVENTS TIMELINE</span>
-            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
-              {loading && <span style={{ color: AMB, fontSize: 9, letterSpacing: 1 }}>POLLING…</span>}
-              <button onClick={poll} title="Refresh" style={{
-                background: "transparent", border: `1px solid ${RED}44`,
-                borderRadius: 4, color: RED, fontSize: 9, padding: "2px 7px", cursor: "pointer",
-              }}>↺</button>
-              <button onClick={() => setOpen(false)} style={{
-                background: "transparent", border: "none",
-                color: GRY, fontSize: 14, cursor: "pointer", lineHeight: 1,
-              }}>×</button>
-            </div>
+          <div
+            style={{
+              borderBottom: `1px solid ${CY}33`, padding: "12px 16px",
+              display: "flex", alignItems: "center", gap: 10, flexShrink: 0,
+            }}
+          >
+            <span style={{ color: CY, fontSize: 14 }}>◷</span>
+            <span style={{ color: CY, fontSize: 12, fontWeight: 700, letterSpacing: 2, flex: 1 }}>
+              OPERATIONS EVENTS TIMELINE
+            </span>
+            <button
+              onClick={() => setOpen(false)}
+              style={{
+                background: "none", border: "none", color: "#3A5060",
+                cursor: "pointer", fontSize: 14, lineHeight: 1,
+              }}
+            >
+              ✕
+            </button>
           </div>
 
           {/* Stat tiles */}
-          <div style={{
-            display: "flex", gap: 0,
-            borderBottom: `1px solid ${RED}22`,
-            flexShrink: 0,
-          }}>
+          <div
+            style={{
+              display: "flex", gap: 12, padding: "8px 16px",
+              borderBottom: `1px solid ${CY}1A`, flexShrink: 0,
+            }}
+          >
             {[
-              { label: "TOTAL",    val: counts.total,    color: CY  },
-              { label: "CRITICAL", val: counts.critical, color: RED },
-              { label: "WARNING",  val: counts.warning,  color: AMB },
-              { label: "INFO",     val: counts.info,     color: BLU },
-            ].map((t) => (
-              <div key={t.label} style={{
-                flex: 1, textAlign: "center", padding: "8px 4px",
-                borderRight: `1px solid ${RED}11`,
-              }}>
-                <div style={{ color: t.color, fontSize: 16, fontWeight: "bold", letterSpacing: 1 }}>
-                  {t.val}
-                </div>
-                <div style={{ color: GRY, fontSize: 8, letterSpacing: 1.5, marginTop: 2 }}>
-                  {t.label}
+              { label: "TOTAL", value: events.length, clr: CY },
+              { label: "LAST HOUR", value: lastHourCount, clr: GR },
+              { label: "TYPES", value: types, clr: AM },
+              { label: "CRITICAL", value: criticals, clr: criticals > 0 ? RD : "#3A5060" },
+            ].map(({ label, value, clr }) => (
+              <div key={label} style={{ flex: 1, textAlign: "center" }}>
+                <div style={{ color: clr, fontSize: 16, fontWeight: 700 }}>{value}</div>
+                <div style={{ color: "#3A5060", fontSize: 8, letterSpacing: 1.5, marginTop: 1 }}>
+                  {label}
                 </div>
               </div>
             ))}
           </div>
 
-          {/* Filter tabs + search */}
-          <div style={{
-            display: "flex", gap: 0, alignItems: "center",
-            borderBottom: `1px solid ${RED}22`,
-            flexShrink: 0,
-          }}>
-            {TABS.map((t) => (
-              <button key={t} onClick={() => setTab(t)} style={{
-                flex: 1,
-                background: tab === t ? `${RED}22` : "transparent",
-                border: "none",
-                borderBottom: tab === t ? `2px solid ${RED}` : "2px solid transparent",
-                color: tab === t ? RED : GRY,
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 9, letterSpacing: 1.5,
-                padding: "6px 4px",
-                cursor: "pointer",
-              }}>
-                {t}
-              </button>
-            ))}
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="search…"
+          {/* 24-hour heatmap */}
+          <div
+            style={{
+              padding: "10px 16px 6px",
+              borderBottom: `1px solid ${CY}1A`, flexShrink: 0,
+            }}
+          >
+            <div style={{ color: "#3A5060", fontSize: 8, letterSpacing: 1.5, marginBottom: 6 }}>
+              24-HOUR ACTIVITY (← oldest · newest →)
+            </div>
+            <div style={{ display: "flex", gap: 2, alignItems: "flex-end", height: 40 }}>
+              {heatmap.map((count, i) => {
+                const pct = count / maxCount;
+                const clr = pct > 0.7 ? RD : pct > 0.4 ? AM : pct > 0.1 ? CY : DIM;
+                return (
+                  <div
+                    key={i}
+                    title={`${23 - i}h ago: ${count} event${count !== 1 ? "s" : ""}`}
+                    style={{
+                      flex: 1,
+                      height: `${Math.max(pct * 36, count > 0 ? 4 : 2)}px`,
+                      background: count > 0 ? clr : DIM,
+                      borderRadius: 2,
+                      opacity: count > 0 ? 0.85 : 0.25,
+                      transition: "height 0.3s ease",
+                    }}
+                  />
+                );
+              })}
+            </div>
+            <div
               style={{
-                flex: 2,
-                background: "transparent",
-                border: "none",
-                borderLeft: `1px solid ${RED}22`,
-                color: CY, fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 9, padding: "6px 8px", outline: "none",
+                display: "flex", justifyContent: "space-between",
+                color: "#2A3A46", fontSize: 7, marginTop: 3,
               }}
-            />
+            >
+              <span>24h ago</span>
+              <span>now</span>
+            </div>
           </div>
 
-          {/* Event list */}
-          <div style={{ overflowY: "auto", flex: 1 }}>
-            {error && (
-              <div style={{ padding: "12px 14px", color: RED, fontSize: 10 }}>
-                Error: {error}
+          {/* Events list */}
+          <div style={{ flex: 1, overflowY: "auto", padding: "6px 0" }}>
+            {loading && !events.length && (
+              <div style={{ color: "#3A5060", fontSize: 11, textAlign: "center", padding: 24 }}>
+                Loading operations events…
               </div>
             )}
-            {!error && filtered.length === 0 && !loading && (
-              <div style={{ padding: "16px 14px", color: GRY, fontSize: 10, textAlign: "center" }}>
-                {events.length === 0 ? "Awaiting first poll…" : "No events match filter."}
+            {!loading && !events.length && (
+              <div style={{ color: GR, fontSize: 11, textAlign: "center", padding: 24 }}>
+                ✓ No events returned — ops log is empty or quiet.
               </div>
             )}
-            {filtered.map((ev, i) => {
-              const sm = sevMeta(ev.severity);
-              const key = ev.id || ev.event_id || i;
-              const isExp = expanded === key;
-              const title = ev.type || ev.event_type || ev.name || "event";
-              const desc  = ev.description || ev.message || ev.summary || "";
+            {events.slice(0, 60).map((e, i) => {
+              const ts = e.ts ? new Date(e.ts) : null;
+              const ago = ts && !isNaN(ts)
+                ? (() => {
+                    const diff = now - ts;
+                    if (diff < 60_000) return "just now";
+                    if (diff < 3_600_000) return `${Math.floor(diff / 60_000)}m ago`;
+                    if (diff < 86_400_000) return `${Math.floor(diff / 3_600_000)}h ago`;
+                    return ts.toLocaleDateString();
+                  })()
+                : "";
               return (
                 <div
-                  key={key}
-                  onClick={() => setExpanded(isExp ? null : key)}
+                  key={e.id}
                   style={{
-                    padding: "7px 14px",
-                    borderBottom: `1px solid ${RED}11`,
-                    cursor: "pointer",
-                    background: isExp ? `${sm.color}08` : "transparent",
+                    display: "flex", alignItems: "flex-start", gap: 8,
+                    padding: "6px 16px",
+                    background: i % 2 === 0 ? `${DIM}80` : "transparent",
                   }}
                 >
-                  <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                    <span style={{ color: sm.color, fontSize: 12, width: 14, textAlign: "center" }}>
-                      {sm.icon}
-                    </span>
-                    <span style={{ color: sm.color, fontSize: 9, letterSpacing: 1, width: 58, flexShrink: 0 }}>
-                      {sm.label}
-                    </span>
-                    <span style={{ color: "#DCEBF5", fontSize: 10, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                      {title}
-                    </span>
-                    <span style={{ color: GRY, fontSize: 9, flexShrink: 0 }}>
-                      {fmtTime(ev.timestamp || ev.created_at || ev.time)}
-                    </span>
-                  </div>
-                  {isExp && (
-                    <div style={{
-                      marginTop: 8, marginLeft: 22,
-                      color: GRY, fontSize: 9, lineHeight: 1.6,
-                    }}>
-                      {desc && (
-                        <div style={{ color: "#DCEBF5", marginBottom: 4 }}>{desc}</div>
-                      )}
-                      {Object.entries(ev)
-                        .filter(([k]) => !["id","event_id","type","event_type","name","description","message","summary","severity","timestamp","created_at","time"].includes(k))
-                        .slice(0, 8)
-                        .map(([k, v]) => (
-                          <div key={k}>
-                            <span style={{ color: sm.color }}>{k}:</span>{" "}
-                            {typeof v === "object" ? JSON.stringify(v).slice(0, 80) : String(v).slice(0, 80)}
-                          </div>
-                        ))}
+                  <SevDot sev={e.severity} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div
+                      style={{
+                        color: "#AABBC8", fontSize: 11, letterSpacing: 0.3,
+                        whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis",
+                      }}
+                    >
+                      {e.title}
                     </div>
+                    <div style={{ color: "#3A5060", fontSize: 8, letterSpacing: 1, marginTop: 1 }}>
+                      {e.type.toUpperCase()}
+                    </div>
+                  </div>
+                  {ago && (
+                    <span style={{ color: "#2A3A46", fontSize: 9, letterSpacing: 0.5, flexShrink: 0 }}>
+                      {ago}
+                    </span>
                   )}
                 </div>
               );
             })}
           </div>
 
-          {/* Brief */}
-          {brief && (
-            <div style={{
-              borderTop: `1px solid ${RED}22`,
-              padding: "8px 14px",
-              color: GRN,
-              fontSize: 9,
-              lineHeight: 1.6,
-              flexShrink: 0,
-            }}>
-              <span style={{ color: CY, marginRight: 6 }}>▸ ASSESS</span>{brief}
+          {/* AI text */}
+          {aiText && (
+            <div
+              style={{
+                borderTop: `1px solid ${CY}1A`, padding: "10px 16px",
+                color: "#7A95AB", fontSize: 10, lineHeight: 1.6, flexShrink: 0,
+                maxHeight: 90, overflowY: "auto",
+              }}
+            >
+              {aiText}
             </div>
           )}
 
           {/* Footer */}
-          <div style={{
-            borderTop: `1px solid ${RED}1A`,
-            padding: "6px 14px",
-            display: "flex", justifyContent: "space-between", alignItems: "center",
-            flexShrink: 0,
-          }}>
-            <span style={{ color: GRY, fontSize: 9, letterSpacing: 1 }}>
-              {lastPoll
-                ? `UPDATED ${lastPoll.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", second: "2-digit" })}`
-                : "AWAITING POLL"}
-            </span>
+          <div
+            style={{
+              borderTop: `1px solid ${CY}1A`, padding: "8px 16px",
+              display: "flex", gap: 10, alignItems: "center", flexShrink: 0,
+            }}
+          >
             <button
-              onClick={handleAssess}
-              disabled={assessing || events.length === 0}
+              onClick={assess}
+              disabled={assessing}
               style={{
-                background: assessing ? `${RED}11` : `${RED}22`,
-                border: `1px solid ${RED}55`,
-                borderRadius: 4,
-                color: assessing ? GRY : RED,
-                fontFamily: "'JetBrains Mono', monospace",
-                fontSize: 9, letterSpacing: 1,
-                padding: "3px 10px",
-                cursor: assessing ? "default" : "pointer",
+                background: assessing ? `${CY}11` : `${CY}22`,
+                border: `1px solid ${CY}55`, borderRadius: 6, color: CY,
+                fontSize: 9, letterSpacing: 1.5, padding: "5px 14px",
+                cursor: assessing ? "not-allowed" : "pointer",
               }}
             >
               {assessing ? "ASSESSING…" : "▶ ASSESS"}
             </button>
+            <button
+              onClick={load}
+              disabled={loading}
+              style={{
+                background: "none", border: `1px solid ${CY}33`,
+                borderRadius: 6, color: CY + "88",
+                fontSize: 9, letterSpacing: 1.5, padding: "5px 12px",
+                cursor: loading ? "not-allowed" : "pointer",
+              }}
+            >
+              {loading ? "…" : "↺"}
+            </button>
+            <span style={{ marginLeft: "auto", color: "#2E4050", fontSize: 9, letterSpacing: 1 }}>
+              auto-refresh 120s
+            </span>
           </div>
         </div>
       )}
