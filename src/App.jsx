@@ -1048,6 +1048,7 @@ import SwarmDatasetKnowledgeNexus from '@/components/cinematic/SwarmDatasetKnowl
 import InvestmentRiskScenarioNexus from '@/components/cinematic/InvestmentRiskScenarioNexus';
 import TaskPriorityQuadrant from '@/components/cinematic/TaskPriorityQuadrant';
 import OpsAlertInvestigationBoard from '@/components/cinematic/OpsAlertInvestigationBoard';
+import ScenarioKnowledgeDatasetNexus from '@/components/cinematic/ScenarioKnowledgeDatasetNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3210,6 +3211,8 @@ function App() {
             <TaskPriorityQuadrant />
             {/* F52 (overnight 2026-09-13): Ops Alert × Investigation Correlation Board (OAIVCORR) — OpsAlertInvestigationBoard.jsx; /v1/ops/alerts × /v1/investigations; keyword cross-reference classifies each alert as LINKED (≥1 investigation matches) or STANDALONE (no investigation backing — blind spot); coverage % bar; ALERTS/INVESTIGATIONS/LINKED/STANDALONE stat tiles; ALL/LINKED/STANDALONE filter tabs + search; expand alert → matched investigations with relevance score bars (amber); red pulse on standalone count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OAIVCORR button left:938120 bottom:8 zIndex:635; isOaivcorrQuery+buildOaivcorrScript wired JarvisBrain; jarvis:oaivcorr-toggle event; 90-s auto-refresh; voice: oaivcorr/alert investigation/ops investigation/linked alerts/alert correlation/investigation correlation */}
             <OpsAlertInvestigationBoard />
+            {/* F53 (overnight 2026-09-13): Scenario × Knowledge × Dataset Intelligence Nexus (SKDNEX) — ScenarioKnowledgeDatasetNexus.jsx; /v1/scenario/list × /knowledge/ × /v1/datasets; keyword cross-reference classifies each scenario as FULLY_GROUNDED (KB + dataset match) / KB_ONLY / DATA_ONLY / UNGROUNDED; 5 stat tiles (scenarios/KB articles/datasets/fully grounded/ungrounded); ALL/FULLY_GROUNDED/KB_ONLY/DATA_ONLY/UNGROUNDED filter tabs + search; expand row → matched KB articles (amber bars) + matched datasets (cyan bars); red pulse on ungrounded count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SKDNEX button left:938980 bottom:8 zIndex:636; isSkdnexQuery+buildSkdnexScript wired JarvisBrain; jarvis:skdnex-toggle event; 90-s auto-refresh; voice: skdnex/scenario knowledge/scenario dataset/grounded scenario/scenario grounding/scenario data */}
+            <ScenarioKnowledgeDatasetNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
