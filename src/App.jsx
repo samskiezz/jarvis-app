@@ -1053,6 +1053,7 @@ import OperationalPulseRing from '@/components/cinematic/OperationalPulseRing';
 import KnowledgeFreshnessTracker from '@/components/cinematic/KnowledgeFreshnessTracker';
 import RiskSignalAgeTracker from '@/components/cinematic/RiskSignalAgeTracker';
 import ScenarioInvestigationReportCoverage from '@/components/cinematic/ScenarioInvestigationReportCoverage';
+import TaskKnowledgeInvestigationReadiness from '@/components/cinematic/TaskKnowledgeInvestigationReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3223,6 +3224,8 @@ function App() {
             <RiskSignalAgeTracker />
             {/* F56 (overnight 2026-09-13): Scenario × Investigation × Report Action Coverage (SIRACOV) — ScenarioInvestigationReportCoverage.jsx; /v1/scenario/list × /v1/investigations × /v1/reports; keyword-correlates each scenario → FULLY_ACTIONABLE/INVESTIGATED_ONLY/REPORTED_ONLY/UNACTIONABLE; red pulse on unactionable; SCENARIOS/FULLY ACTIONABLE/INVESTIGATED/REPORTED/UNACTIONABLE stat tiles; ALL/class filter tabs + search; expand row → matched investigations (amber bars) + matched reports (green bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SIRACOV button left:941560 bottom:8 zIndex:639; isSiracovQuery+buildSiracovScript wired JarvisBrain; jarvis:siracov-toggle event; 90-s auto-refresh; voice: siracov/scenario coverage/scenario action/scenario report/scenario investigation coverage */}
             <ScenarioInvestigationReportCoverage />
+            {/* F57 (overnight 2026-09-13): Task × Knowledge × Investigation Readiness Nexus (TKIRNEX) — TaskKnowledgeInvestigationReadiness.jsx; /entities/Task × /knowledge/ × /v1/investigations; keyword-correlates each task → FULLY_RESOURCED/KB_ONLY/INV_ONLY/ISOLATED; red pulse on isolated; TASKS/KB ARTICLES/INVESTIGATIONS/FULLY RESOURCED/ISOLATED stat tiles; filter tabs + search; expand row → matched KB articles (amber bars) + investigations (green bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TKIRNEX button left:942420 bottom:8 zIndex:640; isTkirnexQuery+buildTkirnexScript wired JarvisBrain; jarvis:tkirnex-toggle event; 90-s auto-refresh; voice: tkirnex/task knowledge/task investigation/isolated tasks/task backing/task readiness */}
+            <TaskKnowledgeInvestigationReadiness />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
