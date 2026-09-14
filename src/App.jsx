@@ -1064,6 +1064,7 @@ import ReportDatasetKnowledgeNexus from '@/components/cinematic/ReportDatasetKno
 import SkillRiskScenarioCapability from '@/components/cinematic/SkillRiskScenarioCapability';
 import InvestigationContactDatasetBridge from '@/components/cinematic/InvestigationContactDatasetBridge';
 import IntelProfileDatasetKnowledgeMatrix from '@/components/cinematic/IntelProfileDatasetKnowledgeMatrix';
+import ContactSwarmScenarioNexus from '@/components/cinematic/ContactSwarmScenarioNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3256,6 +3257,8 @@ function App() {
             <InvestigationContactDatasetBridge />
             {/* F67 (overnight 2026-09-14): Intel Profile × Dataset × Knowledge Intelligence Enrichment Matrix (IPDSKNEX) — IntelProfileDatasetKnowledgeMatrix.jsx; /entities/IntelProfile × /v1/datasets × /knowledge/; keyword-correlates each intel profile → FULLY_ENRICHED/DATA_ONLY/KB_ONLY/UNENRICHED; red pulse on UNENRICHED; 5 stat tiles; filter tabs + search; expand row → matched datasets (cyan) + KB articles (amber); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ IPDSKNEX button left:951020 bottom:8 zIndex:650; isIpdsknexQuery+buildIpdsknexScript wired JarvisBrain; jarvis:ipdsknex-toggle event; 90-s auto-refresh */}
             <IntelProfileDatasetKnowledgeMatrix />
+            {/* F68 (overnight 2026-09-14): Contact × SwarmJob × Scenario Coverage Nexus (CSJSCOV) — ContactSwarmScenarioNexus.jsx; /entities/Contact × /entities/SwarmJob × /v1/scenario/list; keyword-correlates each contact → FULLY_ENGAGED/SWARM_ONLY/SCENARIO_ONLY/UNENGAGED; red pulse on UNENGAGED (contacts with no swarm automation or scenario coverage — coordination gap); CONTACTS/FULLY ENGAGED/SWARM ONLY/SCENARIO ONLY/UNENGAGED stat tiles; ALL/class filter tabs + search on contact name/role; expand row → matched swarm jobs (amber bars) + scenarios (green bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ CSJSCOV button left:951880 bottom:8 zIndex:651; isCsjscovQuery+buildCsjscovScript wired JarvisBrain; jarvis:csjscov-toggle event; 90-s auto-refresh; voice: csjscov/contact swarm/contact scenario/unengaged contacts/contact engagement/swarm contact/scenario contact coverage/contact automation gap */}
+            <ContactSwarmScenarioNexus />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>

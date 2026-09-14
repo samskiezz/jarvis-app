@@ -368,6 +368,7 @@ import { isRdknexQuery, buildRdknexScript } from "./ReportDatasetKnowledgeNexus"
 import { isSrscapQuery, buildSrscapScript } from "./SkillRiskScenarioCapability";
 import { isIcdbrgQuery, buildIcdbrgScript } from "./InvestigationContactDatasetBridge";
 import { isIpdsknexQuery, buildIpdsknexScript } from "./IntelProfileDatasetKnowledgeMatrix";
+import { isCsjscovQuery, buildCsjscovScript } from "./ContactSwarmScenarioNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1513,6 +1514,9 @@ export default function JarvisBrain() {
       } else if (isIpdsknexQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ipdsknex-toggle"));
         answer = await buildIpdsknexScript();
+      } else if (isCsjscovQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:csjscov-toggle"));
+        answer = await buildCsjscovScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
