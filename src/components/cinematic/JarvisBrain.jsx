@@ -378,6 +378,7 @@ import { isSkiodriQuery, buildSkiodriScript } from "./SkillInvestigationDatasetR
 import { isGnethlthQuery, buildGnethlthScript } from "./GraphTopologyHealth";
 import { isKsdlcovQuery, buildKsdlcovScript } from "./KnowledgeSkillDatasetCoverage";
 import { isRioesclQuery, buildRioesclScript } from "./ReportInvestigationAlertEscalation";
+import { isIpsimtxQuery, buildIpsimtxScript } from "./IntelProfileScenarioInvestigationMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1565,6 +1566,9 @@ export default function JarvisBrain() {
       } else if (isRioesclQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:rioescl-toggle"));
         answer = await buildRioesclScript();
+      } else if (isIpsimtxQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:ipsimtx-toggle"));
+        answer = await buildIpsimtxScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

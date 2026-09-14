@@ -1073,6 +1073,7 @@ import ContactTaskRiskAccountability from '@/components/cinematic/ContactTaskRis
 import SkillInvestigationDatasetReadiness from '@/components/cinematic/SkillInvestigationDatasetReadiness';
 import KnowledgeSkillDatasetCoverage from '@/components/cinematic/KnowledgeSkillDatasetCoverage';
 import ReportInvestigationAlertEscalation from '@/components/cinematic/ReportInvestigationAlertEscalation';
+import IntelProfileScenarioInvestigationMatrix from '@/components/cinematic/IntelProfileScenarioInvestigationMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3283,6 +3284,8 @@ function App() {
             <KnowledgeSkillDatasetCoverage />
             {/* F77 (overnight 2026-09-14): Report × Investigation × Ops Alert Escalation Nexus (RIOESCL) — ReportInvestigationAlertEscalation.jsx; /v1/reports × /v1/investigations × /v1/ops/alerts; keyword-correlates each report → FULLY_ESCALATED/INVEST_ONLY/ALERT_ONLY/UNESCALATED; red pulse on UNESCALATED (escalation blind spots); REPORTS/INVESTIGATIONS/ALERTS/FULLY ESCALATED/UNESCALATED stat tiles; filter tabs + search; expand → matched investigations (amber) + alerts (red); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RIOESCL button left:958760 bottom:8 zIndex:659; isRioesclQuery+buildRioesclScript wired JarvisBrain; jarvis:rioescl-toggle event; 120-s auto-refresh */}
             <ReportInvestigationAlertEscalation />
+            {/* F78 (overnight 2026-09-14): Intel Profile × Scenario × Investigation Intelligence Action Matrix (IPSIMTX) — IntelProfileScenarioInvestigationMatrix.jsx; /entities/IntelProfile × /v1/scenario/list × /v1/investigations; keyword-correlates each intel profile → FULLY_ACTIVE/SCEN_ONLY/INV_ONLY/INACTIVE; red pulse on INACTIVE (intel dead weight — profiles with no scenario or investigation backing); PROFILES/SCENARIOS/INVESTIGATIONS/FULLY ACTIVE/INACTIVE stat tiles; ALL/FULLY_ACTIVE/SCEN_ONLY/INV_ONLY/INACTIVE filter tabs + search; expand row → matched scenarios (amber bars) + investigations (green bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ IPSIMTX button left:959620 bottom:8 zIndex:660; isIpsimtxQuery+buildIpsimtxScript wired JarvisBrain; jarvis:ipsimtx-toggle event; 90-s auto-refresh; voice: ipsimtx/intel profile action/inactive intel/intel scenario investigation/profile action coverage/dead intel/intel profile backing/intelligence action/intel dead weight */}
+            <IntelProfileScenarioInvestigationMatrix />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
