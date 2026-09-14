@@ -379,6 +379,7 @@ import { isGnethlthQuery, buildGnethlthScript } from "./GraphTopologyHealth";
 import { isKsdlcovQuery, buildKsdlcovScript } from "./KnowledgeSkillDatasetCoverage";
 import { isRioesclQuery, buildRioesclScript } from "./ReportInvestigationAlertEscalation";
 import { isIpsimtxQuery, buildIpsimtxScript } from "./IntelProfileScenarioInvestigationMatrix";
+import { isCifinexQuery, buildCifinexScript } from "./ContactInvestmentRiskNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1569,6 +1570,9 @@ export default function JarvisBrain() {
       } else if (isIpsimtxQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ipsimtx-toggle"));
         answer = await buildIpsimtxScript();
+      } else if (isCifinexQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:cifinex-toggle"));
+        answer = await buildCifinexScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
