@@ -1072,6 +1072,7 @@ import SwarmRiskTaskNexus from '@/components/cinematic/SwarmRiskTaskNexus';
 import ContactTaskRiskAccountability from '@/components/cinematic/ContactTaskRiskAccountability';
 import SkillInvestigationDatasetReadiness from '@/components/cinematic/SkillInvestigationDatasetReadiness';
 import KnowledgeSkillDatasetCoverage from '@/components/cinematic/KnowledgeSkillDatasetCoverage';
+import ReportInvestigationAlertEscalation from '@/components/cinematic/ReportInvestigationAlertEscalation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3280,6 +3281,8 @@ function App() {
             <SkillInvestigationDatasetReadiness />
             {/* F76 (overnight 2026-09-14): Knowledge × Skill × Dataset Learning Coverage (KSDLCOV) — KnowledgeSkillDatasetCoverage.jsx; /knowledge/ × /v1/aip/skill × /v1/datasets; keyword-correlates each knowledge article → FULLY_COVERED/SKILL_ONLY/DATA_ONLY/UNCOVERED; red pulse on UNCOVERED (learning blind spots); ARTICLES/FULLY COVERED/SKILL ONLY/DATA ONLY/UNCOVERED stat tiles; filter tabs + search; expand → matched skills (cyan) + datasets (amber); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ KSDLCOV button left:957900 bottom:8 zIndex:658; isKsdlcovQuery+buildKsdlcovScript wired JarvisBrain; jarvis:ksdlcov-toggle event; 120-s auto-refresh */}
             <KnowledgeSkillDatasetCoverage />
+            {/* F77 (overnight 2026-09-14): Report × Investigation × Ops Alert Escalation Nexus (RIOESCL) — ReportInvestigationAlertEscalation.jsx; /v1/reports × /v1/investigations × /v1/ops/alerts; keyword-correlates each report → FULLY_ESCALATED/INVEST_ONLY/ALERT_ONLY/UNESCALATED; red pulse on UNESCALATED (escalation blind spots); REPORTS/INVESTIGATIONS/ALERTS/FULLY ESCALATED/UNESCALATED stat tiles; filter tabs + search; expand → matched investigations (amber) + alerts (red); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RIOESCL button left:958760 bottom:8 zIndex:659; isRioesclQuery+buildRioesclScript wired JarvisBrain; jarvis:rioescl-toggle event; 120-s auto-refresh */}
+            <ReportInvestigationAlertEscalation />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
