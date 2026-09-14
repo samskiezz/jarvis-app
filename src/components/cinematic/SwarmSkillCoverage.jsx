@@ -17,7 +17,7 @@
  *         "sklswm" / "which skills are automated" / "skill automation"
  *   → jarvis:sklswm-toggle + TTS brief via buildSklswmScript()
  *
- * Toggle: ◈ SKLSWM at left:55080, bottom:8, zIndex:108.
+ * Toggle: ◈ SKLSWM at left:964780, bottom:8, zIndex:108.
  * Mounted in App.jsx.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -28,7 +28,7 @@ const AMBER  = "#F5A623";
 const GREEN  = "#00c878";
 const RED    = "#FF3D5A";
 const PURPLE = "#A78BFA";
-const BTN_LEFT   = 55080;
+const BTN_LEFT   = 964780;
 const REFRESH_MS = 90_000;
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||
