@@ -191,6 +191,7 @@ import SwarmGraphConvergence from '@/components/cinematic/SwarmGraphConvergence'
 import SnapshotTracker from '@/components/cinematic/SnapshotTracker';
 import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRate';
 import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage';
+import SwarmSkillCoverage from '@/components/cinematic/SwarmSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -566,6 +567,8 @@ function App() {
             <InvestigationCloseRate />
             {/* F165 (overnight 2026-07-05): graph node × task coverage — ◈ GNTASK button (left:54520, bottom:8, zIndex:107); parallel-fetches /v1/graph/centrality + /entities/Task; keyword-correlates each top-influence node against the task catalog to surface TASKED (active task coverage) vs UNMANAGED (no operational task — priority gap); violet badge on unmanaged count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence influence-coverage brief + TTS; "graph node task"/"node task coverage"/"high influence task"/"gntask" voice trigger; jarvis:gntask-toggle event; 90-s auto-refresh */}
             <GraphNodeTaskCoverage />
+            {/* F166 (overnight 2026-09-14): skill × swarm automation coverage — ◈ SKLSWM button (left:55080, bottom:8, zIndex:108); parallel-fetches /v1/aip/skill + /entities/SwarmJob; keyword-correlates each skill against active swarm jobs to surface AUTOMATED (swarm coverage found) vs MANUAL (no automation — execution gap); automation coverage %; stat tiles (skills/jobs/automated/manual); ALL/AUTOMATED/MANUAL filter tabs + text search; expand skill → matched jobs with status badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence automation-coverage brief + TTS via jarvis:speak-dossier; isSklswmQuery+buildSklswmScript exported from SwarmSkillCoverage; "skill swarm"/"automated skills"/"swarm skill coverage"/"sklswm"/"which skills are automated" voice trigger; jarvis:sklswm-toggle event; 90-s auto-refresh */}
+            <SwarmSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
