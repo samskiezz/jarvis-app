@@ -371,6 +371,7 @@ import { isIpdsknexQuery, buildIpdsknexScript } from "./IntelProfileDatasetKnowl
 import { isCsjscovQuery, buildCsjscovScript } from "./ContactSwarmScenarioNexus";
 import { isCtiageQuery, buildCtriageScript } from "./CrisisTriageBoard";
 import { isInvrsmQuery, buildInvrsmScript } from "./InvestmentRiskScenarioMap";
+import { isTciasgnQuery, buildTciasgnScript } from "./TaskContactInvestigationBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1537,6 +1538,9 @@ export default function JarvisBrain() {
       } else if (isInvrsmQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:invrsm-toggle"));
         answer = await buildInvrsmScript();
+      } else if (isTciasgnQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:tciasgn-toggle"));
+        answer = await buildTciasgnScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

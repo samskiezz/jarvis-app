@@ -1067,6 +1067,7 @@ import IntelProfileDatasetKnowledgeMatrix from '@/components/cinematic/IntelProf
 import ContactSwarmScenarioNexus from '@/components/cinematic/ContactSwarmScenarioNexus';
 import CrisisTriageBoard from '@/components/cinematic/CrisisTriageBoard';
 import InvestmentRiskScenarioMap from '@/components/cinematic/InvestmentRiskScenarioMap';
+import TaskContactInvestigationBridge from '@/components/cinematic/TaskContactInvestigationBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3265,6 +3266,8 @@ function App() {
             <CrisisTriageBoard />
             {/* F70 (overnight 2026-09-14): Investment × RiskSignal × Scenario Portfolio Risk Map (INVRSM) — InvestmentRiskScenarioMap.jsx; /entities/Investment × /entities/RiskSignal × /v1/scenario/list; keyword-correlates each investment → HEDGED/RISK_FLAGGED/SCENARIO_PLANNED/UNHEDGED; amber pulse on UNHEDGED; INVESTMENTS/RISK SIGNALS/SCENARIOS/HEDGED/UNHEDGED stat tiles; ALL/class filter tabs + search; expand row → matched risks (red bars) + scenarios (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ INVRSM button left:952740 bottom:8 zIndex:652; isInvrsmQuery+buildInvrsmScript wired JarvisBrain; jarvis:invrsm-toggle event; 90-s auto-refresh; voice: invrsm/investment risk/portfolio risk/unhedged investment/risk map/portfolio scenario/investment exposure */}
             <InvestmentRiskScenarioMap />
+            {/* F71 (overnight 2026-09-14): Task × Contact × Investigation Assignment Bridge (TCIASGN) — TaskContactInvestigationBridge.jsx; /entities/Task × /entities/Contact × /v1/investigations; keyword-correlates each task against contacts (assignees) AND active investigations → FULLY_ASSIGNED/CONTACT_ONLY/INV_ONLY/UNASSIGNED; red pulse on UNASSIGNED (ownership gap); TASKS/FULLY ASSIGNED/CONTACT ONLY/INV ONLY/UNASSIGNED stat tiles; ALL/class filter tabs + search; expand row → matched contacts (cyan bars) + investigations (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TCIASGN button left:953600 bottom:8 zIndex:653; isTciasgnQuery+buildTciasgnScript wired JarvisBrain; jarvis:tciasgn-toggle event; 90-s auto-refresh; voice: tciasgn/task assignment/unassigned tasks/task contact/task ownership/task investigation/task backing/ownership gap */}
+            <TaskContactInvestigationBridge />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
