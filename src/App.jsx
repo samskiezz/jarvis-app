@@ -1070,6 +1070,7 @@ import InvestmentRiskScenarioMap from '@/components/cinematic/InvestmentRiskScen
 import TaskContactInvestigationBridge from '@/components/cinematic/TaskContactInvestigationBridge';
 import SwarmRiskTaskNexus from '@/components/cinematic/SwarmRiskTaskNexus';
 import ContactTaskRiskAccountability from '@/components/cinematic/ContactTaskRiskAccountability';
+import SkillInvestigationDatasetReadiness from '@/components/cinematic/SkillInvestigationDatasetReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3274,6 +3275,8 @@ function App() {
             <SwarmRiskTaskNexus />
             {/* F73 (overnight 2026-09-14): Contact × Task × RiskSignal Accountability Matrix (CTRACCT) — ContactTaskRiskAccountability.jsx; /entities/Contact × /entities/Task × /entities/RiskSignal; keyword-correlates each contact → FULLY_ACCOUNTABLE/TASK_OWNER/RISK_EXPOSED/UNACCOUNTABLE; red pulse on UNACCOUNTABLE (accountability gaps); CONTACTS/FULLY ACCOUNTABLE/TASK OWNER/RISK EXPOSED/UNACCOUNTABLE stat tiles; ALL/class filter tabs + search; expand row → matched tasks (cyan bars) + risk signals (red bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ CTRACCT button left:955320 bottom:8 zIndex:655; isCtracctQuery+buildCtracctScript wired JarvisBrain; jarvis:ctracct-toggle event; 90-s auto-refresh; voice: ctracct/contact accountability/task owner/risk owner/unaccountable contact/accountability gap */}
             <ContactTaskRiskAccountability />
+            {/* F74 (overnight 2026-09-14): Skill × Investigation × Dataset Operational Readiness Index (SKIODRI) — SkillInvestigationDatasetReadiness.jsx; /v1/aip/skill × /v1/investigations × /v1/datasets; keyword-correlates each investigation → FULLY_READY/SKILL_ONLY/DATA_ONLY/UNREADY; red pulse on UNREADY (investigations with no skill or dataset support); INVESTIGATIONS/FULLY READY/SKILL ONLY/DATA ONLY/UNREADY stat tiles; ALL/class filter tabs + search; expand row → matched skills (cyan bars) + matched datasets (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SKIODRI button left:956180 bottom:8 zIndex:656; isSkiodriQuery+buildSkiodriScript wired JarvisBrain; jarvis:skiodri-toggle event; 90-s auto-refresh; voice: skiodri/skill investigation/investigation readiness/dataset readiness/operational readiness index/unready investigation */}
+            <SkillInvestigationDatasetReadiness />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
