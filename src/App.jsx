@@ -1065,6 +1065,7 @@ import SkillRiskScenarioCapability from '@/components/cinematic/SkillRiskScenari
 import InvestigationContactDatasetBridge from '@/components/cinematic/InvestigationContactDatasetBridge';
 import IntelProfileDatasetKnowledgeMatrix from '@/components/cinematic/IntelProfileDatasetKnowledgeMatrix';
 import ContactSwarmScenarioNexus from '@/components/cinematic/ContactSwarmScenarioNexus';
+import CrisisTriageBoard from '@/components/cinematic/CrisisTriageBoard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3259,6 +3260,8 @@ function App() {
             <IntelProfileDatasetKnowledgeMatrix />
             {/* F68 (overnight 2026-09-14): Contact × SwarmJob × Scenario Coverage Nexus (CSJSCOV) — ContactSwarmScenarioNexus.jsx; /entities/Contact × /entities/SwarmJob × /v1/scenario/list; keyword-correlates each contact → FULLY_ENGAGED/SWARM_ONLY/SCENARIO_ONLY/UNENGAGED; red pulse on UNENGAGED (contacts with no swarm automation or scenario coverage — coordination gap); CONTACTS/FULLY ENGAGED/SWARM ONLY/SCENARIO ONLY/UNENGAGED stat tiles; ALL/class filter tabs + search on contact name/role; expand row → matched swarm jobs (amber bars) + scenarios (green bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ CSJSCOV button left:951880 bottom:8 zIndex:651; isCsjscovQuery+buildCsjscovScript wired JarvisBrain; jarvis:csjscov-toggle event; 90-s auto-refresh; voice: csjscov/contact swarm/contact scenario/unengaged contacts/contact engagement/swarm contact/scenario contact coverage/contact automation gap */}
             <ContactSwarmScenarioNexus />
+            {/* F69 (overnight 2026-09-14): Live Crisis Triage Board (CTRIAGE) — unified severity-sorted view of all active criticals: /entities/RiskSignal (critical+high) + /v1/ops/alerts (critical+high) + /entities/Task (blocked) + /v1/investigations (open); TOTAL/CRITICAL/HIGH/RISKS/ALERTS stat tiles; ALL/RISK/ALERT/TASK/INVEST filter tabs + search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ CTRIAGE button; isCtiageQuery+buildCtriageScript wired JarvisBrain; jarvis:ctriage-toggle event; 60-s auto-refresh; voice: crisis triage/ctriage/triage/urgent items/all criticals/emergency board */}
+            <CrisisTriageBoard />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>

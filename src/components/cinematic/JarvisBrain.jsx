@@ -369,6 +369,7 @@ import { isSrscapQuery, buildSrscapScript } from "./SkillRiskScenarioCapability"
 import { isIcdbrgQuery, buildIcdbrgScript } from "./InvestigationContactDatasetBridge";
 import { isIpdsknexQuery, buildIpdsknexScript } from "./IntelProfileDatasetKnowledgeMatrix";
 import { isCsjscovQuery, buildCsjscovScript } from "./ContactSwarmScenarioNexus";
+import { isCtiageQuery, buildCtriageScript } from "./CrisisTriageBoard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1517,6 +1518,21 @@ export default function JarvisBrain() {
       } else if (isCsjscovQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:csjscov-toggle"));
         answer = await buildCsjscovScript();
+      } else if (isCtiageQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:ctriage-toggle"));
+        const [risks, alerts, tasks, invs] = await Promise.allSettled([
+          fetch("/entities/RiskSignal").then((r) => r.json()).catch(() => []),
+          fetch("/v1/ops/alerts").then((r) => r.json()).catch(() => []),
+          fetch("/entities/Task").then((r) => r.json()).catch(() => []),
+          fetch("/v1/investigations").then((r) => r.json()).catch(() => []),
+        ]).then((rs) => rs.map((r) => r.status === "fulfilled" ? r.value : []));
+        const all = [
+          ...(Array.isArray(risks) ? risks : risks?.data || []).filter((x) => ["critical","high"].includes((x.severity||"").toLowerCase())).map((x) => ({ kind:"RISK", name: x.name||x.title, severity: x.severity })),
+          ...(Array.isArray(alerts) ? alerts : alerts?.data||alerts?.alerts||[]).filter((x) => ["critical","high"].includes((x.severity||x.level||"").toLowerCase())).map((x) => ({ kind:"ALERT", name: x.name||x.title||x.message, severity: x.severity||x.level })),
+          ...(Array.isArray(tasks) ? tasks : tasks?.data||[]).filter((x) => (x.status||"").toLowerCase()==="blocked").map((x) => ({ kind:"TASK", name: x.name||x.title, severity:"blocked" })),
+          ...(Array.isArray(invs) ? invs : invs?.data||invs?.investigations||[]).filter((x) => (x.status||"").toLowerCase()==="open").slice(0,10).map((x) => ({ kind:"INVEST", name: x.title||x.name, severity: x.priority||"medium" })),
+        ];
+        answer = buildCtriageScript(all);
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
