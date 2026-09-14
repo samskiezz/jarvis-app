@@ -1068,6 +1068,7 @@ import ContactSwarmScenarioNexus from '@/components/cinematic/ContactSwarmScenar
 import CrisisTriageBoard from '@/components/cinematic/CrisisTriageBoard';
 import InvestmentRiskScenarioMap from '@/components/cinematic/InvestmentRiskScenarioMap';
 import TaskContactInvestigationBridge from '@/components/cinematic/TaskContactInvestigationBridge';
+import SwarmRiskTaskNexus from '@/components/cinematic/SwarmRiskTaskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3268,6 +3269,8 @@ function App() {
             <InvestmentRiskScenarioMap />
             {/* F71 (overnight 2026-09-14): Task × Contact × Investigation Assignment Bridge (TCIASGN) — TaskContactInvestigationBridge.jsx; /entities/Task × /entities/Contact × /v1/investigations; keyword-correlates each task against contacts (assignees) AND active investigations → FULLY_ASSIGNED/CONTACT_ONLY/INV_ONLY/UNASSIGNED; red pulse on UNASSIGNED (ownership gap); TASKS/FULLY ASSIGNED/CONTACT ONLY/INV ONLY/UNASSIGNED stat tiles; ALL/class filter tabs + search; expand row → matched contacts (cyan bars) + investigations (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TCIASGN button left:953600 bottom:8 zIndex:653; isTciasgnQuery+buildTciasgnScript wired JarvisBrain; jarvis:tciasgn-toggle event; 90-s auto-refresh; voice: tciasgn/task assignment/unassigned tasks/task contact/task ownership/task investigation/task backing/ownership gap */}
             <TaskContactInvestigationBridge />
+            {/* F72 (overnight 2026-09-14): SwarmJob × RiskSignal × Task Threat Response Nexus (SRTNEX) — SwarmRiskTaskNexus.jsx; /entities/SwarmJob × /entities/RiskSignal × /entities/Task; keyword-correlates each swarm job → FULLY_ENGAGED/RISK_BACKED/TASK_BACKED/ORPHAN; amber pulse on ORPHAN (automation blind spots); JOBS/FULLY ENGAGED/RISK BACKED/TASK BACKED/ORPHAN stat tiles; ALL/class filter tabs + search; expand row → matched risk signals (red bars) + tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SRTNEX button left:954460 bottom:8 zIndex:654; isSrtnexQuery+buildSrtnexScript wired JarvisBrain; jarvis:srtnex-toggle event; 90-s auto-refresh; voice: srtnex/swarm threat/swarm response/orphan swarm/swarm risk task/threat response nexus/unresponsive swarm/swarm automation gap */}
+            <SwarmRiskTaskNexus />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
