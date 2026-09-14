@@ -1062,6 +1062,7 @@ import ScenarioContactKnowledgeNexus from '@/components/cinematic/ScenarioContac
 import SwarmJobIntelInvestigationNexus from '@/components/cinematic/SwarmJobIntelInvestigationNexus';
 import ReportDatasetKnowledgeNexus from '@/components/cinematic/ReportDatasetKnowledgeNexus';
 import SkillRiskScenarioCapability from '@/components/cinematic/SkillRiskScenarioCapability';
+import InvestigationContactDatasetBridge from '@/components/cinematic/InvestigationContactDatasetBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3250,6 +3251,8 @@ function App() {
             <ReportDatasetKnowledgeNexus />
             {/* F65 (overnight 2026-09-14): Skill × RiskSignal × Scenario Capability Gap Nexus (SRSCAP) — SkillRiskScenarioCapability.jsx; /v1/aip/skill × /entities/RiskSignal × /v1/scenario/list; keyword-correlates each risk signal → FULLY_CAPABLE/SKILL_ONLY/SCENARIO_ONLY/CAPABILITY_GAP; red pulse on CAPABILITY_GAP; 5 stat tiles + coverage bars; ALL/class filter tabs + search; expand row → matched skills (cyan bars) + scenarios (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SRSCAP button left:949300 bottom:8 zIndex:648; isSrscapQuery+buildSrscapScript wired JarvisBrain; jarvis:srscap-toggle event; 90-s auto-refresh; voice: srscap/capability gap/risk capability/skill scenario/risk response/unaddressed risk */}
             <SkillRiskScenarioCapability />
+            {/* F66 (overnight 2026-09-14): Investigation × Contact × Dataset Intelligence Bridge (ICDBRG) — InvestigationContactDatasetBridge.jsx; /v1/investigations × /entities/Contact × /v1/datasets; keyword-correlates each investigation → FULLY_BRIDGED/CONTACT_ONLY/DATA_ONLY/ISOLATED; red pulse on ISOLATED (blind-spot investigations with no contact or data backing); INVEST./CONTACTS/DATASETS/FULLY BRIDGED/ISOLATED stat tiles; ALL/class filter tabs + search on investigation title; expand row → matched contacts (cyan bars) + matched datasets (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ ICDBRG button left:950160 bottom:8 zIndex:649; isIcdbrgQuery+buildIcdbrgScript wired JarvisBrain; jarvis:icdbrg-toggle event; 90-s auto-refresh; voice: icdbrg/investigation bridge/contact dataset/bridged investigation/isolated investigation/investigation contact link/investigation data backing */}
+            <InvestigationContactDatasetBridge />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>

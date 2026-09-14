@@ -366,6 +366,7 @@ import { isScknexQuery, buildScknexScript } from "./ScenarioContactKnowledgeNexu
 import { isSjipnexQuery, buildSjipnexScript } from "./SwarmJobIntelInvestigationNexus";
 import { isRdknexQuery, buildRdknexScript } from "./ReportDatasetKnowledgeNexus";
 import { isSrscapQuery, buildSrscapScript } from "./SkillRiskScenarioCapability";
+import { isIcdbrgQuery, buildIcdbrgScript } from "./InvestigationContactDatasetBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1505,6 +1506,9 @@ export default function JarvisBrain() {
       } else if (isSrscapQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:srscap-toggle"));
         answer = await buildSrscapScript();
+      } else if (isIcdbrgQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:icdbrg-toggle"));
+        answer = await buildIcdbrgScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
