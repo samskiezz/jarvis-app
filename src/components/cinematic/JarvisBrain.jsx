@@ -375,6 +375,7 @@ import { isTciasgnQuery, buildTciasgnScript } from "./TaskContactInvestigationBr
 import { isSrtnexQuery, buildSrtnexScript } from "./SwarmRiskTaskNexus";
 import { isCtracctQuery, buildCtracctScript } from "./ContactTaskRiskAccountability";
 import { isSkiodriQuery, buildSkiodriScript } from "./SkillInvestigationDatasetReadiness";
+import { isGnethlthQuery, buildGnethlthScript } from "./GraphTopologyHealth";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1553,6 +1554,9 @@ export default function JarvisBrain() {
       } else if (isSkiodriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:skiodri-toggle"));
         answer = await buildSkiodriScript();
+      } else if (isGnethlthQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:gnethlth-toggle"));
+        answer = await buildGnethlthScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
