@@ -1059,6 +1059,7 @@ import DailyBriefingPanel from '@/components/cinematic/DailyBriefingPanel';
 import OpsAlertFrequencyAnalysis from '@/components/cinematic/OpsAlertFrequencyAnalysis';
 import DatasetRiskInvestigationMatrix from '@/components/cinematic/DatasetRiskInvestigationMatrix';
 import ScenarioContactKnowledgeNexus from '@/components/cinematic/ScenarioContactKnowledgeNexus';
+import SwarmJobIntelInvestigationNexus from '@/components/cinematic/SwarmJobIntelInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3241,6 +3242,8 @@ function App() {
             <DatasetRiskInvestigationMatrix />
             {/* F62 (overnight 2026-09-14): Scenario × Contact × Knowledge Targeting Nexus (SCKNEX) — ScenarioContactKnowledgeNexus.jsx; /v1/scenario/list × /entities/Contact × /knowledge/; classify each scenario → FULL_INTEL/CONTACT_ONLY/KB_ONLY/BLIND; red pulse on BLIND; SCENARIOS/CONTACTS/KB ARTS/BLIND stat tiles; ALL/FULL_INTEL/CONTACT_ONLY/KB_ONLY/BLIND filter tabs + search; expand → matched contacts (cyan bars) + KB articles (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SCKNEX button left:946720 bottom:8 zIndex:645; isScknexQuery+buildScknexScript wired JarvisBrain; jarvis:scknex-toggle event; 90-s auto-refresh; voice: scknex/scenario contact/scenario knowledge/blind scenario/scenario targeting */}
             <ScenarioContactKnowledgeNexus />
+            {/* F63 (overnight 2026-09-14): SwarmJob × Intel Profile × Investigation Alignment Nexus (SJIPNEX) — SwarmJobIntelInvestigationNexus.jsx; /entities/SwarmJob × /entities/IntelProfile × /v1/investigations; keyword-correlates each swarm job → FULLY_ALIGNED/PROFILE_ONLY/INV_ONLY/ORPHANED; red pulse on ORPHANED (unsupported automation); JOBS/INTEL PROFILES/INVESTIGATIONS/FULLY ALIGNED/ORPHANED stat tiles; ALL/class filter tabs + search; expand row → matched intel profiles (amber bars) + investigations (green bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SJIPNEX button left:947580 bottom:8 zIndex:646; isSjipnexQuery+buildSjipnexScript wired JarvisBrain; jarvis:sjipnex-toggle event; 90-s auto-refresh; voice: sjipnex/swarm alignment/swarm intel/swarm investigation/orphaned swarm/swarm coverage/job alignment */}
+            <SwarmJobIntelInvestigationNexus />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
