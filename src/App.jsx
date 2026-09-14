@@ -1058,6 +1058,7 @@ import RiskSignalKnowledgeReportNexus from '@/components/cinematic/RiskSignalKno
 import DailyBriefingPanel from '@/components/cinematic/DailyBriefingPanel';
 import OpsAlertFrequencyAnalysis from '@/components/cinematic/OpsAlertFrequencyAnalysis';
 import DatasetRiskInvestigationMatrix from '@/components/cinematic/DatasetRiskInvestigationMatrix';
+import ScenarioContactKnowledgeNexus from '@/components/cinematic/ScenarioContactKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3238,6 +3239,8 @@ function App() {
             <OpsAlertFrequencyAnalysis />
             {/* F61 (overnight 2026-09-14): Dataset × RiskSignal × Investigation Coverage Matrix (DRISCOV) — DatasetRiskInvestigationMatrix.jsx; /v1/datasets × /entities/RiskSignal × /v1/investigations; keyword-correlates each dataset → FULLY_COVERED/RISK_ONLY/INV_ONLY/UNCOVERED; red pulse on uncovered; DATASETS/RISK SIGS/INVEST/UNCOVERED stat tiles; ALL/FULLY_COVERED/RISK_ONLY/INV_ONLY/UNCOVERED filter tabs + search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ DRISCOV button left:945860 bottom:8 zIndex:644; isDriscovQuery+buildDriscovScript wired JarvisBrain; jarvis:driscov-toggle event; 90-s auto-refresh; voice: driscov/dataset coverage/dataset risk/dataset investigation/coverage matrix/uncovered dataset */}
             <DatasetRiskInvestigationMatrix />
+            {/* F62 (overnight 2026-09-14): Scenario × Contact × Knowledge Targeting Nexus (SCKNEX) — ScenarioContactKnowledgeNexus.jsx; /v1/scenario/list × /entities/Contact × /knowledge/; classify each scenario → FULL_INTEL/CONTACT_ONLY/KB_ONLY/BLIND; red pulse on BLIND; SCENARIOS/CONTACTS/KB ARTS/BLIND stat tiles; ALL/FULL_INTEL/CONTACT_ONLY/KB_ONLY/BLIND filter tabs + search; expand → matched contacts (cyan bars) + KB articles (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SCKNEX button left:946720 bottom:8 zIndex:645; isScknexQuery+buildScknexScript wired JarvisBrain; jarvis:scknex-toggle event; 90-s auto-refresh; voice: scknex/scenario contact/scenario knowledge/blind scenario/scenario targeting */}
+            <ScenarioContactKnowledgeNexus />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
