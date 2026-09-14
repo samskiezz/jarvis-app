@@ -381,6 +381,7 @@ import { isRioesclQuery, buildRioesclScript } from "./ReportInvestigationAlertEs
 import { isIpsimtxQuery, buildIpsimtxScript } from "./IntelProfileScenarioInvestigationMatrix";
 import { isCifinexQuery, buildCifinexScript } from "./ContactInvestmentRiskNexus";
 import { isAcsrnexQuery, buildAcsrnexScript } from "./OpsAlertResponseOwnership";
+import { isAtpinQuery, buildAtpinScript } from "./SceneActiveThreatPinboard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1577,6 +1578,9 @@ export default function JarvisBrain() {
       } else if (isAcsrnexQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:acsrnex-toggle"));
         answer = await buildAcsrnexScript();
+      } else if (isAtpinQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:atpin-toggle"));
+        answer = await buildAtpinScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
