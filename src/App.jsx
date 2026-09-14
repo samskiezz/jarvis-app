@@ -1060,6 +1060,7 @@ import OpsAlertFrequencyAnalysis from '@/components/cinematic/OpsAlertFrequencyA
 import DatasetRiskInvestigationMatrix from '@/components/cinematic/DatasetRiskInvestigationMatrix';
 import ScenarioContactKnowledgeNexus from '@/components/cinematic/ScenarioContactKnowledgeNexus';
 import SwarmJobIntelInvestigationNexus from '@/components/cinematic/SwarmJobIntelInvestigationNexus';
+import ReportDatasetKnowledgeNexus from '@/components/cinematic/ReportDatasetKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3244,6 +3245,8 @@ function App() {
             <ScenarioContactKnowledgeNexus />
             {/* F63 (overnight 2026-09-14): SwarmJob × Intel Profile × Investigation Alignment Nexus (SJIPNEX) — SwarmJobIntelInvestigationNexus.jsx; /entities/SwarmJob × /entities/IntelProfile × /v1/investigations; keyword-correlates each swarm job → FULLY_ALIGNED/PROFILE_ONLY/INV_ONLY/ORPHANED; red pulse on ORPHANED (unsupported automation); JOBS/INTEL PROFILES/INVESTIGATIONS/FULLY ALIGNED/ORPHANED stat tiles; ALL/class filter tabs + search; expand row → matched intel profiles (amber bars) + investigations (green bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SJIPNEX button left:947580 bottom:8 zIndex:646; isSjipnexQuery+buildSjipnexScript wired JarvisBrain; jarvis:sjipnex-toggle event; 90-s auto-refresh; voice: sjipnex/swarm alignment/swarm intel/swarm investigation/orphaned swarm/swarm coverage/job alignment */}
             <SwarmJobIntelInvestigationNexus />
+            {/* F64 (overnight 2026-09-14): Report × Dataset × Knowledge Intelligence Nexus (RDKNEX) — ReportDatasetKnowledgeNexus.jsx; /v1/reports × /v1/datasets × /knowledge/; keyword-correlates each report → FULLY_GROUNDED/DATA_ONLY/KB_ONLY/UNGROUNDED; red pulse on UNGROUNDED; REPORTS/DATASETS/KB ARTICLES/FULLY GROUNDED/UNGROUNDED stat tiles; ALL/class filter tabs + search; expand row → matched datasets (cyan bars) + KB articles (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RDKNEX button left:948440 bottom:8 zIndex:647; isRdknexQuery+buildRdknexScript wired JarvisBrain; jarvis:rdknex-toggle event; 120-s auto-refresh; voice: rdknex/report dataset/report knowledge/grounded reports/ungrounded reports/report data backing */}
+            <ReportDatasetKnowledgeNexus />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
