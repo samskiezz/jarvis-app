@@ -1057,6 +1057,7 @@ import TaskKnowledgeInvestigationReadiness from '@/components/cinematic/TaskKnow
 import RiskSignalKnowledgeReportNexus from '@/components/cinematic/RiskSignalKnowledgeReportNexus';
 import DailyBriefingPanel from '@/components/cinematic/DailyBriefingPanel';
 import OpsAlertFrequencyAnalysis from '@/components/cinematic/OpsAlertFrequencyAnalysis';
+import DatasetRiskInvestigationMatrix from '@/components/cinematic/DatasetRiskInvestigationMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3235,6 +3236,8 @@ function App() {
             <DailyBriefingPanel />
             {/* F60 (overnight 2026-09-13): Ops Alert Frequency Analysis — OpsAlertFrequencyAnalysis.jsx; /v1/alerts → groups by source/rule, detects alert storms (>5 in 15 min), mean interval between alerts (24h window); TOTAL/SOURCES/INTERVAL/STORM stat tiles; status (ALL/OPEN/ACKED) + severity (ALL/CRITICAL/HIGH/MEDIUM/LOW) filter tabs; top-8 source bar chart; expand source → individual alerts with timestamps; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OAFANA button left:945000 bottom:8 zIndex:643; isOafanaQuery+buildOafanaScript wired JarvisBrain; jarvis:oafana-toggle event; 90-s auto-refresh; voice: oafana/alert frequency/alert source/storm detection/alert analysis/ops frequency/alert rate */}
             <OpsAlertFrequencyAnalysis />
+            {/* F61 (overnight 2026-09-14): Dataset × RiskSignal × Investigation Coverage Matrix (DRISCOV) — DatasetRiskInvestigationMatrix.jsx; /v1/datasets × /entities/RiskSignal × /v1/investigations; keyword-correlates each dataset → FULLY_COVERED/RISK_ONLY/INV_ONLY/UNCOVERED; red pulse on uncovered; DATASETS/RISK SIGS/INVEST/UNCOVERED stat tiles; ALL/FULLY_COVERED/RISK_ONLY/INV_ONLY/UNCOVERED filter tabs + search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ DRISCOV button left:945860 bottom:8 zIndex:644; isDriscovQuery+buildDriscovScript wired JarvisBrain; jarvis:driscov-toggle event; 90-s auto-refresh; voice: driscov/dataset coverage/dataset risk/dataset investigation/coverage matrix/uncovered dataset */}
+            <DatasetRiskInvestigationMatrix />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
