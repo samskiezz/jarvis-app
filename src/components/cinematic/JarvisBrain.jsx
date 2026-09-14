@@ -370,6 +370,7 @@ import { isIcdbrgQuery, buildIcdbrgScript } from "./InvestigationContactDatasetB
 import { isIpdsknexQuery, buildIpdsknexScript } from "./IntelProfileDatasetKnowledgeMatrix";
 import { isCsjscovQuery, buildCsjscovScript } from "./ContactSwarmScenarioNexus";
 import { isCtiageQuery, buildCtriageScript } from "./CrisisTriageBoard";
+import { isInvrsmQuery, buildInvrsmScript } from "./InvestmentRiskScenarioMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1533,6 +1534,9 @@ export default function JarvisBrain() {
           ...(Array.isArray(invs) ? invs : invs?.data||invs?.investigations||[]).filter((x) => (x.status||"").toLowerCase()==="open").slice(0,10).map((x) => ({ kind:"INVEST", name: x.title||x.name, severity: x.priority||"medium" })),
         ];
         answer = buildCtriageScript(all);
+      } else if (isInvrsmQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:invrsm-toggle"));
+        answer = await buildInvrsmScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

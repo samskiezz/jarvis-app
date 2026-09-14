@@ -1066,6 +1066,7 @@ import InvestigationContactDatasetBridge from '@/components/cinematic/Investigat
 import IntelProfileDatasetKnowledgeMatrix from '@/components/cinematic/IntelProfileDatasetKnowledgeMatrix';
 import ContactSwarmScenarioNexus from '@/components/cinematic/ContactSwarmScenarioNexus';
 import CrisisTriageBoard from '@/components/cinematic/CrisisTriageBoard';
+import InvestmentRiskScenarioMap from '@/components/cinematic/InvestmentRiskScenarioMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3262,6 +3263,8 @@ function App() {
             <ContactSwarmScenarioNexus />
             {/* F69 (overnight 2026-09-14): Live Crisis Triage Board (CTRIAGE) — unified severity-sorted view of all active criticals: /entities/RiskSignal (critical+high) + /v1/ops/alerts (critical+high) + /entities/Task (blocked) + /v1/investigations (open); TOTAL/CRITICAL/HIGH/RISKS/ALERTS stat tiles; ALL/RISK/ALERT/TASK/INVEST filter tabs + search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ CTRIAGE button; isCtiageQuery+buildCtriageScript wired JarvisBrain; jarvis:ctriage-toggle event; 60-s auto-refresh; voice: crisis triage/ctriage/triage/urgent items/all criticals/emergency board */}
             <CrisisTriageBoard />
+            {/* F70 (overnight 2026-09-14): Investment × RiskSignal × Scenario Portfolio Risk Map (INVRSM) — InvestmentRiskScenarioMap.jsx; /entities/Investment × /entities/RiskSignal × /v1/scenario/list; keyword-correlates each investment → HEDGED/RISK_FLAGGED/SCENARIO_PLANNED/UNHEDGED; amber pulse on UNHEDGED; INVESTMENTS/RISK SIGNALS/SCENARIOS/HEDGED/UNHEDGED stat tiles; ALL/class filter tabs + search; expand row → matched risks (red bars) + scenarios (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ INVRSM button left:952740 bottom:8 zIndex:652; isInvrsmQuery+buildInvrsmScript wired JarvisBrain; jarvis:invrsm-toggle event; 90-s auto-refresh; voice: invrsm/investment risk/portfolio risk/unhedged investment/risk map/portfolio scenario/investment exposure */}
+            <InvestmentRiskScenarioMap />
             {/* F166 (overnight 2026-09-13): operational pulse ring — ambient 56×56 SVG health ring fixed bottom-right; outer arc=system health (100-cpu), inner arc=risk health (100 - critical×15 - high×8); color green≥75/amber 40-74/red<40; hover tooltip shows SYS/RISK/SCORE; polls /v1/jarvis/system/status + /entities/RiskSignal every 45 s; click → jarvis:ask "system health score"; "pulse ring"/"health ring"/"operational ring" voice trigger; jarvis:pulse-show / jarvis:pulse-hide events; localStorage jarvis_pulse_hidden persists visibility */}
             <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
