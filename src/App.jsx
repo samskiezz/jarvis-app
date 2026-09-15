@@ -1088,6 +1088,7 @@ import ScenarioContactTaskCoverage from '@/components/cinematic/ScenarioContactT
 import SwarmJobKnowledgeReportBacking from '@/components/cinematic/SwarmJobKnowledgeReportBacking';
 import TemporalEntityConvergence from '@/components/cinematic/TemporalEntityConvergence';
 import SystemResourceTrend from '@/components/cinematic/SystemResourceTrend';
+import LiveIntelGraphConvergence from '@/components/cinematic/LiveIntelGraphConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3330,6 +3331,8 @@ function App() {
             <TemporalEntityConvergence />
             {/* F92 (overnight 2026-09-15): System Resource Usage Trend (SRSUTRD) — SystemResourceTrend.jsx; polls /v1/jarvis/system/status every 30 s; stores rolling 20-reading history in localStorage; 3 SVG sparklines (CPU/MEM/LOAD) with min/avg/max; deviation alert when current > avg+stdev; UPTIME/AVG CPU/AVG MEM/AVG LOAD stat tiles; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SRSUTRD button left:971660 bottom:8 zIndex:116; isSrsutrdQuery+buildSrsutrdScript wired JarvisBrain; jarvis:srsutrd-toggle event; 30-s auto-refresh; voice: srsutrd/system trend/resource trend/cpu trend/memory trend/load trend/system history */}
             <SystemResourceTrend />
+            {/* F93 (overnight 2026-09-15): Live Intel × Graph Centrality Convergence (LGICVG) — LiveIntelGraphConvergence.jsx; cross-references /functions/getLiveIntel (quakes/crypto/FX) against /v1/graph/centrality nodes; keyword-correlates live world events to surface ACTIVATED (≥1 event matches) vs DORMANT graph hub nodes; EVENTS/NODES/ACTIVATED/DORMANT stat tiles; ALL/ACTIVATED/DORMANT filter tabs + search; expand node → matched events with type badge (SEISMIC/CRYPTO/FX) + relevance score bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ LGICVG button left:972520 bottom:8 zIndex:117; isLgicvgQuery+buildLgicvgScript wired JarvisBrain; jarvis:lgicvg-toggle event; 60-s auto-refresh; voice: lgicvg/live intel graph/world graph/activated nodes/live centrality/real world network/intel graph convergence */}
+            <LiveIntelGraphConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

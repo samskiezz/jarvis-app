@@ -392,6 +392,7 @@ import { isSctexcovQuery, buildSctexcovScript } from "./ScenarioContactTaskCover
 import { isSjkrbakQuery, buildSjkrbakScript } from "./SwarmJobKnowledgeReportBacking";
 import { isTecviewQuery, buildTecviewScript } from "./TemporalEntityConvergence";
 import { isSrsutrdQuery, buildSrsutrdScript } from "./SystemResourceTrend";
+import { isLgicvgQuery, buildLgicvgScript } from "./LiveIntelGraphConvergence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1621,6 +1622,9 @@ export default function JarvisBrain() {
       } else if (isSrsutrdQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:srsutrd-toggle"));
         answer = await buildSrsutrdScript();
+      } else if (isLgicvgQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:lgicvg-toggle"));
+        answer = await buildLgicvgScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
