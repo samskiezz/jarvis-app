@@ -1092,6 +1092,7 @@ import LiveIntelGraphConvergence from '@/components/cinematic/LiveIntelGraphConv
 import InvestigationStaleness from '@/components/cinematic/InvestigationStaleness';
 import IncidentVelocityMonitor from '@/components/cinematic/IncidentVelocityMonitor';
 import MultiEntityFreshnessMatrix from '@/components/cinematic/MultiEntityFreshnessMatrix';
+import AipSkillSwarmScenarioMatrix from '@/components/cinematic/AipSkillSwarmScenarioMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3342,6 +3343,8 @@ function App() {
             <IncidentVelocityMonitor />
             {/* F96 (overnight 2026-09-15): Multi-Entity Freshness Matrix (MEFMAT) — MultiEntityFreshnessMatrix.jsx; polls all 6 /entities/ types; classifies each record NEW(≤1d)/RECENT(2-7d)/AGING(8-30d)/STALE(>30d); 6-row matrix with freshness bars; TOTAL/NEW/RECENT/AGING/STALE stat tiles; red pulse on STALE; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ MEFMAT button left:975100 bottom:8 zIndex:120; isMefmatQuery+buildMefmatScript wired JarvisBrain; jarvis:mefmat-toggle event; 120-s auto-refresh; voice: mefmat/entity freshness/data freshness/stale entities/freshness matrix/data age */}
             <MultiEntityFreshnessMatrix />
+            {/* F97 (overnight 2026-09-15): AIP Skill × Scenario × SwarmJob Execution Capability Matrix (SSXCAP) — AipSkillSwarmScenarioMatrix.jsx; /v1/aip/skill × /v1/scenario/list × /entities/SwarmJob; keyword-correlates each skill → FULLY_DEPLOYED/SCENARIO_ONLY/SWARM_ONLY/IDLE; red pulse on IDLE (capability gaps); SKILLS/SCENARIOS/JOBS/FULLY DEPLOYED/IDLE stat tiles; ALL/class filter tabs + search; expand skill → matched scenarios (amber bars) + swarm jobs (cyan bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SSXCAP button left:975960 bottom:8 zIndex:121; isSsxcapQuery+buildSsxcapScript wired JarvisBrain; jarvis:ssxcap-toggle event; 90-s auto-refresh; voice: ssxcap/idle skills/skill deployment/skill execution/scenario skill/swarm skill/underused skills/skill utilization/capability deployment */}
+            <AipSkillSwarmScenarioMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

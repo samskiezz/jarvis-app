@@ -396,6 +396,7 @@ import { isLgicvgQuery, buildLgicvgScript } from "./LiveIntelGraphConvergence";
 import { isInvstaleQuery, buildInvstaleScript } from "./InvestigationStaleness";
 import { isIncivctyQuery, buildIncivctyScript } from "./IncidentVelocityMonitor";
 import { isMefmatQuery, buildMefmatScript } from "./MultiEntityFreshnessMatrix";
+import { isSsxcapQuery, buildSsxcapScript } from "./AipSkillSwarmScenarioMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1637,6 +1638,9 @@ export default function JarvisBrain() {
       } else if (isMefmatQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:mefmat-toggle"));
         answer = await buildMefmatScript();
+      } else if (isSsxcapQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:ssxcap-toggle"));
+        answer = await buildSsxcapScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
