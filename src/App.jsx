@@ -1099,6 +1099,7 @@ import ContactKnowledgeReportCompleteness from '@/components/cinematic/ContactKn
 import InvestmentDatasetKnowledgeNexus from '@/components/cinematic/InvestmentDatasetKnowledgeNexus';
 import SceneDatasetKnowledgeGrounding from '@/components/cinematic/SceneDatasetKnowledgeGrounding';
 import TaskKnowledgeReportCoverage from '@/components/cinematic/TaskKnowledgeReportCoverage';
+import GraphCommunityThreatCluster from '@/components/cinematic/GraphCommunityThreatCluster';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3363,6 +3364,8 @@ function App() {
             <SceneDatasetKnowledgeGrounding />
             {/* F103 (overnight 2026-09-15): Task × Knowledge × Report Operational Coverage (TKROPS) — TaskKnowledgeReportCoverage.jsx; /entities/Task × /knowledge/ × /v1/reports; keyword-correlates each task against KB articles AND reports → FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED; red pulse on UNDOCUMENTED (operational documentation blind spots); TASKS/KB ARTS/REPORTS/FULLY DOCUMENTED/UNDOCUMENTED stat tiles; coverage % bar; filter tabs + search on task title/status/type; expand row → matched KB articles (amber) + reports (green); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TKROPS button left:981120 bottom:8 zIndex:127; isTkropsQuery+buildTkropsScript wired JarvisBrain; jarvis:tkrops-toggle event; 120-s auto-refresh; voice: tkrops/task knowledge/task report/task documentation/undocumented task/task coverage/task backing/task knowledge report/operational coverage/task doc coverage */}
             <TaskKnowledgeReportCoverage />
+            {/* F104 (overnight 2026-09-15): Graph Community × Investigation × Contact Threat Cluster Map (GICTCLSTR) — GraphCommunityThreatCluster.jsx; /v1/graph/communities × /v1/investigations × /entities/Contact; keyword-correlates each graph community against investigations AND contacts → HOT_CLUSTER/INV_ONLY/CONTACT_ONLY/DORMANT; red pulse on HOT_CLUSTER (threat clusters with both investigation and contact coverage); COMMUNITIES/INVESTIGATIONS/CONTACTS/HOT CLUSTERS/DORMANT stat tiles; hot cluster rate % bar; filter tabs + search; expand row → matched investigations (red) + contacts (cyan); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ GICTCLSTR button left:981980 bottom:8 zIndex:128; isGictclstrQuery+buildGictclstrScript wired JarvisBrain; jarvis:gictclstr-toggle event; 120-s auto-refresh; voice: gictclstr/graph community/threat cluster/community threat/cluster map/hot cluster/graph cluster/community investigation/community contact/active cluster */}
+            <GraphCommunityThreatCluster />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
