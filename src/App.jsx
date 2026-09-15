@@ -1081,6 +1081,7 @@ import TaskDatasetReportNexus from '@/components/cinematic/TaskDatasetReportNexu
 import OpsAlertScenarioKnowledgeNexus from '@/components/cinematic/OpsAlertScenarioKnowledgeNexus';
 import SwarmSkillCoverage from '@/components/cinematic/SwarmSkillCoverage';
 import KnowledgeContactScenarioBrief from '@/components/cinematic/KnowledgeContactScenarioBrief';
+import ReportContactTaskOwnership from '@/components/cinematic/ReportContactTaskOwnership';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3309,6 +3310,8 @@ function App() {
             <SwarmSkillCoverage />
             {/* F85 (overnight 2026-09-15): Knowledge × Contact × Scenario Intelligence Brief (KCSBRIEF) — KnowledgeContactScenarioBrief.jsx; /knowledge/ × /entities/Contact × /v1/scenario/list; keyword-correlates each knowledge article against contacts AND scenarios → FULLY_BRIEFED/CONTACT_ONLY/SCENARIO_ONLY/DARK; red pulse on DARK count (isolated intelligence with no assigned contact or active scenario); KB ARTICLES/CONTACTS/SCENARIOS/FULLY BRIEFED/DARK stat tiles; ALL/FULLY_BRIEFED/CONTACT_ONLY/SCENARIO_ONLY/DARK filter tabs + search; expand article → matched contacts (cyan bars) + matched scenarios (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ KCSBRIEF button left:965640 bottom:8 zIndex:109; isKcsbriefQuery+buildKcsbriefScript wired JarvisBrain; jarvis:kcsbrief-toggle event; 120-s auto-refresh; voice: kcsbrief/knowledge brief/dark knowledge/briefed knowledge/isolated knowledge/knowledge contact scenario */}
             <KnowledgeContactScenarioBrief />
+            {/* F86 (overnight 2026-09-15): Report × Contact × Task Action Ownership Nexus (RCTOWNX) — ReportContactTaskOwnership.jsx; /v1/reports × /entities/Contact × /entities/Task; keyword-correlates each report against contacts AND tasks → FULLY_ACTIONED/CONTACT_ONLY/TASK_ONLY/UNACTIONED; red pulse on UNACTIONED (accountability gaps — reports with no contact owner or follow-up task); REPORTS/CONTACTS/TASKS/FULLY ACTIONED/UNACTIONED stat tiles; ALL/FULLY_ACTIONED/CONTACT_ONLY/TASK_ONLY/UNACTIONED filter tabs + search; expand report → matched contacts (cyan bars) + tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RCTOWNX button left:966500 bottom:8 zIndex:110; isRctownxQuery+buildRctownxScript wired JarvisBrain; jarvis:rctownx-toggle event; 120-s auto-refresh; voice: rctownx/report ownership/unactioned report/report contact/report task/accountability gap/report action/report accountability */}
+            <ReportContactTaskOwnership />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
