@@ -1097,6 +1097,7 @@ import OpsAlertSeverityFunnel from '@/components/cinematic/OpsAlertSeverityFunne
 import IntelReadinessScore from '@/components/cinematic/IntelReadinessScore';
 import ContactKnowledgeReportCompleteness from '@/components/cinematic/ContactKnowledgeReportCompleteness';
 import InvestmentDatasetKnowledgeNexus from '@/components/cinematic/InvestmentDatasetKnowledgeNexus';
+import SceneDatasetKnowledgeGrounding from '@/components/cinematic/SceneDatasetKnowledgeGrounding';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3357,6 +3358,8 @@ function App() {
             <ContactKnowledgeReportCompleteness />
             {/* F101 (overnight 2026-09-15): Investment × Dataset × Knowledge Portfolio Intelligence Coverage (INVDKNEX) — InvestmentDatasetKnowledgeNexus.jsx; /entities/Investment × /v1/datasets × /knowledge/; keyword-correlates each investment against datasets AND KB articles → FULLY_COVERED/DATA_ONLY/KB_ONLY/DARK; amber pulse on DARK (portfolio intelligence blind spots); INVESTMENTS/DATASETS/KB ARTS/FULLY COVERED/DARK stat tiles; coverage % bar; filter tabs + search on name/type/symbol; expand row → matched datasets (cyan) + KB articles (amber); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ INVDKNEX button left:979400 bottom:8 zIndex:125; isInvdknexQuery+buildInvdknexScript wired JarvisBrain; jarvis:invdknex-toggle event; 120-s auto-refresh; voice: invdknex/investment dataset/investment knowledge/dark investment/investment backing/portfolio coverage/investment intelligence/investment data knowledge */}
             <InvestmentDatasetKnowledgeNexus />
+            {/* F102 (overnight 2026-09-15): Scene × Dataset × Knowledge Intelligence Grounding Matrix (SDKGRND) — SceneDatasetKnowledgeGrounding.jsx; /v1/cinematic/scene/{id} (all 10) × /v1/datasets × /knowledge/; keyword-correlates each scene against datasets AND KB articles → FULLY_GROUNDED/DATA_ONLY/KB_ONLY/UNGROUNDED; red pulse on UNGROUNDED (intelligence blind spots — scenes with no dataset or KB backing); SCENES/DATASETS/KB ARTS/FULLY GROUNDED/UNGROUNDED stat tiles; coverage % bar; filter tabs + search on scene id/label; expand row → matched datasets (cyan bars) + KB articles (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SDKGRND button left:980260 bottom:8 zIndex:126; isSdkgrndQuery+buildSdkgrndScript wired JarvisBrain; jarvis:sdkgrnd-toggle event; 120-s auto-refresh; voice: sdkgrnd/scene dataset/scene knowledge/grounded scene/scene grounding/scene data/scene kb/ungrounded scene/scene intelligence grounding */}
+            <SceneDatasetKnowledgeGrounding />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

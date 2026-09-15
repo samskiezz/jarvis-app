@@ -401,6 +401,7 @@ import { isOapfunlQuery, buildOapfunlScript } from "./OpsAlertSeverityFunnel";
 import { isKirscoreQuery, buildKirscoreScript } from "./IntelReadinessScore";
 import { isCkrcompQuery, buildCkrcompScript } from "./ContactKnowledgeReportCompleteness";
 import { isInvdknexQuery, buildInvdknexScript } from "./InvestmentDatasetKnowledgeNexus";
+import { isSdkgrndQuery, buildSdkgrndScript } from "./SceneDatasetKnowledgeGrounding";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1657,6 +1658,9 @@ export default function JarvisBrain() {
       } else if (isInvdknexQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:invdknex-toggle"));
         answer = await buildInvdknexScript();
+      } else if (isSdkgrndQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:sdkgrnd-toggle"));
+        answer = await buildSdkgrndScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
