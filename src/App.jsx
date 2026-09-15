@@ -1084,6 +1084,7 @@ import KnowledgeContactScenarioBrief from '@/components/cinematic/KnowledgeConta
 import ReportContactTaskOwnership from '@/components/cinematic/ReportContactTaskOwnership';
 import DatasetContactSkillNexus from '@/components/cinematic/DatasetContactSkillNexus';
 import RiskSignalKnowledgeSkillMitigation from '@/components/cinematic/RiskSignalKnowledgeSkillMitigation';
+import ScenarioContactTaskCoverage from '@/components/cinematic/ScenarioContactTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3318,6 +3319,8 @@ function App() {
             <DatasetContactSkillNexus />
             {/* F88 (overnight 2026-09-15): RiskSignal × Knowledge × Skill Threat Mitigation Coverage (RKSM) — RiskSignalKnowledgeSkillMitigation.jsx; /entities/RiskSignal × /knowledge/ × /v1/aip/skill; keyword-correlates each risk signal against KB articles (mitigation docs) AND AIP skills (response capabilities) → FULLY_MITIGATED/KB_ONLY/SKILL_ONLY/UNMITIGATED; red pulse on UNMITIGATED count (critical gaps — risks with no coverage); stat tiles (signals/articles/skills/fully mitigated/unmitigated); ALL/FULLY_MITIGATED/KB_ONLY/SKILL_ONLY/UNMITIGATED filter tabs + search on signal title/severity; expand signal → matched KB articles (cyan bars) + skills (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RKSM button left:968220 bottom:8 zIndex:112; isRksmQuery+buildRksmScript wired JarvisBrain; jarvis:rksm-toggle event; 90-s auto-refresh; voice: rksm/risk mitig/unmitigated risk/threat mitig/risk knowledge/risk skill/mitig coverage/response gap */}
             <RiskSignalKnowledgeSkillMitigation />
+            {/* F89 (overnight 2026-09-15): Scenario × Contact × Task Intelligence Execution Coverage (SCTEXCOV) — ScenarioContactTaskCoverage.jsx; /v1/scenario/list × /entities/Contact × /entities/Task; keyword-correlates each scenario against contacts (owner) AND tasks (actions) → FULLY_SUPPORTED/CONTACT_ONLY/TASK_ONLY/UNSUPPORTED; red pulse on UNSUPPORTED (execution blind spots); SCENARIOS/CONTACTS/TASKS/FULLY SUPPORTED/UNSUPPORTED stat tiles; ALL/class filter tabs + search; expand row → matched contacts (cyan bars) + tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SCTEXCOV button left:969080 bottom:8 zIndex:113; isSctexcovQuery+buildSctexcovScript wired JarvisBrain; jarvis:sctexcov-toggle event; 90-s auto-refresh; voice: sctexcov/scenario execution/scenario contact task/unsupported scenario/scenario coverage/execution coverage */}
+            <ScenarioContactTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

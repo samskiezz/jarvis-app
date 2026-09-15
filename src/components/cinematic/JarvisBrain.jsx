@@ -388,6 +388,7 @@ import { isKcsbriefQuery, buildKcsbriefScript } from "./KnowledgeContactScenario
 import { isRctownxQuery, buildRctownxScript } from "./ReportContactTaskOwnership";
 import { isDcslnexQuery, buildDcslnexScript } from "./DatasetContactSkillNexus";
 import { isRksmQuery, buildRksmScript } from "./RiskSignalKnowledgeSkillMitigation";
+import { isSctexcovQuery, buildSctexcovScript } from "./ScenarioContactTaskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1605,6 +1606,9 @@ export default function JarvisBrain() {
       } else if (isRksmQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:rksm-toggle"));
         answer = await buildRksmScript();
+      } else if (isSctexcovQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:sctexcov-toggle"));
+        answer = await buildSctexcovScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
