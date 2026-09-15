@@ -1102,6 +1102,7 @@ import TaskKnowledgeReportCoverage from '@/components/cinematic/TaskKnowledgeRep
 import GraphCommunityThreatCluster from '@/components/cinematic/GraphCommunityThreatCluster';
 import SwarmScenarioKnowledgeCoverage from '@/components/cinematic/SwarmScenarioKnowledgeCoverage';
 import IntelProfileGraphNexus from '@/components/cinematic/IntelProfileGraphNexus';
+import KnowledgeGraphCommunityBridge from '@/components/cinematic/KnowledgeGraphCommunityBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3372,6 +3373,8 @@ function App() {
             <SwarmScenarioKnowledgeCoverage />
             {/* F106 (overnight 2026-09-15): Intel Profile × Graph Centrality Nexus (IPGCNEX) — IntelProfileGraphNexus.jsx; /entities/IntelProfile × /v1/graph/centrality; keyword-correlates each intel profile against top centrality graph nodes → GRAPH_ACTIVE (≥2 node matches)/PERIPHERAL (1 node)/DARK (no alignment — intelligence dead weight); red pulse on DARK count; INTEL PROFILES/GRAPH NODES/GRAPH ACTIVE/DARK stat tiles; network coverage % bar; ALL/GRAPH_ACTIVE/PERIPHERAL/DARK filter tabs + search on name/role/category; expand row → matched centrality nodes with entity_type badge + centrality score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network intelligence brief + TTS; ◈ IPGCNEX button left:983700 bottom:8 zIndex:130; isIpgcnexQuery+buildIpgcnexScript wired JarvisBrain; jarvis:ipgcnex-toggle event; 90-s auto-refresh; voice: ipgcnex/intel graph/profile graph/graph intel/active profile graph/dark intel profile/graph centrality intel/intel network */}
             <IntelProfileGraphNexus />
+            {/* F107 (overnight 2026-09-15): Knowledge × Graph Centrality × Community Intelligence Bridge (KGNCBRG) — KnowledgeGraphCommunityBridge.jsx; /knowledge/ × /v1/graph/centrality × /v1/graph/communities; keyword-correlates each KB article against centrality nodes AND community clusters → FULLY_MAPPED/NODE_ONLY/CLUSTER_ONLY/DARK; red pulse on DARK count (isolated knowledge — no graph alignment); KB ARTICLES/GRAPH NODES/COMMUNITIES/FULLY MAPPED/DARK stat tiles; graph coverage % bar; ALL/class filter tabs + search on article title/category; expand row → matched centrality nodes (cyan) + communities (amber); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ KGNCBRG button left:984560 bottom:8 zIndex:131; isKgncbrgQuery+buildKgncbrgScript wired JarvisBrain; jarvis:kgncbrg-toggle event; 120-s auto-refresh; voice: kgncbrg/knowledge graph/graph knowledge/mapped knowledge/dark knowledge/knowledge node/knowledge community/knowledge graph bridge */}
+            <KnowledgeGraphCommunityBridge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

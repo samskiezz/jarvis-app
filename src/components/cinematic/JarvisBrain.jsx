@@ -406,6 +406,7 @@ import { isTkropsQuery, buildTkropsScript } from "./TaskKnowledgeReportCoverage"
 import { isGictclstrQuery, buildGictclstrScript } from "./GraphCommunityThreatCluster";
 import { isSskicovQuery, buildSskicovScript } from "./SwarmScenarioKnowledgeCoverage";
 import { isIpgcnexQuery, buildIpgcnexScript } from "./IntelProfileGraphNexus";
+import { isKgncbrgQuery, buildKgncbrgScript } from "./KnowledgeGraphCommunityBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1677,6 +1678,9 @@ export default function JarvisBrain() {
       } else if (isIpgcnexQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ipgcnex-toggle"));
         answer = await buildIpgcnexScript();
+      } else if (isKgncbrgQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:kgncbrg-toggle"));
+        answer = await buildKgncbrgScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
