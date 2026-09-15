@@ -1089,6 +1089,7 @@ import SwarmJobKnowledgeReportBacking from '@/components/cinematic/SwarmJobKnowl
 import TemporalEntityConvergence from '@/components/cinematic/TemporalEntityConvergence';
 import SystemResourceTrend from '@/components/cinematic/SystemResourceTrend';
 import LiveIntelGraphConvergence from '@/components/cinematic/LiveIntelGraphConvergence';
+import InvestigationStaleness from '@/components/cinematic/InvestigationStaleness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3333,6 +3334,8 @@ function App() {
             <SystemResourceTrend />
             {/* F93 (overnight 2026-09-15): Live Intel × Graph Centrality Convergence (LGICVG) — LiveIntelGraphConvergence.jsx; cross-references /functions/getLiveIntel (quakes/crypto/FX) against /v1/graph/centrality nodes; keyword-correlates live world events to surface ACTIVATED (≥1 event matches) vs DORMANT graph hub nodes; EVENTS/NODES/ACTIVATED/DORMANT stat tiles; ALL/ACTIVATED/DORMANT filter tabs + search; expand node → matched events with type badge (SEISMIC/CRYPTO/FX) + relevance score bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ LGICVG button left:972520 bottom:8 zIndex:117; isLgicvgQuery+buildLgicvgScript wired JarvisBrain; jarvis:lgicvg-toggle event; 60-s auto-refresh; voice: lgicvg/live intel graph/world graph/activated nodes/live centrality/real world network/intel graph convergence */}
             <LiveIntelGraphConvergence />
+            {/* F94 (overnight 2026-09-15): Investigation Recency & Stale Case Tracker (INVSTALE) — InvestigationStaleness.jsx; /v1/investigations → classify each case by age since created_at: FRESH(≤7d)/ACTIVE(8-30d)/AGING(31-90d)/STALE(>90d); TOTAL/FRESH/ACTIVE/AGING/STALE stat tiles; ALL/FRESH/ACTIVE/AGING/STALE filter tabs + search; stalest cases first; red pulse on open stale count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ INVSTALE button left:973380 bottom:8 zIndex:118; isInvstaleQuery+buildInvstaleScript wired JarvisBrain; jarvis:invstale-toggle event; 120-s auto-refresh; voice: invstale/stale investigation/case age/old cases/aging investigation/investigation recency */}
+            <InvestigationStaleness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

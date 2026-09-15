@@ -393,6 +393,7 @@ import { isSjkrbakQuery, buildSjkrbakScript } from "./SwarmJobKnowledgeReportBac
 import { isTecviewQuery, buildTecviewScript } from "./TemporalEntityConvergence";
 import { isSrsutrdQuery, buildSrsutrdScript } from "./SystemResourceTrend";
 import { isLgicvgQuery, buildLgicvgScript } from "./LiveIntelGraphConvergence";
+import { isInvstaleQuery, buildInvstaleScript } from "./InvestigationStaleness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1625,6 +1626,9 @@ export default function JarvisBrain() {
       } else if (isLgicvgQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:lgicvg-toggle"));
         answer = await buildLgicvgScript();
+      } else if (isInvstaleQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:invstale-toggle"));
+        answer = await buildInvstaleScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
