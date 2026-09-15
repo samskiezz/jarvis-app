@@ -1087,6 +1087,7 @@ import RiskSignalKnowledgeSkillMitigation from '@/components/cinematic/RiskSigna
 import ScenarioContactTaskCoverage from '@/components/cinematic/ScenarioContactTaskCoverage';
 import SwarmJobKnowledgeReportBacking from '@/components/cinematic/SwarmJobKnowledgeReportBacking';
 import TemporalEntityConvergence from '@/components/cinematic/TemporalEntityConvergence';
+import SystemResourceTrend from '@/components/cinematic/SystemResourceTrend';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3327,6 +3328,8 @@ function App() {
             <SwarmJobKnowledgeReportBacking />
             {/* F91 (overnight 2026-09-15): Temporal Entity Convergence (TECVIEW) — TemporalEntityConvergence.jsx; groups /entities/Task + /entities/RiskSignal + /v1/ops/alerts + /v1/investigations events by hour over last 24 h; 24-column heatmap coloured by severity; surge window detection (hours with ≥3 active entity types); TOTAL EVENTS/PEAK HOUR/ENTITY TYPES/SURGE WINDOWS stat tiles; ALL/TASK/RISK/ALERT/INVESTIGATION filter tabs; event list sorted by ts desc; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TECVIEW button left:970800 bottom:8 zIndex:115; isTecviewQuery+buildTecviewScript wired JarvisBrain; jarvis:tecview-toggle event; 120-s auto-refresh; voice: temporal view/convergence/tecview/entity timeline/hourly activity/surge detection */}
             <TemporalEntityConvergence />
+            {/* F92 (overnight 2026-09-15): System Resource Usage Trend (SRSUTRD) — SystemResourceTrend.jsx; polls /v1/jarvis/system/status every 30 s; stores rolling 20-reading history in localStorage; 3 SVG sparklines (CPU/MEM/LOAD) with min/avg/max; deviation alert when current > avg+stdev; UPTIME/AVG CPU/AVG MEM/AVG LOAD stat tiles; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SRSUTRD button left:971660 bottom:8 zIndex:116; isSrsutrdQuery+buildSrsutrdScript wired JarvisBrain; jarvis:srsutrd-toggle event; 30-s auto-refresh; voice: srsutrd/system trend/resource trend/cpu trend/memory trend/load trend/system history */}
+            <SystemResourceTrend />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
