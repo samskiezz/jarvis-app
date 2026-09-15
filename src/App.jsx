@@ -1083,6 +1083,7 @@ import SwarmSkillCoverage from '@/components/cinematic/SwarmSkillCoverage';
 import KnowledgeContactScenarioBrief from '@/components/cinematic/KnowledgeContactScenarioBrief';
 import ReportContactTaskOwnership from '@/components/cinematic/ReportContactTaskOwnership';
 import DatasetContactSkillNexus from '@/components/cinematic/DatasetContactSkillNexus';
+import RiskSignalKnowledgeSkillMitigation from '@/components/cinematic/RiskSignalKnowledgeSkillMitigation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3315,6 +3316,8 @@ function App() {
             <ReportContactTaskOwnership />
             {/* F87 (overnight 2026-09-15): Dataset × Contact × Skill Data Literacy Nexus (DCSLNEX) — DatasetContactSkillNexus.jsx; /v1/datasets × /entities/Contact × /v1/aip/skill; keyword-correlates each dataset against contacts (who works with it) AND skills (what capabilities it enables) → FULLY_MAPPED/CONTACT_ONLY/SKILL_ONLY/UNMAPPED; red pulse on UNMAPPED (data literacy gaps — datasets with no identifiable contact owner or skill application); DATASETS/CONTACTS/SKILLS/FULLY MAPPED/UNMAPPED stat tiles; ALL/FULLY_MAPPED/CONTACT_ONLY/SKILL_ONLY/UNMAPPED filter tabs + search; expand dataset → matched contacts (cyan bars) + skills (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ⬡ DCSLNEX button left:967360 bottom:8 zIndex:111; isDcslnexQuery+buildDcslnexScript wired JarvisBrain; jarvis:dcslnex-toggle event; 120-s auto-refresh; voice: dcslnex/dataset contact/dataset skill/data literacy/unmapped dataset/dataset user/skill dataset/dataset coverage */}
             <DatasetContactSkillNexus />
+            {/* F88 (overnight 2026-09-15): RiskSignal × Knowledge × Skill Threat Mitigation Coverage (RKSM) — RiskSignalKnowledgeSkillMitigation.jsx; /entities/RiskSignal × /knowledge/ × /v1/aip/skill; keyword-correlates each risk signal against KB articles (mitigation docs) AND AIP skills (response capabilities) → FULLY_MITIGATED/KB_ONLY/SKILL_ONLY/UNMITIGATED; red pulse on UNMITIGATED count (critical gaps — risks with no coverage); stat tiles (signals/articles/skills/fully mitigated/unmitigated); ALL/FULLY_MITIGATED/KB_ONLY/SKILL_ONLY/UNMITIGATED filter tabs + search on signal title/severity; expand signal → matched KB articles (cyan bars) + skills (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RKSM button left:968220 bottom:8 zIndex:112; isRksmQuery+buildRksmScript wired JarvisBrain; jarvis:rksm-toggle event; 90-s auto-refresh; voice: rksm/risk mitig/unmitigated risk/threat mitig/risk knowledge/risk skill/mitig coverage/response gap */}
+            <RiskSignalKnowledgeSkillMitigation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
