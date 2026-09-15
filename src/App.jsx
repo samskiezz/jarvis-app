@@ -1095,6 +1095,7 @@ import MultiEntityFreshnessMatrix from '@/components/cinematic/MultiEntityFreshn
 import AipSkillSwarmScenarioMatrix from '@/components/cinematic/AipSkillSwarmScenarioMatrix';
 import OpsAlertSeverityFunnel from '@/components/cinematic/OpsAlertSeverityFunnel';
 import IntelReadinessScore from '@/components/cinematic/IntelReadinessScore';
+import ContactKnowledgeReportCompleteness from '@/components/cinematic/ContactKnowledgeReportCompleteness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3351,6 +3352,8 @@ function App() {
             <OpsAlertSeverityFunnel />
             {/* F99 (overnight 2026-09-15): Intelligence Readiness Score (KIRSCORE) — IntelReadinessScore.jsx; /knowledge/ × /v1/investigations × /v1/scenario/list; synthesises KB freshness % + investigation KB-coverage % + scenario KB-coverage % into a 0-100 overall score; SVG gauge ring (green≥75/amber 40-74/red<40); TOTAL KB/OPEN INV/SCENARIOS/SCORE stat tiles; 3 component bars with driver counts; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ KIRSCORE button left:977680 bottom:8 zIndex:123; isKirscoreQuery+buildKirscoreScript wired JarvisBrain; jarvis:kirscore-toggle event; 120-s auto-refresh; voice: kirscore/intelligence readiness/readiness score/intel readiness/knowledge readiness/readiness index */}
             <IntelReadinessScore />
+            {/* F100 (overnight 2026-09-15): Contact × Knowledge × Report Intelligence Profile Completeness (CKRCOMP) — ContactKnowledgeReportCompleteness.jsx; /entities/Contact × /knowledge/ × /v1/reports; keyword-correlates each contact → FULLY_PROFILED/KB_ONLY/REPORT_ONLY/INCOMPLETE; red pulse on INCOMPLETE; CONTACTS/KB ARTS/REPORTS/FULLY PROFILED/INCOMPLETE stat tiles; coverage % bar; filter tabs + search; expand contact → matched KB articles (amber) + reports (green); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ CKRCOMP button left:978540 bottom:8 zIndex:124; isCkrcompQuery+buildCkrcompScript wired JarvisBrain; jarvis:ckrcomp-toggle event; 120-s auto-refresh; voice: ckrcomp/contact profile/profile completeness/incomplete contact/contact knowledge report/contact backing */}
+            <ContactKnowledgeReportCompleteness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
