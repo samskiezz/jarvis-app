@@ -1101,6 +1101,7 @@ import SceneDatasetKnowledgeGrounding from '@/components/cinematic/SceneDatasetK
 import TaskKnowledgeReportCoverage from '@/components/cinematic/TaskKnowledgeReportCoverage';
 import GraphCommunityThreatCluster from '@/components/cinematic/GraphCommunityThreatCluster';
 import SwarmScenarioKnowledgeCoverage from '@/components/cinematic/SwarmScenarioKnowledgeCoverage';
+import IntelProfileGraphNexus from '@/components/cinematic/IntelProfileGraphNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3369,6 +3370,8 @@ function App() {
             <GraphCommunityThreatCluster />
             {/* F105 (overnight 2026-09-15): Swarm × Scenario × Knowledge Coverage (SSKICOV) — SwarmScenarioKnowledgeCoverage.jsx; /entities/SwarmJob × /v1/scenario/list × /knowledge/; keyword-correlates each swarm job against scenarios AND KB articles → FULLY_COVERED/SCENARIO_ONLY/KB_ONLY/UNSUPPORTED; red pulse on UNSUPPORTED (automation blind spots); SWARM JOBS/SCENARIOS/KB ARTICLES/FULLY COVERED/UNSUPPORTED stat tiles; coverage % bar; filter tabs + search; expand row → matched scenarios (amber) + KB articles (cyan); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SSKICOV button left:982840 bottom:8 zIndex:129; isSskicovQuery+buildSskicovScript wired JarvisBrain; jarvis:sskicov-toggle event; 120-s auto-refresh; voice: sskicov/swarm scenario/swarm knowledge/swarm coverage/unsupported swarm/swarm backing/swarm intelligence/swarm kb/automated coverage */}
             <SwarmScenarioKnowledgeCoverage />
+            {/* F106 (overnight 2026-09-15): Intel Profile × Graph Centrality Nexus (IPGCNEX) — IntelProfileGraphNexus.jsx; /entities/IntelProfile × /v1/graph/centrality; keyword-correlates each intel profile against top centrality graph nodes → GRAPH_ACTIVE (≥2 node matches)/PERIPHERAL (1 node)/DARK (no alignment — intelligence dead weight); red pulse on DARK count; INTEL PROFILES/GRAPH NODES/GRAPH ACTIVE/DARK stat tiles; network coverage % bar; ALL/GRAPH_ACTIVE/PERIPHERAL/DARK filter tabs + search on name/role/category; expand row → matched centrality nodes with entity_type badge + centrality score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence network intelligence brief + TTS; ◈ IPGCNEX button left:983700 bottom:8 zIndex:130; isIpgcnexQuery+buildIpgcnexScript wired JarvisBrain; jarvis:ipgcnex-toggle event; 90-s auto-refresh; voice: ipgcnex/intel graph/profile graph/graph intel/active profile graph/dark intel profile/graph centrality intel/intel network */}
+            <IntelProfileGraphNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
