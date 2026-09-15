@@ -1080,6 +1080,7 @@ import SceneActiveThreatPinboard from '@/components/cinematic/SceneActiveThreatP
 import TaskDatasetReportNexus from '@/components/cinematic/TaskDatasetReportNexus';
 import OpsAlertScenarioKnowledgeNexus from '@/components/cinematic/OpsAlertScenarioKnowledgeNexus';
 import SwarmSkillCoverage from '@/components/cinematic/SwarmSkillCoverage';
+import KnowledgeContactScenarioBrief from '@/components/cinematic/KnowledgeContactScenarioBrief';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3306,6 +3307,8 @@ function App() {
             <OperationalPulseRing />
             {/* F84 (overnight 2026-09-14): skill × swarm automation coverage — ◈ SKLSWM button (left:964780, bottom:8, zIndex:108); parallel-fetches /v1/aip/skill + /entities/SwarmJob; keyword-correlates each skill against active swarm jobs to surface AUTOMATED (swarm coverage found) vs MANUAL (no automation — execution gap); automation coverage %; stat tiles (skills/jobs/automated/manual); ALL/AUTOMATED/MANUAL filter tabs + text search; expand skill → matched jobs with status badge + relevance score; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence automation-coverage brief + TTS via jarvis:speak-dossier; isSklswmQuery+buildSklswmScript exported from SwarmSkillCoverage; "skill swarm"/"automated skills"/"swarm skill coverage"/"sklswm"/"which skills are automated" voice trigger; jarvis:sklswm-toggle event; 90-s auto-refresh */}
             <SwarmSkillCoverage />
+            {/* F85 (overnight 2026-09-15): Knowledge × Contact × Scenario Intelligence Brief (KCSBRIEF) — KnowledgeContactScenarioBrief.jsx; /knowledge/ × /entities/Contact × /v1/scenario/list; keyword-correlates each knowledge article against contacts AND scenarios → FULLY_BRIEFED/CONTACT_ONLY/SCENARIO_ONLY/DARK; red pulse on DARK count (isolated intelligence with no assigned contact or active scenario); KB ARTICLES/CONTACTS/SCENARIOS/FULLY BRIEFED/DARK stat tiles; ALL/FULLY_BRIEFED/CONTACT_ONLY/SCENARIO_ONLY/DARK filter tabs + search; expand article → matched contacts (cyan bars) + matched scenarios (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ KCSBRIEF button left:965640 bottom:8 zIndex:109; isKcsbriefQuery+buildKcsbriefScript wired JarvisBrain; jarvis:kcsbrief-toggle event; 120-s auto-refresh; voice: kcsbrief/knowledge brief/dark knowledge/briefed knowledge/isolated knowledge/knowledge contact scenario */}
+            <KnowledgeContactScenarioBrief />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
