@@ -1094,6 +1094,7 @@ import IncidentVelocityMonitor from '@/components/cinematic/IncidentVelocityMoni
 import MultiEntityFreshnessMatrix from '@/components/cinematic/MultiEntityFreshnessMatrix';
 import AipSkillSwarmScenarioMatrix from '@/components/cinematic/AipSkillSwarmScenarioMatrix';
 import OpsAlertSeverityFunnel from '@/components/cinematic/OpsAlertSeverityFunnel';
+import IntelReadinessScore from '@/components/cinematic/IntelReadinessScore';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3348,6 +3349,8 @@ function App() {
             <AipSkillSwarmScenarioMatrix />
             {/* F98 (overnight 2026-09-15): Real-time Ops Alert Severity Funnel (OAPFUNL) — OpsAlertSeverityFunnel.jsx; /v1/ops/alerts grouped by severity (CRITICAL→HIGH→MEDIUM→LOW→INFO); funnel bars with % composition + unacked counts per tier; red pulse on unacked critical; TOTAL/CRITICAL/HIGH/UNACKED stat tiles; ALL/severity filter tabs + search; expand alert → source/rule/timestamp/status; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OAPFUNL button left:976820 bottom:8 zIndex:122; isOapfunlQuery+buildOapfunlScript wired JarvisBrain; jarvis:oapfunl-toggle event; 60-s auto-refresh; voice: oapfunl/alert funnel/severity funnel/alert breakdown/unacked alerts/unacknowledged alerts/critical alerts */}
             <OpsAlertSeverityFunnel />
+            {/* F99 (overnight 2026-09-15): Intelligence Readiness Score (KIRSCORE) — IntelReadinessScore.jsx; /knowledge/ × /v1/investigations × /v1/scenario/list; synthesises KB freshness % + investigation KB-coverage % + scenario KB-coverage % into a 0-100 overall score; SVG gauge ring (green≥75/amber 40-74/red<40); TOTAL KB/OPEN INV/SCENARIOS/SCORE stat tiles; 3 component bars with driver counts; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ KIRSCORE button left:977680 bottom:8 zIndex:123; isKirscoreQuery+buildKirscoreScript wired JarvisBrain; jarvis:kirscore-toggle event; 120-s auto-refresh; voice: kirscore/intelligence readiness/readiness score/intel readiness/knowledge readiness/readiness index */}
+            <IntelReadinessScore />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
