@@ -1096,6 +1096,7 @@ import AipSkillSwarmScenarioMatrix from '@/components/cinematic/AipSkillSwarmSce
 import OpsAlertSeverityFunnel from '@/components/cinematic/OpsAlertSeverityFunnel';
 import IntelReadinessScore from '@/components/cinematic/IntelReadinessScore';
 import ContactKnowledgeReportCompleteness from '@/components/cinematic/ContactKnowledgeReportCompleteness';
+import InvestmentDatasetKnowledgeNexus from '@/components/cinematic/InvestmentDatasetKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3354,6 +3355,8 @@ function App() {
             <IntelReadinessScore />
             {/* F100 (overnight 2026-09-15): Contact × Knowledge × Report Intelligence Profile Completeness (CKRCOMP) — ContactKnowledgeReportCompleteness.jsx; /entities/Contact × /knowledge/ × /v1/reports; keyword-correlates each contact → FULLY_PROFILED/KB_ONLY/REPORT_ONLY/INCOMPLETE; red pulse on INCOMPLETE; CONTACTS/KB ARTS/REPORTS/FULLY PROFILED/INCOMPLETE stat tiles; coverage % bar; filter tabs + search; expand contact → matched KB articles (amber) + reports (green); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ CKRCOMP button left:978540 bottom:8 zIndex:124; isCkrcompQuery+buildCkrcompScript wired JarvisBrain; jarvis:ckrcomp-toggle event; 120-s auto-refresh; voice: ckrcomp/contact profile/profile completeness/incomplete contact/contact knowledge report/contact backing */}
             <ContactKnowledgeReportCompleteness />
+            {/* F101 (overnight 2026-09-15): Investment × Dataset × Knowledge Portfolio Intelligence Coverage (INVDKNEX) — InvestmentDatasetKnowledgeNexus.jsx; /entities/Investment × /v1/datasets × /knowledge/; keyword-correlates each investment against datasets AND KB articles → FULLY_COVERED/DATA_ONLY/KB_ONLY/DARK; amber pulse on DARK (portfolio intelligence blind spots); INVESTMENTS/DATASETS/KB ARTS/FULLY COVERED/DARK stat tiles; coverage % bar; filter tabs + search on name/type/symbol; expand row → matched datasets (cyan) + KB articles (amber); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ INVDKNEX button left:979400 bottom:8 zIndex:125; isInvdknexQuery+buildInvdknexScript wired JarvisBrain; jarvis:invdknex-toggle event; 120-s auto-refresh; voice: invdknex/investment dataset/investment knowledge/dark investment/investment backing/portfolio coverage/investment intelligence/investment data knowledge */}
+            <InvestmentDatasetKnowledgeNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
