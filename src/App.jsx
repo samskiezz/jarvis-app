@@ -1086,6 +1086,7 @@ import DatasetContactSkillNexus from '@/components/cinematic/DatasetContactSkill
 import RiskSignalKnowledgeSkillMitigation from '@/components/cinematic/RiskSignalKnowledgeSkillMitigation';
 import ScenarioContactTaskCoverage from '@/components/cinematic/ScenarioContactTaskCoverage';
 import SwarmJobKnowledgeReportBacking from '@/components/cinematic/SwarmJobKnowledgeReportBacking';
+import TemporalEntityConvergence from '@/components/cinematic/TemporalEntityConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3324,6 +3325,8 @@ function App() {
             <ScenarioContactTaskCoverage />
             {/* F90 (overnight 2026-09-15): SwarmJob × Knowledge × Report Intelligence Backing (SJKRBAK) — SwarmJobKnowledgeReportBacking.jsx; /entities/SwarmJob × /knowledge/ × /v1/reports; keyword-correlates each swarm job against KB articles (documentation) AND published reports (output) → FULLY_BACKED/KB_ONLY/REPORT_ONLY/DARK; red pulse on DARK count (automation black boxes — jobs with no knowledge or report backing); JOBS/KB ARTICLES/REPORTS/FULLY BACKED/DARK stat tiles; ALL/FULLY_BACKED/KB_ONLY/REPORT_ONLY/DARK filter tabs + search; expand job → matched KB articles (amber bars) + matched reports (cyan bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SJKRBAK button left:969940 bottom:8 zIndex:114; isSjkrbakQuery+buildSjkrbakScript wired JarvisBrain; jarvis:sjkrbak-toggle event; 90-s auto-refresh; voice: sjkrbak/swarm job backing/swarm knowledge report/dark swarm/undocumented swarm/swarm documentation/job documentation swarm */}
             <SwarmJobKnowledgeReportBacking />
+            {/* F91 (overnight 2026-09-15): Temporal Entity Convergence (TECVIEW) — TemporalEntityConvergence.jsx; groups /entities/Task + /entities/RiskSignal + /v1/ops/alerts + /v1/investigations events by hour over last 24 h; 24-column heatmap coloured by severity; surge window detection (hours with ≥3 active entity types); TOTAL EVENTS/PEAK HOUR/ENTITY TYPES/SURGE WINDOWS stat tiles; ALL/TASK/RISK/ALERT/INVESTIGATION filter tabs; event list sorted by ts desc; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TECVIEW button left:970800 bottom:8 zIndex:115; isTecviewQuery+buildTecviewScript wired JarvisBrain; jarvis:tecview-toggle event; 120-s auto-refresh; voice: temporal view/convergence/tecview/entity timeline/hourly activity/surge detection */}
+            <TemporalEntityConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
