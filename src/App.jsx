@@ -1090,6 +1090,7 @@ import TemporalEntityConvergence from '@/components/cinematic/TemporalEntityConv
 import SystemResourceTrend from '@/components/cinematic/SystemResourceTrend';
 import LiveIntelGraphConvergence from '@/components/cinematic/LiveIntelGraphConvergence';
 import InvestigationStaleness from '@/components/cinematic/InvestigationStaleness';
+import IncidentVelocityMonitor from '@/components/cinematic/IncidentVelocityMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3336,6 +3337,8 @@ function App() {
             <LiveIntelGraphConvergence />
             {/* F94 (overnight 2026-09-15): Investigation Recency & Stale Case Tracker (INVSTALE) — InvestigationStaleness.jsx; /v1/investigations → classify each case by age since created_at: FRESH(≤7d)/ACTIVE(8-30d)/AGING(31-90d)/STALE(>90d); TOTAL/FRESH/ACTIVE/AGING/STALE stat tiles; ALL/FRESH/ACTIVE/AGING/STALE filter tabs + search; stalest cases first; red pulse on open stale count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ INVSTALE button left:973380 bottom:8 zIndex:118; isInvstaleQuery+buildInvstaleScript wired JarvisBrain; jarvis:invstale-toggle event; 120-s auto-refresh; voice: invstale/stale investigation/case age/old cases/aging investigation/investigation recency */}
             <InvestigationStaleness />
+            {/* F95 (overnight 2026-09-15): Incident Velocity Monitor (INCIVCTY) — IncidentVelocityMonitor.jsx; /v1/ops/events × /v1/ops/alerts × /v1/investigations; 24-hour bucket bar charts; spike detection (hour with ≥2 streams >2× avg); 24H EVENTS/24H ALERTS/ACTIVE INV/SPIKES stat tiles; ALL/EVENTS/ALERTS/INVESTIGATIONS filter tabs; red pulse on SPIKES; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ INCIVCTY button left:974240 bottom:8 zIndex:119; isIncivctyQuery+buildIncivctyScript wired JarvisBrain; jarvis:incivcty-toggle event; 60-s auto-refresh; voice: incivcty/incident velocity/event velocity/alert velocity/spike detection/ops velocity */}
+            <IncidentVelocityMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

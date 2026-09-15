@@ -73,3 +73,4 @@
 [2026-09-15] F92 SystemResourceTrend (SRSUTRD) — /v1/jarvis/system/status sparklines; localStorage history; deviation alerts; wired App.jsx + JarvisBrain; Vite build exit 0
 [2026-09-15] F93 LGICVG — LiveIntelGraphConvergence.jsx; /functions/getLiveIntel × /v1/graph/centrality; ACTIVATED/DORMANT node correlation; ◈ LGICVG left:972520 zIndex:117; isLgicvgQuery+buildLgicvgScript wired JarvisBrain; App.jsx mounted; Vite build exit 0
 [2026-09-15] F94 INVSTALE: InvestigationStaleness.jsx — /v1/investigations age classification (FRESH/ACTIVE/AGING/STALE); mounted App.jsx; JarvisBrain wired; Vite build exit 0
+[2026-09-15] F95 INCIVCTY — IncidentVelocityMonitor.jsx; /v1/ops/events × /v1/ops/alerts × /v1/investigations; 24-hour hourly bucket bar charts; spike detection (≥2 streams >2× avg in same hour); SPIKES pulse red; isIncivctyQuery+buildIncivctyScript wired JarvisBrain; App.jsx mounted; Vite build exit 0
