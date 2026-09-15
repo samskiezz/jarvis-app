@@ -1082,6 +1082,7 @@ import OpsAlertScenarioKnowledgeNexus from '@/components/cinematic/OpsAlertScena
 import SwarmSkillCoverage from '@/components/cinematic/SwarmSkillCoverage';
 import KnowledgeContactScenarioBrief from '@/components/cinematic/KnowledgeContactScenarioBrief';
 import ReportContactTaskOwnership from '@/components/cinematic/ReportContactTaskOwnership';
+import DatasetContactSkillNexus from '@/components/cinematic/DatasetContactSkillNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3312,6 +3313,8 @@ function App() {
             <KnowledgeContactScenarioBrief />
             {/* F86 (overnight 2026-09-15): Report × Contact × Task Action Ownership Nexus (RCTOWNX) — ReportContactTaskOwnership.jsx; /v1/reports × /entities/Contact × /entities/Task; keyword-correlates each report against contacts AND tasks → FULLY_ACTIONED/CONTACT_ONLY/TASK_ONLY/UNACTIONED; red pulse on UNACTIONED (accountability gaps — reports with no contact owner or follow-up task); REPORTS/CONTACTS/TASKS/FULLY ACTIONED/UNACTIONED stat tiles; ALL/FULLY_ACTIONED/CONTACT_ONLY/TASK_ONLY/UNACTIONED filter tabs + search; expand report → matched contacts (cyan bars) + tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RCTOWNX button left:966500 bottom:8 zIndex:110; isRctownxQuery+buildRctownxScript wired JarvisBrain; jarvis:rctownx-toggle event; 120-s auto-refresh; voice: rctownx/report ownership/unactioned report/report contact/report task/accountability gap/report action/report accountability */}
             <ReportContactTaskOwnership />
+            {/* F87 (overnight 2026-09-15): Dataset × Contact × Skill Data Literacy Nexus (DCSLNEX) — DatasetContactSkillNexus.jsx; /v1/datasets × /entities/Contact × /v1/aip/skill; keyword-correlates each dataset against contacts (who works with it) AND skills (what capabilities it enables) → FULLY_MAPPED/CONTACT_ONLY/SKILL_ONLY/UNMAPPED; red pulse on UNMAPPED (data literacy gaps — datasets with no identifiable contact owner or skill application); DATASETS/CONTACTS/SKILLS/FULLY MAPPED/UNMAPPED stat tiles; ALL/FULLY_MAPPED/CONTACT_ONLY/SKILL_ONLY/UNMAPPED filter tabs + search; expand dataset → matched contacts (cyan bars) + skills (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ⬡ DCSLNEX button left:967360 bottom:8 zIndex:111; isDcslnexQuery+buildDcslnexScript wired JarvisBrain; jarvis:dcslnex-toggle event; 120-s auto-refresh; voice: dcslnex/dataset contact/dataset skill/data literacy/unmapped dataset/dataset user/skill dataset/dataset coverage */}
+            <DatasetContactSkillNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
