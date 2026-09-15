@@ -1098,6 +1098,7 @@ import IntelReadinessScore from '@/components/cinematic/IntelReadinessScore';
 import ContactKnowledgeReportCompleteness from '@/components/cinematic/ContactKnowledgeReportCompleteness';
 import InvestmentDatasetKnowledgeNexus from '@/components/cinematic/InvestmentDatasetKnowledgeNexus';
 import SceneDatasetKnowledgeGrounding from '@/components/cinematic/SceneDatasetKnowledgeGrounding';
+import TaskKnowledgeReportCoverage from '@/components/cinematic/TaskKnowledgeReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3360,6 +3361,8 @@ function App() {
             <InvestmentDatasetKnowledgeNexus />
             {/* F102 (overnight 2026-09-15): Scene × Dataset × Knowledge Intelligence Grounding Matrix (SDKGRND) — SceneDatasetKnowledgeGrounding.jsx; /v1/cinematic/scene/{id} (all 10) × /v1/datasets × /knowledge/; keyword-correlates each scene against datasets AND KB articles → FULLY_GROUNDED/DATA_ONLY/KB_ONLY/UNGROUNDED; red pulse on UNGROUNDED (intelligence blind spots — scenes with no dataset or KB backing); SCENES/DATASETS/KB ARTS/FULLY GROUNDED/UNGROUNDED stat tiles; coverage % bar; filter tabs + search on scene id/label; expand row → matched datasets (cyan bars) + KB articles (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SDKGRND button left:980260 bottom:8 zIndex:126; isSdkgrndQuery+buildSdkgrndScript wired JarvisBrain; jarvis:sdkgrnd-toggle event; 120-s auto-refresh; voice: sdkgrnd/scene dataset/scene knowledge/grounded scene/scene grounding/scene data/scene kb/ungrounded scene/scene intelligence grounding */}
             <SceneDatasetKnowledgeGrounding />
+            {/* F103 (overnight 2026-09-15): Task × Knowledge × Report Operational Coverage (TKROPS) — TaskKnowledgeReportCoverage.jsx; /entities/Task × /knowledge/ × /v1/reports; keyword-correlates each task against KB articles AND reports → FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED; red pulse on UNDOCUMENTED (operational documentation blind spots); TASKS/KB ARTS/REPORTS/FULLY DOCUMENTED/UNDOCUMENTED stat tiles; coverage % bar; filter tabs + search on task title/status/type; expand row → matched KB articles (amber) + reports (green); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TKROPS button left:981120 bottom:8 zIndex:127; isTkropsQuery+buildTkropsScript wired JarvisBrain; jarvis:tkrops-toggle event; 120-s auto-refresh; voice: tkrops/task knowledge/task report/task documentation/undocumented task/task coverage/task backing/task knowledge report/operational coverage/task doc coverage */}
+            <TaskKnowledgeReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
