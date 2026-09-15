@@ -1100,6 +1100,7 @@ import InvestmentDatasetKnowledgeNexus from '@/components/cinematic/InvestmentDa
 import SceneDatasetKnowledgeGrounding from '@/components/cinematic/SceneDatasetKnowledgeGrounding';
 import TaskKnowledgeReportCoverage from '@/components/cinematic/TaskKnowledgeReportCoverage';
 import GraphCommunityThreatCluster from '@/components/cinematic/GraphCommunityThreatCluster';
+import SwarmScenarioKnowledgeCoverage from '@/components/cinematic/SwarmScenarioKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3366,6 +3367,8 @@ function App() {
             <TaskKnowledgeReportCoverage />
             {/* F104 (overnight 2026-09-15): Graph Community × Investigation × Contact Threat Cluster Map (GICTCLSTR) — GraphCommunityThreatCluster.jsx; /v1/graph/communities × /v1/investigations × /entities/Contact; keyword-correlates each graph community against investigations AND contacts → HOT_CLUSTER/INV_ONLY/CONTACT_ONLY/DORMANT; red pulse on HOT_CLUSTER (threat clusters with both investigation and contact coverage); COMMUNITIES/INVESTIGATIONS/CONTACTS/HOT CLUSTERS/DORMANT stat tiles; hot cluster rate % bar; filter tabs + search; expand row → matched investigations (red) + contacts (cyan); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ GICTCLSTR button left:981980 bottom:8 zIndex:128; isGictclstrQuery+buildGictclstrScript wired JarvisBrain; jarvis:gictclstr-toggle event; 120-s auto-refresh; voice: gictclstr/graph community/threat cluster/community threat/cluster map/hot cluster/graph cluster/community investigation/community contact/active cluster */}
             <GraphCommunityThreatCluster />
+            {/* F105 (overnight 2026-09-15): Swarm × Scenario × Knowledge Coverage (SSKICOV) — SwarmScenarioKnowledgeCoverage.jsx; /entities/SwarmJob × /v1/scenario/list × /knowledge/; keyword-correlates each swarm job against scenarios AND KB articles → FULLY_COVERED/SCENARIO_ONLY/KB_ONLY/UNSUPPORTED; red pulse on UNSUPPORTED (automation blind spots); SWARM JOBS/SCENARIOS/KB ARTICLES/FULLY COVERED/UNSUPPORTED stat tiles; coverage % bar; filter tabs + search; expand row → matched scenarios (amber) + KB articles (cyan); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SSKICOV button left:982840 bottom:8 zIndex:129; isSskicovQuery+buildSskicovScript wired JarvisBrain; jarvis:sskicov-toggle event; 120-s auto-refresh; voice: sskicov/swarm scenario/swarm knowledge/swarm coverage/unsupported swarm/swarm backing/swarm intelligence/swarm kb/automated coverage */}
+            <SwarmScenarioKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
