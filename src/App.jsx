@@ -1093,6 +1093,7 @@ import InvestigationStaleness from '@/components/cinematic/InvestigationStalenes
 import IncidentVelocityMonitor from '@/components/cinematic/IncidentVelocityMonitor';
 import MultiEntityFreshnessMatrix from '@/components/cinematic/MultiEntityFreshnessMatrix';
 import AipSkillSwarmScenarioMatrix from '@/components/cinematic/AipSkillSwarmScenarioMatrix';
+import OpsAlertSeverityFunnel from '@/components/cinematic/OpsAlertSeverityFunnel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3345,6 +3346,8 @@ function App() {
             <MultiEntityFreshnessMatrix />
             {/* F97 (overnight 2026-09-15): AIP Skill × Scenario × SwarmJob Execution Capability Matrix (SSXCAP) — AipSkillSwarmScenarioMatrix.jsx; /v1/aip/skill × /v1/scenario/list × /entities/SwarmJob; keyword-correlates each skill → FULLY_DEPLOYED/SCENARIO_ONLY/SWARM_ONLY/IDLE; red pulse on IDLE (capability gaps); SKILLS/SCENARIOS/JOBS/FULLY DEPLOYED/IDLE stat tiles; ALL/class filter tabs + search; expand skill → matched scenarios (amber bars) + swarm jobs (cyan bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SSXCAP button left:975960 bottom:8 zIndex:121; isSsxcapQuery+buildSsxcapScript wired JarvisBrain; jarvis:ssxcap-toggle event; 90-s auto-refresh; voice: ssxcap/idle skills/skill deployment/skill execution/scenario skill/swarm skill/underused skills/skill utilization/capability deployment */}
             <AipSkillSwarmScenarioMatrix />
+            {/* F98 (overnight 2026-09-15): Real-time Ops Alert Severity Funnel (OAPFUNL) — OpsAlertSeverityFunnel.jsx; /v1/ops/alerts grouped by severity (CRITICAL→HIGH→MEDIUM→LOW→INFO); funnel bars with % composition + unacked counts per tier; red pulse on unacked critical; TOTAL/CRITICAL/HIGH/UNACKED stat tiles; ALL/severity filter tabs + search; expand alert → source/rule/timestamp/status; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OAPFUNL button left:976820 bottom:8 zIndex:122; isOapfunlQuery+buildOapfunlScript wired JarvisBrain; jarvis:oapfunl-toggle event; 60-s auto-refresh; voice: oapfunl/alert funnel/severity funnel/alert breakdown/unacked alerts/unacknowledged alerts/critical alerts */}
+            <OpsAlertSeverityFunnel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
