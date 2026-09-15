@@ -1085,6 +1085,7 @@ import ReportContactTaskOwnership from '@/components/cinematic/ReportContactTask
 import DatasetContactSkillNexus from '@/components/cinematic/DatasetContactSkillNexus';
 import RiskSignalKnowledgeSkillMitigation from '@/components/cinematic/RiskSignalKnowledgeSkillMitigation';
 import ScenarioContactTaskCoverage from '@/components/cinematic/ScenarioContactTaskCoverage';
+import SwarmJobKnowledgeReportBacking from '@/components/cinematic/SwarmJobKnowledgeReportBacking';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3321,6 +3322,8 @@ function App() {
             <RiskSignalKnowledgeSkillMitigation />
             {/* F89 (overnight 2026-09-15): Scenario × Contact × Task Intelligence Execution Coverage (SCTEXCOV) — ScenarioContactTaskCoverage.jsx; /v1/scenario/list × /entities/Contact × /entities/Task; keyword-correlates each scenario against contacts (owner) AND tasks (actions) → FULLY_SUPPORTED/CONTACT_ONLY/TASK_ONLY/UNSUPPORTED; red pulse on UNSUPPORTED (execution blind spots); SCENARIOS/CONTACTS/TASKS/FULLY SUPPORTED/UNSUPPORTED stat tiles; ALL/class filter tabs + search; expand row → matched contacts (cyan bars) + tasks (purple bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SCTEXCOV button left:969080 bottom:8 zIndex:113; isSctexcovQuery+buildSctexcovScript wired JarvisBrain; jarvis:sctexcov-toggle event; 90-s auto-refresh; voice: sctexcov/scenario execution/scenario contact task/unsupported scenario/scenario coverage/execution coverage */}
             <ScenarioContactTaskCoverage />
+            {/* F90 (overnight 2026-09-15): SwarmJob × Knowledge × Report Intelligence Backing (SJKRBAK) — SwarmJobKnowledgeReportBacking.jsx; /entities/SwarmJob × /knowledge/ × /v1/reports; keyword-correlates each swarm job against KB articles (documentation) AND published reports (output) → FULLY_BACKED/KB_ONLY/REPORT_ONLY/DARK; red pulse on DARK count (automation black boxes — jobs with no knowledge or report backing); JOBS/KB ARTICLES/REPORTS/FULLY BACKED/DARK stat tiles; ALL/FULLY_BACKED/KB_ONLY/REPORT_ONLY/DARK filter tabs + search; expand job → matched KB articles (amber bars) + matched reports (cyan bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SJKRBAK button left:969940 bottom:8 zIndex:114; isSjkrbakQuery+buildSjkrbakScript wired JarvisBrain; jarvis:sjkrbak-toggle event; 90-s auto-refresh; voice: sjkrbak/swarm job backing/swarm knowledge report/dark swarm/undocumented swarm/swarm documentation/job documentation swarm */}
+            <SwarmJobKnowledgeReportBacking />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

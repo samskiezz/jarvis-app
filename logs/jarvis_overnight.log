@@ -68,3 +68,4 @@
 2026-09-15 F87 DCSLNEX: DatasetContactSkillNexus.jsx — /v1/datasets × /entities/Contact × /v1/aip/skill; FULLY_MAPPED/CONTACT_ONLY/SKILL_ONLY/UNMAPPED classification; red pulse on unmapped; isDcslnexQuery+buildDcslnexScript wired in JarvisBrain.jsx; ⬡ DCSLNEX button left:967360; mounted App.jsx; Vite build exit 0.
 2026-09-15T03:37:27Z F88 RiskSignalKnowledgeSkillMitigation.jsx — /entities/RiskSignal × /knowledge/ × /v1/aip/skill RKSM nexus; ◈ RKSM button; isRksmQuery+buildRksmScript wired JarvisBrain; mounted App.jsx; Vite build exit 0
 [2026-09-15] F89 SCTEXCOV — ScenarioContactTaskCoverage.jsx: /v1/scenario/list × /entities/Contact × /entities/Task triple-nexus; FULLY_SUPPORTED/CONTACT_ONLY/TASK_ONLY/UNSUPPORTED; mounted App.jsx; JarvisBrain wired; Vite build exit 0
+[2026-09-15] F90 SJKRBAK: SwarmJobKnowledgeReportBacking.jsx — /entities/SwarmJob × /knowledge/ × /v1/reports — FULLY_BACKED/KB_ONLY/REPORT_ONLY/DARK; Vite build exit 0; committed to jarvis-overnight
