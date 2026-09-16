@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
+import { resolveShowMeQuery } from "./ShowMeNavigation";
 import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
 import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 import { isImpactMatrixQuery, buildImpactMatrixScript } from "./ScenarioImpactMatrix";
@@ -485,8 +486,10 @@ export default function JarvisBrain() {
     }, 18);
   }
 
-  async function ask(q) {
-    if (!q || !q.trim()) return;
+  async function ask(rawQ) {
+    if (!rawQ || !rawQ.trim()) return;
+    // F20: pre-route "show me X" / "open X" / "view X" to the normalized panel query.
+    const q = resolveShowMeQuery(rawQ);
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);

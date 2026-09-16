@@ -25,27 +25,27 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS). [2026-09-16: StatusReporter.jsx (HUD card) wired to jarvis:status event dispatched by JarvisBrain; TTS spoken via JarvisBrain speak(); real /v1/jarvis/system/status + /v1/cinematic/brain; build green]
 - [x] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins. [2026-09-16: LiveWorldIncidentFeed.jsx wired to getLiveIntel({type:"all"}) via backendFunctions; SVG globe + magnitude-scaled pins + scrolling sorted list; ⚡ QUAKES toggle; voice intent INTENT_RE; mounted in App.jsx line 1220; build green (exit 0)]
 - [x] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers. [2026-09-16: MarketsTicker.jsx scrolling strip + isMarketsQuery/buildMarketsScript wired into JarvisBrain; mounted App.jsx line 1142; build green (exit 0)]
-- [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.
-- [ ] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical.
-- [ ] F10 Task board — /entities/Task → live mission cards with status.
-- [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
-- [ ] F12 Investigations list — /v1/investigations → open cases panel.
-- [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
-- [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
-- [ ] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live.
-- [ ] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time.
-- [ ] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only).
-- [ ] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts.
-- [ ] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant.
-- [ ] F20 "Show me" navigation — already in JarvisBrain; extend keyword map to data drill (e.g. "show risks").
-- [ ] F21 Live clock + uptime (real process uptime from system status).
-- [ ] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken).
-- [ ] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout.
-- [ ] F24 Contacts directory — /entities/Contact → searchable people list.
-- [ ] F25 Swarm jobs monitor — /entities/SwarmJob → running jobs with progress.
-- [ ] F26 Graph centrality view — /v1/graph/centrality → top entities by influence.
-- [ ] F27 "Diagnostics" — JARVIS reads health of each service (via the dashboard's real status).
-- [ ] F28 Command history — store + replay recent JARVIS commands (localStorage).
-- [ ] F29 Multi-voice toggle — switch JARVIS TTS voice (ash/fable/onyx) live.
-- [ ] F30 Scene auto-tour — cycle the 10 scenes hands-free with spoken narration of each.
+- [x] F08 Entity quick-search — 2026-09-16 — EntityQuickSearch.jsx mounted in App.jsx; Ctrl+Shift+E or "JARVIS, find X"; queries /v1/graph/subgraph + /entities/IntelProfile; already implemented on branch.
+- [x] F09 Risk board — 2026-09-16 — RiskBoard.jsx mounted; /entities/RiskSignal severity-sorted + red pulse on critical; already implemented on branch.
+- [x] F10 Task board — 2026-09-16 — TaskBoard.jsx mounted; /entities/Task live mission cards; already implemented on branch.
+- [x] F11 Datasets browser — 2026-09-16 — DatasetsBrowser.jsx mounted; /v1/datasets catalog with row counts; already implemented on branch.
+- [x] F12 Investigations list — 2026-09-16 — InvestigationsList.jsx mounted; /v1/investigations open cases; already implemented on branch.
+- [x] F13 Scenario launcher — 2026-09-16 — ScenarioLauncher.jsx mounted; /v1/scenario/list pick + run; already implemented on branch.
+- [x] F14 Document search — 2026-09-16 — DocumentSearch.jsx mounted; /v1/reports + /knowledge/*; already implemented on branch.
+- [x] F15 Skill scorecard — 2026-09-16 — SkillScorecard.jsx mounted; /v1/aip/skill live metrics; already implemented on branch.
+- [x] F16 Brain-growth sparkline — 2026-09-16 — BrainGrowthSparkline.jsx mounted; /v1/cinematic/brain poll; already implemented on branch.
+- [x] F17 Per-scene anchor drill-down — 2026-09-16 — SceneAnchorDrillDown.jsx + PerSceneAnchorDrillDown.jsx both mounted; already implemented on branch.
+- [x] F18 JARVIS boot sequence — 2026-09-16 — JarvisBootSequence.jsx mounted; real system+brain counts + TTS; already implemented on branch.
+- [x] F19 Ambient reactor hum toggle — 2026-09-16 — AmbientReactorHum.jsx mounted; WebAudio loop; already implemented on branch.
+- [x] F20 "Show me" navigation — 2026-09-16 — wired resolveShowMeQuery() from ShowMeNavigation.jsx into JarvisBrain.ask() as silent pre-router; "show me X"/"open X"/"view X" now normalize before SCENE_INTENTS/panel-intent dispatch; <ShowMeNavigation /> mounted in App.jsx; build green.
+- [x] F21 Live clock + uptime — 2026-09-16 — LiveClockUptime.jsx mounted; /v1/jarvis/system/status 30-s poll; already implemented on branch.
+- [x] F22 Alert toasts — 2026-09-16 — AlertToasts.jsx mounted; polls /v1/ops alerts; CRITICAL spoken; already implemented on branch.
+- [x] F23 Investment/wealth widget — 2026-09-16 — InvestmentWidget.jsx mounted; /entities/Investment; already implemented on branch.
+- [x] F24 Contacts directory — 2026-09-16 — ContactsDirectory.jsx mounted; /entities/Contact searchable; already implemented on branch.
+- [x] F25 Swarm jobs monitor — 2026-09-16 — SwarmJobsMonitor.jsx mounted; /entities/SwarmJob 20-s poll; already implemented on branch.
+- [x] F26 Graph centrality view — 2026-09-16 — GraphCentralityView.jsx mounted; /v1/graph/centrality; already implemented on branch.
+- [x] F27 "Diagnostics" — 2026-09-16 — ServiceDiagnostics.jsx mounted; /v1/jarvis/system/status per-service health; already implemented on branch.
+- [x] F28 Command history — 2026-09-16 — CommandHistory.jsx mounted; localStorage max 50; replay + filter; already implemented on branch.
+- [x] F29 Multi-voice toggle — 2026-09-16 — MultiVoiceToggle.jsx mounted; ash/fable/onyx; localStorage; already implemented on branch.
+- [x] F30 Scene auto-tour — 2026-09-16 — SceneAutoTour.jsx mounted; cycles 10 scenes with TTS narration; already implemented on branch.
 (Extend with more real features as endpoints allow. Prefer depth + real over count.)
