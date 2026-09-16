@@ -1106,6 +1106,7 @@ import IntelProfileGraphNexus from '@/components/cinematic/IntelProfileGraphNexu
 import KnowledgeGraphCommunityBridge from '@/components/cinematic/KnowledgeGraphCommunityBridge';
 import MissionActivationScore from '@/components/cinematic/MissionActivationScore';
 import OpsEventThreatPulse from '@/components/cinematic/OpsEventThreatPulse';
+import LiveWorldSyncPanel from '@/components/cinematic/LiveWorldSyncPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3384,6 +3385,8 @@ function App() {
             <MissionActivationScore />
             {/* F110 (overnight 2026-09-16): Ops Events × Graph Centrality × RiskSignal Operational Threat Pulse (OTPULSE) — OpsEventThreatPulse.jsx; /v1/ops/events × /v1/graph/centrality × /entities/RiskSignal; keyword-correlates each ops event against centrality nodes AND risk signals → THREAT_ALIGNED/CENTRALITY_ONLY/RISK_ONLY/AMBIENT; red pulse on THREAT_ALIGNED count; EVENTS/GRAPH NODES/RISK SIGNALS/THREAT_ALIGNED/AMBIENT stat tiles; filter tabs + search; expand event → cyan centrality node bars + red risk-severity bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OTPULSE button left:986280 bottom:8 zIndex:133; isOtpulseQuery+buildOtpulseScript wired JarvisBrain; jarvis:otpulse-toggle event; 90-s auto-refresh; voice: otpulse/ops threat pulse/event threat/operational threat/threat pulse/event graph/event risk/threat event graph */}
             <OpsEventThreatPulse />
+            {/* F111 (overnight 2026-09-16): Live Intel × Scenario × RiskSignal Real-World Convergence (LIVSYNC) — LiveWorldSyncPanel.jsx; /functions/getLiveIntel × /v1/scenario/list × /entities/RiskSignal; keyword-correlates each live world event (quake/crypto/FX) against active scenarios AND risk signals → TRIPLE_ALERT/SCENARIO_ONLY/RISK_ONLY/AMBIENT; red pulse on TRIPLE_ALERT count; EVENTS/SCENARIOS/RISK SIGNALS/TRIPLE ALERTS/AMBIENT stat tiles; ALL/TRIPLE_ALERT/SCENARIO_ONLY/RISK_ONLY/AMBIENT filter tabs + search; expand event → amber scenario bars + red risk-severity bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ⚡ LIVSYNC button left:987140 bottom:8 zIndex:134; isLivsyncQuery+buildLivsyncScript wired JarvisBrain; jarvis:livsync-toggle event; 60-s auto-refresh; voice: livsync/live sync/world convergence/live intel convergence/triple alert/world alert/real world convergence/live scenario/live risk sync/world scenario risk */}
+            <LiveWorldSyncPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

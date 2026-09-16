@@ -409,6 +409,7 @@ import { isIpgcnexQuery, buildIpgcnexScript } from "./IntelProfileGraphNexus";
 import { isKgncbrgQuery, buildKgncbrgScript } from "./KnowledgeGraphCommunityBridge";
 import { isMascoreQuery, buildMascoreScript } from "./MissionActivationScore";
 import { isOtpulseQuery, buildOtpulseScript } from "./OpsEventThreatPulse";
+import { isLivsyncQuery, buildLivsyncScript } from "./LiveWorldSyncPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1689,6 +1690,9 @@ export default function JarvisBrain() {
       } else if (isOtpulseQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:otpulse-toggle"));
         answer = await buildOtpulseScript();
+      } else if (isLivsyncQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:livsync-toggle"));
+        answer = await buildLivsyncScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
