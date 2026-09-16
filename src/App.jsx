@@ -1117,6 +1117,7 @@ import ContactInvestigationReportDossier from '@/components/cinematic/ContactInv
 import ContactDatasetRiskMatrix from '@/components/cinematic/ContactDatasetRiskMatrix';
 import SwarmIntelScenarioAutonomy from '@/components/cinematic/SwarmIntelScenarioAutonomy';
 import InvestmentRiskIntelCoverage from '@/components/cinematic/InvestmentRiskIntelCoverage';
+import TaskInvestigationKnowledge from '@/components/cinematic/TaskInvestigationKnowledge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3420,6 +3421,8 @@ function App() {
             <SwarmIntelScenarioAutonomy />
             {/* F38 (overnight 2026-09-16): Investment × RiskSignal × IntelProfile Coverage (IRRIC) — InvestmentRiskIntelCoverage.jsx; /entities/Investment × /entities/RiskSignal × /entities/IntelProfile; keyword-correlates each investment against risk signals AND intel profiles → FULLY_COVERED/RISK_ONLY/INTEL_ONLY/EXPOSED; red pulse on EXPOSED count (portfolio positions flying blind — no risk monitoring or intelligence backing); FULLY_COVERED/RISK_ONLY/INTEL_ONLY/EXPOSED stat tiles; ALL/class filter tabs + search on investment/risk/intel; expand row → red risk-signal bar + amber intel-profile bar with keyword scores; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ IRRIC button left:930680 bottom:8 zIndex:626; isIrricQuery+buildIrricScript wired JarvisBrain; jarvis:irric-toggle event; 90-s auto-refresh; voice: irric/investment risk intel/investment coverage/investment exposure/investment blind spot/portfolio risk intel/investment intelligence/covered investment/uncovered investment/portfolio coverage/portfolio monitoring */}
             <InvestmentRiskIntelCoverage />
+            {/* F39 (overnight 2026-09-16): Task × Investigation × Knowledge Coverage (TIKC) — TaskInvestigationKnowledge.jsx; /entities/Task × /v1/investigations × /knowledge/; keyword-correlates each task against investigations AND knowledge articles → FULLY_BACKED/INVESTIGATED/DOCUMENTED/ORPHAN; red pulse on ORPHAN count (tasks with no investigation or knowledge backing); stat tiles + ALL/class filter + search; expand row → orange investigation bar + amber knowledge bar; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TIKC button left:931540 bottom:8 zIndex:627; isTikcQuery+buildTikcScript wired JarvisBrain; jarvis:tikc-toggle event; 90-s auto-refresh; voice: tikc/task coverage/task backing/task documentation/orphan task/unbacked task/task knowledge/task investigation/mission coverage */}
+            <TaskInvestigationKnowledge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
