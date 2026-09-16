@@ -1112,6 +1112,7 @@ import PortfolioThreatWatchlist from '@/components/cinematic/PortfolioThreatWatc
 import OpsEventGapFinder from '@/components/cinematic/OpsEventGapFinder';
 import ReportInvCoverage from '@/components/cinematic/ReportInvCoverage';
 import RiskSignalDatasetKnowledgeDepth from '@/components/cinematic/RiskSignalDatasetKnowledgeDepth';
+import ScenarioIntelBlindSpots from '@/components/cinematic/ScenarioIntelBlindSpots';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3405,6 +3406,8 @@ function App() {
             <ReportInvCoverage />
             {/* F33 (overnight 2026-09-16): RiskSignal × Dataset × Knowledge Intelligence Depth (RDKIDEP) — RiskSignalDatasetKnowledgeDepth.jsx; /entities/RiskSignal × /v1/datasets × /knowledge/; keyword-correlates each risk signal against datasets AND KB articles → DEEP_INTEL/DATA_ONLY/KB_ONLY/SHALLOW; red pulse on SHALLOW count (intelligence blind spots — risk signals with no data or KB backing); RISKS/DATASETS/KB ARTS/DEEP INTEL/SHALLOW stat tiles; ALL/DEEP_INTEL/DATA_ONLY/KB_ONLY/SHALLOW filter tabs + search; expand row → cyan dataset bars + amber KB article bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RDKIDEP button left:990280 bottom:8 zIndex:138; isRdkidepQuery+buildRdkidepScript wired JarvisBrain; jarvis:rdkidep-toggle event; 90-s auto-refresh; voice: rdkidep/risk dataset/risk knowledge/shallow risk/undocumented risk/risk intelligence depth/dark risk signal/risk data gap */}
             <RiskSignalDatasetKnowledgeDepth />
+            {/* F34 (overnight 2026-09-16): Scenario × IntelProfile Blind Spots (SIPBS) — ScenarioIntelBlindSpots.jsx; /v1/scenario/list × /entities/IntelProfile; keyword-correlates each scenario against intel profiles → COVERED/BLIND_SPOT; surfaces orphan intel profiles (not backing any scenario); SCENARIOS/INTEL PROFILES/COVERED/BLIND SPOTS/ORPHAN INTEL stat tiles; ALL/COVERED/BLIND_SPOT filter tabs + text search; expand scenario → green intel profile match bars; ORPHAN INTEL toggle panel; red pulse on BLIND SPOTS count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SIPBS button left:991140 bottom:8 zIndex:139; isSipbsQuery+buildSipbsScript wired JarvisBrain; jarvis:sipbs-toggle event; 75-s auto-refresh; voice: sipbs/scenario intel/scenario coverage/blind spot scenario/scenario intelligence gap/uncovered scenario/orphan intel/intel profile gap */}
+            <ScenarioIntelBlindSpots />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
