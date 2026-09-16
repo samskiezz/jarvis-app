@@ -1111,6 +1111,7 @@ import LiveWorldSyncPanel from '@/components/cinematic/LiveWorldSyncPanel';
 import PortfolioThreatWatchlist from '@/components/cinematic/PortfolioThreatWatchlist';
 import OpsEventGapFinder from '@/components/cinematic/OpsEventGapFinder';
 import ReportInvCoverage from '@/components/cinematic/ReportInvCoverage';
+import RiskSignalDatasetKnowledgeDepth from '@/components/cinematic/RiskSignalDatasetKnowledgeDepth';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3402,6 +3403,8 @@ function App() {
             <OpsEventGapFinder />
             {/* F32 (overnight 2026-09-16): Report × Investigation Coverage (RINV) — ReportInvCoverage.jsx; /v1/reports × /v1/investigations; keyword-correlates each report against open investigations → SUPPORTING/UNLINKED; surfaces dark cases (investigations with no report coverage); REPORTS/CASES/SUPPORTING/UNLINKED/DARK CASES stat tiles; ALL/SUPPORTING/UNLINKED filter tabs + text search; expand report → green investigation score bars + status badge; red pulse on dark cases; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RINV button left:989420 bottom:8 zIndex:137; isRicovQuery+buildRicovScript wired JarvisBrain; jarvis:ricov-toggle event; 60-s auto-refresh; voice: rinv/report investigation/report coverage/dark case/unlinked report/investigation without report/report gap/intelligence gap/unsupported investigation */}
             <ReportInvCoverage />
+            {/* F33 (overnight 2026-09-16): RiskSignal × Dataset × Knowledge Intelligence Depth (RDKIDEP) — RiskSignalDatasetKnowledgeDepth.jsx; /entities/RiskSignal × /v1/datasets × /knowledge/; keyword-correlates each risk signal against datasets AND KB articles → DEEP_INTEL/DATA_ONLY/KB_ONLY/SHALLOW; red pulse on SHALLOW count (intelligence blind spots — risk signals with no data or KB backing); RISKS/DATASETS/KB ARTS/DEEP INTEL/SHALLOW stat tiles; ALL/DEEP_INTEL/DATA_ONLY/KB_ONLY/SHALLOW filter tabs + search; expand row → cyan dataset bars + amber KB article bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RDKIDEP button left:990280 bottom:8 zIndex:138; isRdkidepQuery+buildRdkidepScript wired JarvisBrain; jarvis:rdkidep-toggle event; 90-s auto-refresh; voice: rdkidep/risk dataset/risk knowledge/shallow risk/undocumented risk/risk intelligence depth/dark risk signal/risk data gap */}
+            <RiskSignalDatasetKnowledgeDepth />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -414,6 +414,7 @@ import { isLivsyncQuery, buildLivsyncScript } from "./LiveWorldSyncPanel";
 import { isPtwlistQuery, buildPtwlistScript } from "./PortfolioThreatWatchlist";
 import { isOegapQuery, buildOegapScript } from "./OpsEventGapFinder";
 import { isRicovQuery, buildRicovScript } from "./ReportInvCoverage";
+import { isRdkidepQuery, buildRdkidepScript } from "./RiskSignalDatasetKnowledgeDepth";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1709,6 +1710,9 @@ export default function JarvisBrain() {
       } else if (isRicovQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ricov-toggle"));
         answer = await buildRicovScript();
+      } else if (isRdkidepQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:rdkidep-toggle"));
+        answer = await buildRdkidepScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
