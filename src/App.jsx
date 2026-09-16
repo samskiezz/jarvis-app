@@ -1103,6 +1103,7 @@ import GraphCommunityThreatCluster from '@/components/cinematic/GraphCommunityTh
 import SwarmScenarioKnowledgeCoverage from '@/components/cinematic/SwarmScenarioKnowledgeCoverage';
 import IntelProfileGraphNexus from '@/components/cinematic/IntelProfileGraphNexus';
 import KnowledgeGraphCommunityBridge from '@/components/cinematic/KnowledgeGraphCommunityBridge';
+import MissionActivationScore from '@/components/cinematic/MissionActivationScore';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3375,6 +3376,8 @@ function App() {
             <IntelProfileGraphNexus />
             {/* F107 (overnight 2026-09-15): Knowledge × Graph Centrality × Community Intelligence Bridge (KGNCBRG) — KnowledgeGraphCommunityBridge.jsx; /knowledge/ × /v1/graph/centrality × /v1/graph/communities; keyword-correlates each KB article against centrality nodes AND community clusters → FULLY_MAPPED/NODE_ONLY/CLUSTER_ONLY/DARK; red pulse on DARK count (isolated knowledge — no graph alignment); KB ARTICLES/GRAPH NODES/COMMUNITIES/FULLY MAPPED/DARK stat tiles; graph coverage % bar; ALL/class filter tabs + search on article title/category; expand row → matched centrality nodes (cyan) + communities (amber); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; ◈ KGNCBRG button left:984560 bottom:8 zIndex:131; isKgncbrgQuery+buildKgncbrgScript wired JarvisBrain; jarvis:kgncbrg-toggle event; 120-s auto-refresh; voice: kgncbrg/knowledge graph/graph knowledge/mapped knowledge/dark knowledge/knowledge node/knowledge community/knowledge graph bridge */}
             <KnowledgeGraphCommunityBridge />
+            {/* F108 (overnight 2026-09-16): Mission Activation Score (MASCORE) — MissionActivationScore.jsx; /entities/Task × /entities/RiskSignal × /v1/investigations × /v1/aip/skill × /v1/cinematic/brain; synthesises 5 streams into 0-100 score (task activity 30% + risk coverage 25% + investigation depth 20% + skill availability 15% + brain density 10%); SVG gauge ring green≥75/amber 40-74/red<40; HIGH/MODERATE/LOW readiness label; 5 stat tiles SCORE/TASKS/RISKS/INVESTIGATIONS/SKILLS; 5 component driver bars with weight labels; red pulse on score<40; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ MASCORE button left:985420 bottom:8 zIndex:132; isMascoreQuery+buildMascoreScript wired JarvisBrain; jarvis:mascore-toggle event; 90-s auto-refresh; voice: mascore/mission activation/activation score/mission readiness/operational score/jarvis mission/mission health */}
+            <MissionActivationScore />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
