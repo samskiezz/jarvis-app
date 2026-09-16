@@ -1116,6 +1116,7 @@ import ScenarioIntelBlindSpots from '@/components/cinematic/ScenarioIntelBlindSp
 import ContactInvestigationReportDossier from '@/components/cinematic/ContactInvestigationReportDossier';
 import ContactDatasetRiskMatrix from '@/components/cinematic/ContactDatasetRiskMatrix';
 import SwarmIntelScenarioAutonomy from '@/components/cinematic/SwarmIntelScenarioAutonomy';
+import InvestmentRiskIntelCoverage from '@/components/cinematic/InvestmentRiskIntelCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3417,6 +3418,8 @@ function App() {
             <ContactDatasetRiskMatrix />
             {/* F37 (overnight 2026-09-16): SwarmJob × IntelProfile × Scenario Intelligence Autonomy Index (SJIA) — SwarmIntelScenarioAutonomy.jsx; /entities/SwarmJob × /entities/IntelProfile × /v1/scenario/list; keyword-correlates each swarm job against intel profiles AND scenarios → FULLY_AUTONOMOUS/INTEL_ONLY/SCENARIO_ONLY/BLIND; red pulse on BLIND count (automation flying blind — no intel or scenario backing); JOBS/INTEL PROFILES/SCENARIOS/FULLY AUTONOMOUS/BLIND stat tiles; ALL/class filter tabs + search on job title/type/profile/scenario; expand row → amber intel profile bar + cyan scenario bar with keyword scores; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SJIA button left:929820 bottom:8 zIndex:625; isSjiaQuery+buildSjiaScript wired JarvisBrain; jarvis:sjia-toggle event; 90-s auto-refresh; voice: sjia/swarm intel scenario/swarm autonomy/blind swarm/autonomous swarm/swarm backing/swarm intelligence index/swarm scenario coverage/swarm intel coverage/swarm fully autonomous */}
             <SwarmIntelScenarioAutonomy />
+            {/* F38 (overnight 2026-09-16): Investment × RiskSignal × IntelProfile Coverage (IRRIC) — InvestmentRiskIntelCoverage.jsx; /entities/Investment × /entities/RiskSignal × /entities/IntelProfile; keyword-correlates each investment against risk signals AND intel profiles → FULLY_COVERED/RISK_ONLY/INTEL_ONLY/EXPOSED; red pulse on EXPOSED count (portfolio positions flying blind — no risk monitoring or intelligence backing); FULLY_COVERED/RISK_ONLY/INTEL_ONLY/EXPOSED stat tiles; ALL/class filter tabs + search on investment/risk/intel; expand row → red risk-signal bar + amber intel-profile bar with keyword scores; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ IRRIC button left:930680 bottom:8 zIndex:626; isIrricQuery+buildIrricScript wired JarvisBrain; jarvis:irric-toggle event; 90-s auto-refresh; voice: irric/investment risk intel/investment coverage/investment exposure/investment blind spot/portfolio risk intel/investment intelligence/covered investment/uncovered investment/portfolio coverage/portfolio monitoring */}
+            <InvestmentRiskIntelCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

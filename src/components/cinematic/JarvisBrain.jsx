@@ -419,6 +419,7 @@ import { isRdkidepQuery, buildRdkidepScript } from "./RiskSignalDatasetKnowledge
 import { isSipbsQuery, buildSipbsScript } from "./ScenarioIntelBlindSpots";
 import { isCirdossQuery, buildCirdossScript } from "./ContactInvestigationReportDossier";
 import { isSjiaQuery, buildSjiaScript } from "./SwarmIntelScenarioAutonomy";
+import { isIrricQuery, buildIrricScript } from "./InvestmentRiskIntelCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1729,6 +1730,9 @@ export default function JarvisBrain() {
       } else if (isSjiaQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sjia-toggle"));
         answer = await buildSjiaScript();
+      } else if (isIrricQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:irric-toggle"));
+        answer = await buildIrricScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
