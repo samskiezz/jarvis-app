@@ -1,2 +1,3 @@
 2026-09-16 F01 ⌘K command palette — verified CommandPalette.jsx mounted in App.jsx; scenes + JARVIS pages searchable; ⌘K/Ctrl+K opens; Enter navigates; build green (exit 0)
 2026-09-16 F02 "Hey JARVIS" wake word — verified HeyJarvisListener.jsx + WakeWordToggle.jsx + jarvisVoice.js + jarvisSound.js all present; mounted in App.jsx line 1136; SpeechRecognition wake-word loop; build green (exit 0)
+2026-09-16 F03 Live telemetry ticker — LiveTelemetryTicker.jsx verified; polls /v1/jarvis/system/status + /v1/cinematic/brain every 30 s; CPU/MEM/LOAD/NODES/SYNAPSES pills in fixed top bar; mounted App.jsx line 1218; build green (exit 0)
