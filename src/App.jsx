@@ -1105,6 +1105,7 @@ import SwarmScenarioKnowledgeCoverage from '@/components/cinematic/SwarmScenario
 import IntelProfileGraphNexus from '@/components/cinematic/IntelProfileGraphNexus';
 import KnowledgeGraphCommunityBridge from '@/components/cinematic/KnowledgeGraphCommunityBridge';
 import MissionActivationScore from '@/components/cinematic/MissionActivationScore';
+import OpsEventThreatPulse from '@/components/cinematic/OpsEventThreatPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3381,6 +3382,8 @@ function App() {
             <KnowledgeGraphCommunityBridge />
             {/* F108 (overnight 2026-09-16): Mission Activation Score (MASCORE) — MissionActivationScore.jsx; /entities/Task × /entities/RiskSignal × /v1/investigations × /v1/aip/skill × /v1/cinematic/brain; synthesises 5 streams into 0-100 score (task activity 30% + risk coverage 25% + investigation depth 20% + skill availability 15% + brain density 10%); SVG gauge ring green≥75/amber 40-74/red<40; HIGH/MODERATE/LOW readiness label; 5 stat tiles SCORE/TASKS/RISKS/INVESTIGATIONS/SKILLS; 5 component driver bars with weight labels; red pulse on score<40; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ MASCORE button left:985420 bottom:8 zIndex:132; isMascoreQuery+buildMascoreScript wired JarvisBrain; jarvis:mascore-toggle event; 90-s auto-refresh; voice: mascore/mission activation/activation score/mission readiness/operational score/jarvis mission/mission health */}
             <MissionActivationScore />
+            {/* F110 (overnight 2026-09-16): Ops Events × Graph Centrality × RiskSignal Operational Threat Pulse (OTPULSE) — OpsEventThreatPulse.jsx; /v1/ops/events × /v1/graph/centrality × /entities/RiskSignal; keyword-correlates each ops event against centrality nodes AND risk signals → THREAT_ALIGNED/CENTRALITY_ONLY/RISK_ONLY/AMBIENT; red pulse on THREAT_ALIGNED count; EVENTS/GRAPH NODES/RISK SIGNALS/THREAT_ALIGNED/AMBIENT stat tiles; filter tabs + search; expand event → cyan centrality node bars + red risk-severity bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OTPULSE button left:986280 bottom:8 zIndex:133; isOtpulseQuery+buildOtpulseScript wired JarvisBrain; jarvis:otpulse-toggle event; 90-s auto-refresh; voice: otpulse/ops threat pulse/event threat/operational threat/threat pulse/event graph/event risk/threat event graph */}
+            <OpsEventThreatPulse />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

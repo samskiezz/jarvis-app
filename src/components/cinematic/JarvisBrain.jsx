@@ -408,6 +408,7 @@ import { isSskicovQuery, buildSskicovScript } from "./SwarmScenarioKnowledgeCove
 import { isIpgcnexQuery, buildIpgcnexScript } from "./IntelProfileGraphNexus";
 import { isKgncbrgQuery, buildKgncbrgScript } from "./KnowledgeGraphCommunityBridge";
 import { isMascoreQuery, buildMascoreScript } from "./MissionActivationScore";
+import { isOtpulseQuery, buildOtpulseScript } from "./OpsEventThreatPulse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1685,6 +1686,9 @@ export default function JarvisBrain() {
       } else if (isMascoreQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:mascore-toggle"));
         answer = await buildMascoreScript();
+      } else if (isOtpulseQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:otpulse-toggle"));
+        answer = await buildOtpulseScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
