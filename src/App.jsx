@@ -1118,6 +1118,7 @@ import ContactDatasetRiskMatrix from '@/components/cinematic/ContactDatasetRiskM
 import SwarmIntelScenarioAutonomy from '@/components/cinematic/SwarmIntelScenarioAutonomy';
 import InvestmentRiskIntelCoverage from '@/components/cinematic/InvestmentRiskIntelCoverage';
 import TaskInvestigationKnowledge from '@/components/cinematic/TaskInvestigationKnowledge';
+import ScenarioDatasetOpsReadiness from '@/components/cinematic/ScenarioDatasetOpsReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3423,6 +3424,8 @@ function App() {
             <InvestmentRiskIntelCoverage />
             {/* F39 (overnight 2026-09-16): Task × Investigation × Knowledge Coverage (TIKC) — TaskInvestigationKnowledge.jsx; /entities/Task × /v1/investigations × /knowledge/; keyword-correlates each task against investigations AND knowledge articles → FULLY_BACKED/INVESTIGATED/DOCUMENTED/ORPHAN; red pulse on ORPHAN count (tasks with no investigation or knowledge backing); stat tiles + ALL/class filter + search; expand row → orange investigation bar + amber knowledge bar; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ TIKC button left:931540 bottom:8 zIndex:627; isTikcQuery+buildTikcScript wired JarvisBrain; jarvis:tikc-toggle event; 90-s auto-refresh; voice: tikc/task coverage/task backing/task documentation/orphan task/unbacked task/task knowledge/task investigation/mission coverage */}
             <TaskInvestigationKnowledge />
+            {/* F40 (overnight 2026-09-16): Scenario × Dataset × Ops Event Readiness Matrix (SDORM) — ScenarioDatasetOpsReadiness.jsx; /v1/scenario/list × /v1/datasets × /v1/ops/events; keyword-correlates each scenario against datasets AND ops events → FULLY_READY/DATA_BACKED/OPS_BACKED/UNREADY; orange pulse on UNREADY count; stat tiles + ALL/class filter + search; expand row → cyan dataset bar + green ops bar; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SDORM button left:932400 bottom:8 zIndex:628; isSdormQuery+buildSdormScript wired JarvisBrain; jarvis:sdorm-toggle event; 90-s auto-refresh; voice: sdorm/scenario readiness/scenario dataset ops/scenario coverage matrix/unready scenario */}
+            <ScenarioDatasetOpsReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

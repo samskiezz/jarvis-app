@@ -421,6 +421,7 @@ import { isCirdossQuery, buildCirdossScript } from "./ContactInvestigationReport
 import { isSjiaQuery, buildSjiaScript } from "./SwarmIntelScenarioAutonomy";
 import { isIrricQuery, buildIrricScript } from "./InvestmentRiskIntelCoverage";
 import { isTikcQuery, buildTikcScript } from "./TaskInvestigationKnowledge";
+import { isSdormQuery, buildSdormScript } from "./ScenarioDatasetOpsReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1737,6 +1738,9 @@ export default function JarvisBrain() {
       } else if (isTikcQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:tikc-toggle"));
         answer = await buildTikcScript();
+      } else if (isSdormQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:sdorm-toggle"));
+        answer = await buildSdormScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
