@@ -1110,6 +1110,7 @@ import OpsEventThreatPulse from '@/components/cinematic/OpsEventThreatPulse';
 import LiveWorldSyncPanel from '@/components/cinematic/LiveWorldSyncPanel';
 import PortfolioThreatWatchlist from '@/components/cinematic/PortfolioThreatWatchlist';
 import OpsEventGapFinder from '@/components/cinematic/OpsEventGapFinder';
+import ReportInvCoverage from '@/components/cinematic/ReportInvCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3399,6 +3400,8 @@ function App() {
             <PortfolioThreatWatchlist />
             {/* F31 (overnight 2026-09-16): Ops Event Gap Finder (OEGAP) — OpsEventGapFinder.jsx; /v1/ops/events × /v1/investigations; keyword-correlates each ops event against open investigations → COVERED/UNCOVERED; red pulse on critical uncovered events; EVENTS/CASES/COVERED/UNCOVERED/CRIT GAP stat tiles; ALL/COVERED/UNCOVERED filter tabs + text search; expand event → cyan investigation score bars + status badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OEGAP button left:988860 bottom:8 zIndex:136; isOegapQuery+buildOegapScript wired JarvisBrain; jarvis:oegap-toggle event; 45-s auto-refresh; voice: oegap/ops gap/uninvestigated event/ops event gap/ops not investigated/investigation gap/event without case/ops coverage gap/uncovered event */}
             <OpsEventGapFinder />
+            {/* F32 (overnight 2026-09-16): Report × Investigation Coverage (RINV) — ReportInvCoverage.jsx; /v1/reports × /v1/investigations; keyword-correlates each report against open investigations → SUPPORTING/UNLINKED; surfaces dark cases (investigations with no report coverage); REPORTS/CASES/SUPPORTING/UNLINKED/DARK CASES stat tiles; ALL/SUPPORTING/UNLINKED filter tabs + text search; expand report → green investigation score bars + status badge; red pulse on dark cases; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ RINV button left:989420 bottom:8 zIndex:137; isRicovQuery+buildRicovScript wired JarvisBrain; jarvis:ricov-toggle event; 60-s auto-refresh; voice: rinv/report investigation/report coverage/dark case/unlinked report/investigation without report/report gap/intelligence gap/unsupported investigation */}
+            <ReportInvCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

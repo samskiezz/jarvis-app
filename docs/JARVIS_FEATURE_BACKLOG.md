@@ -49,4 +49,5 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F29 Multi-voice toggle — 2026-09-16 — MultiVoiceToggle.jsx mounted; ash/fable/onyx; localStorage; already implemented on branch.
 - [x] F30 Scene auto-tour — 2026-09-16 — SceneAutoTour.jsx mounted; cycles 10 scenes with TTS narration; already implemented on branch.
 - [x] F31 Ops Event Gap Finder — 2026-09-16 — OpsEventGapFinder.jsx mounted; /v1/ops/events × /v1/investigations; COVERED/UNCOVERED classification; red pulse on critical gaps; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOegapQuery+buildOegapScript wired in JarvisBrain; build green (exit 0).
+- [x] F32 Report × Investigation Coverage — 2026-09-16 — ReportInvCoverage.jsx; /v1/reports × /v1/investigations; SUPPORTING/UNLINKED classification + dark-case count (investigations with no report); red pulse on dark cases; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRinvQuery+buildRinvScript wired in JarvisBrain; ◈ RINV button left:989420; build green (exit 0).
 (Extend with more real features as endpoints allow. Prefer depth + real over count.)
