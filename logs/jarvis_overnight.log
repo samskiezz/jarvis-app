@@ -1,1 +1,2 @@
 2026-09-16 F01 ⌘K command palette — verified CommandPalette.jsx mounted in App.jsx; scenes + JARVIS pages searchable; ⌘K/Ctrl+K opens; Enter navigates; build green (exit 0)
+2026-09-16 F02 "Hey JARVIS" wake word — verified HeyJarvisListener.jsx + WakeWordToggle.jsx + jarvisVoice.js + jarvisSound.js all present; mounted in App.jsx line 1136; SpeechRecognition wake-word loop; build green (exit 0)

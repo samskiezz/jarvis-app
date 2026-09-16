@@ -19,7 +19,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 
 ## Backlog (real features)
 - [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-09-16: CommandPalette.jsx mounted in App.jsx; scenes + JARVIS pages; ⌘K opens, Enter navigates; build green]
-- [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
+- [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. [2026-09-16: HeyJarvisListener.jsx + WakeWordToggle.jsx + jarvisVoice.js + jarvisSound.js; mounted in App.jsx; Web SpeechRecognition wake-word loop; build green]
 - [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
 - [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
 - [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).
