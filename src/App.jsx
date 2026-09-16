@@ -1115,6 +1115,7 @@ import RiskSignalDatasetKnowledgeDepth from '@/components/cinematic/RiskSignalDa
 import ScenarioIntelBlindSpots from '@/components/cinematic/ScenarioIntelBlindSpots';
 import ContactInvestigationReportDossier from '@/components/cinematic/ContactInvestigationReportDossier';
 import ContactDatasetRiskMatrix from '@/components/cinematic/ContactDatasetRiskMatrix';
+import SwarmIntelScenarioAutonomy from '@/components/cinematic/SwarmIntelScenarioAutonomy';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3414,6 +3415,8 @@ function App() {
             <ContactInvestigationReportDossier />
             {/* F767 (overnight 2026-09-16): Contact × Dataset × RiskSignal Personnel Data Risk Matrix (CDRMAT) — ContactDatasetRiskMatrix.jsx; /entities/Contact × /v1/datasets × /entities/RiskSignal; keyword-correlates each contact against datasets AND risk signals → FULLY_EXPOSED/DATA_EXPOSED/RISK_EXPOSED/CLEAR; orange pulse on FULLY_EXPOSED count (personnel with both data footprint and risk exposure); CONTACTS/DATASETS/RISKS/FULLY EXPOSED/CLEAR stat tiles; ALL/class filter tabs + search on name/company/dataset/risk; expand row → cyan dataset match + amber risk-severity match with keyword scores; isCdrmatQuery+buildCdrmatScript wired JarvisBrain; jarvis:cdrmat-toggle event; ◈ CDRMAT button left:928960 bottom:8 zIndex:624; 90-s auto-refresh; voice: cdrmat/contact data risk/personnel risk matrix/personnel exposure/contact risk data/data risk contact/contact dataset risk/personal exposure/contact risk matrix/exposed contact/contact data footprint */}
             <ContactDatasetRiskMatrix />
+            {/* F37 (overnight 2026-09-16): SwarmJob × IntelProfile × Scenario Intelligence Autonomy Index (SJIA) — SwarmIntelScenarioAutonomy.jsx; /entities/SwarmJob × /entities/IntelProfile × /v1/scenario/list; keyword-correlates each swarm job against intel profiles AND scenarios → FULLY_AUTONOMOUS/INTEL_ONLY/SCENARIO_ONLY/BLIND; red pulse on BLIND count (automation flying blind — no intel or scenario backing); JOBS/INTEL PROFILES/SCENARIOS/FULLY AUTONOMOUS/BLIND stat tiles; ALL/class filter tabs + search on job title/type/profile/scenario; expand row → amber intel profile bar + cyan scenario bar with keyword scores; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SJIA button left:929820 bottom:8 zIndex:625; isSjiaQuery+buildSjiaScript wired JarvisBrain; jarvis:sjia-toggle event; 90-s auto-refresh; voice: sjia/swarm intel scenario/swarm autonomy/blind swarm/autonomous swarm/swarm backing/swarm intelligence index/swarm scenario coverage/swarm intel coverage/swarm fully autonomous */}
+            <SwarmIntelScenarioAutonomy />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
