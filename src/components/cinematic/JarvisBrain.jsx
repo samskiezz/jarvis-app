@@ -416,6 +416,7 @@ import { isOegapQuery, buildOegapScript } from "./OpsEventGapFinder";
 import { isRicovQuery, buildRicovScript } from "./ReportInvCoverage";
 import { isRdkidepQuery, buildRdkidepScript } from "./RiskSignalDatasetKnowledgeDepth";
 import { isSipbsQuery, buildSipbsScript } from "./ScenarioIntelBlindSpots";
+import { isCirdossQuery, buildCirdossScript } from "./ContactInvestigationReportDossier";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1717,6 +1718,9 @@ export default function JarvisBrain() {
       } else if (isSipbsQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:sipbs-toggle"));
         answer = await buildSipbsScript();
+      } else if (isCirdossQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:cirdoss-toggle"));
+        answer = await buildCirdossScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

@@ -1113,6 +1113,7 @@ import OpsEventGapFinder from '@/components/cinematic/OpsEventGapFinder';
 import ReportInvCoverage from '@/components/cinematic/ReportInvCoverage';
 import RiskSignalDatasetKnowledgeDepth from '@/components/cinematic/RiskSignalDatasetKnowledgeDepth';
 import ScenarioIntelBlindSpots from '@/components/cinematic/ScenarioIntelBlindSpots';
+import ContactInvestigationReportDossier from '@/components/cinematic/ContactInvestigationReportDossier';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3408,6 +3409,8 @@ function App() {
             <RiskSignalDatasetKnowledgeDepth />
             {/* F34 (overnight 2026-09-16): Scenario × IntelProfile Blind Spots (SIPBS) — ScenarioIntelBlindSpots.jsx; /v1/scenario/list × /entities/IntelProfile; keyword-correlates each scenario against intel profiles → COVERED/BLIND_SPOT; surfaces orphan intel profiles (not backing any scenario); SCENARIOS/INTEL PROFILES/COVERED/BLIND SPOTS/ORPHAN INTEL stat tiles; ALL/COVERED/BLIND_SPOT filter tabs + text search; expand scenario → green intel profile match bars; ORPHAN INTEL toggle panel; red pulse on BLIND SPOTS count; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SIPBS button left:991140 bottom:8 zIndex:139; isSipbsQuery+buildSipbsScript wired JarvisBrain; jarvis:sipbs-toggle event; 75-s auto-refresh; voice: sipbs/scenario intel/scenario coverage/blind spot scenario/scenario intelligence gap/uncovered scenario/orphan intel/intel profile gap */}
             <ScenarioIntelBlindSpots />
+            {/* F35 (overnight 2026-09-16): Contact × Investigation × Report Mission Dossier (CIRDOSS) — ContactInvestigationReportDossier.jsx; /entities/Contact × /v1/investigations × /v1/reports; keyword-correlates each contact against investigations AND reports → FULLY_DOCUMENTED/INVESTIGATED/REPORTED/DARK; red pulse on DARK (personnel blind spots); CONTACTS/INVESTIGATIONS/REPORTS/FULLY DOC/DARK stat tiles; filter tabs + search on name/email/company/title; expand row → split pane left=matched investigations (cyan) + right=matched reports (violet); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ CIRDOSS button left:992000 bottom:8 zIndex:140; isCirdossQuery+buildCirdossScript wired JarvisBrain; jarvis:cirdoss-toggle event; 90-s auto-refresh; voice: cirdoss/contact investigation/contact report/dark contact/mission dossier/personnel dossier/contact case/contact coverage/dark personnel */}
+            <ContactInvestigationReportDossier />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
