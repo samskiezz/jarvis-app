@@ -1107,6 +1107,7 @@ import KnowledgeGraphCommunityBridge from '@/components/cinematic/KnowledgeGraph
 import MissionActivationScore from '@/components/cinematic/MissionActivationScore';
 import OpsEventThreatPulse from '@/components/cinematic/OpsEventThreatPulse';
 import LiveWorldSyncPanel from '@/components/cinematic/LiveWorldSyncPanel';
+import PortfolioThreatWatchlist from '@/components/cinematic/PortfolioThreatWatchlist';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3387,6 +3388,8 @@ function App() {
             <OpsEventThreatPulse />
             {/* F111 (overnight 2026-09-16): Live Intel × Scenario × RiskSignal Real-World Convergence (LIVSYNC) — LiveWorldSyncPanel.jsx; /functions/getLiveIntel × /v1/scenario/list × /entities/RiskSignal; keyword-correlates each live world event (quake/crypto/FX) against active scenarios AND risk signals → TRIPLE_ALERT/SCENARIO_ONLY/RISK_ONLY/AMBIENT; red pulse on TRIPLE_ALERT count; EVENTS/SCENARIOS/RISK SIGNALS/TRIPLE ALERTS/AMBIENT stat tiles; ALL/TRIPLE_ALERT/SCENARIO_ONLY/RISK_ONLY/AMBIENT filter tabs + search; expand event → amber scenario bars + red risk-severity bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ⚡ LIVSYNC button left:987140 bottom:8 zIndex:134; isLivsyncQuery+buildLivsyncScript wired JarvisBrain; jarvis:livsync-toggle event; 60-s auto-refresh; voice: livsync/live sync/world convergence/live intel convergence/triple alert/world alert/real world convergence/live scenario/live risk sync/world scenario risk */}
             <LiveWorldSyncPanel />
+            {/* F112 (overnight 2026-09-16): RiskSignal × Investment × Contact Portfolio Threat Watchlist (PTWLIST) — PortfolioThreatWatchlist.jsx; /entities/RiskSignal × /entities/Investment × /entities/Contact; keyword-correlates each risk signal against investments AND contacts → FULLY_EXPOSED/INVEST_ONLY/CONTACT_ONLY/UNCOVERED; red pulse on UNCOVERED (portfolio and personnel blind spots); RISKS/INVESTMENTS/CONTACTS/FULLY EXPOSED/UNCOVERED stat tiles; ALL/class filter tabs + search on signal name/severity; expand row → matched investments (amber bars) + contacts (cyan bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ PTWLIST button left:988000 bottom:8 zIndex:135; isPtwlistQuery+buildPtwlistScript wired JarvisBrain; jarvis:ptwlist-toggle event; 90-s auto-refresh; voice: ptwlist/portfolio threat/risk watchlist/threat watchlist/investment risk/exposed contacts/portfolio exposure/financial threat/contact risk */}
+            <PortfolioThreatWatchlist />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
