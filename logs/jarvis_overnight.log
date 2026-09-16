@@ -2,3 +2,4 @@
 2026-09-16 F02 "Hey JARVIS" wake word — verified HeyJarvisListener.jsx + WakeWordToggle.jsx + jarvisVoice.js + jarvisSound.js all present; mounted in App.jsx line 1136; SpeechRecognition wake-word loop; build green (exit 0)
 2026-09-16 F03 Live telemetry ticker — LiveTelemetryTicker.jsx verified; polls /v1/jarvis/system/status + /v1/cinematic/brain every 30 s; CPU/MEM/LOAD/NODES/SYNAPSES pills in fixed top bar; mounted App.jsx line 1218; build green (exit 0)
 2026-09-16 F04 Keyboard scene-jump — verified SceneKeyboardNav.jsx mounted in App.jsx line 1138; keys 1–9/0 navigate to /cinematic/{scene_id}; Esc → home (/); HUD badge for 1.6s; uses CINEMATIC_SCENES registry; build green (exit 0)
+[2026-09-16] F05 spoken status report: StatusReporter.jsx HUD wired to jarvis:status event (JarvisBrain dispatch); TTS via JarvisBrain speak(); real /v1/jarvis/system/status + /v1/cinematic/brain endpoints; build green (exit 0)

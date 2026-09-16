@@ -501,6 +501,7 @@ export default function JarvisBrain() {
         answer = await buildShowMeScript(q);
       } else if (isStatusQuery(q)) {
         answer = await buildStatusScript();
+        window.dispatchEvent(new CustomEvent("jarvis:status"));
       } else if (isMarketsQuery(q)) {
         answer = await buildMarketsScript();
       } else if (isImpactMatrixQuery(q)) {
