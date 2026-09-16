@@ -57,6 +57,7 @@ import LiveTelemetryTicker from '@/components/cinematic/LiveTelemetryTicker';
 import LiveWorldIncidentFeed from '@/components/cinematic/LiveWorldIncidentFeed';
 import StatusReporter from '@/components/cinematic/StatusReporter';
 import OvernightPanels from '@/components/overnight/OvernightPanels';
+import SystemSnapshotExport from '@/components/cinematic/SystemSnapshotExport';
 import InvestmentWidget from '@/components/cinematic/InvestmentWidget';
 import ContactsDirectory from '@/components/cinematic/ContactsDirectory';
 import SwarmJobsMonitor from '@/components/cinematic/SwarmJobsMonitor';
@@ -1226,6 +1227,8 @@ function App() {
             <GraphCentralityView />
             {/* F131: overnight panels launcher — ◈ button at left:340 bottom:18; searchable category-grouped grid of all cinematic panels (panelRegistry.generated.js); lazy-mounts one panel at a time behind PanelErrorBoundary; gives on-demand access to the full panel library without 100+ floating buttons */}
             <OvernightPanels />
+            {/* F109: system snapshot export */}
+            <SystemSnapshotExport />
             {/* F31: knowledge browser — ◈ KNOW button (left:2260); fetches /knowledge/ → article list with search; click → /v1/jarvis/agent/chat AI summary + /v1/voice/tts spoken; "JARVIS, knowledge" voice trigger (isKnowledgeQuery+buildKnowledgeScript already wired in JarvisBrain) */}
             <KnowledgeBrowser />
             {/* F32: intel profile directory — ◈ INTEL button (left:1948); sources /entities/IntelProfile; threat-ranked profiles with type tabs; Alt+I shortcut; "JARVIS, intel profiles" voice trigger (isIntelProfileQuery+buildIntelProfileScript already wired in JarvisBrain) */}
