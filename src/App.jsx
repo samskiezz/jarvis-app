@@ -1109,6 +1109,7 @@ import MissionActivationScore from '@/components/cinematic/MissionActivationScor
 import OpsEventThreatPulse from '@/components/cinematic/OpsEventThreatPulse';
 import LiveWorldSyncPanel from '@/components/cinematic/LiveWorldSyncPanel';
 import PortfolioThreatWatchlist from '@/components/cinematic/PortfolioThreatWatchlist';
+import OpsEventGapFinder from '@/components/cinematic/OpsEventGapFinder';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3396,6 +3397,8 @@ function App() {
             <LiveWorldSyncPanel />
             {/* F112 (overnight 2026-09-16): RiskSignal × Investment × Contact Portfolio Threat Watchlist (PTWLIST) — PortfolioThreatWatchlist.jsx; /entities/RiskSignal × /entities/Investment × /entities/Contact; keyword-correlates each risk signal against investments AND contacts → FULLY_EXPOSED/INVEST_ONLY/CONTACT_ONLY/UNCOVERED; red pulse on UNCOVERED (portfolio and personnel blind spots); RISKS/INVESTMENTS/CONTACTS/FULLY EXPOSED/UNCOVERED stat tiles; ALL/class filter tabs + search on signal name/severity; expand row → matched investments (amber bars) + contacts (cyan bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ PTWLIST button left:988000 bottom:8 zIndex:135; isPtwlistQuery+buildPtwlistScript wired JarvisBrain; jarvis:ptwlist-toggle event; 90-s auto-refresh; voice: ptwlist/portfolio threat/risk watchlist/threat watchlist/investment risk/exposed contacts/portfolio exposure/financial threat/contact risk */}
             <PortfolioThreatWatchlist />
+            {/* F31 (overnight 2026-09-16): Ops Event Gap Finder (OEGAP) — OpsEventGapFinder.jsx; /v1/ops/events × /v1/investigations; keyword-correlates each ops event against open investigations → COVERED/UNCOVERED; red pulse on critical uncovered events; EVENTS/CASES/COVERED/UNCOVERED/CRIT GAP stat tiles; ALL/COVERED/UNCOVERED filter tabs + text search; expand event → cyan investigation score bars + status badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ OEGAP button left:988860 bottom:8 zIndex:136; isOegapQuery+buildOegapScript wired JarvisBrain; jarvis:oegap-toggle event; 45-s auto-refresh; voice: oegap/ops gap/uninvestigated event/ops event gap/ops not investigated/investigation gap/event without case/ops coverage gap/uncovered event */}
+            <OpsEventGapFinder />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

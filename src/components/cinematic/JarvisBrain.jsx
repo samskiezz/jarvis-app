@@ -412,6 +412,7 @@ import { isMascoreQuery, buildMascoreScript } from "./MissionActivationScore";
 import { isOtpulseQuery, buildOtpulseScript } from "./OpsEventThreatPulse";
 import { isLivsyncQuery, buildLivsyncScript } from "./LiveWorldSyncPanel";
 import { isPtwlistQuery, buildPtwlistScript } from "./PortfolioThreatWatchlist";
+import { isOegapQuery, buildOegapScript } from "./OpsEventGapFinder";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1701,6 +1702,9 @@ export default function JarvisBrain() {
       } else if (isPtwlistQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ptwlist-toggle"));
         answer = await buildPtwlistScript();
+      } else if (isOegapQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:oegap-toggle"));
+        answer = await buildOegapScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
