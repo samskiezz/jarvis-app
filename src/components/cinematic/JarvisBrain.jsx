@@ -437,6 +437,7 @@ import { isAtcaQuery, buildAtcaScript } from "./InvestigationRiskScenarioAlignme
 import { isTidaQuery, buildTidaScript } from "./OpsEventDatasetIntelActivation";
 import { isOmrdyQuery, buildOmrdyScript } from "./ContactSkillInvestigationReadiness";
 import { isMaixQuery, buildMaixScript } from "./TaskSkillSwarmAutonomy";
+import { isTrecaQuery, buildTrecaScript } from "./RiskReportOpsEvidence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1797,6 +1798,9 @@ export default function JarvisBrain() {
       } else if (isMaixQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:maix-toggle"));
         answer = await buildMaixScript();
+      } else if (isTrecaQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:treca-toggle"));
+        answer = await buildTrecaScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

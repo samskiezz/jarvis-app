@@ -1136,6 +1136,7 @@ import InvestigationRiskScenarioAlignment from '@/components/cinematic/Investiga
 import OpsEventDatasetIntelActivation from '@/components/cinematic/OpsEventDatasetIntelActivation';
 import ContactSkillInvestigationReadiness from '@/components/cinematic/ContactSkillInvestigationReadiness';
 import TaskSkillSwarmAutonomy from '@/components/cinematic/TaskSkillSwarmAutonomy';
+import RiskReportOpsEvidence from '@/components/cinematic/RiskReportOpsEvidence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3477,6 +3478,8 @@ function App() {
             <ContactSkillInvestigationReadiness />
             {/* F182 (overnight 2026-09-17): Task × AIP Skill × SwarmJob — Mission Automation Index (MAIX) — TaskSkillSwarmAutonomy.jsx; /entities/Task × /v1/aip/skill × /entities/SwarmJob; keyword-correlates each task against skills AND swarm jobs → FULLY_AUTOMATED/SKILL_BACKED/SWARM_BACKED/MANUAL; red pulse on MANUAL count; stat tiles (tasks/skills/swarm/automated/manual); ALL/class filter tabs + search; expand row → green skill bars + cyan swarm bars; ▶ ASSESS → agent/chat + TTS; isMaixQuery+buildMaixScript wired JarvisBrain; jarvis:maix-toggle event; 90-s auto-refresh */}
             <TaskSkillSwarmAutonomy />
+            {/* F183 (overnight 2026-09-17): RiskSignal × Report × OpsEvent — Threat Response Evidence Chain Audit (TRECA) — RiskReportOpsEvidence.jsx; /entities/RiskSignal × /v1/reports × /v1/ops/events; keyword-correlates each risk signal against report archive AND ops event log → FULLY_DOCUMENTED/REPORT_LINKED/EVENT_LINKED/UNTRACKED; red pulse on UNTRACKED count; stat tiles (risks/reports/events/fully documented/untracked); ALL/class filter tabs + search; expand row → amber report bars + cyan event bars; ▶ ASSESS → agent/chat + TTS; isTrecaQuery+buildTrecaScript wired JarvisBrain; jarvis:treca-toggle event; 90-s auto-refresh */}
+            <RiskReportOpsEvidence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
