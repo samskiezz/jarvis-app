@@ -436,6 +436,7 @@ import { isShkcQuery, buildShkcScript } from "./SwarmJobContactKnowledge";
 import { isAtcaQuery, buildAtcaScript } from "./InvestigationRiskScenarioAlignment";
 import { isTidaQuery, buildTidaScript } from "./OpsEventDatasetIntelActivation";
 import { isOmrdyQuery, buildOmrdyScript } from "./ContactSkillInvestigationReadiness";
+import { isMaixQuery, buildMaixScript } from "./TaskSkillSwarmAutonomy";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1793,6 +1794,9 @@ export default function JarvisBrain() {
       } else if (isOmrdyQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:omrdy-toggle"));
         answer = await buildOmrdyScript();
+      } else if (isMaixQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:maix-toggle"));
+        answer = await buildMaixScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

@@ -1135,6 +1135,7 @@ import SwarmJobContactKnowledge from '@/components/cinematic/SwarmJobContactKnow
 import InvestigationRiskScenarioAlignment from '@/components/cinematic/InvestigationRiskScenarioAlignment';
 import OpsEventDatasetIntelActivation from '@/components/cinematic/OpsEventDatasetIntelActivation';
 import ContactSkillInvestigationReadiness from '@/components/cinematic/ContactSkillInvestigationReadiness';
+import TaskSkillSwarmAutonomy from '@/components/cinematic/TaskSkillSwarmAutonomy';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3474,6 +3475,8 @@ function App() {
             <OpsEventDatasetIntelActivation />
             {/* F181 (overnight 2026-09-17): Contact × AIP Skill × Investigation — Operator Mission Readiness (OMRDY) — ContactSkillInvestigationReadiness.jsx; /entities/Contact × /v1/aip/skill × /v1/investigations; keyword-correlates each contact against skills AND investigations → FULLY_READY/SKILLED_ONLY/CASE_ASSIGNED/UNREADY; amber pulse on UNREADY count; stat tiles (contacts/skills/cases/ready/skilled/case-only/unready); ALL/class filter tabs + search; expand row → green skill bars + amber investigation bars; ▶ ASSESS → agent/chat + TTS; isOmrdyQuery+buildOmrdyScript wired JarvisBrain; jarvis:omrdy-toggle event; 90-s auto-refresh */}
             <ContactSkillInvestigationReadiness />
+            {/* F182 (overnight 2026-09-17): Task × AIP Skill × SwarmJob — Mission Automation Index (MAIX) — TaskSkillSwarmAutonomy.jsx; /entities/Task × /v1/aip/skill × /entities/SwarmJob; keyword-correlates each task against skills AND swarm jobs → FULLY_AUTOMATED/SKILL_BACKED/SWARM_BACKED/MANUAL; red pulse on MANUAL count; stat tiles (tasks/skills/swarm/automated/manual); ALL/class filter tabs + search; expand row → green skill bars + cyan swarm bars; ▶ ASSESS → agent/chat + TTS; isMaixQuery+buildMaixScript wired JarvisBrain; jarvis:maix-toggle event; 90-s auto-refresh */}
+            <TaskSkillSwarmAutonomy />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
