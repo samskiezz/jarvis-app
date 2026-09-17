@@ -427,6 +427,7 @@ import { isOrkgQuery, buildOrkgScript } from "./KnowledgeScenarioTaskGap";
 import { isOrkecQuery, buildOrkecScript } from "./OpsEventReportKnowledgeChain";
 import { isSdiceaQuery, buildSdiceaScript } from "./SkillDatasetInvestigationAudit";
 import { isCaritQuery, buildCaritScript } from "./InvestmentSwarmTaskAutonomy";
+import { isOpmapQuery, buildOpmapScript } from "./AipSkillContactScenarioMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1757,6 +1758,9 @@ export default function JarvisBrain() {
         answer = await buildSdiceaScript();
       } else if (isCaritQuery(q)) {
         answer = await buildCaritScript();
+      } else if (isOpmapQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:opmap-toggle"));
+        answer = await buildOpmapScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

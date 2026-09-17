@@ -1126,6 +1126,7 @@ import OpsEventReportKnowledgeChain from '@/components/cinematic/OpsEventReportK
 import SkillDatasetInvestigationAudit from '@/components/cinematic/SkillDatasetInvestigationAudit';
 import OpsEventBadge from '@/components/cinematic/OpsEventBadge';
 import InvestmentSwarmTaskAutonomy from '@/components/cinematic/InvestmentSwarmTaskAutonomy';
+import AipSkillContactScenarioMap from '@/components/cinematic/AipSkillContactScenarioMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3447,6 +3448,8 @@ function App() {
             <SkillDatasetInvestigationAudit />
             {/* F172 (overnight 2026-09-17): Investment × SwarmJob × Task — Capital Automation Readiness (CARIT) — InvestmentSwarmTaskAutonomy.jsx; /entities/Investment × /entities/SwarmJob × /entities/Task; keyword-correlates each investment against swarm automation AND open tasks → FULLY_MANAGED (swarm+task)/SWARM_MONITORED (swarm only)/TASK_TRACKED (task only)/UNMANAGED (neither — capital flying blind); orange pulse on UNMANAGED count; stat tiles (investments/swarm jobs/tasks/fully managed/unmanaged); ALL/class filter tabs + search on name/type/ticker; expand row → cyan swarm bars + amber task bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capital readiness brief + TTS via jarvis:speak-dossier; isCaritQuery+buildCaritScript exported; "carit"/"capital automation"/"investment swarm"/"investment task"/"unmanaged investment"/"capital readiness"/"portfolio automation"/"investment management"/"capital oversight"/"untracked investment" voice trigger; jarvis:carit-toggle event; 90-s auto-refresh */}
             <InvestmentSwarmTaskAutonomy />
+            {/* F173 (overnight 2026-09-17): AIP Skill × Contact × Scenario — Operator Capability Mapping (OPMAP) — AipSkillContactScenarioMap.jsx; /v1/aip/skill × /entities/Contact × /v1/scenario/list; keyword-correlates each AIP skill against operator contacts AND active scenarios → FULLY_MAPPED (contact+scenario)/CONTACT_MAPPED (contact, no scenario)/SCENARIO_MAPPED (scenario, no contact)/UNMAPPED (neither — capability with no operator or context); amber pulse on UNMAPPED count; stat tiles (skills/contacts/scenarios/fully mapped/unmapped); ALL/class filter tabs + search on skill name/category; expand row → cyan contact bars + amber scenario bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capability readiness brief + TTS via jarvis:speak-dossier; isOpmapQuery+buildOpmapScript exported; "opmap"/"operator capability"/"skill contact"/"skill scenario"/"unmapped skill"/"skill operator"/"capability mapping"/"skill coverage"/"operational mapping"/"skill personnel" voice trigger; jarvis:opmap-toggle event; 90-s auto-refresh */}
+            <AipSkillContactScenarioMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
