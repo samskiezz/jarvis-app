@@ -424,6 +424,7 @@ import { isTikcQuery, buildTikcScript } from "./TaskInvestigationKnowledge";
 import { isSdormQuery, buildSdormScript } from "./ScenarioDatasetOpsReadiness";
 import { isSieraQuery, buildSieraScript } from "./SwarmJobAipSkillReport";
 import { isOrkgQuery, buildOrkgScript } from "./KnowledgeScenarioTaskGap";
+import { isOrkecQuery, buildOrkecScript } from "./OpsEventReportKnowledgeChain";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1748,6 +1749,8 @@ export default function JarvisBrain() {
         answer = await buildSieraScript();
       } else if (isOrkgQuery(q)) {
         answer = await buildOrkgScript();
+      } else if (isOrkecQuery(q)) {
+        answer = await buildOrkecScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

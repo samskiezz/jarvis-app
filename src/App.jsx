@@ -1122,6 +1122,7 @@ import ScenarioDatasetOpsReadiness from '@/components/cinematic/ScenarioDatasetO
 import IntelProfileReportLinker from '@/components/cinematic/IntelProfileReportLinker';
 import SwarmJobAipSkillReport from '@/components/cinematic/SwarmJobAipSkillReport';
 import KnowledgeScenarioTaskGap from '@/components/cinematic/KnowledgeScenarioTaskGap';
+import OpsEventReportKnowledgeChain from '@/components/cinematic/OpsEventReportKnowledgeChain';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3435,6 +3436,8 @@ function App() {
             <SwarmJobAipSkillReport />
             {/* F169 (overnight 2026-09-17): Knowledge × Scenario × Task — Operational Knowledge Gap (ORKG) — KnowledgeScenarioTaskGap.jsx; /knowledge/ × /v1/scenario/list × /entities/Task; keyword-correlates each knowledge article against active scenarios AND open tasks → FULLY_APPLIED (scenario+task)/SCENARIO_BACKED (no task)/TASK_BACKED (no scenario)/ORPHAN (neither — dark intelligence); red pulse on ORPHAN count; stat tiles (articles/scenarios/tasks/applied/orphan); ALL/class filter tabs + text search on title; expand row → matched scenarios (amber bars) + matched tasks (cyan bars) with relevance scores; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge readiness brief + TTS via jarvis:speak-dossier; isOrkgQuery+buildOrkgScript exported from KnowledgeScenarioTaskGap; "orkg"/"knowledge gap"/"orphan knowledge"/"operational knowledge"/"knowledge readiness"/"knowledge scenario"/"knowledge task"/"dark knowledge"/"unlinked knowledge"/"knowledge coverage" voice trigger; jarvis:orkg-toggle event; 90-s auto-refresh */}
             <KnowledgeScenarioTaskGap />
+            {/* F170 (overnight 2026-09-17): OpsEvent × Report × Knowledge — Evidence Chain (ORKEC) — OpsEventReportKnowledgeChain.jsx; /v1/ops/events × /v1/reports × /knowledge/; keyword-correlates each ops event against report archive AND knowledge base → FULLY_EVIDENCED (report+KB)/REPORT_ONLY (no KB)/KB_ONLY (no report)/DARK (no documentation); red pulse on DARK count; stat tiles (events/reports/articles/evidenced/dark); ALL/class filter tabs + text search; expand row → matched reports (amber bars) + KB articles (cyan bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; isOrkecQuery+buildOrkecScript exported; "orkec"/"ops evidence"/"ops evidence chain"/"event evidence"/"ops documentation"/"undocumented ops"/"dark ops event"/"ops coverage"/"operational evidence" voice trigger; jarvis:orkec-toggle event; 90-s auto-refresh */}
+            <OpsEventReportKnowledgeChain />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
