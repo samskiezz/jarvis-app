@@ -1140,6 +1140,7 @@ import RiskReportOpsEvidence from '@/components/cinematic/RiskReportOpsEvidence'
 import NetworkThreatAttribution from '@/components/cinematic/NetworkThreatAttribution';
 import InvestmentInvestigationKnowledge from '@/components/cinematic/InvestmentInvestigationKnowledge';
 import RiskSignalContactSwarm from '@/components/cinematic/RiskSignalContactSwarm';
+import DatasetScenarioKnowledge from '@/components/cinematic/DatasetScenarioKnowledge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3489,6 +3490,8 @@ function App() {
             <InvestmentInvestigationKnowledge />
             {/* F186 (overnight 2026-09-17): RiskSignal × Contact × SwarmJob — Threat Response Ownership Index (TROI) — RiskSignalContactSwarm.jsx; /entities/RiskSignal × /entities/Contact × /entities/SwarmJob; keyword-correlates each risk signal against responsible contacts AND active swarm jobs → FULLY_OWNED/CONTACT_ONLY/SWARM_ONLY/UNOWNED; red pulse on UNOWNED count; stat tiles (signals/contacts/swarm jobs/owned/unowned); ALL/class filter tabs + search; expand row → green contact bars + amber swarm bars; ▶ ASSESS → agent/chat + TTS; isTroiQuery+buildTroiScript wired JarvisBrain; ◈ TROI button left:979400 zIndex:687; jarvis:troi-toggle event; 90-s auto-refresh */}
             <RiskSignalContactSwarm />
+            {/* F187 (overnight 2026-09-17): Dataset × Scenario × Knowledge — Operational Readiness (DSKOR) — DatasetScenarioKnowledge.jsx; /v1/datasets × /v1/scenario/list × /knowledge/; keyword-correlates each dataset against active scenarios AND KB articles → FULLY_OPERATIONAL/SCENARIO_BACKED/KB_BACKED/UNINDEXED; orange pulse on UNINDEXED count; stat tiles (datasets/scenarios/KB articles/operational/unindexed); ALL/class filter tabs + search; expand row → amber scenario bars + green KB bars; ▶ ASSESS → agent/chat + TTS; isDskorQuery+buildDskorScript wired JarvisBrain; ◈ DSKOR button left:980260 zIndex:688; jarvis:dskor-toggle event; 90-s auto-refresh */}
+            <DatasetScenarioKnowledge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
