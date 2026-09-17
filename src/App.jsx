@@ -1142,6 +1142,7 @@ import InvestmentInvestigationKnowledge from '@/components/cinematic/InvestmentI
 import RiskSignalContactSwarm from '@/components/cinematic/RiskSignalContactSwarm';
 import DatasetScenarioKnowledge from '@/components/cinematic/DatasetScenarioKnowledge';
 import IntelProfileContactScenarioNetwork from '@/components/cinematic/IntelProfileContactScenarioNetwork';
+import GraphNodeMissionAlignment from '@/components/cinematic/GraphNodeMissionAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3495,6 +3496,8 @@ function App() {
             <DatasetScenarioKnowledge />
             {/* F188 (overnight 2026-09-17): IntelProfile × Contact × Scenario — Threat Actor Contact Network (TACN) — IntelProfileContactScenarioNetwork.jsx; /entities/IntelProfile × /entities/Contact × /v1/scenario/list; keyword-correlates each intel profile against contacts AND active scenarios → FULLY_MAPPED/CONTACT_LINKED/SCENARIO_LINKED/DARK; red pulse on DARK count; stat tiles (profiles/contacts/scenarios/fully mapped/dark); ALL/class filter tabs + search; expand row → cyan contact bars + amber scenario bars; ▶ ASSESS → agent/chat + TTS; isTacnQuery+buildTacnScript wired JarvisBrain; ◈ TACN button left:981120 zIndex:689; jarvis:tacn-toggle event; 90-s auto-refresh */}
             <IntelProfileContactScenarioNetwork />
+            {/* F189 (overnight 2026-09-17): Graph Node × Scenario × Investigation — Node Mission Alignment (NOMA) — GraphNodeMissionAlignment.jsx; /v1/graph/centrality × /v1/scenario/list × /v1/investigations; keyword-correlates each graph node against active scenarios AND open investigations → FULLY_TRACKED (both)/SCENARIO_ONLY/CASE_ONLY/ORPHAN (neither — dark node with no strategic or operational linkage); red pulse on ORPHAN count; stat tiles (nodes/scenarios/investigations/fully tracked/orphan); ALL/class filter tabs + text search; expand row → amber scenario bars + cyan investigation bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence node mission brief + TTS via jarvis:speak-dossier; isNomaQuery+buildNomaScript wired JarvisBrain; ◈ NOMA button left:981980 zIndex:690; jarvis:noma-toggle event; 90-s auto-refresh */}
+            <GraphNodeMissionAlignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
