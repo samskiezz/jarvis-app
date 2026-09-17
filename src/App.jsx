@@ -1131,6 +1131,7 @@ import RiskSignalScenarioContactMatrix from '@/components/cinematic/RiskSignalSc
 import DatasetReportScenarioEvidence from '@/components/cinematic/DatasetReportScenarioEvidence';
 import TaskReportContactAudit from '@/components/cinematic/TaskReportContactAudit';
 import IntelProfileDatasetScenario from '@/components/cinematic/IntelProfileDatasetScenario';
+import SwarmJobContactKnowledge from '@/components/cinematic/SwarmJobContactKnowledge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3462,6 +3463,8 @@ function App() {
             <TaskReportContactAudit />
             {/* F177 (overnight 2026-09-17): IntelProfile × Dataset × Scenario — Threat Intelligence Evidence Readiness (TIER) — IntelProfileDatasetScenario.jsx; /entities/IntelProfile × /v1/datasets × /v1/scenario/list; keyword-correlates each intel profile against datasets AND scenarios → FULLY_ARMED/DATA_BACKED/SCENARIO_BACKED/UNARMED; red pulse on UNARMED count; stat tiles; ALL/class filter tabs + search; expand row → green dataset bars + amber scenario bars; ▶ ASSESS → agent/chat + TTS; isTierQuery+buildTierScript exported; jarvis:tier-toggle event; 90-s auto-refresh */}
             <IntelProfileDatasetScenario />
+            {/* F178 (overnight 2026-09-17): SwarmJob × Contact × Knowledge — Swarm Human Knowledge Coverage (SHKC) — SwarmJobContactKnowledge.jsx; /entities/SwarmJob × /entities/Contact × /knowledge/; keyword-correlates each swarm job against contacts AND KB articles → FULLY_SUPPORTED/HUMAN_BACKED/KB_BACKED/UNSUPPORTED; red pulse on UNSUPPORTED count; stat tiles (jobs/contacts/articles/full/unsupported); ALL/class filter tabs + search; expand row → cyan contact bars + amber KB bars; ▶ ASSESS → agent/chat + TTS; isShkcQuery+buildShkcScript wired JarvisBrain; jarvis:shkc-toggle event; 90-s auto-refresh */}
+            <SwarmJobContactKnowledge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
