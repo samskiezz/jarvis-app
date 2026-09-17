@@ -431,6 +431,7 @@ import { isOpmapQuery, buildOpmapScript } from "./AipSkillContactScenarioMap";
 import { isThrmtQuery, buildThrmtScript } from "./RiskSignalScenarioContactMatrix";
 import { isEvlibQuery, buildEvlibScript } from "./DatasetReportScenarioEvidence";
 import { isMaconQuery, buildMaconScript } from "./TaskReportContactAudit";
+import { isTierQuery, buildTierScript } from "./IntelProfileDatasetScenario";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1773,6 +1774,9 @@ export default function JarvisBrain() {
       } else if (isMaconQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:macon-toggle"));
         answer = await buildMaconScript();
+      } else if (isTierQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:tier-toggle"));
+        answer = await buildTierScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

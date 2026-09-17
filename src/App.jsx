@@ -1130,6 +1130,7 @@ import AipSkillContactScenarioMap from '@/components/cinematic/AipSkillContactSc
 import RiskSignalScenarioContactMatrix from '@/components/cinematic/RiskSignalScenarioContactMatrix';
 import DatasetReportScenarioEvidence from '@/components/cinematic/DatasetReportScenarioEvidence';
 import TaskReportContactAudit from '@/components/cinematic/TaskReportContactAudit';
+import IntelProfileDatasetScenario from '@/components/cinematic/IntelProfileDatasetScenario';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3459,6 +3460,8 @@ function App() {
             <DatasetReportScenarioEvidence />
             {/* F176 (overnight 2026-09-17): Task × Report × Contact — Mission Accountability Audit (MACON) — TaskReportContactAudit.jsx; /entities/Task × /v1/reports × /entities/Contact; keyword-correlates each task against report archive AND contacts roster → FULLY_OWNED (report+contact)/ASSIGNED (contact only)/DOCUMENTED (report only)/ORPHAN (neither — mission with no owner or paper trail); red pulse on ORPHAN count; stat tiles (tasks/reports/contacts/fully owned/orphan); ALL/class filter tabs + search on task name/status; expand row → amber report bars + cyan contact bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence mission accountability brief + TTS via jarvis:speak-dossier; isMaconQuery+buildMaconScript exported; "macon"/"mission accountability"/"task report contact"/"orphan task"/"unowned task"/"task accountability"/"task ownership"/"task audit"/"mission dossier"/"untracked mission" voice trigger; jarvis:macon-toggle event; 90-s auto-refresh */}
             <TaskReportContactAudit />
+            {/* F177 (overnight 2026-09-17): IntelProfile × Dataset × Scenario — Threat Intelligence Evidence Readiness (TIER) — IntelProfileDatasetScenario.jsx; /entities/IntelProfile × /v1/datasets × /v1/scenario/list; keyword-correlates each intel profile against datasets AND scenarios → FULLY_ARMED/DATA_BACKED/SCENARIO_BACKED/UNARMED; red pulse on UNARMED count; stat tiles; ALL/class filter tabs + search; expand row → green dataset bars + amber scenario bars; ▶ ASSESS → agent/chat + TTS; isTierQuery+buildTierScript exported; jarvis:tier-toggle event; 90-s auto-refresh */}
+            <IntelProfileDatasetScenario />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
