@@ -1138,6 +1138,7 @@ import ContactSkillInvestigationReadiness from '@/components/cinematic/ContactSk
 import TaskSkillSwarmAutonomy from '@/components/cinematic/TaskSkillSwarmAutonomy';
 import RiskReportOpsEvidence from '@/components/cinematic/RiskReportOpsEvidence';
 import NetworkThreatAttribution from '@/components/cinematic/NetworkThreatAttribution';
+import InvestmentInvestigationKnowledge from '@/components/cinematic/InvestmentInvestigationKnowledge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3483,6 +3484,8 @@ function App() {
             <RiskReportOpsEvidence />
             {/* F184 (overnight 2026-09-17): Graph Nodes × Contact × RiskSignal — Network Threat Attribution (NGTA) — NetworkThreatAttribution.jsx; /v1/graph/centrality × /entities/Contact × /entities/RiskSignal; keyword-correlates each graph node against contacts AND risk signals → FULLY_ATTRIBUTED/CONTACT_KNOWN/RISK_FLAGGED/UNKNOWN; red pulse on UNKNOWN count; stat tiles (nodes/contacts/risks/attributed/unknown); ALL/class filter tabs + search; expand row → cyan contact bars + red risk bars; ▶ ASSESS → agent/chat + TTS; isNgtaQuery+buildNgtaScript wired JarvisBrain; ◈ NGTA button left:977680 zIndex:685; jarvis:ngta-toggle event; 90-s auto-refresh */}
             <NetworkThreatAttribution />
+            {/* F185 (overnight 2026-09-17): Investment × Investigation × Knowledge Coverage Matrix (IIKM) — InvestmentInvestigationKnowledge.jsx; /entities/Investment × /v1/investigations × /knowledge/; keyword-correlates each investment against open investigations AND KB articles → FULLY_COVERED/CASE_ONLY/KB_ONLY/DARK; red pulse on DARK count; stat tiles (investments/cases/articles/covered/dark); ALL/class filter tabs + search; expand row → amber investigation bars + green KB bars; ▶ ASSESS → agent/chat + TTS; isIikmQuery+buildIikmScript wired JarvisBrain; ◈ IIKM button left:978540 zIndex:686; jarvis:iikm-toggle event; 90-s auto-refresh */}
+            <InvestmentInvestigationKnowledge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

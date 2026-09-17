@@ -439,6 +439,7 @@ import { isOmrdyQuery, buildOmrdyScript } from "./ContactSkillInvestigationReadi
 import { isMaixQuery, buildMaixScript } from "./TaskSkillSwarmAutonomy";
 import { isTrecaQuery, buildTrecaScript } from "./RiskReportOpsEvidence";
 import { isNgtaQuery, buildNgtaScript } from "./NetworkThreatAttribution";
+import { isIikmQuery, buildIikmScript } from "./InvestmentInvestigationKnowledge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1805,6 +1806,9 @@ export default function JarvisBrain() {
       } else if (isNgtaQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:ngta-toggle"));
         answer = await buildNgtaScript();
+      } else if (isIikmQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:iikm-toggle"));
+        answer = await buildIikmScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
