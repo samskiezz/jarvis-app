@@ -1137,6 +1137,7 @@ import OpsEventDatasetIntelActivation from '@/components/cinematic/OpsEventDatas
 import ContactSkillInvestigationReadiness from '@/components/cinematic/ContactSkillInvestigationReadiness';
 import TaskSkillSwarmAutonomy from '@/components/cinematic/TaskSkillSwarmAutonomy';
 import RiskReportOpsEvidence from '@/components/cinematic/RiskReportOpsEvidence';
+import NetworkThreatAttribution from '@/components/cinematic/NetworkThreatAttribution';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3480,6 +3481,8 @@ function App() {
             <TaskSkillSwarmAutonomy />
             {/* F183 (overnight 2026-09-17): RiskSignal × Report × OpsEvent — Threat Response Evidence Chain Audit (TRECA) — RiskReportOpsEvidence.jsx; /entities/RiskSignal × /v1/reports × /v1/ops/events; keyword-correlates each risk signal against report archive AND ops event log → FULLY_DOCUMENTED/REPORT_LINKED/EVENT_LINKED/UNTRACKED; red pulse on UNTRACKED count; stat tiles (risks/reports/events/fully documented/untracked); ALL/class filter tabs + search; expand row → amber report bars + cyan event bars; ▶ ASSESS → agent/chat + TTS; isTrecaQuery+buildTrecaScript wired JarvisBrain; jarvis:treca-toggle event; 90-s auto-refresh */}
             <RiskReportOpsEvidence />
+            {/* F184 (overnight 2026-09-17): Graph Nodes × Contact × RiskSignal — Network Threat Attribution (NGTA) — NetworkThreatAttribution.jsx; /v1/graph/centrality × /entities/Contact × /entities/RiskSignal; keyword-correlates each graph node against contacts AND risk signals → FULLY_ATTRIBUTED/CONTACT_KNOWN/RISK_FLAGGED/UNKNOWN; red pulse on UNKNOWN count; stat tiles (nodes/contacts/risks/attributed/unknown); ALL/class filter tabs + search; expand row → cyan contact bars + red risk bars; ▶ ASSESS → agent/chat + TTS; isNgtaQuery+buildNgtaScript wired JarvisBrain; ◈ NGTA button left:977680 zIndex:685; jarvis:ngta-toggle event; 90-s auto-refresh */}
+            <NetworkThreatAttribution />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
