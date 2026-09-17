@@ -1128,6 +1128,7 @@ import OpsEventBadge from '@/components/cinematic/OpsEventBadge';
 import InvestmentSwarmTaskAutonomy from '@/components/cinematic/InvestmentSwarmTaskAutonomy';
 import AipSkillContactScenarioMap from '@/components/cinematic/AipSkillContactScenarioMap';
 import RiskSignalScenarioContactMatrix from '@/components/cinematic/RiskSignalScenarioContactMatrix';
+import DatasetReportScenarioEvidence from '@/components/cinematic/DatasetReportScenarioEvidence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3453,6 +3454,8 @@ function App() {
             <AipSkillContactScenarioMap />
             {/* F174 (overnight 2026-09-17): RiskSignal × Scenario × Contact — Threat Attribution Matrix (THRMAT) — RiskSignalScenarioContactMatrix.jsx; /entities/RiskSignal × /v1/scenario/list × /entities/Contact; keyword-correlates each risk signal against active scenarios AND responsible contacts → FULLY_ATTRIBUTED (scenario+contact)/SCENARIO_LINKED (scenario only)/CONTACT_LINKED (contact only)/UNATTRIBUTED (neither — threat with no context or owner); red pulse on UNATTRIBUTED count; stat tiles (risk signals/scenarios/contacts/fully attributed/unattributed); ALL/class filter tabs + search on signal name/type/severity; expand row → amber scenario bars + cyan contact bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat attribution brief + TTS via jarvis:speak-dossier; isThrmtQuery+buildThrmtScript exported; "thrmat"/"threat attribution"/"risk signal scenario"/"risk contact"/"unattributed risk"/"threat attribution matrix"/"risk attribution"/"threat contact"/"signal attribution" voice trigger; jarvis:thrmat-toggle event; 90-s auto-refresh */}
             <RiskSignalScenarioContactMatrix />
+            {/* F175 (overnight 2026-09-17): Dataset × Report × Scenario — Evidence Library Audit (EVLIB) — DatasetReportScenarioEvidence.jsx; /v1/datasets × /v1/reports × /v1/scenario/list; keyword-correlates each dataset against report archive AND active scenarios → FULLY_EVIDENCED (report+scenario)/REPORT_CITED (report only)/SCENARIO_USED (scenario only)/UNUSED (neither); orange pulse on UNUSED count; stat tiles (datasets/reports/scenarios/fully evidenced/unused); ALL/class filter tabs + search on dataset name/type; expand row → amber report bars + cyan scenario bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence evidence library brief + TTS via jarvis:speak-dossier; isEvlibQuery+buildEvlibScript exported; "evlib"/"evidence library"/"dataset report scenario"/"unused dataset"/"dataset coverage"/"evidence audit" voice trigger; jarvis:evlib-toggle event; 90-s auto-refresh */}
+            <DatasetReportScenarioEvidence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

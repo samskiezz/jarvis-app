@@ -429,6 +429,7 @@ import { isSdiceaQuery, buildSdiceaScript } from "./SkillDatasetInvestigationAud
 import { isCaritQuery, buildCaritScript } from "./InvestmentSwarmTaskAutonomy";
 import { isOpmapQuery, buildOpmapScript } from "./AipSkillContactScenarioMap";
 import { isThrmtQuery, buildThrmtScript } from "./RiskSignalScenarioContactMatrix";
+import { isEvlibQuery, buildEvlibScript } from "./DatasetReportScenarioEvidence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1765,6 +1766,9 @@ export default function JarvisBrain() {
       } else if (isThrmtQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:thrmat-toggle"));
         answer = await buildThrmtScript();
+      } else if (isEvlibQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:evlib-toggle"));
+        answer = await buildEvlibScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
