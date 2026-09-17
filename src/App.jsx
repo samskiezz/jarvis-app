@@ -1123,6 +1123,7 @@ import IntelProfileReportLinker from '@/components/cinematic/IntelProfileReportL
 import SwarmJobAipSkillReport from '@/components/cinematic/SwarmJobAipSkillReport';
 import KnowledgeScenarioTaskGap from '@/components/cinematic/KnowledgeScenarioTaskGap';
 import OpsEventReportKnowledgeChain from '@/components/cinematic/OpsEventReportKnowledgeChain';
+import SkillDatasetInvestigationAudit from '@/components/cinematic/SkillDatasetInvestigationAudit';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3438,6 +3439,8 @@ function App() {
             <KnowledgeScenarioTaskGap />
             {/* F170 (overnight 2026-09-17): OpsEvent × Report × Knowledge — Evidence Chain (ORKEC) — OpsEventReportKnowledgeChain.jsx; /v1/ops/events × /v1/reports × /knowledge/; keyword-correlates each ops event against report archive AND knowledge base → FULLY_EVIDENCED (report+KB)/REPORT_ONLY (no KB)/KB_ONLY (no report)/DARK (no documentation); red pulse on DARK count; stat tiles (events/reports/articles/evidenced/dark); ALL/class filter tabs + text search; expand row → matched reports (amber bars) + KB articles (cyan bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; isOrkecQuery+buildOrkecScript exported; "orkec"/"ops evidence"/"ops evidence chain"/"event evidence"/"ops documentation"/"undocumented ops"/"dark ops event"/"ops coverage"/"operational evidence" voice trigger; jarvis:orkec-toggle event; 90-s auto-refresh */}
             <OpsEventReportKnowledgeChain />
+            {/* F171 (overnight 2026-09-17): AIP Skill × Dataset × Investigation — Capability Enablement Audit (SDICEA) — SkillDatasetInvestigationAudit.jsx; /v1/aip/skill × /v1/datasets × /v1/investigations; keyword-correlates each skill against dataset catalog AND investigations → FULLY_ENABLED (data+case)/DATA_ONLY (no investigation)/CASE_ONLY (no dataset)/LATENT (neither); red pulse on LATENT count; stat tiles (skills/datasets/investigations/fully enabled/latent); ALL/class filter tabs + text search; expand row → matched datasets (green bars) + investigations (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; isSdiceaQuery+buildSdiceaScript exported; "sdicea"/"skill enablement"/"skill capability"/"skill dataset"/"skill investigation"/"latent skill"/"skill gap"/"skill audit"/"capability audit"/"dormant skill"/"skill coverage" voice trigger; jarvis:sdicea-toggle event; 90-s auto-refresh */}
+            <SkillDatasetInvestigationAudit />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
