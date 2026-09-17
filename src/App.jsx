@@ -1119,6 +1119,7 @@ import SwarmIntelScenarioAutonomy from '@/components/cinematic/SwarmIntelScenari
 import InvestmentRiskIntelCoverage from '@/components/cinematic/InvestmentRiskIntelCoverage';
 import TaskInvestigationKnowledge from '@/components/cinematic/TaskInvestigationKnowledge';
 import ScenarioDatasetOpsReadiness from '@/components/cinematic/ScenarioDatasetOpsReadiness';
+import IntelProfileReportLinker from '@/components/cinematic/IntelProfileReportLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3426,6 +3427,8 @@ function App() {
             <TaskInvestigationKnowledge />
             {/* F40 (overnight 2026-09-16): Scenario × Dataset × Ops Event Readiness Matrix (SDORM) — ScenarioDatasetOpsReadiness.jsx; /v1/scenario/list × /v1/datasets × /v1/ops/events; keyword-correlates each scenario against datasets AND ops events → FULLY_READY/DATA_BACKED/OPS_BACKED/UNREADY; orange pulse on UNREADY count; stat tiles + ALL/class filter + search; expand row → cyan dataset bar + green ops bar; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; ◈ SDORM button left:932400 bottom:8 zIndex:628; isSdormQuery+buildSdormScript wired JarvisBrain; jarvis:sdorm-toggle event; 90-s auto-refresh; voice: sdorm/scenario readiness/scenario dataset ops/scenario coverage matrix/unready scenario */}
             <ScenarioDatasetOpsReadiness />
+            {/* F166b (overnight 2026-09-17): intel profile × report coverage — ◈ IPRPT button (left:55080, bottom:8, zIndex:108); parallel-fetches /entities/IntelProfile + /v1/reports; keyword-correlates each threat actor against the report catalog to surface DOCUMENTED (report coverage found) vs UNDOCUMENTED (no report — intelligence gap); stat tiles (profiles/reports/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + text search; expand profile → matched reports with type badge + date + relevance bar; amber badge on undocumented count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-documentation brief + TTS via jarvis:speak-dossier; isIprptQuery+buildIprptScript exported from IntelProfileReportLinker; "intel report"/"profile report"/"threat report coverage"/"documented threats"/"undocumented threats"/"iprpt" voice trigger; jarvis:iprpt-toggle event; 120-s auto-refresh */}
+            <IntelProfileReportLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
