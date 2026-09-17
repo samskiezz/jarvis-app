@@ -1,0 +1,1 @@
+2026-07-19 | F236 Agent Tool Registry | AgentToolRegistry.jsx — polls /v1/jarvis/agent/tools every 60s; search + category filter; QUERY per tool → /v1/jarvis/agent/chat + TTS; wired JarvisBrain isToolRegistryQuery+buildToolRegistryScript; ◈ ATR button; mounted App.jsx; build EXIT:0.
