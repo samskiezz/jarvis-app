@@ -1124,6 +1124,7 @@ import SwarmJobAipSkillReport from '@/components/cinematic/SwarmJobAipSkillRepor
 import KnowledgeScenarioTaskGap from '@/components/cinematic/KnowledgeScenarioTaskGap';
 import OpsEventReportKnowledgeChain from '@/components/cinematic/OpsEventReportKnowledgeChain';
 import SkillDatasetInvestigationAudit from '@/components/cinematic/SkillDatasetInvestigationAudit';
+import OpsEventBadge from '@/components/cinematic/OpsEventBadge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1237,6 +1238,8 @@ function App() {
             <SkillScorecard />
             {/* F03: live telemetry ticker — thin top-bar HUD; polls /v1/jarvis/system/status (cpu/mem/load) + /v1/cinematic/brain (nodes/synapses) every 30 s; colour-coded pills; hides until first data arrives */}
             <LiveTelemetryTicker />
+            {/* F31: ops event badge — top-right pill; /v1/ops/events + /entities/RiskSignal; events + critical count; pulses red on criticals; click speaks ops brief */}
+            <OpsEventBadge />
             {/* F06: live world incident feed — ⚡ QUAKES button (left:8700); polls /functions/getLiveIntel every 60 s; SVG world map with magnitude-scaled pins + scrolling sorted incident list; "world incidents"/"earthquake feed"/"live quakes" voice trigger */}
             <LiveWorldIncidentFeed />
             {/* F05: spoken status report — "JARVIS, status" or "status report" → fetches /v1/jarvis/system/status + /v1/cinematic/brain; speaks precise numbers via /v1/voice/tts; HUD card auto-dismisses after 14 s */}
