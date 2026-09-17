@@ -1120,6 +1120,7 @@ import InvestmentRiskIntelCoverage from '@/components/cinematic/InvestmentRiskIn
 import TaskInvestigationKnowledge from '@/components/cinematic/TaskInvestigationKnowledge';
 import ScenarioDatasetOpsReadiness from '@/components/cinematic/ScenarioDatasetOpsReadiness';
 import IntelProfileReportLinker from '@/components/cinematic/IntelProfileReportLinker';
+import SwarmJobAipSkillReport from '@/components/cinematic/SwarmJobAipSkillReport';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3429,6 +3430,8 @@ function App() {
             <ScenarioDatasetOpsReadiness />
             {/* F166b (overnight 2026-09-17): intel profile × report coverage — ◈ IPRPT button (left:55080, bottom:8, zIndex:108); parallel-fetches /entities/IntelProfile + /v1/reports; keyword-correlates each threat actor against the report catalog to surface DOCUMENTED (report coverage found) vs UNDOCUMENTED (no report — intelligence gap); stat tiles (profiles/reports/documented/undocumented); ALL/DOCUMENTED/UNDOCUMENTED filter tabs + text search; expand profile → matched reports with type badge + date + relevance bar; amber badge on undocumented count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat-documentation brief + TTS via jarvis:speak-dossier; isIprptQuery+buildIprptScript exported from IntelProfileReportLinker; "intel report"/"profile report"/"threat report coverage"/"documented threats"/"undocumented threats"/"iprpt" voice trigger; jarvis:iprpt-toggle event; 120-s auto-refresh */}
             <IntelProfileReportLinker />
+            {/* F168 (overnight 2026-09-17): SwarmJob × AIP Skill × Report — Swarm Intelligence Execution Audit (SIERA) — SwarmJobAipSkillReport.jsx; /entities/SwarmJob × /v1/aip/skill × /v1/reports; keyword-correlates each swarm job against AIP skill catalog AND report archive → FULLY_DOCUMENTED (skill+report)/SKILLED_ONLY (skill, no report)/REPORTED_ONLY (report, no skill)/UNDOCUMENTED (neither — dark ops); red pulse on UNDOCUMENTED count; stat tiles (jobs/skills/reports/fully doc/skilled only/reported only/undocumented); ALL/class filter tabs + text search; expand job → cyan skill bar + amber report bar with scores; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm execution audit brief + TTS via jarvis:speak-dossier; isSieraQuery+buildSieraScript exported from SwarmJobAipSkillReport; "siera"/"swarm skill report"/"swarm execution audit"/"undocumented swarm"/"dark ops swarm"/"swarm intelligence audit"/"swarm coverage"/"swarm documentation" voice trigger; jarvis:siera-toggle event; 90-s auto-refresh */}
+            <SwarmJobAipSkillReport />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
