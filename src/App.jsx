@@ -1133,6 +1133,7 @@ import TaskReportContactAudit from '@/components/cinematic/TaskReportContactAudi
 import IntelProfileDatasetScenario from '@/components/cinematic/IntelProfileDatasetScenario';
 import SwarmJobContactKnowledge from '@/components/cinematic/SwarmJobContactKnowledge';
 import InvestigationRiskScenarioAlignment from '@/components/cinematic/InvestigationRiskScenarioAlignment';
+import OpsEventDatasetIntelActivation from '@/components/cinematic/OpsEventDatasetIntelActivation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3468,6 +3469,8 @@ function App() {
             <SwarmJobContactKnowledge />
             {/* F179 (overnight 2026-09-17): Investigation × RiskSignal × Scenario — Active Threat Case Alignment (ATCA) — InvestigationRiskScenarioAlignment.jsx; /v1/investigations × /entities/RiskSignal × /v1/scenario/list; keyword-correlates each investigation against risk signals AND scenarios → FULLY_TRACKED/RISK_ONLY/SCENARIO_ONLY/DARK; red pulse on DARK count; stat tiles (cases/risks/scenarios/full/dark); ALL/class filter tabs + search; expand row → red risk bars + amber scenario bars; ▶ ASSESS → agent/chat + TTS; isAtcaQuery+buildAtcaScript wired JarvisBrain; jarvis:atca-toggle event; 90-s auto-refresh */}
             <InvestigationRiskScenarioAlignment />
+            {/* F180 (overnight 2026-09-17): OpsEvent × Dataset × IntelProfile — Threat Intelligence Data Activation (TIDA) — OpsEventDatasetIntelActivation.jsx; /v1/ops/events × /v1/datasets × /entities/IntelProfile; keyword-correlates each ops event against datasets AND intel profiles → FULLY_ARMED/DATA_BACKED/INTEL_BACKED/UNACTIVATED; red pulse on UNACTIVATED count; stat tiles (events/datasets/intel/armed/data only/intel only/unactivated); ALL/class filter tabs + search; expand row → green dataset bars + cyan intel bars; ▶ ASSESS → agent/chat + TTS; isTidaQuery+buildTidaScript wired JarvisBrain; jarvis:tida-toggle event; 90-s auto-refresh */}
+            <OpsEventDatasetIntelActivation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

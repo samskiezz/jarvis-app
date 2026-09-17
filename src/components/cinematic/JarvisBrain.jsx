@@ -434,6 +434,7 @@ import { isMaconQuery, buildMaconScript } from "./TaskReportContactAudit";
 import { isTierQuery, buildTierScript } from "./IntelProfileDatasetScenario";
 import { isShkcQuery, buildShkcScript } from "./SwarmJobContactKnowledge";
 import { isAtcaQuery, buildAtcaScript } from "./InvestigationRiskScenarioAlignment";
+import { isTidaQuery, buildTidaScript } from "./OpsEventDatasetIntelActivation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1785,6 +1786,9 @@ export default function JarvisBrain() {
       } else if (isAtcaQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:atca-toggle"));
         answer = await buildAtcaScript();
+      } else if (isTidaQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:tida-toggle"));
+        answer = await buildTidaScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
