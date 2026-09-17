@@ -440,6 +440,7 @@ import { isMaixQuery, buildMaixScript } from "./TaskSkillSwarmAutonomy";
 import { isTrecaQuery, buildTrecaScript } from "./RiskReportOpsEvidence";
 import { isNgtaQuery, buildNgtaScript } from "./NetworkThreatAttribution";
 import { isIikmQuery, buildIikmScript } from "./InvestmentInvestigationKnowledge";
+import { isTroiQuery, buildTroiScript } from "./RiskSignalContactSwarm";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1809,6 +1810,9 @@ export default function JarvisBrain() {
       } else if (isIikmQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:iikm-toggle"));
         answer = await buildIikmScript();
+      } else if (isTroiQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:troi-toggle"));
+        answer = await buildTroiScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

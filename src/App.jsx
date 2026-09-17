@@ -1139,6 +1139,7 @@ import TaskSkillSwarmAutonomy from '@/components/cinematic/TaskSkillSwarmAutonom
 import RiskReportOpsEvidence from '@/components/cinematic/RiskReportOpsEvidence';
 import NetworkThreatAttribution from '@/components/cinematic/NetworkThreatAttribution';
 import InvestmentInvestigationKnowledge from '@/components/cinematic/InvestmentInvestigationKnowledge';
+import RiskSignalContactSwarm from '@/components/cinematic/RiskSignalContactSwarm';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3486,6 +3487,8 @@ function App() {
             <NetworkThreatAttribution />
             {/* F185 (overnight 2026-09-17): Investment × Investigation × Knowledge Coverage Matrix (IIKM) — InvestmentInvestigationKnowledge.jsx; /entities/Investment × /v1/investigations × /knowledge/; keyword-correlates each investment against open investigations AND KB articles → FULLY_COVERED/CASE_ONLY/KB_ONLY/DARK; red pulse on DARK count; stat tiles (investments/cases/articles/covered/dark); ALL/class filter tabs + search; expand row → amber investigation bars + green KB bars; ▶ ASSESS → agent/chat + TTS; isIikmQuery+buildIikmScript wired JarvisBrain; ◈ IIKM button left:978540 zIndex:686; jarvis:iikm-toggle event; 90-s auto-refresh */}
             <InvestmentInvestigationKnowledge />
+            {/* F186 (overnight 2026-09-17): RiskSignal × Contact × SwarmJob — Threat Response Ownership Index (TROI) — RiskSignalContactSwarm.jsx; /entities/RiskSignal × /entities/Contact × /entities/SwarmJob; keyword-correlates each risk signal against responsible contacts AND active swarm jobs → FULLY_OWNED/CONTACT_ONLY/SWARM_ONLY/UNOWNED; red pulse on UNOWNED count; stat tiles (signals/contacts/swarm jobs/owned/unowned); ALL/class filter tabs + search; expand row → green contact bars + amber swarm bars; ▶ ASSESS → agent/chat + TTS; isTroiQuery+buildTroiScript wired JarvisBrain; ◈ TROI button left:979400 zIndex:687; jarvis:troi-toggle event; 90-s auto-refresh */}
+            <RiskSignalContactSwarm />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
