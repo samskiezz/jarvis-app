@@ -1134,6 +1134,7 @@ import IntelProfileDatasetScenario from '@/components/cinematic/IntelProfileData
 import SwarmJobContactKnowledge from '@/components/cinematic/SwarmJobContactKnowledge';
 import InvestigationRiskScenarioAlignment from '@/components/cinematic/InvestigationRiskScenarioAlignment';
 import OpsEventDatasetIntelActivation from '@/components/cinematic/OpsEventDatasetIntelActivation';
+import ContactSkillInvestigationReadiness from '@/components/cinematic/ContactSkillInvestigationReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3471,6 +3472,8 @@ function App() {
             <InvestigationRiskScenarioAlignment />
             {/* F180 (overnight 2026-09-17): OpsEvent × Dataset × IntelProfile — Threat Intelligence Data Activation (TIDA) — OpsEventDatasetIntelActivation.jsx; /v1/ops/events × /v1/datasets × /entities/IntelProfile; keyword-correlates each ops event against datasets AND intel profiles → FULLY_ARMED/DATA_BACKED/INTEL_BACKED/UNACTIVATED; red pulse on UNACTIVATED count; stat tiles (events/datasets/intel/armed/data only/intel only/unactivated); ALL/class filter tabs + search; expand row → green dataset bars + cyan intel bars; ▶ ASSESS → agent/chat + TTS; isTidaQuery+buildTidaScript wired JarvisBrain; jarvis:tida-toggle event; 90-s auto-refresh */}
             <OpsEventDatasetIntelActivation />
+            {/* F181 (overnight 2026-09-17): Contact × AIP Skill × Investigation — Operator Mission Readiness (OMRDY) — ContactSkillInvestigationReadiness.jsx; /entities/Contact × /v1/aip/skill × /v1/investigations; keyword-correlates each contact against skills AND investigations → FULLY_READY/SKILLED_ONLY/CASE_ASSIGNED/UNREADY; amber pulse on UNREADY count; stat tiles (contacts/skills/cases/ready/skilled/case-only/unready); ALL/class filter tabs + search; expand row → green skill bars + amber investigation bars; ▶ ASSESS → agent/chat + TTS; isOmrdyQuery+buildOmrdyScript wired JarvisBrain; jarvis:omrdy-toggle event; 90-s auto-refresh */}
+            <ContactSkillInvestigationReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
