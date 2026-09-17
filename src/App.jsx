@@ -1121,6 +1121,7 @@ import TaskInvestigationKnowledge from '@/components/cinematic/TaskInvestigation
 import ScenarioDatasetOpsReadiness from '@/components/cinematic/ScenarioDatasetOpsReadiness';
 import IntelProfileReportLinker from '@/components/cinematic/IntelProfileReportLinker';
 import SwarmJobAipSkillReport from '@/components/cinematic/SwarmJobAipSkillReport';
+import KnowledgeScenarioTaskGap from '@/components/cinematic/KnowledgeScenarioTaskGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3432,6 +3433,8 @@ function App() {
             <IntelProfileReportLinker />
             {/* F168 (overnight 2026-09-17): SwarmJob × AIP Skill × Report — Swarm Intelligence Execution Audit (SIERA) — SwarmJobAipSkillReport.jsx; /entities/SwarmJob × /v1/aip/skill × /v1/reports; keyword-correlates each swarm job against AIP skill catalog AND report archive → FULLY_DOCUMENTED (skill+report)/SKILLED_ONLY (skill, no report)/REPORTED_ONLY (report, no skill)/UNDOCUMENTED (neither — dark ops); red pulse on UNDOCUMENTED count; stat tiles (jobs/skills/reports/fully doc/skilled only/reported only/undocumented); ALL/class filter tabs + text search; expand job → cyan skill bar + amber report bar with scores; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm execution audit brief + TTS via jarvis:speak-dossier; isSieraQuery+buildSieraScript exported from SwarmJobAipSkillReport; "siera"/"swarm skill report"/"swarm execution audit"/"undocumented swarm"/"dark ops swarm"/"swarm intelligence audit"/"swarm coverage"/"swarm documentation" voice trigger; jarvis:siera-toggle event; 90-s auto-refresh */}
             <SwarmJobAipSkillReport />
+            {/* F169 (overnight 2026-09-17): Knowledge × Scenario × Task — Operational Knowledge Gap (ORKG) — KnowledgeScenarioTaskGap.jsx; /knowledge/ × /v1/scenario/list × /entities/Task; keyword-correlates each knowledge article against active scenarios AND open tasks → FULLY_APPLIED (scenario+task)/SCENARIO_BACKED (no task)/TASK_BACKED (no scenario)/ORPHAN (neither — dark intelligence); red pulse on ORPHAN count; stat tiles (articles/scenarios/tasks/applied/orphan); ALL/class filter tabs + text search on title; expand row → matched scenarios (amber bars) + matched tasks (cyan bars) with relevance scores; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge readiness brief + TTS via jarvis:speak-dossier; isOrkgQuery+buildOrkgScript exported from KnowledgeScenarioTaskGap; "orkg"/"knowledge gap"/"orphan knowledge"/"operational knowledge"/"knowledge readiness"/"knowledge scenario"/"knowledge task"/"dark knowledge"/"unlinked knowledge"/"knowledge coverage" voice trigger; jarvis:orkg-toggle event; 90-s auto-refresh */}
+            <KnowledgeScenarioTaskGap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
