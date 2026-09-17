@@ -1125,6 +1125,7 @@ import KnowledgeScenarioTaskGap from '@/components/cinematic/KnowledgeScenarioTa
 import OpsEventReportKnowledgeChain from '@/components/cinematic/OpsEventReportKnowledgeChain';
 import SkillDatasetInvestigationAudit from '@/components/cinematic/SkillDatasetInvestigationAudit';
 import OpsEventBadge from '@/components/cinematic/OpsEventBadge';
+import InvestmentSwarmTaskAutonomy from '@/components/cinematic/InvestmentSwarmTaskAutonomy';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3444,6 +3445,8 @@ function App() {
             <OpsEventReportKnowledgeChain />
             {/* F171 (overnight 2026-09-17): AIP Skill × Dataset × Investigation — Capability Enablement Audit (SDICEA) — SkillDatasetInvestigationAudit.jsx; /v1/aip/skill × /v1/datasets × /v1/investigations; keyword-correlates each skill against dataset catalog AND investigations → FULLY_ENABLED (data+case)/DATA_ONLY (no investigation)/CASE_ONLY (no dataset)/LATENT (neither); red pulse on LATENT count; stat tiles (skills/datasets/investigations/fully enabled/latent); ALL/class filter tabs + text search; expand row → matched datasets (green bars) + investigations (amber bars); ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; isSdiceaQuery+buildSdiceaScript exported; "sdicea"/"skill enablement"/"skill capability"/"skill dataset"/"skill investigation"/"latent skill"/"skill gap"/"skill audit"/"capability audit"/"dormant skill"/"skill coverage" voice trigger; jarvis:sdicea-toggle event; 90-s auto-refresh */}
             <SkillDatasetInvestigationAudit />
+            {/* F172 (overnight 2026-09-17): Investment × SwarmJob × Task — Capital Automation Readiness (CARIT) — InvestmentSwarmTaskAutonomy.jsx; /entities/Investment × /entities/SwarmJob × /entities/Task; keyword-correlates each investment against swarm automation AND open tasks → FULLY_MANAGED (swarm+task)/SWARM_MONITORED (swarm only)/TASK_TRACKED (task only)/UNMANAGED (neither — capital flying blind); orange pulse on UNMANAGED count; stat tiles (investments/swarm jobs/tasks/fully managed/unmanaged); ALL/class filter tabs + search on name/type/ticker; expand row → cyan swarm bars + amber task bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capital readiness brief + TTS via jarvis:speak-dossier; isCaritQuery+buildCaritScript exported; "carit"/"capital automation"/"investment swarm"/"investment task"/"unmanaged investment"/"capital readiness"/"portfolio automation"/"investment management"/"capital oversight"/"untracked investment" voice trigger; jarvis:carit-toggle event; 90-s auto-refresh */}
+            <InvestmentSwarmTaskAutonomy />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -426,6 +426,7 @@ import { isSieraQuery, buildSieraScript } from "./SwarmJobAipSkillReport";
 import { isOrkgQuery, buildOrkgScript } from "./KnowledgeScenarioTaskGap";
 import { isOrkecQuery, buildOrkecScript } from "./OpsEventReportKnowledgeChain";
 import { isSdiceaQuery, buildSdiceaScript } from "./SkillDatasetInvestigationAudit";
+import { isCaritQuery, buildCaritScript } from "./InvestmentSwarmTaskAutonomy";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1754,6 +1755,8 @@ export default function JarvisBrain() {
         answer = await buildOrkecScript();
       } else if (isSdiceaQuery(q)) {
         answer = await buildSdiceaScript();
+      } else if (isCaritQuery(q)) {
+        answer = await buildCaritScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
