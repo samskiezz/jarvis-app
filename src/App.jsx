@@ -1141,6 +1141,7 @@ import NetworkThreatAttribution from '@/components/cinematic/NetworkThreatAttrib
 import InvestmentInvestigationKnowledge from '@/components/cinematic/InvestmentInvestigationKnowledge';
 import RiskSignalContactSwarm from '@/components/cinematic/RiskSignalContactSwarm';
 import DatasetScenarioKnowledge from '@/components/cinematic/DatasetScenarioKnowledge';
+import IntelProfileContactScenarioNetwork from '@/components/cinematic/IntelProfileContactScenarioNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3492,6 +3493,8 @@ function App() {
             <RiskSignalContactSwarm />
             {/* F187 (overnight 2026-09-17): Dataset × Scenario × Knowledge — Operational Readiness (DSKOR) — DatasetScenarioKnowledge.jsx; /v1/datasets × /v1/scenario/list × /knowledge/; keyword-correlates each dataset against active scenarios AND KB articles → FULLY_OPERATIONAL/SCENARIO_BACKED/KB_BACKED/UNINDEXED; orange pulse on UNINDEXED count; stat tiles (datasets/scenarios/KB articles/operational/unindexed); ALL/class filter tabs + search; expand row → amber scenario bars + green KB bars; ▶ ASSESS → agent/chat + TTS; isDskorQuery+buildDskorScript wired JarvisBrain; ◈ DSKOR button left:980260 zIndex:688; jarvis:dskor-toggle event; 90-s auto-refresh */}
             <DatasetScenarioKnowledge />
+            {/* F188 (overnight 2026-09-17): IntelProfile × Contact × Scenario — Threat Actor Contact Network (TACN) — IntelProfileContactScenarioNetwork.jsx; /entities/IntelProfile × /entities/Contact × /v1/scenario/list; keyword-correlates each intel profile against contacts AND active scenarios → FULLY_MAPPED/CONTACT_LINKED/SCENARIO_LINKED/DARK; red pulse on DARK count; stat tiles (profiles/contacts/scenarios/fully mapped/dark); ALL/class filter tabs + search; expand row → cyan contact bars + amber scenario bars; ▶ ASSESS → agent/chat + TTS; isTacnQuery+buildTacnScript wired JarvisBrain; ◈ TACN button left:981120 zIndex:689; jarvis:tacn-toggle event; 90-s auto-refresh */}
+            <IntelProfileContactScenarioNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

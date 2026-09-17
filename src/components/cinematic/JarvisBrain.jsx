@@ -442,6 +442,7 @@ import { isNgtaQuery, buildNgtaScript } from "./NetworkThreatAttribution";
 import { isIikmQuery, buildIikmScript } from "./InvestmentInvestigationKnowledge";
 import { isTroiQuery, buildTroiScript } from "./RiskSignalContactSwarm";
 import { isDskorQuery, buildDskorScript } from "./DatasetScenarioKnowledge";
+import { isTacnQuery, buildTacnScript } from "./IntelProfileContactScenarioNetwork";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1817,6 +1818,9 @@ export default function JarvisBrain() {
       } else if (isDskorQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:dskor-toggle"));
         answer = await buildDskorScript();
+      } else if (isTacnQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:tacn-toggle"));
+        answer = await buildTacnScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
