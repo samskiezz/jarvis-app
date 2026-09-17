@@ -1129,6 +1129,7 @@ import InvestmentSwarmTaskAutonomy from '@/components/cinematic/InvestmentSwarmT
 import AipSkillContactScenarioMap from '@/components/cinematic/AipSkillContactScenarioMap';
 import RiskSignalScenarioContactMatrix from '@/components/cinematic/RiskSignalScenarioContactMatrix';
 import DatasetReportScenarioEvidence from '@/components/cinematic/DatasetReportScenarioEvidence';
+import TaskReportContactAudit from '@/components/cinematic/TaskReportContactAudit';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3456,6 +3457,8 @@ function App() {
             <RiskSignalScenarioContactMatrix />
             {/* F175 (overnight 2026-09-17): Dataset × Report × Scenario — Evidence Library Audit (EVLIB) — DatasetReportScenarioEvidence.jsx; /v1/datasets × /v1/reports × /v1/scenario/list; keyword-correlates each dataset against report archive AND active scenarios → FULLY_EVIDENCED (report+scenario)/REPORT_CITED (report only)/SCENARIO_USED (scenario only)/UNUSED (neither); orange pulse on UNUSED count; stat tiles (datasets/reports/scenarios/fully evidenced/unused); ALL/class filter tabs + search on dataset name/type; expand row → amber report bars + cyan scenario bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence evidence library brief + TTS via jarvis:speak-dossier; isEvlibQuery+buildEvlibScript exported; "evlib"/"evidence library"/"dataset report scenario"/"unused dataset"/"dataset coverage"/"evidence audit" voice trigger; jarvis:evlib-toggle event; 90-s auto-refresh */}
             <DatasetReportScenarioEvidence />
+            {/* F176 (overnight 2026-09-17): Task × Report × Contact — Mission Accountability Audit (MACON) — TaskReportContactAudit.jsx; /entities/Task × /v1/reports × /entities/Contact; keyword-correlates each task against report archive AND contacts roster → FULLY_OWNED (report+contact)/ASSIGNED (contact only)/DOCUMENTED (report only)/ORPHAN (neither — mission with no owner or paper trail); red pulse on ORPHAN count; stat tiles (tasks/reports/contacts/fully owned/orphan); ALL/class filter tabs + search on task name/status; expand row → amber report bars + cyan contact bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence mission accountability brief + TTS via jarvis:speak-dossier; isMaconQuery+buildMaconScript exported; "macon"/"mission accountability"/"task report contact"/"orphan task"/"unowned task"/"task accountability"/"task ownership"/"task audit"/"mission dossier"/"untracked mission" voice trigger; jarvis:macon-toggle event; 90-s auto-refresh */}
+            <TaskReportContactAudit />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
