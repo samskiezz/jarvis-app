@@ -200,6 +200,7 @@ import OperationalPulseRing from '@/components/cinematic/OperationalPulseRing';
 import SkillProgressionTracker from '@/components/cinematic/SkillProgressionTracker';
 import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCoverage';
 import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
+import BrainSystemStatusFusion from '@/components/cinematic/BrainSystemStatusFusion';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -593,6 +594,8 @@ function App() {
             <AipSkillScenarioCoverage />
             {/* F39 (overnight 2026-09-18): Agent tool registry — ◈ ATR button; polls /v1/jarvis/agent/tools every 60 s; category filter + text search; ▶ QUERY → agent chat; "tool registry"/"agent tools"/"what tools"/"jarvis capabilities" voice trigger */}
             <AgentToolRegistry />
+            {/* F40 (overnight 2026-09-18): Brain × System Status Fusion — ◈ BSSF button; parallel-polls /v1/cinematic/brain (nodes/synapses) + /v1/jarvis/system/status (cpu/mem/load/provider); fused operational score (0-100); history sparkline; ▶ ASSESS → agent + TTS; "bssf"/"brain status"/"brain health"/"brain fusion"/"operational score"/"health fusion" voice trigger; jarvis:bssf-toggle event */}
+            <BrainSystemStatusFusion />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
