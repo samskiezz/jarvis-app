@@ -22,7 +22,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
 - [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
 - [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
-- [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).
+- [x] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS). [2026-09-18] Wired isStatusQuery+buildStatusScript from SpokenStatusReport into JarvisBrain.ask(); status queries now bypass the agent and speak real /v1/jarvis/system/status + /v1/cinematic/brain telemetry via TTS.
 - [ ] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins.
 - [ ] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers.
 - [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.

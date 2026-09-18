@@ -1,0 +1,1 @@
+[2026-09-18] F05 DONE — SpokenStatusReport wired into JarvisBrain.ask(); 'JARVIS, status' now fetches real CPU/mem/load from /v1/jarvis/system/status + nodes/synapses from /v1/cinematic/brain and speaks via TTS. Build: vite exit 0.

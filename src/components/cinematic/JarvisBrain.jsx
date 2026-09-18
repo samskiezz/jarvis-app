@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
+import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -81,6 +82,16 @@ export default function JarvisBrain() {
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
+
+    // F05: status queries bypass the agent and speak real telemetry directly.
+    if (isStatusQuery(q)) {
+      let script = "";
+      try { script = await buildStatusScript(); } catch { script = "Status telemetry unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
