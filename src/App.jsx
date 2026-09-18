@@ -1148,6 +1148,7 @@ import ScenarioContactTaskMatrix from '@/components/cinematic/ScenarioContactTas
 import OpsEventTaskSkillReadiness from '@/components/cinematic/OpsEventTaskSkillReadiness';
 import KnowledgeInvestigationSkillReadiness from '@/components/cinematic/KnowledgeInvestigationSkillReadiness';
 import InvestmentDatasetOpsRisk from '@/components/cinematic/InvestmentDatasetOpsRisk';
+import ReportGraphContactNetwork from '@/components/cinematic/ReportGraphContactNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3513,6 +3514,8 @@ function App() {
             <KnowledgeInvestigationSkillReadiness />
             {/* F194 (overnight 2026-09-18): Investment × Dataset × OpsEvent — Portfolio Operational Risk Intelligence (PORI) — InvestmentDatasetOpsRisk.jsx; /entities/Investment × /v1/datasets × /v1/ops/events; keyword-correlates each investment against dataset catalog AND ops events → FULLY_COVERED/DATA_BACKED/EVENT_EXPOSED/UNMONITORED; orange pulse on UNMONITORED count; stat tiles (investments/datasets/events/covered/unmonitored); ALL/class filter tabs + text search; expand row → green dataset bars + amber event bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isPoriQuery+buildPoriScript wired JarvisBrain; ◈ PORI button left:986280 zIndex:695; jarvis:pori-toggle event; 90-s auto-refresh */}
             <InvestmentDatasetOpsRisk />
+            {/* F195 (overnight 2026-09-18): Report × Graph Node × Contact — Intelligence Publication Network (IPNET) — ReportGraphContactNetwork.jsx; /v1/reports × /v1/graph/centrality × /entities/Contact; keyword-correlates each report against graph node catalog AND contacts roster → FULLY_MAPPED/GRAPH_LINKED/CONTACT_LINKED/DARK; red pulse on DARK count; stat tiles (reports/nodes/contacts/fully mapped/dark); ALL/class filter tabs + text search; expand row → cyan graph node bars + green contact bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIpnetQuery+buildIpnetScript wired JarvisBrain; ◈ IPNET button left:987140 zIndex:696; jarvis:ipnet-toggle event; 90-s auto-refresh */}
+            <ReportGraphContactNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -449,6 +449,7 @@ import { isCrtmQuery, buildCrtmScript } from "./ScenarioContactTaskMatrix";
 import { isOrarQuery, buildOrarScript } from "./OpsEventTaskSkillReadiness";
 import { isOiriQuery, buildOiriScript } from "./KnowledgeInvestigationSkillReadiness";
 import { isPoriQuery, buildPoriScript } from "./InvestmentDatasetOpsRisk";
+import { isIpnetQuery, buildIpnetScript } from "./ReportGraphContactNetwork";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1844,6 +1845,8 @@ export default function JarvisBrain() {
         answer = await buildOiriScript();
       } else if (isPoriQuery(q)) {
         answer = await buildPoriScript();
+      } else if (isIpnetQuery(q)) {
+        answer = await buildIpnetScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
