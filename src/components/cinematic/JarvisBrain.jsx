@@ -444,6 +444,7 @@ import { isTroiQuery, buildTroiScript } from "./RiskSignalContactSwarm";
 import { isDskorQuery, buildDskorScript } from "./DatasetScenarioKnowledge";
 import { isTacnQuery, buildTacnScript } from "./IntelProfileContactScenarioNetwork";
 import { isNomaQuery, buildNomaScript } from "./GraphNodeMissionAlignment";
+import { isCdocQuery, buildCdocScript } from "./SkillReportTaskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1825,6 +1826,9 @@ export default function JarvisBrain() {
       } else if (isNomaQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:noma-toggle"));
         answer = await buildNomaScript();
+      } else if (isCdocQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:cdoc-toggle"));
+        answer = await buildCdocScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);

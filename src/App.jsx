@@ -1143,6 +1143,7 @@ import RiskSignalContactSwarm from '@/components/cinematic/RiskSignalContactSwar
 import DatasetScenarioKnowledge from '@/components/cinematic/DatasetScenarioKnowledge';
 import IntelProfileContactScenarioNetwork from '@/components/cinematic/IntelProfileContactScenarioNetwork';
 import GraphNodeMissionAlignment from '@/components/cinematic/GraphNodeMissionAlignment';
+import SkillReportTaskCoverage from '@/components/cinematic/SkillReportTaskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3498,6 +3499,8 @@ function App() {
             <IntelProfileContactScenarioNetwork />
             {/* F189 (overnight 2026-09-17): Graph Node × Scenario × Investigation — Node Mission Alignment (NOMA) — GraphNodeMissionAlignment.jsx; /v1/graph/centrality × /v1/scenario/list × /v1/investigations; keyword-correlates each graph node against active scenarios AND open investigations → FULLY_TRACKED (both)/SCENARIO_ONLY/CASE_ONLY/ORPHAN (neither — dark node with no strategic or operational linkage); red pulse on ORPHAN count; stat tiles (nodes/scenarios/investigations/fully tracked/orphan); ALL/class filter tabs + text search; expand row → amber scenario bars + cyan investigation bars; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence node mission brief + TTS via jarvis:speak-dossier; isNomaQuery+buildNomaScript wired JarvisBrain; ◈ NOMA button left:981980 zIndex:690; jarvis:noma-toggle event; 90-s auto-refresh */}
             <GraphNodeMissionAlignment />
+            {/* F190 (overnight 2026-09-18): AIP Skill × Report × Task — Capability Documentation Coverage (CDOC) — SkillReportTaskCoverage.jsx; /v1/aip/skill × /v1/reports × /entities/Task; keyword-correlates each skill against report archive AND open tasks → FULLY_COVERED (report+task)/DOCUMENTED (report only)/TASKED (task only)/LATENT (neither); amber pulse on LATENT count; stat tiles (skills/fully covered/documented/tasked/latent); ALL/class filter tabs + text search; expand row → amber report bars + cyan task bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCdocQuery+buildCdocScript wired JarvisBrain; ◈ CDOC button left:982840 zIndex:691; jarvis:cdoc-toggle event; 90-s auto-refresh */}
+            <SkillReportTaskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
