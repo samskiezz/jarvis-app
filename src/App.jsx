@@ -196,6 +196,7 @@ import InvestigationScenarioLinker from '@/components/cinematic/InvestigationSce
 import DatasetInvestigationGap from '@/components/cinematic/DatasetInvestigationGap';
 import InvestigationScenarioTaskPipeline from '@/components/cinematic/InvestigationScenarioTaskPipeline';
 import RiskInvestigationMatrix from '@/components/cinematic/RiskInvestigationMatrix';
+import OperationalPulseRing from '@/components/cinematic/OperationalPulseRing';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -581,6 +582,8 @@ function App() {
             <InvestigationScenarioTaskPipeline />
             {/* F35 (overnight 2026-09-18): risk-investigation coverage matrix — ◈ RISGAP button (left:10120, bottom:8, zIndex:66); parallel-fetches /entities/RiskSignal + /v1/investigations; keyword-correlates active risks against open investigation cases to surface COVERED vs UNCOVERED; stat tiles: risks/covered/uncovered/critical-gap; filter tabs: ALL/COVERED/UNCOVERED/CRITICAL; red badge on uncovered count; ▶ ASSESS per risk → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; isRisGapQuery+buildRisGapScript wired in JarvisBrain; 60-s auto-refresh; "risk coverage"/"risk gap"/"risgap"/"uncovered risks" voice trigger */}
             <RiskInvestigationMatrix />
+            {/* F166 (overnight 2026-09-18): operational pulse ring — ambient 56×56 SVG health ring fixed at bottom-right; outer arc = system health from /v1/jarvis/system/status cpu_percent; inner arc = risk health from /entities/RiskSignal critical/high count; overall score = mean of both; green ≥75 / amber 40–74 / red <40; 45-s auto-refresh; dismissed via localStorage; isPulseQuery+buildPulseScript wired in JarvisBrain; "pulse ring"/"health ring"/"operational ring" voice trigger */}
+            <OperationalPulseRing />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

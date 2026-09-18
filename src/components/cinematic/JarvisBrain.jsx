@@ -14,6 +14,7 @@ import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChe
 import { isDataGapQuery, buildDataGapScript } from "./DatasetInvestigationGap";
 import { isInvPipeQuery, buildInvPipeScript } from "./InvestigationScenarioTaskPipeline";
 import { isRisGapQuery, buildRisGapScript } from "./RiskInvestigationMatrix";
+import { isPulseQuery, buildPulseScript } from "./OperationalPulseRing";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -193,6 +194,13 @@ export default function JarvisBrain() {
       try { script = await buildRisGapScript(); } catch { script = "Risk-investigation matrix is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPulseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:pulse-show"));
+      const script = buildPulseScript(null);
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;
     }
     let answer = "";
