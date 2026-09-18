@@ -194,6 +194,7 @@ import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage'
 import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
 import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
 import DatasetInvestigationGap from '@/components/cinematic/DatasetInvestigationGap';
+import InvestigationScenarioTaskPipeline from '@/components/cinematic/InvestigationScenarioTaskPipeline';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -575,6 +576,8 @@ function App() {
             <OpsTaskCoverageChecker />
             {/* F33 (overnight 2026-09-18): dataset-investigation gap — ◈ DATAGAP button (left:9000, bottom:8, zIndex:65); parallel-fetches /v1/datasets + /v1/investigations; keyword-correlates each open investigation against dataset catalog to surface SOURCED vs UNSOURCED (data gap); stat tiles + filter tabs; amber badge on unsourced count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-gap recommendation + TTS; 60-s auto-refresh; "data gap"/"datagap"/"dataset investigation gap"/"unsourced investigations" voice trigger */}
             <DatasetInvestigationGap />
+            {/* F34 (overnight 2026-09-18): investigation → scenario → task pipeline — ◈ INVPIPE button (left:9560, bottom:8, zIndex:65); parallel-fetches /v1/investigations + /v1/scenario/list + /entities/Task; 3-hop resolution chain: open case → best-fit scenario → candidate tasks; FULL_CHAIN/PLANNED/NO_PLAN filter tabs; amber badge on cases with no scenario plan; ▶ ASSESS RESOLUTION PATH → /v1/jarvis/agent/chat 2-sentence resolution brief + TTS via jarvis:speak-dossier; isInvPipeQuery+buildInvPipeScript wired in JarvisBrain; 90-s auto-refresh; "investigation pipeline"/"case pipeline"/"case resolution"/"invpipe" voice trigger */}
+            <InvestigationScenarioTaskPipeline />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
