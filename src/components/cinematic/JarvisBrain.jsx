@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
+import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -78,6 +79,12 @@ export default function JarvisBrain() {
 
   async function ask(q) {
     if (!q || !q.trim()) return;
+    // F20: "show me X" / "open X" / "view X" → re-route to the matching panel's keyword.
+    if (isShowMeQuery(q)) {
+      const resolved = resolveShowMeQuery(q);
+      window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: resolved } }));
+      return;
+    }
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
