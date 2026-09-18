@@ -1145,6 +1145,7 @@ import IntelProfileContactScenarioNetwork from '@/components/cinematic/IntelProf
 import GraphNodeMissionAlignment from '@/components/cinematic/GraphNodeMissionAlignment';
 import SkillReportTaskCoverage from '@/components/cinematic/SkillReportTaskCoverage';
 import ScenarioContactTaskMatrix from '@/components/cinematic/ScenarioContactTaskMatrix';
+import OpsEventTaskSkillReadiness from '@/components/cinematic/OpsEventTaskSkillReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3504,6 +3505,8 @@ function App() {
             <SkillReportTaskCoverage />
             {/* F191 (overnight 2026-09-18): Scenario × Contact × Task — Crisis Response Matrix (CRTM) — ScenarioContactTaskMatrix.jsx; /v1/scenario/list × /entities/Contact × /entities/Task; keyword-correlates each scenario against contacts roster AND task catalog → FULLY_RESOURCED/CONTACT_ONLY/TASK_ONLY/UNRESOURCED; red pulse on UNRESOURCED count; stat tiles (scenarios/contacts/tasks/fully resourced/unresourced); ALL/class filter tabs + text search; expand row → green contact bars + amber task bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCrtmQuery+buildCrtmScript wired JarvisBrain; ◈ CRTM button left:983700 zIndex:692; jarvis:crtm-toggle event; 90-s auto-refresh */}
             <ScenarioContactTaskMatrix />
+            {/* F192 (overnight 2026-09-18): OpsEvent × Task × AIP Skill — Operational Response Automation Readiness (ORAR) — OpsEventTaskSkillReadiness.jsx; /v1/ops/events × /entities/Task × /v1/aip/skill; keyword-correlates each ops event against open tasks AND skill catalog → FULLY_AUTOMATED/TASK_BACKED/SKILL_BACKED/MANUAL; red pulse on MANUAL count; stat tiles (events/tasks/skills/automated/manual); ALL/class filter tabs + text search; expand row → amber task bars + green skill bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOrarQuery+buildOrarScript wired JarvisBrain; ◈ ORAR button left:984560 zIndex:693; jarvis:orar-toggle event; 90-s auto-refresh */}
+            <OpsEventTaskSkillReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
