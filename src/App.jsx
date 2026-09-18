@@ -193,6 +193,7 @@ import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRat
 import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage';
 import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
 import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
+import DatasetInvestigationGap from '@/components/cinematic/DatasetInvestigationGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -572,6 +573,8 @@ function App() {
             <InvestigationScenarioLinker />
             {/* F32 (overnight 2026-09-18): ops-task coverage checker — ◎ OPSCOV button (left:6732, bottom:6, zIndex:65); parallel-fetches /v1/ops/events + /entities/Task; keyword-correlates significant (sev≥70) events against open tasks; COVERED vs UNCOVERED stat tiles + filter tabs; red badge on uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence remediation + TTS; 30-s auto-refresh; "ops coverage"/"opscov"/"ops gaps" voice trigger */}
             <OpsTaskCoverageChecker />
+            {/* F33 (overnight 2026-09-18): dataset-investigation gap — ◈ DATAGAP button (left:9000, bottom:8, zIndex:65); parallel-fetches /v1/datasets + /v1/investigations; keyword-correlates each open investigation against dataset catalog to surface SOURCED vs UNSOURCED (data gap); stat tiles + filter tabs; amber badge on unsourced count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-gap recommendation + TTS; 60-s auto-refresh; "data gap"/"datagap"/"dataset investigation gap"/"unsourced investigations" voice trigger */}
+            <DatasetInvestigationGap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

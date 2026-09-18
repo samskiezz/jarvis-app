@@ -11,6 +11,7 @@ import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
 import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
 import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChecker";
+import { isDataGapQuery, buildDataGapScript } from "./DatasetInvestigationGap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -163,6 +164,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ops-coverage-toggle"));
       let script = "";
       try { script = await buildOpsCoverageScript(); } catch { script = "Ops-task coverage checker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F33: dataset-investigation gap — dispatch toggle + speak live data-gap summary.
+    if (isDataGapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:datagap-toggle"));
+      let script = "";
+      try { script = await buildDataGapScript(); } catch { script = "Dataset-investigation gap checker is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
