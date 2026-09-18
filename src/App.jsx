@@ -191,6 +191,7 @@ import SwarmGraphConvergence from '@/components/cinematic/SwarmGraphConvergence'
 import SnapshotTracker from '@/components/cinematic/SnapshotTracker';
 import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRate';
 import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage';
+import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -566,6 +567,8 @@ function App() {
             <InvestigationCloseRate />
             {/* F165 (overnight 2026-07-05): graph node × task coverage — ◈ GNTASK button (left:54520, bottom:8, zIndex:107); parallel-fetches /v1/graph/centrality + /entities/Task; keyword-correlates each top-influence node against the task catalog to surface TASKED (active task coverage) vs UNMANAGED (no operational task — priority gap); violet badge on unmanaged count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence influence-coverage brief + TTS; "graph node task"/"node task coverage"/"high influence task"/"gntask" voice trigger; jarvis:gntask-toggle event; 90-s auto-refresh */}
             <GraphNodeTaskCoverage />
+            {/* F31 (overnight 2026-09-18): ops-task coverage checker — ◎ OPSCOV button (left:6732, bottom:6, zIndex:65); parallel-fetches /v1/ops/events + /entities/Task; keyword-correlates significant (sev≥70) events against open tasks; COVERED vs UNCOVERED stat tiles + filter tabs + event cards sorted uncovered-criticals-first; red badge on uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence remediation + TTS; 30-s auto-refresh; "ops coverage"/"ops task coverage"/"uncovered events"/"opscov"/"ops gaps" voice trigger */}
+            <OpsTaskCoverageChecker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
