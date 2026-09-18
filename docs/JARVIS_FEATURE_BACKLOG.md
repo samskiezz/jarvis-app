@@ -43,7 +43,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout. [2026-09-18: InvestmentWidget.jsx already mounted in App.jsx; wired isInvestmentQuery+buildInvestmentScript into JarvisBrain.jsx for voice dispatch; "JARVIS, investments/portfolio/wealth" speaks live portfolio brief + opens panel]
 - [x] F24 Contacts directory — /entities/Contact → searchable people list. [2026-09-18: ContactsDirectory.jsx already mounted in App.jsx; wired isContactsQuery+buildContactsScript into JarvisBrain.jsx for voice dispatch; "JARVIS, contacts/people/directory" speaks live directory brief + opens panel]
 - [x] F25 Swarm jobs monitor — /entities/SwarmJob → running jobs with progress. [2026-09-18: SwarmJobsMonitor.jsx already mounted in App.jsx (polls /entities/SwarmJob every 20s; stat tiles + filter tabs + progress bars; red pulse on failures); wired isSwarmQuery+buildSwarmScript into JarvisBrain.jsx; "JARVIS, swarm" now speaks live job summary via TTS]
-- [ ] F26 Graph centrality view — /v1/graph/centrality → top entities by influence.
+- [x] F26 Graph centrality view — /v1/graph/centrality → top entities by influence. [2026-09-18: GraphCentralityView.jsx already mounted in App.jsx; wired isCentralityQuery+buildCentralityScript into JarvisBrain.jsx for voice dispatch; "JARVIS, centrality"/"who has most influence" speaks live top-nodes brief via TTS]
 - [ ] F27 "Diagnostics" — JARVIS reads health of each service (via the dashboard's real status).
 - [ ] F28 Command history — store + replay recent JARVIS commands (localStorage).
 - [ ] F29 Multi-voice toggle — switch JARVIS TTS voice (ash/fable/onyx) live.

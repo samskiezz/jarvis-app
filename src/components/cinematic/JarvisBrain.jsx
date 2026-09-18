@@ -9,6 +9,7 @@ import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
 import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
 import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
+import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -144,6 +145,14 @@ export default function JarvisBrain() {
     if (isSwarmQuery(q)) {
       let script = "";
       try { script = await buildSwarmScript(); } catch { script = "Swarm jobs data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F26: centrality queries open the graph centrality view and speak a live influence brief.
+    if (isCentralityQuery(q)) {
+      let script = "";
+      try { script = await buildCentralityScript(); } catch { script = "Graph centrality data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
