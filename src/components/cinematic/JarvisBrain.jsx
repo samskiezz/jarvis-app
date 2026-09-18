@@ -17,6 +17,7 @@ import { isRisGapQuery, buildRisGapScript } from "./RiskInvestigationMatrix";
 import { isPulseQuery, buildPulseScript } from "./OperationalPulseRing";
 import { isSkillProgressQuery, buildSkillProgressScript } from "./SkillProgressionTracker";
 import { isSkasQuery, buildSkasScript } from "./AipSkillScenarioCoverage";
+import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistry";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -217,6 +218,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skas-toggle"));
       let script = "";
       try { script = await buildSkasScript(); } catch { script = "AIP skill scenario coverage analysis is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isToolRegistryQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:atr-toggle"));
+      let script = "";
+      try { script = await buildToolRegistryScript(); } catch { script = "Tool registry is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

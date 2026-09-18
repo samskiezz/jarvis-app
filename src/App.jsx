@@ -199,6 +199,7 @@ import RiskInvestigationMatrix from '@/components/cinematic/RiskInvestigationMat
 import OperationalPulseRing from '@/components/cinematic/OperationalPulseRing';
 import SkillProgressionTracker from '@/components/cinematic/SkillProgressionTracker';
 import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCoverage';
+import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -590,6 +591,8 @@ function App() {
             <SkillProgressionTracker />
             {/* F38 (overnight 2026-09-18): AIP skill × scenario coverage — ⬡ SKAS button (left:960, bottom:18, zIndex:68); parallel-fetches /v1/aip/skill + /v1/scenario/list every 90 s; keyword-correlates each skill against scenarios to classify EXERCISED vs UNUSED; filter tabs ALL/EXERCISED/UNUSED + text search; expand row → matched scenario cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isSkasQuery+buildSkasScript wired in JarvisBrain; "skill coverage"/"skill scenario"/"unused skills"/"skas"/"skill gap" voice trigger */}
             <AipSkillScenarioCoverage />
+            {/* F39 (overnight 2026-09-18): Agent tool registry — ◈ ATR button; polls /v1/jarvis/agent/tools every 60 s; category filter + text search; ▶ QUERY → agent chat; "tool registry"/"agent tools"/"what tools"/"jarvis capabilities" voice trigger */}
+            <AgentToolRegistry />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

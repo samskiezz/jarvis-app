@@ -13,3 +13,4 @@
 [2026-09-18] F36 OperationalPulseRing mounted in App.jsx; isPulseQuery+buildPulseScript wired in JarvisBrain; uses /v1/jarvis/system/status + /entities/RiskSignal; build exit 0
 [2026-09-18] F37 SkillProgressionTracker — /v1/aip/skill 2-min poll, 24-reading localStorage sparklines, voice 'skill progress'/'skillp', JarvisBrain wired, build exit 0
 2026-09-18 | F38 | AipSkillScenarioCoverage: parallel-fetches /v1/aip/skill + /v1/scenario/list; EXERCISED/UNUSED skill classification; isSkasQuery+buildSkasScript wired in JarvisBrain; ⬡ SKAS button; build exit 0 (38.52s)
+[2026-09-18] F39 Agent tool registry — AgentToolRegistry.jsx mounted in App.jsx; isToolRegistryQuery+buildToolRegistryScript wired in JarvisBrain; polls /v1/jarvis/agent/tools every 60s; category filter+text search+QUERY→agent chat; voice: tool registry/agent tools/what tools/jarvis capabilities; build exit 0
