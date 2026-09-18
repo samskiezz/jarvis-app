@@ -38,7 +38,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts. [2026-09-18: JarvisBootSequence.jsx mounted in App.jsx; on first load fetches system+brain counts and speaks via /v1/voice/tts]
 - [x] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant. [2026-09-18: AmbientReactorHum.jsx mounted in App.jsx; WebAudio oscillator loop toggled via "ambient" voice command]
 - [x] F20 "Show me" navigation — extended keyword map to 100+ data-drill phrases. [2026-09-18: isShowMeQuery+resolveShowMeQuery wired in JarvisBrain.ask() as pre-router; 100+ "show me X" / "open X" / "view X" phrases now directly open matching panels via jarvis:ask re-dispatch; ShowMeNavigation.jsx covers risks, markets, datasets, investigations, contacts, tasks, portfolio, swarm, and more]
-- [ ] F21 Live clock + uptime (real process uptime from system status).
+- [x] F21 Live clock + uptime (real process uptime from system status). [2026-09-18: LiveClockUptime.jsx mounted in App.jsx; clock ticks every second; polls /v1/jarvis/system/status every 30s for uptime; isClockQuery+buildClockScript wired in JarvisBrain; "JARVIS, time/clock/uptime" speaks current time + uptime]
 - [ ] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken).
 - [ ] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout.
 - [ ] F24 Contacts directory — /entities/Contact → searchable people list.

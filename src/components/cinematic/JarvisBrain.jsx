@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
+import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -89,6 +90,12 @@ export default function JarvisBrain() {
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
+    if (isClockQuery(q)) {
+      const script = await buildClockScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(6000, script.length * 70));
+      return;
+    }
     if (isInvScenLinkerQuery(q)) {
       window.dispatchEvent(new CustomEvent("jarvis:inv-scen-link-toggle"));
       const script = await buildInvScenLinkerScript();
