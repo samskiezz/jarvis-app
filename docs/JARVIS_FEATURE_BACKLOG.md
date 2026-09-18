@@ -40,7 +40,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F20 "Show me" navigation — extended keyword map to 100+ data-drill phrases. [2026-09-18: isShowMeQuery+resolveShowMeQuery wired in JarvisBrain.ask() as pre-router; 100+ "show me X" / "open X" / "view X" phrases now directly open matching panels via jarvis:ask re-dispatch; ShowMeNavigation.jsx covers risks, markets, datasets, investigations, contacts, tasks, portfolio, swarm, and more]
 - [x] F21 Live clock + uptime (real process uptime from system status). [2026-09-18: LiveClockUptime.jsx mounted in App.jsx; clock ticks every second; polls /v1/jarvis/system/status every 30s for uptime; isClockQuery+buildClockScript wired in JarvisBrain; "JARVIS, time/clock/uptime" speaks current time + uptime]
 - [x] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken). [2026-09-18] AlertToasts.jsx already mounted (polls /v1/alerts?status=open, auto-TTS criticals); wired isAlertQuery+buildAlertScript into JarvisBrain.ask() so "JARVIS, alerts" speaks live alert summary.
-- [ ] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout.
+- [x] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout. [2026-09-18: InvestmentWidget.jsx already mounted in App.jsx; wired isInvestmentQuery+buildInvestmentScript into JarvisBrain.jsx for voice dispatch; "JARVIS, investments/portfolio/wealth" speaks live portfolio brief + opens panel]
 - [ ] F24 Contacts directory — /entities/Contact → searchable people list.
 - [ ] F25 Swarm jobs monitor — /entities/SwarmJob → running jobs with progress.
 - [ ] F26 Graph centrality view — /v1/graph/centrality → top entities by influence.
