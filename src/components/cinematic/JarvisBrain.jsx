@@ -2,6 +2,10 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
+import { isAlertQuery, buildAlertScript } from "./AlertToasts";
+import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
+import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
+import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -78,11 +82,22 @@ export default function JarvisBrain() {
 
   async function ask(q) {
     if (!q || !q.trim()) return;
+    // F20: "show me X" / "open X" / "view X" → re-route to the matching panel's keyword.
+    if (isShowMeQuery(q)) {
+      const resolved = resolveShowMeQuery(q);
+      window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: resolved } }));
+      return;
+    }
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
-
+    if (isClockQuery(q)) {
+      const script = await buildClockScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(6000, script.length * 70));
+      return;
+    }
     // F05: status queries bypass the agent and speak real telemetry directly.
     if (isStatusQuery(q)) {
       let script = "";
@@ -91,7 +106,21 @@ export default function JarvisBrain() {
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
-
+    // F22: alert queries speak the live ops alert summary directly.
+    if (isAlertQuery(q)) {
+      let script = "";
+      try { script = await buildAlertScript(); } catch { script = "Alert feed unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isInvScenLinkerQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:inv-scen-link-toggle"));
+      const script = await buildInvScenLinkerScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
