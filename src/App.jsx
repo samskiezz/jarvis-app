@@ -1149,6 +1149,7 @@ import OpsEventTaskSkillReadiness from '@/components/cinematic/OpsEventTaskSkill
 import KnowledgeInvestigationSkillReadiness from '@/components/cinematic/KnowledgeInvestigationSkillReadiness';
 import InvestmentDatasetOpsRisk from '@/components/cinematic/InvestmentDatasetOpsRisk';
 import ReportGraphContactNetwork from '@/components/cinematic/ReportGraphContactNetwork';
+import ContactTaskReportAudit from '@/components/cinematic/ContactTaskReportAudit';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3516,6 +3517,8 @@ function App() {
             <InvestmentDatasetOpsRisk />
             {/* F195 (overnight 2026-09-18): Report × Graph Node × Contact — Intelligence Publication Network (IPNET) — ReportGraphContactNetwork.jsx; /v1/reports × /v1/graph/centrality × /entities/Contact; keyword-correlates each report against graph node catalog AND contacts roster → FULLY_MAPPED/GRAPH_LINKED/CONTACT_LINKED/DARK; red pulse on DARK count; stat tiles (reports/nodes/contacts/fully mapped/dark); ALL/class filter tabs + text search; expand row → cyan graph node bars + green contact bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIpnetQuery+buildIpnetScript wired JarvisBrain; ◈ IPNET button left:987140 zIndex:696; jarvis:ipnet-toggle event; 90-s auto-refresh */}
             <ReportGraphContactNetwork />
+            {/* F196 (overnight 2026-09-18): Contact × Task × Report — Operator Accountability Audit (OPAC) — ContactTaskReportAudit.jsx; /entities/Contact × /entities/Task × /v1/reports; keyword-correlates each contact against task catalog AND report archive → FULLY_ACCOUNTABLE/TASK_ONLY/REPORTED_ONLY/UNACCOUNTED; red pulse on UNACCOUNTED count; stat tiles (contacts/tasks/reports/fully accountable/unaccounted); ALL/class filter tabs + text search; expand row → amber task bars + cyan report bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOpacQuery+buildOpacScript wired JarvisBrain; ◈ OPAC button left:988000 zIndex:697; jarvis:opac-toggle event; 90-s auto-refresh */}
+            <ContactTaskReportAudit />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

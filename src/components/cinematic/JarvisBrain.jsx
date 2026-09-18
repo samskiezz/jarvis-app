@@ -450,6 +450,7 @@ import { isOrarQuery, buildOrarScript } from "./OpsEventTaskSkillReadiness";
 import { isOiriQuery, buildOiriScript } from "./KnowledgeInvestigationSkillReadiness";
 import { isPoriQuery, buildPoriScript } from "./InvestmentDatasetOpsRisk";
 import { isIpnetQuery, buildIpnetScript } from "./ReportGraphContactNetwork";
+import { isOpacQuery, buildOpacScript } from "./ContactTaskReportAudit";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1847,6 +1848,9 @@ export default function JarvisBrain() {
         answer = await buildPoriScript();
       } else if (isIpnetQuery(q)) {
         answer = await buildIpnetScript();
+      } else if (isOpacQuery(q)) {
+        window.dispatchEvent(new CustomEvent("jarvis:opac-toggle"));
+        answer = await buildOpacScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
