@@ -1147,6 +1147,7 @@ import SkillReportTaskCoverage from '@/components/cinematic/SkillReportTaskCover
 import ScenarioContactTaskMatrix from '@/components/cinematic/ScenarioContactTaskMatrix';
 import OpsEventTaskSkillReadiness from '@/components/cinematic/OpsEventTaskSkillReadiness';
 import KnowledgeInvestigationSkillReadiness from '@/components/cinematic/KnowledgeInvestigationSkillReadiness';
+import InvestmentDatasetOpsRisk from '@/components/cinematic/InvestmentDatasetOpsRisk';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3510,6 +3511,8 @@ function App() {
             <OpsEventTaskSkillReadiness />
             {/* F193 (overnight 2026-09-18): Knowledge × Investigation × AIP Skill — Operational Intelligence Readiness Index (OIRI) — KnowledgeInvestigationSkillReadiness.jsx; /knowledge/ × /v1/investigations × /v1/aip/skill; keyword-correlates each KB article against open investigations AND skill catalog → FULLY_UTILIZED/CASE_BACKED/SKILL_BACKED/DORMANT; red pulse on DORMANT count; stat tiles (articles/cases/skills/utilized/dormant); ALL/class filter tabs + text search; expand row → amber investigation bars + cyan skill bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOiriQuery+buildOiriScript wired JarvisBrain; ◈ OIRI button left:985420 zIndex:694; jarvis:oiri-toggle event; 90-s auto-refresh */}
             <KnowledgeInvestigationSkillReadiness />
+            {/* F194 (overnight 2026-09-18): Investment × Dataset × OpsEvent — Portfolio Operational Risk Intelligence (PORI) — InvestmentDatasetOpsRisk.jsx; /entities/Investment × /v1/datasets × /v1/ops/events; keyword-correlates each investment against dataset catalog AND ops events → FULLY_COVERED/DATA_BACKED/EVENT_EXPOSED/UNMONITORED; orange pulse on UNMONITORED count; stat tiles (investments/datasets/events/covered/unmonitored); ALL/class filter tabs + text search; expand row → green dataset bars + amber event bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isPoriQuery+buildPoriScript wired JarvisBrain; ◈ PORI button left:986280 zIndex:695; jarvis:pori-toggle event; 90-s auto-refresh */}
+            <InvestmentDatasetOpsRisk />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

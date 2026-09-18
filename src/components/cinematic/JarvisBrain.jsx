@@ -448,6 +448,7 @@ import { isCdocQuery, buildCdocScript } from "./SkillReportTaskCoverage";
 import { isCrtmQuery, buildCrtmScript } from "./ScenarioContactTaskMatrix";
 import { isOrarQuery, buildOrarScript } from "./OpsEventTaskSkillReadiness";
 import { isOiriQuery, buildOiriScript } from "./KnowledgeInvestigationSkillReadiness";
+import { isPoriQuery, buildPoriScript } from "./InvestmentDatasetOpsRisk";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1841,6 +1842,8 @@ export default function JarvisBrain() {
       } else if (isOiriQuery(q)) {
         window.dispatchEvent(new CustomEvent("jarvis:oiri-toggle"));
         answer = await buildOiriScript();
+      } else if (isPoriQuery(q)) {
+        answer = await buildPoriScript();
       } else if (isEntitySearchQuery(q)) {
         const term = extractEntitySearchTerm(q);
         answer = await buildEntityDossierScript(term);
