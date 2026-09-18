@@ -195,6 +195,7 @@ import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecke
 import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
 import DatasetInvestigationGap from '@/components/cinematic/DatasetInvestigationGap';
 import InvestigationScenarioTaskPipeline from '@/components/cinematic/InvestigationScenarioTaskPipeline';
+import RiskInvestigationMatrix from '@/components/cinematic/RiskInvestigationMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -578,6 +579,8 @@ function App() {
             <DatasetInvestigationGap />
             {/* F34 (overnight 2026-09-18): investigation → scenario → task pipeline — ◈ INVPIPE button (left:9560, bottom:8, zIndex:65); parallel-fetches /v1/investigations + /v1/scenario/list + /entities/Task; 3-hop resolution chain: open case → best-fit scenario → candidate tasks; FULL_CHAIN/PLANNED/NO_PLAN filter tabs; amber badge on cases with no scenario plan; ▶ ASSESS RESOLUTION PATH → /v1/jarvis/agent/chat 2-sentence resolution brief + TTS via jarvis:speak-dossier; isInvPipeQuery+buildInvPipeScript wired in JarvisBrain; 90-s auto-refresh; "investigation pipeline"/"case pipeline"/"case resolution"/"invpipe" voice trigger */}
             <InvestigationScenarioTaskPipeline />
+            {/* F35 (overnight 2026-09-18): risk-investigation coverage matrix — ◈ RISGAP button (left:10120, bottom:8, zIndex:66); parallel-fetches /entities/RiskSignal + /v1/investigations; keyword-correlates active risks against open investigation cases to surface COVERED vs UNCOVERED; stat tiles: risks/covered/uncovered/critical-gap; filter tabs: ALL/COVERED/UNCOVERED/CRITICAL; red badge on uncovered count; ▶ ASSESS per risk → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; isRisGapQuery+buildRisGapScript wired in JarvisBrain; 60-s auto-refresh; "risk coverage"/"risk gap"/"risgap"/"uncovered risks" voice trigger */}
+            <RiskInvestigationMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -13,6 +13,7 @@ import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView"
 import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChecker";
 import { isDataGapQuery, buildDataGapScript } from "./DatasetInvestigationGap";
 import { isInvPipeQuery, buildInvPipeScript } from "./InvestigationScenarioTaskPipeline";
+import { isRisGapQuery, buildRisGapScript } from "./RiskInvestigationMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -182,6 +183,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invpipe-toggle"));
       let script = "";
       try { script = await buildInvPipeScript(); } catch { script = "Investigation resolution pipeline is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRisGapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:risgap-toggle"));
+      let script = "";
+      try { script = await buildRisGapScript(); } catch { script = "Risk-investigation matrix is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
