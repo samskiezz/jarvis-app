@@ -198,6 +198,7 @@ import InvestigationScenarioTaskPipeline from '@/components/cinematic/Investigat
 import RiskInvestigationMatrix from '@/components/cinematic/RiskInvestigationMatrix';
 import OperationalPulseRing from '@/components/cinematic/OperationalPulseRing';
 import SkillProgressionTracker from '@/components/cinematic/SkillProgressionTracker';
+import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -587,6 +588,8 @@ function App() {
             <OperationalPulseRing />
             {/* F37 (overnight 2026-09-18): skill progression tracker — ⬡ SKILLP button (left:55080, bottom:8, zIndex:67); polls /v1/aip/skill every 2 min; stores up to 24 readings in localStorage; per-skill sparkline + delta badge + current score; "skill progress"/"skill trend"/"aip progress"/"skillp" voice trigger; jarvis:skillp-toggle event */}
             <SkillProgressionTracker />
+            {/* F38 (overnight 2026-09-18): AIP skill × scenario coverage — ⬡ SKAS button (left:960, bottom:18, zIndex:68); parallel-fetches /v1/aip/skill + /v1/scenario/list every 90 s; keyword-correlates each skill against scenarios to classify EXERCISED vs UNUSED; filter tabs ALL/EXERCISED/UNUSED + text search; expand row → matched scenario cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isSkasQuery+buildSkasScript wired in JarvisBrain; "skill coverage"/"skill scenario"/"unused skills"/"skas"/"skill gap" voice trigger */}
+            <AipSkillScenarioCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

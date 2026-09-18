@@ -16,6 +16,7 @@ import { isInvPipeQuery, buildInvPipeScript } from "./InvestigationScenarioTaskP
 import { isRisGapQuery, buildRisGapScript } from "./RiskInvestigationMatrix";
 import { isPulseQuery, buildPulseScript } from "./OperationalPulseRing";
 import { isSkillProgressQuery, buildSkillProgressScript } from "./SkillProgressionTracker";
+import { isSkasQuery, buildSkasScript } from "./AipSkillScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -208,6 +209,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skillp-toggle"));
       let script = "";
       try { script = await buildSkillProgressScript(); } catch { script = "Skill progression tracker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSkasQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skas-toggle"));
+      let script = "";
+      try { script = await buildSkasScript(); } catch { script = "AIP skill scenario coverage analysis is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
