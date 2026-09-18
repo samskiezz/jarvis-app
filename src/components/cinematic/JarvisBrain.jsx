@@ -8,6 +8,7 @@ import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
 import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
 import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
+import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -135,6 +136,14 @@ export default function JarvisBrain() {
     if (isContactsQuery(q)) {
       let script = "";
       try { script = await buildContactsScript(); } catch { script = "Contacts directory unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F25: swarm jobs queries open the monitor and speak a live swarm brief directly.
+    if (isSwarmQuery(q)) {
+      let script = "";
+      try { script = await buildSwarmScript(); } catch { script = "Swarm jobs data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
