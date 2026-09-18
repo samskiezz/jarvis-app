@@ -15,6 +15,7 @@ import { isDataGapQuery, buildDataGapScript } from "./DatasetInvestigationGap";
 import { isInvPipeQuery, buildInvPipeScript } from "./InvestigationScenarioTaskPipeline";
 import { isRisGapQuery, buildRisGapScript } from "./RiskInvestigationMatrix";
 import { isPulseQuery, buildPulseScript } from "./OperationalPulseRing";
+import { isSkillProgressQuery, buildSkillProgressScript } from "./SkillProgressionTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -201,6 +202,14 @@ export default function JarvisBrain() {
       const script = buildPulseScript(null);
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+    if (isSkillProgressQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skillp-toggle"));
+      let script = "";
+      try { script = await buildSkillProgressScript(); } catch { script = "Skill progression tracker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
     let answer = "";

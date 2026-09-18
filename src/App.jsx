@@ -197,6 +197,7 @@ import DatasetInvestigationGap from '@/components/cinematic/DatasetInvestigation
 import InvestigationScenarioTaskPipeline from '@/components/cinematic/InvestigationScenarioTaskPipeline';
 import RiskInvestigationMatrix from '@/components/cinematic/RiskInvestigationMatrix';
 import OperationalPulseRing from '@/components/cinematic/OperationalPulseRing';
+import SkillProgressionTracker from '@/components/cinematic/SkillProgressionTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -584,6 +585,8 @@ function App() {
             <RiskInvestigationMatrix />
             {/* F166 (overnight 2026-09-18): operational pulse ring — ambient 56×56 SVG health ring fixed at bottom-right; outer arc = system health from /v1/jarvis/system/status cpu_percent; inner arc = risk health from /entities/RiskSignal critical/high count; overall score = mean of both; green ≥75 / amber 40–74 / red <40; 45-s auto-refresh; dismissed via localStorage; isPulseQuery+buildPulseScript wired in JarvisBrain; "pulse ring"/"health ring"/"operational ring" voice trigger */}
             <OperationalPulseRing />
+            {/* F37 (overnight 2026-09-18): skill progression tracker — ⬡ SKILLP button (left:55080, bottom:8, zIndex:67); polls /v1/aip/skill every 2 min; stores up to 24 readings in localStorage; per-skill sparkline + delta badge + current score; "skill progress"/"skill trend"/"aip progress"/"skillp" voice trigger; jarvis:skillp-toggle event */}
+            <SkillProgressionTracker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

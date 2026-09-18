@@ -11,3 +11,4 @@
 [2026-09-18] F34 InvestigationScenarioTaskPipeline.jsx: 3-hop resolution chain (/v1/investigations → /v1/scenario/list → /entities/Task); FULL_CHAIN/PLANNED/NO_PLAN filter tabs; ▶ ASSESS RESOLUTION PATH → agent+TTS; isInvPipeQuery+buildInvPipeScript wired in JarvisBrain; ◈ INVPIPE toggle left:9560; build: exit 0
 [2026-09-18] F35 RiskInvestigationMatrix.jsx: /entities/RiskSignal x /v1/investigations coverage matrix; ◈ RISGAP toggle; isRisGapQuery+buildRisGapScript in JarvisBrain; build: exit 0
 [2026-09-18] F36 OperationalPulseRing mounted in App.jsx; isPulseQuery+buildPulseScript wired in JarvisBrain; uses /v1/jarvis/system/status + /entities/RiskSignal; build exit 0
+[2026-09-18] F37 SkillProgressionTracker — /v1/aip/skill 2-min poll, 24-reading localStorage sparklines, voice 'skill progress'/'skillp', JarvisBrain wired, build exit 0
