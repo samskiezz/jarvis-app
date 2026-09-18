@@ -37,6 +37,7 @@ import SceneAnchorDrillDown from '@/components/cinematic/SceneAnchorDrillDown';
 import AmbientReactorHum from '@/components/cinematic/AmbientReactorHum';
 import SceneAutoTour from '@/components/cinematic/SceneAutoTour';
 import CommandHistory from '@/components/cinematic/CommandHistory';
+import ShowMeNavigation from '@/components/cinematic/ShowMeNavigation';
 import SituationRoom from '@/components/cinematic/SituationRoom';
 import GraphPathExplorer from '@/components/cinematic/GraphPathExplorer';
 import MorningBriefing from '@/components/cinematic/MorningBriefing';
@@ -259,6 +260,8 @@ function App() {
             <SceneAutoTour />
             {/* F60: command history — ◷ HIST button (left:1636); captures every jarvis:ask to localStorage (max 50); filter + replay; Alt+H shortcut; "JARVIS, history" voice trigger (isHistoryQuery already wired in JarvisBrain) */}
             <CommandHistory />
+            {/* F20: "show me X" / "open X" voice-navigation router; logic wired in JarvisBrain via isShowMeQuery/resolveShowMeQuery */}
+            <ShowMeNavigation />
             {/* F68: situation room — ⊕ SITREP button (left:3092); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /entities/RiskSignal + /entities/SwarmJob + /v1/ops/events; live ops-centre grid; red pulse on critical; "JARVIS, sitrep" voice trigger (isSituationQuery wired in JarvisBrain) */}
             <SituationRoom />
             {/* F74: graph path explorer — ⤢ PATH button (left:2468); /v1/graph/path?a=&b=; source+target entity inputs; hop chain visualised; JARVIS narrates via /v1/jarvis/agent/chat + TTS; "JARVIS, path from X to Y" voice trigger (isPathQuery+buildPathScript wired in JarvisBrain) */}

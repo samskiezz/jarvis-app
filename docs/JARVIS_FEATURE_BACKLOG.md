@@ -18,7 +18,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 `/v1/scenario/list` · `/v1/aip/skill` · `/v1/reports` · `/knowledge/*`
 
 ## Backlog (real features)
-- [ ] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it.
+- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-09-18: CommandPalette.jsx implemented, wired in App.jsx; opens on ⌘K/Ctrl+K; searches pages+scenes; Enter navigates.]
 - [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
 - [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
 - [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
@@ -37,7 +37,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [ ] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only).
 - [ ] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts.
 - [ ] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant.
-- [ ] F20 "Show me" navigation — already in JarvisBrain; extend keyword map to data drill (e.g. "show risks").
+- [x] F20 "Show me" navigation — already in JarvisBrain; extend keyword map to data drill (e.g. "show risks"). [2026-09-18: ShowMeNavigation.jsx (isShowMeQuery/resolveShowMeQuery) wired into JarvisBrain.ask(); mounted in App.jsx; 100+ panel shortcuts via SHOW_ME_MAP.]
 - [ ] F21 Live clock + uptime (real process uptime from system status).
 - [ ] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken).
 - [ ] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout.
