@@ -1146,6 +1146,7 @@ import GraphNodeMissionAlignment from '@/components/cinematic/GraphNodeMissionAl
 import SkillReportTaskCoverage from '@/components/cinematic/SkillReportTaskCoverage';
 import ScenarioContactTaskMatrix from '@/components/cinematic/ScenarioContactTaskMatrix';
 import OpsEventTaskSkillReadiness from '@/components/cinematic/OpsEventTaskSkillReadiness';
+import KnowledgeInvestigationSkillReadiness from '@/components/cinematic/KnowledgeInvestigationSkillReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -3507,6 +3508,8 @@ function App() {
             <ScenarioContactTaskMatrix />
             {/* F192 (overnight 2026-09-18): OpsEvent × Task × AIP Skill — Operational Response Automation Readiness (ORAR) — OpsEventTaskSkillReadiness.jsx; /v1/ops/events × /entities/Task × /v1/aip/skill; keyword-correlates each ops event against open tasks AND skill catalog → FULLY_AUTOMATED/TASK_BACKED/SKILL_BACKED/MANUAL; red pulse on MANUAL count; stat tiles (events/tasks/skills/automated/manual); ALL/class filter tabs + text search; expand row → amber task bars + green skill bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOrarQuery+buildOrarScript wired JarvisBrain; ◈ ORAR button left:984560 zIndex:693; jarvis:orar-toggle event; 90-s auto-refresh */}
             <OpsEventTaskSkillReadiness />
+            {/* F193 (overnight 2026-09-18): Knowledge × Investigation × AIP Skill — Operational Intelligence Readiness Index (OIRI) — KnowledgeInvestigationSkillReadiness.jsx; /knowledge/ × /v1/investigations × /v1/aip/skill; keyword-correlates each KB article against open investigations AND skill catalog → FULLY_UTILIZED/CASE_BACKED/SKILL_BACKED/DORMANT; red pulse on DORMANT count; stat tiles (articles/cases/skills/utilized/dormant); ALL/class filter tabs + text search; expand row → amber investigation bars + cyan skill bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOiriQuery+buildOiriScript wired JarvisBrain; ◈ OIRI button left:985420 zIndex:694; jarvis:oiri-toggle event; 90-s auto-refresh */}
+            <KnowledgeInvestigationSkillReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
