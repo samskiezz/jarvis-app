@@ -203,6 +203,7 @@ import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 import BrainSystemStatusFusion from '@/components/cinematic/BrainSystemStatusFusion';
 import KnowledgeBaseExplorer from '@/components/cinematic/KnowledgeBaseExplorer';
 import ContactInvestmentLinker from '@/components/cinematic/ContactInvestmentLinker';
+import OpsEventKnowledgeGap from '@/components/cinematic/OpsEventKnowledgeGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -602,6 +603,8 @@ function App() {
             <KnowledgeBaseExplorer />
             {/* F42 (overnight 2026-09-19): Contact × Investment Linker — ◈ CIL button (left:10680, bottom:8, zIndex:66); parallel-fetches /entities/Contact + /entities/Investment; keyword-correlates contacts to portfolio positions; LINKED/UNLINKED stat tiles + filter tabs; expand contact → matched investment cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCilQuery+buildCilScript wired in JarvisBrain; "contact investment"/"portfolio contacts"/"cil"/"who holds what"/"investment contacts" voice trigger; 90-s auto-refresh */}
             <ContactInvestmentLinker />
+            {/* F44 (overnight 2026-09-19): ops events × knowledge gap — ◈ OPKNOW button (left:11240, bottom:8, zIndex:67); parallel-fetches /v1/ops/events (sev≥50) + /knowledge/; keyword-correlates each significant ops event against KB articles to surface DOCUMENTED vs UNDOCUMENTED; stat tiles: events/articles/documented/undocumented; amber badge on undocumented count; filter tabs ALL/DOCUMENTED/UNDOCUMENTED; expand event → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; isOpsKnowQuery+buildOpsKnowScript wired in JarvisBrain; "ops knowledge"/"event docs"/"opknow"/"event knowledge gap"/"ops documentation gap" voice trigger; jarvis:opknow-toggle event; 90-s auto-refresh */}
+            <OpsEventKnowledgeGap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

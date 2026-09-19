@@ -22,6 +22,7 @@ import { isBssfQuery, buildBssfScript } from "./BrainSystemStatusFusion";
 import { isKbeQuery, buildKbeScript } from "./KnowledgeBaseExplorer";
 import { isCilQuery, buildCilScript } from "./ContactInvestmentLinker";
 import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
+import { isOpsKnowQuery, buildOpsKnowScript } from "./OpsEventKnowledgeGap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -254,6 +255,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cil-toggle"));
       let script = "";
       try { script = await buildCilScript(); } catch { script = "Contact investment linker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOpsKnowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opknow-toggle"));
+      let script = "";
+      try { script = await buildOpsKnowScript(); } catch { script = "Ops knowledge gap analysis is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
