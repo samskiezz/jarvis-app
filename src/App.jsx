@@ -205,6 +205,7 @@ import KnowledgeBaseExplorer from '@/components/cinematic/KnowledgeBaseExplorer'
 import ContactInvestmentLinker from '@/components/cinematic/ContactInvestmentLinker';
 import OpsEventKnowledgeGap from '@/components/cinematic/OpsEventKnowledgeGap';
 import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvestigationCoverage';
+import TaskRiskCorrelation from '@/components/cinematic/TaskRiskCorrelation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -608,6 +609,8 @@ function App() {
             <OpsEventKnowledgeGap />
             {/* F45 (overnight 2026-09-19): AIP Skill × Investigation Coverage — ◈ ASIC button (left:7140, bottom:18, zIndex:68); parallel-fetches /v1/aip/skill + /v1/investigations; keyword-correlates each JARVIS skill against active investigations (DRIVEN vs AUTONOMOUS); stat tiles + filter tabs + expand row; ▶ ASSESS → agent + TTS; isAsicQuery+buildAsicScript wired in JarvisBrain; "asic"/"aip investigation"/"skill investigation"/"driven skills"/"autonomous skills" voice trigger; jarvis:asic-toggle event; 90-s auto-refresh */}
             <AipSkillInvestigationCoverage />
+            {/* F46: Task × Risk Signal correlation — /entities/Task × /entities/RiskSignal */}
+            <TaskRiskCorrelation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
