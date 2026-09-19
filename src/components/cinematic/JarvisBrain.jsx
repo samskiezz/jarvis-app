@@ -20,6 +20,7 @@ import { isSkasQuery, buildSkasScript } from "./AipSkillScenarioCoverage";
 import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistry";
 import { isBssfQuery, buildBssfScript } from "./BrainSystemStatusFusion";
 import { isKbeQuery, buildKbeScript } from "./KnowledgeBaseExplorer";
+import { isCilQuery, buildCilScript } from "./ContactInvestmentLinker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -244,6 +245,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kbe-toggle"));
       let script = "";
       try { script = await buildKbeScript(); } catch { script = "Knowledge base explorer is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCilQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cil-toggle"));
+      let script = "";
+      try { script = await buildCilScript(); } catch { script = "Contact investment linker is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

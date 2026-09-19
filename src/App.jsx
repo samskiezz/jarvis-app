@@ -202,6 +202,7 @@ import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCov
 import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 import BrainSystemStatusFusion from '@/components/cinematic/BrainSystemStatusFusion';
 import KnowledgeBaseExplorer from '@/components/cinematic/KnowledgeBaseExplorer';
+import ContactInvestmentLinker from '@/components/cinematic/ContactInvestmentLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -599,6 +600,8 @@ function App() {
             <BrainSystemStatusFusion />
             {/* F41 (overnight 2026-09-19): Knowledge Base Explorer — ⬡ KBE button (left:992860, bottom:8, zIndex:115); fetches /knowledge/ endpoint; search/filter by category + text; click article → expand summary; ▶ SUMMARISE → /v1/jarvis/agent/chat + TTS; "knowledge base"/"knowledge"/"search knowledge"/"kbe"/"show knowledge" voice trigger; jarvis:kbe-toggle event */}
             <KnowledgeBaseExplorer />
+            {/* F42 (overnight 2026-09-19): Contact × Investment Linker — ◈ CIL button (left:10680, bottom:8, zIndex:66); parallel-fetches /entities/Contact + /entities/Investment; keyword-correlates contacts to portfolio positions; LINKED/UNLINKED stat tiles + filter tabs; expand contact → matched investment cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCilQuery+buildCilScript wired in JarvisBrain; "contact investment"/"portfolio contacts"/"cil"/"who holds what"/"investment contacts" voice trigger; 90-s auto-refresh */}
+            <ContactInvestmentLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
