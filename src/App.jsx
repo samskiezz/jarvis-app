@@ -216,6 +216,7 @@ import IntelProfileDatasetEvidence from '@/components/cinematic/IntelProfileData
 import ReportInvestigationCoverage from '@/components/cinematic/ReportInvestigationCoverage';
 import ScenarioKnowledgeReadiness from '@/components/cinematic/ScenarioKnowledgeReadiness';
 import OpsReportCoverage from '@/components/cinematic/OpsReportCoverage';
+import SwarmContactOwnership from '@/components/cinematic/SwarmContactOwnership';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -641,6 +642,8 @@ function App() {
             <ScenarioKnowledgeReadiness />
             {/* F58 (overnight 2026-09-19): Ops Events × Report Coverage — ◈ OPRES button (left:13480, bottom:8, zIndex:67); parallel-fetches /v1/ops/events + /v1/reports; keyword-correlates significant ops events against the reports catalogue to classify REPORTED vs UNREPORTED; stat tiles: events/reported/unreported/report-links; amber badge on unreported count; filter tabs ALL/REPORTED/UNREPORTED + text search; expand event → matched report cards with type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isOpresQuery+buildOpresScript wired in JarvisBrain; "ops reports"/"opres"/"unreported events"/"event reports"/"ops report coverage" voice trigger; jarvis:opres-toggle event; 90-s auto-refresh */}
             <OpsReportCoverage />
+            {/* F59 (overnight 2026-09-19): SwarmJob × Contact Ownership — ◈ SCOWN button (left:14040, bottom:8, zIndex:68); parallel-fetches /entities/SwarmJob + /entities/Contact; keyword-correlates running swarm jobs against contacts to surface OWNED vs UNOWNED; stat tiles: jobs/owned/unowned; amber badge on unowned count; filter tabs ALL/OWNED/UNOWNED + text search; expand job → matched contact cards with role; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ownership brief + TTS; isScownQuery+buildScownScript wired in JarvisBrain; "swarm contact"/"job owner"/"scown"/"swarm ownership"/"who runs"/"contact swarm" voice trigger; jarvis:scown-toggle event; 90-s auto-refresh */}
+            <SwarmContactOwnership />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

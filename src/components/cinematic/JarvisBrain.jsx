@@ -36,6 +36,7 @@ import { isBstpQuery, buildBstpScript } from "./BrainTaskProgressMonitor";
 import { isCreiskQuery, buildCreiskScript } from "./ContactRiskExposure";
 import { isSkrQuery, buildSkrScript } from "./ScenarioKnowledgeReadiness";
 import { isOpresQuery, buildOpresScript } from "./OpsReportCoverage";
+import { isScownQuery, buildScownScript } from "./SwarmContactOwnership";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -369,6 +370,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:crisk-toggle"));
       let script = "";
       try { script = await buildCreiskScript(); } catch { script = "Contact risk exposure panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F59: swarm contact ownership — cross-correlates swarm jobs against contacts.
+    if (isScownQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scown-toggle"));
+      let script = "";
+      try { script = await buildScownScript(); } catch { script = "Swarm contact ownership panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

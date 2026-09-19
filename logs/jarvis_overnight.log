@@ -34,3 +34,4 @@
 [2026-09-19] F56 Contact×RiskSignal (CRISK): ContactRiskExposure.jsx rewritten with isCreiskQuery/buildCreiskScript exports; wired import+dispatch in JarvisBrain.jsx; build exit 0; pushed to jarvis-overnight
 2026-09-19T18:21:27Z F57 DONE: ScenarioKnowledgeReadiness.jsx — /v1/scenario/list × /knowledge/ cross-correlation; READY/PARTIAL/DARK classification; mounted App.jsx; isSkrQuery+buildSkrScript wired JarvisBrain.jsx; build exit 0
 [2026-09-19] F58 OpsReportCoverage.jsx — /v1/ops/events × /v1/reports REPORTED/UNREPORTED; isOpresQuery+buildOpresScript wired in JarvisBrain; build exit 0
+[2026-09-19] F59 SwarmContactOwnership.jsx — /entities/SwarmJob × /entities/Contact keyword-correlation; OWNED/UNOWNED filter; ASSESS via agent+TTS; isScownQuery+buildScownScript in JarvisBrain; build exit 0
