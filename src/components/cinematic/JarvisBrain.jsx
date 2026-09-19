@@ -1,7 +1,29 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
+import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
+import { isAlertQuery, buildAlertScript } from "./AlertToasts";
+import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
+import { isClockQuery, buildClockScript } from "./LiveClockUptime";
+import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
+import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
+import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
+import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
+import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChecker";
+import { isDataGapQuery, buildDataGapScript } from "./DatasetInvestigationGap";
+import { isInvPipeQuery, buildInvPipeScript } from "./InvestigationScenarioTaskPipeline";
+import { isRisGapQuery, buildRisGapScript } from "./RiskInvestigationMatrix";
+import { isPulseQuery, buildPulseScript } from "./OperationalPulseRing";
+import { isSkillProgressQuery, buildSkillProgressScript } from "./SkillProgressionTracker";
+import { isSkasQuery, buildSkasScript } from "./AipSkillScenarioCoverage";
+import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistry";
+import { isBssfQuery, buildBssfScript } from "./BrainSystemStatusFusion";
+import { isKbeQuery, buildKbeScript } from "./KnowledgeBaseExplorer";
+import { isCilQuery, buildCilScript } from "./ContactInvestmentLinker";
+import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
+import { isOpsKnowQuery, buildOpsKnowScript } from "./OpsEventKnowledgeGap";
+import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -78,19 +100,189 @@ export default function JarvisBrain() {
 
   async function ask(q) {
     if (!q || !q.trim()) return;
-
-    // ShowMe pre-router: "show me X" / "open X" / bare "show risks" etc.
-    // Re-dispatches a normalized query so the target panel opens + briefs itself.
+    // F20: "show me X" / "open X" / "view X" → re-route to the matching panel's keyword.
     if (isShowMeQuery(q)) {
-      const normalized = resolveShowMeQuery(q);
-      window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: normalized } }));
+      const resolved = resolveShowMeQuery(q);
+      window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: resolved } }));
       return;
     }
-
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
+    if (isClockQuery(q)) {
+      const script = await buildClockScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(6000, script.length * 70));
+      return;
+    }
+    // F05: status queries bypass the agent and speak real telemetry directly.
+    if (isStatusQuery(q)) {
+      let script = "";
+      try { script = await buildStatusScript(); } catch { script = "Status telemetry unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F22: alert queries speak the live ops alert summary directly.
+    if (isAlertQuery(q)) {
+      let script = "";
+      try { script = await buildAlertScript(); } catch { script = "Alert feed unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isInvScenLinkerQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:inv-scen-link-toggle"));
+      const script = await buildInvScenLinkerScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F23: investment/wealth queries speak a live portfolio brief directly.
+    if (isInvestmentQuery(q)) {
+      let script = "";
+      try { script = await buildInvestmentScript(); } catch { script = "Portfolio data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F24: contacts/people/directory queries speak a live directory brief directly.
+    if (isContactsQuery(q)) {
+      let script = "";
+      try { script = await buildContactsScript(); } catch { script = "Contacts directory unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F25: swarm jobs queries open the monitor and speak a live swarm brief directly.
+    if (isSwarmQuery(q)) {
+      let script = "";
+      try { script = await buildSwarmScript(); } catch { script = "Swarm jobs data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F26: centrality queries open the graph centrality view and speak a live influence brief.
+    if (isCentralityQuery(q)) {
+      let script = "";
+      try { script = await buildCentralityScript(); } catch { script = "Graph centrality data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F32: ops-task coverage — dispatch toggle + speak live coverage summary.
+    if (isOpsCoverageQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ops-coverage-toggle"));
+      let script = "";
+      try { script = await buildOpsCoverageScript(); } catch { script = "Ops-task coverage checker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F33: dataset-investigation gap — dispatch toggle + speak live data-gap summary.
+    if (isDataGapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:datagap-toggle"));
+      let script = "";
+      try { script = await buildDataGapScript(); } catch { script = "Dataset-investigation gap checker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isInvPipeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invpipe-toggle"));
+      let script = "";
+      try { script = await buildInvPipeScript(); } catch { script = "Investigation resolution pipeline is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRisGapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:risgap-toggle"));
+      let script = "";
+      try { script = await buildRisGapScript(); } catch { script = "Risk-investigation matrix is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPulseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:pulse-show"));
+      const script = buildPulseScript(null);
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+    if (isSkillProgressQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skillp-toggle"));
+      let script = "";
+      try { script = await buildSkillProgressScript(); } catch { script = "Skill progression tracker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSkasQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skas-toggle"));
+      let script = "";
+      try { script = await buildSkasScript(); } catch { script = "AIP skill scenario coverage analysis is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isToolRegistryQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:atr-toggle"));
+      let script = "";
+      try { script = await buildToolRegistryScript(); } catch { script = "Tool registry is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isBssfQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:bssf-toggle"));
+      let script = "";
+      try { script = await buildBssfScript(); } catch { script = "Brain system fusion standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKbeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kbe-toggle"));
+      let script = "";
+      try { script = await buildKbeScript(); } catch { script = "Knowledge base explorer is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCilQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cil-toggle"));
+      let script = "";
+      try { script = await buildCilScript(); } catch { script = "Contact investment linker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOpsKnowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opknow-toggle"));
+      let script = "";
+      try { script = await buildOpsKnowScript(); } catch { script = "Ops knowledge gap analysis is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPathQuery(q)) {
+      let script = "";
+      try { script = await buildPathScript(q); } catch { script = "Graph path explorer is standing by. Say path from X to Y to trace a connection, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAsicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:asic-toggle"));
+      let script = "";
+      try { script = await buildAsicScript(); } catch { script = "AIP skill investigation coverage analysis is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

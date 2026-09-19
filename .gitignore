@@ -3,9 +3,9 @@
 venv/
 
 # Logs
-/logs
-!logs/jarvis_overnight.log
+/logs/*
 *.log
+!logs/jarvis_overnight.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -194,7 +194,6 @@ server/data/ontology.db
 underworld/deploy/ue5-project/Binaries/Linux/Underworld
 underworld/deploy/ue5-project/Binaries/Linux/Underworld.sym
 underworld/deploy/ue5-project/Binaries/Linux/Underworld-Linux-Shipping
-underworld/deploy/ue5-project/Binaries/Linux/Underworld.debug
 underworld/deploy/ue5-project/Binaries/Linux/Underworld-Linux-Shipping.sym
 underworld/deploy/ue5-project/Binaries/Linux/Underworld-Linux-Shipping.debug
 .venv-tts/lib/python3.12/site-packages/llvmlite/binding/libllvmlite.so
