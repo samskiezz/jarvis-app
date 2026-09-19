@@ -27,6 +27,7 @@ import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
 import { isSwdpQuery, buildSwdpScript } from "./SwarmDatasetProvenance";
 import { isLitaQuery, buildLitaScript } from "./LiveIntelTaskActivator";
 import { isIdepcQuery, buildIdepcScript } from "./IntelProfileDatasetEvidence";
+import { isRepInvQuery, buildRepInvScript } from "./ReportInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -304,6 +305,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:idepc-toggle"));
       let script = "";
       try { script = await buildIdepcScript(); } catch { script = "Intel profile dataset evidence coverage is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRepInvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:repinv-toggle"));
+      let script = "";
+      try { script = await buildRepInvScript(); } catch { script = "Report investigation coverage analysis is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

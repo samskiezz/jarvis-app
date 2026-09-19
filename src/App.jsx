@@ -209,6 +209,7 @@ import TaskRiskCorrelation from '@/components/cinematic/TaskRiskCorrelation';
 import SwarmDatasetProvenance from '@/components/cinematic/SwarmDatasetProvenance';
 import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivator';
 import IntelProfileDatasetEvidence from '@/components/cinematic/IntelProfileDatasetEvidence';
+import ReportInvestigationCoverage from '@/components/cinematic/ReportInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -620,6 +621,8 @@ function App() {
             <LiveIntelTaskActivator />
             {/* F49 (overnight 2026-09-19): IntelProfile × Dataset Evidence Coverage — ◈ IDEPC button (left:11800, bottom:8, zIndex:131); parallel-fetches /entities/IntelProfile + /v1/datasets; keyword-correlates each threat profile against dataset catalogue to classify EVIDENCED vs UNSUPPORTED; stat tiles; amber badge on unsupported count; filter tabs ALL/EVIDENCED/UNSUPPORTED; expand profile → matched dataset cards with row counts; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence evidence brief + TTS via jarvis:speak-dossier; isIdepcQuery+buildIdepcScript wired in JarvisBrain; "intel evidence"/"profile dataset"/"threat data"/"idepc"/"unsupported profiles"/"intel data coverage" voice trigger; jarvis:idepc-toggle event; 90-s auto-refresh */}
             <IntelProfileDatasetEvidence />
+            {/* F50 (overnight 2026-09-19): Report × Investigation Coverage — ◈ REPINV button (left:12360, bottom:8, zIndex:132); parallel-fetches /v1/reports + /v1/investigations; keyword-correlates each open investigation against reports catalogue to classify BACKED vs UNBACKED (documentation gap); stat tiles: investigations/reports/backed/unbacked; amber badge on unbacked count; filter tabs ALL/BACKED/UNBACKED; expand investigation → matched report cards with type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence documentation brief + TTS via jarvis:speak-dossier; isRepInvQuery+buildRepInvScript wired in JarvisBrain; "report investigation"/"investigation reports"/"repinv"/"unbacked investigations"/"investigation documentation" voice trigger; jarvis:repinv-toggle event; 90-s auto-refresh */}
+            <ReportInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
