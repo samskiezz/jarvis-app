@@ -201,6 +201,7 @@ import SkillProgressionTracker from '@/components/cinematic/SkillProgressionTrac
 import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCoverage';
 import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
 import BrainSystemStatusFusion from '@/components/cinematic/BrainSystemStatusFusion';
+import KnowledgeBaseExplorer from '@/components/cinematic/KnowledgeBaseExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -596,6 +597,8 @@ function App() {
             <AgentToolRegistry />
             {/* F40 (overnight 2026-09-18): Brain × System Status Fusion — ◈ BSSF button; parallel-polls /v1/cinematic/brain (nodes/synapses) + /v1/jarvis/system/status (cpu/mem/load/provider); fused operational score (0-100); history sparkline; ▶ ASSESS → agent + TTS; "bssf"/"brain status"/"brain health"/"brain fusion"/"operational score"/"health fusion" voice trigger; jarvis:bssf-toggle event */}
             <BrainSystemStatusFusion />
+            {/* F41 (overnight 2026-09-19): Knowledge Base Explorer — ⬡ KBE button (left:992860, bottom:8, zIndex:115); fetches /knowledge/ endpoint; search/filter by category + text; click article → expand summary; ▶ SUMMARISE → /v1/jarvis/agent/chat + TTS; "knowledge base"/"knowledge"/"search knowledge"/"kbe"/"show knowledge" voice trigger; jarvis:kbe-toggle event */}
+            <KnowledgeBaseExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
