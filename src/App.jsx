@@ -215,6 +215,7 @@ import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivato
 import IntelProfileDatasetEvidence from '@/components/cinematic/IntelProfileDatasetEvidence';
 import ReportInvestigationCoverage from '@/components/cinematic/ReportInvestigationCoverage';
 import ScenarioKnowledgeReadiness from '@/components/cinematic/ScenarioKnowledgeReadiness';
+import OpsReportCoverage from '@/components/cinematic/OpsReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -638,6 +639,8 @@ function App() {
             <ReportInvestigationCoverage />
             {/* F57 (overnight 2026-09-19): Scenario × Knowledge Readiness — ◈ SKR button (left:12920, bottom:8, zIndex:66); parallel-fetches /v1/scenario/list + /knowledge/; keyword-correlates each scenario against KB articles to classify READY (≥2 articles)/PARTIAL (1)/DARK (0); stat tiles: total/ready/partial/dark; filter tabs ALL/READY/PARTIAL/DARK + text search; expand scenario → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence readiness brief + TTS; isSkrQuery+buildSkrScript wired in JarvisBrain; "scenario knowledge"/"sknow"/"scenario readiness"/"how ready are we"/"knowledge readiness" voice trigger; jarvis:skr-toggle event; 90-s auto-refresh */}
             <ScenarioKnowledgeReadiness />
+            {/* F58 (overnight 2026-09-19): Ops Events × Report Coverage — ◈ OPRES button (left:13480, bottom:8, zIndex:67); parallel-fetches /v1/ops/events + /v1/reports; keyword-correlates significant ops events against the reports catalogue to classify REPORTED vs UNREPORTED; stat tiles: events/reported/unreported/report-links; amber badge on unreported count; filter tabs ALL/REPORTED/UNREPORTED + text search; expand event → matched report cards with type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isOpresQuery+buildOpresScript wired in JarvisBrain; "ops reports"/"opres"/"unreported events"/"event reports"/"ops report coverage" voice trigger; jarvis:opres-toggle event; 90-s auto-refresh */}
+            <OpsReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

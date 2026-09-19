@@ -35,6 +35,7 @@ import { isAtscenQuery, buildAtscenScript } from "./AgentToolScenarioCoverage";
 import { isBstpQuery, buildBstpScript } from "./BrainTaskProgressMonitor";
 import { isCreiskQuery, buildCreiskScript } from "./ContactRiskExposure";
 import { isSkrQuery, buildSkrScript } from "./ScenarioKnowledgeReadiness";
+import { isOpresQuery, buildOpresScript } from "./OpsReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -368,6 +369,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:crisk-toggle"));
       let script = "";
       try { script = await buildCreiskScript(); } catch { script = "Contact risk exposure panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F58: ops report coverage — cross-correlates ops events against reports.
+    if (isOpresQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opres-toggle"));
+      let script = "";
+      try { script = await buildOpresScript(); } catch { script = "Ops report coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
