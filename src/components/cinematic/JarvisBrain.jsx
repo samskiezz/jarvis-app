@@ -39,6 +39,7 @@ import { isOpresQuery, buildOpresScript } from "./OpsReportCoverage";
 import { isScownQuery, buildScownScript } from "./SwarmContactOwnership";
 import { isIsexpQuery, buildIsexpScript } from "./InvestmentScenarioRisk";
 import { isItsmQuery, buildItsmScript } from "./IntelProfileScenarioThreat";
+import { isTaskRepQuery, buildTaskRepScript } from "./TaskReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -381,6 +382,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:isexp-toggle"));
       let script = "";
       try { script = await buildIsexpScript(); } catch { script = "Investment scenario risk panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F62: task report coverage — cross-correlates tasks against reports for documentation gaps.
+    if (isTaskRepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trep-toggle"));
+      let script = "";
+      try { script = await buildTaskRepScript(); } catch { script = "Task report documentation coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
