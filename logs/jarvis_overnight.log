@@ -36,3 +36,4 @@
 [2026-09-19] F58 OpsReportCoverage.jsx — /v1/ops/events × /v1/reports REPORTED/UNREPORTED; isOpresQuery+buildOpresScript wired in JarvisBrain; build exit 0
 [2026-09-19] F59 SwarmContactOwnership.jsx — /entities/SwarmJob × /entities/Contact keyword-correlation; OWNED/UNOWNED filter; ASSESS via agent+TTS; isScownQuery+buildScownScript in JarvisBrain; build exit 0
 [2026-09-19] F60 InvestmentScenarioRisk: /entities/Investment × /v1/scenario/list; EXPOSED/SAFE classification; ◈ ISEXP toggle; isIsexpQuery+buildIsexpScript wired; build exit 0
+[2026-09-19] F61 IntelProfileScenarioThreat.jsx — /entities/IntelProfile × /v1/scenario/list; ADDRESSED vs UNADDRESSED; isItsmQuery+buildItsmScript wired in JarvisBrain; build exit 0; committed to jarvis-overnight
