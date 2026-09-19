@@ -21,6 +21,7 @@ import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistr
 import { isBssfQuery, buildBssfScript } from "./BrainSystemStatusFusion";
 import { isKbeQuery, buildKbeScript } from "./KnowledgeBaseExplorer";
 import { isCilQuery, buildCilScript } from "./ContactInvestmentLinker";
+import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -253,6 +254,13 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cil-toggle"));
       let script = "";
       try { script = await buildCilScript(); } catch { script = "Contact investment linker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPathQuery(q)) {
+      let script = "";
+      try { script = await buildPathScript(q); } catch { script = "Graph path explorer is standing by. Say path from X to Y to trace a connection, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
