@@ -22,3 +22,4 @@
 2026-09-19T04:26:06Z F45 AipSkillInvestigationCoverage.jsx mounted+wired — /v1/aip/skill × /v1/investigations; DRIVEN/AUTONOMOUS; isAsicQuery+buildAsicScript in JarvisBrain; build exit 0
 2026-09-19 F20 ShowMeNavigation wired into JarvisBrain.ask() pre-router — "show me X" / "open X" / bare data-drill commands now route to the correct panel directly without calling the agent; backlog F01-F30 all marked done (all components verified in App.jsx, npm build exit 0)
 [2026-09-19] F47 SwarmDatasetProvenance.jsx — /entities/SwarmJob × /v1/datasets; SOURCED/PARTIAL/UNSOURCED; ◈ SJDP toggle left:937260; isSwdpQuery+buildSwdpScript wired in JarvisBrain; build exit 0
+2026-09-19T08:17:41Z F48 LiveIntelTaskActivator.jsx mounted (App.jsx import+render) + isLitaQuery/buildLitaScript wired in JarvisBrain.jsx; /functions/getLiveIntel × /entities/Task TRIGGERED/DORMANT correlation; build exit 0

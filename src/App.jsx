@@ -207,6 +207,7 @@ import OpsEventKnowledgeGap from '@/components/cinematic/OpsEventKnowledgeGap';
 import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvestigationCoverage';
 import TaskRiskCorrelation from '@/components/cinematic/TaskRiskCorrelation';
 import SwarmDatasetProvenance from '@/components/cinematic/SwarmDatasetProvenance';
+import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -614,6 +615,8 @@ function App() {
             <TaskRiskCorrelation />
             {/* F47: swarm-dataset provenance — ◈ SJDP button (left:937260); parallel-fetches /entities/SwarmJob + /v1/datasets; keyword-correlates jobs against backing datasets to classify SOURCED/PARTIAL/UNSOURCED; red badge on unsourced count; expand job → matched dataset cards with row counts; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwdpQuery+buildSwdpScript wired in JarvisBrain; "swarm dataset"/"sjdp"/"job provenance"/"swarm source" voice trigger; 90-s auto-refresh */}
             <SwarmDatasetProvenance />
+            {/* F48 (overnight 2026-09-19): Live Intel × Task Activator — ◈ LITA button (left:530240, bottom:8, zIndex:130); parallel-fetches /functions/getLiveIntel (seismic/crypto/FX) + /entities/Task; keyword-correlates live world events against open tasks to surface TRIGGERED vs DORMANT; stat tiles + filter tabs; expand task → matched event cards with type badge + relevance score; red badge on triggered count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence activation brief + TTS; isLitaQuery+buildLitaScript wired in JarvisBrain; "live intel task"/"world task"/"task trigger"/"lita"/"triggered tasks" voice trigger; 60-s auto-refresh */}
+            <LiveIntelTaskActivator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
