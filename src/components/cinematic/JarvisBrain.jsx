@@ -26,6 +26,7 @@ import { isOpsKnowQuery, buildOpsKnowScript } from "./OpsEventKnowledgeGap";
 import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
 import { isSwdpQuery, buildSwdpScript } from "./SwarmDatasetProvenance";
 import { isLitaQuery, buildLitaScript } from "./LiveIntelTaskActivator";
+import { isIdepcQuery, buildIdepcScript } from "./IntelProfileDatasetEvidence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -295,6 +296,14 @@ export default function JarvisBrain() {
     if (isLitaQuery(q)) {
       let script = "";
       try { script = await buildLitaScript(); } catch { script = "Live intel task activation panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIdepcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:idepc-toggle"));
+      let script = "";
+      try { script = await buildIdepcScript(); } catch { script = "Intel profile dataset evidence coverage is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

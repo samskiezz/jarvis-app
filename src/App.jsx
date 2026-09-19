@@ -208,6 +208,7 @@ import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvest
 import TaskRiskCorrelation from '@/components/cinematic/TaskRiskCorrelation';
 import SwarmDatasetProvenance from '@/components/cinematic/SwarmDatasetProvenance';
 import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivator';
+import IntelProfileDatasetEvidence from '@/components/cinematic/IntelProfileDatasetEvidence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -617,6 +618,8 @@ function App() {
             <SwarmDatasetProvenance />
             {/* F48 (overnight 2026-09-19): Live Intel × Task Activator — ◈ LITA button (left:530240, bottom:8, zIndex:130); parallel-fetches /functions/getLiveIntel (seismic/crypto/FX) + /entities/Task; keyword-correlates live world events against open tasks to surface TRIGGERED vs DORMANT; stat tiles + filter tabs; expand task → matched event cards with type badge + relevance score; red badge on triggered count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence activation brief + TTS; isLitaQuery+buildLitaScript wired in JarvisBrain; "live intel task"/"world task"/"task trigger"/"lita"/"triggered tasks" voice trigger; 60-s auto-refresh */}
             <LiveIntelTaskActivator />
+            {/* F49 (overnight 2026-09-19): IntelProfile × Dataset Evidence Coverage — ◈ IDEPC button (left:11800, bottom:8, zIndex:131); parallel-fetches /entities/IntelProfile + /v1/datasets; keyword-correlates each threat profile against dataset catalogue to classify EVIDENCED vs UNSUPPORTED; stat tiles; amber badge on unsupported count; filter tabs ALL/EVIDENCED/UNSUPPORTED; expand profile → matched dataset cards with row counts; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence evidence brief + TTS via jarvis:speak-dossier; isIdepcQuery+buildIdepcScript wired in JarvisBrain; "intel evidence"/"profile dataset"/"threat data"/"idepc"/"unsupported profiles"/"intel data coverage" voice trigger; jarvis:idepc-toggle event; 90-s auto-refresh */}
+            <IntelProfileDatasetEvidence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
