@@ -27,3 +27,4 @@
 [2026-09-19] F50 ReportInvestigationCoverage.jsx: /v1/reports × /v1/investigations; BACKED/UNBACKED classification; ▶ ASSESS + TTS; isRepInvQuery+buildRepInvScript wired in JarvisBrain; build exit 0
 [2026-09-19] F51 CrisisEarlyWarning voice routing — isCrisisWarningQuery+buildCrisisWarningScript imported+wired in JarvisBrain.jsx; 'JARVIS, crisis level'/'threat level'/'defcon'/'early warning' now speaks live DEFCON 1-5 composite threat brief from /entities/RiskSignal + /functions/getLiveIntel + /v1/ops/events via TTS; jarvis:crisis-warning-toggle dispatched; build exit 0
 2026-09-19 F01 ⌘K command palette: wired JarvisCommandPalette (scenes+30 panels+agent fallback) into App.jsx; build passed.
+[2026-09-19] F52 SceneRiskPresence.jsx: /v1/cinematic/scene/{id} × /entities/RiskSignal; AT_RISK/CRITICAL/CLEAR filter; expand→risk cards; ▶ ASSESS→agent+TTS; isSceneRiskQuery+buildSceneRiskScript wired JarvisBrain; ◈ SRISK toggle; build exit 0

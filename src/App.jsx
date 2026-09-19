@@ -63,6 +63,7 @@ import GraphCommunitiesView from '@/components/cinematic/GraphCommunitiesView';
 import IntelDigest from '@/components/cinematic/IntelDigest';
 import OpsCasesPanel from '@/components/cinematic/OpsCasesPanel';
 import CrisisEarlyWarning from '@/components/cinematic/CrisisEarlyWarning';
+import SceneRiskPresence from '@/components/cinematic/SceneRiskPresence';
 import EntityWatchlist from '@/components/cinematic/EntityWatchlist';
 import MissionReadinessIndex from '@/components/cinematic/MissionReadinessIndex';
 import DatasetGrowthTracker from '@/components/cinematic/DatasetGrowthTracker';
@@ -331,6 +332,7 @@ function App() {
             <OpsCasesPanel />
             {/* F36: crisis early warning system — ⚠ CRISIS button (left:6940); parallel-fetches /entities/RiskSignal + /functions/getLiveIntel + /v1/ops/events every 90 s; DEFCON 1–5 composite threat level ring; announces level change via TTS; "JARVIS, crisis level"/"defcon"/"threat level"/"early warning" voice trigger (isCrisisWarningQuery+buildCrisisWarningScript wired in JarvisBrain) */}
             <CrisisEarlyWarning />
+            <SceneRiskPresence />
             {/* F37: entity watchlist — ⬡ WATCH button (left:4444); stores pinned entities in localStorage; live-fetches /entities/{Task,RiskSignal,IntelProfile,SwarmJob,Investment,Contact} for each saved item; click → AI assessment via /v1/jarvis/agent/chat + TTS; other panels pin via jarvis:watchlist-add CustomEvent; "JARVIS, watchlist"/"my watchlist"/"watched items" voice trigger (isWatchlistQuery+buildWatchlistScript wired in JarvisBrain) */}
             <EntityWatchlist />
             {/* F38: mission readiness index — ◎ READY button (left:5692); parallel-fetches /entities/Task (25%) + /v1/aip/skill (30%) + /entities/SwarmJob (20%) + /v1/jarvis/system/status (25%); composite 0-100 MRI score ring gauge + 4 sub-score bars + detail text; ▶ JARVIS ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence AI assessment + TTS; 45-s auto-refresh; live score badge on button; "mission ready"/"readiness"/"ready index"/"operational ready" voice trigger (isMissionReadyQuery+buildMissionReadyScript already wired in JarvisBrain) */}
