@@ -30,3 +30,4 @@
 [2026-09-19] F52 SceneRiskPresence.jsx: /v1/cinematic/scene/{id} × /entities/RiskSignal; AT_RISK/CRITICAL/CLEAR filter; expand→risk cards; ▶ ASSESS→agent+TTS; isSceneRiskQuery+buildSceneRiskScript wired JarvisBrain; ◈ SRISK toggle; build exit 0
 [2026-09-19] F53 BrainRiskMonitor: mounted BrainRiskMonitor.jsx in App.jsx; isBrsmQuery+buildBrsmScript wired in JarvisBrain.jsx; uses /v1/cinematic/brain × /entities/RiskSignal; brain:risk ratio AHEAD/MATCHED/BEHIND; voice 'brain risk/brsm/brain vs risk'; build exit 0
 [2026-09-19] F54 AgentToolScenarioCoverage — /v1/jarvis/agent/tools × /v1/scenario/list → EXERCISED/IDLE tool coverage; ◈ ATSCEN button; voice: atscen/tool scenario/idle tools; build exit 0
+[2026-09-19] F55 BrainTaskProgressMonitor: mounted in App.jsx; isBstpQuery+buildBstpScript wired in JarvisBrain.jsx; uses /v1/cinematic/brain × /entities/Task; SYNCED/GROWING/LAGGING/CRITICAL status; voice 'brain task/bstp/brain progress/task progress'; build exit 0
