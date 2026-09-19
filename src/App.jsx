@@ -13,7 +13,7 @@ import { COLORS as C } from '@/domain/colors';
 import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
-import CommandPalette from '@/components/cinematic/CommandPalette';
+import CommandPalette from '@/components/cinematic/JarvisCommandPalette';
 import HeyJarvisListener from '@/components/cinematic/HeyJarvisListener';
 import SceneKeyboardNav from '@/components/cinematic/SceneKeyboardNav';
 import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
