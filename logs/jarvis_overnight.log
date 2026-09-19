@@ -32,3 +32,4 @@
 [2026-09-19] F54 AgentToolScenarioCoverage — /v1/jarvis/agent/tools × /v1/scenario/list → EXERCISED/IDLE tool coverage; ◈ ATSCEN button; voice: atscen/tool scenario/idle tools; build exit 0
 [2026-09-19] F55 BrainTaskProgressMonitor: mounted in App.jsx; isBstpQuery+buildBstpScript wired in JarvisBrain.jsx; uses /v1/cinematic/brain × /entities/Task; SYNCED/GROWING/LAGGING/CRITICAL status; voice 'brain task/bstp/brain progress/task progress'; build exit 0
 [2026-09-19] F56 Contact×RiskSignal (CRISK): ContactRiskExposure.jsx rewritten with isCreiskQuery/buildCreiskScript exports; wired import+dispatch in JarvisBrain.jsx; build exit 0; pushed to jarvis-overnight
+2026-09-19T18:21:27Z F57 DONE: ScenarioKnowledgeReadiness.jsx — /v1/scenario/list × /knowledge/ cross-correlation; READY/PARTIAL/DARK classification; mounted App.jsx; isSkrQuery+buildSkrScript wired JarvisBrain.jsx; build exit 0

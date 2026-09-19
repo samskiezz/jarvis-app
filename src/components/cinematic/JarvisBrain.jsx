@@ -34,6 +34,7 @@ import { isBrsmQuery, buildBrsmScript } from "./BrainRiskMonitor";
 import { isAtscenQuery, buildAtscenScript } from "./AgentToolScenarioCoverage";
 import { isBstpQuery, buildBstpScript } from "./BrainTaskProgressMonitor";
 import { isCreiskQuery, buildCreiskScript } from "./ContactRiskExposure";
+import { isSkrQuery, buildSkrScript } from "./ScenarioKnowledgeReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -367,6 +368,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:crisk-toggle"));
       let script = "";
       try { script = await buildCreiskScript(); } catch { script = "Contact risk exposure panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F57: scenario knowledge readiness — cross-correlates scenarios against KB articles.
+    if (isSkrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skr-toggle"));
+      let script = "";
+      try { script = await buildSkrScript(); } catch { script = "Scenario knowledge readiness panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

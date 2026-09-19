@@ -214,6 +214,7 @@ import SwarmDatasetProvenance from '@/components/cinematic/SwarmDatasetProvenanc
 import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivator';
 import IntelProfileDatasetEvidence from '@/components/cinematic/IntelProfileDatasetEvidence';
 import ReportInvestigationCoverage from '@/components/cinematic/ReportInvestigationCoverage';
+import ScenarioKnowledgeReadiness from '@/components/cinematic/ScenarioKnowledgeReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -635,6 +636,8 @@ function App() {
             <IntelProfileDatasetEvidence />
             {/* F50 (overnight 2026-09-19): Report × Investigation Coverage — ◈ REPINV button (left:12360, bottom:8, zIndex:132); parallel-fetches /v1/reports + /v1/investigations; keyword-correlates each open investigation against reports catalogue to classify BACKED vs UNBACKED (documentation gap); stat tiles: investigations/reports/backed/unbacked; amber badge on unbacked count; filter tabs ALL/BACKED/UNBACKED; expand investigation → matched report cards with type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence documentation brief + TTS via jarvis:speak-dossier; isRepInvQuery+buildRepInvScript wired in JarvisBrain; "report investigation"/"investigation reports"/"repinv"/"unbacked investigations"/"investigation documentation" voice trigger; jarvis:repinv-toggle event; 90-s auto-refresh */}
             <ReportInvestigationCoverage />
+            {/* F57 (overnight 2026-09-19): Scenario × Knowledge Readiness — ◈ SKR button (left:12920, bottom:8, zIndex:66); parallel-fetches /v1/scenario/list + /knowledge/; keyword-correlates each scenario against KB articles to classify READY (≥2 articles)/PARTIAL (1)/DARK (0); stat tiles: total/ready/partial/dark; filter tabs ALL/READY/PARTIAL/DARK + text search; expand scenario → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence readiness brief + TTS; isSkrQuery+buildSkrScript wired in JarvisBrain; "scenario knowledge"/"sknow"/"scenario readiness"/"how ready are we"/"knowledge readiness" voice trigger; jarvis:skr-toggle event; 90-s auto-refresh */}
+            <ScenarioKnowledgeReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
