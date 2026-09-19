@@ -1,0 +1,1 @@
+2026-09-19 F20 ShowMeNavigation wired into JarvisBrain.ask() pre-router — "show me X" / "open X" / bare data-drill commands now route to the correct panel directly without calling the agent; backlog F01-F30 all marked done (all components verified in App.jsx, npm build exit 0)
