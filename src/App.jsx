@@ -217,6 +217,7 @@ import ReportInvestigationCoverage from '@/components/cinematic/ReportInvestigat
 import ScenarioKnowledgeReadiness from '@/components/cinematic/ScenarioKnowledgeReadiness';
 import OpsReportCoverage from '@/components/cinematic/OpsReportCoverage';
 import SwarmContactOwnership from '@/components/cinematic/SwarmContactOwnership';
+import InvestmentScenarioRisk from '@/components/cinematic/InvestmentScenarioRisk';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -644,6 +645,8 @@ function App() {
             <OpsReportCoverage />
             {/* F59 (overnight 2026-09-19): SwarmJob × Contact Ownership — ◈ SCOWN button (left:14040, bottom:8, zIndex:68); parallel-fetches /entities/SwarmJob + /entities/Contact; keyword-correlates running swarm jobs against contacts to surface OWNED vs UNOWNED; stat tiles: jobs/owned/unowned; amber badge on unowned count; filter tabs ALL/OWNED/UNOWNED + text search; expand job → matched contact cards with role; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ownership brief + TTS; isScownQuery+buildScownScript wired in JarvisBrain; "swarm contact"/"job owner"/"scown"/"swarm ownership"/"who runs"/"contact swarm" voice trigger; jarvis:scown-toggle event; 90-s auto-refresh */}
             <SwarmContactOwnership />
+            {/* F60 (overnight 2026-09-19): Investment × Scenario Risk — ◈ ISEXP button (left:14600, bottom:8, zIndex:69); parallel-fetches /entities/Investment + /v1/scenario/list; keyword-correlates portfolio positions against threat scenarios to classify EXPOSED vs SAFE; stat tiles: positions/exposed/safe; amber badge on exposed count; filter tabs ALL/EXPOSED/SAFE + text search; expand investment → matched scenario cards with description; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence portfolio risk brief + TTS; isIsexpQuery+buildIsexpScript wired in JarvisBrain; "investment scenario"/"portfolio scenario"/"isexp"/"portfolio threat"/"investment risk scenario" voice trigger; jarvis:isexp-toggle event; 90-s auto-refresh */}
+            <InvestmentScenarioRisk />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
