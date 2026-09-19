@@ -23,6 +23,7 @@ import { isKbeQuery, buildKbeScript } from "./KnowledgeBaseExplorer";
 import { isCilQuery, buildCilScript } from "./ContactInvestmentLinker";
 import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
 import { isOpsKnowQuery, buildOpsKnowScript } from "./OpsEventKnowledgeGap";
+import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -270,6 +271,14 @@ export default function JarvisBrain() {
     if (isPathQuery(q)) {
       let script = "";
       try { script = await buildPathScript(q); } catch { script = "Graph path explorer is standing by. Say path from X to Y to trace a connection, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAsicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:asic-toggle"));
+      let script = "";
+      try { script = await buildAsicScript(); } catch { script = "AIP skill investigation coverage analysis is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

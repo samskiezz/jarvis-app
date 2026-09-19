@@ -204,6 +204,7 @@ import BrainSystemStatusFusion from '@/components/cinematic/BrainSystemStatusFus
 import KnowledgeBaseExplorer from '@/components/cinematic/KnowledgeBaseExplorer';
 import ContactInvestmentLinker from '@/components/cinematic/ContactInvestmentLinker';
 import OpsEventKnowledgeGap from '@/components/cinematic/OpsEventKnowledgeGap';
+import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -605,6 +606,8 @@ function App() {
             <ContactInvestmentLinker />
             {/* F44 (overnight 2026-09-19): ops events × knowledge gap — ◈ OPKNOW button (left:11240, bottom:8, zIndex:67); parallel-fetches /v1/ops/events (sev≥50) + /knowledge/; keyword-correlates each significant ops event against KB articles to surface DOCUMENTED vs UNDOCUMENTED; stat tiles: events/articles/documented/undocumented; amber badge on undocumented count; filter tabs ALL/DOCUMENTED/UNDOCUMENTED; expand event → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; isOpsKnowQuery+buildOpsKnowScript wired in JarvisBrain; "ops knowledge"/"event docs"/"opknow"/"event knowledge gap"/"ops documentation gap" voice trigger; jarvis:opknow-toggle event; 90-s auto-refresh */}
             <OpsEventKnowledgeGap />
+            {/* F45 (overnight 2026-09-19): AIP Skill × Investigation Coverage — ◈ ASIC button (left:7140, bottom:18, zIndex:68); parallel-fetches /v1/aip/skill + /v1/investigations; keyword-correlates each JARVIS skill against active investigations (DRIVEN vs AUTONOMOUS); stat tiles + filter tabs + expand row; ▶ ASSESS → agent + TTS; isAsicQuery+buildAsicScript wired in JarvisBrain; "asic"/"aip investigation"/"skill investigation"/"driven skills"/"autonomous skills" voice trigger; jarvis:asic-toggle event; 90-s auto-refresh */}
+            <AipSkillInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
