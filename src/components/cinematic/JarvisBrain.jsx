@@ -31,6 +31,7 @@ import { isRepInvQuery, buildRepInvScript } from "./ReportInvestigationCoverage"
 import { isCrisisWarningQuery, buildCrisisWarningScript } from "./CrisisEarlyWarning";
 import { isSceneRiskQuery, buildSceneRiskScript } from "./SceneRiskPresence";
 import { isBrsmQuery, buildBrsmScript } from "./BrainRiskMonitor";
+import { isAtscenQuery, buildAtscenScript } from "./AgentToolScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -340,6 +341,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:brsm-toggle"));
       let script = "";
       try { script = await buildBrsmScript(); } catch { script = "Brain risk monitor is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAtscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:atscen-toggle"));
+      let script = "";
+      try { script = await buildAtscenScript(); } catch { script = "Agent tool scenario coverage is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

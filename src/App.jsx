@@ -65,6 +65,7 @@ import OpsCasesPanel from '@/components/cinematic/OpsCasesPanel';
 import CrisisEarlyWarning from '@/components/cinematic/CrisisEarlyWarning';
 import SceneRiskPresence from '@/components/cinematic/SceneRiskPresence';
 import BrainRiskMonitor from '@/components/cinematic/BrainRiskMonitor';
+import AgentToolScenarioCoverage from '@/components/cinematic/AgentToolScenarioCoverage';
 import EntityWatchlist from '@/components/cinematic/EntityWatchlist';
 import MissionReadinessIndex from '@/components/cinematic/MissionReadinessIndex';
 import DatasetGrowthTracker from '@/components/cinematic/DatasetGrowthTracker';
@@ -336,6 +337,8 @@ function App() {
             <SceneRiskPresence />
             {/* F53: brain × risk monitor — ◉ BRSM button (left:1200, bottom:18, zIndex:68); parallel-polls /v1/cinematic/brain + /entities/RiskSignal; brain:risk ratio (nodes-per-risk); AHEAD/MATCHED/BEHIND status; ▶ ASSESS → agent + TTS; "brain risk"/"brsm"/"brain vs risk"/"risk brain" voice trigger */}
             <BrainRiskMonitor />
+            {/* F167 (overnight 2026-09-19): Agent Tool × Scenario Coverage — ◈ ATSCEN button (left:1760, bottom:18, zIndex:68); parallel-fetches /v1/jarvis/agent/tools + /v1/scenario/list; keyword-correlates each available JARVIS tool against scenario descriptions to surface EXERCISED (scenario references this tool) vs IDLE (no scenario — capability gap); stat tiles (tools/scenarios/exercised/idle); amber badge on idle count; filter tabs ALL/EXERCISED/IDLE + text search; expand tool → matched scenario cards with type badge + status + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capability-gap brief + TTS via jarvis:speak-dossier; isAtscenQuery+buildAtscenScript wired in JarvisBrain; "tool scenario"/"tool coverage"/"idle tools"/"capability gap"/"atscen"/"unused tools"/"tool gap"/"tool exercise" voice trigger; jarvis:atscen-toggle event; 90-s auto-refresh */}
+            <AgentToolScenarioCoverage />
             {/* F37: entity watchlist — ⬡ WATCH button (left:4444); stores pinned entities in localStorage; live-fetches /entities/{Task,RiskSignal,IntelProfile,SwarmJob,Investment,Contact} for each saved item; click → AI assessment via /v1/jarvis/agent/chat + TTS; other panels pin via jarvis:watchlist-add CustomEvent; "JARVIS, watchlist"/"my watchlist"/"watched items" voice trigger (isWatchlistQuery+buildWatchlistScript wired in JarvisBrain) */}
             <EntityWatchlist />
             {/* F38: mission readiness index — ◎ READY button (left:5692); parallel-fetches /entities/Task (25%) + /v1/aip/skill (30%) + /entities/SwarmJob (20%) + /v1/jarvis/system/status (25%); composite 0-100 MRI score ring gauge + 4 sub-score bars + detail text; ▶ JARVIS ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence AI assessment + TTS; 45-s auto-refresh; live score badge on button; "mission ready"/"readiness"/"ready index"/"operational ready" voice trigger (isMissionReadyQuery+buildMissionReadyScript already wired in JarvisBrain) */}
