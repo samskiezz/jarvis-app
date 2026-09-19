@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
+import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -75,8 +76,23 @@ export default function JarvisBrain() {
     }, 18);
   }
 
-  async function ask(q) {
+  async function ask(q, { _noShowMe = false } = {}) {
     if (!q || !q.trim()) return;
+
+    // F20: ShowMe pre-router — translate "show me X" / "open X" / "display X" into the
+    // canonical panel query that the target panel's intent RE will match. Re-dispatch so
+    // every panel listener can hear the resolved intent. Skip agent call to avoid duplicate
+    // speech; the opened panel fetches its own data and speaks via TTS.
+    if (!_noShowMe && isShowMeQuery(q)) {
+      const resolved = resolveShowMeQuery(q);
+      if (resolved && resolved !== q) {
+        window.dispatchEvent(
+          new CustomEvent("jarvis:ask", { detail: { query: resolved, _noShowMe: true } })
+        );
+        return;
+      }
+    }
+
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
@@ -104,6 +120,8 @@ export default function JarvisBrain() {
     const onAsk = (e) => {
       // JarvisAssistant owns chat on /apex routes; avoid duplicate handling there.
       if (typeof window !== "undefined" && window.location.pathname.startsWith("/apex")) return;
+      // Re-dispatched ShowMe events are for panels only; skip the agent call path.
+      if (e?.detail?._noShowMe) return;
       const q = e?.detail?.text || e?.detail?.query;
       if (q) ask(q);
     };

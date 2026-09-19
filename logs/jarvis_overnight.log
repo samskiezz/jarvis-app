@@ -1,0 +1,1 @@
+2026-09-19 F01 ⌘K command palette — wired ShowMeNavigation (isShowMeQuery/resolveShowMeQuery) into JarvisBrain.ask() so "show me X"/"open X"/"display X" phrases resolve to canonical panel queries and re-dispatch jarvis:ask; _noShowMe flag prevents loops; build passes.
