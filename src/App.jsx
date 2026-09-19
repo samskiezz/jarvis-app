@@ -206,6 +206,7 @@ import ContactInvestmentLinker from '@/components/cinematic/ContactInvestmentLin
 import OpsEventKnowledgeGap from '@/components/cinematic/OpsEventKnowledgeGap';
 import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvestigationCoverage';
 import TaskRiskCorrelation from '@/components/cinematic/TaskRiskCorrelation';
+import SwarmDatasetProvenance from '@/components/cinematic/SwarmDatasetProvenance';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -611,6 +612,8 @@ function App() {
             <AipSkillInvestigationCoverage />
             {/* F46: Task × Risk Signal correlation — /entities/Task × /entities/RiskSignal */}
             <TaskRiskCorrelation />
+            {/* F47: swarm-dataset provenance — ◈ SJDP button (left:937260); parallel-fetches /entities/SwarmJob + /v1/datasets; keyword-correlates jobs against backing datasets to classify SOURCED/PARTIAL/UNSOURCED; red badge on unsourced count; expand job → matched dataset cards with row counts; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwdpQuery+buildSwdpScript wired in JarvisBrain; "swarm dataset"/"sjdp"/"job provenance"/"swarm source" voice trigger; 90-s auto-refresh */}
+            <SwarmDatasetProvenance />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

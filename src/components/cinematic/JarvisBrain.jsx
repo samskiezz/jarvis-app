@@ -24,6 +24,7 @@ import { isCilQuery, buildCilScript } from "./ContactInvestmentLinker";
 import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
 import { isOpsKnowQuery, buildOpsKnowScript } from "./OpsEventKnowledgeGap";
 import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
+import { isSwdpQuery, buildSwdpScript } from "./SwarmDatasetProvenance";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -279,6 +280,13 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:asic-toggle"));
       let script = "";
       try { script = await buildAsicScript(); } catch { script = "AIP skill investigation coverage analysis is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSwdpQuery(q)) {
+      let script = "";
+      try { script = await buildSwdpScript(); } catch { script = "Swarm dataset provenance panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
