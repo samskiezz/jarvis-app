@@ -225,6 +225,7 @@ import AipSkillKnowledgeGrounding from '@/components/cinematic/AipSkillKnowledge
 import InvestigationKnowledgeGrounding from '@/components/cinematic/InvestigationKnowledgeGrounding';
 import OpsEventIntelCorrelation from '@/components/cinematic/OpsEventIntelCorrelation';
 import ContactScenarioMapper from '@/components/cinematic/ContactScenarioMapper';
+import RiskSignalReportCoverage from '@/components/cinematic/RiskSignalReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -667,6 +668,8 @@ function App() {
             <OpsEventIntelCorrelation />
             {/* F67 (overnight 2026-09-20): Contact × Scenario Engagement Mapper — ◈ CSEM button (left:18520, bottom:8, zIndex:75); parallel-fetches /entities/Contact + /v1/scenario/list; keyword-correlates contacts against threat scenarios to surface ENGAGED vs CLEAR; stat tiles contacts/engaged/clear; filter tabs ALL/ENGAGED/CLEAR + text search; expand contact → matched scenario cards with type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCsemQuery+buildCsemScript wired in JarvisBrain; "contact scenario"/"csem"/"who handles"/"scenario contacts"/"contact engagement" voice trigger; jarvis:csem-toggle event; 90-s auto-refresh */}
             <ContactScenarioMapper />
+            {/* F69 (overnight 2026-09-20): Risk Signal × Report Coverage — ◈ RSRPT button; parallel-fetches /entities/RiskSignal + /v1/reports; keyword-correlates risk signals against report documentation; DOCUMENTED vs UNDOCUMENTED classification; isRsrptQuery+buildRsrptScript wired in JarvisBrain; jarvis:rsrpt-toggle event */}
+            <RiskSignalReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
