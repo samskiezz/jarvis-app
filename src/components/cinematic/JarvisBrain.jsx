@@ -60,6 +60,7 @@ import { isRdlinQuery, buildRdlinScript } from "./ReportDatasetLineage";
 import { isIrepQuery, buildIrepScript } from "./InvestmentReportCoverage";
 import { isSjinvQuery, buildSjinvScript } from "./SwarmJobInvestigationCoverage";
 import { isSjkgQuery, buildSjkgScript } from "./SwarmJobKnowledgeGrounding";
+import { isCtaskQuery, buildCtaskScript } from "./ContactTaskAssignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -627,6 +628,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjkg-toggle"));
       let script = "";
       try { script = await buildSjkgScript(); } catch { script = "Swarm job knowledge grounding panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F84: contact × task assignment — people workload coverage.
+    if (isCtaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctask-toggle"));
+      let script = "";
+      try { script = await buildCtaskScript(); } catch { script = "Contact task assignment panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

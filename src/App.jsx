@@ -239,6 +239,7 @@ import ReportDatasetLineage from '@/components/cinematic/ReportDatasetLineage';
 import InvestmentReportCoverage from '@/components/cinematic/InvestmentReportCoverage';
 import SwarmJobInvestigationCoverage from '@/components/cinematic/SwarmJobInvestigationCoverage';
 import SwarmJobKnowledgeGrounding from '@/components/cinematic/SwarmJobKnowledgeGrounding';
+import ContactTaskAssignment from '@/components/cinematic/ContactTaskAssignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -708,6 +709,8 @@ function App() {
             <SwarmJobInvestigationCoverage />
             {/* F83 (overnight 2026-09-20): SwarmJob × Knowledge Grounding — ◈ SJKG button (left:24680, bottom:8, zIndex:85); parallel-fetches /entities/SwarmJob + /knowledge/; keyword-correlates each running swarm job against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0); stat tiles jobs/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand job → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge brief + TTS; isSjkgQuery+buildSjkgScript wired in JarvisBrain; "swarm knowledge"/"sjkg"/"bare jobs"/"job kb"/"swarm kb"/"ungrounded swarm" voice trigger; jarvis:sjkg-toggle event; 90-s auto-refresh */}
             <SwarmJobKnowledgeGrounding />
+            {/* F84 (overnight 2026-09-20): Contact × Task Assignment — ◈ CTASK button (left:25240, bottom:8, zIndex:86); parallel-fetches /entities/Contact + /entities/Task; keyword-correlates each contact against tasks to surface ASSIGNED (≥1 task match) vs UNASSIGNED; stat tiles contacts/task-links/assigned/unassigned; amber badge on unassigned count; filter tabs ALL/ASSIGNED/UNASSIGNED + text search; expand contact → matched task cards with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence people-task brief + TTS; isCtaskQuery+buildCtaskScript wired in JarvisBrain; "contact task"/"ctask"/"people tasks"/"assigned contacts"/"task owners"/"who has tasks"/"contact assignment" voice trigger; jarvis:ctask-toggle event; 90-s auto-refresh */}
+            <ContactTaskAssignment />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
