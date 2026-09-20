@@ -51,6 +51,7 @@ import { isCinvQuery, buildCinvScript } from "./ContactInvestigationInvolvement"
 import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
 import { isDtconQuery, buildDtconScript } from "./DatasetTaskConsumption";
 import { isSwriskQuery, buildSwriskScript } from "./SwarmJobRiskCorrelation";
+import { isIptaskQuery, buildIptaskScript } from "./IntelProfileTasking";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -483,6 +484,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dtcon-toggle"));
       let script = "";
       try { script = await buildDtconScript(); } catch { script = "Dataset task consumption panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F74: intel profile × task — TASKED vs AUTONOMOUS threat actor tasking analysis.
+    if (isIptaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iptask-toggle"));
+      let script = "";
+      try { script = await buildIptaskScript(); } catch { script = "Threat actor tasking panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

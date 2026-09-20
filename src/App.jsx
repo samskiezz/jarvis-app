@@ -230,6 +230,7 @@ import ContactInvestigationInvolvement from '@/components/cinematic/ContactInves
 import AipSkillReportsCoverage from '@/components/cinematic/AipSkillReportsCoverage';
 import DatasetTaskConsumption from '@/components/cinematic/DatasetTaskConsumption';
 import SwarmJobRiskCorrelation from '@/components/cinematic/SwarmJobRiskCorrelation';
+import IntelProfileTasking from '@/components/cinematic/IntelProfileTasking';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -682,6 +683,8 @@ function App() {
             <DatasetTaskConsumption />
             {/* F73 (overnight 2026-09-20): SwarmJob × Risk Signal Threat Correlation — ◈ SWRISK button (left:20200, bottom:8, zIndex:77); parallel-fetches /entities/SwarmJob + /entities/RiskSignal; keyword-correlates swarm jobs against active risks; THREATENED vs SECURE classification; stat tiles jobs/risks/threatened/secure; red badge on threatened count; filter tabs ALL/THREATENED/SECURE + text search; expand job → matched risk signal cards with severity; ▶ ASSESS RISK → /v1/jarvis/agent/chat 2-sentence threat brief + TTS; isSwriskQuery+buildSwriskScript wired in JarvisBrain; "swarm risk"/"swrisk"/"threatened jobs"/"swarm threat"/"job risk" voice trigger; jarvis:swrisk-toggle event; 90-s auto-refresh */}
             <SwarmJobRiskCorrelation />
+            {/* F74 (overnight 2026-09-20): IntelProfile × Task — Threat Actor Tasking — ◈ IPTASK button (left:20760, bottom:8, zIndex:78); parallel-fetches /entities/IntelProfile + /entities/Task; keyword-correlates each intel profile against open tasks to surface TASKED (driven by threat actor) vs AUTONOMOUS; stat tiles profiles/tasks/tasked/autonomous; amber badge on tasked count; filter tabs ALL/TASKED/AUTONOMOUS + text search; expand profile → matched task cards with status badge + relevance score; ▶ ASSESS TASKING → /v1/jarvis/agent/chat 2-sentence threat-tasking brief + TTS; isIptaskQuery+buildIptaskScript wired in JarvisBrain; "intel task"/"iptask"/"threat actor tasks"/"tasked threats"/"threat tasking" voice trigger; jarvis:iptask-toggle event; 90-s auto-refresh */}
+            <IntelProfileTasking />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
