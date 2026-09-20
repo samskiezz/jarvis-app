@@ -236,6 +236,7 @@ import InvestmentInvestigationCoverage from '@/components/cinematic/InvestmentIn
 import ScenarioDatasetCoverage from '@/components/cinematic/ScenarioDatasetCoverage';
 import RiskSignalIntelAttribution from '@/components/cinematic/RiskSignalIntelAttribution';
 import ReportDatasetLineage from '@/components/cinematic/ReportDatasetLineage';
+import InvestmentReportCoverage from '@/components/cinematic/InvestmentReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -699,6 +700,8 @@ function App() {
             <RiskSignalIntelAttribution />
             {/* F80 (overnight 2026-09-20): Report × Dataset Lineage — ◈ RDLIN button (left:23000, bottom:8, zIndex:82); parallel-fetches /v1/reports + /v1/datasets; keyword-correlates each report against dataset catalog to surface SOURCED (≥1 dataset match) vs UNSOURCED (data lineage gap); stat tiles: reports/datasets/sourced/unsourced; amber badge on unsourced count; filter tabs ALL/SOURCED/UNSOURCED + text search; expand report → matched dataset cards with row counts + relevance score bar; ▶ ASSESS LINEAGE → /v1/jarvis/agent/chat 2-sentence data governance brief + TTS; isRdlinQuery+buildRdlinScript wired in JarvisBrain; "rdlin"/"report dataset"/"dataset report"/"report lineage"/"data lineage"/"sourced reports"/"unsourced reports"/"report provenance"/"report data coverage" voice trigger; jarvis:rdlin-toggle event; 90-s auto-refresh */}
             <ReportDatasetLineage />
+            {/* F81 (overnight 2026-09-20): Investment × Report Coverage — ◈ IREP button (left:23560, bottom:8, zIndex:83); parallel-fetches /entities/Investment + /v1/reports; keyword-correlates each portfolio position against reports to surface COVERED (≥1 report match) vs DARK (no intelligence coverage); stat tiles: positions/reports/covered/dark; amber badge on dark count; filter tabs ALL/COVERED/DARK + text search; expand position → matched report cards with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment intelligence brief + TTS; isIrepQuery+buildIrepScript wired in JarvisBrain; "investment report"/"irep"/"portfolio coverage"/"portfolio reports"/"dark investments" voice trigger; jarvis:irep-toggle event; 90-s auto-refresh */}
+            <InvestmentReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
