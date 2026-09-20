@@ -45,6 +45,7 @@ import { isSkkgQuery, buildSkkgScript } from "./AipSkillKnowledgeGrounding";
 import { isInvkgQuery, buildInvkgScript } from "./InvestigationKnowledgeGrounding";
 import { isOpeicQuery, buildOpeicScript } from "./OpsEventIntelCorrelation";
 import { isCsemQuery, buildCsemScript } from "./ContactScenarioMapper";
+import { isOpscenQuery, buildOpscenScript } from "./OpsScenarioGap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -441,6 +442,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:csem-toggle"));
       let script = "";
       try { script = await buildCsemScript(); } catch { script = "Contact scenario engagement panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F68: ops events × scenario gap — surfaces COVERED vs UNCOVERED planning blind spots.
+    if (isOpscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opscen-toggle"));
+      let script = "";
+      try { script = await buildOpscenScript(); } catch { script = "Ops scenario gap panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
