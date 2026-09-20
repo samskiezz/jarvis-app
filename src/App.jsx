@@ -28,6 +28,7 @@ import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
 import LiveClockUptime from '@/components/cinematic/LiveClockUptime';
 import BrainGrowthSparkline from '@/components/cinematic/BrainGrowthSparkline';
 import MultiVoiceToggle from '@/components/cinematic/MultiVoiceToggle';
+import DataFeedFreshnessMonitor from '@/components/cinematic/DataFeedFreshnessMonitor';
 import ServiceDiagnostics from '@/components/cinematic/ServiceDiagnostics';
 import ScenarioLauncher from '@/components/cinematic/ScenarioLauncher';
 import DocumentSearch from '@/components/cinematic/DocumentSearch';
@@ -282,6 +283,7 @@ function App() {
             <BrainGrowthSparkline />
             {/* F30: multi-voice TTS toggle — ◈ VOICE button at bottom; picks ash/fable/onyx; persists to localStorage; feeds voice param on every /v1/voice/tts POST */}
             <MultiVoiceToggle />
+            <DataFeedFreshnessMonitor />
             {/* F35: service diagnostics — ⬡ DIAG button; polls /v1/jarvis/system/status every 30 s; per-service health board + CPU/MEM/LOAD tiles; "JARVIS, service health" voice trigger */}
             <ServiceDiagnostics />
             {/* F37: scenario launcher — SIM button bottom strip; /v1/scenario/list + POST /v1/scenario/run; filter + run + outcome; "JARVIS, scenarios" voice trigger */}
