@@ -234,6 +234,7 @@ import SwarmJobRiskCorrelation from '@/components/cinematic/SwarmJobRiskCorrelat
 import IntelProfileTasking from '@/components/cinematic/IntelProfileTasking';
 import InvestmentInvestigationCoverage from '@/components/cinematic/InvestmentInvestigationCoverage';
 import ScenarioDatasetCoverage from '@/components/cinematic/ScenarioDatasetCoverage';
+import RiskSignalIntelAttribution from '@/components/cinematic/RiskSignalIntelAttribution';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -693,6 +694,8 @@ function App() {
             <InvestmentInvestigationCoverage />
             {/* F78 (overnight 2026-09-20): Scenario × Dataset Coverage — ◈ SCDSET button (left:21880, bottom:8, zIndex:80); parallel-fetches /v1/scenario/list + /v1/datasets; keyword-correlates scenarios against dataset catalog; DATA_BACKED/PARTIAL/DATA_DARK classification; stat tiles scenarios/datasets/backed/dark; amber badge on dark count; filter tabs ALL/DATA_BACKED/PARTIAL/DATA_DARK + text search; expand scenario → matched dataset cards with row counts + relevance score bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence data-coverage brief + TTS; isScdsetQuery+buildScdsetScript wired in JarvisBrain; "scenario dataset"/"scenario data"/"scdset"/"scenario data coverage"/"backed scenarios"/"data dark scenarios" voice trigger; jarvis:scdset-toggle event; 90-s auto-refresh */}
             <ScenarioDatasetCoverage />
+            {/* F79 (overnight 2026-09-20): RiskSignal × IntelProfile Threat Attribution — ◈ RATTR button (left:22440, bottom:8, zIndex:81); parallel-fetches /entities/RiskSignal + /entities/IntelProfile; keyword-correlates active risk signals against intel threat profiles to surface ATTRIBUTED (known threat actor) vs UNATTRIBUTED (blind-spot risk); stat tiles signals/intel-profiles/attributed/unattributed; amber badge on unattributed count; filter tabs ALL/ATTRIBUTED/UNATTRIBUTED + text search; expand signal → matched intel profile cards with threat type + relevance score bar; ▶ ASSESS ATTRIBUTION → /v1/jarvis/agent/chat 2-sentence threat-attribution brief + TTS; isRattrQuery+buildRattrScript wired in JarvisBrain; "risk attribution"/"rattr"/"attributed risks"/"unattributed risks"/"threat attribution"/"who is behind"/"risk actor"/"blind risk" voice trigger; jarvis:rattr-toggle event; 90-s auto-refresh */}
+            <RiskSignalIntelAttribution />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -53,3 +53,4 @@
 2026-09-20 F76 InvestmentInvestigationCoverage.jsx: /entities/Investment x /v1/investigations; UNDER_INVESTIGATION/CLEAN; isInvcaseQuery+buildInvcaseScript wired JarvisBrain; ◈ INVCASE toggle; build exit 0.
 [2026-09-20] F77 ContactKnowledgeAdvisor voice wiring: isCtknowQuery+buildCtknowScript imported+wired in JarvisBrain.jsx; /entities/Contact × /knowledge/; LINKED vs DARK; ◈ CTKNOW toggle left:9852; "contact knowledge"/"ctknow" voice trigger; 120-s auto-refresh; build exit 0
 [2026-09-20] F78 ScenarioDatasetCoverage.jsx: Scenario × Dataset Coverage (SCDSET) — DATA_BACKED/PARTIAL/DATA_DARK; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
+2026-09-20T00:00:00Z | F79 | DONE | RiskSignalIntelAttribution.jsx created (/entities/RiskSignal × /entities/IntelProfile; ATTRIBUTED/UNATTRIBUTED; amber badge; voice 'risk attribution'/'rattr'; isRattrQuery+buildRattrScript wired JarvisBrain; ◈ RATTR left:22440; build exit 0)

@@ -55,6 +55,7 @@ import { isIptaskQuery, buildIptaskScript } from "./IntelProfileTasking";
 import { isInvcaseQuery, buildInvcaseScript } from "./InvestmentInvestigationCoverage";
 import { isCtknowQuery, buildCtknowScript } from "./ContactKnowledgeAdvisor";
 import { isScdsetQuery, buildScdsetScript } from "./ScenarioDatasetCoverage";
+import { isRattrQuery, buildRattrScript } from "./RiskSignalIntelAttribution";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -505,6 +506,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scdset-toggle"));
       let script = "";
       try { script = await buildScdsetScript(); } catch { script = "Scenario dataset coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F79: risk signal × intel profile — ATTRIBUTED vs UNATTRIBUTED threat attribution.
+    if (isRattrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rattr-toggle"));
+      let script = "";
+      try { script = await buildRattrScript(); } catch { script = "Risk attribution panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
