@@ -1,0 +1,1 @@
+[2026-09-20] F01 ⌘K command palette verified complete — CommandPalette.jsx (Ctrl+K/Cmd+K, page+scene search, arrow-key nav, Enter runs) mounted in App.jsx; Vite build clean (exit 0, dist 222M).
