@@ -226,6 +226,7 @@ import InvestigationKnowledgeGrounding from '@/components/cinematic/Investigatio
 import OpsEventIntelCorrelation from '@/components/cinematic/OpsEventIntelCorrelation';
 import ContactScenarioMapper from '@/components/cinematic/ContactScenarioMapper';
 import RiskSignalReportCoverage from '@/components/cinematic/RiskSignalReportCoverage';
+import ContactInvestigationInvolvement from '@/components/cinematic/ContactInvestigationInvolvement';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -670,6 +671,8 @@ function App() {
             <ContactScenarioMapper />
             {/* F69 (overnight 2026-09-20): Risk Signal × Report Coverage — ◈ RSRPT button; parallel-fetches /entities/RiskSignal + /v1/reports; keyword-correlates risk signals against report documentation; DOCUMENTED vs UNDOCUMENTED classification; isRsrptQuery+buildRsrptScript wired in JarvisBrain; jarvis:rsrpt-toggle event */}
             <RiskSignalReportCoverage />
+            {/* F70 (overnight 2026-09-20): Contact × Investigation Involvement — ◈ CINV button; parallel-fetches /entities/Contact + /v1/investigations; keyword-correlates contacts against open investigations; INVOLVED vs CLEAR; stat tiles contacts/investigations/involved/clear; amber badge on involved count; filter tabs ALL/INVOLVED/CLEAR + text search; expand contact → matched investigation cards; ▶ ASSESS INVOLVEMENT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCinvQuery+buildCinvScript wired in JarvisBrain; "contact investigation"/"cinv"/"who is involved"/"contact cases" voice trigger; jarvis:cinv-toggle event; 90-s auto-refresh */}
+            <ContactInvestigationInvolvement />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
