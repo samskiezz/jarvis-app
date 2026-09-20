@@ -235,6 +235,7 @@ import IntelProfileTasking from '@/components/cinematic/IntelProfileTasking';
 import InvestmentInvestigationCoverage from '@/components/cinematic/InvestmentInvestigationCoverage';
 import ScenarioDatasetCoverage from '@/components/cinematic/ScenarioDatasetCoverage';
 import RiskSignalIntelAttribution from '@/components/cinematic/RiskSignalIntelAttribution';
+import ReportDatasetLineage from '@/components/cinematic/ReportDatasetLineage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -696,6 +697,8 @@ function App() {
             <ScenarioDatasetCoverage />
             {/* F79 (overnight 2026-09-20): RiskSignal × IntelProfile Threat Attribution — ◈ RATTR button (left:22440, bottom:8, zIndex:81); parallel-fetches /entities/RiskSignal + /entities/IntelProfile; keyword-correlates active risk signals against intel threat profiles to surface ATTRIBUTED (known threat actor) vs UNATTRIBUTED (blind-spot risk); stat tiles signals/intel-profiles/attributed/unattributed; amber badge on unattributed count; filter tabs ALL/ATTRIBUTED/UNATTRIBUTED + text search; expand signal → matched intel profile cards with threat type + relevance score bar; ▶ ASSESS ATTRIBUTION → /v1/jarvis/agent/chat 2-sentence threat-attribution brief + TTS; isRattrQuery+buildRattrScript wired in JarvisBrain; "risk attribution"/"rattr"/"attributed risks"/"unattributed risks"/"threat attribution"/"who is behind"/"risk actor"/"blind risk" voice trigger; jarvis:rattr-toggle event; 90-s auto-refresh */}
             <RiskSignalIntelAttribution />
+            {/* F80 (overnight 2026-09-20): Report × Dataset Lineage — ◈ RDLIN button (left:23000, bottom:8, zIndex:82); parallel-fetches /v1/reports + /v1/datasets; keyword-correlates each report against dataset catalog to surface SOURCED (≥1 dataset match) vs UNSOURCED (data lineage gap); stat tiles: reports/datasets/sourced/unsourced; amber badge on unsourced count; filter tabs ALL/SOURCED/UNSOURCED + text search; expand report → matched dataset cards with row counts + relevance score bar; ▶ ASSESS LINEAGE → /v1/jarvis/agent/chat 2-sentence data governance brief + TTS; isRdlinQuery+buildRdlinScript wired in JarvisBrain; "rdlin"/"report dataset"/"dataset report"/"report lineage"/"data lineage"/"sourced reports"/"unsourced reports"/"report provenance"/"report data coverage" voice trigger; jarvis:rdlin-toggle event; 90-s auto-refresh */}
+            <ReportDatasetLineage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

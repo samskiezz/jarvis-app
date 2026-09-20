@@ -56,6 +56,7 @@ import { isInvcaseQuery, buildInvcaseScript } from "./InvestmentInvestigationCov
 import { isCtknowQuery, buildCtknowScript } from "./ContactKnowledgeAdvisor";
 import { isScdsetQuery, buildScdsetScript } from "./ScenarioDatasetCoverage";
 import { isRattrQuery, buildRattrScript } from "./RiskSignalIntelAttribution";
+import { isRdlinQuery, buildRdlinScript } from "./ReportDatasetLineage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -587,6 +588,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skr-toggle"));
       let script = "";
       try { script = await buildSkrScript(); } catch { script = "Scenario knowledge readiness panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F80: report × dataset lineage — data governance / provenance.
+    if (isRdlinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rdlin-toggle"));
+      let script = "";
+      try { script = await buildRdlinScript(); } catch { script = "Report dataset lineage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
