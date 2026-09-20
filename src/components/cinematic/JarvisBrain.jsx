@@ -49,6 +49,7 @@ import { isOpscenQuery, buildOpscenScript } from "./OpsScenarioGap";
 import { isRsrptQuery, buildRsrptScript } from "./RiskSignalReportCoverage";
 import { isCinvQuery, buildCinvScript } from "./ContactInvestigationInvolvement";
 import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
+import { isDtconQuery, buildDtconScript } from "./DatasetTaskConsumption";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -472,6 +473,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:asrc-toggle"));
       let script = "";
       try { script = await buildAsrcScript(); } catch { script = "AIP skill report coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F72: dataset × task data consumption — CONSUMING vs IDLE datasets.
+    if (isDtconQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dtcon-toggle"));
+      let script = "";
+      try { script = await buildDtconScript(); } catch { script = "Dataset task consumption panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

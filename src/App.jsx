@@ -228,6 +228,7 @@ import ContactScenarioMapper from '@/components/cinematic/ContactScenarioMapper'
 import RiskSignalReportCoverage from '@/components/cinematic/RiskSignalReportCoverage';
 import ContactInvestigationInvolvement from '@/components/cinematic/ContactInvestigationInvolvement';
 import AipSkillReportsCoverage from '@/components/cinematic/AipSkillReportsCoverage';
+import DatasetTaskConsumption from '@/components/cinematic/DatasetTaskConsumption';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -676,6 +677,8 @@ function App() {
             <ContactInvestigationInvolvement />
             {/* F71 (overnight 2026-09-20): AIP Skill × Reports Coverage — ◈ ASRC button; parallel-fetches /v1/aip/skill + /v1/reports; keyword-correlates each JARVIS skill against report catalog; REPORTED vs UNDOCUMENTED classification; isAsrcQuery+buildAsrcScript wired in JarvisBrain; jarvis:asrc-toggle event */}
             <AipSkillReportsCoverage />
+            {/* F72 (overnight 2026-09-20): Dataset × Task Data Consumption — ◈ DTCON button (left:19640, bottom:18, zIndex:76); parallel-fetches /v1/datasets + /entities/Task; keyword-correlates datasets against tasks to surface CONSUMING vs IDLE; stat tiles datasets/tasks/consuming/idle; amber badge on idle count; filter tabs ALL/CONSUMING/IDLE + text search; expand dataset → matched task cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isDtconQuery+buildDtconScript wired in JarvisBrain; "dataset task"/"dtcon"/"idle datasets"/"data utilization" voice trigger; jarvis:dtcon-toggle event; 90-s auto-refresh */}
+            <DatasetTaskConsumption />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
