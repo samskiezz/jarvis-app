@@ -1,6 +1,7 @@
 /**
  * CommandPalette — ⌘K / Ctrl+K global command search.
- * Lists every JARVIS page (from pageRegistry) + the 10 cinematic scenes.
+ * Lists every JARVIS page (from pageRegistry) + the 10 cinematic scenes
+ * + all live-data panel commands (dispatched via jarvis:ask).
  * Additive-only; mounted in App.jsx next to JarvisBrain.
  */
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -9,6 +10,7 @@ import { PAGES } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
 
 const CY = "#29E7FF";
+const GR = "#00c878";
 
 const CINEMATIC_SCENES = [
   { id: "01_command_atrium",          label: "Command Atrium",         icon: "◈" },
@@ -23,14 +25,60 @@ const CINEMATIC_SCENES = [
   { id: "10_system_security_core",    label: "System Security Core",   icon: "◈" },
 ];
 
+// Live-data panel commands — dispatched via jarvis:ask → JarvisBrain
+const PANEL_COMMANDS = [
+  { id: "pc-status",       label: "System Status",          query: "status",              hint: "PANEL" },
+  { id: "pc-intel",        label: "Live World Intel",        query: "world intel",         hint: "PANEL" },
+  { id: "pc-markets",      label: "Markets & Crypto",        query: "markets",             hint: "PANEL" },
+  { id: "pc-risks",        label: "Risk Signals",            query: "risks",               hint: "PANEL" },
+  { id: "pc-tasks",        label: "Task Board",              query: "show tasks",          hint: "PANEL" },
+  { id: "pc-investigations", label: "Investigations",       query: "investigations",      hint: "PANEL" },
+  { id: "pc-scenarios",    label: "Scenario Launcher",       query: "scenarios",           hint: "PANEL" },
+  { id: "pc-docs",         label: "Document Search",         query: "documents",           hint: "PANEL" },
+  { id: "pc-skills",       label: "Skill Scorecard",         query: "skills",              hint: "PANEL" },
+  { id: "pc-brain",        label: "Brain Growth",            query: "brain",               hint: "PANEL" },
+  { id: "pc-datasets",     label: "Datasets Browser",        query: "datasets",            hint: "PANEL" },
+  { id: "pc-anchors",      label: "Scene Anchors",           query: "anchors",             hint: "PANEL" },
+  { id: "pc-contacts",     label: "Contacts Directory",      query: "contacts",            hint: "PANEL" },
+  { id: "pc-investments",  label: "Investment Portfolio",    query: "investments",         hint: "PANEL" },
+  { id: "pc-swarm",        label: "Swarm Jobs",              query: "swarm jobs",          hint: "PANEL" },
+  { id: "pc-centrality",   label: "Graph Centrality",        query: "centrality",          hint: "PANEL" },
+  { id: "pc-diagnostics",  label: "Service Diagnostics",     query: "diagnostics",         hint: "PANEL" },
+  { id: "pc-history",      label: "Command History",         query: "history",             hint: "PANEL" },
+  { id: "pc-tour",         label: "Scene Auto-Tour",         query: "tour",                hint: "PANEL" },
+  { id: "pc-profiles",     label: "Intel Profiles",          query: "intel profiles",      hint: "PANEL" },
+  { id: "pc-health",       label: "Scene Health Heatmap",    query: "scene health",        hint: "PANEL" },
+  { id: "pc-briefing",     label: "Morning Briefing",        query: "briefing",            hint: "PANEL" },
+  { id: "pc-knowledge",    label: "Knowledge Browser",       query: "knowledge",           hint: "PANEL" },
+  { id: "pc-ops",          label: "Ops Event Stream",        query: "ops events",          hint: "PANEL" },
+  { id: "pc-path",         label: "Graph Path Explorer",     query: "graph path",          hint: "PANEL" },
+  { id: "pc-reports",      label: "Report Summariser",       query: "summarise reports",   hint: "PANEL" },
+  { id: "pc-acq",          label: "Data Acquisition",        query: "acquisition",         hint: "PANEL" },
+  { id: "pc-registry",     label: "Entity Registry",         query: "registry",            hint: "PANEL" },
+  { id: "pc-timeline",     label: "Threat Timeline",         query: "timeline",            hint: "PANEL" },
+  { id: "pc-hum",          label: "Ambient Reactor Hum",     query: "ambient hum",         hint: "PANEL" },
+  { id: "pc-clock",        label: "Live Clock & Uptime",     query: "clock",               hint: "PANEL" },
+];
+
 function buildCommands() {
   const sceneCommands = CINEMATIC_SCENES.map((s) => ({
     id: `scene:${s.id}`,
     label: s.label,
     icon: s.icon,
     group: "CINEMATIC",
+    action: "navigate",
     path: `/cinematic/${s.id}`,
     keywords: `cinematic scene ${s.label}`.toLowerCase(),
+  }));
+
+  const panelCommands = PANEL_COMMANDS.map((p) => ({
+    id: p.id,
+    label: p.label,
+    icon: "⬡",
+    group: "PANEL",
+    action: "ask",
+    query: p.query,
+    keywords: `panel ${p.label} ${p.query}`.toLowerCase(),
   }));
 
   const pageCommands = PAGES
@@ -40,11 +88,12 @@ function buildCommands() {
       label: p.label,
       icon: p.icon || "◆",
       group: (p.group || "apex").toUpperCase(),
+      action: "navigate",
       path: `/apex${createPageUrl(p.name)}`,
       keywords: [p.label, p.name, ...(p.aliases || [])].join(" ").toLowerCase(),
     }));
 
-  return [...sceneCommands, ...pageCommands];
+  return [...sceneCommands, ...panelCommands, ...pageCommands];
 }
 
 const ALL_COMMANDS = buildCommands();
@@ -73,8 +122,12 @@ export default function CommandPalette() {
 
   const run = useCallback(
     (cmd) => {
-      navigate(cmd.path);
       close();
+      if (cmd.action === "ask") {
+        window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { query: cmd.query } }));
+      } else {
+        navigate(cmd.path);
+      }
     },
     [navigate, close]
   );
@@ -228,7 +281,9 @@ export default function CommandPalette() {
               </span>
               <span
                 style={{
-                  color: i === selected ? `${CY}AA` : "#2E4050",
+                  color: i === selected
+                    ? (cmd.group === "PANEL" ? `${GR}CC` : `${CY}AA`)
+                    : "#2E4050",
                   fontSize: 10, letterSpacing: 2, flexShrink: 0,
                 }}
               >
