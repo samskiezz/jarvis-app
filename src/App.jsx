@@ -222,6 +222,7 @@ import IntelProfileScenarioThreat from '@/components/cinematic/IntelProfileScena
 import TaskReportCoverage from '@/components/cinematic/TaskReportCoverage';
 import SceneKnowledgeCoverage from '@/components/cinematic/SceneKnowledgeCoverage';
 import AipSkillKnowledgeGrounding from '@/components/cinematic/AipSkillKnowledgeGrounding';
+import InvestigationKnowledgeGrounding from '@/components/cinematic/InvestigationKnowledgeGrounding';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -658,6 +659,8 @@ function App() {
             <SceneKnowledgeCoverage />
             {/* F64 (overnight 2026-09-20): AIP Skill × Knowledge Grounding — ◈ SKKG button (left:16840, bottom:8, zIndex:72); parallel-fetches /v1/aip/skill + /knowledge/; keyword-correlates each JARVIS AI skill against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0); stat tiles skills/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand skill → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge gap brief + TTS; isSkkgQuery+buildSkkgScript wired in JarvisBrain; "skill knowledge"/"skill kb"/"skkg"/"skill grounding"/"knowledge backing"/"grounded skills"/"ungrounded skills" voice trigger; jarvis:skkg-toggle event; 90-s auto-refresh */}
             <AipSkillKnowledgeGrounding />
+            {/* F65 (overnight 2026-09-20): Investigation × Knowledge Grounding — ◈ INVKG button (left:17400, bottom:8, zIndex:73); parallel-fetches /v1/investigations + /knowledge/; keyword-correlates each open investigation against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0); stat tiles cases/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand case → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge gap brief + TTS; isInvkgQuery+buildInvkgScript wired in JarvisBrain; "investigation knowledge"/"invkg"/"case knowledge"/"knowledge gap cases"/"ungrounded cases" voice trigger; jarvis:invkg-toggle event; 90-s auto-refresh */}
+            <InvestigationKnowledgeGrounding />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

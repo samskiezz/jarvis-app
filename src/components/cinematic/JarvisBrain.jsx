@@ -42,6 +42,7 @@ import { isItsmQuery, buildItsmScript } from "./IntelProfileScenarioThreat";
 import { isTaskRepQuery, buildTaskRepScript } from "./TaskReportCoverage";
 import { isScknQuery, buildScknScript } from "./SceneKnowledgeCoverage";
 import { isSkkgQuery, buildSkkgScript } from "./AipSkillKnowledgeGrounding";
+import { isInvkgQuery, buildInvkgScript } from "./InvestigationKnowledgeGrounding";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -411,6 +412,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skkg-toggle"));
       let script = "";
       try { script = await buildSkkgScript(); } catch { script = "AIP skill knowledge grounding panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F65: investigation × knowledge grounding — correlates open investigations against KB articles.
+    if (isInvkgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invkg-toggle"));
+      let script = "";
+      try { script = await buildInvkgScript(); } catch { script = "Investigation knowledge grounding panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
