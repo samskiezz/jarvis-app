@@ -1,0 +1,1 @@
+2026-09-20T00:00:00Z | F01 | DONE | ⌘K command palette verified and marked complete. CommandPalette.jsx (266 lines) wired in App.jsx alongside JarvisBrain; lists all APEX pages (from pageRegistry) + 10 cinematic scenes; Enter navigates; ⌘K/Ctrl+K toggle; build exit 0.
