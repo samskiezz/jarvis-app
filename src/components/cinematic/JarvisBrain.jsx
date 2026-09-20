@@ -61,6 +61,7 @@ import { isIrepQuery, buildIrepScript } from "./InvestmentReportCoverage";
 import { isSjinvQuery, buildSjinvScript } from "./SwarmJobInvestigationCoverage";
 import { isSjkgQuery, buildSjkgScript } from "./SwarmJobKnowledgeGrounding";
 import { isCtaskQuery, buildCtaskScript } from "./ContactTaskAssignment";
+import { isOpeconQuery, buildOpeconScript } from "./OpsContactOwnership";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -637,6 +638,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctask-toggle"));
       let script = "";
       try { script = await buildCtaskScript(); } catch { script = "Contact task assignment panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F85: ops events × contact ownership — orphaned event detection.
+    if (isOpeconQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opecon-toggle"));
+      let script = "";
+      try { script = await buildOpeconScript(); } catch { script = "Ops contact ownership panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

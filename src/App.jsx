@@ -240,6 +240,7 @@ import InvestmentReportCoverage from '@/components/cinematic/InvestmentReportCov
 import SwarmJobInvestigationCoverage from '@/components/cinematic/SwarmJobInvestigationCoverage';
 import SwarmJobKnowledgeGrounding from '@/components/cinematic/SwarmJobKnowledgeGrounding';
 import ContactTaskAssignment from '@/components/cinematic/ContactTaskAssignment';
+import OpsContactOwnership from '@/components/cinematic/OpsContactOwnership';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -711,6 +712,8 @@ function App() {
             <SwarmJobKnowledgeGrounding />
             {/* F84 (overnight 2026-09-20): Contact × Task Assignment — ◈ CTASK button (left:25240, bottom:8, zIndex:86); parallel-fetches /entities/Contact + /entities/Task; keyword-correlates each contact against tasks to surface ASSIGNED (≥1 task match) vs UNASSIGNED; stat tiles contacts/task-links/assigned/unassigned; amber badge on unassigned count; filter tabs ALL/ASSIGNED/UNASSIGNED + text search; expand contact → matched task cards with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence people-task brief + TTS; isCtaskQuery+buildCtaskScript wired in JarvisBrain; "contact task"/"ctask"/"people tasks"/"assigned contacts"/"task owners"/"who has tasks"/"contact assignment" voice trigger; jarvis:ctask-toggle event; 90-s auto-refresh */}
             <ContactTaskAssignment />
+            {/* F85 (overnight 2026-09-20): Ops Events × Contact Ownership — ◈ OPECON button (left:25800, bottom:8, zIndex:87); parallel-fetches /v1/ops/events + /entities/Contact; keyword-correlates significant ops events against contacts to surface OWNED (≥1 contact match) vs ORPHANED; stat tiles events/contacts/owned/orphaned; amber badge on orphaned count; filter tabs ALL/OWNED/ORPHANED + text search; expand event → matched contact cards with role + relevance score bar; ▶ ASSESS OWNERSHIP → /v1/jarvis/agent/chat 2-sentence ops-ownership brief + TTS; isOpeconQuery+buildOpeconScript wired in JarvisBrain; "ops contact"/"event owner"/"opecon"/"orphaned events"/"who owns this event" voice trigger; jarvis:opecon-toggle event; 90-s auto-refresh */}
+            <OpsContactOwnership />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
