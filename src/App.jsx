@@ -237,6 +237,7 @@ import ScenarioDatasetCoverage from '@/components/cinematic/ScenarioDatasetCover
 import RiskSignalIntelAttribution from '@/components/cinematic/RiskSignalIntelAttribution';
 import ReportDatasetLineage from '@/components/cinematic/ReportDatasetLineage';
 import InvestmentReportCoverage from '@/components/cinematic/InvestmentReportCoverage';
+import SwarmJobInvestigationCoverage from '@/components/cinematic/SwarmJobInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -702,6 +703,8 @@ function App() {
             <ReportDatasetLineage />
             {/* F81 (overnight 2026-09-20): Investment × Report Coverage — ◈ IREP button (left:23560, bottom:8, zIndex:83); parallel-fetches /entities/Investment + /v1/reports; keyword-correlates each portfolio position against reports to surface COVERED (≥1 report match) vs DARK (no intelligence coverage); stat tiles: positions/reports/covered/dark; amber badge on dark count; filter tabs ALL/COVERED/DARK + text search; expand position → matched report cards with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment intelligence brief + TTS; isIrepQuery+buildIrepScript wired in JarvisBrain; "investment report"/"irep"/"portfolio coverage"/"portfolio reports"/"dark investments" voice trigger; jarvis:irep-toggle event; 90-s auto-refresh */}
             <InvestmentReportCoverage />
+            {/* F82 (overnight 2026-09-20): SwarmJob × Investigation Coverage — ◈ SJINV button (left:24120, bottom:8, zIndex:84); parallel-fetches /entities/SwarmJob + /v1/investigations; keyword-correlates each running swarm job against open investigations to surface ASSIGNED (case-grounded) vs AUTONOMOUS (orphan job, operational blind-spot); stat tiles jobs/cases/assigned/autonomous; amber badge on autonomous count; filter tabs ALL/ASSIGNED/AUTONOMOUS + text search; expand job → matched investigation cards with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm grounding brief + TTS; isSjinvQuery+buildSjinvScript wired in JarvisBrain; "swarm investigation"/"sjinv"/"job case"/"orphan jobs"/"autonomous jobs" voice trigger; jarvis:sjinv-toggle event; 90-s auto-refresh */}
+            <SwarmJobInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
