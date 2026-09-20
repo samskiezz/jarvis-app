@@ -43,6 +43,7 @@ import { isTaskRepQuery, buildTaskRepScript } from "./TaskReportCoverage";
 import { isScknQuery, buildScknScript } from "./SceneKnowledgeCoverage";
 import { isSkkgQuery, buildSkkgScript } from "./AipSkillKnowledgeGrounding";
 import { isInvkgQuery, buildInvkgScript } from "./InvestigationKnowledgeGrounding";
+import { isOpeicQuery, buildOpeicScript } from "./OpsEventIntelCorrelation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -421,6 +422,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invkg-toggle"));
       let script = "";
       try { script = await buildInvkgScript(); } catch { script = "Investigation knowledge grounding panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F66: ops events × intel profile threat correlation — tracked vs untracked blind-spot events.
+    if (isOpeicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opeic-toggle"));
+      let script = "";
+      try { script = await buildOpeicScript(); } catch { script = "Ops event intel correlation panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

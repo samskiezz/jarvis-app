@@ -223,6 +223,7 @@ import TaskReportCoverage from '@/components/cinematic/TaskReportCoverage';
 import SceneKnowledgeCoverage from '@/components/cinematic/SceneKnowledgeCoverage';
 import AipSkillKnowledgeGrounding from '@/components/cinematic/AipSkillKnowledgeGrounding';
 import InvestigationKnowledgeGrounding from '@/components/cinematic/InvestigationKnowledgeGrounding';
+import OpsEventIntelCorrelation from '@/components/cinematic/OpsEventIntelCorrelation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -661,6 +662,8 @@ function App() {
             <AipSkillKnowledgeGrounding />
             {/* F65 (overnight 2026-09-20): Investigation × Knowledge Grounding — ◈ INVKG button (left:17400, bottom:8, zIndex:73); parallel-fetches /v1/investigations + /knowledge/; keyword-correlates each open investigation against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0); stat tiles cases/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand case → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge gap brief + TTS; isInvkgQuery+buildInvkgScript wired in JarvisBrain; "investigation knowledge"/"invkg"/"case knowledge"/"knowledge gap cases"/"ungrounded cases" voice trigger; jarvis:invkg-toggle event; 90-s auto-refresh */}
             <InvestigationKnowledgeGrounding />
+            {/* F66 (overnight 2026-09-20): Ops Events × Intel Threat Correlation — ◈ OPEIC button (left:17960, bottom:8, zIndex:74); parallel-fetches /v1/ops/events + /entities/IntelProfile; keyword-correlates significant ops events against active intel threat profiles; TRACKED (matching profile) vs UNTRACKED (blind spot); stat tiles events/tracked/untracked; amber badge on untracked count; filter tabs ALL/TRACKED/UNTRACKED + text search; expand event → matched intel profile cards with threat type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat correlation brief + TTS; isOpeicQuery+buildOpeicScript wired in JarvisBrain; "ops intel"/"event intel"/"opeic"/"blind ops"/"tracked events"/"event threat match" voice trigger; jarvis:opeic-toggle event; 90-s auto-refresh */}
+            <OpsEventIntelCorrelation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
