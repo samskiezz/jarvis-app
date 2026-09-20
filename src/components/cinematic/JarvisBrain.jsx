@@ -48,6 +48,7 @@ import { isCsemQuery, buildCsemScript } from "./ContactScenarioMapper";
 import { isOpscenQuery, buildOpscenScript } from "./OpsScenarioGap";
 import { isRsrptQuery, buildRsrptScript } from "./RiskSignalReportCoverage";
 import { isCinvQuery, buildCinvScript } from "./ContactInvestigationInvolvement";
+import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -462,6 +463,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cinv-toggle"));
       let script = "";
       try { script = await buildCinvScript(); } catch { script = "Contact investigation involvement panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F71: AIP skill × reports coverage — REPORTED vs UNDOCUMENTED skills.
+    if (isAsrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:asrc-toggle"));
+      let script = "";
+      try { script = await buildAsrcScript(); } catch { script = "AIP skill report coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
