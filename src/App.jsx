@@ -232,6 +232,7 @@ import AipSkillReportsCoverage from '@/components/cinematic/AipSkillReportsCover
 import DatasetTaskConsumption from '@/components/cinematic/DatasetTaskConsumption';
 import SwarmJobRiskCorrelation from '@/components/cinematic/SwarmJobRiskCorrelation';
 import IntelProfileTasking from '@/components/cinematic/IntelProfileTasking';
+import InvestmentInvestigationCoverage from '@/components/cinematic/InvestmentInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -687,6 +688,8 @@ function App() {
             <SwarmJobRiskCorrelation />
             {/* F74 (overnight 2026-09-20): IntelProfile × Task — Threat Actor Tasking — ◈ IPTASK button (left:20760, bottom:8, zIndex:78); parallel-fetches /entities/IntelProfile + /entities/Task; keyword-correlates each intel profile against open tasks to surface TASKED (driven by threat actor) vs AUTONOMOUS; stat tiles profiles/tasks/tasked/autonomous; amber badge on tasked count; filter tabs ALL/TASKED/AUTONOMOUS + text search; expand profile → matched task cards with status badge + relevance score; ▶ ASSESS TASKING → /v1/jarvis/agent/chat 2-sentence threat-tasking brief + TTS; isIptaskQuery+buildIptaskScript wired in JarvisBrain; "intel task"/"iptask"/"threat actor tasks"/"tasked threats"/"threat tasking" voice trigger; jarvis:iptask-toggle event; 90-s auto-refresh */}
             <IntelProfileTasking />
+            {/* F76 (overnight 2026-09-20): Investment × Investigation Coverage — ◈ INVCASE button (left:21320, bottom:8, zIndex:79); parallel-fetches /entities/Investment + /v1/investigations; keyword-correlates portfolio positions against open cases to surface UNDER_INVESTIGATION vs CLEAN; stat tiles positions/cases/investigated/clean; amber badge on investigated count; filter tabs ALL/UNDER_INVESTIGATION/CLEAN + text search; expand position → matched investigation cards with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio risk brief + TTS; isInvcaseQuery+buildInvcaseScript wired in JarvisBrain; "investment investigation"/"portfolio case"/"invcase"/"under investigation" voice trigger; jarvis:invcase-toggle event; 90-s auto-refresh */}
+            <InvestmentInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

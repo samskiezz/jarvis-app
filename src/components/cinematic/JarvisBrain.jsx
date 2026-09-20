@@ -52,6 +52,7 @@ import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
 import { isDtconQuery, buildDtconScript } from "./DatasetTaskConsumption";
 import { isSwriskQuery, buildSwriskScript } from "./SwarmJobRiskCorrelation";
 import { isIptaskQuery, buildIptaskScript } from "./IntelProfileTasking";
+import { isInvcaseQuery, buildInvcaseScript } from "./InvestmentInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -484,6 +485,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dtcon-toggle"));
       let script = "";
       try { script = await buildDtconScript(); } catch { script = "Dataset task consumption panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F76: investment × investigation — UNDER_INVESTIGATION vs CLEAN portfolio coverage.
+    if (isInvcaseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invcase-toggle"));
+      let script = "";
+      try { script = await buildInvcaseScript(); } catch { script = "Investment investigation coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
