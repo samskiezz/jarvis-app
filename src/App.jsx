@@ -224,6 +224,7 @@ import SceneKnowledgeCoverage from '@/components/cinematic/SceneKnowledgeCoverag
 import AipSkillKnowledgeGrounding from '@/components/cinematic/AipSkillKnowledgeGrounding';
 import InvestigationKnowledgeGrounding from '@/components/cinematic/InvestigationKnowledgeGrounding';
 import OpsEventIntelCorrelation from '@/components/cinematic/OpsEventIntelCorrelation';
+import ContactScenarioMapper from '@/components/cinematic/ContactScenarioMapper';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -664,6 +665,8 @@ function App() {
             <InvestigationKnowledgeGrounding />
             {/* F66 (overnight 2026-09-20): Ops Events × Intel Threat Correlation — ◈ OPEIC button (left:17960, bottom:8, zIndex:74); parallel-fetches /v1/ops/events + /entities/IntelProfile; keyword-correlates significant ops events against active intel threat profiles; TRACKED (matching profile) vs UNTRACKED (blind spot); stat tiles events/tracked/untracked; amber badge on untracked count; filter tabs ALL/TRACKED/UNTRACKED + text search; expand event → matched intel profile cards with threat type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat correlation brief + TTS; isOpeicQuery+buildOpeicScript wired in JarvisBrain; "ops intel"/"event intel"/"opeic"/"blind ops"/"tracked events"/"event threat match" voice trigger; jarvis:opeic-toggle event; 90-s auto-refresh */}
             <OpsEventIntelCorrelation />
+            {/* F67 (overnight 2026-09-20): Contact × Scenario Engagement Mapper — ◈ CSEM button (left:18520, bottom:8, zIndex:75); parallel-fetches /entities/Contact + /v1/scenario/list; keyword-correlates contacts against threat scenarios to surface ENGAGED vs CLEAR; stat tiles contacts/engaged/clear; filter tabs ALL/ENGAGED/CLEAR + text search; expand contact → matched scenario cards with type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCsemQuery+buildCsemScript wired in JarvisBrain; "contact scenario"/"csem"/"who handles"/"scenario contacts"/"contact engagement" voice trigger; jarvis:csem-toggle event; 90-s auto-refresh */}
+            <ContactScenarioMapper />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -44,6 +44,7 @@ import { isScknQuery, buildScknScript } from "./SceneKnowledgeCoverage";
 import { isSkkgQuery, buildSkkgScript } from "./AipSkillKnowledgeGrounding";
 import { isInvkgQuery, buildInvkgScript } from "./InvestigationKnowledgeGrounding";
 import { isOpeicQuery, buildOpeicScript } from "./OpsEventIntelCorrelation";
+import { isCsemQuery, buildCsemScript } from "./ContactScenarioMapper";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -431,6 +432,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:opeic-toggle"));
       let script = "";
       try { script = await buildOpeicScript(); } catch { script = "Ops event intel correlation panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F67: contact × scenario engagement mapper — surfaces ENGAGED vs CLEAR contacts per scenario.
+    if (isCsemQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csem-toggle"));
+      let script = "";
+      try { script = await buildCsemScript(); } catch { script = "Contact scenario engagement panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
