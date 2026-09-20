@@ -59,6 +59,7 @@ import { isRattrQuery, buildRattrScript } from "./RiskSignalIntelAttribution";
 import { isRdlinQuery, buildRdlinScript } from "./ReportDatasetLineage";
 import { isIrepQuery, buildIrepScript } from "./InvestmentReportCoverage";
 import { isSjinvQuery, buildSjinvScript } from "./SwarmJobInvestigationCoverage";
+import { isSjkgQuery, buildSjkgScript } from "./SwarmJobKnowledgeGrounding";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -617,6 +618,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjinv-toggle"));
       let script = "";
       try { script = await buildSjinvScript(); } catch { script = "Swarm job investigation coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F83: swarm job × knowledge grounding — bare job detection.
+    if (isSjkgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjkg-toggle"));
+      let script = "";
+      try { script = await buildSjkgScript(); } catch { script = "Swarm job knowledge grounding panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
