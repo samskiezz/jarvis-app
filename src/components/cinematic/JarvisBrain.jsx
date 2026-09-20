@@ -53,6 +53,7 @@ import { isDtconQuery, buildDtconScript } from "./DatasetTaskConsumption";
 import { isSwriskQuery, buildSwriskScript } from "./SwarmJobRiskCorrelation";
 import { isIptaskQuery, buildIptaskScript } from "./IntelProfileTasking";
 import { isInvcaseQuery, buildInvcaseScript } from "./InvestmentInvestigationCoverage";
+import { isCtknowQuery, buildCtknowScript } from "./ContactKnowledgeAdvisor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -485,6 +486,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dtcon-toggle"));
       let script = "";
       try { script = await buildDtconScript(); } catch { script = "Dataset task consumption panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F77: contact × knowledge advisor — LINKED vs DARK contact knowledge coverage.
+    if (isCtknowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctknow-toggle"));
+      let script = "";
+      try { script = await buildCtknowScript(); } catch { script = "Contact knowledge advisor panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

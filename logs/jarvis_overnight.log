@@ -51,3 +51,4 @@
 [2026-09-20] F73 SwarmJobRiskCorrelation: /entities/SwarmJob × /entities/RiskSignal — THREATENED vs SECURE classification; SwarmJobRiskCorrelation.jsx created, mounted App.jsx, wired JarvisBrain.jsx; build exit 0
 [2026-09-20] F74 IntelProfileTasking.jsx — /entities/IntelProfile × /entities/Task; TASKED vs AUTONOMOUS threat-actor tasking analysis; ◈ IPTASK toggle; isIptaskQuery+buildIptaskScript wired in JarvisBrain; build exit 0
 2026-09-20 F76 InvestmentInvestigationCoverage.jsx: /entities/Investment x /v1/investigations; UNDER_INVESTIGATION/CLEAN; isInvcaseQuery+buildInvcaseScript wired JarvisBrain; ◈ INVCASE toggle; build exit 0.
+[2026-09-20] F77 ContactKnowledgeAdvisor voice wiring: isCtknowQuery+buildCtknowScript imported+wired in JarvisBrain.jsx; /entities/Contact × /knowledge/; LINKED vs DARK; ◈ CTKNOW toggle left:9852; "contact knowledge"/"ctknow" voice trigger; 120-s auto-refresh; build exit 0
