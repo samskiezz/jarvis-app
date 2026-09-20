@@ -1,16 +1,16 @@
 /**
  * CommandPalette — ⌘K / Ctrl+K global command search.
  * Lists every JARVIS page (from pageRegistry) + the 10 cinematic scenes
- * + all live-data panel commands (dispatched via jarvis:ask).
+ * + every JARVIS action command (dispatches jarvis:ask events).
  * Additive-only; mounted in App.jsx next to JarvisBrain.
+ * Restricted to /apex routes — cinematic routes use JarvisCommandPalette instead.
  */
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { PAGES } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
 
 const CY = "#29E7FF";
-const GR = "#00c878";
 
 const CINEMATIC_SCENES = [
   { id: "01_command_atrium",          label: "Command Atrium",         icon: "◈" },
@@ -25,39 +25,59 @@ const CINEMATIC_SCENES = [
   { id: "10_system_security_core",    label: "System Security Core",   icon: "◈" },
 ];
 
-// Live-data panel commands — dispatched via jarvis:ask → JarvisBrain
-const PANEL_COMMANDS = [
-  { id: "pc-status",       label: "System Status",          query: "status",              hint: "PANEL" },
-  { id: "pc-intel",        label: "Live World Intel",        query: "world intel",         hint: "PANEL" },
-  { id: "pc-markets",      label: "Markets & Crypto",        query: "markets",             hint: "PANEL" },
-  { id: "pc-risks",        label: "Risk Signals",            query: "risks",               hint: "PANEL" },
-  { id: "pc-tasks",        label: "Task Board",              query: "show tasks",          hint: "PANEL" },
-  { id: "pc-investigations", label: "Investigations",       query: "investigations",      hint: "PANEL" },
-  { id: "pc-scenarios",    label: "Scenario Launcher",       query: "scenarios",           hint: "PANEL" },
-  { id: "pc-docs",         label: "Document Search",         query: "documents",           hint: "PANEL" },
-  { id: "pc-skills",       label: "Skill Scorecard",         query: "skills",              hint: "PANEL" },
-  { id: "pc-brain",        label: "Brain Growth",            query: "brain",               hint: "PANEL" },
-  { id: "pc-datasets",     label: "Datasets Browser",        query: "datasets",            hint: "PANEL" },
-  { id: "pc-anchors",      label: "Scene Anchors",           query: "anchors",             hint: "PANEL" },
-  { id: "pc-contacts",     label: "Contacts Directory",      query: "contacts",            hint: "PANEL" },
-  { id: "pc-investments",  label: "Investment Portfolio",    query: "investments",         hint: "PANEL" },
-  { id: "pc-swarm",        label: "Swarm Jobs",              query: "swarm jobs",          hint: "PANEL" },
-  { id: "pc-centrality",   label: "Graph Centrality",        query: "centrality",          hint: "PANEL" },
-  { id: "pc-diagnostics",  label: "Service Diagnostics",     query: "diagnostics",         hint: "PANEL" },
-  { id: "pc-history",      label: "Command History",         query: "history",             hint: "PANEL" },
-  { id: "pc-tour",         label: "Scene Auto-Tour",         query: "tour",                hint: "PANEL" },
-  { id: "pc-profiles",     label: "Intel Profiles",          query: "intel profiles",      hint: "PANEL" },
-  { id: "pc-health",       label: "Scene Health Heatmap",    query: "scene health",        hint: "PANEL" },
-  { id: "pc-briefing",     label: "Morning Briefing",        query: "briefing",            hint: "PANEL" },
-  { id: "pc-knowledge",    label: "Knowledge Browser",       query: "knowledge",           hint: "PANEL" },
-  { id: "pc-ops",          label: "Ops Event Stream",        query: "ops events",          hint: "PANEL" },
-  { id: "pc-path",         label: "Graph Path Explorer",     query: "graph path",          hint: "PANEL" },
-  { id: "pc-reports",      label: "Report Summariser",       query: "summarise reports",   hint: "PANEL" },
-  { id: "pc-acq",          label: "Data Acquisition",        query: "acquisition",         hint: "PANEL" },
-  { id: "pc-registry",     label: "Entity Registry",         query: "registry",            hint: "PANEL" },
-  { id: "pc-timeline",     label: "Threat Timeline",         query: "timeline",            hint: "PANEL" },
-  { id: "pc-hum",          label: "Ambient Reactor Hum",     query: "ambient hum",         hint: "PANEL" },
-  { id: "pc-clock",        label: "Live Clock & Uptime",     query: "clock",               hint: "PANEL" },
+// Every named JARVIS voice action — dispatches jarvis:ask so the real agent handles it.
+const JARVIS_ACTIONS = [
+  { label: "Status Report",        query: "JARVIS, status",                icon: "⊕", keywords: "status report system health" },
+  { label: "Morning Briefing",     query: "JARVIS, brief me",              icon: "◎", keywords: "morning brief briefing summary" },
+  { label: "Situation Report",     query: "JARVIS, sitrep",                icon: "⊕", keywords: "sitrep situation room ops overview" },
+  { label: "Risk Board",           query: "show risks",                    icon: "⚠", keywords: "risks risk board signals threats" },
+  { label: "Task Board",           query: "JARVIS, tasks",                 icon: "◎", keywords: "tasks missions task board" },
+  { label: "Investigations",       query: "JARVIS, investigations",        icon: "◈", keywords: "investigations cases intel" },
+  { label: "Datasets Browser",     query: "JARVIS, datasets",              icon: "⬡", keywords: "datasets data catalog sources" },
+  { label: "Contacts Directory",   query: "JARVIS, contacts",              icon: "◈", keywords: "contacts people directory" },
+  { label: "Markets Ticker",       query: "JARVIS, markets",               icon: "◆", keywords: "markets crypto forex fx ticker" },
+  { label: "World Incidents",      query: "JARVIS, world incidents",       icon: "◈", keywords: "world earthquakes incidents globe" },
+  { label: "Brain Growth",         query: "JARVIS, brain growth",          icon: "◈", keywords: "brain nodes synapses growth sparkline" },
+  { label: "Service Diagnostics",  query: "JARVIS, service health",        icon: "⬡", keywords: "diagnostics services health check" },
+  { label: "Swarm Jobs",           query: "JARVIS, swarm",                 icon: "⬡", keywords: "swarm jobs monitor running" },
+  { label: "Graph Centrality",     query: "JARVIS, centrality",            icon: "◈", keywords: "graph centrality influence network" },
+  { label: "Graph Communities",    query: "JARVIS, communities",           icon: "◍", keywords: "graph communities clusters" },
+  { label: "Knowledge Browser",    query: "JARVIS, knowledge",             icon: "◈", keywords: "knowledge articles documents" },
+  { label: "Intel Profiles",       query: "JARVIS, intel profiles",        icon: "◈", keywords: "intel profiles threat actors" },
+  { label: "Intel Digest",         query: "JARVIS, intel digest",          icon: "◈", keywords: "intel digest live news" },
+  { label: "Skill Scorecard",      query: "JARVIS, skills",                icon: "◈", keywords: "skills scorecard aip self-improvement" },
+  { label: "Investment Portfolio",  query: "JARVIS, investments",          icon: "◆", keywords: "investments wealth portfolio" },
+  { label: "Scenario Launcher",    query: "JARVIS, scenarios",             icon: "▶", keywords: "scenarios simulations run launch" },
+  { label: "Document Search",      query: "JARVIS, documents",             icon: "◈", keywords: "documents reports knowledge search" },
+  { label: "Entity Quick Search",  query: "JARVIS, find",                  icon: "◈", keywords: "entity search graph intel find" },
+  { label: "Priority Action Queue",query: "what needs attention now",      icon: "⚡", keywords: "priority queue urgent action items" },
+  { label: "Mission Readiness",    query: "JARVIS, readiness",             icon: "◎", keywords: "mission readiness operational index" },
+  { label: "Crisis Level",         query: "JARVIS, crisis level",          icon: "⚠", keywords: "crisis defcon threat level warning" },
+  { label: "Threat Timeline",      query: "threat timeline",               icon: "◈", keywords: "threat timeline unified feed intel" },
+  { label: "Scene Health Heatmap", query: "scene health",                  icon: "⬡", keywords: "scene health heatmap anchors" },
+  { label: "Health Score",         query: "JARVIS, health score",          icon: "⊕", keywords: "health score system scorecard" },
+  { label: "Resource Pressure",    query: "resource pressure",             icon: "⊡", keywords: "resource pressure cpu memory load" },
+  { label: "Ops Event Timeline",   query: "ops events",                    icon: "◈", keywords: "ops events timeline log" },
+  { label: "Threat Report",        query: "generate threat report",        icon: "◎", keywords: "threat report intelligence adaptive" },
+  { label: "Geo-Seismic Analysis", query: "geo seismic",                   icon: "◎", keywords: "geo seismic earthquake regions" },
+  { label: "Graph Anomaly Detect", query: "graph anomaly",                 icon: "◈", keywords: "graph anomaly outlier unusual node" },
+  { label: "Entity Chronology",    query: "JARVIS, entity chronology",     icon: "⊕", keywords: "entity chronology all entities timeline" },
+  { label: "Entity Watchlist",     query: "JARVIS, watchlist",             icon: "⬡", keywords: "watchlist watched entities" },
+  { label: "Ops Cases Panel",      query: "JARVIS, cases",                 icon: "◈", keywords: "ops cases case files" },
+  { label: "Graph Network",        query: "JARVIS, graph network",         icon: "◈", keywords: "graph network explorer map" },
+  { label: "Daily Objectives",     query: "what should I do today",        icon: "◎", keywords: "daily objectives plan today" },
+  { label: "Threat Actor Network", query: "threat actor network",          icon: "◈", keywords: "threat actor network tan danger" },
+  { label: "Threat Correlation",   query: "correlate threats",             icon: "⚡", keywords: "correlate threats correlation" },
+  { label: "World Risk Correlator",query: "world risk",                    icon: "◈", keywords: "world risk quake geo correlate" },
+  { label: "Intel Pulse",          query: "intel pulse",                   icon: "⚡", keywords: "intel pulse global activity score" },
+  { label: "Scene Auto-Tour",      query: "JARVIS, start tour",            icon: "⟳", keywords: "tour auto tour cycle scenes" },
+  { label: "Narrate Scene",        query: "narrate scene",                 icon: "◎", keywords: "narrate scene describe story" },
+  { label: "Path from X to Y",     query: "JARVIS, show path",             icon: "⤢", keywords: "path graph explore hop" },
+  { label: "Ambient Hum Toggle",   query: "JARVIS, ambient",               icon: "◇", keywords: "ambient hum reactor toggle" },
+  { label: "Command History",      query: "JARVIS, history",               icon: "◷", keywords: "command history replay" },
+  { label: "Report Summariser",    query: "summarize report",              icon: "◎", keywords: "report summary summarise" },
+  { label: "Swarm-Task Convergence", query: "swarm task convergence",      icon: "◈", keywords: "swarm task convergence alignment" },
+  { label: "Agent Chat Panel",     query: "JARVIS, open chat",             icon: "◉", keywords: "chat agent conversation panel" },
 ];
 
 function buildCommands() {
@@ -66,19 +86,19 @@ function buildCommands() {
     label: s.label,
     icon: s.icon,
     group: "CINEMATIC",
-    action: "navigate",
     path: `/cinematic/${s.id}`,
+    action: null,
     keywords: `cinematic scene ${s.label}`.toLowerCase(),
   }));
 
-  const panelCommands = PANEL_COMMANDS.map((p) => ({
-    id: p.id,
-    label: p.label,
-    icon: "⬡",
-    group: "PANEL",
-    action: "ask",
-    query: p.query,
-    keywords: `panel ${p.label} ${p.query}`.toLowerCase(),
+  const actionCommands = JARVIS_ACTIONS.map((a) => ({
+    id: `action:${a.label.toLowerCase().replace(/\s+/g, "-")}`,
+    label: a.label,
+    icon: a.icon,
+    group: "JARVIS",
+    path: null,
+    action: a.query,
+    keywords: `${a.label} ${a.keywords}`.toLowerCase(),
   }));
 
   const pageCommands = PAGES
@@ -88,12 +108,12 @@ function buildCommands() {
       label: p.label,
       icon: p.icon || "◆",
       group: (p.group || "apex").toUpperCase(),
-      action: "navigate",
       path: `/apex${createPageUrl(p.name)}`,
+      action: null,
       keywords: [p.label, p.name, ...(p.aliases || [])].join(" ").toLowerCase(),
     }));
 
-  return [...sceneCommands, ...panelCommands, ...pageCommands];
+  return [...sceneCommands, ...actionCommands, ...pageCommands];
 }
 
 const ALL_COMMANDS = buildCommands();
@@ -103,8 +123,14 @@ export default function CommandPalette() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const inputRef = useRef(null);
   const listRef = useRef(null);
+  // Only active on /apex routes — cinematic routes use JarvisCommandPalette
+  const isApex = pathname.startsWith("/apex");
+
+  // Restrict to /apex routes — cinematic routes use JarvisCommandPalette instead.
+  if (!pathname.startsWith("/apex")) return null;
 
   const filtered = query.trim()
     ? ALL_COMMANDS.filter(
@@ -122,17 +148,18 @@ export default function CommandPalette() {
 
   const run = useCallback(
     (cmd) => {
-      close();
-      if (cmd.action === "ask") {
-        window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { query: cmd.query } }));
-      } else {
+      if (cmd.action) {
+        window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: cmd.action } }));
+      } else if (cmd.path) {
         navigate(cmd.path);
       }
+      close();
     },
     [navigate, close]
   );
 
   useEffect(() => {
+    if (!isApex) return;
     const onKey = (e) => {
       const isModifier = e.metaKey || e.ctrlKey;
       if (isModifier && e.key === "k") {
@@ -145,7 +172,7 @@ export default function CommandPalette() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [isApex]);
 
   useEffect(() => {
     if (open) {
@@ -281,9 +308,7 @@ export default function CommandPalette() {
               </span>
               <span
                 style={{
-                  color: i === selected
-                    ? (cmd.group === "PANEL" ? `${GR}CC` : `${CY}AA`)
-                    : "#2E4050",
+                  color: i === selected ? `${CY}AA` : "#2E4050",
                   fontSize: 10, letterSpacing: 2, flexShrink: 0,
                 }}
               >
@@ -303,7 +328,7 @@ export default function CommandPalette() {
           }}
         >
           <span>↑↓ navigate</span>
-          <span>↵ open</span>
+          <span>↵ run</span>
           <span>ESC close</span>
           <span style={{ marginLeft: "auto" }}>
             {filtered.length} command{filtered.length !== 1 ? "s" : ""}
