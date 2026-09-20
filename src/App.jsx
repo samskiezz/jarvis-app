@@ -220,6 +220,7 @@ import SwarmContactOwnership from '@/components/cinematic/SwarmContactOwnership'
 import InvestmentScenarioRisk from '@/components/cinematic/InvestmentScenarioRisk';
 import IntelProfileScenarioThreat from '@/components/cinematic/IntelProfileScenarioThreat';
 import TaskReportCoverage from '@/components/cinematic/TaskReportCoverage';
+import SceneKnowledgeCoverage from '@/components/cinematic/SceneKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -652,6 +653,8 @@ function App() {
             {/* F61 (overnight 2026-09-19): IntelProfile × Scenario Threat Match — ◈ ITSM button (left:15160, bottom:8, zIndex:70); parallel-fetches /entities/IntelProfile + /v1/scenario/list; keyword-correlates active threat intel profiles against scenarios to classify ADDRESSED vs UNADDRESSED; stat tiles: profiles/addressed/unaddressed; amber badge on unaddressed count; filter tabs ALL/ADDRESSED/UNADDRESSED + text search; expand profile → matched scenario cards with description; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat readiness brief + TTS; isItsmQuery+buildItsmScript wired in JarvisBrain; "intel scenario"/"threat scenario"/"itsm"/"unaddressed threats"/"intel profile scenario"/"threat matching" voice trigger; jarvis:itsm-toggle event; 90-s auto-refresh */}
             <IntelProfileScenarioThreat />
             <TaskReportCoverage />
+            {/* F63 (overnight 2026-09-20): Scene × Knowledge Article Coverage — ◈ SCKN button (left:16280, bottom:8, zIndex:71); fetches all 10 /v1/cinematic/scene/{id} + /knowledge/; keyword-correlates each scene's anchors against KB articles; DOCUMENTED (≥2)/PARTIAL (1)/DARK (0) status; stat tiles total/documented/partial/dark; filter tabs + text search; expand scene → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene knowledge brief + TTS; isScknQuery+buildScknScript wired in JarvisBrain; "scene knowledge"/"sckn"/"scene articles"/"cinematic coverage"/"which scenes have knowledge" voice trigger; jarvis:sckn-toggle event; 90-s auto-refresh */}
+            <SceneKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

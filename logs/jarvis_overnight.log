@@ -38,3 +38,4 @@
 [2026-09-19] F60 InvestmentScenarioRisk: /entities/Investment × /v1/scenario/list; EXPOSED/SAFE classification; ◈ ISEXP toggle; isIsexpQuery+buildIsexpScript wired; build exit 0
 [2026-09-19] F61 IntelProfileScenarioThreat.jsx — /entities/IntelProfile × /v1/scenario/list; ADDRESSED vs UNADDRESSED; isItsmQuery+buildItsmScript wired in JarvisBrain; build exit 0; committed to jarvis-overnight
 2026-09-19T23:15:53Z F62 TaskReportCoverage — Task×Report documentation gap; TaskReportCoverage.jsx + App.jsx + JarvisBrain.jsx; build exit 0
+[2026-09-20] F63: SceneKnowledgeCoverage.jsx — /v1/cinematic/scene/{id}×/knowledge/; DOCUMENTED/PARTIAL/DARK; ◈ SCKN toggle; isScknQuery+buildScknScript wired in JarvisBrain; build exit 0

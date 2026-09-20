@@ -40,6 +40,7 @@ import { isScownQuery, buildScownScript } from "./SwarmContactOwnership";
 import { isIsexpQuery, buildIsexpScript } from "./InvestmentScenarioRisk";
 import { isItsmQuery, buildItsmScript } from "./IntelProfileScenarioThreat";
 import { isTaskRepQuery, buildTaskRepScript } from "./TaskReportCoverage";
+import { isScknQuery, buildScknScript } from "./SceneKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -391,6 +392,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:trep-toggle"));
       let script = "";
       try { script = await buildTaskRepScript(); } catch { script = "Task report documentation coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F63: scene knowledge coverage — cross-correlates cinematic scenes against KB articles.
+    if (isScknQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sckn-toggle"));
+      let script = "";
+      try { script = await buildScknScript(); } catch { script = "Scene knowledge coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
