@@ -50,6 +50,7 @@ import { isRsrptQuery, buildRsrptScript } from "./RiskSignalReportCoverage";
 import { isCinvQuery, buildCinvScript } from "./ContactInvestigationInvolvement";
 import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
 import { isDtconQuery, buildDtconScript } from "./DatasetTaskConsumption";
+import { isSwriskQuery, buildSwriskScript } from "./SwarmJobRiskCorrelation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -482,6 +483,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dtcon-toggle"));
       let script = "";
       try { script = await buildDtconScript(); } catch { script = "Dataset task consumption panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F73: swarm job × risk signal — THREATENED vs SECURE job classification.
+    if (isSwriskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swrisk-toggle"));
+      let script = "";
+      try { script = await buildSwriskScript(); } catch { script = "Swarm risk correlation panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

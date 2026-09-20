@@ -229,6 +229,7 @@ import RiskSignalReportCoverage from '@/components/cinematic/RiskSignalReportCov
 import ContactInvestigationInvolvement from '@/components/cinematic/ContactInvestigationInvolvement';
 import AipSkillReportsCoverage from '@/components/cinematic/AipSkillReportsCoverage';
 import DatasetTaskConsumption from '@/components/cinematic/DatasetTaskConsumption';
+import SwarmJobRiskCorrelation from '@/components/cinematic/SwarmJobRiskCorrelation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -679,6 +680,8 @@ function App() {
             <AipSkillReportsCoverage />
             {/* F72 (overnight 2026-09-20): Dataset × Task Data Consumption — ◈ DTCON button (left:19640, bottom:18, zIndex:76); parallel-fetches /v1/datasets + /entities/Task; keyword-correlates datasets against tasks to surface CONSUMING vs IDLE; stat tiles datasets/tasks/consuming/idle; amber badge on idle count; filter tabs ALL/CONSUMING/IDLE + text search; expand dataset → matched task cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isDtconQuery+buildDtconScript wired in JarvisBrain; "dataset task"/"dtcon"/"idle datasets"/"data utilization" voice trigger; jarvis:dtcon-toggle event; 90-s auto-refresh */}
             <DatasetTaskConsumption />
+            {/* F73 (overnight 2026-09-20): SwarmJob × Risk Signal Threat Correlation — ◈ SWRISK button (left:20200, bottom:8, zIndex:77); parallel-fetches /entities/SwarmJob + /entities/RiskSignal; keyword-correlates swarm jobs against active risks; THREATENED vs SECURE classification; stat tiles jobs/risks/threatened/secure; red badge on threatened count; filter tabs ALL/THREATENED/SECURE + text search; expand job → matched risk signal cards with severity; ▶ ASSESS RISK → /v1/jarvis/agent/chat 2-sentence threat brief + TTS; isSwriskQuery+buildSwriskScript wired in JarvisBrain; "swarm risk"/"swrisk"/"threatened jobs"/"swarm threat"/"job risk" voice trigger; jarvis:swrisk-toggle event; 90-s auto-refresh */}
+            <SwarmJobRiskCorrelation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
