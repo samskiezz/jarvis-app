@@ -1,379 +1,508 @@
 /**
- * ScenarioDatasetCoverage — F37 (overnight backlog)
+ * F78 — Scenario × Dataset Coverage (SCDSET)
  *
- * Parallel-fetches /v1/scenario/list + /v1/datasets; keyword-correlates each
- * scenario against the dataset catalog to surface DATA_BACKED (scenario has a
- * real data foundation) vs DATA_DARK (no dataset covers it — data gap).
+ * Parallel-fetches /v1/scenario/list + /v1/datasets every 90 s.
+ * Keyword-correlates each scenario against the dataset catalog to classify:
+ *   DATA_BACKED  — ≥2 datasets match the scenario's domain
+ *   PARTIAL      — exactly 1 dataset matches
+ *   DATA_DARK    — no dataset backs this scenario
  *
- * Toggle:  ⬡ SCDV  at left:881760 bottom:8 zIndex:583.
- * Event:   jarvis:scdv-toggle
- * Shortcut: Ctrl+Shift+D (unused)
- * Voice:   "scenario dataset / data coverage / data-backed scenarios / scdv"
- * Refresh: 90 s while open.
- * ASSESS:  /v1/jarvis/agent/chat 2-sentence data-readiness brief + TTS.
+ * Stat tiles:  scenarios / datasets / backed / dark
+ * Filter tabs: ALL | DATA_BACKED | PARTIAL | DATA_DARK
+ * Text search: across scenario name / description.
+ * Expand row → matched dataset cards with row counts + relevance score bar.
+ * Amber badge on DATA_DARK count.
+ * ▶ ASSESS: 2-sentence scenario data-coverage brief via
+ *   /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
+ *
+ * Toggle:  ◈ SCDSET  at left:21880 bottom:8, zIndex:80.
+ * Event:   jarvis:scdset-toggle
+ * Voice:   "scenario dataset" / "scenario data" / "scdset"
+ *          / "scenario data coverage" / "backed scenarios"
+ *          / "data dark scenarios" / "which scenarios have data"
+ * Refresh: 90 s auto-poll.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { apiBase } from "@/api/cinematicDataAdapters";
 
 const CY    = "#29E7FF";
-const GRN   = "#00E5A0";
 const AMBER = "#F5A623";
-const RED   = "#FF3D5A";
-const DIM   = "#0D1520";
-const POLL  = 90_000;
-const BTN_LEFT = 881760;
+const GREEN = "#00c878";
+const RED   = "#FF3B6B";
+const MUTED = "#6E8AA0";
+const BG    = "rgba(4,7,14,0.96)";
+const MONO  = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
 
+const BTN_LEFT   = 21880;
+const REFRESH_MS = 90_000;
 const API_KEY =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||
+  "dev-key";
 
-/* ── exported helpers for JarvisBrain ────────────────────────────────────────── */
+// ─── normalise ────────────────────────────────────────────────────────────────
 
-export function isScenarioDsvQuery(q) {
-  return /\b(scenario.?dataset|dataset.?scenario|data.?coverage|data.?backed.?scenario|scdv|scenario.?data|dark.?scenario|data.?foundation)\b/i.test(
-    q || ""
-  );
-}
-
-export async function buildScenarioDsvScript() {
-  try {
-    const [sr, dr] = await Promise.all([
-      fetch(`${apiBase()}/v1/scenario/list`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
-      fetch(`${apiBase()}/v1/datasets`,      { headers: { Authorization: `Bearer ${API_KEY}` } }),
-    ]);
-    const scenarios = normalise(sr.ok ? await sr.json() : []);
-    const datasets  = normalise(dr.ok ? await dr.json() : []);
-    const backed = scenarios.filter((s) => hasCoverage(s, datasets)).length;
-    const dark   = scenarios.length - backed;
-    window.dispatchEvent(new CustomEvent("jarvis:scdv-toggle"));
-    if (!scenarios.length) return "No scenarios found in the system, sir.";
-    return (
-      `Scenario dataset coverage online, sir. ${scenarios.length} scenario${scenarios.length !== 1 ? "s" : ""} cross-referenced against ${datasets.length} dataset${datasets.length !== 1 ? "s" : ""}. ` +
-      `${backed} scenario${backed !== 1 ? "s are" : " is"} data-backed; ${dark} ${dark !== 1 ? "are" : "is"} data-dark with no dataset foundation.`
-    );
-  } catch {
-    window.dispatchEvent(new CustomEvent("jarvis:scdv-toggle"));
-    return "Scenario dataset coverage panel open, sir.";
-  }
-}
-
-/* ── helpers ─────────────────────────────────────────────────────────────────── */
-
-function normalise(raw) {
-  if (Array.isArray(raw)) return raw;
-  if (raw && typeof raw === "object") {
-    for (const k of ["items", "results", "data", "scenarios", "datasets", "records"]) {
-      if (Array.isArray(raw[k])) return raw[k];
-    }
-  }
+function normaliseArray(raw) {
+  if (Array.isArray(raw))                return raw;
+  if (raw && Array.isArray(raw.items))   return raw.items;
+  if (raw && Array.isArray(raw.data))    return raw.data;
+  if (raw && Array.isArray(raw.results)) return raw.results;
+  if (raw && typeof raw === "object")    return Object.values(raw);
   return [];
 }
 
-function kwds(str) {
-  if (!str) return [];
-  return str.toLowerCase().replace(/[^a-z0-9\s]/g, " ").split(/\s+/).filter((w) => w.length > 3);
+function normaliseScenarios(raw) {
+  return normaliseArray(raw).map((s, i) => ({
+    id:          String(s.id ?? s.scenario_id ?? i),
+    name:        s.name ?? s.title ?? s.label ?? `Scenario ${i + 1}`,
+    description: [s.description, s.objective, s.type, s.category, s.tags, s.context]
+                   .filter(Boolean).join(" "),
+  }));
 }
 
-function hasCoverage(scenario, datasets) {
-  const sWords = new Set([
-    ...kwds(scenario.name || scenario.title || ""),
-    ...kwds(scenario.description || scenario.summary || ""),
-    ...kwds(scenario.type || scenario.category || ""),
+function normaliseDatasets(raw) {
+  return normaliseArray(raw).map((d, i) => ({
+    id:    String(d.id ?? d.dataset_id ?? i),
+    name:  d.name ?? d.dataset_name ?? d.title ?? `Dataset ${i + 1}`,
+    rows:  d.row_count ?? d.rows ?? d.count ?? null,
+    body:  [d.description, d.category, d.type, d.tags, d.domain, d.source]
+             .filter(Boolean).join(" "),
+  }));
+}
+
+// ─── keyword scoring ──────────────────────────────────────────────────────────
+
+function buildKeywords(strings) {
+  return strings
+    .flatMap(s => String(s).toLowerCase().split(/[^a-z0-9]+/))
+    .filter(t => t.length >= 3);
+}
+
+function scoreMatch(keywords, haystack) {
+  const h = haystack.toLowerCase();
+  let hits = 0;
+  for (const kw of keywords) if (h.includes(kw)) hits++;
+  return hits;
+}
+
+// ─── fetch ────────────────────────────────────────────────────────────────────
+
+async function fetchAll() {
+  const hdr  = { Authorization: `Bearer ${API_KEY}` };
+  const base = apiBase();
+  const [sRes, dRes] = await Promise.all([
+    fetch(`${base}/v1/scenario/list`, { headers: hdr }),
+    fetch(`${base}/v1/datasets`,      { headers: hdr }),
   ]);
-  if (!sWords.size) return false;
-  return datasets.some((ds) => {
-    const dWords = kwds(
-      [ds.name, ds.title, ds.description, ds.tags, ds.type, ds.source].filter(Boolean).join(" ")
-    );
-    return dWords.some((w) => sWords.has(w));
+  return {
+    scenarios: normaliseScenarios(sRes.ok ? await sRes.json() : []),
+    datasets:  normaliseDatasets(dRes.ok  ? await dRes.json() : []),
+  };
+}
+
+// ─── correlation ──────────────────────────────────────────────────────────────
+
+function classify(matchCount) {
+  if (matchCount >= 2) return "DATA_BACKED";
+  if (matchCount === 1) return "PARTIAL";
+  return "DATA_DARK";
+}
+
+function correlate(scenarios, datasets) {
+  return scenarios.map(sc => {
+    const kws = buildKeywords([sc.name, sc.description]);
+    const matched = datasets
+      .map(ds => ({ ds, score: scoreMatch(kws, `${ds.name} ${ds.body}`) }))
+      .filter(x => x.score > 0)
+      .sort((a, b) => b.score - a.score);
+    return { ...sc, matched, classification: classify(matched.length) };
   });
 }
 
-function matchedDatasets(scenario, datasets) {
-  const sWords = new Set([
-    ...kwds(scenario.name || scenario.title || ""),
-    ...kwds(scenario.description || scenario.summary || ""),
-    ...kwds(scenario.type || scenario.category || ""),
-  ]);
-  if (!sWords.size) return [];
-  return datasets
-    .map((ds) => {
-      const dWords = kwds(
-        [ds.name, ds.title, ds.description, ds.tags, ds.type, ds.source].filter(Boolean).join(" ")
-      );
-      const score = dWords.filter((w) => sWords.has(w)).length;
-      return { ds, score };
-    })
-    .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 5)
-    .map(({ ds, score }) => ({ ds, score }));
+// ─── exported intent helpers ──────────────────────────────────────────────────
+
+const SCDSET_RE =
+  /\b(scdset|scenario[\s_-]?data(set[s]?)?|data[\s_-]?scenario[s]?|backed[\s_-]?scenario[s]?|dark[\s_-]?scenario[s]?|data[\s_-]?dark[\s_-]?scenario[s]?|which[\s_-]?scenario[s]?[\s_-]?have[\s_-]?data|scenario[\s_-]?data[\s_-]?coverage|scenario[\s_-]?dataset[\s_-]?coverage|unsupported[\s_-]?scenario[s]?|scenario[\s_-]?backing)\b/i;
+
+export function isScdsetQuery(q) { return SCDSET_RE.test(q); }
+
+export async function buildScdsetScript() {
+  try {
+    const { scenarios, datasets } = await fetchAll();
+    const rows   = correlate(scenarios, datasets);
+    const backed = rows.filter(r => r.classification === "DATA_BACKED").length;
+    const partial = rows.filter(r => r.classification === "PARTIAL").length;
+    const dark   = rows.filter(r => r.classification === "DATA_DARK").length;
+    const prompt =
+      `Scenario dataset coverage analysis: ${scenarios.length} scenarios cross-referenced against ` +
+      `${datasets.length} datasets in the catalog. ` +
+      `${backed} scenarios are fully data-backed (2+ datasets), ` +
+      `${partial} have partial coverage (1 dataset), and ` +
+      `${dark} are data-dark with no backing dataset at all. ` +
+      `Provide a 2-sentence operational assessment and flag the most critical data-dark scenarios.`;
+    const base = apiBase();
+    const res  = await fetch(`${base}/v1/jarvis/agent/chat`, {
+      method:  "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+      body:    JSON.stringify({ message: prompt }),
+    });
+    const data = await res.json();
+    window.dispatchEvent(new CustomEvent("jarvis:scdset-toggle"));
+    return (
+      data.response ?? data.reply ?? data.message ??
+      `${backed} scenarios data-backed, ${partial} partial, ${dark} data-dark across ${datasets.length} datasets.`
+    );
+  } catch {
+    window.dispatchEvent(new CustomEvent("jarvis:scdset-toggle"));
+    return "Scenario dataset coverage panel is standing by, sir.";
+  }
 }
 
-function statusBadge(s) {
-  const st = (s.status || s.state || "active").toLowerCase();
-  if (st === "completed" || st === "done") return { label: "DONE", color: GRN };
-  if (st === "failed" || st === "error")  return { label: "FAIL", color: RED };
-  if (st === "running")                   return { label: "RUN",  color: CY  };
-  return { label: "READY", color: AMBER };
-}
+// ─── component ────────────────────────────────────────────────────────────────
 
-/* ── component ───────────────────────────────────────────────────────────────── */
+const FILTERS = ["ALL", "DATA_BACKED", "PARTIAL", "DATA_DARK"];
+
+const FILTER_COLOR = {
+  DATA_BACKED: GREEN,
+  PARTIAL:     AMBER,
+  DATA_DARK:   RED,
+};
 
 export default function ScenarioDatasetCoverage() {
-  const [visible,    setVisible]    = useState(false);
-  const [scenarios,  setScenarios]  = useState([]);
-  const [datasets,   setDatasets]   = useState([]);
-  const [rows,       setRows]       = useState([]);
-  const [loading,    setLoading]    = useState(false);
-  const [filter,     setFilter]     = useState("all");
-  const [search,     setSearch]     = useState("");
-  const [expanded,   setExpanded]   = useState(null);
-  const [aiText,     setAiText]     = useState("");
-  const [aiLoading,  setAiLoading]  = useState(false);
-  const pollRef = useRef(null);
+  const [open,      setOpen]      = useState(false);
+  const [rows,      setRows]      = useState([]);
+  const [dsCount,   setDsCount]   = useState(0);
+  const [filter,    setFilter]    = useState("ALL");
+  const [search,    setSearch]    = useState("");
+  const [expanded,  setExpanded]  = useState(null);
+  const [loading,   setLoading]   = useState(false);
+  const [error,     setError]     = useState(null);
+  const [assessing, setAssessing] = useState(null);
+  const [assessText, setAssessText] = useState({});
+  const timerRef = useRef(null);
 
-  const darkCount   = rows.filter((r) => !r.backed).length;
-  const backedCount = rows.filter((r) =>  r.backed).length;
-
-  const fetchData = useCallback(async () => {
+  const load = useCallback(async () => {
+    setLoading(true); setError(null);
     try {
-      const [sr, dr] = await Promise.all([
-        fetch(`${apiBase()}/v1/scenario/list`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${apiBase()}/v1/datasets`,      { headers: { Authorization: `Bearer ${API_KEY}` } }),
-      ]);
-      const rawScenarios = normalise(sr.ok ? await sr.json() : []);
-      const rawDatasets  = normalise(dr.ok ? await dr.json() : []);
-      setScenarios(rawScenarios);
-      setDatasets(rawDatasets);
-      setRows(
-        rawScenarios.map((s) => ({
-          scenario: s,
-          backed: hasCoverage(s, rawDatasets),
-          matches: matchedDatasets(s, rawDatasets),
-        }))
-      );
-    } catch (_) {}
-  }, []);
-
-  useEffect(() => {
-    const onToggle = () => setVisible((v) => !v);
-    window.addEventListener("jarvis:scdv-toggle", onToggle);
-    return () => window.removeEventListener("jarvis:scdv-toggle", onToggle);
-  }, []);
-
-  useEffect(() => {
-    if (!visible) return;
-    setLoading(true);
-    fetchData().finally(() => setLoading(false));
-    pollRef.current = setInterval(fetchData, POLL);
-    return () => clearInterval(pollRef.current);
-  }, [visible, fetchData]);
-
-  async function assess() {
-    if (!rows.length) return;
-    setAiLoading(true);
-    setAiText("");
-    const dark = rows.filter((r) => !r.backed).slice(0, 5);
-    const prompt =
-      `As JARVIS, provide a 2-sentence assessment of data readiness for these scenario-dataset gaps: ` +
-      (dark.length
-        ? dark.map((r) => `"${r.scenario.name || r.scenario.title || "Unknown"}" (no dataset)`).join("; ")
-        : "all scenarios have data coverage") +
-      ". Be direct and operational.";
-    try {
-      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({ message: prompt }),
-      });
-      const d = await res.json();
-      const txt = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
-      setAiText(txt);
-      if (txt)
-        window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text: txt } }));
-    } catch {
-      setAiText("Unable to reach reasoning core.");
+      const { scenarios, datasets } = await fetchAll();
+      setRows(correlate(scenarios, datasets));
+      setDsCount(datasets.length);
+    } catch (e) {
+      setError(String(e?.message ?? e));
     } finally {
-      setAiLoading(false);
+      setLoading(false);
     }
-  }
+  }, []);
 
-  const filtered = rows.filter((r) => {
-    if (filter === "backed") return  r.backed;
-    if (filter === "dark")   return !r.backed;
+  useEffect(() => {
+    if (!open) return;
+    load();
+    timerRef.current = setInterval(load, REFRESH_MS);
+    return () => clearInterval(timerRef.current);
+  }, [open, load]);
+
+  useEffect(() => {
+    const handler = () => setOpen(v => !v);
+    window.addEventListener("jarvis:scdset-toggle", handler);
+    return () => window.removeEventListener("jarvis:scdset-toggle", handler);
+  }, []);
+
+  const handleAssess = useCallback(async (sc) => {
+    const key = sc.id;
+    if (assessing === key) return;
+    setAssessing(key);
+    try {
+      const prompt =
+        `Scenario "${sc.name}": ${sc.description.slice(0, 200)}. ` +
+        `Coverage status: ${sc.classification}. ` +
+        `Matched datasets: ${sc.matched.map(m => m.ds.name).join(", ") || "none"}. ` +
+        `In 2 sentences, assess the data-coverage risk and recommend the most urgent datasets to source.`;
+      const base = apiBase();
+      const res  = await fetch(`${base}/v1/jarvis/agent/chat`, {
+        method:  "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+        body:    JSON.stringify({ message: prompt }),
+      });
+      const data = await res.json();
+      const text = data.response ?? data.reply ?? data.message ?? "No assessment available.";
+      setAssessText(prev => ({ ...prev, [key]: text }));
+      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
+    } catch {
+      setAssessText(prev => ({ ...prev, [key]: "Assessment unavailable." }));
+    } finally {
+      setAssessing(null);
+    }
+  }, [assessing]);
+
+  const backed  = rows.filter(r => r.classification === "DATA_BACKED").length;
+  const partial = rows.filter(r => r.classification === "PARTIAL").length;
+  const dark    = rows.filter(r => r.classification === "DATA_DARK").length;
+
+  const filtered = rows.filter(r => {
+    if (filter !== "ALL" && r.classification !== filter) return false;
+    if (search) {
+      const s = search.toLowerCase();
+      if (!r.name.toLowerCase().includes(s) && !r.description.toLowerCase().includes(s)) return false;
+    }
     return true;
-  }).filter((r) => {
-    if (!search) return true;
-    const q = search.toLowerCase();
-    return (r.scenario.name || r.scenario.title || "").toLowerCase().includes(q) ||
-           (r.scenario.description || "").toLowerCase().includes(q);
   });
 
-  if (!visible) {
+  if (!open) {
     return (
       <button
-        onClick={() => setVisible(true)}
-        title="Scenario Dataset Coverage"
+        onClick={() => setOpen(true)}
+        title="Scenario × Dataset Coverage (SCDSET)"
         style={{
-          position: "fixed", bottom: 8, left: BTN_LEFT, zIndex: 583,
-          background: "rgba(13,21,32,0.85)", border: `1px solid ${CY}40`,
-          color: CY, fontFamily: "monospace", fontSize: 10, padding: "3px 7px",
-          borderRadius: 4, cursor: "pointer", letterSpacing: 1,
+          position: "fixed", bottom: 8, left: BTN_LEFT, zIndex: 80,
+          fontFamily: MONO, fontSize: 9, letterSpacing: 1,
+          background: "rgba(4,7,14,0.85)", border: `1px solid ${CY}44`,
+          color: CY, borderRadius: 4, padding: "3px 8px", cursor: "pointer",
+          display: "flex", alignItems: "center", gap: 5,
         }}
       >
-        {darkCount > 0 && (
-          <span style={{ background: AMBER, color: "#000", borderRadius: 3, padding: "0 4px", marginRight: 4, fontWeight: 700 }}>
-            {darkCount}
+        ◈ SCDSET
+        {dark > 0 && (
+          <span style={{
+            background: AMBER, color: "#0B1420", borderRadius: 3,
+            padding: "0 4px", fontSize: 8, fontWeight: 700, lineHeight: "14px",
+          }}>
+            {dark}
           </span>
         )}
-        ⬡ SCDV
       </button>
     );
   }
 
   return (
     <div style={{
-      position: "fixed", bottom: 56, right: 18, width: 440, maxHeight: "78vh",
-      background: "rgba(8,16,26,0.97)", border: `1px solid ${CY}55`,
-      borderRadius: 8, zIndex: 583, display: "flex", flexDirection: "column",
-      fontFamily: "monospace", color: CY, overflow: "hidden",
-      boxShadow: `0 0 24px ${CY}22`,
+      position: "fixed", bottom: 40, left: BTN_LEFT - 200, zIndex: 80,
+      width: 420, maxHeight: "70vh",
+      background: BG, border: `1px solid ${CY}44`,
+      borderRadius: 8, display: "flex", flexDirection: "column",
+      fontFamily: MONO, overflow: "hidden",
+      boxShadow: `0 0 24px ${CY}18`,
     }}>
       {/* header */}
-      <div style={{ display: "flex", alignItems: "center", padding: "10px 14px", borderBottom: `1px solid ${CY}33`, gap: 8 }}>
-        <span style={{ fontWeight: 700, fontSize: 13, flex: 1 }}>⬡ SCENARIO DATASET COVERAGE</span>
-        <span style={{ fontSize: 10, color: GRN }}>{backedCount} BACKED</span>
-        <span style={{ fontSize: 10, color: AMBER, marginLeft: 6 }}>{darkCount} DARK</span>
-        <button onClick={assess} disabled={aiLoading}
-          style={{ marginLeft: 8, background: `${CY}22`, border: `1px solid ${CY}55`, color: CY,
-            fontSize: 10, padding: "2px 8px", borderRadius: 4, cursor: "pointer" }}>
-          {aiLoading ? "…" : "▶ ASSESS"}
+      <div style={{
+        padding: "8px 14px", borderBottom: `1px solid ${CY}22`,
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+      }}>
+        <span style={{ color: CY, fontSize: 11, letterSpacing: 2 }}>
+          ◈ SCENARIO × DATASET COVERAGE
+        </span>
+        <button
+          onClick={() => setOpen(false)}
+          style={{
+            background: "none", border: "none", color: MUTED,
+            cursor: "pointer", fontSize: 12, lineHeight: 1,
+          }}
+        >
+          ×
         </button>
-        <button onClick={() => setVisible(false)}
-          style={{ marginLeft: 6, background: "transparent", border: "none", color: RED, fontSize: 14, cursor: "pointer" }}>
-          ✕
-        </button>
-      </div>
-
-      {/* AI text */}
-      {aiText && (
-        <div style={{ padding: "8px 14px", background: `${CY}11`, fontSize: 11, lineHeight: 1.5, color: "#b0c8e0", borderBottom: `1px solid ${CY}22` }}>
-          {aiText}
-        </div>
-      )}
-
-      {/* filters + search */}
-      <div style={{ display: "flex", gap: 6, padding: "8px 14px", borderBottom: `1px solid ${CY}22`, flexWrap: "wrap" }}>
-        {["all", "backed", "dark"].map((f) => (
-          <button key={f} onClick={() => setFilter(f)}
-            style={{ fontSize: 10, padding: "2px 8px", borderRadius: 4, cursor: "pointer",
-              background: filter === f ? `${CY}33` : "transparent",
-              border: `1px solid ${filter === f ? CY : CY + "44"}`, color: CY,
-              letterSpacing: 1, textTransform: "uppercase" }}>
-            {f}
-          </button>
-        ))}
-        <input value={search} onChange={(e) => setSearch(e.target.value)}
-          placeholder="search scenarios…"
-          style={{ flex: 1, minWidth: 100, background: `${DIM}`, border: `1px solid ${CY}33`, color: CY,
-            borderRadius: 4, fontSize: 10, padding: "2px 7px", outline: "none" }} />
       </div>
 
       {/* stat tiles */}
-      <div style={{ display: "flex", gap: 8, padding: "8px 14px", borderBottom: `1px solid ${CY}22` }}>
+      <div style={{
+        display: "grid", gridTemplateColumns: "repeat(4,1fr)",
+        gap: 6, padding: "8px 14px", borderBottom: `1px solid ${CY}18`,
+      }}>
         {[
-          { label: "SCENARIOS", val: scenarios.length, color: CY   },
-          { label: "DATASETS",  val: datasets.length,  color: "#A78BFA" },
-          { label: "BACKED",    val: backedCount,       color: GRN  },
-          { label: "DARK",      val: darkCount,         color: AMBER },
+          { label: "SCENARIOS", val: rows.length, color: CY },
+          { label: "DATASETS",  val: dsCount,     color: CY },
+          { label: "BACKED",    val: backed,       color: GREEN },
+          { label: "DARK",      val: dark,         color: dark > 0 ? AMBER : MUTED },
         ].map(({ label, val, color }) => (
-          <div key={label} style={{ flex: 1, textAlign: "center", background: `${color}11`,
-            border: `1px solid ${color}33`, borderRadius: 6, padding: "4px 0" }}>
-            <div style={{ fontSize: 15, fontWeight: 700, color }}>{val}</div>
-            <div style={{ fontSize: 9, color: "#6080a0" }}>{label}</div>
+          <div key={label} style={{
+            background: "rgba(10,20,35,0.7)", borderRadius: 5,
+            padding: "5px 0", textAlign: "center",
+            border: `1px solid ${color}22`,
+          }}>
+            <div style={{ color, fontSize: 16, fontWeight: 700 }}>{val}</div>
+            <div style={{ color: MUTED, fontSize: 7, letterSpacing: 1 }}>{label}</div>
           </div>
         ))}
       </div>
 
-      {/* list */}
-      <div style={{ overflowY: "auto", flex: 1 }}>
-        {loading ? (
-          <div style={{ padding: 20, textAlign: "center", color: "#4080a0", fontSize: 12 }}>Loading…</div>
-        ) : !filtered.length ? (
-          <div style={{ padding: 20, textAlign: "center", color: "#4080a0", fontSize: 12 }}>No scenarios found.</div>
-        ) : (
-          filtered.map((row, i) => {
-            const s    = row.scenario;
-            const name = s.name || s.title || `Scenario ${i + 1}`;
-            const sb   = statusBadge(s);
-            const isEx = expanded === i;
-            return (
-              <div key={i} style={{ borderBottom: `1px solid ${CY}18` }}>
-                <div
-                  onClick={() => setExpanded(isEx ? null : i)}
-                  style={{ display: "flex", alignItems: "center", gap: 8,
-                    padding: "8px 14px", cursor: "pointer",
-                    background: isEx ? `${CY}0a` : "transparent" }}>
-                  <span style={{ fontSize: 10, color: row.backed ? GRN : AMBER, minWidth: 70, letterSpacing: 1 }}>
-                    {row.backed ? "DATA_BACKED" : "DATA_DARK"}
-                  </span>
-                  <span style={{ flex: 1, fontSize: 11, color: "#c8dff0", overflow: "hidden",
-                    textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {name}
-                  </span>
-                  <span style={{ fontSize: 9, background: `${sb.color}22`,
-                    border: `1px solid ${sb.color}44`, color: sb.color,
-                    borderRadius: 3, padding: "1px 5px" }}>
-                    {sb.label}
-                  </span>
-                  <span style={{ fontSize: 10, color: "#4080a0" }}>{isEx ? "▲" : "▼"}</span>
-                </div>
+      {/* filter tabs */}
+      <div style={{
+        display: "flex", gap: 4, padding: "6px 14px",
+        borderBottom: `1px solid ${CY}18`,
+      }}>
+        {FILTERS.map(f => (
+          <button
+            key={f}
+            onClick={() => setFilter(f)}
+            style={{
+              fontFamily: MONO, fontSize: 8, letterSpacing: 1,
+              background: filter === f ? `${CY}20` : "none",
+              border: `1px solid ${filter === f ? CY : CY + "33"}`,
+              color: filter === f ? CY : MUTED,
+              borderRadius: 3, padding: "2px 7px", cursor: "pointer",
+            }}
+          >
+            {f}
+          </button>
+        ))}
+      </div>
 
-                {isEx && (
-                  <div style={{ padding: "6px 14px 12px 14px", background: `${DIM}` }}>
-                    {s.description && (
-                      <p style={{ fontSize: 10, color: "#7090b0", margin: "0 0 8px" }}>{s.description}</p>
-                    )}
-                    {row.matches.length > 0 ? (
-                      <>
-                        <div style={{ fontSize: 9, color: "#5070a0", marginBottom: 4, letterSpacing: 1 }}>
-                          MATCHING DATASETS ({row.matches.length})
-                        </div>
-                        {row.matches.map(({ ds, score }, di) => (
-                          <div key={di} style={{ display: "flex", alignItems: "center", gap: 8,
-                            marginBottom: 4, padding: "3px 8px", background: `${GRN}0a`,
-                            border: `1px solid ${GRN}22`, borderRadius: 4 }}>
-                            <span style={{ fontSize: 10, color: GRN, flex: 1 }}>
-                              {ds.name || ds.title || ds.id || `Dataset ${di + 1}`}
-                            </span>
-                            <span style={{ fontSize: 9, color: "#4080a0" }}>
-                              {ds.type || ds.format || "dataset"}
-                            </span>
-                            <span style={{ fontSize: 9, color: GRN }}>
-                              {score} kw
-                            </span>
-                          </div>
-                        ))}
-                      </>
-                    ) : (
-                      <div style={{ fontSize: 10, color: AMBER }}>
-                        No matching datasets found — data gap.
-                      </div>
-                    )}
-                  </div>
+      {/* search */}
+      <div style={{ padding: "4px 14px", borderBottom: `1px solid ${CY}18` }}>
+        <input
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="search scenarios…"
+          style={{
+            width: "100%", boxSizing: "border-box",
+            fontFamily: MONO, fontSize: 9, background: "rgba(10,20,35,0.6)",
+            border: `1px solid ${CY}33`, borderRadius: 4,
+            color: CY, padding: "3px 8px", outline: "none",
+          }}
+        />
+      </div>
+
+      {/* list */}
+      <div style={{ flex: 1, overflowY: "auto", padding: "6px 14px" }}>
+        {loading && rows.length === 0 && (
+          <div style={{ color: MUTED, fontSize: 9, padding: "12px 0", textAlign: "center", letterSpacing: 1 }}>
+            LOADING…
+          </div>
+        )}
+        {error && (
+          <div style={{ color: RED, fontSize: 9, padding: "6px 0" }}>{error}</div>
+        )}
+        {!loading && !error && filtered.length === 0 && (
+          <div style={{ color: MUTED, fontSize: 9, padding: "12px 0", textAlign: "center", letterSpacing: 1 }}>
+            NO RESULTS
+          </div>
+        )}
+        {filtered.map(sc => {
+          const isExp     = expanded === sc.id;
+          const cls       = sc.classification;
+          const clsColor  = FILTER_COLOR[cls] ?? MUTED;
+          return (
+            <div
+              key={sc.id}
+              onClick={() => setExpanded(isExp ? null : sc.id)}
+              style={{
+                marginBottom: 4, padding: "7px 10px",
+                background: "rgba(10,18,30,0.7)", borderRadius: 5,
+                border: `1px solid ${clsColor}33`,
+                cursor: "pointer", transition: "border-color 0.2s",
+              }}
+            >
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <div style={{
+                  width: 8, height: 8, borderRadius: "50%",
+                  background: clsColor, flexShrink: 0,
+                  boxShadow: cls === "DATA_DARK" ? `0 0 6px ${clsColor}` : "none",
+                }} />
+                <span style={{ flex: 1, color: "#D0E0F0", fontSize: 11 }}>{sc.name}</span>
+                <span style={{
+                  fontFamily: MONO, fontSize: 9, color: clsColor,
+                  border: `1px solid ${clsColor}55`, borderRadius: 3,
+                  padding: "1px 5px", letterSpacing: 1, flexShrink: 0,
+                }}>
+                  {cls}
+                </span>
+                {sc.matched.length > 0 && (
+                  <span style={{ color: MUTED, fontSize: 9 }}>
+                    {sc.matched.length} ds
+                  </span>
                 )}
               </div>
-            );
-          })
-        )}
+
+              {isExp && (
+                <div style={{ marginTop: 8, paddingLeft: 14 }}>
+                  {sc.matched.length > 0 ? (
+                    <>
+                      <div style={{ color: "#7090A0", fontSize: 9, marginBottom: 4, letterSpacing: 1 }}>
+                        MATCHED DATASETS
+                      </div>
+                      {sc.matched.map(({ ds, score }) => (
+                        <div key={ds.id} style={{
+                          marginBottom: 4, padding: "4px 8px",
+                          background: "rgba(12,22,36,0.8)", borderRadius: 4,
+                          border: `1px solid ${CY}22`,
+                        }}>
+                          <div style={{
+                            display: "flex", justifyContent: "space-between",
+                            alignItems: "center", marginBottom: 3,
+                          }}>
+                            <span style={{ color: "#B0D0E0", fontSize: 10 }}>{ds.name}</span>
+                            {ds.rows != null && (
+                              <span style={{ color: MUTED, fontSize: 9 }}>
+                                {ds.rows.toLocaleString()} rows
+                              </span>
+                            )}
+                          </div>
+                          {/* relevance bar */}
+                          <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
+                            <div style={{
+                              flex: 1, height: 3, background: `${CY}18`, borderRadius: 2,
+                            }}>
+                              <div style={{
+                                width: `${Math.min(100, score * 10)}%`,
+                                height: "100%", background: CY, borderRadius: 2,
+                              }} />
+                            </div>
+                            <span style={{ color: CY, fontSize: 9 }}>score {score}</span>
+                          </div>
+                        </div>
+                      ))}
+                    </>
+                  ) : (
+                    <div style={{ color: "#3E5060", fontSize: 10, marginBottom: 4 }}>
+                      No datasets matched — scenario is data-dark.
+                    </div>
+                  )}
+
+                  {/* ASSESS button */}
+                  <button
+                    onClick={e => { e.stopPropagation(); handleAssess(sc); }}
+                    disabled={assessing === sc.id}
+                    style={{
+                      fontFamily: MONO, fontSize: 9, letterSpacing: 1,
+                      background: `${CY}18`, border: `1px solid ${CY}44`,
+                      color: CY, borderRadius: 4, padding: "3px 8px",
+                      cursor: assessing === sc.id ? "wait" : "pointer", marginTop: 6,
+                    }}
+                  >
+                    {assessing === sc.id ? "ASSESSING…" : "▶ ASSESS COVERAGE"}
+                  </button>
+
+                  {assessText[sc.id] && (
+                    <div style={{
+                      marginTop: 6, padding: "6px 8px",
+                      background: `${CY}0A`, border: `1px solid ${CY}22`,
+                      borderRadius: 4, color: "#A0C0D0", fontSize: 10, lineHeight: 1.5,
+                    }}>
+                      {assessText[sc.id]}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* footer */}
-      <div style={{ padding: "6px 14px", borderTop: `1px solid ${CY}22`,
-        fontSize: 9, color: "#3a5060", display: "flex", justifyContent: "space-between" }}>
-        <span>/v1/scenario/list · /v1/datasets · {POLL / 1000}s refresh</span>
-        <button onClick={fetchData} style={{ background: "transparent", border: "none",
-          color: "#4a7090", fontSize: 9, cursor: "pointer" }}>↺</button>
+      <div style={{
+        padding: "6px 14px", borderTop: `1px solid ${CY}18`,
+        display: "flex", justifyContent: "space-between", alignItems: "center",
+      }}>
+        <span style={{ color: "#2E4060", fontSize: 9, letterSpacing: 1 }}>
+          {filtered.length}/{rows.length} SCENARIOS · AUTO-REFRESH 90s
+        </span>
+        <button
+          onClick={load}
+          style={{
+            fontFamily: MONO, fontSize: 9, letterSpacing: 1,
+            background: "none", border: `1px solid ${CY}33`,
+            color: CY, borderRadius: 3, padding: "2px 7px", cursor: "pointer",
+          }}
+        >
+          ↻ SYNC
+        </button>
       </div>
     </div>
   );

@@ -54,6 +54,7 @@ import { isSwriskQuery, buildSwriskScript } from "./SwarmJobRiskCorrelation";
 import { isIptaskQuery, buildIptaskScript } from "./IntelProfileTasking";
 import { isInvcaseQuery, buildInvcaseScript } from "./InvestmentInvestigationCoverage";
 import { isCtknowQuery, buildCtknowScript } from "./ContactKnowledgeAdvisor";
+import { isScdsetQuery, buildScdsetScript } from "./ScenarioDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -495,6 +496,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctknow-toggle"));
       let script = "";
       try { script = await buildCtknowScript(); } catch { script = "Contact knowledge advisor panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F78: scenario × dataset — DATA_BACKED/PARTIAL/DATA_DARK scenario data coverage.
+    if (isScdsetQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scdset-toggle"));
+      let script = "";
+      try { script = await buildScdsetScript(); } catch { script = "Scenario dataset coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

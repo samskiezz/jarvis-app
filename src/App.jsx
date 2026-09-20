@@ -233,6 +233,7 @@ import DatasetTaskConsumption from '@/components/cinematic/DatasetTaskConsumptio
 import SwarmJobRiskCorrelation from '@/components/cinematic/SwarmJobRiskCorrelation';
 import IntelProfileTasking from '@/components/cinematic/IntelProfileTasking';
 import InvestmentInvestigationCoverage from '@/components/cinematic/InvestmentInvestigationCoverage';
+import ScenarioDatasetCoverage from '@/components/cinematic/ScenarioDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -690,6 +691,8 @@ function App() {
             <IntelProfileTasking />
             {/* F76 (overnight 2026-09-20): Investment × Investigation Coverage — ◈ INVCASE button (left:21320, bottom:8, zIndex:79); parallel-fetches /entities/Investment + /v1/investigations; keyword-correlates portfolio positions against open cases to surface UNDER_INVESTIGATION vs CLEAN; stat tiles positions/cases/investigated/clean; amber badge on investigated count; filter tabs ALL/UNDER_INVESTIGATION/CLEAN + text search; expand position → matched investigation cards with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio risk brief + TTS; isInvcaseQuery+buildInvcaseScript wired in JarvisBrain; "investment investigation"/"portfolio case"/"invcase"/"under investigation" voice trigger; jarvis:invcase-toggle event; 90-s auto-refresh */}
             <InvestmentInvestigationCoverage />
+            {/* F78 (overnight 2026-09-20): Scenario × Dataset Coverage — ◈ SCDSET button (left:21880, bottom:8, zIndex:80); parallel-fetches /v1/scenario/list + /v1/datasets; keyword-correlates scenarios against dataset catalog; DATA_BACKED/PARTIAL/DATA_DARK classification; stat tiles scenarios/datasets/backed/dark; amber badge on dark count; filter tabs ALL/DATA_BACKED/PARTIAL/DATA_DARK + text search; expand scenario → matched dataset cards with row counts + relevance score bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence data-coverage brief + TTS; isScdsetQuery+buildScdsetScript wired in JarvisBrain; "scenario dataset"/"scenario data"/"scdset"/"scenario data coverage"/"backed scenarios"/"data dark scenarios" voice trigger; jarvis:scdset-toggle event; 90-s auto-refresh */}
+            <ScenarioDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
