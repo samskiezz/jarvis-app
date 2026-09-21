@@ -259,6 +259,7 @@ import ContactDatasetExposure from '@/components/cinematic/ContactDatasetExposur
 import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCoverage';
 import LiveIntelScenarioCoverage from '@/components/cinematic/LiveIntelScenarioCoverage';
 import GraphCentralityInvestigations from '@/components/cinematic/GraphCentralityInvestigations';
+import GraphCentralitySwarmJobs from '@/components/cinematic/GraphCentralitySwarmJobs';
 import LiveIntelKnowledgeCoverage from '@/components/cinematic/LiveIntelKnowledgeCoverage';
 import LiveIntelContactExposure from '@/components/cinematic/LiveIntelContactExposure';
 
@@ -786,6 +787,9 @@ function App() {
 
             {/* F205 (overnight 2026-09-21): Live Intel × Contact Exposure — ◈ LICONTACT button (left:36840, bottom:8, zIndex:105); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /entities/Contact; keyword-correlates contact name/role/org/dept/tags against live world events to surface EXPOSED (≥1 event match) vs SAFE; stat tiles events/contacts/exposed/safe; amber badge on exposed count; filter tabs ALL/EXPOSED/SAFE + text search; expand contact → matched live event cards with type badge (SEISMIC/CRYPTO/FX) + relevance bar; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLicontactQuery+buildLicontactScript wired in JarvisBrain; "licontact"/"contact exposure"/"exposed contacts"/"who is exposed"/"live contact" voice trigger; jarvis:licontact-toggle event; 90-s auto-refresh */}
             <LiveIntelContactExposure />
+
+            {/* F206 (overnight 2026-09-21): Graph Centrality × SwarmJob Tasking — ◈ GCNJOB button (left:37400, bottom:8, zIndex:106); parallel-fetches /v1/graph/centrality + /entities/SwarmJob; keyword-correlates high-centrality graph nodes against running swarm jobs to surface TASKED (≥1 job match) vs DORMANT; amber badge on tasked count; filter tabs ALL/TASKED/DORMANT + text search; expand node → matched SwarmJob cards with status badge + relevance bar; ▶ ASSESS TASKING → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcnjobQuery+buildGcnjobScript wired in JarvisBrain; "gcnjob"/"centrality swarm"/"node jobs"/"swarm centrality"/"swarm nodes"/"central jobs" voice trigger; jarvis:gcnjob-toggle event; 90-s auto-refresh */}
+            <GraphCentralitySwarmJobs />
 
             <Suspense fallback={<Loading />}>
               <Routes>
