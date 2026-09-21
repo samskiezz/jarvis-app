@@ -258,6 +258,7 @@ import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKn
 import ContactDatasetExposure from '@/components/cinematic/ContactDatasetExposure';
 import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCoverage';
 import LiveIntelScenarioCoverage from '@/components/cinematic/LiveIntelScenarioCoverage';
+import GraphCentralityInvestigations from '@/components/cinematic/GraphCentralityInvestigations';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -775,6 +776,8 @@ function App() {
 
             {/* F202 (overnight 2026-09-21): Live Intel × Scenario Coverage — ◈ LISCEN button (left:35160, bottom:8, zIndex:102); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/scenario/list; keyword-correlates live world events against threat scenarios to surface TRIGGERED (≥1 scenario match) vs DORMANT; amber badge on triggered count; filter tabs ALL/TRIGGERED/DORMANT; expand event → matched scenario cards with relevance bar; ▶ ASSESS TRIGGERS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLiscenQuery+buildLiscenScript wired in JarvisBrain; "liscen"/"live intel scenario"/"scenario trigger"/"triggered scenarios"/"live scenario"/"world scenario"/"event scenario" voice trigger; jarvis:liscen-toggle event; 60-s auto-refresh */}
             <LiveIntelScenarioCoverage />
+            {/* F203 (overnight 2026-09-21): Graph Centrality × Investigations Coverage — ◈ GCIN button (left:35720, bottom:8, zIndex:103); parallel-fetches /v1/graph/centrality + /v1/investigations; keyword-correlates high-centrality graph nodes against open investigations to surface INVOLVED (≥1 match) vs CLEAR; amber badge on involved count; filter tabs ALL/INVOLVED/CLEAR; expand node → matched investigation cards with centrality bar + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcinQuery+buildGcinScript wired in JarvisBrain; "gcin"/"graph centrality investigation"/"investigated nodes"/"node investigation" voice trigger; jarvis:gcin-toggle event; 90-s auto-refresh */}
+            <GraphCentralityInvestigations />
 
             <Suspense fallback={<Loading />}>
               <Routes>

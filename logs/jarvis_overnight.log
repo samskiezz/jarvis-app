@@ -79,3 +79,4 @@
 2026-09-21 F200 ContactDatasetExposure — /entities/Contact x /v1/datasets; DOCUMENTED/INVISIBLE classification; wired isCtdsetQuery+buildCtdsetScript in JarvisBrain; build exit 0
 2026-09-21 F201 LiveIntelReportCoverage (LIRPT) — /functions/getLiveIntel x /v1/reports; REPORTED/UNREPORTED classification; amber badge on unreported blind spots; ◈ LIRPT toggle left:34600 zIndex:101; isLirptQuery+buildLirptScript wired in JarvisBrain; AI coverage-gap brief + TTS; build exit 0
 2026-09-21 overnight: F202 LiveIntelScenarioCoverage.jsx — /functions/getLiveIntel × /v1/scenario/list; TRIGGERED/DORMANT; isLiscenQuery+buildLiscenScript wired JarvisBrain; mounted App.jsx; build exit 0
+2026-09-21 F203 GraphCentralityInvestigations.jsx: /v1/graph/centrality × /v1/investigations; GCIN toggle left:35720; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
