@@ -68,6 +68,7 @@ import { isScrepQuery, buildScrepScript } from "./ScenarioReportIntelligence";
 import { isCntrkrskQuery, buildCntrkrskScript } from "./GraphCentralityRiskConvergence";
 import { isTaskkgQuery, buildTaskkgScript } from "./TaskKnowledgeGrounding";
 import { isIpopsQuery, buildIpopsScript } from "./IntelProfileOpsActivation";
+import { isRptkbQuery, buildRptkbScript } from "./ReportKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -707,6 +708,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipops-toggle"));
       let script = "";
       try { script = await buildIpopsScript(); } catch { script = "Intel profile ops activation panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRptkbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rptkb-toggle"));
+      let script = "";
+      try { script = await buildRptkbScript(); } catch { script = "Report knowledge coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

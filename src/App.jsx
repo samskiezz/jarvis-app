@@ -247,6 +247,7 @@ import GraphCentralityRiskConvergence from '@/components/cinematic/GraphCentrali
 import TaskKnowledgeGrounding from '@/components/cinematic/TaskKnowledgeGrounding';
 import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
 import IntelProfileOpsActivation from '@/components/cinematic/IntelProfileOpsActivation';
+import ReportKnowledgeCoverage from '@/components/cinematic/ReportKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -734,6 +735,9 @@ function App() {
 
             {/* F166 (overnight 2026-09-21): dataset × knowledge coverage — ◈ DSKNOW button (left:30120, bottom:8, zIndex:60); parallel-fetches /v1/datasets + /knowledge/; keyword-correlates each dataset against knowledge articles to surface DOCUMENTED vs DARK (no backing docs — knowledge gap); amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-documentation brief + TTS via jarvis:speak-dossier; 120-s auto-refresh; "dataset knowledge"/"dataset docs"/"undocumented datasets"/"data documentation gap"/"dsknow" voice trigger; jarvis:dsknow-toggle event */}
             <DatasetKnowledgeCoverage />
+
+            {/* F92 (overnight 2026-09-21): Report × Knowledge Coverage — ◈ RPTKB button (left:29160, bottom:8, zIndex:93); parallel-fetches /v1/reports + /knowledge/; keyword-correlates each intelligence report against KB articles; GROUNDED/PARTIAL/BARE classification; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand report → matched KB article cards with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRptkbQuery+buildRptkbScript wired in JarvisBrain; "rptkb"/"report knowledge"/"report kb"/"bare reports"/"report knowledge gap" voice trigger; jarvis:rptkb-toggle event; 90-s auto-refresh */}
+            <ReportKnowledgeCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
