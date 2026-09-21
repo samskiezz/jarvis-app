@@ -1,29 +1,25 @@
 /**
- * F96 — IntelProfile × Knowledge Coverage (IPKC)
+ * IntelProfileKnowledgeCoverage — F99 (IPKB)
  *
- * Answers: "Which intelligence profiles are documented in the knowledge base,
- *           and which remain undocumented knowledge gaps?"
+ * Parallel-fetches /entities/IntelProfile + /knowledge/ then keyword-
+ * correlates each active threat intel profile against KB articles to surface
+ * GROUNDED (≥2 article matches) / PARTIAL (1) / BARE (0 — no knowledge
+ * backing for the threat profile).
  *
- * Data sources (confirmed real endpoints):
- *   GET /entities/IntelProfile  → active intelligence profiles
- *   GET /knowledge/             → KB articles catalog
+ * Stat tiles: profiles / articles / grounded / partial / bare
+ * Filter tabs: ALL / GROUNDED / PARTIAL / BARE
+ * Expand profile → matched KB article cards with relevance score bar.
+ * Click ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief
+ *   + jarvis:speak-dossier TTS.
+ * 90 s auto-refresh.
  *
- * Each IntelProfile's name/aliases/role/organization/tags is keyword-matched
- * against each KB article's title/summary/content/tags/category to produce:
- *   DOCUMENTED   — at least one KB article covers this intel profile
- *   UNDOCUMENTED — no KB article covers this intel profile
+ * Intent: "intel knowledge" / "ipkb" / "threat knowledge" /
+ *         "intel kb" / "profile knowledge" / "bare profiles" /
+ *         "ungrounded intel" / "intel knowledge gap"
+ *   → jarvis:ipkb-toggle + TTS brief via buildIpkbScript()
  *
- * Stat tiles:  profiles / articles / documented / undocumented
- * Amber badge: undocumented count on button (knowledge gaps).
- * Expand row:  matched KB articles with topic badge + relevance score bar.
- * ▶ ASSESS:   2-sentence AI brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
- *
- * Toggle:  ◈ IPKC  at left:3180 bottom:18, zIndex:68.
- * Event:   jarvis:ipkc-toggle
- * Voice:   "intel profile knowledge / profile kb / ipkc / documented profiles /
- *           undocumented intel / intel knowledge gap / profile knowledge coverage /
- *           which intel profiles have kb / intel kb / profile documentation"
- * Refresh: 90 s auto-poll.
+ * Toggle: ◈ IPKB at left:33480, bottom:8, zIndex 99.
+ * Mounted in App.jsx.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { apiBase } from "@/api/cinematicDataAdapters";
@@ -31,118 +27,179 @@ import { apiBase } from "@/api/cinematicDataAdapters";
 const CY    = "#29E7FF";
 const AMBER = "#F5A623";
 const GREEN = "#00c878";
-const MUTED = "#6E8AA0";
-const BG    = "rgba(4,7,14,0.96)";
-const MONO  = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
-
-const BTN_LEFT   = 3180;
+const RED   = "#FF4444";
+const DIM   = "#4A6070";
+const BG    = "rgba(3,5,9,0.97)";
+const BTN_LEFT   = 33480;
 const REFRESH_MS = 90_000;
+const MONO = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||
   "dev-key";
 
-// ─── helpers ─────────────────────────────────────────────────────────────────
+// ─── intent exports ────────────────────────────────────────────────────────────
 
-function normArr(raw) {
-  if (Array.isArray(raw))              return raw;
-  if (raw && Array.isArray(raw.items)) return raw.items;
-  if (raw && Array.isArray(raw.data))  return raw.data;
+const IPKB_RE =
+  /\b(ipkb|intel.*knowl|knowl.*intel|threat.*knowl|knowl.*threat|profile.*knowl|knowl.*profile|intel\.kb|threat\.kb|bare.*profile|bare.*intel|unground.*intel|intel.*ground|intel.*artic|profile.*artic)\b/i;
+
+export function isIpkbQuery(t) { return IPKB_RE.test(t || ""); }
+
+export async function buildIpkbScript() {
+  const [ipRaw, kRaw] = await Promise.allSettled([
+    fetch(`${apiBase()}/entities/IntelProfile`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    }).then((r) => r.json()),
+    fetch(`${apiBase()}/knowledge/`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    }).then((r) => r.json()),
+  ]);
+  const profiles  = normaliseProfiles(ipRaw.status === "fulfilled" ? ipRaw.value : []);
+  const articles  = normaliseArticles(kRaw.status === "fulfilled" ? kRaw.value : []);
+  const pairs     = correlate(profiles, articles);
+  const grounded  = pairs.filter((p) => p.matches.length >= 2).length;
+  const partial   = pairs.filter((p) => p.matches.length === 1).length;
+  const bare      = pairs.filter((p) => p.matches.length === 0).length;
+  const topBare   = pairs
+    .filter((p) => p.matches.length === 0)
+    .slice(0, 3)
+    .map((p) => p.profile.name)
+    .join(", ") || "none";
+  return (
+    `Assess JARVIS threat intel profile knowledge coverage in 2 sentences. ` +
+    `${profiles.length} intel profiles vs ${articles.length} KB articles: ` +
+    `${grounded} GROUNDED (≥2 articles), ${partial} PARTIAL (1 article), ` +
+    `${bare} BARE (no KB backing — threat profiles with zero knowledge coverage). ` +
+    `Top bare profiles: ${topBare}.`
+  );
+}
+
+// ─── normalise helpers ─────────────────────────────────────────────────────────
+
+function normaliseArray(raw, keys = []) {
+  if (Array.isArray(raw)) return raw;
+  for (const k of keys) {
+    if (raw && Array.isArray(raw[k])) return raw[k];
+  }
+  if (raw && Array.isArray(raw.items))   return raw.items;
+  if (raw && Array.isArray(raw.data))    return raw.data;
+  if (raw && Array.isArray(raw.results)) return raw.results;
+  if (raw && typeof raw === "object")    return Object.values(raw);
   return [];
 }
 
+function normaliseProfiles(raw) {
+  return normaliseArray(raw, ["intel_profiles", "profiles", "intelProfiles", "threat_actors"]).map((ip) => ({
+    id:      ip.id || ip.profile_id || ip.intel_id || String(Math.random()),
+    name:    ip.name || ip.title || ip.actor || ip.label || "Unknown Profile",
+    type:    ip.type || ip.threat_type || ip.category || ip.actor_type || "",
+    summary: ip.summary || ip.description || ip.notes || ip.overview || "",
+    tags:    [...(ip.tags || []), ...(ip.labels || []), ...(ip.keywords || [])].map(String),
+    risk:    ip.risk_level || ip.severity || ip.threat_level || "",
+  }));
+}
+
+function normaliseArticles(raw) {
+  return normaliseArray(raw, ["articles", "knowledge", "items"]).map((a) => ({
+    id:      a.id || a.article_id || String(Math.random()),
+    title:   a.title || a.name || a.heading || "Untitled Article",
+    summary: a.summary || a.description || a.body || a.content || "",
+    tags:    [...(a.tags || []), ...(a.categories || []), ...(a.labels || [])].map(String),
+  }));
+}
+
 function tokens(str) {
-  return String(str || "").toLowerCase().replace(/[^a-z0-9]+/g, " ").split(" ").filter(Boolean);
+  return String(str)
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w.length > 2);
 }
 
-function tokenSet(obj, fields) {
-  return new Set(fields.flatMap(f => tokens(obj[f])));
-}
-
-function score(profileToks, articleToks) {
-  let hits = 0;
-  for (const t of profileToks) if (articleToks.has(t) && t.length > 2) hits++;
-  return hits;
+function matchScore(profile, article) {
+  const profWords = tokens(
+    `${profile.name} ${profile.type} ${profile.summary} ${profile.tags.join(" ")}`
+  );
+  const artText = `${article.title} ${article.summary} ${article.tags.join(" ")}`.toLowerCase();
+  const hits = profWords.filter((w) => artText.includes(w));
+  return hits.length / Math.max(profWords.length, 1);
 }
 
 function correlate(profiles, articles) {
-  return profiles.map(p => {
-    const pToks = new Set([
-      ...tokens(p.name),
-      ...tokens(p.role),
-      ...tokens(p.organization),
-      ...(p.aliases || []).flatMap(tokens),
-      ...(p.tags || []).flatMap(tokens),
-    ].filter(t => t.length > 2));
-
-    const matches = articles
-      .map(a => {
-        const aToks = tokenSet(a, ["title", "summary", "content", "tags", "category", "topic"]);
-        const s = score(pToks, aToks);
-        return s > 0 ? { article: a, score: s } : null;
-      })
-      .filter(Boolean)
-      .sort((x, y) => y.score - x.score)
-      .slice(0, 8);
-
-    return { profile: p, matches, status: matches.length > 0 ? "DOCUMENTED" : "UNDOCUMENTED" };
+  return profiles.map((profile) => {
+    const scored = articles
+      .map((a) => ({ a, score: matchScore(profile, a) }))
+      .filter((x) => x.score > 0.1)
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5);
+    return { profile, matches: scored };
   });
 }
 
-// ─── exported intent helpers (consumed by JarvisBrain) ───────────────────────
+// ─── sub-components ────────────────────────────────────────────────────────────
 
-const IPKC_RE = /\b(ipkc|intel\s+profile\s+knowledge|profile\s+kb|intel\s+kb|intel\s+knowledge\s+gap|profile\s+knowledge|documented\s+profiles|undocumented\s+intel|intel\s+kb\s+coverage|which\s+intel\s+profiles\s+have\s+kb|profile\s+documentation)\b/i;
-
-export function isIpkcQuery(q) { return IPKC_RE.test(q); }
-
-export async function buildIpkcScript() {
-  try {
-    const base = apiBase();
-    const headers = { Authorization: `Bearer ${API_KEY}` };
-    const [pr, kr] = await Promise.all([
-      fetch(`${base}/entities/IntelProfile`, { headers }).then(r => r.json()).catch(() => []),
-      fetch(`${base}/knowledge/`, { headers }).then(r => r.json()).catch(() => []),
-    ]);
-    const profiles = normArr(pr);
-    const articles = normArr(kr);
-    const rows = correlate(profiles, articles);
-    const documented   = rows.filter(r => r.status === "DOCUMENTED").length;
-    const undocumented = rows.filter(r => r.status === "UNDOCUMENTED").length;
-    return `IPKC: ${profiles.length} profiles vs ${articles.length} KB articles. ${documented} documented, ${undocumented} undocumented.`;
-  } catch {
-    return "IPKC data unavailable.";
-  }
+function Tile({ label, value, color }) {
+  return (
+    <div style={{
+      flex: "1 1 0", minWidth: 60, background: "rgba(0,0,0,0.3)",
+      border: `1px solid ${color}33`, borderRadius: 6,
+      padding: "6px 8px", textAlign: "center",
+    }}>
+      <div style={{ fontSize: 18, fontWeight: 700, color, fontFamily: MONO }}>{value}</div>
+      <div style={{ fontSize: 9, color: DIM, letterSpacing: 1, marginTop: 2 }}>{label}</div>
+    </div>
+  );
 }
 
-// ─── component ───────────────────────────────────────────────────────────────
+function ScoreBar({ score }) {
+  const color = score > 0.5 ? GREEN : score > 0.25 ? AMBER : CY;
+  return (
+    <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, flex: 1 }}>
+      <div style={{
+        width: `${Math.round(score * 100)}%`, height: "100%",
+        background: color, borderRadius: 2, transition: "width 0.4s ease",
+      }} />
+    </div>
+  );
+}
+
+// ─── main component ────────────────────────────────────────────────────────────
 
 export default function IntelProfileKnowledgeCoverage() {
-  const [open, setOpen]         = useState(false);
-  const [loading, setLoading]   = useState(false);
-  const [rows, setRows]         = useState([]);
-  const [articles, setArticles] = useState([]);
-  const [filter, setFilter]     = useState("ALL");
-  const [search, setSearch]     = useState("");
-  const [expanded, setExpanded] = useState(null);
+  const [open, setOpen]           = useState(false);
+  const [pairs, setPairs]         = useState([]);
+  const [loading, setLoading]     = useState(false);
+  const [error, setError]         = useState(null);
+  const [tab, setTab]             = useState("ALL");
+  const [search, setSearch]       = useState("");
+  const [expanded, setExpanded]   = useState({});
   const [assessing, setAssessing] = useState(false);
-  const [brief, setBrief]       = useState("");
   const timerRef = useRef(null);
 
   const load = useCallback(async () => {
-    setLoading(true);
+    setLoading(true); setError(null);
     try {
-      const base = apiBase();
-      const headers = { Authorization: `Bearer ${API_KEY}` };
-      const [pr, kr] = await Promise.all([
-        fetch(`${base}/entities/IntelProfile`, { headers }).then(r => r.json()).catch(() => []),
-        fetch(`${base}/knowledge/`, { headers }).then(r => r.json()).catch(() => []),
+      const [ipRes, kRes] = await Promise.allSettled([
+        fetch(`${apiBase()}/entities/IntelProfile`, {
+          headers: { Authorization: `Bearer ${API_KEY}` },
+        }).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
+        fetch(`${apiBase()}/knowledge/`, {
+          headers: { Authorization: `Bearer ${API_KEY}` },
+        }).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
       ]);
-      const profiles = normArr(pr);
-      const arts = normArr(kr);
-      setArticles(arts);
-      setRows(correlate(profiles, arts));
+      const profiles = normaliseProfiles(ipRes.status === "fulfilled" ? ipRes.value : []);
+      const articles = normaliseArticles(kRes.status === "fulfilled" ? kRes.value : []);
+      setPairs(correlate(profiles, articles));
+    } catch (e) {
+      setError(e.message);
     } finally {
       setLoading(false);
     }
+  }, []);
+
+  useEffect(() => {
+    const onToggle = () => setOpen((v) => !v);
+    window.addEventListener("jarvis:ipkb-toggle", onToggle);
+    return () => window.removeEventListener("jarvis:ipkb-toggle", onToggle);
   }, []);
 
   useEffect(() => {
@@ -152,236 +209,274 @@ export default function IntelProfileKnowledgeCoverage() {
     return () => clearInterval(timerRef.current);
   }, [open, load]);
 
-  useEffect(() => {
-    const h = e => {
-      setOpen(v => !v);
-      if (e?.detail?.query) setBrief("");
-    };
-    window.addEventListener("jarvis:ipkc-toggle", h);
-    return () => window.removeEventListener("jarvis:ipkc-toggle", h);
-  }, []);
+  const grounded = pairs.filter((p) => p.matches.length >= 2);
+  const partial  = pairs.filter((p) => p.matches.length === 1);
+  const bare     = pairs.filter((p) => p.matches.length === 0);
 
-  const assess = async () => {
-    setAssessing(true); setBrief("");
+  const visible = pairs
+    .filter((p) => {
+      if (tab === "GROUNDED") return p.matches.length >= 2;
+      if (tab === "PARTIAL")  return p.matches.length === 1;
+      if (tab === "BARE")     return p.matches.length === 0;
+      return true;
+    })
+    .filter((p) => {
+      if (!search) return true;
+      const q = search.toLowerCase();
+      return (
+        p.profile.name.toLowerCase().includes(q) ||
+        p.profile.type.toLowerCase().includes(q) ||
+        p.profile.summary.toLowerCase().includes(q) ||
+        p.matches.some((m) => m.a.title.toLowerCase().includes(q))
+      );
+    });
+
+  async function assess() {
+    setAssessing(true);
     try {
-      const base = apiBase();
-      const documented   = rows.filter(r => r.status === "DOCUMENTED").length;
-      const undocumented = rows.filter(r => r.status === "UNDOCUMENTED").length;
-      const q = `JARVIS IPKC assessment: ${rows.length} intel profiles vs ${articles.length} KB articles. ${documented} documented, ${undocumented} undocumented. Provide a 2-sentence intelligence knowledge coverage brief.`;
-      const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
+      const script = await buildIpkbScript();
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({ message: q }),
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${API_KEY}`,
+        },
+        body: JSON.stringify({ message: script }),
       });
-      const d = await r.json();
-      const text = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
-      setBrief(text);
-      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
-    } catch {
-      setBrief("Assessment unavailable.");
+      const json = await res.json();
+      const text =
+        json.response || json.reply || json.message || json.content ||
+        JSON.stringify(json).slice(0, 200);
+      window.dispatchEvent(
+        new CustomEvent("jarvis:speak-dossier", { detail: { text } })
+      );
+    } catch (_) {
+      // silently ignore assessment errors
     } finally {
       setAssessing(false);
     }
-  };
+  }
 
-  const documented   = rows.filter(r => r.status === "DOCUMENTED").length;
-  const undocumented = rows.filter(r => r.status === "UNDOCUMENTED").length;
+  const toggleRow = (id) =>
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
 
-  const visible = rows.filter(r => {
-    if (filter === "DOCUMENTED"   && r.status !== "DOCUMENTED")   return false;
-    if (filter === "UNDOCUMENTED" && r.status !== "UNDOCUMENTED") return false;
-    if (search) {
-      const q = search.toLowerCase();
-      const p = r.profile;
-      return (p.name || "").toLowerCase().includes(q) ||
-             (p.role || "").toLowerCase().includes(q) ||
-             (p.organization || "").toLowerCase().includes(q);
-    }
-    return true;
-  });
-
-  const maxScore = Math.max(1, ...rows.flatMap(r => r.matches.map(m => m.score)));
-
-  return (
-    <>
-      {/* toggle button */}
+  if (!open) {
+    return (
       <button
-        onClick={() => setOpen(v => !v)}
-        title="IntelProfile × Knowledge Coverage (IPKC)"
+        onClick={() => setOpen(true)}
+        title="IntelProfile × Knowledge Coverage (IPKB)"
         style={{
-          position: "fixed", left: BTN_LEFT, bottom: 18, zIndex: 68,
-          background: open ? CY : "rgba(4,7,14,0.82)",
-          color: open ? "#04060A" : CY,
-          border: `1px solid ${CY}88`,
-          borderRadius: 7, padding: "3px 9px", fontSize: 10,
-          fontFamily: MONO, letterSpacing: 1, cursor: "pointer",
-          backdropFilter: "blur(6px)",
-        }}>
-        ◈ IPKC
-        {undocumented > 0 && (
+          position: "fixed", left: BTN_LEFT, bottom: 8, zIndex: 99,
+          background: "rgba(3,5,9,0.85)", border: `1px solid ${AMBER}55`,
+          borderRadius: 4, color: AMBER, fontFamily: MONO, fontSize: 9,
+          letterSpacing: 1, padding: "3px 7px", cursor: "pointer",
+        }}
+      >
+        ◈ IPKB
+        {bare.length > 0 && (
           <span style={{
-            marginLeft: 5, background: AMBER, color: "#04060A",
-            borderRadius: 4, padding: "0 4px", fontSize: 9, fontWeight: 700,
-          }}>{undocumented}</span>
+            marginLeft: 4, background: AMBER, color: "#000",
+            borderRadius: 8, padding: "0 4px", fontSize: 8, fontWeight: 700,
+          }}>
+            {bare.length}
+          </span>
         )}
       </button>
+    );
+  }
 
-      {/* panel */}
-      {open && (
-        <div style={{
-          position: "fixed", left: BTN_LEFT - 340, bottom: 52, zIndex: 120,
-          width: 440, maxHeight: "70vh",
-          background: BG, border: `1px solid ${CY}44`,
-          borderRadius: 12, padding: "14px 16px",
-          backdropFilter: "blur(12px)",
-          boxShadow: `0 0 40px ${CY}18`,
-          fontFamily: MONO, color: "#DCEBF5",
-          display: "flex", flexDirection: "column", gap: 10,
-          overflowY: "auto",
-        }}>
-          {/* header */}
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-            <span style={{ color: CY, fontSize: 11, letterSpacing: 2, fontWeight: 700 }}>
-              ◈ INTEL PROFILE × KNOWLEDGE COVERAGE
-            </span>
-            <button onClick={() => setOpen(false)} style={{
-              background: "none", border: "none", color: MUTED,
-              cursor: "pointer", fontSize: 14, lineHeight: 1,
-            }}>✕</button>
-          </div>
+  const TABS = ["ALL", "GROUNDED", "PARTIAL", "BARE"];
+  const tabColor = (t) => {
+    if (t === "BARE")     return AMBER;
+    if (t === "GROUNDED") return GREEN;
+    return CY;
+  };
 
-          {/* stat tiles */}
-          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 6 }}>
-            {[
-              { label: "PROFILES",      value: rows.length,  color: CY    },
-              { label: "ARTICLES",      value: articles.length, color: CY },
-              { label: "DOCUMENTED",    value: documented,   color: GREEN  },
-              { label: "UNDOCUMENTED",  value: undocumented, color: AMBER  },
-            ].map(t => (
-              <div key={t.label} style={{
-                background: "rgba(255,255,255,0.04)", borderRadius: 6,
-                padding: "6px 8px", textAlign: "center",
-              }}>
-                <div style={{ color: t.color, fontSize: 16, fontWeight: 700 }}>{t.value}</div>
-                <div style={{ color: MUTED, fontSize: 8, letterSpacing: 1 }}>{t.label}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* filter tabs */}
-          <div style={{ display: "flex", gap: 6 }}>
-            {["ALL", "DOCUMENTED", "UNDOCUMENTED"].map(f => (
-              <button key={f} onClick={() => setFilter(f)} style={{
-                background: filter === f ? CY : "rgba(255,255,255,0.05)",
-                color: filter === f ? "#04060A" : MUTED,
-                border: "none", borderRadius: 5, padding: "2px 8px",
-                fontSize: 9, letterSpacing: 1, cursor: "pointer", fontFamily: MONO,
-              }}>{f}</button>
-            ))}
-            <input
-              value={search} onChange={e => setSearch(e.target.value)}
-              placeholder="search profiles…"
-              style={{
-                marginLeft: "auto", background: "rgba(255,255,255,0.05)",
-                border: `1px solid ${CY}33`, borderRadius: 5,
-                color: "#DCEBF5", padding: "2px 8px", fontSize: 10,
-                fontFamily: MONO, outline: "none", width: 120,
-              }} />
-          </div>
-
-          {/* loading */}
-          {loading && (
-            <div style={{ color: MUTED, fontSize: 10, textAlign: "center" }}>
-              Correlating intel profiles against KB…
-            </div>
-          )}
-
-          {/* rows */}
-          {!loading && visible.map((r, i) => {
-            const p = r.profile;
-            const isEx = expanded === i;
-            const statusColor = r.status === "DOCUMENTED" ? GREEN : AMBER;
-            return (
-              <div key={p.id || p.name || i} style={{
-                background: "rgba(255,255,255,0.04)", borderRadius: 8,
-                padding: "8px 10px", cursor: "pointer",
-                border: `1px solid ${statusColor}22`,
-              }} onClick={() => setExpanded(isEx ? null : i)}>
-                <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-                  <span style={{
-                    background: statusColor + "22", color: statusColor,
-                    borderRadius: 4, padding: "1px 6px", fontSize: 9, letterSpacing: 1,
-                  }}>{r.status}</span>
-                  <span style={{ fontSize: 11, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {p.name || p.id || "—"}
-                  </span>
-                  {p.role && (
-                    <span style={{ color: MUTED, fontSize: 9 }}>{p.role}</span>
-                  )}
-                  <span style={{ color: MUTED, fontSize: 10 }}>{isEx ? "▲" : "▼"}</span>
-                </div>
-
-                {/* expanded: matched articles */}
-                {isEx && r.matches.length > 0 && (
-                  <div style={{ marginTop: 8, display: "flex", flexDirection: "column", gap: 5 }}>
-                    {r.matches.map((m, j) => {
-                      const a = m.article;
-                      const pct = Math.round((m.score / maxScore) * 100);
-                      return (
-                        <div key={a.id || a.title || j} style={{
-                          background: "rgba(255,255,255,0.04)", borderRadius: 5,
-                          padding: "5px 8px",
-                        }}>
-                          <div style={{ display: "flex", alignItems: "center", gap: 6, marginBottom: 3 }}>
-                            {(a.category || a.topic) && (
-                              <span style={{
-                                background: CY + "22", color: CY,
-                                borderRadius: 3, padding: "0 4px", fontSize: 8, letterSpacing: 1,
-                              }}>{(a.category || a.topic || "").toUpperCase()}</span>
-                            )}
-                            <span style={{ fontSize: 10, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                              {a.title || a.id || "—"}
-                            </span>
-                            <span style={{ color: MUTED, fontSize: 9 }}>score {m.score}</span>
-                          </div>
-                          <div style={{ height: 3, background: "rgba(255,255,255,0.07)", borderRadius: 2 }}>
-                            <div style={{ height: "100%", width: `${pct}%`, background: GREEN, borderRadius: 2 }} />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                )}
-                {isEx && r.status === "UNDOCUMENTED" && (
-                  <div style={{ marginTop: 6, color: AMBER, fontSize: 9, letterSpacing: 1 }}>
-                    No KB articles matched this intel profile.
-                  </div>
-                )}
-              </div>
-            );
-          })}
-
-          {!loading && visible.length === 0 && (
-            <div style={{ color: MUTED, fontSize: 10, textAlign: "center" }}>No profiles match filter.</div>
-          )}
-
-          {/* assess button */}
-          <button onClick={assess} disabled={assessing || rows.length === 0} style={{
-            background: assessing ? "rgba(41,231,255,0.1)" : CY + "22",
-            border: `1px solid ${CY}55`, color: CY,
-            borderRadius: 6, padding: "5px 10px", fontSize: 10,
-            letterSpacing: 1, cursor: "pointer", fontFamily: MONO,
-          }}>
-            {assessing ? "Assessing…" : "▶ ASSESS"}
+  return (
+    <div style={{
+      position: "fixed", left: BTN_LEFT - 200, bottom: 48, zIndex: 99,
+      width: 520, maxHeight: "75vh",
+      background: BG, border: `1px solid ${AMBER}66`,
+      borderRadius: 8, fontFamily: MONO, fontSize: 10,
+      display: "flex", flexDirection: "column", overflow: "hidden",
+    }}>
+      {/* header */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "8px 12px", borderBottom: `1px solid ${AMBER}33`,
+        background: "rgba(0,0,0,0.4)",
+      }}>
+        <span style={{ color: AMBER, fontSize: 11, letterSpacing: 2 }}>
+          ◈ INTELPROFILE × KNOWLEDGE
+        </span>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button
+            onClick={assess}
+            disabled={assessing}
+            style={{
+              background: "none", border: `1px solid ${CY}66`,
+              borderRadius: 4, color: CY, fontFamily: MONO, fontSize: 9,
+              letterSpacing: 1, padding: "2px 8px", cursor: "pointer",
+            }}
+          >
+            {assessing ? "…" : "▶ ASSESS KNOWLEDGE GAPS"}
           </button>
-          {brief && (
-            <div style={{
-              background: "rgba(41,231,255,0.06)", border: `1px solid ${CY}33`,
-              borderRadius: 6, padding: "8px 10px", fontSize: 10, lineHeight: 1.5, color: "#DCEBF5",
-            }}>{brief}</div>
-          )}
+          <button
+            onClick={() => setOpen(false)}
+            style={{
+              background: "none", border: "none", color: DIM,
+              fontSize: 14, cursor: "pointer", lineHeight: 1,
+            }}
+          >
+            ×
+          </button>
         </div>
-      )}
-    </>
+      </div>
+
+      {/* stat tiles */}
+      <div style={{ display: "flex", gap: 6, padding: "8px 12px" }}>
+        <Tile label="PROFILES"  value={pairs.length}     color={CY}   />
+        <Tile label="ARTICLES"  value={
+          pairs.length > 0
+            ? [...new Set(pairs.flatMap((p) => p.matches.map((m) => m.a.id)))].length
+            : 0
+        } color={CY} />
+        <Tile label="GROUNDED" value={grounded.length}  color={GREEN} />
+        <Tile label="PARTIAL"  value={partial.length}   color={CY}   />
+        <Tile label="BARE"     value={bare.length}      color={AMBER} />
+      </div>
+
+      {/* filter tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 12px 6px" }}>
+        {TABS.map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            style={{
+              background: tab === t ? `${tabColor(t)}22` : "none",
+              border: `1px solid ${tab === t ? tabColor(t) : DIM}`,
+              borderRadius: 3, color: tab === t ? tabColor(t) : DIM,
+              fontFamily: MONO, fontSize: 8, letterSpacing: 1,
+              padding: "2px 6px", cursor: "pointer",
+            }}
+          >
+            {t}
+          </button>
+        ))}
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="search…"
+          style={{
+            marginLeft: "auto", background: "rgba(0,0,0,0.4)",
+            border: `1px solid ${DIM}`, borderRadius: 3,
+            color: CY, fontFamily: MONO, fontSize: 9,
+            padding: "2px 6px", width: 120, outline: "none",
+          }}
+        />
+      </div>
+
+      {/* list */}
+      <div style={{ overflowY: "auto", flex: 1, padding: "0 12px 12px" }}>
+        {loading && (
+          <div style={{ color: DIM, padding: "8px 0" }}>◌ loading…</div>
+        )}
+        {error && (
+          <div style={{ color: RED, padding: "4px 0" }}>⚠ {error}</div>
+        )}
+        {!loading && visible.length === 0 && !error && (
+          <div style={{ color: DIM, padding: "8px 0" }}>no results</div>
+        )}
+        {visible.map((p) => {
+          const status =
+            p.matches.length >= 2 ? "GROUNDED" :
+            p.matches.length === 1 ? "PARTIAL" : "BARE";
+          const statusColor =
+            status === "GROUNDED" ? GREEN :
+            status === "PARTIAL"  ? CY    : AMBER;
+          const isExp = expanded[p.profile.id];
+          return (
+            <div
+              key={p.profile.id}
+              style={{
+                borderBottom: "1px solid rgba(255,255,255,0.04)",
+                paddingBottom: 6, marginBottom: 6,
+              }}
+            >
+              <div
+                style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  cursor: "pointer", padding: "4px 0",
+                }}
+                onClick={() => toggleRow(p.profile.id)}
+              >
+                <span style={{
+                  fontSize: 8, border: `1px solid ${statusColor}`,
+                  borderRadius: 3, color: statusColor,
+                  padding: "1px 4px", letterSpacing: 1, flexShrink: 0,
+                }}>
+                  {status}
+                </span>
+                <span style={{ color: CY, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {p.profile.name}
+                </span>
+                {p.profile.type && (
+                  <span style={{ color: DIM, fontSize: 8, flexShrink: 0 }}>
+                    {p.profile.type}
+                  </span>
+                )}
+                <span style={{ color: DIM, fontSize: 8, flexShrink: 0 }}>
+                  {p.matches.length} kb
+                </span>
+                <span style={{ color: DIM, fontSize: 10 }}>
+                  {isExp ? "▲" : "▼"}
+                </span>
+              </div>
+
+              {isExp && (
+                <div style={{ paddingLeft: 12, paddingBottom: 4 }}>
+                  {p.matches.length === 0 ? (
+                    <div style={{ color: AMBER, fontSize: 9 }}>
+                      ⚠ no KB article match — BARE threat profile
+                    </div>
+                  ) : (
+                    p.matches.map(({ a, score }) => (
+                      <div key={a.id} style={{
+                        display: "flex", alignItems: "center", gap: 6,
+                        marginBottom: 3,
+                      }}>
+                        <span style={{
+                          color: GREEN, fontSize: 9, flex: 1,
+                          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                        }}>
+                          {a.title}
+                        </span>
+                        <ScoreBar score={score} />
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* footer */}
+      <div style={{
+        padding: "4px 12px", borderTop: `1px solid ${AMBER}22`,
+        color: DIM, fontSize: 8, letterSpacing: 1,
+        display: "flex", justifyContent: "space-between",
+      }}>
+        <span>IPKB · /entities/IntelProfile × /knowledge/</span>
+        <span
+          onClick={load}
+          style={{ cursor: "pointer", color: CY }}
+          title="refresh now"
+        >
+          ↺ {REFRESH_MS / 1000}s
+        </span>
+      </div>
+    </div>
   );
 }

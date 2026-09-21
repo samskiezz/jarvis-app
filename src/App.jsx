@@ -254,6 +254,7 @@ import InvestigationDatasetEvidence from '@/components/cinematic/InvestigationDa
 import GraphCentralityKnowledge from '@/components/cinematic/GraphCentralityKnowledge';
 import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowledgeCoverage';
 import OpsTempoIndex from '@/components/cinematic/OpsTempoIndex';
+import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -759,6 +760,9 @@ function App() {
             <InvestmentKnowledgeCoverage />
             {/* F98 (overnight 2026-09-21): Ops Tempo Index — ◈ TEMPO button (left:32920, bottom:8, zIndex:98); polls /v1/ops/events + /entities/RiskSignal + /entities/SwarmJob every 45 s; composite 0-100 tempo score (ops 40% + risk 35% + swarm 25%, normalised vs rolling max); SURGE/ELEVATED/NOMINAL/QUIET badge; arc gauge + sub-metric bars + sparkline history (localStorage max 20 readings); auto-announces SURGE ≥75 via jarvis:speak-dossier; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOpsTempoQuery+buildOpsTempoScript exported for JarvisBrain wiring; "ops tempo"/"activity tempo"/"operational tempo"/"opstempo" voice trigger; jarvis:ops-tempo-toggle event */}
             <OpsTempoIndex />
+
+            {/* F99 (overnight 2026-09-21): IntelProfile × Knowledge Coverage — ◈ IPKB button (left:33480, bottom:8, zIndex:99); parallel-fetches /entities/IntelProfile + /knowledge/; keyword-correlates each threat intel profile against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0 — threat profile with zero KB backing); stat tiles profiles/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand profile → matched KB article cards with relevance score bar; ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIpkbQuery+buildIpkbScript wired in JarvisBrain; "intel knowledge"/"ipkb"/"threat knowledge"/"intel kb"/"profile knowledge"/"bare profiles"/"ungrounded intel"/"intel knowledge gap" voice trigger; jarvis:ipkb-toggle event; 90-s auto-refresh */}
+            <IntelProfileKnowledgeCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
