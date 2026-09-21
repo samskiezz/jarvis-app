@@ -66,6 +66,7 @@ import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
 import { isSjaskQuery, buildSjaskScript } from "./SwarmJobAipSkillCoverage";
 import { isScrepQuery, buildScrepScript } from "./ScenarioReportIntelligence";
 import { isCntrkrskQuery, buildCntrkrskScript } from "./GraphCentralityRiskConvergence";
+import { isTaskkgQuery, buildTaskkgScript } from "./TaskKnowledgeGrounding";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -687,6 +688,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cntrkrsk-toggle"));
       let script = "";
       try { script = await buildCntrkrskScript(); } catch { script = "Graph centrality risk convergence panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F90: task × knowledge grounding — surfaces BARE tasks with no KB article backing.
+    if (isTaskkgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:taskkg-toggle"));
+      let script = "";
+      try { script = await buildTaskkgScript(); } catch { script = "Task knowledge grounding panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

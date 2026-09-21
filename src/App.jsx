@@ -244,6 +244,7 @@ import SwarmJobKnowledgeGrounding from '@/components/cinematic/SwarmJobKnowledge
 import ContactTaskAssignment from '@/components/cinematic/ContactTaskAssignment';
 import OpsContactOwnership from '@/components/cinematic/OpsContactOwnership';
 import GraphCentralityRiskConvergence from '@/components/cinematic/GraphCentralityRiskConvergence';
+import TaskKnowledgeGrounding from '@/components/cinematic/TaskKnowledgeGrounding';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -723,6 +724,8 @@ function App() {
             <ScenarioReportIntelligence />
             {/* F89 (overnight 2026-09-21): Graph Centrality × Risk Signal Convergence — ◈ CNTRKRSK button (left:27480, bottom:8, zIndex:90); parallel-fetches /v1/graph/centrality + /entities/RiskSignal; keyword-correlates each high-centrality graph node against live risk signals to surface AT_RISK (≥1 signal match) vs SECURE; stat tiles nodes/signals/at_risk/secure; red badge on at-risk count; filter tabs ALL/AT_RISK/SECURE + text search; expand node → matched risk signal cards with SevBar + RelevanceBar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence centrality-risk convergence brief + TTS; isCntrkrskQuery+buildCntrkrskScript wired in JarvisBrain; "cntrkrsk"/"centrality risk"/"graph risk"/"risky nodes"/"at risk nodes" voice trigger; jarvis:cntrkrsk-toggle event; 90-s auto-refresh */}
             <GraphCentralityRiskConvergence />
+            {/* F90 (overnight 2026-09-21): Task × Knowledge Grounding — ◈ TASKKG button (left:28040, bottom:8, zIndex:91); parallel-fetches /entities/Task + /knowledge/; keyword-correlates each open task against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0); stat tiles tasks/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand task → matched KB article cards with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task knowledge coverage brief + TTS; isTaskkgQuery+buildTaskkgScript wired in JarvisBrain; "taskkg"/"task knowledge"/"task kb"/"bare tasks"/"task grounding"/"ungrounded tasks"/"task knowledge gap" voice trigger; jarvis:taskkg-toggle event; 90-s auto-refresh */}
+            <TaskKnowledgeGrounding />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
