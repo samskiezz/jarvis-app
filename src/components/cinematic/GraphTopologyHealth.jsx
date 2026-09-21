@@ -1,381 +1,430 @@
 /**
- * GraphTopologyHealth (F44) — composite graph topology health monitor.
+ * F75 – Graph Network Topology Health Monitor (GNETHLTH)
+ * Synthesises /v1/graph/centrality + /v1/graph/communities + /v1/cinematic/brain
+ * into a single network health score (0–100).
  *
- * Parallel-polls /v1/graph/centrality + /v1/graph/communities every 90 s.
- * Computes a 0–100 health score:
- *   • Concentration penalty  (top node holds too much centrality = fragile)
- *   • Community diversity bonus  (more balanced clusters = healthier)
+ * Metrics:
+ *   Hub Dominance  – % of total centrality held by top-10% of nodes (high = concentration risk)
+ *   Community Balance – coefficient of variation of cluster sizes (high = imbalanced)
+ *   Isolation Rate  – % of nodes with centrality < 0.05 (orphaned / barely connected)
+ *   Synapse Density – synapses / nodes ratio from /v1/cinematic/brain
  *
- * Panel shows: score ring, key stat tiles, 15-bar sparkline history (localStorage),
- * and an "ASSESS" button → /v1/jarvis/agent/chat + TTS narrative.
+ * Health score = mean of (100 − hub_pct) + (100 − isolation_pct) + density_score + balance_score
+ *               scaled to 0–100
  *
- * Toggle: ⬡ GTOPO button at bottom left:9340.
- * Voice: "graph topology" / "network topology" / "topology health" / "gtopo"
- *
- * Exports: isGtopoQuery, buildGtopoScript  (wired into JarvisBrain).
- * Additive only — mounted via App.jsx; does NOT touch CinematicShell/Home/Loader.
+ * Colour: green ≥ 75 / amber 40–74 / red < 40
+ * ASSESS → /v1/jarvis/agent/chat + TTS
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { apiBase } from "@/api/cinematicDataAdapters";
+import { getActiveVoice } from "@/components/cinematic/MultiVoiceToggle";
 
-const API_KEY =
-  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
+const BTN_LEFT   = 957040;
+const Z          = 657;
+const REFRESH_MS = 120_000;
 
+const GR   = "#00c878";
+const AM   = "#F5A623";
+const RD   = "#FF3B3B";
 const CY   = "#29E7FF";
-const GRN  = "#00c878";
-const AMB  = "#e8a800";
-const RED  = "#e8203c";
-const MONO = "'JetBrains Mono',monospace";
+const DIM  = "#3a5060";
+const MONO = "'JetBrains Mono', 'Courier New', monospace";
+const SANS = "'Inter', system-ui, sans-serif";
 
-const POLL_MS     = 90_000;
-const LS_KEY      = "jarvis:gtopo:history";
-const MAX_HISTORY = 15;
-
-// ── Intent helpers exported for JarvisBrain ────────────────────────────────
-export function isGtopoQuery(q) {
-  return /\b(graph\s*topolog|network\s*topolog|topolog.*health|graph\s*health|network\s*health|topo\s*health|gtopo)\b/i.test(
-    q || ""
-  );
-}
-
-export async function buildGtopoScript() {
-  try {
-    const [cResp, commResp] = await Promise.all([
-      fetch(`${apiBase()}/v1/graph/centrality`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
-      fetch(`${apiBase()}/v1/graph/communities`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
-    ]);
-    const cData    = await cResp.json();
-    const commData = await commResp.json();
-
-    const nodes  = normaliseNodes(cData);
-    const nComm  = commData?.n_clusters ?? Object.keys(commData?.communities ?? {}).length ?? 0;
-    const { score, concentration } = computeScore(nodes, nComm);
-    const top = nodes[0];
-    const topName = top?.label ?? top?.name ?? top?.id ?? "unknown";
-
-    return (
-      `Graph topology health score is ${score} out of 100, sir. ` +
-      `The network has ${nodes.length} ranked node${nodes.length !== 1 ? "s" : ""} across ` +
-      `${nComm} communit${nComm !== 1 ? "ies" : "y"}. ` +
-      `Centrality concentration is ${concentration}% — ` +
-      (concentration >= 50
-        ? `critically high; the top node "${topName}" dominates the network, making it fragile.`
-        : concentration >= 25
-        ? `elevated; consider distributing influence more evenly.`
-        : `healthy; influence is well distributed across the graph.`)
-    );
-  } catch (_) {
-    return "Graph topology health monitoring is active, sir. Fetching live centrality and community data now.";
-  }
-}
-
-// ── Data helpers ───────────────────────────────────────────────────────────
-function normaliseNodes(d) {
-  const arr = Array.isArray(d)
-    ? d
-    : Array.isArray(d?.centrality)
-    ? d.centrality
-    : Array.isArray(d?.nodes)
-    ? d.nodes
-    : Array.isArray(d?.data)
-    ? d.data
-    : [];
-  return arr
-    .map((n) => ({ ...n, _score: n.score ?? n.centrality_score ?? n.value ?? n.degree ?? 0 }))
-    .sort((a, b) => b._score - a._score);
-}
-
-function computeScore(nodes, nClusters) {
-  if (!nodes.length) return { score: 50, concentration: 0 };
-  const totalScore = nodes.reduce((s, n) => s + n._score, 0) || 1;
-  const topScore   = nodes[0]?._score ?? 0;
-  const concentration = Math.round((topScore / totalScore) * 100);
-  const concentrationPenalty = Math.min(50, concentration * 0.9);
-  const diversityBonus       = Math.min(50, (nClusters ?? 0) * 5);
-  const raw = 50 - concentrationPenalty + diversityBonus;
-  return { score: Math.max(0, Math.min(100, Math.round(raw))), concentration };
-}
+const API_KEY = (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
+function authHdr() { return { Authorization: `Bearer ${API_KEY}` }; }
 
 function scoreColor(s) {
-  if (s >= 70) return GRN;
-  if (s >= 40) return AMB;
-  return RED;
+  if (s >= 75) return GR;
+  if (s >= 40) return AM;
+  return RD;
 }
 
-function loadHistory() {
+function scoreLabel(s) {
+  if (s >= 75) return "HEALTHY";
+  if (s >= 40) return "DEGRADED";
+  return "CRITICAL";
+}
+
+function cv(arr) {
+  if (!arr.length) return 0;
+  const mean = arr.reduce((a, b) => a + b, 0) / arr.length;
+  if (mean === 0) return 0;
+  const variance = arr.reduce((a, b) => a + (b - mean) ** 2, 0) / arr.length;
+  return Math.sqrt(variance) / mean;
+}
+
+function computeMetrics(centralities, communities, brain) {
+  // centralities: [{name, score}] (score 0–1)
+  const scores = centralities.map(n => Number(n.score || n.centrality || 0));
+  const total  = scores.reduce((a, b) => a + b, 0) || 1;
+  const sorted = [...scores].sort((a, b) => b - a);
+  const topN   = Math.max(1, Math.ceil(sorted.length * 0.1));
+  const topSum = sorted.slice(0, topN).reduce((a, b) => a + b, 0);
+  const hubPct = total > 0 ? (topSum / total) * 100 : 0;
+
+  const isolated    = scores.filter(s => s < 0.05).length;
+  const isolPct     = scores.length > 0 ? (isolated / scores.length) * 100 : 0;
+
+  // communities: [{id, members, size}]
+  const sizes      = communities.map(c => Number(c.member_count || c.size || (Array.isArray(c.members) ? c.members.length : 1)));
+  const cvVal      = cv(sizes);
+  const balancePct = Math.max(0, 100 - cvVal * 100);
+
+  const nodes     = Number(brain?.node_count || brain?.nodes || centralities.length || 0);
+  const synapses  = Number(brain?.synapse_count || brain?.synapses || 0);
+  const density   = nodes > 0 ? Math.min(100, (synapses / nodes) * 10) : 0;
+
+  const health = Math.round(
+    ((100 - hubPct) * 0.3 + (100 - isolPct) * 0.3 + balancePct * 0.2 + density * 0.2)
+  );
+
+  return {
+    health: Math.max(0, Math.min(100, health)),
+    hubPct: Math.round(hubPct),
+    isolPct: Math.round(isolPct),
+    balancePct: Math.round(balancePct),
+    density: Math.round(density),
+    nodeCount: nodes,
+    synapseCount: synapses,
+    communityCount: communities.length,
+    topHubs: centralities.slice(0, 8),
+    communities: communities.slice(0, 8),
+  };
+}
+
+async function loadAll(base) {
+  const [cr, cor, br] = await Promise.all([
+    fetch(`${base}/v1/graph/centrality`,  { headers: authHdr() }),
+    fetch(`${base}/v1/graph/communities`, { headers: authHdr() }),
+    fetch(`${base}/v1/cinematic/brain`,   { headers: authHdr() }),
+  ]);
+  const [cd, cod, bd] = await Promise.all([
+    cr.ok  ? cr.json()  : [],
+    cor.ok ? cor.json() : [],
+    br.ok  ? br.json()  : {},
+  ]);
+  const centralities  = Array.isArray(cd)  ? cd  : cd.data  || cd.nodes  || cd.items  || [];
+  const communities   = Array.isArray(cod) ? cod : cod.data || cod.communities || cod.items || [];
+  const brain         = Array.isArray(bd)  ? {}  : bd;
+  return { centralities, communities, brain };
+}
+
+// ─── exported helpers for JarvisBrain ────────────────────────────────────────
+export function isGnethlthQuery(q) {
+  return /\b(gnethlth|graph\s+topology|network\s+health|topology\s+(score|health|monitor)|graph\s+health|hub\s+risk|network\s+topology|graph\s+network\s+health|topology\s+analysis)\b/i.test(q);
+}
+
+export async function buildGnethlthScript() {
   try {
-    return JSON.parse(localStorage.getItem(LS_KEY) || "[]");
+    const base = apiBase();
+    const { centralities, communities, brain } = await loadAll(base);
+    const m = computeMetrics(centralities, communities, brain);
+    return `Graph topology health: score ${m.health}/100 (${scoreLabel(m.health)}). ` +
+      `${m.nodeCount} nodes, ${m.synapseCount} synapses, ${m.communityCount} communities. ` +
+      `Hub dominance ${m.hubPct}%, isolation rate ${m.isolPct}%, community balance ${m.balancePct}%, synapse density score ${m.density}/100. ` +
+      (m.health < 40
+        ? `Network is critically unhealthy — high hub concentration or isolation detected.`
+        : m.health < 75
+          ? `Network is degraded. Review hub concentration and isolated nodes.`
+          : `Network topology is healthy.`);
   } catch (_) {
-    return [];
+    return "Graph topology health status unavailable.";
   }
 }
 
-function saveHistory(h) {
-  try {
-    localStorage.setItem(LS_KEY, JSON.stringify(h.slice(-MAX_HISTORY)));
-  } catch (_) {}
-}
-
-// ── Component ──────────────────────────────────────────────────────────────
+// ─── Component ───────────────────────────────────────────────────────────────
 export default function GraphTopologyHealth() {
-  const [visible, setVisible]     = useState(false);
-  const [loading, setLoading]     = useState(false);
-  const [error, setError]         = useState(null);
-  const [snapshot, setSnapshot]   = useState(null); // { score, concentration, nodes, nClusters, ts }
-  const [history, setHistory]     = useState(loadHistory);
-  const [assessing, setAssessing] = useState(false);
-  const [aiText, setAiText]       = useState("");
-  const timerRef = useRef(null);
+  const [open, setOpen]       = useState(false);
+  const [metrics, setMetrics] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError]     = useState(null);
+  const [tab, setTab]         = useState("OVERVIEW");
+  const timerRef              = useRef(null);
 
-  const poll = useCallback(async () => {
-    try {
-      const [cResp, commResp] = await Promise.all([
-        fetch(`${apiBase()}/v1/graph/centrality`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${apiBase()}/v1/graph/communities`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
-      ]);
-      const [cData, commData] = await Promise.all([cResp.json(), commResp.json()]);
-
-      const nodes      = normaliseNodes(cData);
-      const nClusters  = commData?.n_clusters ?? Object.keys(commData?.communities ?? {}).length ?? 0;
-      const { score, concentration } = computeScore(nodes, nClusters);
-      const ts = Date.now();
-
-      const snap = { score, concentration, nodes, nClusters, ts };
-      setSnapshot(snap);
-      setError(null);
-
-      setHistory((prev) => {
-        const next = [...prev, { score, ts }].slice(-MAX_HISTORY);
-        saveHistory(next);
-        return next;
-      });
-    } catch (e) {
-      setError("Unreachable");
-    }
-  }, []);
-
-  useEffect(() => {
+  const load = useCallback(async () => {
     setLoading(true);
-    poll().finally(() => setLoading(false));
-    timerRef.current = setInterval(poll, POLL_MS);
-    return () => clearInterval(timerRef.current);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    setError(null);
+    try {
+      const base = apiBase();
+      const { centralities, communities, brain } = await loadAll(base);
+      setMetrics(computeMetrics(centralities, communities, brain));
+    } catch (e) {
+      setError(e.message || "Load failed");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    const h = () => setVisible((v) => !v);
-    window.addEventListener("jarvis:gtopo-toggle", h);
-    return () => window.removeEventListener("jarvis:gtopo-toggle", h);
+    const handler = () => setOpen(v => !v);
+    window.addEventListener("jarvis:gnethlth-toggle", handler);
+    return () => window.removeEventListener("jarvis:gnethlth-toggle", handler);
   }, []);
 
-  async function handleAssess() {
-    if (assessing) return;
-    setAssessing(true);
-    setAiText("");
+  useEffect(() => {
+    if (!open) return;
+    load();
+    timerRef.current = setInterval(load, REFRESH_MS);
+    return () => clearInterval(timerRef.current);
+  }, [open, load]);
+
+  const assess = useCallback(async () => {
+    if (!metrics) return;
+    const script = await buildGnethlthScript();
     try {
-      const prompt = snapshot
-        ? `Graph topology health score: ${snapshot.score}/100. ` +
-          `Nodes: ${snapshot.nodes.length}. Communities: ${snapshot.nClusters}. ` +
-          `Centrality concentration: ${snapshot.concentration}%. ` +
-          `Top node: ${snapshot.nodes[0]?.label ?? snapshot.nodes[0]?.id ?? "unknown"}. ` +
-          `Assess the graph's structural resilience and recommend one action.`
-        : "Assess the current JARVIS knowledge graph topology health and structural resilience.";
-      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+      const base = apiBase();
+      const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
         method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({ message: prompt }),
+        headers: { ...authHdr(), "Content-Type": "application/json" },
+        body: JSON.stringify({ message: `Assess the following graph topology health report and provide recommendations:\n${script}` }),
       });
-      const d = await r.json();
-      const answer =
-        d?.response ?? d?.message ?? d?.text ?? d?.answer ?? "Assessment complete.";
-      setAiText(answer);
-      window.dispatchEvent(
-        new CustomEvent("jarvis:speak-dossier", { detail: { text: answer } })
-      );
-    } catch (_) {
-      setAiText("Assessment unavailable.");
-    } finally {
-      setAssessing(false);
-    }
-  }
+      const d = r.ok ? await r.json() : {};
+      const reply = d.response || d.message || script;
+      const voice = getActiveVoice ? getActiveVoice() : "ash";
+      await fetch(`${base}/v1/voice/tts`, {
+        method: "POST",
+        headers: { ...authHdr(), "Content-Type": "application/json" },
+        body: JSON.stringify({ text: reply.slice(0, 500), voice }),
+      });
+    } catch (_) {}
+  }, [metrics]);
 
-  const color     = snapshot ? scoreColor(snapshot.score) : CY;
-  const maxH      = Math.max(...history.map((h) => h.score), 1);
-  const lastTs    = snapshot
-    ? new Date(snapshot.ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-    : "—";
-  const topNode   = snapshot?.nodes?.[0];
-  const topName   = topNode?.label ?? topNode?.name ?? topNode?.id ?? "—";
-
-  return (
-    <>
-      {/* ── Toggle button ──────────────────────────────────────────────── */}
+  if (!open) {
+    const score = metrics?.health ?? null;
+    const col   = score !== null ? scoreColor(score) : CY;
+    return (
       <button
-        onClick={() => setVisible((v) => !v)}
-        title="Graph Topology Health (F44)"
+        onClick={() => setOpen(true)}
+        title="Graph Network Topology Health (GNETHLTH)"
         style={{
-          position: "fixed", bottom: 8, left: 9340, zIndex: 60,
-          background: visible ? color : "rgba(5,8,13,0.7)",
-          border: `1px solid ${color}55`,
-          color: visible ? "#04060A" : color,
-          borderRadius: 4, padding: "2px 7px",
-          fontFamily: MONO, fontSize: 9, letterSpacing: 1.5, cursor: "pointer",
-          boxShadow: snapshot && snapshot.score < 40 ? `0 0 12px ${RED}88` : "none",
+          position: "fixed", left: BTN_LEFT, bottom: 8, zIndex: Z,
+          background: "rgba(0,20,30,0.85)", border: `1px solid ${col}`,
+          color: col, fontFamily: MONO, fontSize: 10, padding: "3px 8px",
+          cursor: "pointer", borderRadius: 3, whiteSpace: "nowrap",
         }}
       >
-        ⬡ GTOPO
-        {snapshot && (
-          <span style={{
-            marginLeft: 4, background: color, color: "#04060A",
-            borderRadius: 8, padding: "0 4px", fontSize: 8, fontWeight: 700,
-          }}>
-            {snapshot.score}
-          </span>
-        )}
+        ◈ GNETHLTH{score !== null ? ` ${score}` : ""}
       </button>
+    );
+  }
 
-      {/* ── Panel ──────────────────────────────────────────────────────── */}
-      {visible && (
-        <div style={{
-          position: "fixed", bottom: 36, left: 9220, zIndex: 65,
-          width: 340, background: "rgba(5,10,18,0.92)",
-          border: `1px solid ${color}44`,
-          borderTop: `2px solid ${color}`,
-          borderRadius: 10, padding: "12px 14px",
-          backdropFilter: "blur(12px)",
-          boxShadow: `0 0 40px ${color}22`,
-          fontFamily: MONO, color: "#d0e8f4",
-        }}>
-          {/* Header */}
-          <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 10 }}>
-            <span style={{ color, fontSize: 13 }}>⬡</span>
-            <span style={{ color, fontSize: 11, letterSpacing: 3, fontWeight: 700 }}>
-              GRAPH TOPOLOGY HEALTH
-            </span>
-            <button
-              onClick={() => setVisible(false)}
-              style={{ marginLeft: "auto", background: "none", border: "none", color: "#4a6070", cursor: "pointer", fontSize: 12 }}
-            >✕</button>
-          </div>
+  const m    = metrics;
+  const col  = m ? scoreColor(m.health) : CY;
+  const tabs = ["OVERVIEW", "HUBS", "CLUSTERS"];
 
-          {loading && !snapshot ? (
-            <div style={{ color: "#4a6070", fontSize: 10, letterSpacing: 1 }}>LOADING…</div>
-          ) : error ? (
-            <div style={{ color: RED, fontSize: 10, letterSpacing: 1 }}>{error}</div>
-          ) : snapshot ? (
-            <>
-              {/* Score ring (SVG) */}
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: 10 }}>
-                <svg width={96} height={96} style={{ display: "block" }}>
-                  <circle cx={48} cy={48} r={40} fill="none" stroke={`${color}22`} strokeWidth={8} />
-                  <circle
-                    cx={48} cy={48} r={40}
-                    fill="none"
-                    stroke={color}
-                    strokeWidth={8}
-                    strokeLinecap="round"
-                    strokeDasharray={`${2 * Math.PI * 40}`}
-                    strokeDashoffset={`${2 * Math.PI * 40 * (1 - snapshot.score / 100)}`}
-                    transform="rotate(-90 48 48)"
-                    style={{ transition: "stroke-dashoffset 0.6s ease" }}
-                  />
-                  <text x={48} y={44} textAnchor="middle" fill={color}
-                    style={{ fontFamily: MONO, fontSize: 18, fontWeight: 700 }}>
-                    {snapshot.score}
-                  </text>
-                  <text x={48} y={60} textAnchor="middle" fill="#4a6070"
-                    style={{ fontFamily: MONO, fontSize: 9, letterSpacing: 1 }}>
-                    /100
-                  </text>
-                </svg>
-              </div>
+  return (
+    <div style={{
+      position: "fixed", top: 60, right: 20, zIndex: Z + 1000,
+      width: 480, maxHeight: "80vh", overflowY: "auto",
+      background: "rgba(0,14,22,0.97)", border: `1px solid ${col}`,
+      borderRadius: 8, fontFamily: SANS, color: "#cde",
+      boxShadow: `0 0 32px ${col}33`,
+    }}>
+      {/* header */}
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between",
+                    padding: "10px 14px", borderBottom: `1px solid ${DIM}` }}>
+        <span style={{ fontFamily: MONO, fontSize: 12, color: col, letterSpacing: 1 }}>
+          ◈ GRAPH TOPOLOGY HEALTH
+        </span>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button onClick={assess} disabled={!m} style={{
+            background: "transparent", border: `1px solid ${col}`,
+            color: col, fontFamily: MONO, fontSize: 9, padding: "2px 8px",
+            cursor: m ? "pointer" : "default", borderRadius: 3,
+          }}>▶ ASSESS</button>
+          <button onClick={load} style={{
+            background: "transparent", border: `1px solid ${DIM}`, color: "#888",
+            fontFamily: MONO, fontSize: 9, padding: "2px 6px", cursor: "pointer", borderRadius: 3,
+          }}>↺</button>
+          <button onClick={() => setOpen(false)} style={{
+            background: "transparent", border: "none", color: "#666",
+            fontSize: 16, cursor: "pointer", lineHeight: 1,
+          }}>✕</button>
+        </div>
+      </div>
 
-              {/* Stat tiles */}
-              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr 1fr 1fr", gap: 6, marginBottom: 10 }}>
-                {[
-                  { label: "NODES",   value: snapshot.nodes.length },
-                  { label: "CLUSTERS", value: snapshot.nClusters },
-                  { label: "CONC %",  value: `${snapshot.concentration}%`,
-                    color: snapshot.concentration >= 50 ? RED : snapshot.concentration >= 25 ? AMB : GRN },
-                  { label: "TOP NODE", value: topName.length > 8 ? topName.slice(0, 7) + "…" : topName, small: true },
-                ].map(({ label, value, color: c, small }) => (
-                  <div key={label} style={{
-                    background: "rgba(41,231,255,0.05)", borderRadius: 6,
-                    padding: "5px 4px", textAlign: "center",
-                    border: "1px solid rgba(41,231,255,0.1)",
-                  }}>
-                    <div style={{ fontSize: small ? 10 : 13, fontWeight: 700, color: c ?? color }}>{value}</div>
-                    <div style={{ fontSize: 7, color: "#4a6070", letterSpacing: 1, marginTop: 2 }}>{label}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Sparkline */}
-              {history.length > 1 && (
-                <div style={{ marginBottom: 10 }}>
-                  <div style={{ fontSize: 8, color: "#4a6070", letterSpacing: 1, marginBottom: 4 }}>
-                    SCORE HISTORY ({history.length} readings)
-                  </div>
-                  <div style={{ display: "flex", alignItems: "flex-end", gap: 2, height: 36 }}>
-                    {history.map((h, i) => {
-                      const barH = Math.max(4, Math.round((h.score / maxH) * 32));
-                      const isLast = i === history.length - 1;
-                      const bc     = scoreColor(h.score);
-                      return (
-                        <div key={i} title={`Score ${h.score} @ ${new Date(h.ts).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}`}
-                          style={{
-                            flex: 1, height: barH,
-                            background: isLast ? bc : `${bc}55`,
-                            borderRadius: 2,
-                            transition: "height 0.4s ease",
-                          }}
-                        />
-                      );
-                    })}
-                    {Array.from({ length: MAX_HISTORY - history.length }).map((_, i) => (
-                      <div key={`pad-${i}`} style={{ flex: 1, height: 4, background: "rgba(41,231,255,0.08)", borderRadius: 2 }} />
-                    ))}
-                  </div>
-                </div>
-              )}
-
-              {/* AI assessment */}
-              <button
-                onClick={handleAssess}
-                disabled={assessing}
-                style={{
-                  width: "100%", padding: "6px 0", marginBottom: aiText ? 8 : 0,
-                  background: assessing ? "rgba(41,231,255,0.05)" : `${color}18`,
-                  border: `1px solid ${color}55`,
-                  color: assessing ? "#4a6070" : color,
-                  borderRadius: 6, fontFamily: MONO, fontSize: 9, letterSpacing: 2,
-                  cursor: assessing ? "default" : "pointer",
-                }}
-              >
-                {assessing ? "▸ ASSESSING…" : "▶ JARVIS ASSESS TOPOLOGY"}
-              </button>
-
-              {aiText && (
-                <div style={{
-                  fontSize: 10, color: "#c0d8e8", lineHeight: 1.5,
-                  background: "rgba(41,231,255,0.04)",
-                  border: `1px solid ${color}22`, borderRadius: 6,
-                  padding: "6px 8px",
-                }}>
-                  {aiText}
-                </div>
-              )}
-
-              <div style={{
-                marginTop: 8, fontSize: 8, color: "#4a6070", letterSpacing: 1,
-                borderTop: "1px solid rgba(41,231,255,0.06)", paddingTop: 6,
-              }}>
-                POLLS /v1/graph/centrality + /v1/graph/communities every 90 s · refreshed {lastTs}
-              </div>
-            </>
-          ) : null}
+      {loading && !m && (
+        <div style={{ padding: 20, textAlign: "center", color: "#556", fontFamily: MONO, fontSize: 11 }}>
+          LOADING GRAPH DATA…
         </div>
       )}
-    </>
+      {error && (
+        <div style={{ padding: 12, color: RD, fontFamily: MONO, fontSize: 10 }}>ERR: {error}</div>
+      )}
+
+      {m && (
+        <>
+          {/* health score ring area */}
+          <div style={{ padding: "16px 14px 8px", display: "flex", alignItems: "center", gap: 20 }}>
+            <div style={{ textAlign: "center" }}>
+              <div style={{ fontFamily: MONO, fontSize: 36, color: col, lineHeight: 1 }}>{m.health}</div>
+              <div style={{ fontFamily: MONO, fontSize: 9, color: col, marginTop: 2 }}>/100</div>
+              <div style={{ fontFamily: MONO, fontSize: 10, color: col, marginTop: 4,
+                            border: `1px solid ${col}`, borderRadius: 3, padding: "1px 6px" }}>
+                {scoreLabel(m.health)}
+              </div>
+            </div>
+            {/* stat tiles */}
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 6, flex: 1 }}>
+              {[
+                { label: "NODES",      val: m.nodeCount,      c: CY },
+                { label: "SYNAPSES",   val: m.synapseCount,   c: CY },
+                { label: "CLUSTERS",   val: m.communityCount, c: GR },
+                { label: "HUB DOM %",  val: `${m.hubPct}%`,  c: m.hubPct > 60 ? RD : m.hubPct > 35 ? AM : GR },
+                { label: "ISOLATION%", val: `${m.isolPct}%`, c: m.isolPct > 30 ? RD : m.isolPct > 10 ? AM : GR },
+                { label: "DENSITY",    val: `${m.density}`,   c: m.density > 60 ? GR : m.density > 30 ? AM : RD },
+              ].map(({ label, val, c }) => (
+                <div key={label} style={{
+                  background: "rgba(255,255,255,0.03)", borderRadius: 4, padding: "5px 8px",
+                  border: `1px solid ${DIM}`,
+                }}>
+                  <div style={{ fontSize: 9, color: "#556", fontFamily: MONO }}>{label}</div>
+                  <div style={{ fontSize: 14, color: c, fontFamily: MONO, marginTop: 1 }}>{val}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* metric bars */}
+          <div style={{ padding: "4px 14px 10px" }}>
+            {[
+              { label: "Hub Dominance (low = healthy)", val: m.hubPct, good: false },
+              { label: "Isolation Rate (low = healthy)", val: m.isolPct, good: false },
+              { label: "Community Balance",              val: m.balancePct, good: true },
+              { label: "Synapse Density",                val: m.density, good: true },
+            ].map(({ label, val, good }) => {
+              const barCol = good
+                ? (val >= 75 ? GR : val >= 40 ? AM : RD)
+                : (val <= 20 ? GR : val <= 50 ? AM : RD);
+              return (
+                <div key={label} style={{ marginBottom: 6 }}>
+                  <div style={{ display: "flex", justifyContent: "space-between",
+                                fontSize: 10, color: "#778", marginBottom: 2 }}>
+                    <span>{label}</span>
+                    <span style={{ color: barCol, fontFamily: MONO }}>{val}%</span>
+                  </div>
+                  <div style={{ height: 4, background: "rgba(255,255,255,0.07)", borderRadius: 2 }}>
+                    <div style={{ height: 4, width: `${val}%`, background: barCol, borderRadius: 2,
+                                  transition: "width 0.4s" }} />
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+
+          {/* tabs */}
+          <div style={{ display: "flex", borderBottom: `1px solid ${DIM}`, padding: "0 14px" }}>
+            {tabs.map(t => (
+              <button key={t} onClick={() => setTab(t)} style={{
+                background: "none", border: "none", cursor: "pointer",
+                fontFamily: MONO, fontSize: 10, padding: "6px 10px",
+                color: tab === t ? col : "#556",
+                borderBottom: tab === t ? `2px solid ${col}` : "2px solid transparent",
+              }}>{t}</button>
+            ))}
+          </div>
+
+          {tab === "OVERVIEW" && (
+            <div style={{ padding: "10px 14px", fontSize: 11, color: "#889", lineHeight: 1.6 }}>
+              <p style={{ margin: "0 0 6px" }}>
+                Health score is a weighted composite: hub dominance (30%), isolation rate (30%),
+                community balance (20%), synapse density (20%).
+              </p>
+              {m.health < 40 && (
+                <p style={{ margin: 0, color: RD, fontFamily: MONO, fontSize: 10 }}>
+                  ⚠ CRITICAL — network topology shows severe imbalance or isolation.
+                </p>
+              )}
+              {m.health >= 40 && m.health < 75 && (
+                <p style={{ margin: 0, color: AM, fontFamily: MONO, fontSize: 10 }}>
+                  ⚠ DEGRADED — review hub concentration and isolated nodes.
+                </p>
+              )}
+              {m.health >= 75 && (
+                <p style={{ margin: 0, color: GR, fontFamily: MONO, fontSize: 10 }}>
+                  ✓ HEALTHY — network topology within normal parameters.
+                </p>
+              )}
+            </div>
+          )}
+
+          {tab === "HUBS" && (
+            <div style={{ padding: "8px 14px" }}>
+              {m.topHubs.length === 0 ? (
+                <div style={{ color: "#445", fontSize: 11, padding: 8 }}>No centrality data.</div>
+              ) : m.topHubs.map((n, i) => {
+                const s = Number(n.score || n.centrality || 0);
+                return (
+                  <div key={n.name || i} style={{
+                    padding: "6px 0", borderBottom: `1px solid ${DIM}`,
+                    display: "flex", alignItems: "center", gap: 8,
+                  }}>
+                    <span style={{ fontSize: 10, color: "#445", fontFamily: MONO, width: 18 }}>
+                      {i + 1}.
+                    </span>
+                    <div style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ fontSize: 11, color: CY, overflow: "hidden",
+                                    textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                        {n.name || n.entity || n.id || "—"}
+                      </div>
+                      <div style={{ height: 3, background: "rgba(255,255,255,0.07)", borderRadius: 2, marginTop: 3 }}>
+                        <div style={{ height: 3, width: `${Math.min(100, s * 100)}%`,
+                                      background: s > 0.7 ? RD : s > 0.4 ? AM : CY,
+                                      borderRadius: 2 }} />
+                      </div>
+                    </div>
+                    <span style={{ fontFamily: MONO, fontSize: 10, color: s > 0.7 ? RD : s > 0.4 ? AM : CY,
+                                   width: 36, textAlign: "right" }}>
+                      {(s * 100).toFixed(0)}%
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          {tab === "CLUSTERS" && (
+            <div style={{ padding: "8px 14px" }}>
+              {m.communities.length === 0 ? (
+                <div style={{ color: "#445", fontSize: 11, padding: 8 }}>No community data.</div>
+              ) : m.communities.map((c, i) => {
+                const size = Number(c.member_count || c.size || (Array.isArray(c.members) ? c.members.length : 1));
+                const topMember = Array.isArray(c.members) ? c.members[0] : (c.top_member || c.id || "—");
+                return (
+                  <div key={c.id || i} style={{
+                    padding: "6px 0", borderBottom: `1px solid ${DIM}`,
+                  }}>
+                    <div style={{ display: "flex", justifyContent: "space-between",
+                                  fontSize: 11, marginBottom: 2 }}>
+                      <span style={{ color: GR }}>
+                        Cluster {c.id ?? i + 1}
+                        {topMember && topMember !== (c.id || "—") &&
+                          <span style={{ color: "#556", fontSize: 9, marginLeft: 6 }}>
+                            top: {String(topMember).slice(0, 24)}
+                          </span>}
+                      </span>
+                      <span style={{ color: CY, fontFamily: MONO, fontSize: 10 }}>
+                        {size} members
+                      </span>
+                    </div>
+                    <div style={{ height: 3, background: "rgba(255,255,255,0.07)", borderRadius: 2 }}>
+                      <div style={{ height: 3,
+                                    width: `${Math.min(100, (size / (m.nodeCount || 1)) * 100 * 4)}%`,
+                                    background: GR, borderRadius: 2 }} />
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
+
+          <div style={{ padding: "6px 14px 10px",
+                        fontSize: 9, color: "#334", fontFamily: MONO, textAlign: "right" }}>
+            AUTO-REFRESH {REFRESH_MS / 1000}s · /v1/graph/centrality + /v1/graph/communities + /v1/cinematic/brain
+          </div>
+        </>
+      )}
+    </div>
   );
 }
