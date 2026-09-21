@@ -78,6 +78,7 @@ import { isCtdsetQuery, buildCtdsetScript } from "./ContactDatasetExposure";
 import { isLirptQuery, buildLirptScript } from "./LiveIntelReportCoverage";
 import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioCoverage";
 import { isGcinQuery, buildGcinScript } from "./GraphCentralityInvestigations";
+import { isLiknowQuery, buildLiknowScript } from "./LiveIntelKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -806,6 +807,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcin-toggle"));
       let script = "";
       try { script = await buildGcinScript(); } catch { script = "Graph centrality investigations panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLiknowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:liknow-toggle"));
+      let script = "";
+      try { script = await buildLiknowScript(); } catch { script = "Live intel knowledge coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

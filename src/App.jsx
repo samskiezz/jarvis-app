@@ -259,6 +259,7 @@ import ContactDatasetExposure from '@/components/cinematic/ContactDatasetExposur
 import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCoverage';
 import LiveIntelScenarioCoverage from '@/components/cinematic/LiveIntelScenarioCoverage';
 import GraphCentralityInvestigations from '@/components/cinematic/GraphCentralityInvestigations';
+import LiveIntelKnowledgeCoverage from '@/components/cinematic/LiveIntelKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -778,6 +779,9 @@ function App() {
             <LiveIntelScenarioCoverage />
             {/* F203 (overnight 2026-09-21): Graph Centrality × Investigations Coverage — ◈ GCIN button (left:35720, bottom:8, zIndex:103); parallel-fetches /v1/graph/centrality + /v1/investigations; keyword-correlates high-centrality graph nodes against open investigations to surface INVOLVED (≥1 match) vs CLEAR; amber badge on involved count; filter tabs ALL/INVOLVED/CLEAR; expand node → matched investigation cards with centrality bar + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcinQuery+buildGcinScript wired in JarvisBrain; "gcin"/"graph centrality investigation"/"investigated nodes"/"node investigation" voice trigger; jarvis:gcin-toggle event; 90-s auto-refresh */}
             <GraphCentralityInvestigations />
+
+            {/* F204 (overnight 2026-09-21): Live Intel × Knowledge Coverage — ◈ LIKNOW button (left:36280, bottom:8, zIndex:104); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /knowledge/; keyword-correlates live world events against KB articles to surface DOCUMENTED (≥1 KB match) vs UNDOCUMENTED (knowledge gap); amber badge on undocumented count; filter tabs ALL/DOCUMENTED/UNDOCUMENTED + text search; expand event → matched KB article cards with relevance bar; ▶ ASSESS COVERAGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLiknowQuery+buildLiknowScript wired in JarvisBrain; "liknow"/"live intel knowledge"/"world knowledge"/"event knowledge"/"undocumented events" voice trigger; jarvis:liknow-toggle event; 60-s auto-refresh */}
+            <LiveIntelKnowledgeCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
