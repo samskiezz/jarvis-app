@@ -253,6 +253,7 @@ import OpsAipSkillCoverage from '@/components/cinematic/OpsAipSkillCoverage';
 import InvestigationDatasetEvidence from '@/components/cinematic/InvestigationDatasetEvidence';
 import GraphCentralityKnowledge from '@/components/cinematic/GraphCentralityKnowledge';
 import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowledgeCoverage';
+import OpsTempoIndex from '@/components/cinematic/OpsTempoIndex';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -756,6 +757,8 @@ function App() {
             <GraphCentralityKnowledge />
             {/* F97 (overnight 2026-09-21): investment × knowledge coverage — ◈ INVKB button (left:31800, bottom:8, zIndex:97); parallel-fetches /entities/Investment + /knowledge/; keyword-correlates portfolio positions against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/DARK (0 — no KB backing); stat tiles positions/articles/grounded/partial/dark; amber badge on dark count; filter tabs ALL/GROUNDED/PARTIAL/DARK + text search; expand position → matched KB article cards with relevance score bar; ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isInvkbQuery+buildInvkbScript wired in JarvisBrain; "investment knowledge"/"invkb"/"portfolio kb"/"dark investments" voice trigger; jarvis:invkb-toggle event; 90-s auto-refresh */}
             <InvestmentKnowledgeCoverage />
+            {/* F98 (overnight 2026-09-21): Ops Tempo Index — ◈ TEMPO button (left:32920, bottom:8, zIndex:98); polls /v1/ops/events + /entities/RiskSignal + /entities/SwarmJob every 45 s; composite 0-100 tempo score (ops 40% + risk 35% + swarm 25%, normalised vs rolling max); SURGE/ELEVATED/NOMINAL/QUIET badge; arc gauge + sub-metric bars + sparkline history (localStorage max 20 readings); auto-announces SURGE ≥75 via jarvis:speak-dossier; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOpsTempoQuery+buildOpsTempoScript exported for JarvisBrain wiring; "ops tempo"/"activity tempo"/"operational tempo"/"opstempo" voice trigger; jarvis:ops-tempo-toggle event */}
+            <OpsTempoIndex />
 
             <Suspense fallback={<Loading />}>
               <Routes>
