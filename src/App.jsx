@@ -168,6 +168,7 @@ import SkillKnowledgeCoverage from '@/components/cinematic/SkillKnowledgeCoverag
 import DecisionDatasetTracker from '@/components/cinematic/DecisionDatasetTracker';
 import OpsKnowledgeCorrelator from '@/components/cinematic/OpsKnowledgeCorrelator';
 import ContactReportCoverage from '@/components/cinematic/ContactReportCoverage';
+import SwarmJobAipSkillCoverage from '@/components/cinematic/SwarmJobAipSkillCoverage';
 import SwarmReportCoverage from '@/components/cinematic/SwarmReportCoverage';
 import InvestmentDatasetCorrelator from '@/components/cinematic/InvestmentDatasetCorrelator';
 import SwarmDatasetCoverage from '@/components/cinematic/SwarmDatasetCoverage';
@@ -714,6 +715,8 @@ function App() {
             <ContactTaskAssignment />
             {/* F85 (overnight 2026-09-20): Ops Events × Contact Ownership — ◈ OPECON button (left:25800, bottom:8, zIndex:87); parallel-fetches /v1/ops/events + /entities/Contact; keyword-correlates significant ops events against contacts to surface OWNED (≥1 contact match) vs ORPHANED; stat tiles events/contacts/owned/orphaned; amber badge on orphaned count; filter tabs ALL/OWNED/ORPHANED + text search; expand event → matched contact cards with role + relevance score bar; ▶ ASSESS OWNERSHIP → /v1/jarvis/agent/chat 2-sentence ops-ownership brief + TTS; isOpeconQuery+buildOpeconScript wired in JarvisBrain; "ops contact"/"event owner"/"opecon"/"orphaned events"/"who owns this event" voice trigger; jarvis:opecon-toggle event; 90-s auto-refresh */}
             <OpsContactOwnership />
+            {/* F87 (overnight 2026-09-21): SwarmJob × AIP Skill Coverage — ◈ SJASK button (left:26360, bottom:8, zIndex:88); parallel-fetches /entities/SwarmJob + /v1/aip/skill; keyword-correlates each running swarm job against JARVIS AI skills to surface SKILLED (≥1 skill match) vs UNSKILLED (no AI capability — operational blind-spot); stat tiles jobs/skills/skilled/unskilled; amber badge on unskilled count; filter tabs ALL/SKILLED/UNSKILLED + text search; expand job → matched AI skill cards with type badge + score + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm capability brief + TTS; isSjaskQuery+buildSjaskScript wired in JarvisBrain; "swarm skill"/"sjask"/"skilled jobs"/"unskilled jobs"/"ai skill job"/"job capability"/"swarm capability"/"capability gap swarm" voice trigger; jarvis:sjask-toggle event; 90-s auto-refresh */}
+            <SwarmJobAipSkillCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

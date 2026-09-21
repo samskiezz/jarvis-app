@@ -63,6 +63,7 @@ import { isSjkgQuery, buildSjkgScript } from "./SwarmJobKnowledgeGrounding";
 import { isCtaskQuery, buildCtaskScript } from "./ContactTaskAssignment";
 import { isOpeconQuery, buildOpeconScript } from "./OpsContactOwnership";
 import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
+import { isSjaskQuery, buildSjaskScript } from "./SwarmJobAipSkillCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -657,6 +658,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctrpt-toggle"));
       let script = "";
       try { script = await buildCtrptScript(); } catch { script = "Contact report coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F87: swarm job × aip skill coverage — surfaces jobs with no AI capability assigned.
+    if (isSjaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjask-toggle"));
+      let script = "";
+      try { script = await buildSjaskScript(); } catch { script = "Swarm job AI skill coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
