@@ -260,6 +260,7 @@ import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCover
 import LiveIntelScenarioCoverage from '@/components/cinematic/LiveIntelScenarioCoverage';
 import GraphCentralityInvestigations from '@/components/cinematic/GraphCentralityInvestigations';
 import GraphCentralitySwarmJobs from '@/components/cinematic/GraphCentralitySwarmJobs';
+import GraphCentralityAipSkill from '@/components/cinematic/GraphCentralityAipSkill';
 import LiveIntelKnowledgeCoverage from '@/components/cinematic/LiveIntelKnowledgeCoverage';
 import LiveIntelContactExposure from '@/components/cinematic/LiveIntelContactExposure';
 import LiveIntelTaskActivation from '@/components/cinematic/LiveIntelTaskActivation';
@@ -791,6 +792,9 @@ function App() {
 
             {/* F206 (overnight 2026-09-21): Graph Centrality × SwarmJob Tasking — ◈ GCNJOB button (left:37400, bottom:8, zIndex:106); parallel-fetches /v1/graph/centrality + /entities/SwarmJob; keyword-correlates high-centrality graph nodes against running swarm jobs to surface TASKED (≥1 job match) vs DORMANT; amber badge on tasked count; filter tabs ALL/TASKED/DORMANT + text search; expand node → matched SwarmJob cards with status badge + relevance bar; ▶ ASSESS TASKING → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcnjobQuery+buildGcnjobScript wired in JarvisBrain; "gcnjob"/"centrality swarm"/"node jobs"/"swarm centrality"/"swarm nodes"/"central jobs" voice trigger; jarvis:gcnjob-toggle event; 90-s auto-refresh */}
             <GraphCentralitySwarmJobs />
+
+            {/* F208 (overnight 2026-09-21): Graph Centrality × AIP Skill Coverage — ◈ GCASK button (left:38520, bottom:8, zIndex:108); parallel-fetches /v1/graph/centrality + /v1/aip/skill; keyword-correlates high-centrality graph nodes against JARVIS AI skills to surface SKILLED (≥1 skill match) vs UNSKILLED; stat tiles nodes/skills/skilled/unskilled; amber badge on unskilled count; filter tabs ALL/SKILLED/UNSKILLED + text search; expand node → matched AIP skill cards with type badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcaskQuery+buildGcaskScript wired in JarvisBrain; "gcask"/"centrality skill"/"node skill"/"influential skills"/"skill centrality"/"graph skill coverage"/"node ai coverage" voice trigger; jarvis:gcask-toggle event; 90-s auto-refresh */}
+            <GraphCentralityAipSkill />
 
             {/* F207 (overnight 2026-09-21): Live Intel × Task Activation — ◈ LITASK button (left:37960, bottom:8, zIndex:107); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /entities/Task; keyword-correlates task name/description/type/status against live world events to surface TRIGGERED (≥1 event match) vs INACTIVE; stat tiles events/tasks/triggered/inactive; violet badge on triggered count; filter tabs ALL/TRIGGERED/INACTIVE + text search; expand task → matched live event cards with type badge (SEISMIC/CRYPTO/FX) + relevance bar; ▶ ASSESS ACTIVATION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLitaskQuery+buildLitaskScript wired in JarvisBrain; "litask"/"live intel task"/"task activation"/"triggered tasks"/"live task"/"world event task" voice trigger; jarvis:litask-toggle event; 90-s auto-refresh */}
             <LiveIntelTaskActivation />

@@ -84,3 +84,4 @@
 2026-09-21T20:17:42Z F205 LiveIntelContactExposure.jsx — /functions/getLiveIntel × /entities/Contact → EXPOSED/SAFE contact exposure; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
 [2026-09-21] F206 GraphCentralitySwarmJobs — /v1/graph/centrality × /entities/SwarmJob; TASKED vs DORMANT; ◈ GCNJOB toggle; build exit 0; pushed to jarvis-overnight
 [2026-09-21] F207 Live Intel × Task Activation (LITASK) — LiveIntelTaskActivation.jsx created; wired in App.jsx + JarvisBrain.jsx; build exit 0.
+2026-09-21 23:15:36 UTC | F208 GraphCentralityAipSkill.jsx | /v1/graph/centrality × /v1/aip/skill | SKILLED/UNSKILLED correlation | build exit 0 | committed jarvis-overnight
