@@ -169,6 +169,7 @@ import DecisionDatasetTracker from '@/components/cinematic/DecisionDatasetTracke
 import OpsKnowledgeCorrelator from '@/components/cinematic/OpsKnowledgeCorrelator';
 import ContactReportCoverage from '@/components/cinematic/ContactReportCoverage';
 import SwarmJobAipSkillCoverage from '@/components/cinematic/SwarmJobAipSkillCoverage';
+import ScenarioReportIntelligence from '@/components/cinematic/ScenarioReportIntelligence';
 import SwarmReportCoverage from '@/components/cinematic/SwarmReportCoverage';
 import InvestmentDatasetCorrelator from '@/components/cinematic/InvestmentDatasetCorrelator';
 import SwarmDatasetCoverage from '@/components/cinematic/SwarmDatasetCoverage';
@@ -717,6 +718,8 @@ function App() {
             <OpsContactOwnership />
             {/* F87 (overnight 2026-09-21): SwarmJob × AIP Skill Coverage — ◈ SJASK button (left:26360, bottom:8, zIndex:88); parallel-fetches /entities/SwarmJob + /v1/aip/skill; keyword-correlates each running swarm job against JARVIS AI skills to surface SKILLED (≥1 skill match) vs UNSKILLED (no AI capability — operational blind-spot); stat tiles jobs/skills/skilled/unskilled; amber badge on unskilled count; filter tabs ALL/SKILLED/UNSKILLED + text search; expand job → matched AI skill cards with type badge + score + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm capability brief + TTS; isSjaskQuery+buildSjaskScript wired in JarvisBrain; "swarm skill"/"sjask"/"skilled jobs"/"unskilled jobs"/"ai skill job"/"job capability"/"swarm capability"/"capability gap swarm" voice trigger; jarvis:sjask-toggle event; 90-s auto-refresh */}
             <SwarmJobAipSkillCoverage />
+            {/* F88 (overnight 2026-09-21): Scenario × Report Intelligence Coverage — ◈ SCREP button (left:26920, bottom:8, zIndex:89); parallel-fetches /v1/scenario/list + /v1/reports; keyword-correlates each scenario against intelligence reports to surface REPORTED (≥1 report match) vs DARK (intelligence gap); stat tiles scenarios/reports/reported/dark; amber badge on dark count; filter tabs ALL/REPORTED/DARK + text search; expand scenario → matched report cards with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario intelligence brief + TTS; isScrepQuery+buildScrepScript wired in JarvisBrain; "screp"/"scenario report"/"scenario intelligence"/"dark scenarios"/"reported scenarios" voice trigger; jarvis:screp-toggle event; 90-s auto-refresh */}
+            <ScenarioReportIntelligence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
