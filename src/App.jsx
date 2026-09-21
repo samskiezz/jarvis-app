@@ -257,6 +257,7 @@ import OpsTempoIndex from '@/components/cinematic/OpsTempoIndex';
 import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKnowledgeCoverage';
 import ContactDatasetExposure from '@/components/cinematic/ContactDatasetExposure';
 import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCoverage';
+import LiveIntelScenarioCoverage from '@/components/cinematic/LiveIntelScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -771,6 +772,9 @@ function App() {
 
             {/* F201 (overnight 2026-09-21): Live Intel × Reports Coverage — ◈ LIRPT button (left:34600, bottom:8, zIndex:101); parallel-fetches /functions/getLiveIntel (earthquakes/crypto/FX) + /v1/reports; keyword-correlates each live event against reports catalogue to surface REPORTED (≥1 match) vs UNREPORTED (blind spot — zero report coverage); stat tiles events/reports/reported/unreported; amber badge on unreported count; filter tabs ALL/REPORTED/UNREPORTED + text search; expand event → matched report cards with relevance score bar; ▶ ASSESS COVERAGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLirptQuery+buildLirptScript wired in JarvisBrain; "lirpt"/"live intel report"/"intel report gap"/"unreported intel"/"live event coverage"/"live reports"/"report coverage" voice trigger; jarvis:lirpt-toggle event; 60-s auto-refresh */}
             <LiveIntelReportCoverage />
+
+            {/* F202 (overnight 2026-09-21): Live Intel × Scenario Coverage — ◈ LISCEN button (left:35160, bottom:8, zIndex:102); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/scenario/list; keyword-correlates live world events against threat scenarios to surface TRIGGERED (≥1 scenario match) vs DORMANT; amber badge on triggered count; filter tabs ALL/TRIGGERED/DORMANT; expand event → matched scenario cards with relevance bar; ▶ ASSESS TRIGGERS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLiscenQuery+buildLiscenScript wired in JarvisBrain; "liscen"/"live intel scenario"/"scenario trigger"/"triggered scenarios"/"live scenario"/"world scenario"/"event scenario" voice trigger; jarvis:liscen-toggle event; 60-s auto-refresh */}
+            <LiveIntelScenarioCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

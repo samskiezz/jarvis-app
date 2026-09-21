@@ -76,6 +76,7 @@ import { isInvkbQuery, buildInvkbScript } from "./InvestmentKnowledgeCoverage";
 import { isIpkbQuery, buildIpkbScript } from "./IntelProfileKnowledgeCoverage";
 import { isCtdsetQuery, buildCtdsetScript } from "./ContactDatasetExposure";
 import { isLirptQuery, buildLirptScript } from "./LiveIntelReportCoverage";
+import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -786,6 +787,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:lirpt-toggle"));
       let script = "";
       try { script = await buildLirptScript(); } catch { script = "Live intel report coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F202: live intel × scenario coverage — correlates live world events against threat scenarios.
+    if (isLiscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:liscen-toggle"));
+      let script = "";
+      try { script = await buildLiscenScript(); } catch { script = "Live intel scenario coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
