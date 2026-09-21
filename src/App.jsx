@@ -256,6 +256,7 @@ import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowle
 import OpsTempoIndex from '@/components/cinematic/OpsTempoIndex';
 import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKnowledgeCoverage';
 import ContactDatasetExposure from '@/components/cinematic/ContactDatasetExposure';
+import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -767,6 +768,9 @@ function App() {
 
             {/* F200 (overnight 2026-09-21): Contact × Dataset Exposure — ◈ CTDSET button (left:34040, bottom:8, zIndex:100); parallel-fetches /entities/Contact + /v1/datasets; keyword-correlates contact name/role/org/tags against dataset catalog metadata to surface DOCUMENTED (≥1 dataset match) vs INVISIBLE (no data trail — contact absent from all datasets); stat tiles contacts/datasets/documented/invisible; amber badge on invisible count; filter tabs ALL/DOCUMENTED/INVISIBLE + text search; expand contact → matched dataset cards with row count + relevance score bar; ▶ ASSESS DATA TRAILS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCtdsetQuery+buildCtdsetScript wired in JarvisBrain; "contact dataset"/"ctdset"/"data trail"/"invisible contacts"/"contact data exposure" voice trigger; jarvis:ctdset-toggle event; 90-s auto-refresh */}
             <ContactDatasetExposure />
+
+            {/* F201 (overnight 2026-09-21): Live Intel × Reports Coverage — ◈ LIRPT button (left:34600, bottom:8, zIndex:101); parallel-fetches /functions/getLiveIntel (earthquakes/crypto/FX) + /v1/reports; keyword-correlates each live event against reports catalogue to surface REPORTED (≥1 match) vs UNREPORTED (blind spot — zero report coverage); stat tiles events/reports/reported/unreported; amber badge on unreported count; filter tabs ALL/REPORTED/UNREPORTED + text search; expand event → matched report cards with relevance score bar; ▶ ASSESS COVERAGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLirptQuery+buildLirptScript wired in JarvisBrain; "lirpt"/"live intel report"/"intel report gap"/"unreported intel"/"live event coverage"/"live reports"/"report coverage" voice trigger; jarvis:lirpt-toggle event; 60-s auto-refresh */}
+            <LiveIntelReportCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

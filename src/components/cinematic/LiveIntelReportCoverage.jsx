@@ -1,381 +1,520 @@
-import { useState, useEffect, useCallback } from 'react';
+/**
+ * LiveIntelReportCoverage — F201
+ *
+ * Parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/reports
+ * then keyword-correlates each live intel event against the reports catalogue
+ * to surface:
+ *   REPORTED  (≥1 report match) — live event has intelligence report coverage
+ *   UNREPORTED (0 matches)      — live event has no report coverage (blind spot)
+ *
+ * Stat tiles: events / reports / reported / unreported
+ * Filter tabs: ALL / REPORTED / UNREPORTED
+ * Text search.
+ * Expand event → matched report cards with relevance bar.
+ * ▶ ASSESS COVERAGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS.
+ * 60 s auto-refresh.
+ *
+ * Intent: "live intel reports" / "lirpt" / "unreported events" /
+ *         "live event coverage" / "live reports" / "intel report gap" /
+ *         "unreported intel" / "report coverage"
+ *   → jarvis:lirpt-toggle + TTS brief via buildLirptScript()
+ *
+ * Toggle: ◈ LIRPT at left:34600, bottom:8, zIndex:101.
+ * Mounted in App.jsx.
+ */
+import { useCallback, useEffect, useRef, useState } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = '';
-const RPLIVE_RE = /\b(report[s]?[._-]?live|live[._-]?report[s]?|rplive|triggered[._-]?report[s]?|live[._-]?triggered[._-]?report[s]?|world[._-]?report[s]?|report[s]?[._-]?world[._-]?event[s]?|intel[._-]?report[s]?[._-]?live|live[._-]?intel[._-]?report[s]?)\b/i;
+const CY    = "#29E7FF";
+const AMBER = "#F5A623";
+const GREEN = "#00c878";
+const RED   = "#FF4444";
+const DIM   = "#4A6070";
+const BG    = "rgba(3,5,9,0.97)";
+const BTN_LEFT   = 34600;
+const REFRESH_MS = 60_000;
+const MONO = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
+const API_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||
+  "dev-key";
 
-export function isRpliveQuery(t) {
-  return RPLIVE_RE.test(t || '');
-}
+// ─── intent exports ────────────────────────────────────────────────────────────
 
-export async function buildRpliveScript() {
-  const [rpR, liR] = await Promise.allSettled([
-    fetch(`${API}/v1/reports`).then(r => r.json()),
-    fetch(`${API}/functions/getLiveIntel`).then(r => r.json()),
+const LIRPT_RE =
+  /\b(lirpt|live.intel.report|intel.report.gap|unreported.intel|unreported.event|live.event.coverage|live.reports?|report.coverage|intel.coverage.gap)\b/i;
+
+export function isLirptQuery(t) { return LIRPT_RE.test(t || ""); }
+
+export async function buildLirptScript() {
+  const [iRaw, rRaw] = await Promise.allSettled([
+    fetch(`${apiBase()}/functions/getLiveIntel`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    }).then((r) => r.json()),
+    fetch(`${apiBase()}/v1/reports`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    }).then((r) => r.json()),
   ]);
-  const reports = normaliseReports(rpR.status === 'fulfilled' ? rpR.value : []);
-  const events = normaliseLiveIntel(liR.status === 'fulfilled' ? liR.value : []);
-  const enriched = correlate(reports, events);
-  const triggered = enriched.filter(r => r._linked).length;
-  const stale = enriched.filter(r => !r._linked).length;
+  const events  = normaliseEvents(iRaw.status === "fulfilled" ? iRaw.value : {});
+  const reports = normaliseReports(rRaw.status === "fulfilled" ? rRaw.value : []);
+  const pairs   = correlate(events, reports);
+  const reported   = pairs.filter((p) => p.matches.length >= 1).length;
+  const unreported = pairs.filter((p) => p.matches.length === 0).length;
+  const topUnreported = pairs
+    .filter((p) => p.matches.length === 0)
+    .slice(0, 3)
+    .map((p) => p.event.name)
+    .join(", ") || "none";
   return (
-    `Live Intel × Report Coverage: ${reports.length} intelligence reports cross-matched against ${events.length} live world events. ` +
-    `${triggered} reports are TRIGGERED (live world event aligns with report topic); ${stale} are STALE (no current live signal matches). ` +
-    `Top triggered: ${enriched.filter(r => r._linked).slice(0, 3).map(r => r.title || r.name || '?').join(', ') || 'none'}.`
+    `Assess JARVIS live intel report coverage in 2 sentences. ` +
+    `${events.length} live events vs ${reports.length} reports: ` +
+    `${reported} REPORTED (≥1 report match), ` +
+    `${unreported} UNREPORTED (no intelligence report covers these live events — coverage gap). ` +
+    `Top unreported events: ${topUnreported}.`
   );
 }
 
-function normaliseReports(raw) {
-  if (!raw) return [];
+// ─── normalise helpers ─────────────────────────────────────────────────────────
+
+function normaliseArray(raw, keys = []) {
   if (Array.isArray(raw)) return raw;
-  for (const k of ['reports', 'items', 'results', 'data', 'records']) {
-    if (Array.isArray(raw[k])) return raw[k];
+  for (const k of keys) {
+    if (raw && Array.isArray(raw[k])) return raw[k];
   }
+  if (raw && Array.isArray(raw.items))   return raw.items;
+  if (raw && Array.isArray(raw.data))    return raw.data;
+  if (raw && Array.isArray(raw.results)) return raw.results;
+  if (raw && typeof raw === "object")    return Object.values(raw);
   return [];
 }
 
-function normaliseLiveIntel(raw) {
-  if (!raw) return [];
-  const out = [];
-  if (Array.isArray(raw)) {
-    for (const ev of raw) out.push(ev);
-    return out;
-  }
-  for (const key of ['earthquakes', 'quakes', 'seismic']) {
-    if (Array.isArray(raw[key])) raw[key].forEach(e => out.push({ ...e, _type: 'SEISMIC' }));
-  }
-  for (const key of ['crypto', 'cryptocurrency']) {
-    if (Array.isArray(raw[key])) raw[key].forEach(e => out.push({ ...e, _type: 'CRYPTO' }));
-  }
-  for (const key of ['fx', 'forex', 'currencies']) {
-    if (Array.isArray(raw[key])) raw[key].forEach(e => out.push({ ...e, _type: 'FX' }));
-  }
-  if (!out.length) {
-    for (const k of ['items', 'results', 'data', 'events']) {
-      if (Array.isArray(raw[k])) { raw[k].forEach(e => out.push(e)); break; }
-    }
-  }
-  return out;
+function normaliseEvents(data) {
+  const events = [];
+  if (!data || typeof data !== "object") return events;
+
+  const quakes = Array.isArray(data.earthquakes) ? data.earthquakes : [];
+  quakes.forEach((q, i) => {
+    events.push({
+      id:   q.id || `quake-${i}`,
+      type: "seismic",
+      name: q.place || q.name || `Magnitude ${q.magnitude} quake`,
+      desc: `Mag ${q.magnitude ?? "?"} at ${q.place || "unknown location"}`,
+      keywords: `seismic earthquake ${q.place || ""} magnitude disaster geologic`.toLowerCase(),
+    });
+  });
+
+  const coins = Array.isArray(data.crypto) ? data.crypto : [];
+  coins.slice(0, 10).forEach((c, i) => {
+    const sym = c.symbol || c.coin || c.currency || `COIN${i}`;
+    const chg = c.change_24h ?? c.pct_change ?? null;
+    events.push({
+      id:   `crypto-${sym}`,
+      type: "crypto",
+      name: `${sym} ${chg !== null ? (chg >= 0 ? "+" : "") + chg.toFixed(2) + "%" : ""}`.trim(),
+      desc: `Cryptocurrency ${sym}: price ${c.price ?? "?"} USD`,
+      keywords: `crypto ${sym} ${sym.toLowerCase()} digital asset market finance`.toLowerCase(),
+    });
+  });
+
+  const fx = Array.isArray(data.fx) ? data.fx : [];
+  fx.slice(0, 8).forEach((f, i) => {
+    const pair = f.pair || f.symbol || f.currency_pair || `FX${i}`;
+    const rate = f.rate ?? f.price ?? "?";
+    events.push({
+      id:   `fx-${pair}`,
+      type: "fx",
+      name: `${pair} ${rate}`,
+      desc: `FX pair ${pair}: rate ${rate}`,
+      keywords: `forex fx ${pair} ${pair.toLowerCase()} currency exchange rate finance`.toLowerCase(),
+    });
+  });
+
+  return events;
+}
+
+function normaliseReports(raw) {
+  return normaliseArray(raw, ["reports", "items", "data"]).map((r) => ({
+    id:    r.id || r.report_id || String(Math.random()),
+    title: r.title || r.name || r.report_title || "Untitled Report",
+    type:  r.type || r.category || r.report_type || "",
+    desc:  r.summary || r.description || r.abstract || r.content?.slice?.(0, 200) || "",
+    tags:  [...(r.tags || []), ...(r.labels || [])].map(String),
+  }));
 }
 
 function tokens(str) {
-  return String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(w => w.length > 2);
+  return String(str)
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w.length > 2);
 }
 
-function eventLabel(ev) {
-  return ev.place || ev.title || ev.name || ev.symbol || ev.currency || ev.pair || ev.description || '';
+function matchScore(event, report) {
+  const evWords = tokens(`${event.name} ${event.desc} ${event.keywords}`);
+  const rpText  = `${report.title} ${report.desc} ${report.type} ${report.tags.join(" ")}`.toLowerCase();
+  const hits = evWords.filter((w) => rpText.includes(w));
+  return hits.length / Math.max(evWords.length, 1);
 }
 
-function matchScore(report, ev) {
-  const rToks = new Set([
-    ...tokens(report.title),
-    ...tokens(report.name),
-    ...tokens(report.summary),
-    ...tokens(report.type),
-    ...tokens(report.category),
-    ...tokens(report.tags),
-    ...tokens(report.description),
-  ].filter(Boolean));
-  const evToks = [
-    ...tokens(eventLabel(ev)),
-    ...tokens(ev.type),
-    ...tokens(ev._type),
-    ...tokens(ev.description),
-    ...tokens(ev.region),
-    ...tokens(ev.country),
-  ].filter(Boolean);
-  if (!rToks.size || !evToks.length) return 0;
-  let hits = 0;
-  for (const t of evToks) if (rToks.has(t)) hits++;
-  return hits / Math.max(rToks.size, evToks.length);
-}
-
-function correlate(reports, events) {
-  return reports.map(rp => {
-    const scored = events
-      .map(ev => ({ ev, score: matchScore(rp, ev) }))
-      .filter(s => s.score > 0)
+function correlate(events, reports) {
+  return events.map((event) => {
+    const scored = reports
+      .map((r) => ({ r, score: matchScore(event, r) }))
+      .filter((x) => x.score > 0.06)
       .sort((a, b) => b.score - a.score)
-      .slice(0, 5);
-    return { ...rp, _linked: scored.length > 0, _matches: scored };
+      .slice(0, 4);
+    return { event, matches: scored };
   });
 }
 
-const PANEL_W = 580;
-const PANEL_H = 560;
-const CY = '#00CFFF';
-const GR = '#22C55E';
-const AM = '#F59E0B';
-const RD = '#EF4444';
-const PU = '#A78BFA';
+// ─── sub-components ────────────────────────────────────────────────────────────
 
-const chip = (label, color = CY) => (
-  <span style={{
-    display: 'inline-block', padding: '1px 7px', borderRadius: 4, border: `1px solid ${color}44`,
-    background: `${color}14`, color, fontSize: 10, letterSpacing: 1, marginRight: 4,
-  }}>{label}</span>
-);
-
-const scorebar = (score, color = AM) => (
-  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, verticalAlign: 'middle' }}>
-    <div style={{ width: 60, height: 4, background: '#1a2535', borderRadius: 2, overflow: 'hidden' }}>
-      <div style={{ width: `${Math.round(score * 100)}%`, height: '100%', background: color, borderRadius: 2 }} />
+function Tile({ label, value, color }) {
+  return (
+    <div style={{
+      flex: "1 1 0", minWidth: 55, background: "rgba(0,0,0,0.3)",
+      border: `1px solid ${color}33`, borderRadius: 6,
+      padding: "6px 8px", textAlign: "center",
+    }}>
+      <div style={{ fontSize: 18, fontWeight: 700, color, fontFamily: MONO }}>{value}</div>
+      <div style={{ fontSize: 9, color: DIM, letterSpacing: 1, marginTop: 2 }}>{label}</div>
     </div>
-    <span style={{ color: '#6E8AA0', fontSize: 10 }}>{(score * 100).toFixed(0)}%</span>
-  </div>
-);
+  );
+}
 
-const typeColor = t => ({ SEISMIC: RD, CRYPTO: CY, FX: GR })[String(t || '').toUpperCase()] || AM;
+function ScoreBar({ score }) {
+  const color = score > 0.5 ? GREEN : score > 0.25 ? AMBER : CY;
+  return (
+    <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, flex: 1 }}>
+      <div style={{
+        width: `${Math.round(score * 100)}%`, height: "100%",
+        background: color, borderRadius: 2, transition: "width 0.4s ease",
+      }} />
+    </div>
+  );
+}
+
+const TYPE_COLOR = { seismic: AMBER, crypto: CY, fx: GREEN };
+const TYPE_ICON  = { seismic: "⚡", crypto: "◆", fx: "◈" };
+
+// ─── main component ────────────────────────────────────────────────────────────
 
 export default function LiveIntelReportCoverage() {
-  const [open, setOpen] = useState(false);
-  const [reports, setReports] = useState([]);
-  const [events, setEvents] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [tab, setTab] = useState('ALL');
-  const [search, setSearch] = useState('');
-  const [expanded, setExpanded] = useState(null);
+  const [open, setOpen]           = useState(false);
+  const [pairs, setPairs]         = useState([]);
+  const [loading, setLoading]     = useState(false);
+  const [error, setError]         = useState(null);
+  const [tab, setTab]             = useState("ALL");
+  const [search, setSearch]       = useState("");
+  const [expanded, setExpanded]   = useState({});
   const [assessing, setAssessing] = useState(false);
-  const [brief, setBrief] = useState('');
+  const timerRef = useRef(null);
 
   const load = useCallback(async () => {
-    setLoading(true);
+    setLoading(true); setError(null);
     try {
-      const [rpR, liR] = await Promise.allSettled([
-        fetch(`${API}/v1/reports`).then(r => r.json()),
-        fetch(`${API}/functions/getLiveIntel`).then(r => r.json()),
+      const [iRes, rRes] = await Promise.allSettled([
+        fetch(`${apiBase()}/functions/getLiveIntel`, {
+          headers: { Authorization: `Bearer ${API_KEY}` },
+        }).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
+        fetch(`${apiBase()}/v1/reports`, {
+          headers: { Authorization: `Bearer ${API_KEY}` },
+        }).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
       ]);
-      setReports(normaliseReports(rpR.status === 'fulfilled' ? rpR.value : []));
-      setEvents(normaliseLiveIntel(liR.status === 'fulfilled' ? liR.value : []));
-    } catch { /* silently skip */ }
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    const onToggle = () => setOpen(o => !o);
-    window.addEventListener('jarvis:rplive-toggle', onToggle);
-    return () => window.removeEventListener('jarvis:rplive-toggle', onToggle);
-  }, []);
-
-  useEffect(() => {
-    let timer;
-    if (open) {
-      load();
-      timer = setInterval(load, 60000);
+      const events  = normaliseEvents(iRes.status === "fulfilled" ? iRes.value : {});
+      const reports = normaliseReports(rRes.status === "fulfilled" ? rRes.value : []);
+      setPairs(correlate(events, reports));
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
     }
-    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const onToggle = () => setOpen((v) => !v);
+    window.addEventListener("jarvis:lirpt-toggle", onToggle);
+    return () => window.removeEventListener("jarvis:lirpt-toggle", onToggle);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    load();
+    timerRef.current = setInterval(load, REFRESH_MS);
+    return () => clearInterval(timerRef.current);
   }, [open, load]);
 
-  const enriched = correlate(reports, events);
-  const triggered = enriched.filter(r => r._linked);
-  const stale = enriched.filter(r => !r._linked);
-  const badgeCount = triggered.length;
-  const badgeColor = badgeCount > 0 ? AM : GR;
+  const reported   = pairs.filter((p) => p.matches.length >= 1);
+  const unreported = pairs.filter((p) => p.matches.length === 0);
 
-  const filtered = enriched
-    .filter(r => tab === 'ALL' || (tab === 'TRIGGERED' ? r._linked : !r._linked))
-    .filter(r => {
+  const visible = pairs
+    .filter((p) => {
+      if (tab === "REPORTED")   return p.matches.length >= 1;
+      if (tab === "UNREPORTED") return p.matches.length === 0;
+      return true;
+    })
+    .filter((p) => {
       if (!search) return true;
       const q = search.toLowerCase();
       return (
-        String(r.title || '').toLowerCase().includes(q) ||
-        String(r.name || '').toLowerCase().includes(q) ||
-        String(r.type || '').toLowerCase().includes(q) ||
-        String(r.category || '').toLowerCase().includes(q) ||
-        String(r.summary || '').toLowerCase().includes(q)
+        p.event.name.toLowerCase().includes(q) ||
+        p.event.type.toLowerCase().includes(q) ||
+        p.matches.some((m) => m.r.title.toLowerCase().includes(q))
       );
     });
 
   async function assess() {
     setAssessing(true);
-    setBrief('');
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer dev-key' },
-        body: JSON.stringify({
-          message:
-            `You have ${reports.length} intelligence reports cross-matched against ${events.length} live world events (seismic/crypto/FX). ` +
-            `${triggered.length} reports are TRIGGERED (live world event aligns with this report's topic domain — time-critical intelligence). ` +
-            `${stale.length} are STALE (no current live world event matches this report's domain). ` +
-            `Top triggered reports: ${triggered.slice(0, 3).map(rp => rp.title || rp.name || '?').join(', ') || 'none'}. ` +
-            `Give a 2-sentence report-world relevance brief: which reports are being activated by live events, and which reports are going stale due to no live signal.`,
-        }),
+      const script = await buildLirptScript();
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${API_KEY}`,
+        },
+        body: JSON.stringify({ message: script }),
       });
-      const d = await r.json();
-      const txt = d.response || d.answer || d.text || d.content || '';
-      setBrief(txt);
-      window.dispatchEvent(new CustomEvent('jarvis:speak-dossier', { detail: { text: txt } }));
-    } catch { setBrief('Agent unavailable.'); }
-    setAssessing(false);
+      const json = await res.json();
+      const text =
+        json.response || json.reply || json.message || json.content ||
+        json.answer || JSON.stringify(json).slice(0, 200);
+      window.dispatchEvent(
+        new CustomEvent("jarvis:speak-dossier", { detail: { text } })
+      );
+    } catch (_) {
+      // silently ignore
+    } finally {
+      setAssessing(false);
+    }
   }
 
-  const reportLabel = rp => rp.title || rp.name || rp.id || '?';
+  const toggleRow = (id) =>
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
 
-  return (
-    <>
+  if (!open) {
+    return (
       <button
-        onClick={() => setOpen(o => !o)}
-        title="Live Intel × Report Coverage (RPLIVE)"
+        onClick={() => setOpen(true)}
+        title="Live Intel × Reports Coverage (LIRPT)"
         style={{
-          position: 'fixed', left: 684080, bottom: 8, zIndex: 250,
-          width: 64, height: 22, borderRadius: 3,
-          border: `1px solid ${badgeColor}77`, cursor: 'pointer',
-          background: 'rgba(5,8,13,0.75)', color: badgeColor,
-          fontSize: 9, letterSpacing: 1, backdropFilter: 'blur(6px)',
-          boxShadow: `0 0 10px ${badgeColor}44`, fontFamily: "'JetBrains Mono',monospace",
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3,
+          position: "fixed", left: BTN_LEFT, bottom: 8, zIndex: 101,
+          background: "rgba(3,5,9,0.85)", border: `1px solid ${AMBER}55`,
+          borderRadius: 4, color: AMBER, fontFamily: MONO, fontSize: 9,
+          letterSpacing: 1, padding: "3px 7px", cursor: "pointer",
         }}
       >
-        ◈ RPLIVE
-        {badgeCount > 0 && (
+        ◈ LIRPT
+        {unreported.length > 0 && (
           <span style={{
-            background: badgeColor, color: '#04060A', borderRadius: 3, padding: '0 4px',
-            fontSize: 8, fontWeight: 700, minWidth: 14, textAlign: 'center',
-          }}>{badgeCount}</span>
+            marginLeft: 4, background: AMBER, color: "#000",
+            borderRadius: 8, padding: "0 4px", fontSize: 8, fontWeight: 700,
+          }}>
+            {unreported.length}
+          </span>
         )}
       </button>
+    );
+  }
 
-      {open && (
-        <div style={{
-          position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%,-50%)',
-          width: PANEL_W, height: PANEL_H, zIndex: 9210,
-          background: 'rgba(6,10,18,0.97)', border: `1px solid ${AM}33`,
-          borderRadius: 12, backdropFilter: 'blur(16px)',
-          boxShadow: `0 0 60px ${AM}22`, fontFamily: "'JetBrains Mono',monospace",
-          display: 'flex', flexDirection: 'column', overflow: 'hidden',
-        }}>
-          <div style={{
-            padding: '10px 14px', borderBottom: `1px solid ${AM}22`,
-            display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0,
-          }}>
-            <span style={{ color: AM, fontSize: 11, letterSpacing: 2, fontWeight: 700, textShadow: `0 0 12px ${AM}` }}>
-              ◈ LIVE INTEL × REPORT COVERAGE
-            </span>
-            <span style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center' }}>
-              {loading && <span style={{ color: '#6E8AA0', fontSize: 10 }}>loading…</span>}
-              <button
-                onClick={assess}
-                disabled={assessing}
-                style={{
-                  padding: '2px 8px', borderRadius: 3, border: `1px solid ${AM}55`,
-                  background: 'transparent', color: AM, cursor: 'pointer', fontSize: 9, letterSpacing: 1,
-                }}
-              >{assessing ? 'assessing…' : '▶ ASSESS'}</button>
-              <button
-                onClick={() => setOpen(false)}
-                style={{ background: 'none', border: 'none', color: '#6E8AA0', cursor: 'pointer', fontSize: 14, padding: 0 }}
-              >✕</button>
-            </span>
-          </div>
+  const TABS = ["ALL", "REPORTED", "UNREPORTED"];
+  const tabColor = (t) => {
+    if (t === "UNREPORTED") return AMBER;
+    if (t === "REPORTED")   return GREEN;
+    return CY;
+  };
 
-          <div style={{ display: 'flex', gap: 8, padding: '8px 14px', flexShrink: 0 }}>
-            {[
-              { label: 'REPORTS', val: reports.length, col: CY },
-              { label: 'LIVE EVENTS', val: events.length, col: PU },
-              { label: 'TRIGGERED', val: triggered.length, col: AM },
-              { label: 'STALE', val: stale.length, col: GR },
-            ].map(({ label: l, val, col }) => (
-              <div key={l} style={{
-                flex: 1, background: `${col}0d`, border: `1px solid ${col}33`,
-                borderRadius: 6, padding: '6px 8px', textAlign: 'center',
-              }}>
-                <div style={{ color: col, fontSize: 16, fontWeight: 700 }}>{val}</div>
-                <div style={{ color: '#6E8AA0', fontSize: 9, letterSpacing: 1, marginTop: 2 }}>{l}</div>
-              </div>
-            ))}
-          </div>
+  return (
+    <div style={{
+      position: "fixed", left: BTN_LEFT - 200, bottom: 48, zIndex: 101,
+      width: 520, maxHeight: "75vh",
+      background: BG, border: `1px solid ${AMBER}66`,
+      borderRadius: 8, fontFamily: MONO, fontSize: 10,
+      display: "flex", flexDirection: "column", overflow: "hidden",
+    }}>
+      {/* header */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "8px 12px", borderBottom: `1px solid ${AMBER}33`,
+        background: "rgba(0,0,0,0.4)",
+      }}>
+        <span style={{ color: AMBER, fontSize: 11, letterSpacing: 2 }}>
+          ◈ LIVE INTEL × REPORT COVERAGE
+        </span>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button
+            onClick={assess}
+            disabled={assessing}
+            style={{
+              background: "none", border: `1px solid ${CY}66`,
+              borderRadius: 4, color: CY, fontFamily: MONO, fontSize: 9,
+              letterSpacing: 1, padding: "2px 8px", cursor: "pointer",
+            }}
+          >
+            {assessing ? "…" : "▶ ASSESS COVERAGE GAPS"}
+          </button>
+          <button
+            onClick={() => setOpen(false)}
+            style={{
+              background: "none", border: "none", color: DIM,
+              fontSize: 14, cursor: "pointer", lineHeight: 1,
+            }}
+          >
+            ×
+          </button>
+        </div>
+      </div>
 
-          <div style={{ display: 'flex', gap: 6, padding: '0 14px 8px', flexShrink: 0, alignItems: 'center' }}>
-            {['ALL', 'TRIGGERED', 'STALE'].map(t => (
-              <button
-                key={t}
-                onClick={() => setTab(t)}
-                style={{
-                  padding: '2px 10px', borderRadius: 3, cursor: 'pointer', fontSize: 9, letterSpacing: 1,
-                  border: `1px solid ${tab === t ? AM : '#2a3a4a'}`,
-                  background: tab === t ? `${AM}22` : 'transparent',
-                  color: tab === t ? AM : '#6E8AA0',
-                }}
-              >{t}</button>
-            ))}
-            <input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="search reports…"
+      {/* stat tiles */}
+      <div style={{ display: "flex", gap: 6, padding: "8px 12px" }}>
+        <Tile label="EVENTS"     value={pairs.length}       color={CY}   />
+        <Tile label="REPORTS"    value={
+          pairs.length > 0
+            ? [...new Set(pairs.flatMap((p) => p.matches.map((m) => m.r.id)))].length
+            : 0
+        } color={CY} />
+        <Tile label="REPORTED"   value={reported.length}    color={GREEN} />
+        <Tile label="UNREPORTED" value={unreported.length}  color={AMBER} />
+      </div>
+
+      {/* filter tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 12px 6px" }}>
+        {TABS.map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            style={{
+              background: tab === t ? `${tabColor(t)}22` : "none",
+              border: `1px solid ${tab === t ? tabColor(t) : DIM}`,
+              borderRadius: 3, color: tab === t ? tabColor(t) : DIM,
+              fontFamily: MONO, fontSize: 8, letterSpacing: 1,
+              padding: "2px 6px", cursor: "pointer",
+            }}
+          >
+            {t}
+          </button>
+        ))}
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="search…"
+          style={{
+            marginLeft: "auto", background: "rgba(0,0,0,0.4)",
+            border: `1px solid ${DIM}`, borderRadius: 3,
+            color: CY, fontFamily: MONO, fontSize: 9,
+            padding: "2px 6px", width: 120, outline: "none",
+          }}
+        />
+      </div>
+
+      {/* list */}
+      <div style={{ overflowY: "auto", flex: 1, padding: "0 12px 12px" }}>
+        {loading && (
+          <div style={{ color: DIM, padding: "8px 0" }}>◌ loading…</div>
+        )}
+        {error && (
+          <div style={{ color: RED, padding: "4px 0" }}>⚠ {error}</div>
+        )}
+        {!loading && visible.length === 0 && !error && (
+          <div style={{ color: DIM, padding: "8px 0" }}>no results</div>
+        )}
+        {visible.map((p) => {
+          const status = p.matches.length >= 1 ? "REPORTED" : "UNREPORTED";
+          const statusColor = status === "REPORTED" ? GREEN : AMBER;
+          const typeColor = TYPE_COLOR[p.event.type] || CY;
+          const typeIcon  = TYPE_ICON[p.event.type] || "◈";
+          const isExp = expanded[p.event.id];
+          return (
+            <div
+              key={p.event.id}
               style={{
-                marginLeft: 'auto', background: 'rgba(255,255,255,0.03)', border: `1px solid #2a3a4a`,
-                borderRadius: 4, color: '#DCEBF5', padding: '2px 8px', fontSize: 10, outline: 'none',
-                fontFamily: "'JetBrains Mono',monospace", width: 160,
+                borderBottom: "1px solid rgba(255,255,255,0.04)",
+                paddingBottom: 6, marginBottom: 6,
               }}
-            />
-          </div>
-
-          <div style={{ flex: 1, overflowY: 'auto', padding: '0 14px 8px' }}>
-            {filtered.length === 0 ? (
-              <div style={{ color: '#6E8AA0', fontSize: 11, textAlign: 'center', paddingTop: 40 }}>
-                {loading ? 'Loading…' : 'No reports found.'}
+            >
+              <div
+                style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  cursor: "pointer", padding: "4px 0",
+                }}
+                onClick={() => toggleRow(p.event.id)}
+              >
+                <span style={{ color: typeColor, fontSize: 10, flexShrink: 0 }}>
+                  {typeIcon}
+                </span>
+                <span style={{
+                  fontSize: 8, border: `1px solid ${statusColor}`,
+                  borderRadius: 3, color: statusColor,
+                  padding: "1px 4px", letterSpacing: 1, flexShrink: 0,
+                }}>
+                  {status}
+                </span>
+                <span style={{
+                  color: CY, flex: 1, overflow: "hidden",
+                  textOverflow: "ellipsis", whiteSpace: "nowrap",
+                }}>
+                  {p.event.name}
+                </span>
+                <span style={{ color: DIM, fontSize: 8, flexShrink: 0 }}>
+                  {p.event.type} · {p.matches.length} rpt
+                </span>
+                <span style={{ color: DIM, fontSize: 10 }}>
+                  {isExp ? "▲" : "▼"}
+                </span>
               </div>
-            ) : filtered.map((rp, i) => {
-              const isTriggered = rp._linked;
-              const statusColor = isTriggered ? AM : GR;
-              const isExp = expanded === i;
-              return (
-                <div key={rp.id || i} style={{ borderBottom: `1px solid ${AM}11`, paddingBottom: 6, marginBottom: 6 }}>
-                  <div
-                    onClick={() => setExpanded(isExp ? null : i)}
-                    style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', padding: '4px 0' }}
-                  >
-                    <span style={{
-                      width: 7, height: 7, borderRadius: '50%', background: statusColor,
-                      boxShadow: `0 0 6px ${statusColor}`, flexShrink: 0,
-                    }} />
-                    <span style={{ color: '#DCEBF5', fontSize: 11, flex: 1 }}>{reportLabel(rp)}</span>
-                    {rp.type && chip(String(rp.type).slice(0, 14), CY)}
-                    {rp.category && chip(String(rp.category).slice(0, 14), PU)}
-                    {chip(isTriggered ? 'TRIGGERED' : 'STALE', statusColor)}
-                    <span style={{ color: '#6E8AA0', fontSize: 9, marginLeft: 'auto' }}>
-                      {isExp ? '▲' : '▼'}
-                    </span>
-                  </div>
 
-                  {isExp && (
-                    <div style={{ paddingLeft: 14, paddingTop: 4 }}>
-                      {rp._matches.length > 0 ? (
-                        <>
-                          <div style={{ color: '#6E8AA0', fontSize: 9, letterSpacing: 1, marginBottom: 4 }}>
-                            MATCHING LIVE EVENTS
-                          </div>
-                          {rp._matches.map(({ ev, score }, j) => (
-                            <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
-                              {ev._type && chip(ev._type, typeColor(ev._type))}
-                              <span style={{ color: '#DCEBF5', fontSize: 10, flex: 1 }}>
-                                {eventLabel(ev).slice(0, 60) || '—'}
-                              </span>
-                              {scorebar(score, AM)}
-                            </div>
-                          ))}
-                        </>
-                      ) : (
-                        <div style={{ color: GR, fontSize: 10 }}>No live world events match this report's domain.</div>
-                      )}
+              {isExp && (
+                <div style={{ paddingLeft: 16, paddingBottom: 4 }}>
+                  <div style={{ color: DIM, fontSize: 8, marginBottom: 4 }}>
+                    {p.event.desc}
+                  </div>
+                  {p.matches.length === 0 ? (
+                    <div style={{ color: AMBER, fontSize: 9 }}>
+                      ⚠ no report covers this live event — UNREPORTED gap
                     </div>
+                  ) : (
+                    p.matches.map(({ r, score }) => (
+                      <div key={r.id} style={{
+                        display: "flex", alignItems: "center", gap: 6,
+                        marginBottom: 3,
+                      }}>
+                        <span style={{
+                          color: GREEN, fontSize: 9, flex: 1,
+                          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                        }}>
+                          {r.title}
+                        </span>
+                        {r.type && (
+                          <span style={{ color: DIM, fontSize: 8, flexShrink: 0 }}>
+                            {r.type}
+                          </span>
+                        )}
+                        <ScoreBar score={score} />
+                      </div>
+                    ))
                   )}
                 </div>
-              );
-            })}
-          </div>
-
-          {brief && (
-            <div style={{
-              padding: '8px 14px', borderTop: `1px solid ${AM}22`,
-              color: '#DCEBF5', fontSize: 11, lineHeight: 1.5, flexShrink: 0,
-              background: 'rgba(245,158,11,0.03)',
-            }}>
-              <span style={{ color: AM, fontSize: 9, letterSpacing: 2 }}>ASSESS ▸ </span>{brief}
+              )}
             </div>
-          )}
-        </div>
-      )}
-    </>
+          );
+        })}
+      </div>
+
+      {/* footer */}
+      <div style={{
+        padding: "4px 12px", borderTop: `1px solid ${AMBER}22`,
+        color: DIM, fontSize: 8, letterSpacing: 1,
+        display: "flex", justifyContent: "space-between",
+      }}>
+        <span>LIRPT · /functions/getLiveIntel × /v1/reports</span>
+        <span
+          onClick={load}
+          style={{ cursor: "pointer", color: CY }}
+          title="refresh now"
+        >
+          ↺ {REFRESH_MS / 1000}s
+        </span>
+      </div>
+    </div>
   );
 }
