@@ -67,3 +67,4 @@
 [2026-09-21] F90 TaskKnowledgeGrounding.jsx — Task × Knowledge Grounding (TASKKG): /entities/Task × /knowledge/ → GROUNDED/PARTIAL/BARE classification; ◈ TASKKG toggle; isTaskkgQuery+buildTaskkgScript wired in JarvisBrain; build exit 0
 2026-09-21 | F01 marked done (CommandPalette pre-built, mounted) | F166 DatasetKnowledgeCoverage mounted: /v1/datasets + /knowledge/ → DOCUMENTED/DARK split, amber badge, AI brief + TTS via jarvis:dsknow-toggle | build: OK
 
+[2026-09-21] F91 IntelProfileOpsActivation.jsx — /entities/IntelProfile × /v1/ops/events; ACTIVATED vs DORMANT; ◈ IPOPS toggle left:28600; isIpopsQuery+buildIpopsScript wired in JarvisBrain; build exit 0

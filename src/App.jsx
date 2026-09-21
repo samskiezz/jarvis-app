@@ -246,6 +246,7 @@ import OpsContactOwnership from '@/components/cinematic/OpsContactOwnership';
 import GraphCentralityRiskConvergence from '@/components/cinematic/GraphCentralityRiskConvergence';
 import TaskKnowledgeGrounding from '@/components/cinematic/TaskKnowledgeGrounding';
 import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
+import IntelProfileOpsActivation from '@/components/cinematic/IntelProfileOpsActivation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -727,6 +728,9 @@ function App() {
             <GraphCentralityRiskConvergence />
             {/* F90 (overnight 2026-09-21): Task × Knowledge Grounding — ◈ TASKKG button (left:28040, bottom:8, zIndex:91); parallel-fetches /entities/Task + /knowledge/; keyword-correlates each open task against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0); stat tiles tasks/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand task → matched KB article cards with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task knowledge coverage brief + TTS; isTaskkgQuery+buildTaskkgScript wired in JarvisBrain; "taskkg"/"task knowledge"/"task kb"/"bare tasks"/"task grounding"/"ungrounded tasks"/"task knowledge gap" voice trigger; jarvis:taskkg-toggle event; 90-s auto-refresh */}
             <TaskKnowledgeGrounding />
+
+            {/* F91 (overnight 2026-09-21): IntelProfile × Ops Events Activation — ◈ IPOPS button (left:28600, bottom:8, zIndex:92); parallel-fetches /entities/IntelProfile + /v1/ops/events; keyword-correlates each active intel threat profile against significant ops events to surface ACTIVATED (live event matches threat actor keywords) vs DORMANT; stat tiles profiles/events/activated/dormant; amber badge on activated count; filter tabs ALL/ACTIVATED/DORMANT + text search; expand profile → matched ops event cards with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat activation brief + TTS; isIpopsQuery+buildIpopsScript wired in JarvisBrain; "intel ops"/"ipops"/"activated threats"/"threat in ops"/"intel activation"/"ops threat match"/"threat operations" voice trigger; jarvis:ipops-toggle event; 90-s auto-refresh */}
+            <IntelProfileOpsActivation />
 
             {/* F166 (overnight 2026-09-21): dataset × knowledge coverage — ◈ DSKNOW button (left:30120, bottom:8, zIndex:60); parallel-fetches /v1/datasets + /knowledge/; keyword-correlates each dataset against knowledge articles to surface DOCUMENTED vs DARK (no backing docs — knowledge gap); amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-documentation brief + TTS via jarvis:speak-dossier; 120-s auto-refresh; "dataset knowledge"/"dataset docs"/"undocumented datasets"/"data documentation gap"/"dsknow" voice trigger; jarvis:dsknow-toggle event */}
             <DatasetKnowledgeCoverage />

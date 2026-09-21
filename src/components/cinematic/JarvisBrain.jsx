@@ -67,6 +67,7 @@ import { isSjaskQuery, buildSjaskScript } from "./SwarmJobAipSkillCoverage";
 import { isScrepQuery, buildScrepScript } from "./ScenarioReportIntelligence";
 import { isCntrkrskQuery, buildCntrkrskScript } from "./GraphCentralityRiskConvergence";
 import { isTaskkgQuery, buildTaskkgScript } from "./TaskKnowledgeGrounding";
+import { isIpopsQuery, buildIpopsScript } from "./IntelProfileOpsActivation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -697,6 +698,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:taskkg-toggle"));
       let script = "";
       try { script = await buildTaskkgScript(); } catch { script = "Task knowledge grounding panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F91: intel profile × ops events activation — surfaces ACTIVATED threat profiles matched by live ops events.
+    if (isIpopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipops-toggle"));
+      let script = "";
+      try { script = await buildIpopsScript(); } catch { script = "Intel profile ops activation panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
