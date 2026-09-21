@@ -79,6 +79,7 @@ import { isLirptQuery, buildLirptScript } from "./LiveIntelReportCoverage";
 import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioCoverage";
 import { isGcinQuery, buildGcinScript } from "./GraphCentralityInvestigations";
 import { isLiknowQuery, buildLiknowScript } from "./LiveIntelKnowledgeCoverage";
+import { isLicontactQuery, buildLicontactScript } from "./LiveIntelContactExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -815,6 +816,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:liknow-toggle"));
       let script = "";
       try { script = await buildLiknowScript(); } catch { script = "Live intel knowledge coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLicontactQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:licontact-toggle"));
+      let script = "";
+      try { script = await buildLicontactScript(); } catch { script = "Live intel contact exposure panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

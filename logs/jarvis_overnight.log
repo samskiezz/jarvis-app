@@ -81,3 +81,4 @@
 2026-09-21 overnight: F202 LiveIntelScenarioCoverage.jsx — /functions/getLiveIntel × /v1/scenario/list; TRIGGERED/DORMANT; isLiscenQuery+buildLiscenScript wired JarvisBrain; mounted App.jsx; build exit 0
 2026-09-21 F203 GraphCentralityInvestigations.jsx: /v1/graph/centrality × /v1/investigations; GCIN toggle left:35720; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
 [2026-09-21] F204 LiveIntelKnowledgeCoverage.jsx — /functions/getLiveIntel × /knowledge/ → DOCUMENTED vs UNDOCUMENTED; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
+2026-09-21T20:17:42Z F205 LiveIntelContactExposure.jsx — /functions/getLiveIntel × /entities/Contact → EXPOSED/SAFE contact exposure; mounted App.jsx; wired JarvisBrain.jsx; build exit 0

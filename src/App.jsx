@@ -260,6 +260,7 @@ import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCover
 import LiveIntelScenarioCoverage from '@/components/cinematic/LiveIntelScenarioCoverage';
 import GraphCentralityInvestigations from '@/components/cinematic/GraphCentralityInvestigations';
 import LiveIntelKnowledgeCoverage from '@/components/cinematic/LiveIntelKnowledgeCoverage';
+import LiveIntelContactExposure from '@/components/cinematic/LiveIntelContactExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -782,6 +783,9 @@ function App() {
 
             {/* F204 (overnight 2026-09-21): Live Intel × Knowledge Coverage — ◈ LIKNOW button (left:36280, bottom:8, zIndex:104); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /knowledge/; keyword-correlates live world events against KB articles to surface DOCUMENTED (≥1 KB match) vs UNDOCUMENTED (knowledge gap); amber badge on undocumented count; filter tabs ALL/DOCUMENTED/UNDOCUMENTED + text search; expand event → matched KB article cards with relevance bar; ▶ ASSESS COVERAGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLiknowQuery+buildLiknowScript wired in JarvisBrain; "liknow"/"live intel knowledge"/"world knowledge"/"event knowledge"/"undocumented events" voice trigger; jarvis:liknow-toggle event; 60-s auto-refresh */}
             <LiveIntelKnowledgeCoverage />
+
+            {/* F205 (overnight 2026-09-21): Live Intel × Contact Exposure — ◈ LICONTACT button (left:36840, bottom:8, zIndex:105); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /entities/Contact; keyword-correlates contact name/role/org/dept/tags against live world events to surface EXPOSED (≥1 event match) vs SAFE; stat tiles events/contacts/exposed/safe; amber badge on exposed count; filter tabs ALL/EXPOSED/SAFE + text search; expand contact → matched live event cards with type badge (SEISMIC/CRYPTO/FX) + relevance bar; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLicontactQuery+buildLicontactScript wired in JarvisBrain; "licontact"/"contact exposure"/"exposed contacts"/"who is exposed"/"live contact" voice trigger; jarvis:licontact-toggle event; 90-s auto-refresh */}
+            <LiveIntelContactExposure />
 
             <Suspense fallback={<Loading />}>
               <Routes>
