@@ -75,6 +75,7 @@ import LiveScenarioMonitor from '@/components/cinematic/LiveScenarioMonitor';
 import OpsHealthBanner from '@/components/cinematic/OpsHealthBanner';
 import PriorityActionQueue from '@/components/cinematic/PriorityActionQueue';
 import ThreatVelocityMonitor from '@/components/cinematic/ThreatVelocityMonitor';
+import OpsVelocityMonitor from '@/components/cinematic/OpsVelocityMonitor';
 import GraphTopologyHealth from '@/components/cinematic/GraphTopologyHealth';
 import AdaptiveThreatReport from '@/components/cinematic/AdaptiveThreatReport';
 import GeoSeismicAnalyst from '@/components/cinematic/GeoSeismicAnalyst';
@@ -389,6 +390,8 @@ function App() {
             <OpsHealthBanner />
             {/* F42: priority action queue — ⚡ QUEUE button (left:3404); parallel-fetches /entities/Task + /entities/RiskSignal + /v1/investigations; urgency-scores all items; unified ranked "what needs attention now" list; click → /v1/jarvis/agent/chat AI recommendation spoken via jarvis:speak-dossier; 45-s auto-refresh; "priority queue"/"what needs attention"/"urgent items"/"action items" voice trigger (isPriorityQueueQuery+buildPriorityQueueScript already wired in JarvisBrain) */}
             <PriorityActionQueue />
+            {/* F93 (overnight 2026-09-21): ops velocity monitor — ◈ OPSVL button (left:5060); polls /v1/ops/events every 30 s; rolling 10-sample window; evt/min velocity gauge; SURGE/ELEVATED/NOMINAL badge + sparkline; announces SURGE ≥5/min via jarvis:speak-dossier; isOpsVelocityQuery+buildOpsVelocityScript; "ops velocity"/"event rate"/"opsvl" voice trigger */}
+            <OpsVelocityMonitor />
             {/* F43: threat velocity monitor — ⚡ VEL button (left:4860); polls /entities/RiskSignal every 30 s; rolling 10-sample window computes thr/min rate; SURGE/ELEVATED/NOMINAL badge + sparkline + big velocity number; auto-announces SURGE ≥3/min via jarvis:speak-dossier; isThreatVelocityQuery+buildThreatVelocityScript wired in JarvisBrain; "threat velocity"/"threat rate"/"threat surge" voice trigger */}
             <ThreatVelocityMonitor />
             {/* F44: graph topology health — ⬡ GTOPO button (left:9340); parallel-polls /v1/graph/centrality + /v1/graph/communities every 90 s; composite 0-100 topology health score (concentration penalty + community diversity bonus); score ring + stat tiles + sparkline history (localStorage) + AI assessment via /v1/jarvis/agent/chat + TTS; isGtopoQuery+buildGtopoScript wired in JarvisBrain; "graph topology"/"network topology"/"topology health"/"gtopo" voice trigger */}

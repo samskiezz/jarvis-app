@@ -68,4 +68,5 @@
 2026-09-21 | F01 marked done (CommandPalette pre-built, mounted) | F166 DatasetKnowledgeCoverage mounted: /v1/datasets + /knowledge/ → DOCUMENTED/DARK split, amber badge, AI brief + TTS via jarvis:dsknow-toggle | build: OK
 
 [2026-09-21] F91 IntelProfileOpsActivation.jsx — /entities/IntelProfile × /v1/ops/events; ACTIVATED vs DORMANT; ◈ IPOPS toggle left:28600; isIpopsQuery+buildIpopsScript wired in JarvisBrain; build exit 0
-[2026-09-21] F92 ReportKnowledgeCoverage.jsx — /v1/reports × /knowledge/ → GROUNDED/PARTIAL/BARE classification; ◈ RPTKB toggle left:29160 zIndex:93; isRptkbQuery+buildRptkbScript wired in JarvisBrain; build exit 0
+[2026-09-21] F92 ReportKnowledgeCoverage.jsx — /v1/reports × /knowledge/ → GROUNDED/PARTIAL/BARE classification; ◈ RPTKB toggle left:29160 zIndex:93; isRptkbQuery+buildRptkbScript wired in JarvisBrain; build exit 0[2026-09-21] F93 OpsVelocityMonitor (OPSVL): OpsVelocityMonitor.jsx created; polls /v1/ops/events every 30s; 10-sample rolling window; evt/min velocity; SURGE/ELEVATED/NOMINAL badge; auto-announce SURGE ≥5/min via jarvis:speak-dossier; ◈ OPSVL toggle left:5060; mounted in App.jsx; isOpsVelocityQuery+buildOpsVelocityScript wired; build exit 0
+
