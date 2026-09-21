@@ -69,6 +69,7 @@ import { isCntrkrskQuery, buildCntrkrskScript } from "./GraphCentralityRiskConve
 import { isTaskkgQuery, buildTaskkgScript } from "./TaskKnowledgeGrounding";
 import { isIpopsQuery, buildIpopsScript } from "./IntelProfileOpsActivation";
 import { isRptkbQuery, buildRptkbScript } from "./ReportKnowledgeCoverage";
+import { isOpaskQuery, buildOpaskScript } from "./OpsAipSkillCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -716,6 +717,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rptkb-toggle"));
       let script = "";
       try { script = await buildRptkbScript(); } catch { script = "Report knowledge coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F94: ops events × AIP skill coverage — surfaces ops events with no AI skill backing (UNSUPPORTED).
+    if (isOpaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opask-toggle"));
+      let script = "";
+      try { script = await buildOpaskScript(); } catch { script = "Ops AI skill coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

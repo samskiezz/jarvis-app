@@ -249,6 +249,7 @@ import TaskKnowledgeGrounding from '@/components/cinematic/TaskKnowledgeGroundin
 import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
 import IntelProfileOpsActivation from '@/components/cinematic/IntelProfileOpsActivation';
 import ReportKnowledgeCoverage from '@/components/cinematic/ReportKnowledgeCoverage';
+import OpsAipSkillCoverage from '@/components/cinematic/OpsAipSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -741,6 +742,9 @@ function App() {
 
             {/* F92 (overnight 2026-09-21): Report × Knowledge Coverage — ◈ RPTKB button (left:29160, bottom:8, zIndex:93); parallel-fetches /v1/reports + /knowledge/; keyword-correlates each intelligence report against KB articles; GROUNDED/PARTIAL/BARE classification; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand report → matched KB article cards with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRptkbQuery+buildRptkbScript wired in JarvisBrain; "rptkb"/"report knowledge"/"report kb"/"bare reports"/"report knowledge gap" voice trigger; jarvis:rptkb-toggle event; 90-s auto-refresh */}
             <ReportKnowledgeCoverage />
+
+            {/* F94 (overnight 2026-09-21): Ops Events × AIP Skill Response Coverage — ◈ OPASK button (left:29720, bottom:8, zIndex:94); parallel-fetches /v1/ops/events + /v1/aip/skill; keyword-correlates significant ops events (sev≥50) against JARVIS AI skills; SKILLED (≥1 skill match) vs UNSUPPORTED (AI capability blind-spot); stat tiles events/skills/skilled/unsupported; amber badge on unsupported count; filter tabs ALL/SKILLED/UNSUPPORTED + text search; expand event → matched AI skill cards with type badge + relevance score bar; ▶ ASSESS AI GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOpaskQuery+buildOpaskScript wired in JarvisBrain; "opask"/"ops skill"/"ai skill gap"/"unsupported events"/"ops ai coverage" voice trigger; jarvis:opask-toggle event; 60-s auto-refresh */}
+            <OpsAipSkillCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
