@@ -1,0 +1,1 @@
+[2026-09-21] F166 IntelProfileDatasetCoverage: /entities/IntelProfile × /v1/datasets — COVERED/DARK classification, amber badge on gaps, AI assess + TTS. New file src/components/cinematic/IntelProfileDatasetCoverage.jsx; mounted App.jsx after F165. Build ✓.
