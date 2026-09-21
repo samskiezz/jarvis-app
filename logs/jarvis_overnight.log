@@ -72,3 +72,4 @@
 
 2026-09-21 | F94 OPASK | OpsAipSkillCoverage.jsx — /v1/ops/events × /v1/aip/skill; SKILLED/UNSUPPORTED; ◈ OPASK left:29720 zIndex:94; isOpaskQuery+buildOpaskScript in JarvisBrain; build exit 0
 [2026-09-21] F95 InvestigationDatasetEvidence: /v1/investigations × /v1/datasets — DATA_BACKED/DATA_DARK classification, amber badge on dark cases, AI evidence brief + TTS. New file src/components/cinematic/InvestigationDatasetEvidence.jsx; mounted App.jsx after F94; wired JarvisBrain.jsx. Build exit 0.
+[2026-09-21] F96 GraphCentralityKnowledge (GCNK): /v1/graph/centrality × /knowledge/ — GROUNDED/PARTIAL/BARE classification; amber badge on bare nodes; ◈ GCNK toggle left:31240 zIndex:96; isGcknQuery+buildGcknScript wired in JarvisBrain; build exit 0

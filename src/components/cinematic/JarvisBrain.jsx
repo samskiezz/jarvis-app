@@ -71,6 +71,7 @@ import { isIpopsQuery, buildIpopsScript } from "./IntelProfileOpsActivation";
 import { isRptkbQuery, buildRptkbScript } from "./ReportKnowledgeCoverage";
 import { isOpaskQuery, buildOpaskScript } from "./OpsAipSkillCoverage";
 import { isInvdsetQuery, buildInvdsetScript } from "./InvestigationDatasetEvidence";
+import { isGcknQuery, buildGcknScript } from "./GraphCentralityKnowledge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -736,6 +737,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:invdset-toggle"));
       let script = "";
       try { script = await buildInvdsetScript(); } catch { script = "Investigation dataset evidence panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F96: graph centrality × knowledge coverage — surfaces BARE high-centrality nodes with no KB backing.
+    if (isGcknQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcnk-toggle"));
+      let script = "";
+      try { script = await buildGcknScript(); } catch { script = "Graph centrality knowledge coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

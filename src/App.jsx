@@ -251,6 +251,7 @@ import IntelProfileOpsActivation from '@/components/cinematic/IntelProfileOpsAct
 import ReportKnowledgeCoverage from '@/components/cinematic/ReportKnowledgeCoverage';
 import OpsAipSkillCoverage from '@/components/cinematic/OpsAipSkillCoverage';
 import InvestigationDatasetEvidence from '@/components/cinematic/InvestigationDatasetEvidence';
+import GraphCentralityKnowledge from '@/components/cinematic/GraphCentralityKnowledge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -749,6 +750,9 @@ function App() {
 
             {/* F95 (overnight 2026-09-21): investigation × dataset evidence — ◈ INVDSET button (left:30680, bottom:8, zIndex:95); parallel-fetches /v1/investigations + /v1/datasets; keyword-correlates each open investigation against dataset catalog to surface DATA_BACKED (≥1 dataset match) vs DATA_DARK (no dataset support — investigation has no data foundation); amber badge on dark count; filter tabs ALL/DATA_BACKED/DATA_DARK; expand case → matched dataset cards with row counts + relevance bar; ▶ ASSESS EVIDENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isInvdsetQuery+buildInvdsetScript wired in JarvisBrain; "investigation dataset"/"invdset"/"case data"/"unbacked investigations"/"investigation evidence"/"data dark cases"/"case dataset" voice trigger; jarvis:invdset-toggle event; 90-s auto-refresh */}
             <InvestigationDatasetEvidence />
+
+            {/* F96 (overnight 2026-09-21): graph centrality × knowledge coverage — ◈ GCNK button (left:31240, bottom:8, zIndex:96); parallel-fetches /v1/graph/centrality + /knowledge/; keyword-correlates high-centrality graph nodes against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0 — knowledge gap for influential nodes); stat tiles nodes/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand node → matched KB article cards with relevance score bar; ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcknQuery+buildGcknScript wired in JarvisBrain; "graph knowledge"/"gcnk"/"node knowledge"/"centrality knowledge"/"bare nodes"/"graph kb" voice trigger; jarvis:gcnk-toggle event; 90-s auto-refresh */}
+            <GraphCentralityKnowledge />
 
             <Suspense fallback={<Loading />}>
               <Routes>
