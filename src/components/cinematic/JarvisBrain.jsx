@@ -65,6 +65,7 @@ import { isOpeconQuery, buildOpeconScript } from "./OpsContactOwnership";
 import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
 import { isSjaskQuery, buildSjaskScript } from "./SwarmJobAipSkillCoverage";
 import { isScrepQuery, buildScrepScript } from "./ScenarioReportIntelligence";
+import { isCntrkrskQuery, buildCntrkrskScript } from "./GraphCentralityRiskConvergence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -677,6 +678,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:screp-toggle"));
       let script = "";
       try { script = await buildScrepScript(); } catch { script = "Scenario intelligence coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F89: graph centrality × risk signal convergence — surfaces high-centrality nodes with live risk signal matches.
+    if (isCntrkrskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cntrkrsk-toggle"));
+      let script = "";
+      try { script = await buildCntrkrskScript(); } catch { script = "Graph centrality risk convergence panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

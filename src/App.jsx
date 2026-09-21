@@ -243,6 +243,7 @@ import SwarmJobInvestigationCoverage from '@/components/cinematic/SwarmJobInvest
 import SwarmJobKnowledgeGrounding from '@/components/cinematic/SwarmJobKnowledgeGrounding';
 import ContactTaskAssignment from '@/components/cinematic/ContactTaskAssignment';
 import OpsContactOwnership from '@/components/cinematic/OpsContactOwnership';
+import GraphCentralityRiskConvergence from '@/components/cinematic/GraphCentralityRiskConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -720,6 +721,8 @@ function App() {
             <SwarmJobAipSkillCoverage />
             {/* F88 (overnight 2026-09-21): Scenario × Report Intelligence Coverage — ◈ SCREP button (left:26920, bottom:8, zIndex:89); parallel-fetches /v1/scenario/list + /v1/reports; keyword-correlates each scenario against intelligence reports to surface REPORTED (≥1 report match) vs DARK (intelligence gap); stat tiles scenarios/reports/reported/dark; amber badge on dark count; filter tabs ALL/REPORTED/DARK + text search; expand scenario → matched report cards with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario intelligence brief + TTS; isScrepQuery+buildScrepScript wired in JarvisBrain; "screp"/"scenario report"/"scenario intelligence"/"dark scenarios"/"reported scenarios" voice trigger; jarvis:screp-toggle event; 90-s auto-refresh */}
             <ScenarioReportIntelligence />
+            {/* F89 (overnight 2026-09-21): Graph Centrality × Risk Signal Convergence — ◈ CNTRKRSK button (left:27480, bottom:8, zIndex:90); parallel-fetches /v1/graph/centrality + /entities/RiskSignal; keyword-correlates each high-centrality graph node against live risk signals to surface AT_RISK (≥1 signal match) vs SECURE; stat tiles nodes/signals/at_risk/secure; red badge on at-risk count; filter tabs ALL/AT_RISK/SECURE + text search; expand node → matched risk signal cards with SevBar + RelevanceBar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence centrality-risk convergence brief + TTS; isCntrkrskQuery+buildCntrkrskScript wired in JarvisBrain; "cntrkrsk"/"centrality risk"/"graph risk"/"risky nodes"/"at risk nodes" voice trigger; jarvis:cntrkrsk-toggle event; 90-s auto-refresh */}
+            <GraphCentralityRiskConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
