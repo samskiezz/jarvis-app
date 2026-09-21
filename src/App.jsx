@@ -255,6 +255,7 @@ import GraphCentralityKnowledge from '@/components/cinematic/GraphCentralityKnow
 import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowledgeCoverage';
 import OpsTempoIndex from '@/components/cinematic/OpsTempoIndex';
 import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKnowledgeCoverage';
+import ContactDatasetExposure from '@/components/cinematic/ContactDatasetExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -763,6 +764,9 @@ function App() {
 
             {/* F99 (overnight 2026-09-21): IntelProfile × Knowledge Coverage — ◈ IPKB button (left:33480, bottom:8, zIndex:99); parallel-fetches /entities/IntelProfile + /knowledge/; keyword-correlates each threat intel profile against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0 — threat profile with zero KB backing); stat tiles profiles/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand profile → matched KB article cards with relevance score bar; ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIpkbQuery+buildIpkbScript wired in JarvisBrain; "intel knowledge"/"ipkb"/"threat knowledge"/"intel kb"/"profile knowledge"/"bare profiles"/"ungrounded intel"/"intel knowledge gap" voice trigger; jarvis:ipkb-toggle event; 90-s auto-refresh */}
             <IntelProfileKnowledgeCoverage />
+
+            {/* F200 (overnight 2026-09-21): Contact × Dataset Exposure — ◈ CTDSET button (left:34040, bottom:8, zIndex:100); parallel-fetches /entities/Contact + /v1/datasets; keyword-correlates contact name/role/org/tags against dataset catalog metadata to surface DOCUMENTED (≥1 dataset match) vs INVISIBLE (no data trail — contact absent from all datasets); stat tiles contacts/datasets/documented/invisible; amber badge on invisible count; filter tabs ALL/DOCUMENTED/INVISIBLE + text search; expand contact → matched dataset cards with row count + relevance score bar; ▶ ASSESS DATA TRAILS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCtdsetQuery+buildCtdsetScript wired in JarvisBrain; "contact dataset"/"ctdset"/"data trail"/"invisible contacts"/"contact data exposure" voice trigger; jarvis:ctdset-toggle event; 90-s auto-refresh */}
+            <ContactDatasetExposure />
 
             <Suspense fallback={<Loading />}>
               <Routes>

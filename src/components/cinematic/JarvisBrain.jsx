@@ -74,6 +74,7 @@ import { isInvdsetQuery, buildInvdsetScript } from "./InvestigationDatasetEviden
 import { isGcknQuery, buildGcknScript } from "./GraphCentralityKnowledge";
 import { isInvkbQuery, buildInvkbScript } from "./InvestmentKnowledgeCoverage";
 import { isIpkbQuery, buildIpkbScript } from "./IntelProfileKnowledgeCoverage";
+import { isCtdsetQuery, buildCtdsetScript } from "./ContactDatasetExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -766,6 +767,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipkb-toggle"));
       let script = "";
       try { script = await buildIpkbScript(); } catch { script = "Intel profile knowledge coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F200: contact × dataset exposure — surfaces INVISIBLE contacts with no data trail in any dataset.
+    if (isCtdsetQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctdset-toggle"));
+      let script = "";
+      try { script = await buildCtdsetScript(); } catch { script = "Contact dataset exposure panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
