@@ -1,157 +1,161 @@
 /**
- * IntelProfileDatasetCoverage — F166
+ * F68 — IntelProfile × Dataset Coverage (IPDC)
  *
- * Parallel-fetches /entities/IntelProfile + /v1/datasets then keyword-
- * correlates each threat-actor/org profile against the dataset catalog to
- * surface COVERED (at least one dataset contains intel on this profile) vs
- * DARK (profile has no dataset backing — intelligence gap).
+ * Answers: "Which intel profiles have supporting datasets, and which are data-dark?"
  *
- * Stat tiles: profiles / datasets / covered / dark
- * Filter tabs: ALL / COVERED / DARK
- * Expand profile → matched datasets with relevance score.
- * Amber badge on dark count (intelligence gaps require attention).
- * Click ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence intel-dataset brief
- *   + jarvis:speak-dossier TTS.
- * 90 s auto-refresh.
+ * Data sources (confirmed real endpoints):
+ *   GET /entities/IntelProfile  → registered intelligence profiles
+ *   GET /v1/datasets            → dataset catalog
  *
- * Intent: "intel data coverage" / "profile datasets" / "threat intel data" /
- *         "intel dataset coverage" / "ipdset" / "dark profiles"
- *   → jarvis:ipdset-toggle
+ * Each IntelProfile's name/tags/description/aliases are keyword-matched against
+ * each dataset's name/description/tags/source to produce:
+ *   DATA_BACKED — at least one dataset references this profile's context
+ *   DATA_DARK   — no dataset correlates to this profile
  *
- * Toggle: ◈ IPDSET at left:55080, bottom:8, zIndex:108.
- * Mounted in App.jsx.
+ * Stat tiles:  profiles / datasets / data-backed / data-dark
+ * Amber badge: dark count on button (unsupported profiles are the intelligence gap).
+ * Expand row:  matched datasets with topic badge + relevance score bar.
+ * ▶ ASSESS:   2-sentence AI brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
+ *
+ * Toggle:  ◈ IPDF  at left:1620 bottom:18, zIndex:68.
+ * Event:   jarvis:ipdf-toggle
+ * Voice:   "intel profile dataset / profile data / ipds / data-backed profiles /
+ *           dark profiles / which profiles have data / profile coverage /
+ *           profile dataset coverage / intel data coverage"
+ * Refresh: 90 s auto-poll.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
 import { apiBase } from "@/api/cinematicDataAdapters";
 
-const CY     = "#29E7FF";
-const AMBER  = "#F5A623";
-const GREEN  = "#00c878";
-const RED    = "#FF4444";
-const DIM    = "#4A6070";
-const BG     = "rgba(3,5,9,0.97)";
-const BTN_LEFT   = 55080;
+const CY    = "#29E7FF";
+const AMBER = "#F5A623";
+const GREEN = "#00c878";
+const RED   = "#FF3B6B";
+const MUTED = "#6E8AA0";
+const BG    = "rgba(4,7,14,0.96)";
+const MONO  = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
+
+const BTN_LEFT   = 1620;
 const REFRESH_MS = 90_000;
-const MONO = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||
   "dev-key";
 
-// ─── intent exports ───────────────────────────────────────────────────────────
+// ─── normalise ───────────────────────────────────────────────────────────────
 
-const IPDSET_RE =
-  /\b(intel.data.coverage|profile.dataset|threat.intel.data|intel.dataset|ipdset|dark.profiles|profile.backing|intel.gaps)\b/i;
-
-export function isIpdsetQuery(t) { return IPDSET_RE.test(t || ""); }
-
-export async function buildIpdsetScript() {
-  const [pRaw, dRaw] = await Promise.allSettled([
-    fetch(`${apiBase()}/entities/IntelProfile`, {
-      headers: { Authorization: `Bearer ${API_KEY}` },
-    }).then((r) => r.json()),
-    fetch(`${apiBase()}/v1/datasets`, {
-      headers: { Authorization: `Bearer ${API_KEY}` },
-    }).then((r) => r.json()),
-  ]);
-  const profiles = normaliseProfiles(pRaw.status === "fulfilled" ? pRaw.value : []);
-  const datasets = normaliseDatasets(dRaw.status === "fulfilled" ? dRaw.value : []);
-  const pairs    = correlate(profiles, datasets);
-  const covered  = pairs.filter((p) => p.matches.length > 0).length;
-  const dark     = pairs.filter((p) => p.matches.length === 0).length;
-  return (
-    `Intel Profile × Dataset Coverage: ${profiles.length} profiles, ${datasets.length} datasets. ` +
-    `${covered} profiles have dataset backing; ${dark} profiles are DARK (no dataset coverage). ` +
-    `Provide a 2-sentence intelligence-gap brief and recommend the highest-priority profile to address.`
-  );
-}
-
-// ─── data helpers ─────────────────────────────────────────────────────────────
-
-function normaliseProfiles(raw) {
-  const arr = Array.isArray(raw) ? raw : raw?.items ?? raw?.data ?? raw?.results ?? [];
-  return arr.map((p) => ({
-    id:   p.id   ?? p._id   ?? String(Math.random()),
-    name: p.name ?? p.title ?? p.alias ?? p.subject ?? "Unknown Profile",
-    type: p.type ?? p.profile_type ?? p.category ?? "",
-    tags: Array.isArray(p.tags) ? p.tags : [],
-  }));
-}
-
-function normaliseDatasets(raw) {
-  const arr = Array.isArray(raw) ? raw : raw?.datasets ?? raw?.items ?? raw?.data ?? raw?.results ?? [];
-  return arr.map((d) => ({
-    id:   d.id   ?? d._id   ?? String(Math.random()),
-    name: d.name ?? d.title ?? d.label ?? "Unnamed Dataset",
-    desc: d.description ?? d.desc ?? d.summary ?? "",
-    rows: d.row_count ?? d.rows ?? d.record_count ?? null,
-  }));
+function normArr(raw) {
+  if (Array.isArray(raw))                return raw;
+  if (raw && Array.isArray(raw.items))   return raw.items;
+  if (raw && Array.isArray(raw.data))    return raw.data;
+  if (raw && Array.isArray(raw.results)) return raw.results;
+  return [];
 }
 
 function tokens(str) {
-  return String(str || "")
-    .toLowerCase()
-    .split(/[\s\-_/.,;:()[\]]+/)
-    .filter((t) => t.length > 2);
+  return String(str || "").toLowerCase().split(/\W+/).filter(t => t.length > 2);
 }
 
-function correlate(profiles, datasets) {
-  return profiles.map((prof) => {
-    const profTokens = new Set([
-      ...tokens(prof.name),
-      ...tokens(prof.type),
-      ...prof.tags.flatMap(tokens),
-    ]);
+function score(profile, dataset) {
+  const pTokens = new Set([
+    ...tokens(profile.name),
+    ...tokens(profile.description),
+    ...tokens(profile.aliases),
+    ...tokens(Array.isArray(profile.tags) ? profile.tags.join(" ") : profile.tags),
+    ...tokens(profile.role),
+    ...tokens(profile.organization),
+  ]);
+  const dSrc = [
+    dataset.name, dataset.description,
+    Array.isArray(dataset.tags) ? dataset.tags.join(" ") : dataset.tags,
+    dataset.source, dataset.category,
+  ].join(" ");
+  const dTokens = tokens(dSrc);
+  const hits = dTokens.filter(t => pTokens.has(t));
+  return hits.length;
+}
+
+// ─── fetch ───────────────────────────────────────────────────────────────────
+
+async function fetchAll() {
+  const base = apiBase();
+  const headers = { Authorization: `Bearer ${API_KEY}` };
+  const [pr, dr] = await Promise.all([
+    fetch(`${base}/entities/IntelProfile`, { headers }).then(r => r.json()).catch(() => []),
+    fetch(`${base}/v1/datasets`,           { headers }).then(r => r.json()).catch(() => []),
+  ]);
+  const profiles  = normArr(pr);
+  const datasets  = normArr(dr);
+  const correlated = profiles.map(p => {
     const matches = datasets
-      .map((ds) => {
-        const dsTokens = [...tokens(ds.name), ...tokens(ds.desc)];
-        const shared = dsTokens.filter((t) => profTokens.has(t));
-        return { dataset: ds, score: shared.length };
-      })
-      .filter((m) => m.score > 0)
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 5);
-    return { profile: prof, matches };
+      .map(d => ({ dataset: d, sc: score(p, d) }))
+      .filter(x => x.sc > 0)
+      .sort((a, b) => b.sc - a.sc);
+    return {
+      profile: p,
+      classification: matches.length > 0 ? "DATA_BACKED" : "DATA_DARK",
+      matches,
+    };
   });
+  return { correlated, profileCount: profiles.length, datasetCount: datasets.length };
 }
 
-// ─── component ────────────────────────────────────────────────────────────────
+// ─── assess ──────────────────────────────────────────────────────────────────
+
+async function runAssess(correlated, setText, speak) {
+  const dark    = correlated.filter(c => c.classification === "DATA_DARK").length;
+  const backed  = correlated.filter(c => c.classification === "DATA_BACKED").length;
+  const prompt  =
+    `You are JARVIS. In 2 sentences, brief the operator on IntelProfile × Dataset coverage: ` +
+    `${backed} profiles are data-backed, ${dark} are data-dark (no dataset correlates). ` +
+    `Mention the top data-dark profile name if any: ${
+      correlated.find(c => c.classification === "DATA_DARK")?.profile?.name || "none"
+    }. Conclude with the most urgent action.`;
+  const base = apiBase();
+  const headers = { Authorization: `Bearer ${API_KEY}`, "Content-Type": "application/json" };
+  try {
+    const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
+      method: "POST", headers, body: JSON.stringify({ message: prompt }),
+    });
+    const j = await r.json();
+    const text = j.response || j.reply || j.message || JSON.stringify(j);
+    setText(text);
+    window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
+    speak(text);
+  } catch (e) {
+    setText(`ASSESS error: ${e.message}`);
+  }
+}
+
+// ─── component ───────────────────────────────────────────────────────────────
 
 export default function IntelProfileDatasetCoverage() {
-  const [open, setOpen]         = useState(false);
-  const [pairs, setPairs]       = useState([]);
-  const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState(null);
-  const [tab, setTab]           = useState("ALL");
-  const [search, setSearch]     = useState("");
-  const [expanded, setExpanded] = useState(null);
+  const [open, setOpen]           = useState(false);
+  const [data, setData]           = useState(null);
+  const [loading, setLoading]     = useState(false);
+  const [err, setErr]             = useState(null);
+  const [filter, setFilter]       = useState("ALL");
+  const [search, setSearch]       = useState("");
+  const [expanded, setExpanded]   = useState(null);
   const [assessing, setAssessing] = useState(false);
+  const [assessText, setAssessText] = useState("");
   const timerRef = useRef(null);
 
   const load = useCallback(async () => {
-    setLoading(true); setError(null);
+    setLoading(true); setErr(null);
     try {
-      const [pRes, dRes] = await Promise.allSettled([
-        fetch(`${apiBase()}/entities/IntelProfile`, {
-          headers: { Authorization: `Bearer ${API_KEY}` },
-        }).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
-        fetch(`${apiBase()}/v1/datasets`, {
-          headers: { Authorization: `Bearer ${API_KEY}` },
-        }).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
-      ]);
-      const profiles = normaliseProfiles(pRes.status === "fulfilled" ? pRes.value : []);
-      const datasets = normaliseDatasets(dRes.status === "fulfilled" ? dRes.value : []);
-      setPairs(correlate(profiles, datasets));
+      const result = await fetchAll();
+      setData(result);
     } catch (e) {
-      setError(e.message);
+      setErr(e.message);
     } finally {
       setLoading(false);
     }
   }, []);
 
   useEffect(() => {
-    const onToggle = () => setOpen((v) => !v);
-    window.addEventListener("jarvis:ipdset-toggle", onToggle);
-    return () => window.removeEventListener("jarvis:ipdset-toggle", onToggle);
+    const handler = () => setOpen(o => !o);
+    window.addEventListener("jarvis:ipdf-toggle", handler);
+    return () => window.removeEventListener("jarvis:ipdf-toggle", handler);
   }, []);
 
   useEffect(() => {
@@ -161,242 +165,304 @@ export default function IntelProfileDatasetCoverage() {
     return () => clearInterval(timerRef.current);
   }, [open, load]);
 
-  const covered = pairs.filter((p) => p.matches.length > 0);
-  const dark    = pairs.filter((p) => p.matches.length === 0);
-
-  const allDatasets = pairs.reduce((acc, p) => {
-    p.matches.forEach((m) => {
-      if (!acc.some((d) => d.id === m.dataset.id)) acc.push(m.dataset);
-    });
-    return acc;
+  const speak = useCallback((text) => {
+    const base = apiBase();
+    fetch(`${base}/v1/voice/tts`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ text, voice: localStorage.getItem("jarvis_voice") || "ash" }),
+    }).then(r => r.blob()).then(b => {
+      const url = URL.createObjectURL(b);
+      new Audio(url).play().catch(() => {});
+    }).catch(() => {});
   }, []);
 
-  const visible = pairs
-    .filter((p) => {
-      if (tab === "COVERED") return p.matches.length > 0;
-      if (tab === "DARK")    return p.matches.length === 0;
-      return true;
-    })
-    .filter((p) => {
-      if (!search) return true;
-      const q = search.toLowerCase();
-      return (
-        p.profile.name.toLowerCase().includes(q) ||
-        p.profile.type.toLowerCase().includes(q) ||
-        p.matches.some((m) => m.dataset.name.toLowerCase().includes(q))
-      );
-    });
-
-  async function assess() {
-    setAssessing(true);
-    try {
-      const script = await buildIpdsetScript();
-      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({ message: script }),
-      });
-      const d = await r.json();
-      const answer = (d.answer || d.response || "No assessment available.").trim();
-      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text: answer } }));
-    } catch {
-      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", {
-        detail: { text: "Unable to generate assessment at this time." },
-      }));
-    } finally {
-      setAssessing(false);
-    }
-  }
-
-  const darkCount = dark.length;
-
-  return (
-    <>
-      {/* ── fixed toggle button ─────────────────────────────────────────── */}
+  if (!open) {
+    const darkCount = data?.correlated?.filter(c => c.classification === "DATA_DARK").length ?? 0;
+    return (
       <button
-        onClick={() => window.dispatchEvent(new CustomEvent("jarvis:ipdset-toggle"))}
-        title="Intel Profile × Dataset Coverage"
+        onClick={() => setOpen(true)}
+        title="IntelProfile × Dataset Coverage (IPDC)"
         style={{
-          position: "fixed", left: BTN_LEFT, bottom: 8, zIndex: 108,
-          fontFamily: MONO, fontSize: 10, letterSpacing: 1, cursor: "pointer",
-          padding: "4px 8px", borderRadius: 6, whiteSpace: "nowrap",
-          background: open ? CY : "rgba(3,5,9,0.85)",
-          color: open ? "#000" : darkCount > 0 ? AMBER : CY,
-          border: `1px solid ${darkCount > 0 ? AMBER : CY}${open ? "" : "88"}`,
-          boxShadow: open ? `0 0 12px ${CY}88` : darkCount > 0 ? `0 0 8px ${AMBER}44` : "none",
+          position: "fixed", left: BTN_LEFT, bottom: 18, zIndex: 68,
+          background: "rgba(4,7,14,0.82)", border: `1px solid ${AMBER}44`,
+          color: AMBER, fontFamily: MONO, fontSize: 10, letterSpacing: 1,
+          padding: "3px 8px", borderRadius: 3, cursor: "pointer",
+          display: "flex", alignItems: "center", gap: 5,
         }}
       >
-        ◈ IPDSET{darkCount > 0 && !open && (
+        ◈ IPDF
+        {darkCount > 0 && (
           <span style={{
-            marginLeft: 5, background: AMBER, color: "#000",
-            borderRadius: 8, padding: "1px 5px", fontSize: 9,
+            background: AMBER, color: "#000", borderRadius: 8,
+            padding: "0 5px", fontSize: 9, fontWeight: 700,
           }}>{darkCount}</span>
         )}
       </button>
+    );
+  }
 
-      {/* ── panel ───────────────────────────────────────────────────────── */}
-      {open && (
+  const { correlated = [], profileCount = 0, datasetCount = 0 } = data || {};
+  const backed = correlated.filter(c => c.classification === "DATA_BACKED").length;
+  const dark   = correlated.filter(c => c.classification === "DATA_DARK").length;
+
+  const visible = correlated.filter(c => {
+    if (filter === "DATA_BACKED" && c.classification !== "DATA_BACKED") return false;
+    if (filter === "DATA_DARK"   && c.classification !== "DATA_DARK")   return false;
+    if (search) {
+      const q = search.toLowerCase();
+      const name = String(c.profile?.name || "").toLowerCase();
+      const desc = String(c.profile?.description || "").toLowerCase();
+      if (!name.includes(q) && !desc.includes(q)) return false;
+    }
+    return true;
+  });
+
+  const TAB_STYLE = (active) => ({
+    background: active ? AMBER : "transparent",
+    color: active ? "#000" : MUTED,
+    border: `1px solid ${active ? AMBER : MUTED}44`,
+    borderRadius: 3, padding: "2px 8px", fontSize: 9,
+    fontFamily: MONO, cursor: "pointer", letterSpacing: 1,
+  });
+
+  return (
+    <div style={{
+      position: "fixed", right: 18, top: 60, width: 520, maxHeight: "80vh",
+      background: BG, border: `1px solid ${AMBER}55`, borderRadius: 6,
+      fontFamily: MONO, fontSize: 11, color: CY, zIndex: 160,
+      display: "flex", flexDirection: "column", overflow: "hidden",
+    }}>
+      {/* header */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "8px 12px", borderBottom: `1px solid ${AMBER}33`,
+        background: "rgba(245,166,35,0.06)",
+      }}>
+        <span style={{ color: AMBER, fontWeight: 700, letterSpacing: 2 }}>
+          ◈ INTEL PROFILE — DATASET COVERAGE
+        </span>
+        <div style={{ display: "flex", gap: 6 }}>
+          {!assessing && (
+            <button onClick={async () => {
+              setAssessing(true); setAssessText("");
+              await runAssess(correlated, setAssessText, speak);
+              setAssessing(false);
+            }} style={{
+              background: "transparent", border: `1px solid ${CY}55`,
+              color: CY, fontFamily: MONO, fontSize: 9, cursor: "pointer",
+              padding: "2px 8px", borderRadius: 3,
+            }}>▶ ASSESS</button>
+          )}
+          <button onClick={() => setOpen(false)} style={{
+            background: "transparent", border: "none", color: MUTED,
+            cursor: "pointer", fontSize: 13, lineHeight: 1,
+          }}>✕</button>
+        </div>
+      </div>
+
+      {/* assess result */}
+      {(assessing || assessText) && (
         <div style={{
-          position: "fixed", left: Math.min(BTN_LEFT, window.innerWidth - 540),
-          bottom: 36, zIndex: 108,
-          width: 520, maxHeight: "72vh", display: "flex", flexDirection: "column",
-          background: BG, border: `1px solid ${CY}44`, borderRadius: 10,
-          fontFamily: MONO, fontSize: 11, color: "#c8e8f0",
-          boxShadow: `0 0 40px rgba(0,0,0,0.8)`, backdropFilter: "blur(12px)",
+          padding: "6px 12px", background: "rgba(41,231,255,0.05)",
+          borderBottom: `1px solid ${CY}22`, color: CY, fontSize: 10,
+          fontStyle: "italic", lineHeight: 1.5,
         }}>
-          {/* header */}
-          <div style={{ padding: "10px 14px 8px", borderBottom: `1px solid ${CY}22` }}>
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{ color: CY, letterSpacing: 2, fontWeight: 700 }}>
-                ◈ INTEL PROFILE × DATASET COVERAGE
-              </span>
-              <button
-                onClick={() => setOpen(false)}
-                style={{ background: "none", border: "none", color: DIM, cursor: "pointer", fontSize: 14 }}
-              >×</button>
-            </div>
+          {assessing ? "▸ assessing…" : assessText}
+        </div>
+      )}
 
-            {/* stat tiles */}
-            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-              {[
-                { label: "PROFILES", val: pairs.length,   color: CY },
-                { label: "DATASETS", val: allDatasets.length, color: CY },
-                { label: "COVERED",  val: covered.length, color: GREEN },
-                { label: "DARK",     val: darkCount,      color: darkCount > 0 ? AMBER : DIM },
-              ].map(({ label, val, color }) => (
-                <div key={label} style={{
-                  flex: 1, textAlign: "center", padding: "5px 4px",
-                  background: "rgba(255,255,255,0.04)", borderRadius: 6,
-                  border: `1px solid ${color}33`,
-                }}>
-                  <div style={{ color, fontSize: 14, fontWeight: 700 }}>{loading ? "…" : val}</div>
-                  <div style={{ color: DIM, fontSize: 9, letterSpacing: 1, marginTop: 1 }}>{label}</div>
-                </div>
-              ))}
-            </div>
-
-            {/* controls */}
-            <div style={{ display: "flex", gap: 6, marginTop: 8, alignItems: "center" }}>
-              {["ALL", "COVERED", "DARK"].map((t) => (
-                <button
-                  key={t}
-                  onClick={() => setTab(t)}
-                  style={{
-                    padding: "3px 10px", borderRadius: 5, cursor: "pointer", fontSize: 10,
-                    background: tab === t ? CY : "transparent",
-                    color: tab === t ? "#000" : CY,
-                    border: `1px solid ${CY}55`,
-                  }}
-                >{t}</button>
-              ))}
-              <input
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder="filter…"
-                style={{
-                  flex: 1, background: "rgba(0,0,0,0.3)", border: `1px solid ${CY}33`,
-                  borderRadius: 5, padding: "3px 8px", color: "#cfe", fontFamily: MONO,
-                  fontSize: 10, outline: "none",
-                }}
-              />
-              <button
-                onClick={assess}
-                disabled={assessing || pairs.length === 0}
-                style={{
-                  padding: "3px 10px", borderRadius: 5, cursor: "pointer", fontSize: 10,
-                  background: assessing ? DIM : AMBER, color: "#000",
-                  border: "none", opacity: assessing ? 0.6 : 1,
-                }}
-              >{assessing ? "…" : "▶ ASSESS"}</button>
-            </div>
+      {/* stat tiles */}
+      <div style={{
+        display: "grid", gridTemplateColumns: "repeat(4,1fr)",
+        gap: 4, padding: "8px 12px", borderBottom: `1px solid ${AMBER}22`,
+      }}>
+        {[
+          ["PROFILES",  profileCount, CY],
+          ["DATASETS",  datasetCount, MUTED],
+          ["BACKED",    backed,       GREEN],
+          ["DATA-DARK", dark,         AMBER],
+        ].map(([label, val, col]) => (
+          <div key={label} style={{
+            background: "rgba(255,255,255,0.03)", borderRadius: 4,
+            padding: "4px 6px", textAlign: "center",
+          }}>
+            <div style={{ color: col, fontSize: 16, fontWeight: 700 }}>{val}</div>
+            <div style={{ color: MUTED, fontSize: 8, letterSpacing: 1 }}>{label}</div>
           </div>
+        ))}
+      </div>
 
-          {/* rows */}
-          <div style={{ flex: 1, overflowY: "auto", padding: "6px 0" }}>
-            {error && (
-              <div style={{ padding: "8px 14px", color: RED, fontSize: 10 }}>
-                ⚠ {error}
+      {/* filter + search */}
+      <div style={{
+        display: "flex", alignItems: "center", gap: 6,
+        padding: "6px 12px", borderBottom: `1px solid ${AMBER}22`,
+        flexWrap: "wrap",
+      }}>
+        {["ALL", "DATA_BACKED", "DATA_DARK"].map(f => (
+          <button key={f} onClick={() => setFilter(f)} style={TAB_STYLE(filter === f)}>
+            {f}
+          </button>
+        ))}
+        <input
+          value={search} onChange={e => setSearch(e.target.value)}
+          placeholder="search profile…"
+          style={{
+            background: "rgba(255,255,255,0.04)", border: `1px solid ${MUTED}44`,
+            borderRadius: 3, color: CY, fontFamily: MONO, fontSize: 10,
+            padding: "2px 8px", flex: 1, minWidth: 100, outline: "none",
+          }}
+        />
+      </div>
+
+      {/* body */}
+      <div style={{ overflowY: "auto", flex: 1, padding: "6px 0" }}>
+        {loading && !data && (
+          <div style={{ color: MUTED, padding: "12px 16px" }}>◌ loading…</div>
+        )}
+        {err && (
+          <div style={{ color: RED, padding: "8px 16px", fontSize: 10 }}>⚠ {err}</div>
+        )}
+        {visible.length === 0 && !loading && (
+          <div style={{ color: MUTED, padding: "12px 16px" }}>no profiles match</div>
+        )}
+        {visible.map((c, i) => {
+          const { profile, classification, matches } = c;
+          const isBacked = classification === "DATA_BACKED";
+          const isExp    = expanded === i;
+          return (
+            <div key={i} style={{
+              borderBottom: `1px solid ${AMBER}18`,
+              background: isExp ? "rgba(245,166,35,0.04)" : "transparent",
+            }}>
+              <div
+                onClick={() => setExpanded(isExp ? null : i)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 8,
+                  padding: "5px 14px", cursor: "pointer",
+                }}
+              >
+                <span style={{
+                  fontSize: 8, padding: "1px 6px", borderRadius: 2, fontWeight: 700,
+                  background: isBacked ? `${GREEN}22` : `${AMBER}22`,
+                  color: isBacked ? GREEN : AMBER,
+                  minWidth: 76, textAlign: "center",
+                }}>
+                  {classification}
+                </span>
+                <span style={{ color: CY, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {profile.name || profile.id || "Unknown"}
+                </span>
+                {isBacked && (
+                  <span style={{ color: MUTED, fontSize: 9 }}>
+                    {matches.length} dataset{matches.length !== 1 ? "s" : ""}
+                  </span>
+                )}
+                <span style={{ color: MUTED, fontSize: 10 }}>{isExp ? "▲" : "▼"}</span>
               </div>
-            )}
-            {!loading && !error && visible.length === 0 && (
-              <div style={{ padding: "12px 14px", color: DIM }}>No profiles match filter.</div>
-            )}
-            {visible.map((pair) => {
-              const isDark = pair.matches.length === 0;
-              const isExp  = expanded === pair.profile.id;
-              return (
-                <div key={pair.profile.id} style={{ borderBottom: `1px solid ${CY}11` }}>
-                  <div
-                    onClick={() => setExpanded(isExp ? null : pair.profile.id)}
-                    style={{
-                      display: "flex", alignItems: "center", gap: 8, padding: "6px 14px",
-                      cursor: "pointer", background: isExp ? `${CY}08` : "transparent",
-                    }}
-                  >
-                    <span style={{
-                      width: 6, height: 6, borderRadius: "50%", flexShrink: 0,
-                      background: isDark ? AMBER : GREEN,
-                      boxShadow: isDark ? `0 0 6px ${AMBER}` : `0 0 6px ${GREEN}`,
-                    }} />
-                    <span style={{ flex: 1, color: isDark ? AMBER : "#c8e8f0" }}>
-                      {pair.profile.name}
-                    </span>
-                    {pair.profile.type && (
-                      <span style={{
-                        fontSize: 9, color: DIM, background: "rgba(255,255,255,0.05)",
-                        borderRadius: 4, padding: "1px 5px",
-                      }}>{pair.profile.type}</span>
-                    )}
-                    <span style={{
-                      fontSize: 9,
-                      color: isDark ? AMBER : GREEN,
-                      marginLeft: 4,
-                    }}>
-                      {isDark ? "DARK" : `${pair.matches.length} ds`}
-                    </span>
-                    <span style={{ color: DIM, fontSize: 10 }}>{isExp ? "▴" : "▾"}</span>
-                  </div>
 
-                  {isExp && (
-                    <div style={{ padding: "0 14px 8px 28px" }}>
-                      {isDark ? (
-                        <div style={{ color: AMBER, fontSize: 10, opacity: 0.8 }}>
-                          No datasets reference this profile. Intelligence gap — no data backing.
-                        </div>
-                      ) : (
-                        pair.matches.map(({ dataset, score }) => (
-                          <div key={dataset.id} style={{
-                            display: "flex", gap: 8, alignItems: "center",
-                            padding: "3px 0", borderBottom: `1px solid ${CY}0a`,
-                          }}>
-                            <span style={{ color: CY, flex: 1, fontSize: 10 }}>{dataset.name}</span>
-                            {dataset.rows != null && (
-                              <span style={{ color: DIM, fontSize: 9 }}>{dataset.rows.toLocaleString()} rows</span>
-                            )}
+              {isExp && (
+                <div style={{ padding: "0 14px 8px 14px" }}>
+                  {profile.description && (
+                    <div style={{ color: MUTED, fontSize: 9, marginBottom: 6, lineHeight: 1.4 }}>
+                      {profile.description}
+                    </div>
+                  )}
+                  {isBacked ? (
+                    matches.map((m, mi) => (
+                      <div key={mi} style={{
+                        background: "rgba(255,255,255,0.03)", borderRadius: 3,
+                        padding: "4px 8px", marginBottom: 4,
+                      }}>
+                        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                          <span style={{ color: CY, fontSize: 10 }}>
+                            {m.dataset.name || m.dataset.id}
+                          </span>
+                          {m.dataset.category && (
                             <span style={{
-                              fontSize: 9, color: GREEN, background: `${GREEN}22`,
-                              borderRadius: 4, padding: "1px 5px",
-                            }}>score {score}</span>
-                          </div>
-                        ))
-                      )}
+                              fontSize: 8, background: `${CY}22`, color: CY,
+                              borderRadius: 2, padding: "0 4px",
+                            }}>{m.dataset.category}</span>
+                          )}
+                        </div>
+                        {/* relevance bar */}
+                        <div style={{
+                          height: 2, background: `${MUTED}33`, borderRadius: 1,
+                          marginTop: 4, overflow: "hidden",
+                        }}>
+                          <div style={{
+                            height: "100%", borderRadius: 1,
+                            background: GREEN,
+                            width: `${Math.min(100, m.sc * 20)}%`,
+                          }} />
+                        </div>
+                        <div style={{ color: MUTED, fontSize: 8, marginTop: 2 }}>
+                          relevance: {m.sc}
+                        </div>
+                      </div>
+                    ))
+                  ) : (
+                    <div style={{ color: AMBER, fontSize: 9, fontStyle: "italic" }}>
+                      no datasets correlate to this profile — data gap identified
                     </div>
                   )}
                 </div>
-              );
-            })}
-          </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
 
-          {/* footer */}
-          <div style={{
-            padding: "6px 14px", borderTop: `1px solid ${CY}22`,
-            display: "flex", justifyContent: "space-between", color: DIM, fontSize: 9,
-          }}>
-            <span>90 s auto-refresh · /entities/IntelProfile · /v1/datasets</span>
-            <span>{loading ? "loading…" : `${visible.length} shown`}</span>
-          </div>
-        </div>
-      )}
-    </>
+      {/* footer */}
+      <div style={{
+        padding: "4px 12px", borderTop: `1px solid ${AMBER}22`,
+        color: MUTED, fontSize: 9, display: "flex", justifyContent: "space-between",
+      }}>
+        <span>↺ {REFRESH_MS / 1000}s refresh</span>
+        <span>{loading ? "◌ refreshing…" : `${correlated.length} profiles correlated`}</span>
+      </div>
+    </div>
   );
+}
+
+// ─── JarvisBrain exports ──────────────────────────────────────────────────────
+
+const IPDC_VOICE_TERMS = [
+  "intel profile dataset", "profile data", "ipdc", "data-backed profiles",
+  "dark profiles", "which profiles have data", "profile coverage",
+  "profile dataset", "intel data coverage", "intel profile coverage",
+  "data dark profiles", "unsupported profiles", "profile data gap",
+];
+
+export function isIpdfQuery(q) {
+  const lq = q.toLowerCase();
+  return IPDC_VOICE_TERMS.some(t => lq.includes(t));
+}
+
+export async function buildIpdfScript() {
+  try {
+    const base = apiBase();
+    const headers = { Authorization: `Bearer ${API_KEY}` };
+    const [pr, dr] = await Promise.all([
+      fetch(`${base}/entities/IntelProfile`, { headers }).then(r => r.json()).catch(() => []),
+      fetch(`${base}/v1/datasets`,           { headers }).then(r => r.json()).catch(() => []),
+    ]);
+    const profiles = normArr(pr);
+    const datasets = normArr(dr);
+    const dark = profiles.filter(p =>
+      datasets.every(d => score(p, d) === 0)
+    );
+    return (
+      `Intel profile dataset coverage: ${profiles.length} profiles versus ` +
+      `${datasets.length} datasets. ` +
+      `${profiles.length - dark.length} profiles are data-backed. ` +
+      `${dark.length} profiles are data-dark — no datasets correlate. ` +
+      (dark.length > 0
+        ? `Top data-dark profile: ${dark[0].name || dark[0].id || "unknown"}. ` +
+          `Recommend sourcing datasets for uncovered intelligence profiles.`
+        : `All profiles have dataset coverage. Intelligence base appears solid.`)
+    );
+  } catch {
+    return "Intel profile dataset coverage status unavailable — check endpoint health.";
+  }
 }
