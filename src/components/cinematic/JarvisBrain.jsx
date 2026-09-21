@@ -72,6 +72,7 @@ import { isRptkbQuery, buildRptkbScript } from "./ReportKnowledgeCoverage";
 import { isOpaskQuery, buildOpaskScript } from "./OpsAipSkillCoverage";
 import { isInvdsetQuery, buildInvdsetScript } from "./InvestigationDatasetEvidence";
 import { isGcknQuery, buildGcknScript } from "./GraphCentralityKnowledge";
+import { isInvkbQuery, buildInvkbScript } from "./InvestmentKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -746,6 +747,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcnk-toggle"));
       let script = "";
       try { script = await buildGcknScript(); } catch { script = "Graph centrality knowledge coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F97: investment × knowledge coverage — surfaces DARK portfolio positions with no KB backing.
+    if (isInvkbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invkb-toggle"));
+      let script = "";
+      try { script = await buildInvkbScript(); } catch { script = "Investment knowledge coverage panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

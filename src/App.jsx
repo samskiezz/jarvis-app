@@ -252,6 +252,7 @@ import ReportKnowledgeCoverage from '@/components/cinematic/ReportKnowledgeCover
 import OpsAipSkillCoverage from '@/components/cinematic/OpsAipSkillCoverage';
 import InvestigationDatasetEvidence from '@/components/cinematic/InvestigationDatasetEvidence';
 import GraphCentralityKnowledge from '@/components/cinematic/GraphCentralityKnowledge';
+import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -753,6 +754,8 @@ function App() {
 
             {/* F96 (overnight 2026-09-21): graph centrality × knowledge coverage — ◈ GCNK button (left:31240, bottom:8, zIndex:96); parallel-fetches /v1/graph/centrality + /knowledge/; keyword-correlates high-centrality graph nodes against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0 — knowledge gap for influential nodes); stat tiles nodes/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand node → matched KB article cards with relevance score bar; ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcknQuery+buildGcknScript wired in JarvisBrain; "graph knowledge"/"gcnk"/"node knowledge"/"centrality knowledge"/"bare nodes"/"graph kb" voice trigger; jarvis:gcnk-toggle event; 90-s auto-refresh */}
             <GraphCentralityKnowledge />
+            {/* F97 (overnight 2026-09-21): investment × knowledge coverage — ◈ INVKB button (left:31800, bottom:8, zIndex:97); parallel-fetches /entities/Investment + /knowledge/; keyword-correlates portfolio positions against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/DARK (0 — no KB backing); stat tiles positions/articles/grounded/partial/dark; amber badge on dark count; filter tabs ALL/GROUNDED/PARTIAL/DARK + text search; expand position → matched KB article cards with relevance score bar; ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isInvkbQuery+buildInvkbScript wired in JarvisBrain; "investment knowledge"/"invkb"/"portfolio kb"/"dark investments" voice trigger; jarvis:invkb-toggle event; 90-s auto-refresh */}
+            <InvestmentKnowledgeCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -1,399 +1,483 @@
-import { useState, useEffect, useCallback } from 'react';
+/**
+ * InvestmentKnowledgeCoverage — F97
+ *
+ * Parallel-fetches /entities/Investment + /knowledge/ then keyword-
+ * correlates portfolio positions against KB articles to surface
+ * GROUNDED (≥2 article matches) / PARTIAL (1) / DARK (0 — no knowledge
+ * backing for the position).
+ *
+ * Stat tiles: positions / articles / grounded / partial / dark
+ * Filter tabs: ALL / GROUNDED / PARTIAL / DARK
+ * Expand position → matched KB article cards with relevance score bar.
+ * Click ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief
+ *   + jarvis:speak-dossier TTS.
+ * 90 s auto-refresh.
+ *
+ * Intent: "investment knowledge" / "invkb" / "portfolio kb" /
+ *         "dark investments" / "investment grounding" /
+ *         "ungrounded investments" / "investment articles"
+ *   → jarvis:invkb-toggle + TTS brief via buildInvkbScript()
+ *
+ * Toggle: ◈ INVKB at left:31800, bottom:8, zIndex 97.
+ * Mounted in App.jsx.
+ */
+import { useCallback, useEffect, useRef, useState } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = '';
+const CY    = "#29E7FF";
+const AMBER = "#F5A623";
+const GREEN = "#00c878";
+const RED   = "#FF4444";
+const DIM   = "#4A6070";
+const BG    = "rgba(3,5,9,0.97)";
+const BTN_LEFT   = 31800;
+const REFRESH_MS = 90_000;
+const MONO = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
+const API_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||
+  "dev-key";
 
-const INVKB_RE = /\b(investment[._-]?knowledge|knowledge[._-]?invest|invkb|investment[._-]?kb|knowledge[._-]?backed[._-]?invest|invest[._-]?knowledge[._-]?gap|which[._-]?investments?[._-]?have[._-]?knowledge|portfolio[._-]?knowledge|invest[._-]?docs?)\b/i;
+// ─── intent exports ────────────────────────────────────────────────────────────
 
-export function isInvkbQuery(t) {
-  return INVKB_RE.test(t || '');
-}
+const INVKB_RE =
+  /\b(invkb|invest.*knowl|knowl.*invest|portfolio.kb|portfolio.*knowl|knowl.*portfolio|dark.invest|invest.*ground|unground.*invest|invest.*artic)\b/i;
+
+export function isInvkbQuery(t) { return INVKB_RE.test(t || ""); }
 
 export async function buildInvkbScript() {
-  try {
-    const hdr = { Authorization: 'Bearer dev-key' };
-    const [invR, kbR] = await Promise.allSettled([
-      fetch(`${API}/entities/Investment`, { headers: hdr }).then(r => r.json()),
-      fetch(`${API}/knowledge/`, { headers: hdr }).then(r => r.json()),
-    ]);
-    const investments = normaliseInvestments(invR.status === 'fulfilled' ? invR.value : []);
-    const articles    = normaliseKB(kbR.status === 'fulfilled' ? kbR.value : []);
-    const enriched    = correlate(investments, articles);
-    const informed    = enriched.filter(inv => inv._informed).length;
-    const blind       = enriched.length - informed;
-    const topBlind    = enriched.filter(inv => !inv._informed).slice(0, 4).map(inv => inv.name || inv.id || '?').join(', ') || 'none';
-    return (
-      `Investment × Knowledge Coverage: ${investments.length} investments cross-matched against ` +
-      `${articles.length} KB articles. ${informed} investments are INFORMED (KB article coverage found); ` +
-      `${blind} are BLIND (no knowledge backing — intelligence gap). ` +
-      `Top uncovered: ${topBlind}.`
-    );
-  } catch {
-    return 'Investment × Knowledge Coverage assessment unavailable at this time, sir.';
+  const [iRaw, kRaw] = await Promise.allSettled([
+    fetch(`${apiBase()}/entities/Investment`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    }).then((r) => r.json()),
+    fetch(`${apiBase()}/knowledge/`, {
+      headers: { Authorization: `Bearer ${API_KEY}` },
+    }).then((r) => r.json()),
+  ]);
+  const positions = normaliseInvestments(iRaw.status === "fulfilled" ? iRaw.value : []);
+  const articles  = normaliseArticles(kRaw.status === "fulfilled" ? kRaw.value : []);
+  const pairs     = correlate(positions, articles);
+  const grounded  = pairs.filter((p) => p.matches.length >= 2).length;
+  const partial   = pairs.filter((p) => p.matches.length === 1).length;
+  const dark      = pairs.filter((p) => p.matches.length === 0).length;
+  const topDark   = pairs
+    .filter((p) => p.matches.length === 0)
+    .slice(0, 3)
+    .map((p) => p.inv.name)
+    .join(", ") || "none";
+  return (
+    `Assess JARVIS investment portfolio knowledge coverage in 2 sentences. ` +
+    `${positions.length} positions vs ${articles.length} KB articles: ` +
+    `${grounded} GROUNDED (≥2 articles), ${partial} PARTIAL (1 article), ` +
+    `${dark} DARK (no KB backing — investments with no knowledge coverage). ` +
+    `Top dark positions: ${topDark}.`
+  );
+}
+
+// ─── normalise helpers ─────────────────────────────────────────────────────────
+
+function normaliseArray(raw, keys = []) {
+  if (Array.isArray(raw)) return raw;
+  for (const k of keys) {
+    if (raw && Array.isArray(raw[k])) return raw[k];
   }
+  if (raw && Array.isArray(raw.items))   return raw.items;
+  if (raw && Array.isArray(raw.data))    return raw.data;
+  if (raw && Array.isArray(raw.results)) return raw.results;
+  if (raw && typeof raw === "object")    return Object.values(raw);
+  return [];
 }
 
 function normaliseInvestments(raw) {
-  if (!raw) return [];
-  const arr = Array.isArray(raw)                ? raw
-    : Array.isArray(raw?.investments)           ? raw.investments
-    : Array.isArray(raw?.items)                 ? raw.items
-    : Array.isArray(raw?.results)               ? raw.results
-    : Array.isArray(raw?.data)                  ? raw.data
-    : [];
-  return arr.map((inv, i) => ({
-    id:          inv.id          || String(i),
-    name:        inv.name        || inv.title    || inv.label || `Investment ${i + 1}`,
-    sector:      inv.sector      || inv.industry || inv.category || inv.type || '',
-    ticker:      inv.ticker      || inv.symbol   || inv.code || '',
-    notes:       String(inv.notes || inv.description || inv.summary || '').slice(0, 300),
-    tags:        Array.isArray(inv.tags) ? inv.tags.join(' ') : (inv.tags || ''),
-    region:      inv.region      || inv.country  || inv.market || '',
-    assetClass:  inv.asset_class || inv.assetClass || inv.class || '',
+  return normaliseArray(raw, ["investments", "positions", "portfolio"]).map((inv) => ({
+    id:     inv.id || inv.investment_id || String(Math.random()),
+    name:   inv.name || inv.title || inv.ticker || inv.symbol || inv.asset || "Unknown",
+    type:   inv.type || inv.asset_type || inv.category || "",
+    value:  inv.value || inv.amount || inv.quantity || 0,
+    tags:   [...(inv.tags || []), ...(inv.labels || [])].map(String),
+    sector: inv.sector || inv.industry || "",
   }));
 }
 
-function normaliseKB(raw) {
-  if (!raw) return [];
-  const arr = Array.isArray(raw)           ? raw
-    : Array.isArray(raw?.articles)         ? raw.articles
-    : Array.isArray(raw?.items)            ? raw.items
-    : Array.isArray(raw?.results)          ? raw.results
-    : Array.isArray(raw?.data)             ? raw.data
-    : [];
-  return arr.map((a, i) => ({
-    id:       a.id       || a.slug     || String(i),
-    title:    a.title    || a.name     || a.label || `Article ${i + 1}`,
-    category: a.category || a.type     || a.domain || '',
-    summary:  String(a.summary || a.content || a.body || a.abstract || a.description || '').slice(0, 400),
-    tags:     Array.isArray(a.tags) ? a.tags.join(' ') : (a.tags || ''),
+function normaliseArticles(raw) {
+  return normaliseArray(raw, ["articles", "knowledge", "items"]).map((a) => ({
+    id:      a.id || a.article_id || String(Math.random()),
+    title:   a.title || a.name || a.heading || "Untitled Article",
+    summary: a.summary || a.description || a.body || a.content || "",
+    tags:    [...(a.tags || []), ...(a.categories || []), ...(a.labels || [])].map(String),
   }));
 }
 
 function tokens(str) {
-  return String(str || '').toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim().split(/\s+/).filter(w => w.length > 2);
-}
-
-function investTokens(inv) {
-  return new Set([
-    ...tokens(inv.name),
-    ...tokens(inv.sector),
-    ...tokens(inv.ticker),
-    ...tokens(inv.notes),
-    ...tokens(inv.tags),
-    ...tokens(inv.region),
-    ...tokens(inv.assetClass),
-  ].filter(Boolean));
-}
-
-function articleTokens(article) {
-  return [
-    ...tokens(article.title),
-    ...tokens(article.category),
-    ...tokens(article.summary),
-    ...tokens(article.tags),
-  ].filter(Boolean);
+  return String(str)
+    .toLowerCase()
+    .replace(/[^a-z0-9 ]/g, " ")
+    .split(/\s+/)
+    .filter((w) => w.length > 2);
 }
 
 function matchScore(inv, article) {
-  const invToks = investTokens(inv);
-  const artToks = articleTokens(article);
-  if (!invToks.size || !artToks.length) return 0;
-  let hits = 0;
-  for (const t of artToks) if (invToks.has(t)) hits++;
-  return hits / Math.max(invToks.size, artToks.length);
+  const invWords = tokens(
+    `${inv.name} ${inv.type} ${inv.sector} ${inv.tags.join(" ")}`
+  );
+  const artText  = `${article.title} ${article.summary} ${article.tags.join(" ")}`.toLowerCase();
+  const hits = invWords.filter((w) => artText.includes(w));
+  return hits.length / Math.max(invWords.length, 1);
 }
 
-function correlate(investments, articles) {
-  return investments.map(inv => {
+function correlate(positions, articles) {
+  return positions.map((inv) => {
     const scored = articles
-      .map(a => ({ ...a, _score: matchScore(inv, a) }))
-      .filter(x => x._score > 0)
-      .sort((a, b) => b._score - a._score)
+      .map((a) => ({ a, score: matchScore(inv, a) }))
+      .filter((x) => x.score > 0.1)
+      .sort((a, b) => b.score - a.score)
       .slice(0, 5);
-    return { ...inv, _informed: scored.length > 0, _matches: scored };
+    return { inv, matches: scored };
   });
 }
 
-const PANEL_W = 600;
-const PANEL_H = 570;
-const AM = '#F59E0B';
-const CY = '#00CFFF';
-const GR = '#22C55E';
-const PU = '#A78BFA';
+// ─── sub-components ────────────────────────────────────────────────────────────
 
-const chip = (label, color = AM) => (
-  <span style={{
-    display: 'inline-block', padding: '1px 7px', borderRadius: 4,
-    border: `1px solid ${color}44`, background: `${color}14`,
-    color, fontSize: 10, letterSpacing: 1, marginRight: 4,
-  }}>{label}</span>
-);
-
-const scorebar = (score, color = AM) => (
-  <div style={{ display: 'inline-flex', alignItems: 'center', gap: 4, verticalAlign: 'middle' }}>
-    <div style={{ width: 60, height: 4, background: '#1a2535', borderRadius: 2, overflow: 'hidden' }}>
-      <div style={{ width: `${Math.round(score * 100)}%`, height: '100%', background: color, borderRadius: 2 }} />
+function Tile({ label, value, color }) {
+  return (
+    <div style={{
+      flex: "1 1 0", minWidth: 60, background: "rgba(0,0,0,0.3)",
+      border: `1px solid ${color}33`, borderRadius: 6,
+      padding: "6px 8px", textAlign: "center",
+    }}>
+      <div style={{ fontSize: 18, fontWeight: 700, color, fontFamily: MONO }}>{value}</div>
+      <div style={{ fontSize: 9, color: DIM, letterSpacing: 1, marginTop: 2 }}>{label}</div>
     </div>
-    <span style={{ color: '#6E8AA0', fontSize: 10 }}>{(score * 100).toFixed(0)}%</span>
-  </div>
-);
+  );
+}
+
+function ScoreBar({ score }) {
+  const color = score > 0.5 ? GREEN : score > 0.25 ? AMBER : CY;
+  return (
+    <div style={{ height: 4, background: "rgba(255,255,255,0.06)", borderRadius: 2, flex: 1 }}>
+      <div style={{
+        width: `${Math.round(score * 100)}%`, height: "100%",
+        background: color, borderRadius: 2, transition: "width 0.4s ease",
+      }} />
+    </div>
+  );
+}
+
+// ─── main component ────────────────────────────────────────────────────────────
 
 export default function InvestmentKnowledgeCoverage() {
-  const [open, setOpen]             = useState(false);
-  const [investments, setInvestments] = useState([]);
-  const [articles, setArticles]     = useState([]);
-  const [loading, setLoading]       = useState(false);
-  const [tab, setTab]               = useState('ALL');
-  const [search, setSearch]         = useState('');
-  const [expanded, setExpanded]     = useState(null);
-  const [assessing, setAssessing]   = useState(false);
-  const [brief, setBrief]           = useState('');
+  const [open, setOpen]           = useState(false);
+  const [pairs, setPairs]         = useState([]);
+  const [loading, setLoading]     = useState(false);
+  const [error, setError]         = useState(null);
+  const [tab, setTab]             = useState("ALL");
+  const [search, setSearch]       = useState("");
+  const [expanded, setExpanded]   = useState({});
+  const [assessing, setAssessing] = useState(false);
+  const timerRef = useRef(null);
 
   const load = useCallback(async () => {
-    setLoading(true);
+    setLoading(true); setError(null);
     try {
-      const hdr = { Authorization: 'Bearer dev-key' };
-      const [invR, kbR] = await Promise.allSettled([
-        fetch(`${API}/entities/Investment`, { headers: hdr }).then(r => r.json()),
-        fetch(`${API}/knowledge/`, { headers: hdr }).then(r => r.json()),
+      const [iRes, kRes] = await Promise.allSettled([
+        fetch(`${apiBase()}/entities/Investment`, {
+          headers: { Authorization: `Bearer ${API_KEY}` },
+        }).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
+        fetch(`${apiBase()}/knowledge/`, {
+          headers: { Authorization: `Bearer ${API_KEY}` },
+        }).then((r) => { if (!r.ok) throw new Error(`HTTP ${r.status}`); return r.json(); }),
       ]);
-      setInvestments(normaliseInvestments(invR.status === 'fulfilled' ? invR.value : []));
-      setArticles(normaliseKB(kbR.status === 'fulfilled' ? kbR.value : []));
-    } catch { /* silently skip */ }
-    setLoading(false);
-  }, []);
-
-  useEffect(() => {
-    const onToggle = () => setOpen(o => !o);
-    window.addEventListener('jarvis:invkb-toggle', onToggle);
-    return () => window.removeEventListener('jarvis:invkb-toggle', onToggle);
-  }, []);
-
-  useEffect(() => {
-    let timer;
-    if (open) {
-      load();
-      timer = setInterval(load, 90000);
+      const positions = normaliseInvestments(iRes.status === "fulfilled" ? iRes.value : []);
+      const articles  = normaliseArticles(kRes.status === "fulfilled" ? kRes.value : []);
+      setPairs(correlate(positions, articles));
+    } catch (e) {
+      setError(e.message);
+    } finally {
+      setLoading(false);
     }
-    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    const onToggle = () => setOpen((v) => !v);
+    window.addEventListener("jarvis:invkb-toggle", onToggle);
+    return () => window.removeEventListener("jarvis:invkb-toggle", onToggle);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    load();
+    timerRef.current = setInterval(load, REFRESH_MS);
+    return () => clearInterval(timerRef.current);
   }, [open, load]);
 
-  const enriched = correlate(investments, articles);
-  const informed = enriched.filter(inv => inv._informed);
-  const blind    = enriched.filter(inv => !inv._informed);
-  const badgeCount = blind.length;
-  const badgeColor = badgeCount > 0 ? AM : GR;
+  const grounded = pairs.filter((p) => p.matches.length >= 2);
+  const partial  = pairs.filter((p) => p.matches.length === 1);
+  const dark     = pairs.filter((p) => p.matches.length === 0);
 
-  const filtered = enriched
-    .filter(inv => tab === 'ALL' || (tab === 'INFORMED' ? inv._informed : !inv._informed))
-    .filter(inv => {
+  const visible = pairs
+    .filter((p) => {
+      if (tab === "GROUNDED") return p.matches.length >= 2;
+      if (tab === "PARTIAL")  return p.matches.length === 1;
+      if (tab === "DARK")     return p.matches.length === 0;
+      return true;
+    })
+    .filter((p) => {
       if (!search) return true;
-      const s = search.toLowerCase();
+      const q = search.toLowerCase();
       return (
-        String(inv.name   || '').toLowerCase().includes(s) ||
-        String(inv.sector || '').toLowerCase().includes(s) ||
-        String(inv.ticker || '').toLowerCase().includes(s) ||
-        String(inv.region || '').toLowerCase().includes(s)
+        p.inv.name.toLowerCase().includes(q) ||
+        p.inv.type.toLowerCase().includes(q) ||
+        p.inv.sector.toLowerCase().includes(q) ||
+        p.matches.some((m) => m.a.title.toLowerCase().includes(q))
       );
     });
 
   async function assess() {
     setAssessing(true);
-    setBrief('');
     try {
-      const topBlind = blind.slice(0, 4).map(inv => inv.name || inv.id || '?').join(', ') || 'none';
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: 'Bearer dev-key' },
-        body: JSON.stringify({
-          message:
-            `Investment × Knowledge Coverage: ${investments.length} investments, ${articles.length} KB articles. ` +
-            `${informed.length} investments are INFORMED (KB article coverage found). ` +
-            `${blind.length} are BLIND (no knowledge backing — intelligence gap). ` +
-            `Uncovered investments: ${topBlind}. ` +
-            `Give a 2-sentence investment-knowledge coverage brief highlighting the most significant intelligence gap.`,
-        }),
+      const script = await buildInvkbScript();
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${API_KEY}`,
+        },
+        body: JSON.stringify({ message: script }),
       });
-      const d = await r.json();
-      const txt = d.response || d.answer || d.text || d.content || '';
-      setBrief(txt);
-      window.dispatchEvent(new CustomEvent('jarvis:speak-dossier', { detail: { text: txt } }));
-    } catch { setBrief('Agent unavailable.'); }
-    setAssessing(false);
+      const json = await res.json();
+      const text =
+        json.response || json.reply || json.message || json.content ||
+        JSON.stringify(json).slice(0, 200);
+      window.dispatchEvent(
+        new CustomEvent("jarvis:speak-dossier", { detail: { text } })
+      );
+    } catch (_) {
+      // silently ignore assessment errors
+    } finally {
+      setAssessing(false);
+    }
   }
 
-  const label = inv => inv.name || inv.id || '?';
+  const toggleRow = (id) =>
+    setExpanded((prev) => ({ ...prev, [id]: !prev[id] }));
 
-  return (
-    <>
+  if (!open) {
+    return (
       <button
-        onClick={() => setOpen(o => !o)}
+        onClick={() => setOpen(true)}
         title="Investment × Knowledge Coverage (INVKB)"
         style={{
-          position: 'fixed', left: 710400, bottom: 8, zIndex: 297,
-          width: 58, height: 22, borderRadius: 3,
-          border: `1px solid ${badgeColor}77`, cursor: 'pointer',
-          background: 'rgba(5,8,13,0.75)', color: badgeColor,
-          fontSize: 9, letterSpacing: 1, backdropFilter: 'blur(6px)',
-          boxShadow: `0 0 10px ${badgeColor}44`, fontFamily: "'JetBrains Mono',monospace",
-          display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3,
+          position: "fixed", left: BTN_LEFT, bottom: 8, zIndex: 97,
+          background: "rgba(3,5,9,0.85)", border: `1px solid ${AMBER}55`,
+          borderRadius: 4, color: AMBER, fontFamily: MONO, fontSize: 9,
+          letterSpacing: 1, padding: "3px 7px", cursor: "pointer",
         }}
       >
         ◈ INVKB
-        {badgeCount > 0 && (
+        {dark.length > 0 && (
           <span style={{
-            background: badgeColor, color: '#04060A', borderRadius: 3, padding: '0 4px',
-            fontSize: 8, fontWeight: 700, minWidth: 14, textAlign: 'center',
-          }}>{badgeCount}</span>
+            marginLeft: 4, background: AMBER, color: "#000",
+            borderRadius: 8, padding: "0 4px", fontSize: 8, fontWeight: 700,
+          }}>
+            {dark.length}
+          </span>
         )}
       </button>
+    );
+  }
 
-      {open && (
-        <div style={{
-          position: 'fixed', left: '50%', top: '50%', transform: 'translate(-50%,-50%)',
-          width: PANEL_W, height: PANEL_H, zIndex: 9202,
-          background: 'rgba(6,10,18,0.97)', border: `1px solid ${AM}33`,
-          borderRadius: 12, backdropFilter: 'blur(16px)',
-          boxShadow: `0 0 60px ${AM}22`, fontFamily: "'JetBrains Mono',monospace",
-          display: 'flex', flexDirection: 'column', overflow: 'hidden',
-        }}>
-          {/* Header */}
-          <div style={{
-            padding: '10px 14px', borderBottom: `1px solid ${AM}22`,
-            display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0,
-          }}>
-            <span style={{ color: AM, fontSize: 11, letterSpacing: 2, fontWeight: 700, textShadow: `0 0 12px ${AM}` }}>
-              ◈ INVESTMENT × KNOWLEDGE COVERAGE
-            </span>
-            <span style={{ marginLeft: 'auto', display: 'flex', gap: 6, alignItems: 'center' }}>
-              {loading && <span style={{ color: '#6E8AA0', fontSize: 10 }}>loading…</span>}
-              <button
-                onClick={assess}
-                disabled={assessing}
-                style={{
-                  padding: '2px 8px', borderRadius: 3, border: `1px solid ${AM}55`,
-                  background: 'transparent', color: AM, cursor: 'pointer', fontSize: 9, letterSpacing: 1,
-                }}
-              >{assessing ? 'assessing…' : '▶ ASSESS'}</button>
-              <button
-                onClick={() => setOpen(false)}
-                style={{ background: 'none', border: 'none', color: '#6E8AA0', cursor: 'pointer', fontSize: 14, padding: 0 }}
-              >✕</button>
-            </span>
-          </div>
+  const TABS = ["ALL", "GROUNDED", "PARTIAL", "DARK"];
+  const tabColor = (t) => {
+    if (t === "DARK")     return AMBER;
+    if (t === "GROUNDED") return GREEN;
+    if (t === "PARTIAL")  return CY;
+    return CY;
+  };
 
-          {/* Stat tiles */}
-          <div style={{ display: 'flex', gap: 8, padding: '8px 14px', flexShrink: 0 }}>
-            {[
-              { label: 'INVESTMENTS', val: investments.length, col: CY },
-              { label: 'KB ARTICLES', val: articles.length,   col: PU },
-              { label: 'INFORMED',    val: informed.length,   col: GR },
-              { label: 'BLIND',       val: blind.length,      col: AM },
-            ].map(({ label: l, val, col }) => (
-              <div key={l} style={{
-                flex: 1, background: `${col}0d`, border: `1px solid ${col}33`,
-                borderRadius: 6, padding: '6px 8px', textAlign: 'center',
-              }}>
-                <div style={{ color: col, fontSize: 16, fontWeight: 700 }}>{val}</div>
-                <div style={{ color: '#6E8AA0', fontSize: 9, letterSpacing: 1, marginTop: 2 }}>{l}</div>
-              </div>
-            ))}
-          </div>
+  return (
+    <div style={{
+      position: "fixed", left: BTN_LEFT - 200, bottom: 48, zIndex: 97,
+      width: 520, maxHeight: "75vh",
+      background: BG, border: `1px solid ${AMBER}66`,
+      borderRadius: 8, fontFamily: MONO, fontSize: 10,
+      display: "flex", flexDirection: "column", overflow: "hidden",
+    }}>
+      {/* header */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "8px 12px", borderBottom: `1px solid ${AMBER}33`,
+        background: "rgba(0,0,0,0.4)",
+      }}>
+        <span style={{ color: AMBER, fontSize: 11, letterSpacing: 2 }}>
+          ◈ INVESTMENT × KNOWLEDGE
+        </span>
+        <div style={{ display: "flex", gap: 6 }}>
+          <button
+            onClick={assess}
+            disabled={assessing}
+            style={{
+              background: "none", border: `1px solid ${CY}66`,
+              borderRadius: 4, color: CY, fontFamily: MONO, fontSize: 9,
+              letterSpacing: 1, padding: "2px 8px", cursor: "pointer",
+            }}
+          >
+            {assessing ? "…" : "▶ ASSESS KNOWLEDGE GAPS"}
+          </button>
+          <button
+            onClick={() => setOpen(false)}
+            style={{
+              background: "none", border: "none", color: DIM,
+              fontSize: 14, cursor: "pointer", lineHeight: 1,
+            }}
+          >
+            ×
+          </button>
+        </div>
+      </div>
 
-          {/* Filter tabs + search */}
-          <div style={{ display: 'flex', gap: 6, padding: '0 14px 8px', flexShrink: 0, alignItems: 'center' }}>
-            {['ALL', 'INFORMED', 'BLIND'].map(t => (
-              <button
-                key={t}
-                onClick={() => setTab(t)}
-                style={{
-                  padding: '2px 10px', borderRadius: 3, cursor: 'pointer', fontSize: 9, letterSpacing: 1,
-                  border: `1px solid ${tab === t ? AM : '#2a3a4a'}`,
-                  background: tab === t ? `${AM}22` : 'transparent',
-                  color: tab === t ? AM : '#6E8AA0',
-                }}
-              >{t}</button>
-            ))}
-            <input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="search investments…"
+      {/* stat tiles */}
+      <div style={{ display: "flex", gap: 6, padding: "8px 12px" }}>
+        <Tile label="POSITIONS" value={pairs.length}     color={CY}   />
+        <Tile label="ARTICLES"  value={
+          pairs.length > 0
+            ? [...new Set(pairs.flatMap((p) => p.matches.map((m) => m.a.id)))].length
+            : 0
+        } color={CY} />
+        <Tile label="GROUNDED" value={grounded.length}  color={GREEN} />
+        <Tile label="PARTIAL"  value={partial.length}   color={CY}   />
+        <Tile label="DARK"     value={dark.length}      color={AMBER} />
+      </div>
+
+      {/* filter tabs */}
+      <div style={{ display: "flex", gap: 4, padding: "0 12px 6px" }}>
+        {TABS.map((t) => (
+          <button
+            key={t}
+            onClick={() => setTab(t)}
+            style={{
+              background: tab === t ? `${tabColor(t)}22` : "none",
+              border: `1px solid ${tab === t ? tabColor(t) : DIM}`,
+              borderRadius: 3, color: tab === t ? tabColor(t) : DIM,
+              fontFamily: MONO, fontSize: 8, letterSpacing: 1,
+              padding: "2px 6px", cursor: "pointer",
+            }}
+          >
+            {t}
+          </button>
+        ))}
+        <input
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder="search…"
+          style={{
+            marginLeft: "auto", background: "rgba(0,0,0,0.4)",
+            border: `1px solid ${DIM}`, borderRadius: 3,
+            color: CY, fontFamily: MONO, fontSize: 9,
+            padding: "2px 6px", width: 120, outline: "none",
+          }}
+        />
+      </div>
+
+      {/* list */}
+      <div style={{ overflowY: "auto", flex: 1, padding: "0 12px 12px" }}>
+        {loading && (
+          <div style={{ color: DIM, padding: "8px 0" }}>◌ loading…</div>
+        )}
+        {error && (
+          <div style={{ color: RED, padding: "4px 0" }}>⚠ {error}</div>
+        )}
+        {!loading && visible.length === 0 && !error && (
+          <div style={{ color: DIM, padding: "8px 0" }}>no results</div>
+        )}
+        {visible.map((p) => {
+          const status =
+            p.matches.length >= 2 ? "GROUNDED" :
+            p.matches.length === 1 ? "PARTIAL" : "DARK";
+          const statusColor =
+            status === "GROUNDED" ? GREEN :
+            status === "PARTIAL"  ? CY    : AMBER;
+          const isExp = expanded[p.inv.id];
+          return (
+            <div
+              key={p.inv.id}
               style={{
-                marginLeft: 'auto', background: 'rgba(255,255,255,0.03)', border: `1px solid #2a3a4a`,
-                borderRadius: 4, color: '#DCEBF5', padding: '2px 8px', fontSize: 10, outline: 'none',
-                fontFamily: "'JetBrains Mono',monospace", width: 160,
+                borderBottom: "1px solid rgba(255,255,255,0.04)",
+                paddingBottom: 6, marginBottom: 6,
               }}
-            />
-          </div>
-
-          {/* Investment list */}
-          <div style={{ flex: 1, overflowY: 'auto', padding: '0 14px 8px' }}>
-            {filtered.length === 0 ? (
-              <div style={{ color: '#6E8AA0', fontSize: 11, textAlign: 'center', paddingTop: 40 }}>
-                {loading ? 'Loading…' : 'No investments found.'}
+            >
+              <div
+                style={{
+                  display: "flex", alignItems: "center", gap: 6,
+                  cursor: "pointer", padding: "4px 0",
+                }}
+                onClick={() => toggleRow(p.inv.id)}
+              >
+                <span style={{
+                  fontSize: 8, border: `1px solid ${statusColor}`,
+                  borderRadius: 3, color: statusColor,
+                  padding: "1px 4px", letterSpacing: 1, flexShrink: 0,
+                }}>
+                  {status}
+                </span>
+                <span style={{ color: CY, flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {p.inv.name}
+                </span>
+                {p.inv.type && (
+                  <span style={{ color: DIM, fontSize: 8, flexShrink: 0 }}>
+                    {p.inv.type}
+                  </span>
+                )}
+                <span style={{ color: DIM, fontSize: 8, flexShrink: 0 }}>
+                  {p.matches.length} kb
+                </span>
+                <span style={{ color: DIM, fontSize: 10 }}>
+                  {isExp ? "▲" : "▼"}
+                </span>
               </div>
-            ) : filtered.map((inv, i) => {
-              const isExp   = expanded === i;
-              const statusC = inv._informed ? GR : AM;
-              return (
-                <div
-                  key={inv.id || i}
-                  style={{ borderBottom: `1px solid ${AM}11`, paddingBottom: 6, marginBottom: 6 }}
-                >
-                  <div
-                    onClick={() => setExpanded(isExp ? null : i)}
-                    style={{ display: 'flex', alignItems: 'center', gap: 6, cursor: 'pointer', padding: '4px 0' }}
-                  >
-                    <span style={{
-                      width: 7, height: 7, borderRadius: '50%', background: statusC,
-                      boxShadow: `0 0 6px ${statusC}`, flexShrink: 0,
-                    }} />
-                    <span style={{ color: '#DCEBF5', fontSize: 11, flex: 1 }}>{label(inv)}</span>
-                    {inv.ticker && chip(inv.ticker, CY)}
-                    {inv.sector && chip(inv.sector, '#6E8AA0')}
-                    {chip(inv._informed ? 'INFORMED' : 'BLIND', statusC)}
-                    <span style={{ color: '#6E8AA0', fontSize: 9, marginLeft: 'auto' }}>{isExp ? '▲' : '▼'}</span>
-                  </div>
 
-                  {isExp && (
-                    <div style={{ paddingLeft: 14, paddingTop: 4 }}>
-                      {inv._matches.length > 0 ? (
-                        <>
-                          <div style={{ color: '#6E8AA0', fontSize: 9, letterSpacing: 1, marginBottom: 4 }}>
-                            MATCHED KB ARTICLES
-                          </div>
-                          {inv._matches.map((art, j) => (
-                            <div key={j} style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 3 }}>
-                              <span style={{ color: '#DCEBF5', fontSize: 10, flex: 1 }}>
-                                {art.title || art.id || '?'}
-                              </span>
-                              {art.category && chip(art.category, PU)}
-                              {scorebar(art._score, AM)}
-                            </div>
-                          ))}
-                        </>
-                      ) : (
-                        <div style={{ color: AM, fontSize: 10 }}>No KB articles matched — investment intelligence gap.</div>
-                      )}
+              {isExp && (
+                <div style={{ paddingLeft: 12, paddingBottom: 4 }}>
+                  {p.matches.length === 0 ? (
+                    <div style={{ color: AMBER, fontSize: 9 }}>
+                      ⚠ no KB article match — DARK position
                     </div>
+                  ) : (
+                    p.matches.map(({ a, score }) => (
+                      <div key={a.id} style={{
+                        display: "flex", alignItems: "center", gap: 6,
+                        marginBottom: 3,
+                      }}>
+                        <span style={{
+                          color: GREEN, fontSize: 9, flex: 1,
+                          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                        }}>
+                          {a.title}
+                        </span>
+                        <ScoreBar score={score} />
+                      </div>
+                    ))
                   )}
                 </div>
-              );
-            })}
-          </div>
-
-          {/* Brief block */}
-          {brief && (
-            <div style={{
-              padding: '8px 14px', borderTop: `1px solid ${AM}22`,
-              color: '#DCEBF5', fontSize: 11, lineHeight: 1.5, flexShrink: 0,
-              background: 'rgba(245,158,11,0.03)',
-            }}>
-              <span style={{ color: AM, fontSize: 9, letterSpacing: 2 }}>ASSESS ▸ </span>{brief}
+              )}
             </div>
-          )}
-        </div>
-      )}
-    </>
+          );
+        })}
+      </div>
+
+      {/* footer */}
+      <div style={{
+        padding: "4px 12px", borderTop: `1px solid ${AMBER}22`,
+        color: DIM, fontSize: 8, letterSpacing: 1,
+        display: "flex", justifyContent: "space-between",
+      }}>
+        <span>INVKB · /entities/Investment × /knowledge/</span>
+        <span
+          onClick={load}
+          style={{ cursor: "pointer", color: CY }}
+          title="refresh now"
+        >
+          ↺ {REFRESH_MS / 1000}s
+        </span>
+      </div>
+    </div>
   );
 }
