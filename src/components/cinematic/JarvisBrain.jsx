@@ -84,6 +84,7 @@ import { isLicontactQuery, buildLicontactScript } from "./LiveIntelContactExposu
 import { isLitaskQuery, buildLitaskScript } from "./LiveIntelTaskActivation";
 import { isGcaskQuery, buildGcaskScript } from "./GraphCentralityAipSkill";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
+import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -188,6 +189,16 @@ export default function JarvisBrain() {
     if (isMarketsQuery(q)) {
       let script = "";
       try { script = await buildMarketsScript(); } catch { script = "Market data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F08: entity quick-search — open the panel and speak a one-line dossier.
+    if (isEntitySearchQuery(q)) {
+      const term = extractEntitySearchTerm(q) || "";
+      window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term } }));
+      let script = "";
+      try { script = await buildEntityDossierScript(term); } catch { script = "Entity search unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
