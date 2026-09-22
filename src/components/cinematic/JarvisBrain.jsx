@@ -90,6 +90,7 @@ import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
 import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
 import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
 import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
+import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -245,6 +246,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:document-search-toggle"));
       let script = "";
       try { script = await buildDocumentScript(); } catch { script = "Document vault is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F15: skill scorecard — open the panel and speak top performers.
+    if (isSkillQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: q } }));
+      let script = "";
+      try { script = await buildSkillScript(); } catch { script = "Skill metrics unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
