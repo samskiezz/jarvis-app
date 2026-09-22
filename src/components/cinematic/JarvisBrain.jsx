@@ -83,6 +83,7 @@ import { isLiknowQuery, buildLiknowScript } from "./LiveIntelKnowledgeCoverage";
 import { isLicontactQuery, buildLicontactScript } from "./LiveIntelContactExposure";
 import { isLitaskQuery, buildLitaskScript } from "./LiveIntelTaskActivation";
 import { isGcaskQuery, buildGcaskScript } from "./GraphCentralityAipSkill";
+import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -179,6 +180,14 @@ export default function JarvisBrain() {
     if (isStatusQuery(q)) {
       let script = "";
       try { script = await buildStatusScript(); } catch { script = "Status telemetry unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F07: markets queries speak live crypto+FX top-movers directly.
+    if (isMarketsQuery(q)) {
+      let script = "";
+      try { script = await buildMarketsScript(); } catch { script = "Market data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
