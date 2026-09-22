@@ -5,6 +5,7 @@ import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
 import { isAlertQuery, buildAlertScript } from "./AlertToasts";
 import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
+import { isAmbientQuery } from "./AmbientReactorHum";
 import { isClockQuery, buildClockScript } from "./LiveClockUptime";
 import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
 import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
@@ -179,6 +180,14 @@ export default function JarvisBrain() {
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
+    // F19: ambient reactor hum toggle — dispatch event; AmbientReactorHum handles the WebAudio.
+    if (isAmbientQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
+      const script = "Ambient reactor hum toggled, sir.";
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), 5000);
+      return;
+    }
     if (isClockQuery(q)) {
       const script = await buildClockScript();
       setThinking(false); typeOut(script); speak(script);
