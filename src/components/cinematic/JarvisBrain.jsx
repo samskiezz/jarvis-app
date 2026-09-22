@@ -85,6 +85,7 @@ import { isLitaskQuery, buildLitaskScript } from "./LiveIntelTaskActivation";
 import { isGcaskQuery, buildGcaskScript } from "./GraphCentralityAipSkill";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
+import { isTaskQuery, buildTaskScript } from "./TaskBoard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -199,6 +200,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term } }));
       let script = "";
       try { script = await buildEntityDossierScript(term); } catch { script = "Entity search unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F10: task board — TaskBoard opens on jarvis:ask; JarvisBrain speaks the summary.
+    if (isTaskQuery(q)) {
+      let script = "";
+      try { script = await buildTaskScript(); } catch { script = "Mission board is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
