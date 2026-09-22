@@ -88,6 +88,7 @@ import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript 
 import { isTaskQuery, buildTaskScript } from "./TaskBoard";
 import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
 import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
+import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -226,6 +227,14 @@ export default function JarvisBrain() {
     if (isInvestigationsQuery(q)) {
       let script = "";
       try { script = await buildInvestigationsScript(); } catch { script = "Investigations panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F13: scenario launcher — ScenarioLauncher opens on jarvis:ask; JarvisBrain speaks the theatre brief.
+    if (isScenarioQuery(q)) {
+      let script = "";
+      try { script = await buildScenarioScript(); } catch { script = "Simulation theatre is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
