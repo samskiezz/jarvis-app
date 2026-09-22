@@ -18,8 +18,8 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 `/v1/scenario/list` · `/v1/aip/skill` · `/v1/reports` · `/knowledge/*`
 
 ## Backlog (real features)
-- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-09-22: CommandPalette.jsx wired in App.jsx; lists all pageRegistry pages + 10 cinematic scenes; ⌘K/Ctrl+K opens, arrows/Enter navigate, Esc closes; build verified.]
-- [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
+- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-09-22: implemented in src/components/cinematic/CommandPalette.jsx, mounted in App.jsx; lists all PAGES + 10 cinematic scenes, full keyboard nav + search; build verified]
+- [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. [2026-09-22: implemented in src/components/cinematic/HeyJarvisListener.jsx, mounted in App.jsx; SpeechRecognition wake-word engine; dispatches jarvis:ask; armed/disarmed toggle via WakeWordToggle; build verified exit 0]
 - [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
 - [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
 - [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).

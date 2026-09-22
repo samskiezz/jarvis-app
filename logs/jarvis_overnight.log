@@ -1,1 +1,2 @@
-2026-09-22T00:00:00Z | F01 | DONE | ⌘K command palette implemented (CommandPalette.jsx) — mounted in App.jsx; lists all JARVIS pages from pageRegistry + 10 cinematic scenes; full keyboard nav (arrows/Enter/Esc); build verified exit:0.
+[2026-09-22] F01 DONE — CinematicCommandPalette (⌘K) verified and marked complete; src/components/cinematic/CommandPalette.jsx mounted in App.jsx; lists all JARVIS pages + 10 cinematic scenes; search+keyboard nav+Enter-to-run; npm build exit 0
+[2026-09-22] F02 DONE — HeyJarvisListener ("Hey JARVIS" wake word) verified and marked complete; src/components/cinematic/HeyJarvisListener.jsx mounted in App.jsx; SpeechRecognition wake-word engine; dispatches jarvis:ask to open assistant; armed/disarmed WakeWordToggle; build exit 0
