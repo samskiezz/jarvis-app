@@ -20,3 +20,4 @@
 2026-09-22 overnight run: F22-F26 marked done (already wired in JarvisBrain from main); F27 ServiceDiagnostics — isDiagnosticsQuery+buildDiagnosticsScript wired into JarvisBrain.jsx; speaks /v1/jarvis/system/status service health summary; build exit 0
 2026-09-22T21:16:57Z F28 CommandHistory voice wiring: isHistoryQuery+buildHistoryScript imported into JarvisBrain.jsx; panel self-opens via HIST_RE; speaks localStorage summary; build exit 0
 [2026-09-22] F29 multi-voice toggle: wired isVoiceQuery+applyVoiceFromQuery+getActiveVoice into JarvisBrain.jsx; speak() passes active voice to /v1/voice/tts; build exit 0
+[2026-09-22] F30 Scene auto-tour: wired isTourQuery+buildTourScript into JarvisBrain.jsx; SceneAutoTour.jsx cycles 10 scenes via /v1/cinematic/scene/{id} + narrates via /v1/voice/tts; build exit 0

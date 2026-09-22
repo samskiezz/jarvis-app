@@ -97,6 +97,7 @@ import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
+import { isTourQuery, buildTourScript } from "./SceneAutoTour";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -351,6 +352,14 @@ export default function JarvisBrain() {
       const script = buildHistoryScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F30: scene auto-tour — "JARVIS, start tour / give me a tour / walkthrough" → narrated cycle of all 10 scenes.
+    if (isTourQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tour-start"));
+      const script = buildTourScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
     }
     // F29: multi-voice toggle — "JARVIS, switch to fable voice" / "change voice" cycles or sets ash/fable/onyx.
