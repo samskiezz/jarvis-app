@@ -87,6 +87,7 @@ import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
 import { isTaskQuery, buildTaskScript } from "./TaskBoard";
 import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
+import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -217,6 +218,14 @@ export default function JarvisBrain() {
     if (isDatasetsQuery(q)) {
       let script = "";
       try { script = await buildDatasetsScript(); } catch { script = "Data Fusion Catalog is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F12: investigations — InvestigationsList opens on jarvis:ask; JarvisBrain speaks the case brief.
+    if (isInvestigationsQuery(q)) {
+      let script = "";
+      try { script = await buildInvestigationsScript(); } catch { script = "Investigations panel is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

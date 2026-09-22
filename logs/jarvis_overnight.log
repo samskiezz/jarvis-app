@@ -9,3 +9,4 @@
 2026-09-22 | F09 | Risk board | DONE | RiskBoard.jsx fetches /entities/RiskSignal; severity-sorted cards (critical/high/medium/low); red pulse animation on critical; filter tabs; 90 s auto-refresh; jarvis:ask RISK_RE voice trigger; mounted in App.jsx; build exit 0
 [2026-09-22] F10 Task board: TaskBoard.jsx (374 lines) already implemented and mounted in App.jsx; wired isTaskQuery+buildTaskScript into JarvisBrain.jsx for voice response; build verified exit 0.
 [2026-09-22] F11 Datasets browser: wired isDatasetsQuery+buildDatasetsScript into JarvisBrain.jsx; DatasetsBrowser.jsx (already mounted in App.jsx) now also responds to 'JARVIS, datasets' voice/text queries; build exit 0
+2026-09-22T12:16:05Z F12 InvestigationsList voice wiring: imported isInvestigationsQuery+buildInvestigationsScript from InvestigationsList.jsx into JarvisBrain.jsx; 'JARVIS, investigations/cases' now triggers panel open + spoken brief; build exit 0
