@@ -1,0 +1,1 @@
+2026-09-22T00:00:00Z | F01 | DONE | ⌘K command palette implemented (CommandPalette.jsx) — mounted in App.jsx; lists all JARVIS pages from pageRegistry + 10 cinematic scenes; full keyboard nav (arrows/Enter/Esc); build verified exit:0.

@@ -2,9 +2,10 @@
 .venv/
 venv/
 
-# Logs
-/logs
+# Logs (keep overnight tracking log; ignore everything else)
+/logs/*
 *.log
+!/logs/jarvis_overnight.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
