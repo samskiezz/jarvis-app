@@ -91,6 +91,7 @@ import { isInvestigationsQuery, buildInvestigationsScript } from "./Investigatio
 import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
 import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
 import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
+import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -255,6 +256,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: q } }));
       let script = "";
       try { script = await buildSkillScript(); } catch { script = "Skill metrics unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F16: brain-growth sparkline — toggle panel + speak nodes/synapses trend.
+    if (isBrainQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:brain-growth-toggle"));
+      let script = "";
+      try { script = await buildBrainScript(); } catch { script = "Brain growth telemetry unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
