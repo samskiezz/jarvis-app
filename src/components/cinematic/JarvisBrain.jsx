@@ -12,6 +12,7 @@ import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
 import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
 import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
+import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
 import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChecker";
 import { isDataGapQuery, buildDataGapScript } from "./DatasetInvestigationGap";
 import { isInvPipeQuery, buildInvPipeScript } from "./InvestigationScenarioTaskPipeline";
@@ -340,6 +341,13 @@ export default function JarvisBrain() {
     if (isDiagnosticsQuery(q)) {
       let script = "";
       try { script = await buildDiagnosticsScript(); } catch { script = "Diagnostics unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F28: command history — read from localStorage, speak recent entries; panel opens via Alt+H or HIST button.
+    if (isHistoryQuery(q)) {
+      const script = buildHistoryScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -45,7 +45,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F25 Swarm jobs monitor — /entities/SwarmJob → running jobs with progress. [2026-09-22: SwarmJobsMonitor.jsx exists+mounted; isSwarmQuery+buildSwarmScript wired in JarvisBrain.jsx from main branch; build verified]
 - [x] F26 Graph centrality view — /v1/graph/centrality → top entities by influence. [2026-09-22: GraphCentralityView.jsx exists+mounted; isCentralityQuery+buildCentralityScript wired in JarvisBrain.jsx from main branch; build verified]
 - [x] F27 "Diagnostics" — JARVIS reads health of each service (via the dashboard's real status). [2026-09-22: ServiceDiagnostics.jsx (fetches /v1/jarvis/system/status; per-service status extraction; online/degraded/offline count); isDiagnosticsQuery+buildDiagnosticsScript wired into JarvisBrain.jsx by this run; build verified exit 0]
-- [ ] F28 Command history — store + replay recent JARVIS commands (localStorage).
+- [x] F28 Command history — store + replay recent JARVIS commands (localStorage). [2026-09-22: CommandHistory.jsx (already existed+mounted in App.jsx) wired isHistoryQuery+buildHistoryScript into JarvisBrain.jsx; "JARVIS, history/replay/recent commands" speaks localStorage summary + panel self-opens via existing HIST_RE listener; build verified exit 0]
 - [ ] F29 Multi-voice toggle — switch JARVIS TTS voice (ash/fable/onyx) live.
 - [ ] F30 Scene auto-tour — cycle the 10 scenes hands-free with spoken narration of each.
 (Extend with more real features as endpoints allow. Prefer depth + real over count.)
