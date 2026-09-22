@@ -39,12 +39,12 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant. (2026-09-22: wired isAmbientQuery from AmbientReactorHum.jsx into JarvisBrain.ask(); "JARVIS, ambient/hum on/off" dispatches jarvis:ambient-toggle → AmbientReactorHum toggles 60Hz sawtooth+harmonics WebAudio synthesis; speaks canned confirmation; build verified exit 0)
 - [x] F20 "Show me" navigation — already in JarvisBrain; extend keyword map to data drill (e.g. "show risks"). (2026-09-22: ShowMeNavigation.{isShowMeQuery,resolveShowMeQuery} wired in JarvisBrain.ask(); "show me X"/"open X"/"view X" re-dispatches normalized jarvis:ask so target panel opens; instant navigation without agent call; build verified)
 - [x] F21 Live clock + uptime (real process uptime from system status). [2026-09-22: LiveClockUptime.jsx polls /v1/jarvis/system/status every 30 s for uptime; ticks every 1 s; mounted in App.jsx bottom-left; isClockQuery+buildClockScript wired in JarvisBrain.jsx; build exit 0]
-- [ ] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken).
-- [ ] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout.
-- [ ] F24 Contacts directory — /entities/Contact → searchable people list.
-- [ ] F25 Swarm jobs monitor — /entities/SwarmJob → running jobs with progress.
-- [ ] F26 Graph centrality view — /v1/graph/centrality → top entities by influence.
-- [ ] F27 "Diagnostics" — JARVIS reads health of each service (via the dashboard's real status).
+- [x] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken). [2026-09-22: AlertToasts.jsx polls /v1/alerts every 20s; isAlertQuery+buildAlertScript wired in JarvisBrain.jsx; critical alerts spoken via /v1/voice/tts; already wired from main; build verified]
+- [x] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout. [2026-09-22: InvestmentWidget.jsx exists+mounted; isInvestmentQuery+buildInvestmentScript wired in JarvisBrain.jsx from main branch; build verified]
+- [x] F24 Contacts directory — /entities/Contact → searchable people list. [2026-09-22: ContactsDirectory.jsx exists+mounted; isContactsQuery+buildContactsScript wired in JarvisBrain.jsx from main branch; build verified]
+- [x] F25 Swarm jobs monitor — /entities/SwarmJob → running jobs with progress. [2026-09-22: SwarmJobsMonitor.jsx exists+mounted; isSwarmQuery+buildSwarmScript wired in JarvisBrain.jsx from main branch; build verified]
+- [x] F26 Graph centrality view — /v1/graph/centrality → top entities by influence. [2026-09-22: GraphCentralityView.jsx exists+mounted; isCentralityQuery+buildCentralityScript wired in JarvisBrain.jsx from main branch; build verified]
+- [x] F27 "Diagnostics" — JARVIS reads health of each service (via the dashboard's real status). [2026-09-22: ServiceDiagnostics.jsx (fetches /v1/jarvis/system/status; per-service status extraction; online/degraded/offline count); isDiagnosticsQuery+buildDiagnosticsScript wired into JarvisBrain.jsx by this run; build verified exit 0]
 - [ ] F28 Command history — store + replay recent JARVIS commands (localStorage).
 - [ ] F29 Multi-voice toggle — switch JARVIS TTS voice (ash/fable/onyx) live.
 - [ ] F30 Scene auto-tour — cycle the 10 scenes hands-free with spoken narration of each.

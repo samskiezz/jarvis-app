@@ -11,6 +11,7 @@ import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
 import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
 import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
 import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
+import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
 import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChecker";
 import { isDataGapQuery, buildDataGapScript } from "./DatasetInvestigationGap";
 import { isInvPipeQuery, buildInvPipeScript } from "./InvestigationScenarioTaskPipeline";
@@ -331,6 +332,14 @@ export default function JarvisBrain() {
     if (isCentralityQuery(q)) {
       let script = "";
       try { script = await buildCentralityScript(); } catch { script = "Graph centrality data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F27: diagnostics queries open the service health panel and speak a live diagnostics brief.
+    if (isDiagnosticsQuery(q)) {
+      let script = "";
+      try { script = await buildDiagnosticsScript(); } catch { script = "Diagnostics unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
