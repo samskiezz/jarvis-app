@@ -96,6 +96,7 @@ import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
 import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
+import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -150,7 +151,7 @@ export default function JarvisBrain() {
     try {
       const r = await fetch(`${apiBase()}/v1/voice/tts`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: answer }),
+        body: JSON.stringify({ text: answer, voice: getActiveVoice() }),
       });
       if (!r.ok) return;
       const url = URL.createObjectURL(await r.blob());
@@ -350,6 +351,14 @@ export default function JarvisBrain() {
       const script = buildHistoryScript();
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F29: multi-voice toggle — "JARVIS, switch to fable voice" / "change voice" cycles or sets ash/fable/onyx.
+    if (isVoiceQuery(q)) {
+      const chosen = applyVoiceFromQuery(q);
+      const script = `Voice profile switched to ${chosen}. All subsequent speech will use the ${chosen} engine, sir.`;
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;
     }
     // F32: ops-task coverage — dispatch toggle + speak live coverage summary.
