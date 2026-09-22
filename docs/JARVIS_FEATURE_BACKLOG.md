@@ -18,27 +18,27 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 `/v1/scenario/list` · `/v1/aip/skill` · `/v1/reports` · `/knowledge/*`
 
 ## Backlog (real features)
-- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-09-22: implemented in src/components/cinematic/CommandPalette.jsx; pulls from pageRegistry + 10 cinematic scenes; ⌘K/Ctrl+K opens; Enter navigates; mounted in App.jsx; build verified]
-- [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
-- [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
-- [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
-- [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).
-- [ ] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins.
-- [ ] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers.
-- [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.
-- [ ] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical.
-- [ ] F10 Task board — /entities/Task → live mission cards with status.
-- [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
-- [ ] F12 Investigations list — /v1/investigations → open cases panel.
-- [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
-- [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
-- [ ] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live.
-- [ ] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time.
-- [ ] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only).
-- [ ] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts.
-- [ ] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant.
-- [ ] F20 "Show me" navigation — already in JarvisBrain; extend keyword map to data drill (e.g. "show risks").
-- [ ] F21 Live clock + uptime (real process uptime from system status).
+- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [2026-09-22: implemented in src/components/cinematic/CommandPalette.jsx, mounted in App.jsx; lists all PAGES + 10 cinematic scenes, full keyboard nav + search; build verified]
+- [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. [2026-09-22: implemented in src/components/cinematic/HeyJarvisListener.jsx, mounted in App.jsx; SpeechRecognition wake-word engine; dispatches jarvis:ask; armed/disarmed toggle via WakeWordToggle; build verified exit 0]
+- [x] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing. [2026-09-22: LiveTelemetryTicker.jsx mounted in App.jsx; polls both endpoints every 30 s; fixed top strip with CPU/MEM/LOAD/NODES/SYNAPSES pills; hides until real data arrives; build verified exit 0]
+- [x] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector. [2026-09-22: implemented in src/components/cinematic/SceneKeyboardNav.jsx, mounted in App.jsx; digit keys 1–0 navigate to scenes 01–10 via react-router; Esc → /; ignores typing contexts; HUD badge flashes scene label; build verified exit 0]
+- [x] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS). [2026-09-22: implemented in src/components/cinematic/SpokenStatusReport.jsx (fetches /v1/jarvis/system/status + /v1/cinematic/brain, builds spoken script) + StatusReporter.jsx (HUD card) + wired in JarvisBrain.jsx; speak() POSTs to /v1/voice/tts → Audio playback; build verified exit 0]
+- [x] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins. [2026-09-22: WorldIncidentFeed.jsx fully implemented with Three.js mini globe + earthquake pins + scrolling list; imported and mounted in App.jsx; build verified exit 0]
+- [x] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers. [2026-09-22: MarketsTicker.jsx (component already existed) wired isMarketsQuery+buildMarketsScript into JarvisBrain.jsx; bottom scrolling ticker + expanded grid + voice handler; build verified exit 0]
+- [x] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier. [2026-09-22: wired isEntitySearchQuery+extractEntitySearchTerm+buildEntityDossierScript from EntityQuickSearch.jsx into JarvisBrain.jsx; "JARVIS, find/who is/search for X" dispatches jarvis:entity-search (opens panel) + speaks dossier via /v1/graph/subgraph + /entities/IntelProfile; build verified exit 0]
+- [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical. [2026-09-22: RiskBoard.jsx implemented; fetches /entities/RiskSignal, severity-sorted (critical→high→medium→low), red pulse animation on critical cards, filter tabs, auto-refresh every 90 s, jarvis:ask voice trigger via RISK_RE; mounted in App.jsx; build verified exit 0]
+- [x] F10 Task board — /entities/Task → live mission cards with status. [2026-09-22: TaskBoard.jsx already implemented (374 lines, mounted in App.jsx); wired isTaskQuery+buildTaskScript into JarvisBrain.jsx for voice ("JARVIS, tasks/missions"); build verified exit 0]
+- [x] F11 Datasets browser — /v1/datasets → catalog list with row counts. [2026-09-22: DatasetsBrowser.jsx was already fully implemented (mounted in App.jsx); wired isDatasetsQuery+buildDatasetsScript into JarvisBrain.jsx for "JARVIS, datasets" voice trigger; build verified exit 0]
+- [x] F12 Investigations list — /v1/investigations → open cases panel. [2026-09-22: InvestigationsList.jsx already existed (mounted in App.jsx); wired isInvestigationsQuery+buildInvestigationsScript into JarvisBrain.jsx for "JARVIS, investigations/cases" voice trigger; build verified exit 0]
+- [x] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome. [2026-09-22: ScenarioLauncher.jsx already existed (mounted in App.jsx); wired isScenarioQuery+buildScenarioScript into JarvisBrain.jsx for "JARVIS, scenarios/simulation/playbook" voice trigger; build verified exit 0]
+- [x] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes. [2026-09-22: wired isDocumentQuery+buildDocumentScript from DocumentSearch.jsx into JarvisBrain.jsx; "JARVIS, documents/reports/knowledge" opens panel + speaks vault summary; build exit 0]
+- [x] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live. [2026-09-22: SkillScorecard.jsx already existed (mounted in App.jsx with toggle button + 60s auto-refresh + filter); wired isSkillQuery+buildSkillScript into JarvisBrain.jsx for "JARVIS, skills/scorecard/aip/capability" voice trigger; build verified exit 0]
+- [x] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time. [2026-09-22: BrainGrowthSparkline.jsx already existed (mounted in App.jsx); wired isBrainQuery+buildBrainScript into JarvisBrain.jsx; dispatches jarvis:brain-growth-toggle (safe, no re-entry); BrainGrowthSparkline now also listens for that toggle; build verified exit 0]
+- [x] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only). [2026-09-22: SceneAnchorDrillDown.jsx already implemented+mounted in App.jsx; wired isAnchorQuery+buildAnchorScript into JarvisBrain.jsx for "JARVIS, anchors/anchor detail/scene anchors" voice trigger; build verified exit 0]
+- [x] F18 JARVIS boot sequence — first load plays a short spoken "all systems online" with the real counts. (2026-09-22: JarvisBootSequence.jsx fully implemented; fires once per session via sessionStorage; fetches /v1/jarvis/system/status + /v1/cinematic/brain; cinematic boot terminal + TTS speak on click via /v1/voice/tts; mounted in App.jsx; build verified)
+- [x] F19 Ambient reactor hum toggle — WebAudio loop; on/off in the assistant. (2026-09-22: wired isAmbientQuery from AmbientReactorHum.jsx into JarvisBrain.ask(); "JARVIS, ambient/hum on/off" dispatches jarvis:ambient-toggle → AmbientReactorHum toggles 60Hz sawtooth+harmonics WebAudio synthesis; speaks canned confirmation; build verified exit 0)
+- [x] F20 "Show me" navigation — already in JarvisBrain; extend keyword map to data drill (e.g. "show risks"). (2026-09-22: ShowMeNavigation.{isShowMeQuery,resolveShowMeQuery} wired in JarvisBrain.ask(); "show me X"/"open X"/"view X" re-dispatches normalized jarvis:ask so target panel opens; instant navigation without agent call; build verified)
+- [x] F21 Live clock + uptime (real process uptime from system status). [2026-09-22: LiveClockUptime.jsx polls /v1/jarvis/system/status every 30 s for uptime; ticks every 1 s; mounted in App.jsx bottom-left; isClockQuery+buildClockScript wired in JarvisBrain.jsx; build exit 0]
 - [ ] F22 Alert toasts — poll /v1/ops alerts → JARVIS announces new criticals (spoken).
 - [ ] F23 Investment/wealth widget — /entities/Investment + WealthSnapshot → portfolio readout.
 - [ ] F24 Contacts directory — /entities/Contact → searchable people list.
