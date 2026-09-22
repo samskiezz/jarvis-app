@@ -31,7 +31,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F11 Datasets browser — /v1/datasets → catalog list with row counts. [2026-09-22: DatasetsBrowser.jsx was already fully implemented (mounted in App.jsx); wired isDatasetsQuery+buildDatasetsScript into JarvisBrain.jsx for "JARVIS, datasets" voice trigger; build verified exit 0]
 - [x] F12 Investigations list — /v1/investigations → open cases panel. [2026-09-22: InvestigationsList.jsx already existed (mounted in App.jsx); wired isInvestigationsQuery+buildInvestigationsScript into JarvisBrain.jsx for "JARVIS, investigations/cases" voice trigger; build verified exit 0]
 - [x] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome. [2026-09-22: ScenarioLauncher.jsx already existed (mounted in App.jsx); wired isScenarioQuery+buildScenarioScript into JarvisBrain.jsx for "JARVIS, scenarios/simulation/playbook" voice trigger; build verified exit 0]
-- [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
+- [x] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes. [2026-09-22: wired isDocumentQuery+buildDocumentScript from DocumentSearch.jsx into JarvisBrain.jsx; "JARVIS, documents/reports/knowledge" opens panel + speaks vault summary; build exit 0]
 - [ ] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live.
 - [ ] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time.
 - [ ] F17 Per-scene anchor drill-down — click an anchor readout → expanded real detail (read-only).

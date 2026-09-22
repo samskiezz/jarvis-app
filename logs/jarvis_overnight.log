@@ -11,3 +11,4 @@
 [2026-09-22] F11 Datasets browser: wired isDatasetsQuery+buildDatasetsScript into JarvisBrain.jsx; DatasetsBrowser.jsx (already mounted in App.jsx) now also responds to 'JARVIS, datasets' voice/text queries; build exit 0
 2026-09-22T12:16:05Z F12 InvestigationsList voice wiring: imported isInvestigationsQuery+buildInvestigationsScript from InvestigationsList.jsx into JarvisBrain.jsx; 'JARVIS, investigations/cases' now triggers panel open + spoken brief; build exit 0
 [2026-09-22] F13 Scenario launcher: wired isScenarioQuery+buildScenarioScript into JarvisBrain.jsx; ScenarioLauncher.jsx (already in App.jsx) now responds to voice queries; build exit 0
+[2026-09-22] F14 Document search: wired isDocumentQuery+buildDocumentScript from DocumentSearch.jsx into JarvisBrain.jsx; 'JARVIS, documents/reports/knowledge' dispatches jarvis:document-search-toggle (opens panel) + speaks vault summary from /v1/reports + /knowledge/*; build exit 0
