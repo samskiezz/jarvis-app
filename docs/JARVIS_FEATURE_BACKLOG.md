@@ -28,7 +28,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier. [2026-09-22: wired isEntitySearchQuery+extractEntitySearchTerm+buildEntityDossierScript from EntityQuickSearch.jsx into JarvisBrain.jsx; "JARVIS, find/who is/search for X" dispatches jarvis:entity-search (opens panel) + speaks dossier via /v1/graph/subgraph + /entities/IntelProfile; build verified exit 0]
 - [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical. [2026-09-22: RiskBoard.jsx implemented; fetches /entities/RiskSignal, severity-sorted (critical→high→medium→low), red pulse animation on critical cards, filter tabs, auto-refresh every 90 s, jarvis:ask voice trigger via RISK_RE; mounted in App.jsx; build verified exit 0]
 - [x] F10 Task board — /entities/Task → live mission cards with status. [2026-09-22: TaskBoard.jsx already implemented (374 lines, mounted in App.jsx); wired isTaskQuery+buildTaskScript into JarvisBrain.jsx for voice ("JARVIS, tasks/missions"); build verified exit 0]
-- [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
+- [x] F11 Datasets browser — /v1/datasets → catalog list with row counts. [2026-09-22: DatasetsBrowser.jsx was already fully implemented (mounted in App.jsx); wired isDatasetsQuery+buildDatasetsScript into JarvisBrain.jsx for "JARVIS, datasets" voice trigger; build verified exit 0]
 - [ ] F12 Investigations list — /v1/investigations → open cases panel.
 - [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
 - [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
