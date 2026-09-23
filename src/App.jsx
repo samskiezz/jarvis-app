@@ -57,6 +57,7 @@ import OvernightPanels from '@/components/overnight/OvernightPanels';
 import InvestmentWidget from '@/components/cinematic/InvestmentWidget';
 import ContactsDirectory from '@/components/cinematic/ContactsDirectory';
 import SwarmJobsMonitor from '@/components/cinematic/SwarmJobsMonitor';
+import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
 import GraphCentralityView from '@/components/cinematic/GraphCentralityView';
 import KnowledgeBrowser from '@/components/cinematic/KnowledgeBrowser';
 import IntelProfileDirectory from '@/components/cinematic/IntelProfileDirectory';
@@ -372,6 +373,8 @@ function App() {
             <SwarmJobsMonitor />
             {/* F26: graph centrality view — ◈ GRAPH button (left:1428); polls /v1/graph/centrality every 60 s; top-node highlight + influence bars + type-filter tabs + search; "JARVIS, centrality" / "who has most influence" voice trigger (isCentralityQuery+buildCentralityScript wired in JarvisBrain) */}
             <GraphCentralityView />
+            {/* F31: entity count pulse — ◈ PULSE button (left:540); polls all 6 /entities/ endpoints in parallel every 60s; live counts with ↑/↓ delta badges; "entity pulse"/"entity counts"/"how many entities" voice trigger (self-wires via jarvis:ask) */}
+            <EntityCountPulse />
             {/* F131: overnight panels launcher — ◈ button at left:340 bottom:18; searchable category-grouped grid of all cinematic panels (panelRegistry.generated.js); lazy-mounts one panel at a time behind PanelErrorBoundary; gives on-demand access to the full panel library without 100+ floating buttons */}
             <OvernightPanels />
             {/* F31: knowledge browser — ◈ KNOW button (left:2260); fetches /knowledge/ → article list with search; click → /v1/jarvis/agent/chat AI summary + /v1/voice/tts spoken; "JARVIS, knowledge" voice trigger (isKnowledgeQuery+buildKnowledgeScript already wired in JarvisBrain) */}

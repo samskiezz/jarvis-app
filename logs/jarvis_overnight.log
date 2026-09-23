@@ -21,3 +21,4 @@
 2026-09-22T21:16:57Z F28 CommandHistory voice wiring: isHistoryQuery+buildHistoryScript imported into JarvisBrain.jsx; panel self-opens via HIST_RE; speaks localStorage summary; build exit 0
 [2026-09-22] F29 multi-voice toggle: wired isVoiceQuery+applyVoiceFromQuery+getActiveVoice into JarvisBrain.jsx; speak() passes active voice to /v1/voice/tts; build exit 0
 [2026-09-22] F30 Scene auto-tour: wired isTourQuery+buildTourScript into JarvisBrain.jsx; SceneAutoTour.jsx cycles 10 scenes via /v1/cinematic/scene/{id} + narrates via /v1/voice/tts; build exit 0
+[2026-09-23] F31 Entity count pulse — EntityCountPulse.jsx (pre-existing) imported + mounted in App.jsx; fixed jarvis:ask detail.text|query listener; polls /entities/{Task,RiskSignal,IntelProfile,SwarmJob,Investment,Contact} every 60s; ◈ PULSE button (left:540); build verified exit 0

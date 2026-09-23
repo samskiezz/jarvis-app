@@ -112,7 +112,7 @@ export default function EntityCountPulse() {
 
   useEffect(() => {
     const onAsk = (e) => {
-      const q = e?.detail?.query || "";
+      const q = e?.detail?.text || e?.detail?.query || "";
       if (VOICE_RE.test(q)) setOpen(true);
     };
     window.addEventListener("jarvis:ask", onAsk);
