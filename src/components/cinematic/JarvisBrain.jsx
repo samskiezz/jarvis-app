@@ -109,6 +109,7 @@ import { isOpsTempoQuery, buildOpsTempoScript } from "./OpsTempoIndex";
 import { isOpsHealthBannerQuery, buildOpsHealthBannerScript } from "./OpsHealthBanner";
 import { isChatQuery, buildChatScript } from "./AgentChatTranscript";
 import { isSctmQuery, buildSctmScript } from "./AipSkillContactTaskMesh";
+import { isOpmapQuery, buildOpmapScript } from "./AipSkillContactScenarioMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1090,6 +1091,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sctm-toggle"));
       let script = "";
       try { script = await buildSctmScript(); } catch { script = "Skill contact task mesh is open, sir. Showing skill coverage gaps across contacts and tasks."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F44: AIP skill × contact × scenario operator capability map — open OPMAP panel + speak summary.
+    if (isOpmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opmap-toggle"));
+      let script = "";
+      try { script = await buildOpmapScript(); } catch { script = "Operator capability map is open, sir. Showing skill coverage across contacts and scenarios."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
