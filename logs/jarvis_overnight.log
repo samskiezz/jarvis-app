@@ -25,3 +25,4 @@
 [2026-09-23] F32 KnowledgeFreshnessMonitor: imported+mounted in App.jsx; isKfmQuery+buildKfmScript wired in JarvisBrain.jsx; /knowledge/ freshness classification FRESH/CURRENT/STALE; build exit 0
 [2026-09-23] F33 AgentToolsRunner: imported+mounted in App.jsx; added isAgentToolsRunnerQuery+buildAgentToolsRunnerScript + jarvis:atr-toggle; wired in JarvisBrain.jsx; /v1/jarvis/agent/tools catalogue + /v1/jarvis/agent/chat one-shot run; build exit 0
 [2026-09-23] F34 Intel Digest: wired isIntelDigestQuery+buildIntelDigestScript into JarvisBrain.jsx; IntelDigest.jsx (pre-existing, left:3196) dispatches jarvis:intel-digest-toggle; voice trigger 'intel digest/live digest/news digest'; build exit 0
+[2026-09-23] F35 ScenarioImpactMatrix wired into App.jsx — /v1/scenario/list 3x3 impact×probability matrix + /v1/jarvis/agent/chat AI assessment; MATRIX toggle left:3924; build verified exit 0

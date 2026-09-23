@@ -267,6 +267,7 @@ import LiveIntelContactExposure from '@/components/cinematic/LiveIntelContactExp
 import LiveIntelTaskActivation from '@/components/cinematic/LiveIntelTaskActivation';
 import KnowledgeFreshnessMonitor from '@/components/cinematic/KnowledgeFreshnessMonitor';
 import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
+import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -810,6 +811,8 @@ function App() {
             {/* F33 (overnight 2026-09-23): Agent Tools Runner — ⌘⇧T opens a live palette; fetches real tool catalogue from /v1/jarvis/agent/tools; select + Enter fires /v1/jarvis/agent/chat with a one-shot tool-run prompt and shows the agent response inline; keyboard nav ↑↓↵ + text search; isAgentToolsRunnerQuery+buildAgentToolsRunnerScript wired in JarvisBrain; "agent tools"/"run tool"/"tool runner"/"tool palette"/"jarvis tools"/"atr"/"list tools"/"show tools" voice trigger; jarvis:atr-toggle event */}
             <AgentToolsRunner />
 
+            {/* F35 (overnight 2026-09-23): scenario impact matrix — ◫ MATRIX button (left:3924, bottom:6, zIndex:60); fetches /v1/scenario/list; plots every scenario on a 3×3 impact×probability risk matrix; quadrant colours: LOW(green)/MEDIUM(amber)/HIGH(orange)/CRITICAL(red); hover shows scenario name; click → /v1/jarvis/agent/chat AI risk assessment + jarvis:speak-dossier TTS; critical-count badge; filter input; 60-s auto-refresh; "impact matrix"/"scenario matrix"/"risk matrix"/"scenario risk" voice trigger (jarvis:matrix-toggle event) */}
+            <ScenarioImpactMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
