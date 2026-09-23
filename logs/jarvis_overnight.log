@@ -1,0 +1,1 @@
+2026-09-23 F01 ⌘K command palette — CommandPalette.jsx (src/components/cinematic/CommandPalette.jsx) wired in App.jsx; searches all JARVIS pages + 10 cinematic scenes + panel commands; ⌘K/Ctrl+K opens; Enter navigates; build passes exit 0.
