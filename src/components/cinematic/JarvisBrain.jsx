@@ -116,6 +116,7 @@ import { isBrainPulseQuery } from "./LiveBrainPulse";
 import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
 import { isSsxcapQuery, buildSsxcapScript } from "./AipSkillSwarmScenarioMatrix";
 import { isIrsigQuery, buildIrsigScript } from "./InvestigationRiskCorrelator";
+import { isTskquadQuery, buildTskquadScript } from "./TaskPriorityQuadrant";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1168,6 +1169,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:irsig-toggle"));
       let script = "";
       try { script = await buildIrsigScript(); } catch { script = "Investigation risk correlator is online, sir. Cross-referencing open investigations against active risk signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F51: Task Priority Quadrant — Eisenhower 2×2 DO FIRST/PLAN/DELEGATE/SKIP classification.
+    if (isTskquadQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tskquad-toggle"));
+      let script = "";
+      try { script = await buildTskquadScript(); } catch { script = "Task priority quadrant is online, sir. Classifying tasks by urgency and priority now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
