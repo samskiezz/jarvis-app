@@ -265,6 +265,7 @@ import GraphCentralityAipSkill from '@/components/cinematic/GraphCentralityAipSk
 import LiveIntelKnowledgeCoverage from '@/components/cinematic/LiveIntelKnowledgeCoverage';
 import LiveIntelContactExposure from '@/components/cinematic/LiveIntelContactExposure';
 import LiveIntelTaskActivation from '@/components/cinematic/LiveIntelTaskActivation';
+import KnowledgeFreshnessMonitor from '@/components/cinematic/KnowledgeFreshnessMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -801,6 +802,9 @@ function App() {
 
             {/* F207 (overnight 2026-09-21): Live Intel × Task Activation — ◈ LITASK button (left:37960, bottom:8, zIndex:107); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /entities/Task; keyword-correlates task name/description/type/status against live world events to surface TRIGGERED (≥1 event match) vs INACTIVE; stat tiles events/tasks/triggered/inactive; violet badge on triggered count; filter tabs ALL/TRIGGERED/INACTIVE + text search; expand task → matched live event cards with type badge (SEISMIC/CRYPTO/FX) + relevance bar; ▶ ASSESS ACTIVATION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLitaskQuery+buildLitaskScript wired in JarvisBrain; "litask"/"live intel task"/"task activation"/"triggered tasks"/"live task"/"world event task" voice trigger; jarvis:litask-toggle event; 90-s auto-refresh */}
             <LiveIntelTaskActivation />
+
+            {/* F32 (overnight 2026-09-23): Knowledge Freshness Monitor — ⬡ KFM button (left:8580, bottom:8, zIndex:68); polls /knowledge/ every 120 s; classifies articles FRESH (<24h) / CURRENT (1–7d) / STALE (>7d); stat tiles total/fresh/current/stale; amber warning badge on stale count; filter tabs ALL/FRESH/CURRENT/STALE + age bar per article; isKfmQuery+buildKfmScript wired in JarvisBrain; "knowledge freshness"/"stale knowledge"/"knowledge age"/"kfm" voice trigger; jarvis:kfm-toggle event; 120-s auto-refresh */}
+            <KnowledgeFreshnessMonitor />
 
             <Suspense fallback={<Loading />}>
               <Routes>

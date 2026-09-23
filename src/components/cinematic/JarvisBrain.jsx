@@ -86,6 +86,7 @@ import { isLiknowQuery, buildLiknowScript } from "./LiveIntelKnowledgeCoverage";
 import { isLicontactQuery, buildLicontactScript } from "./LiveIntelContactExposure";
 import { isLitaskQuery, buildLitaskScript } from "./LiveIntelTaskActivation";
 import { isGcaskQuery, buildGcaskScript } from "./GraphCentralityAipSkill";
+import { isKfmQuery, buildKfmScript } from "./KnowledgeFreshnessMonitor";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
 import { isTaskQuery, buildTaskScript } from "./TaskBoard";
@@ -991,6 +992,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcask-toggle"));
       let script = "";
       try { script = await buildGcaskScript(); } catch { script = "Graph centrality AIP skill coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKfmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kfm-toggle"));
+      let script = "";
+      try { script = await buildKfmScript(); } catch { script = "Knowledge freshness monitor is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
