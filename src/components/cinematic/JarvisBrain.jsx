@@ -103,6 +103,7 @@ import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
+import { isExecBriefQuery, buildExecBriefScript } from "./ExecutiveBriefing";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1039,6 +1040,15 @@ export default function JarvisBrain() {
       try { script = await buildWatchlistScript(); } catch { script = "Watchlist panel is ready, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F38: executive intel briefing — open BRIEF panel + speak AI-generated 3-sentence brief.
+    if (isExecBriefQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:exec-brief-toggle"));
+      let script = "";
+      try { script = await buildExecBriefScript(); } catch { script = "Executive briefing panel is ready, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(12000, script.length * 70));
       return;
     }
     let answer = "";

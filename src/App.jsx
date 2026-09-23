@@ -269,6 +269,7 @@ import KnowledgeFreshnessMonitor from '@/components/cinematic/KnowledgeFreshness
 import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
 import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
 import ReportViewer from '@/components/cinematic/ReportViewer';
+import ExecutiveBriefing from '@/components/cinematic/ExecutiveBriefing';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -816,6 +817,10 @@ function App() {
             <ScenarioImpactMatrix />
             {/* F36: report viewer — ◈ RVIEW button (left:10920, bottom:8, zIndex:71); fetches /v1/reports every 2 min; browsable report cards with type/date/author/tags; filter tabs ALL/THREAT/INTEL/OPS/KNOWLEDGE/OTHER; isReportViewerQuery+buildReportViewerScript wired in JarvisBrain; "report viewer/show reports/intelligence reports/rview" voice trigger; jarvis:report-viewer-toggle event */}
             <ReportViewer />
+
+            {/* F38 (overnight 2026-09-23): Executive Intel Briefing — ◈ BRIEF button (left:55640, bottom:8, zIndex:110); aggregates /v1/jarvis/system/status + /entities/RiskSignal + /v1/cinematic/brain; sends snapshot to /v1/jarvis/agent/chat for AI 3-sentence executive brief; speaks via /v1/voice/tts; auto-refresh 10 min; isExecBriefQuery+buildExecBriefScript wired in JarvisBrain; "exec brief/executive briefing/brief me/sitrep/situation report" voice trigger; jarvis:exec-brief-toggle event */}
+            <ExecutiveBriefing />
+
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
