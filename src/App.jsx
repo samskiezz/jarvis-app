@@ -279,6 +279,7 @@ import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
 import AipSkillSwarmScenarioMatrix from '@/components/cinematic/AipSkillSwarmScenarioMatrix';
 import InvestigationRiskCorrelator from '@/components/cinematic/InvestigationRiskCorrelator';
 import TaskPriorityQuadrant from '@/components/cinematic/TaskPriorityQuadrant';
+import SystemStatusAipSkillCoverage from '@/components/cinematic/SystemStatusAipSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -849,6 +850,8 @@ function App() {
             <InvestigationRiskCorrelator />
             {/* F51 (overnight 2026-09-23): Task Priority Quadrant — ◈ TSKQUAD button (left:937260, bottom:8, zIndex:634); polls /entities/Task every 90 s; classifies tasks into Eisenhower 2×2 (DO FIRST/PLAN/DELEGATE/SKIP) by priority+urgency; stat tiles TOTAL/DO FIRST/PLAN/DELEGATE; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTskquadQuery+buildTskquadScript wired in JarvisBrain; "task quadrant/priority quadrant/eisenhower/tskquad/urgent tasks" voice trigger; jarvis:tskquad-toggle event */}
             <TaskPriorityQuadrant />
+            {/* F52 (overnight 2026-09-23): System Status × AIP Skill Coverage — ◈ SSAIP button (left:978200, bottom:8, zIndex:124); parallel-fetches /v1/jarvis/system/status + /v1/aip/skill; keyword-correlates detected services against JARVIS AIP skills to classify SKILLED (≥1 skill match) vs UNSKILLED (automation gap); stat tiles SERVICES/AIP SKILLS/SKILLED/UNSKILLED; amber badge on unskilled count; filter tabs ALL/SKILLED/UNSKILLED + text search; expand service → matched AIP skill cards with type badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSsaipQuery+buildSsaipScript wired in JarvisBrain; "ssaip/service skill coverage/system skill/unskilled service/service coverage/skill gap service" voice trigger; jarvis:ssaip-toggle event; 90-s auto-refresh */}
+            <SystemStatusAipSkillCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
