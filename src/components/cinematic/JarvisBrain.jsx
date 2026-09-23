@@ -105,6 +105,7 @@ import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } f
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
 import { isExecBriefQuery, buildExecBriefScript } from "./ExecutiveBriefing";
 import { isDinvQuery, buildDinvScript } from "./DatasetInvestigationLinker";
+import { isOpsTempoQuery, buildOpsTempoScript } from "./OpsTempoIndex";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1057,6 +1058,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dinv-toggle"));
       let script = "";
       try { script = await buildDinvScript(); } catch { script = "Dataset investigation linker is ready, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F40: operational tempo index — open TEMPO panel + speak composite ops/risk/swarm score.
+    if (isOpsTempoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ops-tempo-toggle"));
+      let script = "";
+      try { script = await buildOpsTempoScript(); } catch { script = "Operational tempo index is online, sir. Monitoring all activity streams."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
