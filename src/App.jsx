@@ -273,6 +273,7 @@ import ExecutiveBriefing from '@/components/cinematic/ExecutiveBriefing';
 import DatasetInvestigationLinker from '@/components/cinematic/DatasetInvestigationLinker';
 import AipSkillContactTaskMesh from '@/components/cinematic/AipSkillContactTaskMesh';
 import AipSkillContactScenarioMap from '@/components/cinematic/AipSkillContactScenarioMap';
+import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -831,6 +832,8 @@ function App() {
             <AipSkillContactTaskMesh />
             {/* F44 (overnight 2026-09-23): AIP Skill × Contact × Scenario Operator Capability Map — ◈ OPMAP button; parallel-fetches /v1/aip/skill + /entities/Contact + /v1/scenario/list; keyword-correlates skills against contacts (STAFFED) and scenarios (CONTEXTED) to classify FULLY_MAPPED/CONTACT_MAPPED/SCENARIO_MAPPED/UNMAPPED; amber badge on unmapped; filter tabs + search; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capability brief + TTS; isOpmapQuery+buildOpmapScript wired in JarvisBrain; "opmap/operator capability/skill contact scenario/unmapped skill/capability mapping" voice trigger; jarvis:opmap-toggle event; 90-s auto-refresh */}
             <AipSkillContactScenarioMap />
+            {/* F46 (overnight 2026-09-23): Brain Node Velocity Monitor — ◈ BNVM button (left:2580, bottom:18); polls /v1/cinematic/brain every 30 s; computes Δnodes/Δsynapses per minute; ACCELERATING/STEADY/DECELERATING trend via linear regression over 20 localStorage readings; velocity sparklines; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence growth-velocity brief + TTS; isBnvmQuery+buildBnvmScript wired in JarvisBrain; "brain velocity/node velocity/brain acceleration/bnvm/growth velocity/brain growth rate" voice trigger; jarvis:bnvm-toggle event */}
+            <BrainNodeVelocityMonitor />
 
             <Suspense fallback={<Loading />}>
               <Routes>

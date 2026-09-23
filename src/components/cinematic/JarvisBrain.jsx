@@ -111,6 +111,7 @@ import { isChatQuery, buildChatScript } from "./AgentChatTranscript";
 import { isSctmQuery, buildSctmScript } from "./AipSkillContactTaskMesh";
 import { isOpmapQuery, buildOpmapScript } from "./AipSkillContactScenarioMap";
 import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
+import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1109,6 +1110,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:opmap-toggle"));
       let script = "";
       try { script = await buildOpmapScript(); } catch { script = "Operator capability map is open, sir. Showing skill coverage across contacts and scenarios."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F46: brain node velocity monitor — open BNVM panel + speak growth velocity.
+    if (isBnvmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:bnvm-toggle"));
+      let script = "";
+      try { script = await buildBnvmScript(); } catch { script = "Brain node velocity monitor is online, sir. Tracking neural growth rate and acceleration trend."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
