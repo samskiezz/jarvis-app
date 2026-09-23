@@ -268,6 +268,7 @@ import LiveIntelTaskActivation from '@/components/cinematic/LiveIntelTaskActivat
 import KnowledgeFreshnessMonitor from '@/components/cinematic/KnowledgeFreshnessMonitor';
 import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
 import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
+import ReportViewer from '@/components/cinematic/ReportViewer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -813,6 +814,8 @@ function App() {
 
             {/* F35 (overnight 2026-09-23): scenario impact matrix — ◫ MATRIX button (left:3924, bottom:6, zIndex:60); fetches /v1/scenario/list; plots every scenario on a 3×3 impact×probability risk matrix; quadrant colours: LOW(green)/MEDIUM(amber)/HIGH(orange)/CRITICAL(red); hover shows scenario name; click → /v1/jarvis/agent/chat AI risk assessment + jarvis:speak-dossier TTS; critical-count badge; filter input; 60-s auto-refresh; "impact matrix"/"scenario matrix"/"risk matrix"/"scenario risk" voice trigger (jarvis:matrix-toggle event) */}
             <ScenarioImpactMatrix />
+            {/* F36: report viewer — ◈ RVIEW button (left:10920, bottom:8, zIndex:71); fetches /v1/reports every 2 min; browsable report cards with type/date/author/tags; filter tabs ALL/THREAT/INTEL/OPS/KNOWLEDGE/OTHER; isReportViewerQuery+buildReportViewerScript wired in JarvisBrain; "report viewer/show reports/intelligence reports/rview" voice trigger; jarvis:report-viewer-toggle event */}
+            <ReportViewer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

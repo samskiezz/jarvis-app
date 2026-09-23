@@ -89,6 +89,7 @@ import { isGcaskQuery, buildGcaskScript } from "./GraphCentralityAipSkill";
 import { isKfmQuery, buildKfmScript } from "./KnowledgeFreshnessMonitor";
 import { isAgentToolsRunnerQuery, buildAgentToolsRunnerScript } from "./AgentToolsRunner";
 import { isIntelDigestQuery, buildIntelDigestScript } from "./IntelDigest";
+import { isReportViewerQuery, buildReportViewerScript } from "./ReportViewer";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
 import { isTaskQuery, buildTaskScript } from "./TaskBoard";
@@ -1018,6 +1019,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:intel-digest-toggle"));
       let script = "";
       try { script = await buildIntelDigestScript(); } catch { script = "Intelligence digest is online. Monitoring live feeds. Standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F36: report viewer — open the reports panel + speak report count and types.
+    if (isReportViewerQuery(q)) {
+      let script = "";
+      try { script = await buildReportViewerScript(); } catch { script = "Report viewer is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
