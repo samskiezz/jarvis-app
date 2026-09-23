@@ -112,6 +112,7 @@ import { isSctmQuery, buildSctmScript } from "./AipSkillContactTaskMesh";
 import { isOpmapQuery, buildOpmapScript } from "./AipSkillContactScenarioMap";
 import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
 import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
+import { isBrainPulseQuery } from "./LiveBrainPulse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1119,6 +1120,25 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:bnvm-toggle"));
       let script = "";
       try { script = await buildBnvmScript(); } catch { script = "Brain node velocity monitor is online, sir. Tracking neural growth rate and acceleration trend."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F47: live brain pulse — toggle ambient orb + speak live node/synapse counts from /v1/cinematic/brain.
+    if (isBrainPulseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:brain-pulse-toggle"));
+      let script = "Live brain pulse is active, sir.";
+      try {
+        const r = await fetch(`${apiBase()}/v1/cinematic/brain`, {
+          headers: { Authorization: `Bearer ${API_KEY}` },
+        });
+        if (r.ok) {
+          const d = await r.json();
+          const nodes = d.nodes ?? d.node_count ?? d.total_nodes ?? d.graph?.nodes ?? 0;
+          const synapses = d.synapses ?? d.synapse_count ?? d.edge_count ?? d.total_edges ?? d.graph?.edges ?? 0;
+          script = `Neural activity confirmed, sir. The cognitive graph currently holds ${nodes} nodes and ${synapses} synaptic connections. The ambient pulse indicator reflects live growth velocity.`;
+        }
+      } catch { /* silent */ }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;

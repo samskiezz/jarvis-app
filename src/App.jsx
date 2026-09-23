@@ -274,6 +274,7 @@ import DatasetInvestigationLinker from '@/components/cinematic/DatasetInvestigat
 import AipSkillContactTaskMesh from '@/components/cinematic/AipSkillContactTaskMesh';
 import AipSkillContactScenarioMap from '@/components/cinematic/AipSkillContactScenarioMap';
 import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMonitor';
+import LiveBrainPulse from '@/components/cinematic/LiveBrainPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -834,6 +835,8 @@ function App() {
             <AipSkillContactScenarioMap />
             {/* F46 (overnight 2026-09-23): Brain Node Velocity Monitor — ◈ BNVM button (left:2580, bottom:18); polls /v1/cinematic/brain every 30 s; computes Δnodes/Δsynapses per minute; ACCELERATING/STEADY/DECELERATING trend via linear regression over 20 localStorage readings; velocity sparklines; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence growth-velocity brief + TTS; isBnvmQuery+buildBnvmScript wired in JarvisBrain; "brain velocity/node velocity/brain acceleration/bnvm/growth velocity/brain growth rate" voice trigger; jarvis:bnvm-toggle event */}
             <BrainNodeVelocityMonitor />
+            {/* F47 (overnight 2026-09-23): Live Brain Pulse — always-on ambient orb (bottom-right) pulsing at a rate derived from Δnodes+Δsynapses every 30 s from /v1/cinematic/brain; click → /v1/jarvis/agent/chat 2-sentence health brief + TTS; isBrainPulseQuery wired in JarvisBrain; "brain pulse/neural activity/live brain" voice trigger; jarvis:brain-pulse-toggle event */}
+            <LiveBrainPulse />
 
             <Suspense fallback={<Loading />}>
               <Routes>
