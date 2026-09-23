@@ -114,6 +114,7 @@ import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
 import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
 import { isBrainPulseQuery } from "./LiveBrainPulse";
 import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
+import { isSsxcapQuery, buildSsxcapScript } from "./AipSkillSwarmScenarioMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1148,6 +1149,15 @@ export default function JarvisBrain() {
     if (isSwarmDatasetQuery(q)) {
       let script = "";
       try { script = await buildSwarmDatasetScript(); } catch { script = "Swarm-Dataset Ingestion Tracker is online, sir. Analysing pipeline automation coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F49: AIP Skill × Swarm × Scenario Execution Capability Matrix — FULLY_DEPLOYED/SCENARIO_ONLY/SWARM_ONLY/IDLE.
+    if (isSsxcapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssxcap-toggle"));
+      let script = "";
+      try { script = await buildSsxcapScript(); } catch { script = "Skill execution capability matrix is online, sir. Cross-referencing AIP skills against scenarios and swarm jobs now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;

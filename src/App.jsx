@@ -276,6 +276,7 @@ import AipSkillContactScenarioMap from '@/components/cinematic/AipSkillContactSc
 import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMonitor';
 import LiveBrainPulse from '@/components/cinematic/LiveBrainPulse';
 import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
+import AipSkillSwarmScenarioMatrix from '@/components/cinematic/AipSkillSwarmScenarioMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -840,6 +841,8 @@ function App() {
             <LiveBrainPulse />
             {/* F48: Swarm-Dataset Ingestion Tracker — ⬡ SDTRK button (left:7564); cross-refs /entities/SwarmJob against /v1/datasets; AUTOMATED vs MANUAL classification; amber badge on manual count; filter tabs; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; "swarm dataset/dataset ingestion/data automation/pipeline coverage/sdtrk" voice trigger */}
             <SwarmDatasetTracker />
+            {/* F49 (overnight 2026-09-23): AIP Skill × Swarm × Scenario Execution Capability Matrix — ◈ SSXCAP button (left:975960, bottom:8, zIndex:121); cross-refs /v1/aip/skill against /v1/scenario/list + /entities/SwarmJob; FULLY_DEPLOYED/SCENARIO_ONLY/SWARM_ONLY/IDLE classification; red pulse on IDLE; filter tabs + text search; expand skill → matched scenarios (amber) + swarm jobs (cyan); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence gap brief + TTS; "ssxcap/idle skills/skill deployment/skill execution/underused skills/capability deployment" voice trigger; jarvis:ssxcap-toggle event; 90-s auto-refresh */}
+            <AipSkillSwarmScenarioMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
