@@ -119,6 +119,7 @@ import { isIrsigQuery, buildIrsigScript } from "./InvestigationRiskCorrelator";
 import { isTskquadQuery, buildTskquadScript } from "./TaskPriorityQuadrant";
 import { isSsaipQuery, buildSsaipScript } from "./SystemStatusAipSkillCoverage";
 import { isCrseQuery, buildCrseScript } from "./ContactRiskExposureMatrix";
+import { isWrlrskQuery, buildWrlrskScript } from "./WorldRiskCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1198,6 +1199,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:crse-toggle"));
       let script = "";
       try { script = await buildCrseScript(); } catch { script = "Contact risk exposure matrix is online, sir. Cross-referencing personnel against active risk signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F54: World Risk Correlator — open WRLRSK panel + speak geophysical risk brief.
+    if (isWrlrskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wrlrsk-toggle"));
+      let script = "";
+      try { script = await buildWrlrskScript(); } catch { script = "World risk correlator is online, sir. Cross-referencing live seismic events against the risk signal catalog now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
