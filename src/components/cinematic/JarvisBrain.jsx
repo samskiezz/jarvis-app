@@ -107,6 +107,7 @@ import { isExecBriefQuery, buildExecBriefScript } from "./ExecutiveBriefing";
 import { isDinvQuery, buildDinvScript } from "./DatasetInvestigationLinker";
 import { isOpsTempoQuery, buildOpsTempoScript } from "./OpsTempoIndex";
 import { isOpsHealthBannerQuery, buildOpsHealthBannerScript } from "./OpsHealthBanner";
+import { isChatQuery, buildChatScript } from "./AgentChatTranscript";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1061,6 +1062,18 @@ export default function JarvisBrain() {
       try { script = await buildDinvScript(); } catch { script = "Dataset investigation linker is ready, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F42: agent chat transcript — open persistent multi-turn chat panel + speak status.
+    if (isChatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:chat-toggle"));
+      let script = "";
+      try {
+        const stored = (() => { try { const r = localStorage.getItem("jarvis_chat_history"); return r ? JSON.parse(r) : []; } catch { return []; } })();
+        script = buildChatScript(stored);
+      } catch { script = "Chat transcript panel is open, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
       return;
     }
     // F41: ops health banner — toggle OHB strip + speak system/risk/task/swarm summary.
