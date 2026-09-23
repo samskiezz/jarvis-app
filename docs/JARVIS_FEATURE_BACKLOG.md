@@ -18,7 +18,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 `/v1/scenario/list` · `/v1/aip/skill` · `/v1/reports` · `/knowledge/*`
 
 ## Backlog (real features)
-- [ ] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it.
+- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. _(2026-09-23: CommandPalette.jsx enhanced — added 18 JARVIS brain commands (kind:"ask") alongside scenes+pages; Enter on a brain command dispatches jarvis:ask to JarvisBrain; MG accent distinguishes brain vs nav entries; build verified.)_
 - [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
 - [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
 - [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.

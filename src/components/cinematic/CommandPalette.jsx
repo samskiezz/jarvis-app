@@ -1,6 +1,8 @@
 /**
  * CommandPalette — ⌘K / Ctrl+K global command search.
- * Lists every JARVIS page (from pageRegistry) + the 10 cinematic scenes.
+ * Lists every JARVIS command: cinematic scenes + every page + JARVIS brain queries.
+ * Brain commands dispatch `jarvis:ask` so JarvisBrain handles them (TTS + agent response).
+ * Navigation commands call navigate(). Both types obey the same ↵ / Enter flow.
  * Additive-only; mounted in App.jsx next to JarvisBrain.
  */
 import { useState, useEffect, useRef, useCallback } from "react";
@@ -9,6 +11,7 @@ import { PAGES } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
 
 const CY = "#29E7FF";
+const MG = "#BF5FFF";
 
 const CINEMATIC_SCENES = [
   { id: "01_command_atrium",          label: "Command Atrium",         icon: "◈" },
@@ -23,12 +26,44 @@ const CINEMATIC_SCENES = [
   { id: "10_system_security_core",    label: "System Security Core",   icon: "◈" },
 ];
 
+const JARVIS_BRAIN_COMMANDS = [
+  { label: "System Status Report",        query: "Give me a full system status report including CPU, memory, and brain node counts." },
+  { label: "Markets Overview",            query: "What are the top movers in the markets right now? Summarise crypto and FX." },
+  { label: "Risk Assessment",             query: "Show me the current risk signals. Which are critical?" },
+  { label: "Active Investigations",       query: "List all open investigations and their current status." },
+  { label: "Operations Summary",          query: "Summarise current operations. Any active alerts or cases I should know about?" },
+  { label: "Intelligence Digest",         query: "Give me today's intelligence digest. Key entities and signals." },
+  { label: "World Incidents",             query: "What world incidents have occurred recently? Include seismic activity and geopolitical events." },
+  { label: "Agent Tools Status",          query: "List all available agent tools and confirm which are operational." },
+  { label: "Brain Growth",               query: "How many nodes and synapses does the knowledge graph have? How has it grown?" },
+  { label: "Swarm Jobs",                  query: "What swarm jobs are currently running? Show progress." },
+  { label: "Investment Portfolio",        query: "Give me a portfolio overview. Key holdings and risk exposure." },
+  { label: "Scenario Analysis",          query: "What scenarios are available for simulation? Which are most relevant now?" },
+  { label: "Skill Scorecard",            query: "Show me the current skill metrics and self-improvement indicators." },
+  { label: "Graph Centrality",           query: "Which entities have the highest graph centrality? Top five." },
+  { label: "Document Search",            query: "What reports and knowledge documents are available? Summary of coverage." },
+  { label: "Diagnostics",               query: "Run diagnostics on all services and report any failures or warnings." },
+  { label: "Contact Intelligence",       query: "Who are the most connected contacts? Any new activity?" },
+  { label: "Threat Landscape",          query: "What is the current threat landscape? Any new risk signals or escalations?" },
+];
+
 function buildCommands() {
+  const brainCommands = JARVIS_BRAIN_COMMANDS.map((c, i) => ({
+    id: `jarvis:${i}`,
+    label: c.label,
+    icon: "◉",
+    group: "JARVIS",
+    kind: "ask",
+    query: c.query,
+    keywords: `jarvis ask brain ${c.label}`.toLowerCase(),
+  }));
+
   const sceneCommands = CINEMATIC_SCENES.map((s) => ({
     id: `scene:${s.id}`,
     label: s.label,
     icon: s.icon,
     group: "CINEMATIC",
+    kind: "nav",
     path: `/cinematic/${s.id}`,
     keywords: `cinematic scene ${s.label}`.toLowerCase(),
   }));
@@ -40,11 +75,12 @@ function buildCommands() {
       label: p.label,
       icon: p.icon || "◆",
       group: (p.group || "apex").toUpperCase(),
+      kind: "nav",
       path: `/apex${createPageUrl(p.name)}`,
       keywords: [p.label, p.name, ...(p.aliases || [])].join(" ").toLowerCase(),
     }));
 
-  return [...sceneCommands, ...pageCommands];
+  return [...brainCommands, ...sceneCommands, ...pageCommands];
 }
 
 const ALL_COMMANDS = buildCommands();
@@ -73,7 +109,11 @@ export default function CommandPalette() {
 
   const run = useCallback(
     (cmd) => {
-      navigate(cmd.path);
+      if (cmd.kind === "ask") {
+        window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: cmd.query } }));
+      } else {
+        navigate(cmd.path);
+      }
       close();
     },
     [navigate, close]
@@ -214,6 +254,7 @@ export default function CommandPalette() {
                 style={{
                   width: 22, textAlign: "center", fontSize: 14,
                   flexShrink: 0, opacity: i === selected ? 1 : 0.6,
+                  color: cmd.kind === "ask" ? MG : "inherit",
                 }}
               >
                 {cmd.icon}
@@ -228,7 +269,9 @@ export default function CommandPalette() {
               </span>
               <span
                 style={{
-                  color: i === selected ? `${CY}AA` : "#2E4050",
+                  color: i === selected
+                    ? (cmd.kind === "ask" ? `${MG}AA` : `${CY}AA`)
+                    : "#2E4050",
                   fontSize: 10, letterSpacing: 2, flexShrink: 0,
                 }}
               >
@@ -248,7 +291,7 @@ export default function CommandPalette() {
           }}
         >
           <span>↑↓ navigate</span>
-          <span>↵ open</span>
+          <span>↵ open / ask JARVIS</span>
           <span>ESC close</span>
           <span style={{ marginLeft: "auto" }}>
             {filtered.length} command{filtered.length !== 1 ? "s" : ""}

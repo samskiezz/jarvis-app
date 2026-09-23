@@ -1,0 +1,1 @@
+[2026-09-23] F01 ⌘K command palette: enhanced CommandPalette.jsx with 18 JARVIS brain commands (dispatches jarvis:ask to JarvisBrain) + nav commands; build verified (exit 0).
