@@ -113,6 +113,7 @@ import { isOpmapQuery, buildOpmapScript } from "./AipSkillContactScenarioMap";
 import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
 import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
 import { isBrainPulseQuery } from "./LiveBrainPulse";
+import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1139,6 +1140,14 @@ export default function JarvisBrain() {
           script = `Neural activity confirmed, sir. The cognitive graph currently holds ${nodes} nodes and ${synapses} synaptic connections. The ambient pulse indicator reflects live growth velocity.`;
         }
       } catch { /* silent */ }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F48: swarm-dataset ingestion tracker — cross-ref /entities/SwarmJob vs /v1/datasets; AUTOMATED vs MANUAL classification.
+    if (isSwarmDatasetQuery(q)) {
+      let script = "";
+      try { script = await buildSwarmDatasetScript(); } catch { script = "Swarm-Dataset Ingestion Tracker is online, sir. Analysing pipeline automation coverage now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;

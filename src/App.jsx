@@ -275,6 +275,7 @@ import AipSkillContactTaskMesh from '@/components/cinematic/AipSkillContactTaskM
 import AipSkillContactScenarioMap from '@/components/cinematic/AipSkillContactScenarioMap';
 import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMonitor';
 import LiveBrainPulse from '@/components/cinematic/LiveBrainPulse';
+import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -837,6 +838,8 @@ function App() {
             <BrainNodeVelocityMonitor />
             {/* F47 (overnight 2026-09-23): Live Brain Pulse — always-on ambient orb (bottom-right) pulsing at a rate derived from Δnodes+Δsynapses every 30 s from /v1/cinematic/brain; click → /v1/jarvis/agent/chat 2-sentence health brief + TTS; isBrainPulseQuery wired in JarvisBrain; "brain pulse/neural activity/live brain" voice trigger; jarvis:brain-pulse-toggle event */}
             <LiveBrainPulse />
+            {/* F48: Swarm-Dataset Ingestion Tracker — ⬡ SDTRK button (left:7564); cross-refs /entities/SwarmJob against /v1/datasets; AUTOMATED vs MANUAL classification; amber badge on manual count; filter tabs; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; "swarm dataset/dataset ingestion/data automation/pipeline coverage/sdtrk" voice trigger */}
+            <SwarmDatasetTracker />
 
             <Suspense fallback={<Loading />}>
               <Routes>
