@@ -106,6 +106,7 @@ import { isTourQuery, buildTourScript } from "./SceneAutoTour";
 import { isExecBriefQuery, buildExecBriefScript } from "./ExecutiveBriefing";
 import { isDinvQuery, buildDinvScript } from "./DatasetInvestigationLinker";
 import { isOpsTempoQuery, buildOpsTempoScript } from "./OpsTempoIndex";
+import { isOpsHealthBannerQuery, buildOpsHealthBannerScript } from "./OpsHealthBanner";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1058,6 +1059,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dinv-toggle"));
       let script = "";
       try { script = await buildDinvScript(); } catch { script = "Dataset investigation linker is ready, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F41: ops health banner — toggle OHB strip + speak system/risk/task/swarm summary.
+    if (isOpsHealthBannerQuery(q)) {
+      let script = "";
+      try { script = await buildOpsHealthBannerScript(); } catch { script = "Ops health banner is active, sir. Monitoring system status, risk signals, tasks, and swarm jobs."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
