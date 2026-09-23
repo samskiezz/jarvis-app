@@ -270,6 +270,7 @@ import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
 import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
 import ReportViewer from '@/components/cinematic/ReportViewer';
 import ExecutiveBriefing from '@/components/cinematic/ExecutiveBriefing';
+import DatasetInvestigationLinker from '@/components/cinematic/DatasetInvestigationLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -820,6 +821,9 @@ function App() {
 
             {/* F38 (overnight 2026-09-23): Executive Intel Briefing — ◈ BRIEF button (left:55640, bottom:8, zIndex:110); aggregates /v1/jarvis/system/status + /entities/RiskSignal + /v1/cinematic/brain; sends snapshot to /v1/jarvis/agent/chat for AI 3-sentence executive brief; speaks via /v1/voice/tts; auto-refresh 10 min; isExecBriefQuery+buildExecBriefScript wired in JarvisBrain; "exec brief/executive briefing/brief me/sitrep/situation report" voice trigger; jarvis:exec-brief-toggle event */}
             <ExecutiveBriefing />
+
+            {/* F39 (overnight 2026-09-23): Dataset × Investigation Linker — ◈ DINV button (left:56200, bottom:8, zIndex:111); parallel-fetches /v1/datasets + /v1/investigations; keyword-correlates dataset names/types against investigation titles to surface CITED (≥1 match) vs UNCITED; amber badge on uncited count; filter tabs ALL/CITED/UNCITED + text search; expand dataset → matched investigation cards with relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isDinvQuery+buildDinvScript wired in JarvisBrain; "dataset investigation/data link/dinv/uncited datasets/investigation data" voice trigger; jarvis:dinv-toggle event; 90-s auto-refresh */}
+            <DatasetInvestigationLinker />
 
             <Suspense fallback={<Loading />}>
               <Routes>
