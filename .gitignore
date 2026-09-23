@@ -2,9 +2,10 @@
 .venv/
 venv/
 
-# Logs (jarvis_overnight.log is tracked — do not ignore the logs dir entirely)
+# Logs (keep overnight tracking log; ignore everything else)
+/logs/*
 *.log
-!logs/jarvis_overnight.log
+!/logs/jarvis_overnight.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -224,3 +225,4 @@ underworld/deploy/pixelstream/game/Linux/Underworld_Render/Binaries/Linux/Underw
 underworld/deploy/pixelstream/game/Linux/Underworld_Render/Binaries/Linux/Underworld-Linux-Shipping.debug
 server/data/vision_tracking/soccernet/england_epl/2014-2015/2015-02-21 - 18-00 Chelsea 1 - 1 Burnley/1_224p.mkv
 server/data/vision_tracking/soccernet/england_epl/2014-2015/2015-02-21 - 18-00 Chelsea 1 - 1 Burnley/2_224p.mkv
+!/logs/jarvis_overnight.log
