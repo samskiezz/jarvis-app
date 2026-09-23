@@ -280,6 +280,7 @@ import AipSkillSwarmScenarioMatrix from '@/components/cinematic/AipSkillSwarmSce
 import InvestigationRiskCorrelator from '@/components/cinematic/InvestigationRiskCorrelator';
 import TaskPriorityQuadrant from '@/components/cinematic/TaskPriorityQuadrant';
 import SystemStatusAipSkillCoverage from '@/components/cinematic/SystemStatusAipSkillCoverage';
+import ContactRiskExposureMatrix from '@/components/cinematic/ContactRiskExposureMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -852,6 +853,9 @@ function App() {
             <TaskPriorityQuadrant />
             {/* F52 (overnight 2026-09-23): System Status × AIP Skill Coverage — ◈ SSAIP button (left:978200, bottom:8, zIndex:124); parallel-fetches /v1/jarvis/system/status + /v1/aip/skill; keyword-correlates detected services against JARVIS AIP skills to classify SKILLED (≥1 skill match) vs UNSKILLED (automation gap); stat tiles SERVICES/AIP SKILLS/SKILLED/UNSKILLED; amber badge on unskilled count; filter tabs ALL/SKILLED/UNSKILLED + text search; expand service → matched AIP skill cards with type badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSsaipQuery+buildSsaipScript wired in JarvisBrain; "ssaip/service skill coverage/system skill/unskilled service/service coverage/skill gap service" voice trigger; jarvis:ssaip-toggle event; 90-s auto-refresh */}
             <SystemStatusAipSkillCoverage />
+
+            {/* F53 (overnight 2026-09-23): Contact × Risk Signal Exposure Matrix — ◈ CRSE button (left:978760, bottom:8, zIndex:125); parallel-fetches /entities/Contact + /entities/RiskSignal; keyword-correlates contact name/role/org/dept/tags against risk signal titles/descriptions/categories to surface AT_RISK (≥1 match) vs CLEAR; stat tiles CONTACTS/SIGNALS/AT_RISK/CLEAR; red pulse on AT_RISK count; filter tabs ALL/AT_RISK/CLEAR + text search; expand contact → matched risk signal cards with severity badge + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence personnel risk brief + TTS; isCrseQuery+buildCrseScript wired in JarvisBrain; "crse/contact risk/personnel risk/at risk contacts/exposed personnel/who is at risk" voice trigger; jarvis:crse-toggle event; 90-s auto-refresh */}
+            <ContactRiskExposureMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>

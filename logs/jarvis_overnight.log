@@ -43,3 +43,4 @@
 [2026-09-23] F50 Investigation × Risk Signal Correlator (IRSIG): InvestigationRiskCorrelator.jsx created; imported+mounted in App.jsx; isIrsigQuery+buildIrsigScript wired in JarvisBrain.jsx; /v1/investigations × /entities/RiskSignal; CORROBORATED/UNCONFIRMED; amber badge; severity colours; jarvis:irsig-toggle; build verified exit 0
 [2026-09-23] F51 Task Priority Quadrant: TaskPriorityQuadrant.jsx imported+mounted in App.jsx; isTskquadQuery+buildTskquadScript wired in JarvisBrain.jsx; polls /entities/Task 90s; Eisenhower 2x2 quadrant DO FIRST/PLAN/DELEGATE/SKIP; build verified exit 0
 [2026-09-23] F52 SystemStatusAipSkillCoverage.jsx — /v1/jarvis/system/status × /v1/aip/skill; SKILLED/UNSKILLED classification; isSsaipQuery+buildSsaipScript wired JarvisBrain; build exit 0; pushed jarvis-overnight
+[2026-09-23] F53 ContactRiskExposureMatrix — /entities/Contact × /entities/RiskSignal; AT_RISK/CLEAR classification; red pulse badge; JarvisBrain voice wired; build exit 0

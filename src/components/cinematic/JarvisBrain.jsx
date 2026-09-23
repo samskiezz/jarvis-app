@@ -118,6 +118,7 @@ import { isSsxcapQuery, buildSsxcapScript } from "./AipSkillSwarmScenarioMatrix"
 import { isIrsigQuery, buildIrsigScript } from "./InvestigationRiskCorrelator";
 import { isTskquadQuery, buildTskquadScript } from "./TaskPriorityQuadrant";
 import { isSsaipQuery, buildSsaipScript } from "./SystemStatusAipSkillCoverage";
+import { isCrseQuery, buildCrseScript } from "./ContactRiskExposureMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1188,6 +1189,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ssaip-toggle"));
       let script = "";
       try { script = await buildSsaipScript(); } catch { script = "Service AIP skill coverage monitor is online, sir. Cross-referencing system services against automation skills now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F53: Contact × Risk Signal Exposure Matrix — surface AT_RISK personnel.
+    if (isCrseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:crse-toggle"));
+      let script = "";
+      try { script = await buildCrseScript(); } catch { script = "Contact risk exposure matrix is online, sir. Cross-referencing personnel against active risk signals now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
