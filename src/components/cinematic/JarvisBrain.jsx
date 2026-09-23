@@ -115,6 +115,7 @@ import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
 import { isBrainPulseQuery } from "./LiveBrainPulse";
 import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
 import { isSsxcapQuery, buildSsxcapScript } from "./AipSkillSwarmScenarioMatrix";
+import { isIrsigQuery, buildIrsigScript } from "./InvestigationRiskCorrelator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1158,6 +1159,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ssxcap-toggle"));
       let script = "";
       try { script = await buildSsxcapScript(); } catch { script = "Skill execution capability matrix is online, sir. Cross-referencing AIP skills against scenarios and swarm jobs now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F50: Investigation × Risk Signal Correlator — CORROBORATED/UNCONFIRMED.
+    if (isIrsigQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:irsig-toggle"));
+      let script = "";
+      try { script = await buildIrsigScript(); } catch { script = "Investigation risk correlator is online, sir. Cross-referencing open investigations against active risk signals now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;

@@ -277,6 +277,7 @@ import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMo
 import LiveBrainPulse from '@/components/cinematic/LiveBrainPulse';
 import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
 import AipSkillSwarmScenarioMatrix from '@/components/cinematic/AipSkillSwarmScenarioMatrix';
+import InvestigationRiskCorrelator from '@/components/cinematic/InvestigationRiskCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -843,6 +844,8 @@ function App() {
             <SwarmDatasetTracker />
             {/* F49 (overnight 2026-09-23): AIP Skill × Swarm × Scenario Execution Capability Matrix — ◈ SSXCAP button (left:975960, bottom:8, zIndex:121); cross-refs /v1/aip/skill against /v1/scenario/list + /entities/SwarmJob; FULLY_DEPLOYED/SCENARIO_ONLY/SWARM_ONLY/IDLE classification; red pulse on IDLE; filter tabs + text search; expand skill → matched scenarios (amber) + swarm jobs (cyan); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence gap brief + TTS; "ssxcap/idle skills/skill deployment/skill execution/underused skills/capability deployment" voice trigger; jarvis:ssxcap-toggle event; 90-s auto-refresh */}
             <AipSkillSwarmScenarioMatrix />
+            {/* F50 (overnight 2026-09-23): Investigation × Risk Signal Correlator — ◈ IRSIG button (left:976520, bottom:8, zIndex:122); parallel-fetches /v1/investigations + /entities/RiskSignal; keyword-correlates each investigation against active risk signals to classify CORROBORATED (≥1 signal match) vs UNCONFIRMED; stat tiles investigations/signals/corroborated/unconfirmed; amber badge on unconfirmed count; filter tabs ALL/CORROBORATED/UNCONFIRMED + text search; expand investigation → matched risk signal cards with severity badge + relevance bar; ▶ ASSESS CORROBORATION → /v1/jarvis/agent/chat 2-sentence prioritisation brief + TTS; isIrsigQuery+buildIrsigScript wired in JarvisBrain; "investigation risk/inv risk/irsig/unconfirmed investigations/risk signal link/corroborated investigations" voice trigger; jarvis:irsig-toggle event; 90-s auto-refresh */}
+            <InvestigationRiskCorrelator />
 
             <Suspense fallback={<Loading />}>
               <Routes>
