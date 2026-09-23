@@ -27,3 +27,4 @@
 [2026-09-23] F34 Intel Digest: wired isIntelDigestQuery+buildIntelDigestScript into JarvisBrain.jsx; IntelDigest.jsx (pre-existing, left:3196) dispatches jarvis:intel-digest-toggle; voice trigger 'intel digest/live digest/news digest'; build exit 0
 [2026-09-23] F35 ScenarioImpactMatrix wired into App.jsx — /v1/scenario/list 3x3 impact×probability matrix + /v1/jarvis/agent/chat AI assessment; MATRIX toggle left:3924; build verified exit 0
 [2026-09-23] F36 Report Viewer — ReportViewer.jsx mounted in App.jsx; isReportViewerQuery+buildReportViewerScript wired in JarvisBrain.jsx; /v1/reports → report cards with type/date filter tabs; RVIEW button left:10920; build exit 0
+[2026-09-23] F37 Entity Watchlist: EntityWatchlist.jsx (pre-existing, mounted in App.jsx); isWatchlistQuery+buildWatchlistScript wired in JarvisBrain.jsx; dispatches jarvis:watchlist-toggle; /entities/{Task,RiskSignal,IntelProfile,SwarmJob,Investment,Contact} live poll; build exit 0

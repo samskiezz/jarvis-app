@@ -90,6 +90,7 @@ import { isKfmQuery, buildKfmScript } from "./KnowledgeFreshnessMonitor";
 import { isAgentToolsRunnerQuery, buildAgentToolsRunnerScript } from "./AgentToolsRunner";
 import { isIntelDigestQuery, buildIntelDigestScript } from "./IntelDigest";
 import { isReportViewerQuery, buildReportViewerScript } from "./ReportViewer";
+import { isWatchlistQuery, buildWatchlistScript } from "./EntityWatchlist";
 import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
 import { isTaskQuery, buildTaskScript } from "./TaskBoard";
@@ -1027,6 +1028,15 @@ export default function JarvisBrain() {
     if (isReportViewerQuery(q)) {
       let script = "";
       try { script = await buildReportViewerScript(); } catch { script = "Report viewer is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F37: entity watchlist — open watchlist panel + speak pinned item summary.
+    if (isWatchlistQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:watchlist-toggle"));
+      let script = "";
+      try { script = await buildWatchlistScript(); } catch { script = "Watchlist panel is ready, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
