@@ -271,6 +271,7 @@ import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
 import ReportViewer from '@/components/cinematic/ReportViewer';
 import ExecutiveBriefing from '@/components/cinematic/ExecutiveBriefing';
 import DatasetInvestigationLinker from '@/components/cinematic/DatasetInvestigationLinker';
+import AipSkillContactTaskMesh from '@/components/cinematic/AipSkillContactTaskMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -824,6 +825,9 @@ function App() {
 
             {/* F39 (overnight 2026-09-23): Dataset × Investigation Linker — ◈ DINV button (left:56200, bottom:8, zIndex:111); parallel-fetches /v1/datasets + /v1/investigations; keyword-correlates dataset names/types against investigation titles to surface CITED (≥1 match) vs UNCITED; amber badge on uncited count; filter tabs ALL/CITED/UNCITED + text search; expand dataset → matched investigation cards with relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isDinvQuery+buildDinvScript wired in JarvisBrain; "dataset investigation/data link/dinv/uncited datasets/investigation data" voice trigger; jarvis:dinv-toggle event; 90-s auto-refresh */}
             <DatasetInvestigationLinker />
+
+            {/* F43 (overnight 2026-09-23): AIP Skill × Contact × Task Mesh — ◈ SCTM button (left:6120, bottom:18, zIndex:68); parallel-fetches /v1/aip/skill + /entities/Contact + /entities/Task; keyword-scores each skill against contacts (STAFFED) and tasks (TASKED) to classify: STAFFED_AND_TASKED/STAFFED_ONLY/TASKED_ONLY/ORPHANED; amber badge on orphaned count; filter tabs ALL/STAFFED_AND_TASKED/STAFFED_ONLY/TASKED_ONLY/ORPHANED + text search; expand skill → matched contacts with role badge + relevance bar + matched tasks with priority/status badge; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSctmQuery+buildSctmScript wired in JarvisBrain; "skill contact task/sctm/orphaned skills/staffed skills/skill task mesh/aip skill mesh" voice trigger; jarvis:sctm-toggle event; 90-s auto-refresh */}
+            <AipSkillContactTaskMesh />
 
             <Suspense fallback={<Loading />}>
               <Routes>

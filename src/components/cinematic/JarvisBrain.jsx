@@ -108,6 +108,7 @@ import { isDinvQuery, buildDinvScript } from "./DatasetInvestigationLinker";
 import { isOpsTempoQuery, buildOpsTempoScript } from "./OpsTempoIndex";
 import { isOpsHealthBannerQuery, buildOpsHealthBannerScript } from "./OpsHealthBanner";
 import { isChatQuery, buildChatScript } from "./AgentChatTranscript";
+import { isSctmQuery, buildSctmScript } from "./AipSkillContactTaskMesh";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1080,6 +1081,15 @@ export default function JarvisBrain() {
     if (isOpsHealthBannerQuery(q)) {
       let script = "";
       try { script = await buildOpsHealthBannerScript(); } catch { script = "Ops health banner is active, sir. Monitoring system status, risk signals, tasks, and swarm jobs."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F43: AIP skill × contact × task mesh — open SCTM panel + speak coverage summary.
+    if (isSctmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sctm-toggle"));
+      let script = "";
+      try { script = await buildSctmScript(); } catch { script = "Skill contact task mesh is open, sir. Showing skill coverage gaps across contacts and tasks."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
