@@ -301,6 +301,7 @@ import AipSkillInvestigationDatasetTriple from '@/components/cinematic/AipSkillI
 import KnowledgeOpsRiskTriple from '@/components/cinematic/KnowledgeOpsRiskTriple';
 import SwarmRiskScenarioMatrix from '@/components/cinematic/SwarmRiskScenarioMatrix';
 import OpsEventContactCoverage from '@/components/cinematic/OpsEventContactCoverage';
+import ContactTaskInvestigationTriple from '@/components/cinematic/ContactTaskInvestigationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -935,6 +936,9 @@ function App() {
 
             {/* F77 (overnight 2026-09-24): Ops Event × Contact Response Coverage (OECRC) — ◈ OECRC button (left:986600, bottom:8, zIndex:140); parallel-fetches /v1/ops/events × /entities/Contact; keyword-correlates each ops event against contact names/roles/orgs/tags to surface RESPONSE_ASSIGNED (≥1 match) vs UNASSIGNED (response gap); amber badge on unassigned count; filter tabs ALL/RESPONSE_ASSIGNED/UNASSIGNED + text search; expand event → matched contact cards with role badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOecrcQuery+buildOecrcScript wired in JarvisBrain; "oecrc/ops contact coverage/event response/ops assigned/unassigned events" voice trigger; jarvis:oecrc-toggle event; 90-s auto-refresh */}
             <OpsEventContactCoverage />
+
+            {/* F78 (overnight 2026-09-24): Contact × Task × Investigation Engagement Triple (CTINV) — ◈ CTINV button (left:987160, bottom:8, zIndex:141); parallel-fetches /entities/Contact × /entities/Task × /v1/investigations; keyword-correlates each contact against tasks AND investigations to classify FULLY_ENGAGED/TASK_ACTIVE/INV_LINKED/AVAILABLE; amber badge on available (idle) count; filter tabs ALL/FULLY_ENGAGED/TASK_ACTIVE/INV_LINKED/AVAILABLE + text search; expand contact → matched task cards (cyan) + matched investigation cards (purple) with relevance bars; ▶ ASSESS ENGAGEMENT → /v1/jarvis/agent/chat + TTS; isCtinvQuery+buildCtinvScript wired in JarvisBrain; "ctinv/contact engagement/idle contacts/contact task investigation" voice trigger; jarvis:ctinv-toggle event; 90-s auto-refresh */}
+            <ContactTaskInvestigationTriple />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -143,6 +143,7 @@ import { isAsidtriQuery, buildAsidtriScript } from "./AipSkillInvestigationDatas
 import { isKorstriQuery, buildKorstriScript } from "./KnowledgeOpsRiskTriple";
 import { isSrsmQuery, buildSrsmScript } from "./SwarmRiskScenarioMatrix";
 import { isOecrcQuery, buildOecrcScript } from "./OpsEventContactCoverage";
+import { isCtinvQuery, buildCtinvScript } from "./ContactTaskInvestigationTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1440,6 +1441,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:oecrc-toggle"));
       let script = "";
       try { script = await buildOecrcScript(); } catch { script = "Ops Event Contact Coverage online, sir. Cross-referencing operational events against contacts to identify response assignment gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCtinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctinv-toggle"));
+      let script = "";
+      try { script = await buildCtinvScript(); } catch { script = "Contact Engagement Triple online, sir. Cross-referencing contacts against tasks and investigations to identify idle engagement gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
