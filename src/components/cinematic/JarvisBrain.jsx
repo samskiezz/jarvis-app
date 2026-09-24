@@ -132,6 +132,7 @@ import { isIcpimQuery, buildIcpimScript } from "./InvestmentContactMap";
 import { isUitlQuery, buildUitlScript } from "./UnifiedIntelTimeline";
 import { isAipkrstriQuery, buildAipkrstriScript } from "./AipSkillKnowledgeRiskTriple";
 import { isSitrepQuery, buildSitrepScript } from "./SitrepCommander";
+import { isScgnQuery, buildScgnScript } from "./SceneGraphNodeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1339,6 +1340,15 @@ export default function JarvisBrain() {
       try { script = await buildOpsTempoScript(); } catch { script = "Operational tempo index is online, sir. Monitoring all activity streams."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F67: Scene × Graph Node Coverage — open SCGN panel + speak network-backed vs disconnected scene brief.
+    if (isScgnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scgn-toggle"));
+      let script = "";
+      try { script = await buildScgnScript(); } catch { script = "Scene graph node coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
     }
     let answer = "";

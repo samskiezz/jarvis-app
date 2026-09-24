@@ -291,6 +291,7 @@ import KnowledgeInvestigationMapper from '@/components/cinematic/KnowledgeInvest
 import ContactIntelProfileCrossRef from '@/components/cinematic/ContactIntelProfileCrossRef';
 import UnifiedIntelTimeline from '@/components/cinematic/UnifiedIntelTimeline';
 import AipSkillKnowledgeRiskTriple from '@/components/cinematic/AipSkillKnowledgeRiskTriple';
+import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -895,6 +896,9 @@ function App() {
 
             {/* F65 (overnight 2026-09-24): AIP Skill × Knowledge × Risk Triple (AIPKRSTRI) — ◈ AIPKRSTRI button (left:983240, bottom:8, zIndex:133); parallel-fetches /v1/aip/skill + /knowledge/ + /entities/RiskSignal; classifies each skill as FULLY ARMED (KB + risk), KB-BACKED (KB only), RISK-LINKED (risk only), or DORMANT (neither); stat tiles SKILLS/KB ARTICLES/RISK SIGNALS/FULLY ARMED/KB-BACKED/RISK-LINKED/DORMANT; dormant badge; coverage bar; filter tabs ALL/FULLY ARMED/KB-BACKED/RISK-LINKED/DORMANT + search; expand skill → matched KB articles + matched risk signals with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; isAipkrstriQuery+buildAipkrstriScript wired in JarvisBrain; "aipkrstri/aip skill knowledge risk/dormant skill/fully armed skill/skill triple coverage/skill kb risk/capability risk coverage" voice trigger; jarvis:aipkrstri-toggle event; 90-s auto-refresh */}
             <AipSkillKnowledgeRiskTriple />
+
+            {/* F67 (overnight 2026-09-24): Scene × Graph Node Coverage (SCGN) — ◈ SCGN button (left:35720, bottom:8, zIndex:103); parallel-fetches /v1/cinematic/scene/{id} (all 10 scenes) + /v1/graph/centrality; keyword-correlates each scene's anchor text against top-influence graph nodes to surface NETWORK-BACKED (≥1 centrality node match) vs DISCONNECTED (no graph coverage); stat tiles SCENES/NODES/NETWORK-BACKED/DISCONNECTED; amber badge on disconnected count; filter tabs ALL/NETWORK-BACKED/DISCONNECTED + text search; expand scene → matched graph node cards with centrality score bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isScgnQuery+buildScgnScript wired in JarvisBrain; "scgn/scene graph node/network backed scene/disconnected scene/scene centrality/scene network/scene influence" voice trigger; jarvis:scgn-toggle event; 90-s auto-refresh */}
+            <SceneGraphNodeCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
