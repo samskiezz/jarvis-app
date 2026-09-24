@@ -121,6 +121,7 @@ import { isSsaipQuery, buildSsaipScript } from "./SystemStatusAipSkillCoverage";
 import { isCrseQuery, buildCrseScript } from "./ContactRiskExposureMatrix";
 import { isWrlrskQuery, buildWrlrskScript } from "./WorldRiskCorrelator";
 import { isLiicQuery, buildLiicScript } from "./LiveIntelInvestigationCorrelator";
+import { isRrsigQuery, buildRrsigScript } from "./ReportRiskSignalCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1218,6 +1219,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:liic-toggle"));
       let script = "";
       try { script = await buildLiicScript(); } catch { script = "Live intel investigation correlator is online, sir. Cross-referencing world events against open investigations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F56: Report × Risk Signal Coverage — open RRSIG panel + speak intelligence gap brief.
+    if (isRrsigQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rrsig-toggle"));
+      let script = "";
+      try { script = await buildRrsigScript(); } catch { script = "Report risk signal coverage monitor is online, sir. Cross-referencing intelligence reports against active risk signals now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;

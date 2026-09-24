@@ -282,6 +282,7 @@ import TaskPriorityQuadrant from '@/components/cinematic/TaskPriorityQuadrant';
 import SystemStatusAipSkillCoverage from '@/components/cinematic/SystemStatusAipSkillCoverage';
 import ContactRiskExposureMatrix from '@/components/cinematic/ContactRiskExposureMatrix';
 import LiveIntelInvestigationCorrelator from '@/components/cinematic/LiveIntelInvestigationCorrelator';
+import ReportRiskSignalCoverage from '@/components/cinematic/ReportRiskSignalCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -860,6 +861,9 @@ function App() {
 
             {/* F55 (overnight 2026-09-24): Live Intel × Investigation Correlator (LIIC) — ⊕ LIIC button (left:215040, bottom:8, zIndex:140); parallel-fetches /functions/getLiveIntel + /v1/investigations; keyword-correlates live quake place names, crypto tickers, and FX pairs against investigation titles/descriptions to surface FLAGGED (≥1 match) vs CLEAR; 5-min auto-refresh; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence correlation brief + TTS; isLiicQuery+buildLiicScript wired in JarvisBrain; "live intel correlator/liic/investigation alert/world events investigations/flagged investigations" voice trigger; jarvis:liic-toggle event */}
             <LiveIntelInvestigationCorrelator />
+
+            {/* F56 (overnight 2026-09-24): Report × Risk Signal Coverage (RRSIG) — ◈ RRSIG button (left:979320, bottom:8, zIndex:126); parallel-fetches /v1/reports + /entities/RiskSignal; keyword-correlates report titles/descriptions/tags against risk signal titles/descriptions to classify THREAT_COVERED (≥1 match) vs UNCOVERED; stat tiles REPORTS/RISK SIGNALS/THREAT COVERED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/THREAT_COVERED/UNCOVERED + text search; expand report → matched risk signal cards with severity badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence intelligence gap brief + TTS; isRrsigQuery+buildRrsigScript wired in JarvisBrain; "rrsig/report risk coverage/risk covered reports/threat coverage reports/intelligence gap" voice trigger; jarvis:rrsig-toggle event; 90-s auto-refresh */}
+            <ReportRiskSignalCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
