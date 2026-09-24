@@ -298,6 +298,7 @@ import ScenarioContactReadinessMatrix from '@/components/cinematic/ScenarioConta
 import TaskSwarmDatasetTriple from '@/components/cinematic/TaskSwarmDatasetTriple';
 import PortfolioThreatExposure from '@/components/cinematic/PortfolioThreatExposure';
 import AipSkillInvestigationDatasetTriple from '@/components/cinematic/AipSkillInvestigationDatasetTriple';
+import KnowledgeOpsRiskTriple from '@/components/cinematic/KnowledgeOpsRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -923,6 +924,9 @@ function App() {
 
             {/* F74 (overnight 2026-09-24): AipSkill × Investigation × Dataset Triple Nexus (ASIDTRI) — pre-existing component mounted; parallel-fetches /v1/aip/skill + /v1/investigations + /v1/datasets; FULLY_EQUIPPED/INV_ONLY/DATASET_ONLY/DARK classification; amber badge on dark count; filter tabs ALL/FULLY_EQUIPPED/INV_ONLY/DATASET_ONLY/DARK + text search; expand skill → matched investigations + datasets; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isAsidtriQuery+buildAsidtriScript wired in JarvisBrain; "asidtri/skill investigation dataset/investigation dataset skill/equipped skills/dark skills" voice trigger; jarvis:asidtri-toggle event; 90-s auto-refresh */}
             <AipSkillInvestigationDatasetTriple />
+
+            {/* F75 (overnight 2026-09-24): Knowledge × Ops Event × Risk Triple Coverage (KORSTRI) — ◈ KORSTRI button (left:985480, bottom:8, zIndex:138); parallel-fetches /knowledge/ + /v1/ops/events + /entities/RiskSignal; keyword-correlates each knowledge article against ops events AND risk signals to classify FULLY_GROUNDED/OPS_BACKED/RISK_FLAGGED/ISOLATED; stat tiles ARTICLES/OPS EVENTS/RISK SIGNALS + classification counts; amber badge on isolated count; filter tabs ALL/FULLY_GROUNDED/OPS_BACKED/RISK_FLAGGED/ISOLATED + text search; expand article → matched ops event cards (blue) + matched risk signal cards (red) with relevance bars; ▶ ASSESS KNOWLEDGE COVERAGE → /v1/jarvis/agent/chat + TTS; isKorstriQuery+buildKorstriScript wired in JarvisBrain; "korstri/knowledge ops risk/grounded knowledge/isolated knowledge/knowledge triple" voice trigger; jarvis:korstri-toggle event; 90-s auto-refresh */}
+            <KnowledgeOpsRiskTriple />
 
             <Suspense fallback={<Loading />}>
               <Routes>
