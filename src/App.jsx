@@ -293,6 +293,7 @@ import UnifiedIntelTimeline from '@/components/cinematic/UnifiedIntelTimeline';
 import AipSkillKnowledgeRiskTriple from '@/components/cinematic/AipSkillKnowledgeRiskTriple';
 import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverage';
 import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnnotationTriple';
+import IntelProfileReportLinkage from '@/components/cinematic/IntelProfileReportLinkage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -903,6 +904,9 @@ function App() {
 
             {/* F69 (overnight 2026-09-24): AIP Skill × Live Intel × Graph Annotation Triple (ASLIANN) — ◈ ASLIANN button (left:840880, bottom:8, zIndex:530); parallel-fetches /v1/aip/skill + /functions/getLiveIntel + /v1/graph/annotations; classifies each skill as FULLY_PRIMED (live intel + graph annotation), WORLD_TRIGGERED (live intel only), GRAPH_TAGGED (annotation only), or DORMANT (neither); stat tiles SKILLS/FULLY_PRIMED/WORLD_TRIGGERED/GRAPH_TAGGED/DORMANT; filter tabs ALL/FULLY_PRIMED/WORLD_TRIGGERED/GRAPH_TAGGED/DORMANT + text search; expand skill → matched live intel events + graph annotation cards with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isAsliannQuery+buildAsliannScript wired in JarvisBrain; "asliann/skill live annotation/primed skill/dormant skill live/skill world annotation/aip skill live annotation" voice trigger; jarvis:asliann-toggle event; 60-s auto-refresh */}
             <AipSkillLiveAnnotationTriple />
+
+            {/* F70 (overnight 2026-09-24): IntelProfile × Report Linkage (IPRLINK) — ◈ IPRLINK button (left:983800, bottom:8, zIndex:134); parallel-fetches /entities/IntelProfile + /v1/reports; keyword-correlates each threat actor profile (name/aliases/org/role/tags) against report titles/descriptions/tags/type to classify DOCUMENTED (≥1 report match) vs UNREPORTED (intelligence gap); stat tiles PROFILES/REPORTS/DOCUMENTED/UNREPORTED; coverage bar; amber badge on unreported count; filter tabs ALL/DOCUMENTED/UNREPORTED + text search; expand profile → matched report cards with type badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence threat-actor coverage brief + TTS; isIprlinkQuery+buildIprlinkScript wired in JarvisBrain; "iprlink/intel profile report/threat actor report/documented actor/unreported actor/actor coverage/threat coverage report" voice trigger; jarvis:iprlink-toggle event; 90-s auto-refresh */}
+            <IntelProfileReportLinkage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

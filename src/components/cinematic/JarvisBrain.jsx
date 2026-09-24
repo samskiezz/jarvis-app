@@ -135,6 +135,7 @@ import { isSitrepQuery, buildSitrepScript } from "./SitrepCommander";
 import { isScgnQuery, buildScgnScript } from "./SceneGraphNodeCoverage";
 import { isRskscenQuery, buildRskscenScript } from "./RiskScenarioCoverage";
 import { isAsliannQuery, buildAsliannScript } from "./AipSkillLiveAnnotationTriple";
+import { isIprlinkQuery, buildIprlinkScript } from "./IntelProfileReportLinkage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1367,6 +1368,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rskscen-toggle"));
       let script = "";
       try { script = await buildRskscenScript(); } catch { script = "Risk scenario coverage panel is standing by, sir. Cross-referencing active risk signals against available scenario playbooks now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F70: IntelProfile × Report Linkage — open IPRLINK panel + speak actor coverage brief.
+    if (isIprlinkQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iprlink-toggle"));
+      let script = "";
+      try { script = await buildIprlinkScript(); } catch { script = "Intel profile report linkage panel is standing by, sir. Cross-referencing tracked threat actor profiles against the intelligence report archive now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
