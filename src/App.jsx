@@ -295,6 +295,7 @@ import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverag
 import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnnotationTriple';
 import IntelProfileReportLinkage from '@/components/cinematic/IntelProfileReportLinkage';
 import ScenarioContactReadinessMatrix from '@/components/cinematic/ScenarioContactReadinessMatrix';
+import TaskSwarmDatasetTriple from '@/components/cinematic/TaskSwarmDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -911,6 +912,9 @@ function App() {
 
             {/* F71 (overnight 2026-09-24): Scenario × Contact Readiness Matrix (SCRMX) — ◈ SCRMX button (left:984360, bottom:8, zIndex:135); parallel-fetches /v1/scenario/list + /entities/Contact; keyword-correlates each scenario name/description against contact name/role/org/tags to classify CONTACT_ASSIGNED (≥1 match) vs UNASSIGNED; amber badge on unassigned count; filter tabs ALL/CONTACT_ASSIGNED/UNASSIGNED + text search; expand scenario → matched contact cards with role badge + relevance bar; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isScrmxQuery+buildScrmxScript wired in JarvisBrain; "scrmx/scenario contact/contact readiness/unassigned scenario/scenario staffing/readiness matrix" voice trigger; jarvis:scrmx-toggle event; 90-s auto-refresh */}
             <ScenarioContactReadinessMatrix />
+
+            {/* F72 (overnight 2026-09-24): Task × SwarmJob × Dataset Triple Coverage (TSDTRI) — ◈ TSDTRI button (left:984920, bottom:8, zIndex:136); parallel-fetches /entities/Task + /entities/SwarmJob + /v1/datasets; keyword-correlates each task against swarm jobs AND datasets to classify FULLY_RESOURCED/SWARM_ONLY/DATA_ONLY/BARE; amber badge on bare count; filter tabs ALL/FULLY_RESOURCED/SWARM_ONLY/DATA_ONLY/BARE + text search; expand task → matched swarm job cards (cyan) + dataset cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isTsdtriQuery+buildTsdtriScript wired in JarvisBrain; "tsdtri/task resources/bare tasks/task triple/task resource gap" voice trigger; jarvis:tsdtri-toggle event; 90-s auto-refresh */}
+            <TaskSwarmDatasetTriple />
 
             <Suspense fallback={<Loading />}>
               <Routes>

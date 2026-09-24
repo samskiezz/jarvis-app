@@ -137,6 +137,7 @@ import { isRskscenQuery, buildRskscenScript } from "./RiskScenarioCoverage";
 import { isAsliannQuery, buildAsliannScript } from "./AipSkillLiveAnnotationTriple";
 import { isIprlinkQuery, buildIprlinkScript } from "./IntelProfileReportLinkage";
 import { isScrmxQuery, buildScrmxScript } from "./ScenarioContactReadinessMatrix";
+import { isTsdtriQuery, buildTsdtriScript } from "./TaskSwarmDatasetTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1386,6 +1387,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scrmx-toggle"));
       let script = "";
       try { script = await buildScrmxScript(); } catch { script = "Scenario Contact Readiness Matrix is online, sir. Cross-referencing operational scenarios against available contacts to surface staffing gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTsdtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tsdtri-toggle"));
+      let script = "";
+      try { script = await buildTsdtriScript(); } catch { script = "Task Resource Triple online, sir. Correlating tasks against swarm jobs and datasets to surface automation and data coverage gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
