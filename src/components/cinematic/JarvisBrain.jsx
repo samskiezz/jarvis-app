@@ -133,6 +133,7 @@ import { isUitlQuery, buildUitlScript } from "./UnifiedIntelTimeline";
 import { isAipkrstriQuery, buildAipkrstriScript } from "./AipSkillKnowledgeRiskTriple";
 import { isSitrepQuery, buildSitrepScript } from "./SitrepCommander";
 import { isScgnQuery, buildScgnScript } from "./SceneGraphNodeCoverage";
+import { isRskscenQuery, buildRskscenScript } from "./RiskScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1347,6 +1348,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scgn-toggle"));
       let script = "";
       try { script = await buildScgnScript(); } catch { script = "Scene graph node coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F68: Risk Signal × Scenario Coverage — open RSKSCEN panel + speak playbook coverage brief.
+    if (isRskscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rskscen-toggle"));
+      let script = "";
+      try { script = await buildRskscenScript(); } catch { script = "Risk scenario coverage panel is standing by, sir. Cross-referencing active risk signals against available scenario playbooks now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
