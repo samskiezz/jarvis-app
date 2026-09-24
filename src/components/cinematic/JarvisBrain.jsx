@@ -123,6 +123,7 @@ import { isWrlrskQuery, buildWrlrskScript } from "./WorldRiskCorrelator";
 import { isLiicQuery, buildLiicScript } from "./LiveIntelInvestigationCorrelator";
 import { isRrsigQuery, buildRrsigScript } from "./ReportRiskSignalCoverage";
 import { isSddepQuery, buildSddepScript } from "./ScenarioDatasetDependencyMap";
+import { isOesgaQuery, buildOesgaScript } from "./OpsEventScenarioGap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1229,6 +1230,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rrsig-toggle"));
       let script = "";
       try { script = await buildRrsigScript(); } catch { script = "Report risk signal coverage monitor is online, sir. Cross-referencing intelligence reports against active risk signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F58: Ops Event × Scenario Gap Analysis — open OESGA panel + speak coverage gap brief.
+    if (isOesgaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oesga-toggle"));
+      let script = "";
+      try { script = await buildOesgaScript(); } catch { script = "Ops event scenario gap analysis is online, sir. Checking operational events against available playbooks now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
