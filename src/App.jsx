@@ -300,6 +300,7 @@ import PortfolioThreatExposure from '@/components/cinematic/PortfolioThreatExpos
 import AipSkillInvestigationDatasetTriple from '@/components/cinematic/AipSkillInvestigationDatasetTriple';
 import KnowledgeOpsRiskTriple from '@/components/cinematic/KnowledgeOpsRiskTriple';
 import SwarmRiskScenarioMatrix from '@/components/cinematic/SwarmRiskScenarioMatrix';
+import OpsEventContactCoverage from '@/components/cinematic/OpsEventContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -931,6 +932,9 @@ function App() {
 
             {/* F76 (overnight 2026-09-24): Swarm × Risk Signal × Scenario Mission Risk Matrix (SRSM) — ◈ SRSM button (left:986040, bottom:8, zIndex:139); parallel-fetches /entities/SwarmJob × /entities/RiskSignal × /v1/scenario/list; classifies each swarm job as EXPOSED (risk active, no scenario cover) / RISK_MANAGED (risk + scenario) / MONITORED (scenario only) / CLEAR (neither); red badge on exposed count; filter tabs ALL/EXPOSED/RISK_MANAGED/MONITORED/CLEAR + text search; expand job → matched risk signal cards (red/severity) + scenario cards (green) with relevance bars; ▶ ASSESS RISK → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSrsmQuery+buildSrsmScript wired in JarvisBrain; "srsm/swarm risk scenario/mission risk matrix/exposed swarm/unmitigated swarm" voice trigger; jarvis:srsm-toggle event; 90-s auto-refresh */}
             <SwarmRiskScenarioMatrix />
+
+            {/* F77 (overnight 2026-09-24): Ops Event × Contact Response Coverage (OECRC) — ◈ OECRC button (left:986600, bottom:8, zIndex:140); parallel-fetches /v1/ops/events × /entities/Contact; keyword-correlates each ops event against contact names/roles/orgs/tags to surface RESPONSE_ASSIGNED (≥1 match) vs UNASSIGNED (response gap); amber badge on unassigned count; filter tabs ALL/RESPONSE_ASSIGNED/UNASSIGNED + text search; expand event → matched contact cards with role badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOecrcQuery+buildOecrcScript wired in JarvisBrain; "oecrc/ops contact coverage/event response/ops assigned/unassigned events" voice trigger; jarvis:oecrc-toggle event; 90-s auto-refresh */}
+            <OpsEventContactCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
