@@ -281,6 +281,7 @@ import InvestigationRiskCorrelator from '@/components/cinematic/InvestigationRis
 import TaskPriorityQuadrant from '@/components/cinematic/TaskPriorityQuadrant';
 import SystemStatusAipSkillCoverage from '@/components/cinematic/SystemStatusAipSkillCoverage';
 import ContactRiskExposureMatrix from '@/components/cinematic/ContactRiskExposureMatrix';
+import LiveIntelInvestigationCorrelator from '@/components/cinematic/LiveIntelInvestigationCorrelator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -856,6 +857,9 @@ function App() {
 
             {/* F53 (overnight 2026-09-23): Contact × Risk Signal Exposure Matrix — ◈ CRSE button (left:978760, bottom:8, zIndex:125); parallel-fetches /entities/Contact + /entities/RiskSignal; keyword-correlates contact name/role/org/dept/tags against risk signal titles/descriptions/categories to surface AT_RISK (≥1 match) vs CLEAR; stat tiles CONTACTS/SIGNALS/AT_RISK/CLEAR; red pulse on AT_RISK count; filter tabs ALL/AT_RISK/CLEAR + text search; expand contact → matched risk signal cards with severity badge + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence personnel risk brief + TTS; isCrseQuery+buildCrseScript wired in JarvisBrain; "crse/contact risk/personnel risk/at risk contacts/exposed personnel/who is at risk" voice trigger; jarvis:crse-toggle event; 90-s auto-refresh */}
             <ContactRiskExposureMatrix />
+
+            {/* F55 (overnight 2026-09-24): Live Intel × Investigation Correlator (LIIC) — ⊕ LIIC button (left:215040, bottom:8, zIndex:140); parallel-fetches /functions/getLiveIntel + /v1/investigations; keyword-correlates live quake place names, crypto tickers, and FX pairs against investigation titles/descriptions to surface FLAGGED (≥1 match) vs CLEAR; 5-min auto-refresh; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence correlation brief + TTS; isLiicQuery+buildLiicScript wired in JarvisBrain; "live intel correlator/liic/investigation alert/world events investigations/flagged investigations" voice trigger; jarvis:liic-toggle event */}
+            <LiveIntelInvestigationCorrelator />
 
             <Suspense fallback={<Loading />}>
               <Routes>

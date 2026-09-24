@@ -45,3 +45,4 @@
 [2026-09-23] F52 SystemStatusAipSkillCoverage.jsx — /v1/jarvis/system/status × /v1/aip/skill; SKILLED/UNSKILLED classification; isSsaipQuery+buildSsaipScript wired JarvisBrain; build exit 0; pushed jarvis-overnight
 [2026-09-23] F53 ContactRiskExposureMatrix — /entities/Contact × /entities/RiskSignal; AT_RISK/CLEAR classification; red pulse badge; JarvisBrain voice wired; build exit 0
 [2026-09-23] F54 World Risk Correlator (WRLRSK): isWrlrskQuery+buildWrlrskScript imported from WorldRiskCorrelator.jsx and wired into JarvisBrain.jsx; jarvis:wrlrsk-toggle dispatched; voice trigger 'world risk/quake risk/geo risk/wrlrsk'; build exit 0
+[2026-09-24] F55 Live Intel × Investigation Correlator (LIIC): LiveIntelInvestigationCorrelator.jsx (pre-existing) imported+mounted in App.jsx; isLiicQuery+buildLiicScript wired in JarvisBrain.jsx; jarvis:liic-toggle dispatched; voice trigger 'live intel correlator/liic/investigation alert/flagged investigations'; build exit 0
