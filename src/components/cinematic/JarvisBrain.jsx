@@ -128,6 +128,7 @@ import { isKimapQuery, buildKimapScript } from "./KnowledgeInvestigationMapper";
 import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
 import { isTscovQuery, buildTscovScript } from "./TaskScenarioCoverage";
 import { isSwimbQuery, buildSwimbScript } from "./SwarmInvestigationBridge";
+import { isIcpimQuery, buildIcpimScript } from "./InvestmentContactMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1279,6 +1280,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tscov-toggle"));
       let script = "";
       try { script = await buildTscovScript(); } catch { script = "Task scenario coverage analysis is online, sir. Cross-referencing tasks against scenario playbooks to identify unplanned operations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F63: Investment × Contact Portfolio Intelligence Map — open ICPIM panel + speak coverage brief.
+    if (isIcpimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:icpim-toggle"));
+      let script = "";
+      try { script = await buildIcpimScript(); } catch { script = "Investment contact portfolio map is online, sir. Cross-referencing portfolio positions against contact relationships to identify coverage gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;

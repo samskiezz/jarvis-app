@@ -152,6 +152,7 @@ import InvestmentContactMapper from '@/components/cinematic/InvestmentContactMap
 import ScenarioInvestmentExposure from '@/components/cinematic/ScenarioInvestmentExposure';
 import TaskScenarioCoverage from '@/components/cinematic/TaskScenarioCoverage';
 import SwarmInvestigationBridge from '@/components/cinematic/SwarmInvestigationBridge';
+import InvestmentContactMap from '@/components/cinematic/InvestmentContactMap';
 import SwarmContactLinker from '@/components/cinematic/SwarmContactLinker';
 import SwarmInvestigationCoverage from '@/components/cinematic/SwarmInvestigationCoverage';
 import InvestmentSwarmCoverage from '@/components/cinematic/InvestmentSwarmCoverage';
@@ -884,6 +885,8 @@ function App() {
 
             {/* F62 (overnight 2026-09-24): Swarm × Investigation Mission Bridge (SWIMB) — ◈ SWIMB button (left:981560, bottom:8, zIndex:130); parallel-fetches /entities/SwarmJob + /v1/investigations; keyword-correlates each swarm job (name/description/type/status) against investigation titles/descriptions to classify MISSION_ALIGNED (≥1 match) vs UNALIGNED (no backing investigation); stat tiles JOBS/INVESTIGATIONS/ALIGNED/UNALIGNED; amber badge on unaligned count; filter tabs ALL/MISSION_ALIGNED/UNALIGNED + text search; expand job → matched investigation cards with priority badge + relevance bar; ▶ ASSESS ALIGNMENT → /v1/jarvis/agent/chat 2-sentence mission coverage brief + TTS; isSwimbQuery+buildSwimbScript wired in JarvisBrain; "swimb/swarm investigation/mission aligned/swarm mission/unaligned swarm/swarm coverage" voice trigger; jarvis:swimb-toggle event; 90-s auto-refresh */}
             <SwarmInvestigationBridge />
+            {/* F63 (overnight 2026-09-24): Investment × Contact Portfolio Intelligence Map (ICPIM) — ◈ ICPIM button (left:982120, bottom:8, zIndex:131); parallel-fetches /entities/Investment + /entities/Contact; keyword-correlates investment name/type/sector/description against contact name/role/org/tags to classify MANAGED (≥1 match) vs UNMANAGED (coverage gap); stat tiles INVESTMENTS/CONTACTS/MANAGED/UNMANAGED; amber badge on unmanaged count; filter tabs ALL/MANAGED/UNMANAGED + text search; expand investment → matched contact cards with role badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence portfolio coverage brief + TTS; isIcpimQuery+buildIcpimScript wired in JarvisBrain; "icpim/investment contact/portfolio contact/managed investments/unmanaged portfolio/portfolio coverage" voice trigger; jarvis:icpim-toggle event; 90-s auto-refresh */}
+            <InvestmentContactMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
