@@ -289,6 +289,7 @@ import ScenarioDatasetDependencyMap from '@/components/cinematic/ScenarioDataset
 import OpsEventScenarioGap from '@/components/cinematic/OpsEventScenarioGap';
 import KnowledgeInvestigationMapper from '@/components/cinematic/KnowledgeInvestigationMapper';
 import ContactIntelProfileCrossRef from '@/components/cinematic/ContactIntelProfileCrossRef';
+import UnifiedIntelTimeline from '@/components/cinematic/UnifiedIntelTimeline';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -887,6 +888,9 @@ function App() {
             <SwarmInvestigationBridge />
             {/* F63 (overnight 2026-09-24): Investment × Contact Portfolio Intelligence Map (ICPIM) — ◈ ICPIM button (left:982120, bottom:8, zIndex:131); parallel-fetches /entities/Investment + /entities/Contact; keyword-correlates investment name/type/sector/description against contact name/role/org/tags to classify MANAGED (≥1 match) vs UNMANAGED (coverage gap); stat tiles INVESTMENTS/CONTACTS/MANAGED/UNMANAGED; amber badge on unmanaged count; filter tabs ALL/MANAGED/UNMANAGED + text search; expand investment → matched contact cards with role badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence portfolio coverage brief + TTS; isIcpimQuery+buildIcpimScript wired in JarvisBrain; "icpim/investment contact/portfolio contact/managed investments/unmanaged portfolio/portfolio coverage" voice trigger; jarvis:icpim-toggle event; 90-s auto-refresh */}
             <InvestmentContactMap />
+
+            {/* F64 (overnight 2026-09-24): Unified Intelligence Timeline (UITL) — ◈ UITL button (left:982680, bottom:8, zIndex:132); parallel-fetches /v1/ops/events + /entities/RiskSignal + /knowledge/; merges into a single chronological stream sorted newest-first; source type badges OPS/RISK/KNOWLEDGE with distinct colours; filter tabs ALL/OPS/RISK/KNOWLEDGE + text search; red badge on risk count; ▶ ASSESS SITUATION → /v1/jarvis/agent/chat 2-sentence unified situation brief + TTS; isUitlQuery+buildUitlScript wired in JarvisBrain; "uitl/intel timeline/unified timeline/event timeline/unified event stream/what is happening/all events" voice trigger; jarvis:uitl-toggle event; 5-min auto-refresh */}
+            <UnifiedIntelTimeline />
 
             <Suspense fallback={<Loading />}>
               <Routes>

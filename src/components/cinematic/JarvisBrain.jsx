@@ -129,6 +129,7 @@ import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
 import { isTscovQuery, buildTscovScript } from "./TaskScenarioCoverage";
 import { isSwimbQuery, buildSwimbScript } from "./SwarmInvestigationBridge";
 import { isIcpimQuery, buildIcpimScript } from "./InvestmentContactMap";
+import { isUitlQuery, buildUitlScript } from "./UnifiedIntelTimeline";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1298,6 +1299,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swimb-toggle"));
       let script = "";
       try { script = await buildSwimbScript(); } catch { script = "Swarm investigation mission bridge is online, sir. Cross-referencing swarm jobs against active investigations to identify unaligned automation now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F64: Unified Intelligence Timeline — open UITL panel + speak unified situation brief.
+    if (isUitlQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:uitl-toggle"));
+      let script = "";
+      try { script = await buildUitlScript(); } catch { script = "Unified intelligence timeline is online, sir. Merging ops events, risk signals, and knowledge articles into a single chronological stream now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
