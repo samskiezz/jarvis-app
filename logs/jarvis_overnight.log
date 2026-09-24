@@ -63,3 +63,4 @@
 2026-09-24T15:18:11Z F70 IntelProfileReportLinkage.jsx: new /entities/IntelProfile x /v1/reports cross-reference; DOCUMENTED/UNREPORTED classification; coverage bar; ▶ ASSESS brief; voice+toggle wired; build exit 0
 [2026-09-24] F71 SCRMX: ScenarioContactReadinessMatrix.jsx created; /v1/scenario/list × /entities/Contact; CONTACT_ASSIGNED/UNASSIGNED; wired in App.jsx + JarvisBrain.jsx; build verified exit 0
 2026-09-24T17:18:16Z F72 TaskSwarmDatasetTriple.jsx: /entities/Task × /entities/SwarmJob × /v1/datasets triple coverage; FULLY_RESOURCED/SWARM_ONLY/DATA_ONLY/BARE; isTsdtriQuery+buildTsdtriScript wired; build exit 0
+[2026-09-24] F73 PortfolioThreatExposure (PTEXP): /entities/Investment × /entities/RiskSignal × /entities/IntelProfile — FULLY_EXPOSED/RISK_EXPOSED/ACTOR_LINKED/CLEAR classification; isPtexpQuery+buildPtexpScript wired in JarvisBrain; build exit 0

@@ -138,6 +138,7 @@ import { isAsliannQuery, buildAsliannScript } from "./AipSkillLiveAnnotationTrip
 import { isIprlinkQuery, buildIprlinkScript } from "./IntelProfileReportLinkage";
 import { isScrmxQuery, buildScrmxScript } from "./ScenarioContactReadinessMatrix";
 import { isTsdtriQuery, buildTsdtriScript } from "./TaskSwarmDatasetTriple";
+import { isPtexpQuery, buildPtexpScript } from "./PortfolioThreatExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1395,6 +1396,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tsdtri-toggle"));
       let script = "";
       try { script = await buildTsdtriScript(); } catch { script = "Task Resource Triple online, sir. Correlating tasks against swarm jobs and datasets to surface automation and data coverage gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPtexpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ptexp-toggle"));
+      let script = "";
+      try { script = await buildPtexpScript(); } catch { script = "Portfolio Threat Exposure online, sir. Correlating investments against active risk signals and threat actor profiles to surface asset exposure."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

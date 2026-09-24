@@ -296,6 +296,7 @@ import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnn
 import IntelProfileReportLinkage from '@/components/cinematic/IntelProfileReportLinkage';
 import ScenarioContactReadinessMatrix from '@/components/cinematic/ScenarioContactReadinessMatrix';
 import TaskSwarmDatasetTriple from '@/components/cinematic/TaskSwarmDatasetTriple';
+import PortfolioThreatExposure from '@/components/cinematic/PortfolioThreatExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -915,6 +916,9 @@ function App() {
 
             {/* F72 (overnight 2026-09-24): Task × SwarmJob × Dataset Triple Coverage (TSDTRI) — ◈ TSDTRI button (left:984920, bottom:8, zIndex:136); parallel-fetches /entities/Task + /entities/SwarmJob + /v1/datasets; keyword-correlates each task against swarm jobs AND datasets to classify FULLY_RESOURCED/SWARM_ONLY/DATA_ONLY/BARE; amber badge on bare count; filter tabs ALL/FULLY_RESOURCED/SWARM_ONLY/DATA_ONLY/BARE + text search; expand task → matched swarm job cards (cyan) + dataset cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isTsdtriQuery+buildTsdtriScript wired in JarvisBrain; "tsdtri/task resources/bare tasks/task triple/task resource gap" voice trigger; jarvis:tsdtri-toggle event; 90-s auto-refresh */}
             <TaskSwarmDatasetTriple />
+
+            {/* F73 (overnight 2026-09-24): Investment × RiskSignal × IntelProfile Portfolio Threat Exposure (PTEXP) — ◈ PTEXP button (left:985480, bottom:8, zIndex:137); parallel-fetches /entities/Investment + /entities/RiskSignal + /entities/IntelProfile every 90 s; keyword-correlates each investment against risk signals AND intel profiles to classify FULLY_EXPOSED/RISK_EXPOSED/ACTOR_LINKED/CLEAR; amber badge on threatened count; filter tabs ALL/FULLY_EXPOSED/RISK_EXPOSED/ACTOR_LINKED/CLEAR + text search; expand investment → matched risk signal cards (red) + intel profile cards (orange) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isPtexpQuery+buildPtexpScript wired in JarvisBrain; "ptexp/portfolio threat/investment threat/asset exposure/portfolio exposure" voice trigger; jarvis:ptexp-toggle event; 90-s auto-refresh */}
+            <PortfolioThreatExposure />
 
             <Suspense fallback={<Loading />}>
               <Routes>
