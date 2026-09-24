@@ -66,3 +66,4 @@
 [2026-09-24] F73 PortfolioThreatExposure (PTEXP): /entities/Investment × /entities/RiskSignal × /entities/IntelProfile — FULLY_EXPOSED/RISK_EXPOSED/ACTOR_LINKED/CLEAR classification; isPtexpQuery+buildPtexpScript wired in JarvisBrain; build exit 0
 2026-09-24 F74 ASIDTRI: AipSkillInvestigationDatasetTriple.jsx imported+mounted in App.jsx; isAsidtriQuery+buildAsidtriScript wired in JarvisBrain.jsx; /v1/aip/skill × /v1/investigations × /v1/datasets; FULLY_EQUIPPED/INV_ONLY/DATASET_ONLY/DARK; build exit 0
 [2026-09-24] F75 KORSTRI: new KnowledgeOpsRiskTriple.jsx (/knowledge/ × /v1/ops/events × /entities/RiskSignal); FULLY_GROUNDED/OPS_BACKED/RISK_FLAGGED/ISOLATED classification; mounted in App.jsx; isKorstriQuery+buildKorstriScript wired in JarvisBrain.jsx; build exit 0
+[2026-09-24] F76 SwarmRiskScenarioMatrix (SRSM): SwarmJob×RiskSignal×Scenario; EXPOSED/RISK_MANAGED/MONITORED/CLEAR; red badge; voice+TTS; build exit 0

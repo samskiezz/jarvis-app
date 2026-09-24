@@ -141,6 +141,7 @@ import { isTsdtriQuery, buildTsdtriScript } from "./TaskSwarmDatasetTriple";
 import { isPtexpQuery, buildPtexpScript } from "./PortfolioThreatExposure";
 import { isAsidtriQuery, buildAsidtriScript } from "./AipSkillInvestigationDatasetTriple";
 import { isKorstriQuery, buildKorstriScript } from "./KnowledgeOpsRiskTriple";
+import { isSrsmQuery, buildSrsmScript } from "./SwarmRiskScenarioMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1422,6 +1423,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:korstri-toggle"));
       let script = "";
       try { script = await buildKorstriScript(); } catch { script = "Knowledge Ops Risk Triple Coverage panel online, sir. Cross-referencing knowledge articles against operational events and risk signals to identify isolated knowledge gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSrsmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srsm-toggle"));
+      let script = "";
+      try { script = await buildSrsmScript(); } catch { script = "Swarm Mission Risk Matrix online, sir. Cross-referencing swarm jobs against active risk signals and scenario playbooks to identify exposed, unmitigated operations."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

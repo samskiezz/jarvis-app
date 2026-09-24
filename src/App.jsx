@@ -299,6 +299,7 @@ import TaskSwarmDatasetTriple from '@/components/cinematic/TaskSwarmDatasetTripl
 import PortfolioThreatExposure from '@/components/cinematic/PortfolioThreatExposure';
 import AipSkillInvestigationDatasetTriple from '@/components/cinematic/AipSkillInvestigationDatasetTriple';
 import KnowledgeOpsRiskTriple from '@/components/cinematic/KnowledgeOpsRiskTriple';
+import SwarmRiskScenarioMatrix from '@/components/cinematic/SwarmRiskScenarioMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -927,6 +928,9 @@ function App() {
 
             {/* F75 (overnight 2026-09-24): Knowledge × Ops Event × Risk Triple Coverage (KORSTRI) — ◈ KORSTRI button (left:985480, bottom:8, zIndex:138); parallel-fetches /knowledge/ + /v1/ops/events + /entities/RiskSignal; keyword-correlates each knowledge article against ops events AND risk signals to classify FULLY_GROUNDED/OPS_BACKED/RISK_FLAGGED/ISOLATED; stat tiles ARTICLES/OPS EVENTS/RISK SIGNALS + classification counts; amber badge on isolated count; filter tabs ALL/FULLY_GROUNDED/OPS_BACKED/RISK_FLAGGED/ISOLATED + text search; expand article → matched ops event cards (blue) + matched risk signal cards (red) with relevance bars; ▶ ASSESS KNOWLEDGE COVERAGE → /v1/jarvis/agent/chat + TTS; isKorstriQuery+buildKorstriScript wired in JarvisBrain; "korstri/knowledge ops risk/grounded knowledge/isolated knowledge/knowledge triple" voice trigger; jarvis:korstri-toggle event; 90-s auto-refresh */}
             <KnowledgeOpsRiskTriple />
+
+            {/* F76 (overnight 2026-09-24): Swarm × Risk Signal × Scenario Mission Risk Matrix (SRSM) — ◈ SRSM button (left:986040, bottom:8, zIndex:139); parallel-fetches /entities/SwarmJob × /entities/RiskSignal × /v1/scenario/list; classifies each swarm job as EXPOSED (risk active, no scenario cover) / RISK_MANAGED (risk + scenario) / MONITORED (scenario only) / CLEAR (neither); red badge on exposed count; filter tabs ALL/EXPOSED/RISK_MANAGED/MONITORED/CLEAR + text search; expand job → matched risk signal cards (red/severity) + scenario cards (green) with relevance bars; ▶ ASSESS RISK → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSrsmQuery+buildSrsmScript wired in JarvisBrain; "srsm/swarm risk scenario/mission risk matrix/exposed swarm/unmitigated swarm" voice trigger; jarvis:srsm-toggle event; 90-s auto-refresh */}
+            <SwarmRiskScenarioMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
