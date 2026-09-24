@@ -131,6 +131,7 @@ import { isSwimbQuery, buildSwimbScript } from "./SwarmInvestigationBridge";
 import { isIcpimQuery, buildIcpimScript } from "./InvestmentContactMap";
 import { isUitlQuery, buildUitlScript } from "./UnifiedIntelTimeline";
 import { isAipkrstriQuery, buildAipkrstriScript } from "./AipSkillKnowledgeRiskTriple";
+import { isSitrepQuery, buildSitrepScript } from "./SitrepCommander";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1318,6 +1319,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:aipkrstri-toggle"));
       let script = "";
       try { script = await buildAipkrstriScript(); } catch { script = "AIPKRSTRI skill triple analysis is online, sir. Assessing AIP skill coverage against the knowledge base and active risk signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F66: SITREP Commander — open SITREP panel + speak structured 5-bullet situation report.
+    if (isSitrepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sitrep-toggle"));
+      let script = "";
+      try { script = await buildSitrepScript(); } catch { script = "SITREP Commander is online, sir. Compiling your situation report now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
