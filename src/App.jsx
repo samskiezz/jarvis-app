@@ -292,6 +292,7 @@ import ContactIntelProfileCrossRef from '@/components/cinematic/ContactIntelProf
 import UnifiedIntelTimeline from '@/components/cinematic/UnifiedIntelTimeline';
 import AipSkillKnowledgeRiskTriple from '@/components/cinematic/AipSkillKnowledgeRiskTriple';
 import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverage';
+import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnnotationTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -899,6 +900,9 @@ function App() {
 
             {/* F67 (overnight 2026-09-24): Scene × Graph Node Coverage (SCGN) — ◈ SCGN button (left:35720, bottom:8, zIndex:103); parallel-fetches /v1/cinematic/scene/{id} (all 10 scenes) + /v1/graph/centrality; keyword-correlates each scene's anchor text against top-influence graph nodes to surface NETWORK-BACKED (≥1 centrality node match) vs DISCONNECTED (no graph coverage); stat tiles SCENES/NODES/NETWORK-BACKED/DISCONNECTED; amber badge on disconnected count; filter tabs ALL/NETWORK-BACKED/DISCONNECTED + text search; expand scene → matched graph node cards with centrality score bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isScgnQuery+buildScgnScript wired in JarvisBrain; "scgn/scene graph node/network backed scene/disconnected scene/scene centrality/scene network/scene influence" voice trigger; jarvis:scgn-toggle event; 90-s auto-refresh */}
             <SceneGraphNodeCoverage />
+
+            {/* F69 (overnight 2026-09-24): AIP Skill × Live Intel × Graph Annotation Triple (ASLIANN) — ◈ ASLIANN button (left:840880, bottom:8, zIndex:530); parallel-fetches /v1/aip/skill + /functions/getLiveIntel + /v1/graph/annotations; classifies each skill as FULLY_PRIMED (live intel + graph annotation), WORLD_TRIGGERED (live intel only), GRAPH_TAGGED (annotation only), or DORMANT (neither); stat tiles SKILLS/FULLY_PRIMED/WORLD_TRIGGERED/GRAPH_TAGGED/DORMANT; filter tabs ALL/FULLY_PRIMED/WORLD_TRIGGERED/GRAPH_TAGGED/DORMANT + text search; expand skill → matched live intel events + graph annotation cards with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isAsliannQuery+buildAsliannScript wired in JarvisBrain; "asliann/skill live annotation/primed skill/dormant skill live/skill world annotation/aip skill live annotation" voice trigger; jarvis:asliann-toggle event; 60-s auto-refresh */}
+            <AipSkillLiveAnnotationTriple />
 
             <Suspense fallback={<Loading />}>
               <Routes>
