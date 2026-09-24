@@ -18,11 +18,11 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 `/v1/scenario/list` · `/v1/aip/skill` · `/v1/reports` · `/knowledge/*`
 
 ## Backlog (real features)
-- [ ] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it.
-- [ ] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant.
-- [ ] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing.
-- [ ] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector.
-- [ ] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS).
+- [x] F01 ⌘K command palette — searchable list of every JARVIS command; Enter runs it. [done 2026-09-24: CommandPalette.jsx mounted in App.jsx, pages+scenes navigate on Enter]
+- [x] F02 "Hey JARVIS" wake word (always-listening toggle) → opens the assistant. [done 2026-09-24: HeyJarvisListener.jsx mounted in App.jsx, always-listening toggle wired]
+- [x] F03 Live telemetry ticker (top bar) — real CPU/mem/load from /v1/jarvis/system/status + brain nodes/synapses from /v1/cinematic/brain, refreshing. [done 2026-09-24: TelemetryTicker.jsx mounted in Layout.jsx, polls every 15 s]
+- [x] F04 Keyboard scene-jump (keys 1–0 → the 10 scenes); Esc → home selector. [done 2026-09-24: SceneKeyboardNav.jsx mounted in App.jsx]
+- [x] F05 Spoken status report — "JARVIS, status" → reads real system+brain numbers aloud (TTS). [done 2026-09-24: SpokenStatusReport.isStatusQuery+buildStatusScript wired into JarvisBrain.ask(); fetches /v1/jarvis/system/status + /v1/cinematic/brain, speaks via /v1/voice/tts]
 - [ ] F06 Live World incident feed — /functions/getLiveIntel earthquakes → scrolling list + globe pins.
 - [ ] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers.
 - [ ] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier.

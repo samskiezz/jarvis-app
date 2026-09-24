@@ -1,0 +1,1 @@
+2026-09-24 F05 SpokenStatusReport wired into JarvisBrain.ask() — "JARVIS, status" now fetches /v1/jarvis/system/status + /v1/cinematic/brain and speaks real telemetry via /v1/voice/tts; F01-F04 backlog entries marked done (already implemented in prior runs)
