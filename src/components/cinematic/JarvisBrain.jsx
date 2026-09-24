@@ -130,6 +130,7 @@ import { isTscovQuery, buildTscovScript } from "./TaskScenarioCoverage";
 import { isSwimbQuery, buildSwimbScript } from "./SwarmInvestigationBridge";
 import { isIcpimQuery, buildIcpimScript } from "./InvestmentContactMap";
 import { isUitlQuery, buildUitlScript } from "./UnifiedIntelTimeline";
+import { isAipkrstriQuery, buildAipkrstriScript } from "./AipSkillKnowledgeRiskTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1308,6 +1309,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:uitl-toggle"));
       let script = "";
       try { script = await buildUitlScript(); } catch { script = "Unified intelligence timeline is online, sir. Merging ops events, risk signals, and knowledge articles into a single chronological stream now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F65: AIP Skill × Knowledge × Risk Triple — open AIPKRSTRI panel + speak capability coverage.
+    if (isAipkrstriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aipkrstri-toggle"));
+      let script = "";
+      try { script = await buildAipkrstriScript(); } catch { script = "AIPKRSTRI skill triple analysis is online, sir. Assessing AIP skill coverage against the knowledge base and active risk signals now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;

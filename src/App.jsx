@@ -290,6 +290,7 @@ import OpsEventScenarioGap from '@/components/cinematic/OpsEventScenarioGap';
 import KnowledgeInvestigationMapper from '@/components/cinematic/KnowledgeInvestigationMapper';
 import ContactIntelProfileCrossRef from '@/components/cinematic/ContactIntelProfileCrossRef';
 import UnifiedIntelTimeline from '@/components/cinematic/UnifiedIntelTimeline';
+import AipSkillKnowledgeRiskTriple from '@/components/cinematic/AipSkillKnowledgeRiskTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -891,6 +892,9 @@ function App() {
 
             {/* F64 (overnight 2026-09-24): Unified Intelligence Timeline (UITL) — ◈ UITL button (left:982680, bottom:8, zIndex:132); parallel-fetches /v1/ops/events + /entities/RiskSignal + /knowledge/; merges into a single chronological stream sorted newest-first; source type badges OPS/RISK/KNOWLEDGE with distinct colours; filter tabs ALL/OPS/RISK/KNOWLEDGE + text search; red badge on risk count; ▶ ASSESS SITUATION → /v1/jarvis/agent/chat 2-sentence unified situation brief + TTS; isUitlQuery+buildUitlScript wired in JarvisBrain; "uitl/intel timeline/unified timeline/event timeline/unified event stream/what is happening/all events" voice trigger; jarvis:uitl-toggle event; 5-min auto-refresh */}
             <UnifiedIntelTimeline />
+
+            {/* F65 (overnight 2026-09-24): AIP Skill × Knowledge × Risk Triple (AIPKRSTRI) — ◈ AIPKRSTRI button (left:983240, bottom:8, zIndex:133); parallel-fetches /v1/aip/skill + /knowledge/ + /entities/RiskSignal; classifies each skill as FULLY ARMED (KB + risk), KB-BACKED (KB only), RISK-LINKED (risk only), or DORMANT (neither); stat tiles SKILLS/KB ARTICLES/RISK SIGNALS/FULLY ARMED/KB-BACKED/RISK-LINKED/DORMANT; dormant badge; coverage bar; filter tabs ALL/FULLY ARMED/KB-BACKED/RISK-LINKED/DORMANT + search; expand skill → matched KB articles + matched risk signals with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; isAipkrstriQuery+buildAipkrstriScript wired in JarvisBrain; "aipkrstri/aip skill knowledge risk/dormant skill/fully armed skill/skill triple coverage/skill kb risk/capability risk coverage" voice trigger; jarvis:aipkrstri-toggle event; 90-s auto-refresh */}
+            <AipSkillKnowledgeRiskTriple />
 
             <Suspense fallback={<Loading />}>
               <Routes>
