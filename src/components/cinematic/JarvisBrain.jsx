@@ -126,6 +126,7 @@ import { isSddepQuery, buildSddepScript } from "./ScenarioDatasetDependencyMap";
 import { isOesgaQuery, buildOesgaScript } from "./OpsEventScenarioGap";
 import { isKimapQuery, buildKimapScript } from "./KnowledgeInvestigationMapper";
 import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
+import { isTscovQuery, buildTscovScript } from "./TaskScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1268,6 +1269,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cipr-toggle"));
       let script = "";
       try { script = await buildCiprScript(); } catch { script = "Contact intelligence cross-reference is online, sir. Correlating contacts against intel profiles to identify coverage gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F61: Task × Scenario Coverage — open TSCOV panel + speak playbook coverage brief.
+    if (isTscovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tscov-toggle"));
+      let script = "";
+      try { script = await buildTscovScript(); } catch { script = "Task scenario coverage analysis is online, sir. Cross-referencing tasks against scenario playbooks to identify unplanned operations now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
