@@ -122,6 +122,7 @@ import { isCrseQuery, buildCrseScript } from "./ContactRiskExposureMatrix";
 import { isWrlrskQuery, buildWrlrskScript } from "./WorldRiskCorrelator";
 import { isLiicQuery, buildLiicScript } from "./LiveIntelInvestigationCorrelator";
 import { isRrsigQuery, buildRrsigScript } from "./ReportRiskSignalCoverage";
+import { isSddepQuery, buildSddepScript } from "./ScenarioDatasetDependencyMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1228,6 +1229,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rrsig-toggle"));
       let script = "";
       try { script = await buildRrsigScript(); } catch { script = "Report risk signal coverage monitor is online, sir. Cross-referencing intelligence reports against active risk signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F57: Scenario × Dataset Dependency Map — open SDDEP panel + speak coverage brief.
+    if (isSddepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sddep-toggle"));
+      let script = "";
+      try { script = await buildSddepScript(); } catch { script = "Scenario dataset dependency map is online, sir. Cross-referencing operational scenarios against available datasets now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;

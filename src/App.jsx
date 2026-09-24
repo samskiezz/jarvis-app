@@ -283,6 +283,7 @@ import SystemStatusAipSkillCoverage from '@/components/cinematic/SystemStatusAip
 import ContactRiskExposureMatrix from '@/components/cinematic/ContactRiskExposureMatrix';
 import LiveIntelInvestigationCorrelator from '@/components/cinematic/LiveIntelInvestigationCorrelator';
 import ReportRiskSignalCoverage from '@/components/cinematic/ReportRiskSignalCoverage';
+import ScenarioDatasetDependencyMap from '@/components/cinematic/ScenarioDatasetDependencyMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -864,6 +865,9 @@ function App() {
 
             {/* F56 (overnight 2026-09-24): Report × Risk Signal Coverage (RRSIG) — ◈ RRSIG button (left:979320, bottom:8, zIndex:126); parallel-fetches /v1/reports + /entities/RiskSignal; keyword-correlates report titles/descriptions/tags against risk signal titles/descriptions to classify THREAT_COVERED (≥1 match) vs UNCOVERED; stat tiles REPORTS/RISK SIGNALS/THREAT COVERED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/THREAT_COVERED/UNCOVERED + text search; expand report → matched risk signal cards with severity badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence intelligence gap brief + TTS; isRrsigQuery+buildRrsigScript wired in JarvisBrain; "rrsig/report risk coverage/risk covered reports/threat coverage reports/intelligence gap" voice trigger; jarvis:rrsig-toggle event; 90-s auto-refresh */}
             <ReportRiskSignalCoverage />
+
+            {/* F57 (overnight 2026-09-24): Scenario × Dataset Dependency Map (SDDEP) — ◈ SDDEP button (left:979880, bottom:8, zIndex:127); parallel-fetches /v1/scenario/list + /v1/datasets; keyword-correlates scenario names/descriptions against dataset names/descriptions to classify SOURCED (≥1 match) vs UNSOURCED; stat tiles SCENARIOS/DATASETS/SOURCED/UNSOURCED; amber badge on unsourced count; filter tabs ALL/SOURCED/UNSOURCED + text search; expand scenario → matched dataset cards with relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence data-grounding brief + TTS; isSddepQuery+buildSddepScript wired in JarvisBrain; "sddep/scenario dataset/unsourced scenarios/scenario data dependency/dataset coverage scenario" voice trigger; jarvis:sddep-toggle event; 90-s auto-refresh */}
+            <ScenarioDatasetDependencyMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
