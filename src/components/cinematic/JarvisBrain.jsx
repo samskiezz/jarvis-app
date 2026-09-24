@@ -125,6 +125,7 @@ import { isRrsigQuery, buildRrsigScript } from "./ReportRiskSignalCoverage";
 import { isSddepQuery, buildSddepScript } from "./ScenarioDatasetDependencyMap";
 import { isOesgaQuery, buildOesgaScript } from "./OpsEventScenarioGap";
 import { isKimapQuery, buildKimapScript } from "./KnowledgeInvestigationMapper";
+import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1258,6 +1259,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kimap-toggle"));
       let script = "";
       try { script = await buildKimapScript(); } catch { script = "Knowledge investigation mapper is online, sir. Cross-referencing knowledge articles against active investigations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F60: Contact × IntelProfile Cross-Reference — open CIPR panel + speak intelligence coverage brief.
+    if (isCiprQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cipr-toggle"));
+      let script = "";
+      try { script = await buildCiprScript(); } catch { script = "Contact intelligence cross-reference is online, sir. Correlating contacts against intel profiles to identify coverage gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;

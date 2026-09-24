@@ -50,3 +50,4 @@
 2026-09-24T02:15:23Z F57 ScenarioDatasetDependencyMap.jsx — /v1/scenario/list × /v1/datasets; SOURCED/UNSOURCED classification; isSddepQuery+buildSddepScript wired in JarvisBrain; build exit 0; pushed to jarvis-overnight
 [2026-09-24] F58 OpsEventScenarioGap: /v1/ops/events × /v1/scenario/list COVERED/UNCOVERED matrix; amber badge; ASSESS GAP via /v1/jarvis/agent/chat; voice trigger oesga/ops scenario gap/playbook gap; build exit 0
 [2026-09-24] F59 KnowledgeInvestigationMapper.jsx — /knowledge/ x /v1/investigations SUPPORTING/ORPHANED classifier; ▶ ASSESS via /v1/jarvis/agent/chat + TTS; isKimapQuery+buildKimapScript wired in JarvisBrain.jsx; build exit 0
+[2026-09-24] F60 Contact×IntelProfile Cross-Reference (CIPR): ContactIntelProfileCrossRef.jsx mounted in App.jsx; isCiprQuery+buildCiprScript wired in JarvisBrain.jsx; /entities/Contact×/entities/IntelProfile; PROFILED/UNKNOWN classification; jarvis:cipr-toggle; voice triggers wired; build exit 0

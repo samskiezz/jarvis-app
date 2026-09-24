@@ -286,6 +286,7 @@ import ReportRiskSignalCoverage from '@/components/cinematic/ReportRiskSignalCov
 import ScenarioDatasetDependencyMap from '@/components/cinematic/ScenarioDatasetDependencyMap';
 import OpsEventScenarioGap from '@/components/cinematic/OpsEventScenarioGap';
 import KnowledgeInvestigationMapper from '@/components/cinematic/KnowledgeInvestigationMapper';
+import ContactIntelProfileCrossRef from '@/components/cinematic/ContactIntelProfileCrossRef';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -876,6 +877,9 @@ function App() {
 
             {/* F59 (overnight 2026-09-24): Knowledge × Investigation Coverage Mapper (KIMAP) — ◈ KIMAP button (left:981000, bottom:8, zIndex:129); parallel-fetches /knowledge/ + /v1/investigations; keyword-correlates article titles/content/tags against investigation titles/descriptions to classify SUPPORTING (≥1 match) vs ORPHANED; stat tiles ARTICLES/INVESTIGATIONS/SUPPORTING/ORPHANED; amber badge on orphaned count; filter tabs ALL/SUPPORTING/ORPHANED + text search; expand article → matched investigation cards with relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isKimapQuery+buildKimapScript wired in JarvisBrain; "kimap/knowledge investigation/orphaned knowledge/knowledge coverage/knowledge map/knowledge support" voice trigger; jarvis:kimap-toggle event; 90-s auto-refresh */}
             <KnowledgeInvestigationMapper />
+
+            {/* F60 (overnight 2026-09-24): Contact × IntelProfile Cross-Reference (CIPR) — ◈ CIPR button (left:1740, bottom:18, zIndex:68); parallel-fetches /entities/Contact + /entities/IntelProfile; keyword-correlates contact name/org/email/tags against profile name/aliases/org/role/tags to classify PROFILED (≥1 match) vs UNKNOWN (intel gap); stat tiles CONTACTS/PROFILES/PROFILED/UNKNOWN; amber badge on unknown count; filter tabs ALL/PROFILED/UNKNOWN + text search; expand contact → matched intel profile cards with role badge + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isCiprQuery+buildCiprScript wired in JarvisBrain; "contact profile/intel contact/cipr/profiled contacts/contact intel match/who is profiled/contact intelligence match/contact cross reference/unknown contacts/intel coverage" voice trigger; jarvis:cipr-toggle event; 90-s auto-refresh */}
+            <ContactIntelProfileCrossRef />
 
             <Suspense fallback={<Loading />}>
               <Routes>
