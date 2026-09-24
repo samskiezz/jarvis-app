@@ -124,6 +124,7 @@ import { isLiicQuery, buildLiicScript } from "./LiveIntelInvestigationCorrelator
 import { isRrsigQuery, buildRrsigScript } from "./ReportRiskSignalCoverage";
 import { isSddepQuery, buildSddepScript } from "./ScenarioDatasetDependencyMap";
 import { isOesgaQuery, buildOesgaScript } from "./OpsEventScenarioGap";
+import { isKimapQuery, buildKimapScript } from "./KnowledgeInvestigationMapper";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1248,6 +1249,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sddep-toggle"));
       let script = "";
       try { script = await buildSddepScript(); } catch { script = "Scenario dataset dependency map is online, sir. Cross-referencing operational scenarios against available datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F59: Knowledge × Investigation Coverage Mapper — open KIMAP panel + speak coverage brief.
+    if (isKimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kimap-toggle"));
+      let script = "";
+      try { script = await buildKimapScript(); } catch { script = "Knowledge investigation mapper is online, sir. Cross-referencing knowledge articles against active investigations now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;

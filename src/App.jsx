@@ -285,6 +285,7 @@ import LiveIntelInvestigationCorrelator from '@/components/cinematic/LiveIntelIn
 import ReportRiskSignalCoverage from '@/components/cinematic/ReportRiskSignalCoverage';
 import ScenarioDatasetDependencyMap from '@/components/cinematic/ScenarioDatasetDependencyMap';
 import OpsEventScenarioGap from '@/components/cinematic/OpsEventScenarioGap';
+import KnowledgeInvestigationMapper from '@/components/cinematic/KnowledgeInvestigationMapper';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -872,6 +873,9 @@ function App() {
 
             {/* F58 (overnight 2026-09-24): Ops Event × Scenario Gap Analysis (OESGA) — ◈ OESGA button (left:980440, bottom:8, zIndex:128); parallel-fetches /v1/ops/events + /v1/scenario/list; keyword-correlates each ops event against scenarios to classify COVERED (≥1 playbook match) vs UNCOVERED (no playbook exists); stat tiles EVENTS/SCENARIOS/COVERED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/COVERED/UNCOVERED + text search; expand event → matched scenario cards with relevance bar; ▶ ASSESS GAP → /v1/jarvis/agent/chat 2-sentence coverage gap brief + TTS; isOesgaQuery+buildOesgaScript wired in JarvisBrain; "oesga/ops scenario gap/event coverage/uncovered events/scenario gap/playbook gap" voice trigger; jarvis:oesga-toggle event; 90-s auto-refresh */}
             <OpsEventScenarioGap />
+
+            {/* F59 (overnight 2026-09-24): Knowledge × Investigation Coverage Mapper (KIMAP) — ◈ KIMAP button (left:981000, bottom:8, zIndex:129); parallel-fetches /knowledge/ + /v1/investigations; keyword-correlates article titles/content/tags against investigation titles/descriptions to classify SUPPORTING (≥1 match) vs ORPHANED; stat tiles ARTICLES/INVESTIGATIONS/SUPPORTING/ORPHANED; amber badge on orphaned count; filter tabs ALL/SUPPORTING/ORPHANED + text search; expand article → matched investigation cards with relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isKimapQuery+buildKimapScript wired in JarvisBrain; "kimap/knowledge investigation/orphaned knowledge/knowledge coverage/knowledge map/knowledge support" voice trigger; jarvis:kimap-toggle event; 90-s auto-refresh */}
+            <KnowledgeInvestigationMapper />
 
             <Suspense fallback={<Loading />}>
               <Routes>
