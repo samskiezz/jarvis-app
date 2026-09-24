@@ -151,6 +151,7 @@ import IntelProfileTaskLinker from '@/components/cinematic/IntelProfileTaskLinke
 import InvestmentContactMapper from '@/components/cinematic/InvestmentContactMapper';
 import ScenarioInvestmentExposure from '@/components/cinematic/ScenarioInvestmentExposure';
 import TaskScenarioCoverage from '@/components/cinematic/TaskScenarioCoverage';
+import SwarmInvestigationBridge from '@/components/cinematic/SwarmInvestigationBridge';
 import SwarmContactLinker from '@/components/cinematic/SwarmContactLinker';
 import SwarmInvestigationCoverage from '@/components/cinematic/SwarmInvestigationCoverage';
 import InvestmentSwarmCoverage from '@/components/cinematic/InvestmentSwarmCoverage';
@@ -880,6 +881,9 @@ function App() {
 
             {/* F60 (overnight 2026-09-24): Contact × IntelProfile Cross-Reference (CIPR) — ◈ CIPR button (left:1740, bottom:18, zIndex:68); parallel-fetches /entities/Contact + /entities/IntelProfile; keyword-correlates contact name/org/email/tags against profile name/aliases/org/role/tags to classify PROFILED (≥1 match) vs UNKNOWN (intel gap); stat tiles CONTACTS/PROFILES/PROFILED/UNKNOWN; amber badge on unknown count; filter tabs ALL/PROFILED/UNKNOWN + text search; expand contact → matched intel profile cards with role badge + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isCiprQuery+buildCiprScript wired in JarvisBrain; "contact profile/intel contact/cipr/profiled contacts/contact intel match/who is profiled/contact intelligence match/contact cross reference/unknown contacts/intel coverage" voice trigger; jarvis:cipr-toggle event; 90-s auto-refresh */}
             <ContactIntelProfileCrossRef />
+
+            {/* F62 (overnight 2026-09-24): Swarm × Investigation Mission Bridge (SWIMB) — ◈ SWIMB button (left:981560, bottom:8, zIndex:130); parallel-fetches /entities/SwarmJob + /v1/investigations; keyword-correlates each swarm job (name/description/type/status) against investigation titles/descriptions to classify MISSION_ALIGNED (≥1 match) vs UNALIGNED (no backing investigation); stat tiles JOBS/INVESTIGATIONS/ALIGNED/UNALIGNED; amber badge on unaligned count; filter tabs ALL/MISSION_ALIGNED/UNALIGNED + text search; expand job → matched investigation cards with priority badge + relevance bar; ▶ ASSESS ALIGNMENT → /v1/jarvis/agent/chat 2-sentence mission coverage brief + TTS; isSwimbQuery+buildSwimbScript wired in JarvisBrain; "swimb/swarm investigation/mission aligned/swarm mission/unaligned swarm/swarm coverage" voice trigger; jarvis:swimb-toggle event; 90-s auto-refresh */}
+            <SwarmInvestigationBridge />
 
             <Suspense fallback={<Loading />}>
               <Routes>

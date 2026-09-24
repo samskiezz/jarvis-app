@@ -127,6 +127,7 @@ import { isOesgaQuery, buildOesgaScript } from "./OpsEventScenarioGap";
 import { isKimapQuery, buildKimapScript } from "./KnowledgeInvestigationMapper";
 import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
 import { isTscovQuery, buildTscovScript } from "./TaskScenarioCoverage";
+import { isSwimbQuery, buildSwimbScript } from "./SwarmInvestigationBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1278,6 +1279,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tscov-toggle"));
       let script = "";
       try { script = await buildTscovScript(); } catch { script = "Task scenario coverage analysis is online, sir. Cross-referencing tasks against scenario playbooks to identify unplanned operations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F62: Swarm × Investigation Mission Bridge — open SWIMB panel + speak mission alignment brief.
+    if (isSwimbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swimb-toggle"));
+      let script = "";
+      try { script = await buildSwimbScript(); } catch { script = "Swarm investigation mission bridge is online, sir. Cross-referencing swarm jobs against active investigations to identify unaligned automation now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
       return;
