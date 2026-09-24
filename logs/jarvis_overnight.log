@@ -61,3 +61,4 @@
 [2026-09-24] F68 RiskScenarioCoverage (RSKSCEN): isRskscenQuery+buildRskscenScript imported+wired in JarvisBrain.jsx; dispatches jarvis:rskscen-toggle; /entities/RiskSignal × /v1/scenario/list COVERED vs UNPLANNED voice brief; backlog marked [x]; build exit 0
 2026-09-24 F69 ASLIANN: AipSkillLiveAnnotationTriple.jsx imported+mounted in App.jsx; isAsliannQuery+buildAsliannScript wired in JarvisBrain.jsx; /v1/aip/skill + /functions/getLiveIntel + /v1/graph/annotations; build exit 0
 2026-09-24T15:18:11Z F70 IntelProfileReportLinkage.jsx: new /entities/IntelProfile x /v1/reports cross-reference; DOCUMENTED/UNREPORTED classification; coverage bar; ▶ ASSESS brief; voice+toggle wired; build exit 0
+[2026-09-24] F71 SCRMX: ScenarioContactReadinessMatrix.jsx created; /v1/scenario/list × /entities/Contact; CONTACT_ASSIGNED/UNASSIGNED; wired in App.jsx + JarvisBrain.jsx; build verified exit 0

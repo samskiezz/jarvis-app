@@ -136,6 +136,7 @@ import { isScgnQuery, buildScgnScript } from "./SceneGraphNodeCoverage";
 import { isRskscenQuery, buildRskscenScript } from "./RiskScenarioCoverage";
 import { isAsliannQuery, buildAsliannScript } from "./AipSkillLiveAnnotationTriple";
 import { isIprlinkQuery, buildIprlinkScript } from "./IntelProfileReportLinkage";
+import { isScrmxQuery, buildScrmxScript } from "./ScenarioContactReadinessMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1377,6 +1378,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iprlink-toggle"));
       let script = "";
       try { script = await buildIprlinkScript(); } catch { script = "Intel profile report linkage panel is standing by, sir. Cross-referencing tracked threat actor profiles against the intelligence report archive now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isScrmxQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scrmx-toggle"));
+      let script = "";
+      try { script = await buildScrmxScript(); } catch { script = "Scenario Contact Readiness Matrix is online, sir. Cross-referencing operational scenarios against available contacts to surface staffing gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

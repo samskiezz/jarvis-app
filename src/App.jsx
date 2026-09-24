@@ -294,6 +294,7 @@ import AipSkillKnowledgeRiskTriple from '@/components/cinematic/AipSkillKnowledg
 import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverage';
 import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnnotationTriple';
 import IntelProfileReportLinkage from '@/components/cinematic/IntelProfileReportLinkage';
+import ScenarioContactReadinessMatrix from '@/components/cinematic/ScenarioContactReadinessMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -907,6 +908,9 @@ function App() {
 
             {/* F70 (overnight 2026-09-24): IntelProfile × Report Linkage (IPRLINK) — ◈ IPRLINK button (left:983800, bottom:8, zIndex:134); parallel-fetches /entities/IntelProfile + /v1/reports; keyword-correlates each threat actor profile (name/aliases/org/role/tags) against report titles/descriptions/tags/type to classify DOCUMENTED (≥1 report match) vs UNREPORTED (intelligence gap); stat tiles PROFILES/REPORTS/DOCUMENTED/UNREPORTED; coverage bar; amber badge on unreported count; filter tabs ALL/DOCUMENTED/UNREPORTED + text search; expand profile → matched report cards with type badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence threat-actor coverage brief + TTS; isIprlinkQuery+buildIprlinkScript wired in JarvisBrain; "iprlink/intel profile report/threat actor report/documented actor/unreported actor/actor coverage/threat coverage report" voice trigger; jarvis:iprlink-toggle event; 90-s auto-refresh */}
             <IntelProfileReportLinkage />
+
+            {/* F71 (overnight 2026-09-24): Scenario × Contact Readiness Matrix (SCRMX) — ◈ SCRMX button (left:984360, bottom:8, zIndex:135); parallel-fetches /v1/scenario/list + /entities/Contact; keyword-correlates each scenario name/description against contact name/role/org/tags to classify CONTACT_ASSIGNED (≥1 match) vs UNASSIGNED; amber badge on unassigned count; filter tabs ALL/CONTACT_ASSIGNED/UNASSIGNED + text search; expand scenario → matched contact cards with role badge + relevance bar; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isScrmxQuery+buildScrmxScript wired in JarvisBrain; "scrmx/scenario contact/contact readiness/unassigned scenario/scenario staffing/readiness matrix" voice trigger; jarvis:scrmx-toggle event; 90-s auto-refresh */}
+            <ScenarioContactReadinessMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
