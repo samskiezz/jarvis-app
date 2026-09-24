@@ -139,6 +139,7 @@ import { isIprlinkQuery, buildIprlinkScript } from "./IntelProfileReportLinkage"
 import { isScrmxQuery, buildScrmxScript } from "./ScenarioContactReadinessMatrix";
 import { isTsdtriQuery, buildTsdtriScript } from "./TaskSwarmDatasetTriple";
 import { isPtexpQuery, buildPtexpScript } from "./PortfolioThreatExposure";
+import { isAsidtriQuery, buildAsidtriScript } from "./AipSkillInvestigationDatasetTriple";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1404,6 +1405,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ptexp-toggle"));
       let script = "";
       try { script = await buildPtexpScript(); } catch { script = "Portfolio Threat Exposure online, sir. Correlating investments against active risk signals and threat actor profiles to surface asset exposure."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAsidtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:asidtri-toggle"));
+      let script = "";
+      try { script = await buildAsidtriScript(); } catch { script = "AIP Skill Investigation Dataset Triple Nexus online, sir. Cross-referencing skills against investigations and datasets to identify fully equipped versus dark capabilities."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

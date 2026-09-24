@@ -297,6 +297,7 @@ import IntelProfileReportLinkage from '@/components/cinematic/IntelProfileReport
 import ScenarioContactReadinessMatrix from '@/components/cinematic/ScenarioContactReadinessMatrix';
 import TaskSwarmDatasetTriple from '@/components/cinematic/TaskSwarmDatasetTriple';
 import PortfolioThreatExposure from '@/components/cinematic/PortfolioThreatExposure';
+import AipSkillInvestigationDatasetTriple from '@/components/cinematic/AipSkillInvestigationDatasetTriple';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -919,6 +920,9 @@ function App() {
 
             {/* F73 (overnight 2026-09-24): Investment × RiskSignal × IntelProfile Portfolio Threat Exposure (PTEXP) — ◈ PTEXP button (left:985480, bottom:8, zIndex:137); parallel-fetches /entities/Investment + /entities/RiskSignal + /entities/IntelProfile every 90 s; keyword-correlates each investment against risk signals AND intel profiles to classify FULLY_EXPOSED/RISK_EXPOSED/ACTOR_LINKED/CLEAR; amber badge on threatened count; filter tabs ALL/FULLY_EXPOSED/RISK_EXPOSED/ACTOR_LINKED/CLEAR + text search; expand investment → matched risk signal cards (red) + intel profile cards (orange) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isPtexpQuery+buildPtexpScript wired in JarvisBrain; "ptexp/portfolio threat/investment threat/asset exposure/portfolio exposure" voice trigger; jarvis:ptexp-toggle event; 90-s auto-refresh */}
             <PortfolioThreatExposure />
+
+            {/* F74 (overnight 2026-09-24): AipSkill × Investigation × Dataset Triple Nexus (ASIDTRI) — pre-existing component mounted; parallel-fetches /v1/aip/skill + /v1/investigations + /v1/datasets; FULLY_EQUIPPED/INV_ONLY/DATASET_ONLY/DARK classification; amber badge on dark count; filter tabs ALL/FULLY_EQUIPPED/INV_ONLY/DATASET_ONLY/DARK + text search; expand skill → matched investigations + datasets; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isAsidtriQuery+buildAsidtriScript wired in JarvisBrain; "asidtri/skill investigation dataset/investigation dataset skill/equipped skills/dark skills" voice trigger; jarvis:asidtri-toggle event; 90-s auto-refresh */}
+            <AipSkillInvestigationDatasetTriple />
 
             <Suspense fallback={<Loading />}>
               <Routes>

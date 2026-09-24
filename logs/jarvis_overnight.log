@@ -64,3 +64,4 @@
 [2026-09-24] F71 SCRMX: ScenarioContactReadinessMatrix.jsx created; /v1/scenario/list × /entities/Contact; CONTACT_ASSIGNED/UNASSIGNED; wired in App.jsx + JarvisBrain.jsx; build verified exit 0
 2026-09-24T17:18:16Z F72 TaskSwarmDatasetTriple.jsx: /entities/Task × /entities/SwarmJob × /v1/datasets triple coverage; FULLY_RESOURCED/SWARM_ONLY/DATA_ONLY/BARE; isTsdtriQuery+buildTsdtriScript wired; build exit 0
 [2026-09-24] F73 PortfolioThreatExposure (PTEXP): /entities/Investment × /entities/RiskSignal × /entities/IntelProfile — FULLY_EXPOSED/RISK_EXPOSED/ACTOR_LINKED/CLEAR classification; isPtexpQuery+buildPtexpScript wired in JarvisBrain; build exit 0
+2026-09-24 F74 ASIDTRI: AipSkillInvestigationDatasetTriple.jsx imported+mounted in App.jsx; isAsidtriQuery+buildAsidtriScript wired in JarvisBrain.jsx; /v1/aip/skill × /v1/investigations × /v1/datasets; FULLY_EQUIPPED/INV_ONLY/DATASET_ONLY/DARK; build exit 0
