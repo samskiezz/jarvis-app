@@ -308,6 +308,7 @@ import InvestmentScenarioContactMap from '@/components/cinematic/InvestmentScena
 import ContactKnowledgeScenarioReadiness from '@/components/cinematic/ContactKnowledgeScenarioReadiness';
 import IntelActorDeploymentMatrix from '@/components/cinematic/IntelActorDeploymentMatrix';
 import ContactInvestmentRiskNexus from '@/components/cinematic/ContactInvestmentRiskNexus';
+import SwarmKnowledgeReportNexus from '@/components/cinematic/SwarmKnowledgeReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -962,6 +963,8 @@ function App() {
             <IntelActorDeploymentMatrix />
             {/* F84 (overnight 2026-09-25): Contact × Investment × RiskSignal Financial Exposure Nexus (CIFINEX) — ◈ CIFINEX button (left:960480, bottom:8, zIndex:661); parallel-fetches /entities/Contact × /entities/Investment × /entities/RiskSignal; keyword-correlates each contact against investments AND risk signals to classify FULLY_MONITORED/INVEST_ONLY/RISK_ONLY/UNMONITORED; amber badge on unmonitored count; filter tabs ALL/FULLY_MONITORED/INVEST_ONLY/RISK_ONLY/UNMONITORED + text search; expand contact → matched investment cards (gold) + risk signal cards (red) with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCifinexQuery+buildCifinexScript wired in JarvisBrain; "cifinex/contact financial/financial exposure/contact investment/financial monitoring/unmonitored contact" voice trigger; jarvis:cifinex-toggle event; 90-s auto-refresh */}
             <ContactInvestmentRiskNexus />
+            {/* F85 (overnight 2026-09-25): Swarm Job × Knowledge Base × Report Documentation Nexus (SJKBREP) — ◈ SJKBREP button (left:990520, bottom:8, zIndex:147); parallel-fetches /entities/SwarmJob + /knowledge/ + /v1/reports; keyword-correlates each swarm job against KB articles AND reports to classify FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED; amber badge on undocumented count; filter tabs ALL/FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED + text search; expand job → matched KB article cards (cyan) + report cards (purple) with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSjkbrepQuery+buildSjkbrepScript wired in JarvisBrain; "sjkbrep/swarm job knowledge/swarm documentation/undocumented swarm/swarm report coverage/job documentation" voice trigger; jarvis:sjkbrep-toggle event; 90-s auto-refresh */}
+            <SwarmKnowledgeReportNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>

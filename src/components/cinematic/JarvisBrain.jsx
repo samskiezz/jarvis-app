@@ -150,6 +150,7 @@ import { isIexrmQuery, buildIexrmScript } from "./InvestmentScenarioContactMap";
 import { isCkiriQuery, buildCkiriScript } from "./ContactKnowledgeScenarioReadiness";
 import { isIasadQuery, buildIasadScript } from "./IntelActorDeploymentMatrix";
 import { isCifinexQuery, buildCifinexScript } from "./ContactInvestmentRiskNexus";
+import { isSjkbrepQuery, buildSjkbrepScript } from "./SwarmKnowledgeReportNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1509,6 +1510,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cifinex-toggle"));
       let script = "";
       try { script = await buildCifinexScript(); } catch { script = "Financial Exposure Nexus online, sir. Cross-referencing all contacts against active investments and risk signals to identify unmonitored personnel with no financial exposure coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F85: Swarm Job × Knowledge Base × Report Documentation Nexus — open SJKBREP panel + speak documentation coverage brief.
+    if (isSjkbrepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjkbrep-toggle"));
+      let script = "";
+      try { script = await buildSjkbrepScript(); } catch { script = "Swarm Documentation Nexus online, sir. Cross-referencing all swarm jobs against the knowledge base and report library to identify undocumented operations with no documentation coverage now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
