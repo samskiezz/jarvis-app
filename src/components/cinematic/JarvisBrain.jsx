@@ -159,6 +159,7 @@ import { isDtkhealthQuery, buildDtkhealthScript } from "./DatasetTaskKnowledgeHe
 import { isIssmapQuery, buildIssmapScript } from "./InvestmentSwarmScenarioCoverage";
 import { isRsdatQuery, buildRsdatScript } from "./ReportScenarioDatasetTriad";
 import { isSipwcovQuery, buildSipwcovScript } from "./ScenarioIntelReportCoverage";
+import { isTortcovQuery, buildTortcovScript } from "./TaskRiskReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1590,6 +1591,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsdat-toggle"));
       let script = "";
       try { script = await buildRsdatScript(); } catch { script = "Report scenario dataset coverage triad online, sir. Cross-referencing all intelligence reports against scenario playbooks and data sources to classify fully-grounded, scenario-backed, dataset-linked, and unanchored reports now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F94: Task × RiskSignal × Report Operational Threat Coverage — open TORTCOV panel + speak coverage brief.
+    if (isTortcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tortcov-toggle"));
+      let script = "";
+      try { script = await buildTortcovScript(); } catch { script = "Operational threat coverage matrix online, sir. Correlating all active tasks against risk signals and intelligence reports to identify unmonitored exposure now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

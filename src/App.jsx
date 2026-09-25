@@ -317,6 +317,7 @@ import DatasetTaskKnowledgeHealth from '@/components/cinematic/DatasetTaskKnowle
 import InvestmentSwarmScenarioCoverage from '@/components/cinematic/InvestmentSwarmScenarioCoverage';
 import ReportScenarioDatasetTriad from '@/components/cinematic/ReportScenarioDatasetTriad';
 import ScenarioIntelReportCoverage from '@/components/cinematic/ScenarioIntelReportCoverage';
+import TaskRiskReportCoverage from '@/components/cinematic/TaskRiskReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -989,6 +990,8 @@ function App() {
             <ReportScenarioDatasetTriad />
             {/* F93 (overnight 2026-09-25): Scenario × IntelProfile × Report Intelligence Coverage (SIPWCOV) — ◈ SIPWCOV button (left:995000, bottom:8, zIndex:155); parallel-fetches /v1/scenario/list + /entities/IntelProfile + /v1/reports; keyword-correlates each scenario against intel actor profiles AND reports to classify FULLY_ARMED/ACTOR_PLANNED/REPORT_BACKED/BLIND; red pulse badge on blind count; filter tabs ALL/FULLY_ARMED/ACTOR_PLANNED/REPORT_BACKED/BLIND + text search; expand scenario → matched intel profile cards (orange) + report cards (purple) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isSipwcovQuery+buildSipwcovScript wired in JarvisBrain; "sipwcov/scenario intel report/weapon coverage/armed scenario/blind scenario" voice trigger; jarvis:sipwcov-toggle event; 90-s auto-refresh */}
             <ScenarioIntelReportCoverage />
+            {/* F94 (overnight 2026-09-25): Task × RiskSignal × Report Operational Threat Coverage (TORTCOV) — ◈ TORTCOV button (left:995560, bottom:8, zIndex:156); parallel-fetches /entities/Task + /entities/RiskSignal + /v1/reports; keyword-correlates each task against risk signals AND reports to classify FULLY_COVERED/RISK_FLAGGED/REPORT_BACKED/UNMONITORED; amber badge on unmonitored count; filter tabs + search; expand task → matched risk signal cards (red) + report cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isTortcovQuery+buildTortcovScript wired in JarvisBrain; "tortcov/task risk report/operational threat coverage/unmonitored task" voice trigger; jarvis:tortcov-toggle event; 90-s auto-refresh */}
+            <TaskRiskReportCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
