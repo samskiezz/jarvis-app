@@ -324,6 +324,7 @@ import DatasetIntelSwarmNexus from '@/components/cinematic/DatasetIntelSwarmNexu
 import ReportInvestigationContactNexus from '@/components/cinematic/ReportInvestigationContactNexus';
 import InvestmentKnowledgeOpsFirm from '@/components/cinematic/InvestmentKnowledgeOpsFirm';
 import FullSpectrumThreatCoverage from '@/components/cinematic/FullSpectrumThreatCoverage';
+import GraphCommunityNetworkThreatIndex from '@/components/cinematic/GraphCommunityNetworkThreatIndex';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1010,6 +1011,8 @@ function App() {
             <InvestmentKnowledgeOpsFirm />
             {/* F100 (overnight 2026-09-25): AIP Skill × IntelProfile × Ops Event × RiskSignal Full-Spectrum Threat Response Coverage (FSTRC) — ◈ FSTRC button (left:998920, bottom:8, zIndex:162); parallel-fetches /v1/aip/skill + /entities/IntelProfile + /v1/ops/events + /entities/RiskSignal; keyword-correlates each skill against all three threat sources to classify FULLY_COUNTERED/ACTOR_OPS/ACTOR_RISK/OPS_RISK/PARTIAL/DORMANT; red pulse badge on dormant count; coverage bar; filter tabs ALL/FULLY_COUNTERED/ACTOR_OPS/ACTOR_RISK/OPS_RISK/PARTIAL/DORMANT + text search; expand skill → matched intel profile cards (orange) + ops event cards (blue) + risk signal cards (red/severity) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isFstrcQuery+buildFstrcScript wired in JarvisBrain; "fstrc/full spectrum threat/threat response coverage/dormant skills threat/skill threat coverage/four source coverage" voice trigger; jarvis:fstrc-toggle event; 90-s auto-refresh */}
             <FullSpectrumThreatCoverage />
+            {/* F101 (overnight 2026-09-25): Graph Community × Investigation × RiskSignal Network Threat Index (GCNITX) — ◈ GCNITX button (left:999480, bottom:8, zIndex:163); parallel-fetches /v1/graph/communities + /v1/investigations + /entities/RiskSignal; keyword-correlates each graph community cluster against open investigations AND active risk signals to classify TRIPLE_THREAT/INVESTIGATION_LINKED/RISK_FLAGGED/CLEAR; red pulse badge on triple-threat count; stat tiles + filter tabs ALL/TRIPLE_THREAT/INVESTIGATION_LINKED/RISK_FLAGGED/CLEAR + text search; expand community → matched investigation cards (blue) + risk signal cards (red/severity) with relevance bars; ▶ ASSESS NETWORK THREAT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcnitxQuery+buildGcnitxScript wired in JarvisBrain; "gcnitx/graph community threat/network threat index/community investigation/community risk" voice trigger; jarvis:gcnitx-toggle event; 90-s auto-refresh */}
+            <GraphCommunityNetworkThreatIndex />
 
             <Suspense fallback={<Loading />}>
               <Routes>

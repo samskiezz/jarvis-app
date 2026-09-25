@@ -166,6 +166,7 @@ import { isDiaswanQuery, buildDiaswanScript } from "./DatasetIntelSwarmNexus";
 import { isRiccovQuery, buildRiccovScript } from "./ReportInvestigationContactNexus";
 import { isIkofirmQuery, buildIkofirmScript } from "./InvestmentKnowledgeOpsFirm";
 import { isFstrcQuery, buildFstrcScript } from "./FullSpectrumThreatCoverage";
+import { isGcnitxQuery, buildGcnitxScript } from "./GraphCommunityNetworkThreatIndex";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1660,6 +1661,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:fstrc-toggle"));
       let script = "";
       try { script = await buildFstrcScript(); } catch { script = "Full-Spectrum Threat Response Coverage online, sir. Cross-referencing all AIP skills against intel actor profiles, operational events, and risk signals to classify fully-countered, partially-covered, and dormant capabilities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F101: Graph Community × Investigation × RiskSignal Network Threat Index — open GCNITX panel + speak network threat brief.
+    if (isGcnitxQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcnitx-toggle"));
+      let script = "";
+      try { script = await buildGcnitxScript(); } catch { script = "Graph Community Network Threat Index GCNITX online, sir. Cross-referencing all graph community clusters against open investigations and active risk signals to classify triple-threat, investigation-linked, risk-flagged, and clear communities now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
