@@ -147,6 +147,7 @@ import { isCtinvQuery, buildCtinvScript } from "./ContactTaskInvestigationTriple
 import { isIorstdQuery, buildIorstdScript } from "./InvestigationOpsRiskDashboard";
 import { isRkogapQuery, buildRkogapScript } from "./ReportKnowledgeOpsGap";
 import { isIexrmQuery, buildIexrmScript } from "./InvestmentScenarioContactMap";
+import { isCkiriQuery, buildCkiriScript } from "./ContactKnowledgeScenarioReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1479,6 +1480,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iexrm-toggle"));
       let script = "";
       try { script = await buildIexrmScript(); } catch { script = "Investment Execution Readiness Map online, sir. Cross-referencing investments against scenario playbooks and responsible contacts to identify exposed assets with no execution coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F82: Contact × Knowledge × Scenario Intelligence Readiness Index — open CKIRI panel + speak readiness brief.
+    if (isCkiriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ckiri-toggle"));
+      let script = "";
+      try { script = await buildCkiriScript(); } catch { script = "Contact Intelligence Readiness Index online, sir. Cross-referencing all contacts against the knowledge base and scenario library to identify personnel with insufficient intelligence coverage now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

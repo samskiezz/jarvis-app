@@ -305,6 +305,7 @@ import ContactTaskInvestigationTriple from '@/components/cinematic/ContactTaskIn
 import InvestigationOpsRiskDashboard from '@/components/cinematic/InvestigationOpsRiskDashboard';
 import ReportKnowledgeOpsGap from '@/components/cinematic/ReportKnowledgeOpsGap';
 import InvestmentScenarioContactMap from '@/components/cinematic/InvestmentScenarioContactMap';
+import ContactKnowledgeScenarioReadiness from '@/components/cinematic/ContactKnowledgeScenarioReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -951,6 +952,9 @@ function App() {
 
             {/* F81 (overnight 2026-09-25): Investment × Scenario × Contact Execution Readiness Map (IEXRM) — ◈ IEXRM button (left:988840, bottom:8, zIndex:144); parallel-fetches /entities/Investment + /v1/scenario/list + /entities/Contact; keyword-correlates each investment against scenarios AND contacts to classify FULLY_MAPPED/SCENARIO_BACKED/CONTACT_COVERED/EXPOSED; amber badge on exposed count; filter tabs ALL/FULLY_MAPPED/SCENARIO_BACKED/CONTACT_COVERED/EXPOSED + text search; expand investment → matched scenario cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isIexrmQuery+buildIexrmScript wired in JarvisBrain; "iexrm/investment scenario/execution readiness/asset readiness/portfolio readiness" voice trigger; jarvis:iexrm-toggle event; 90-s auto-refresh */}
             <InvestmentScenarioContactMap />
+
+            {/* F82 (overnight 2026-09-25): Contact × Knowledge × Scenario Intelligence Readiness Index (CKIRI) — ◈ CKIRI button (left:989400, bottom:8, zIndex:145); parallel-fetches /entities/Contact + /knowledge/ + /v1/scenario/list; keyword-correlates each contact against KB articles AND scenarios to classify FULLY_BRIEFED/KB_INFORMED/SCENARIO_PLACED/UNINFORMED; amber badge on uninformed count; filter tabs ALL/FULLY_BRIEFED/KB_INFORMED/SCENARIO_PLACED/UNINFORMED + text search; expand contact → matched KB article cards (green) + scenario cards (purple) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isCkiriQuery+buildCkiriScript wired in JarvisBrain; "ckiri/contact intelligence/contact briefing/contact readiness/personnel readiness" voice trigger; jarvis:ckiri-toggle event; 90-s auto-refresh */}
+            <ContactKnowledgeScenarioReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>
