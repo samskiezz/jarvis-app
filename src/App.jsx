@@ -304,6 +304,7 @@ import OpsEventContactCoverage from '@/components/cinematic/OpsEventContactCover
 import ContactTaskInvestigationTriple from '@/components/cinematic/ContactTaskInvestigationTriple';
 import InvestigationOpsRiskDashboard from '@/components/cinematic/InvestigationOpsRiskDashboard';
 import ReportKnowledgeOpsGap from '@/components/cinematic/ReportKnowledgeOpsGap';
+import InvestmentScenarioContactMap from '@/components/cinematic/InvestmentScenarioContactMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -947,6 +948,9 @@ function App() {
 
             {/* F80 (overnight 2026-09-25): Report × Knowledge × Ops Event Intelligence Gap Triad (RKOGAP) — ◈ RKOGAP button (left:988280, bottom:8, zIndex:143); parallel-fetches /v1/reports + /knowledge/ + /v1/ops/events; keyword-correlates each report against KB articles AND ops events to classify FULLY_GROUNDED/KB_ONLY/OPS_ONLY/UNANCHORED; amber badge on unanchored count; filter tabs; expand report → matched KB article cards (green) + ops event cards (amber) with relevance bars; ▶ ASSESS INTEL GAPS → /v1/jarvis/agent/chat + TTS; isRkogapQuery+buildRkogapScript wired in JarvisBrain; "rkogap/report knowledge gap/intel grounding/unanchored reports/report ops gap" voice trigger; jarvis:rkogap-toggle event; 90-s auto-refresh */}
             <ReportKnowledgeOpsGap />
+
+            {/* F81 (overnight 2026-09-25): Investment × Scenario × Contact Execution Readiness Map (IEXRM) — ◈ IEXRM button (left:988840, bottom:8, zIndex:144); parallel-fetches /entities/Investment + /v1/scenario/list + /entities/Contact; keyword-correlates each investment against scenarios AND contacts to classify FULLY_MAPPED/SCENARIO_BACKED/CONTACT_COVERED/EXPOSED; amber badge on exposed count; filter tabs ALL/FULLY_MAPPED/SCENARIO_BACKED/CONTACT_COVERED/EXPOSED + text search; expand investment → matched scenario cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isIexrmQuery+buildIexrmScript wired in JarvisBrain; "iexrm/investment scenario/execution readiness/asset readiness/portfolio readiness" voice trigger; jarvis:iexrm-toggle event; 90-s auto-refresh */}
+            <InvestmentScenarioContactMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -146,6 +146,7 @@ import { isOecrcQuery, buildOecrcScript } from "./OpsEventContactCoverage";
 import { isCtinvQuery, buildCtinvScript } from "./ContactTaskInvestigationTriple";
 import { isIorstdQuery, buildIorstdScript } from "./InvestigationOpsRiskDashboard";
 import { isRkogapQuery, buildRkogapScript } from "./ReportKnowledgeOpsGap";
+import { isIexrmQuery, buildIexrmScript } from "./InvestmentScenarioContactMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1469,6 +1470,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rkogap-toggle"));
       let script = "";
       try { script = await buildRkogapScript(); } catch { script = "Report Knowledge-Ops Gap Triad online, sir. Cross-referencing intelligence reports against knowledge articles and ops events to surface unanchored intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F81: Investment × Scenario × Contact Execution Readiness Map — open IEXRM panel + speak readiness brief.
+    if (isIexrmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iexrm-toggle"));
+      let script = "";
+      try { script = await buildIexrmScript(); } catch { script = "Investment Execution Readiness Map online, sir. Cross-referencing investments against scenario playbooks and responsible contacts to identify exposed assets with no execution coverage now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
