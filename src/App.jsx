@@ -323,6 +323,7 @@ import ContactGraphInfluenceExposure from '@/components/cinematic/ContactGraphIn
 import DatasetIntelSwarmNexus from '@/components/cinematic/DatasetIntelSwarmNexus';
 import ReportInvestigationContactNexus from '@/components/cinematic/ReportInvestigationContactNexus';
 import InvestmentKnowledgeOpsFirm from '@/components/cinematic/InvestmentKnowledgeOpsFirm';
+import FullSpectrumThreatCoverage from '@/components/cinematic/FullSpectrumThreatCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1007,6 +1008,8 @@ function App() {
             <ReportInvestigationContactNexus />
             {/* F99 (overnight 2026-09-25): Investment × Knowledge × Ops Event Financial Intelligence Readiness Monitor (IKOFIRM) — ◈ IKOFIRM button (left:998360, bottom:8, zIndex:161); parallel-fetches /entities/Investment + /knowledge/ + /v1/ops/events; keyword-correlates each investment against KB articles AND ops events to classify FULLY_INFORMED/OPS_TRACKED/KB_RESEARCHED/BLIND; red badge on blind count; filter tabs + search; expand investment → matched KB article cards (green) + ops event cards (blue) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isIkofirmQuery+buildIkofirmScript wired in JarvisBrain; "ikofirm/investment knowledge ops/financial intelligence readiness/blind investments" voice trigger; jarvis:ikofirm-toggle event; 90-s auto-refresh */}
             <InvestmentKnowledgeOpsFirm />
+            {/* F100 (overnight 2026-09-25): AIP Skill × IntelProfile × Ops Event × RiskSignal Full-Spectrum Threat Response Coverage (FSTRC) — ◈ FSTRC button (left:998920, bottom:8, zIndex:162); parallel-fetches /v1/aip/skill + /entities/IntelProfile + /v1/ops/events + /entities/RiskSignal; keyword-correlates each skill against all three threat sources to classify FULLY_COUNTERED/ACTOR_OPS/ACTOR_RISK/OPS_RISK/PARTIAL/DORMANT; red pulse badge on dormant count; coverage bar; filter tabs ALL/FULLY_COUNTERED/ACTOR_OPS/ACTOR_RISK/OPS_RISK/PARTIAL/DORMANT + text search; expand skill → matched intel profile cards (orange) + ops event cards (blue) + risk signal cards (red/severity) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isFstrcQuery+buildFstrcScript wired in JarvisBrain; "fstrc/full spectrum threat/threat response coverage/dormant skills threat/skill threat coverage/four source coverage" voice trigger; jarvis:fstrc-toggle event; 90-s auto-refresh */}
+            <FullSpectrumThreatCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

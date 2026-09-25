@@ -165,6 +165,7 @@ import { isCginfexQuery, buildCginfexScript } from "./ContactGraphInfluenceExpos
 import { isDiaswanQuery, buildDiaswanScript } from "./DatasetIntelSwarmNexus";
 import { isRiccovQuery, buildRiccovScript } from "./ReportInvestigationContactNexus";
 import { isIkofirmQuery, buildIkofirmScript } from "./InvestmentKnowledgeOpsFirm";
+import { isFstrcQuery, buildFstrcScript } from "./FullSpectrumThreatCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1650,6 +1651,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ikofirm-toggle"));
       let script = "";
       try { script = await buildIkofirmScript(); } catch { script = "IKOFIRM financial intelligence readiness monitor online, sir. Cross-referencing all investments against knowledge base articles and operational events to classify fully-informed, ops-tracked, KB-researched, and blind portfolio positions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F100: AIP Skill × IntelProfile × Ops Event × RiskSignal Full-Spectrum Threat Response Coverage — open FSTRC panel + speak 4-source coverage brief.
+    if (isFstrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:fstrc-toggle"));
+      let script = "";
+      try { script = await buildFstrcScript(); } catch { script = "Full-Spectrum Threat Response Coverage online, sir. Cross-referencing all AIP skills against intel actor profiles, operational events, and risk signals to classify fully-countered, partially-covered, and dormant capabilities now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
