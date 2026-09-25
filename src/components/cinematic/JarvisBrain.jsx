@@ -162,6 +162,7 @@ import { isSipwcovQuery, buildSipwcovScript } from "./ScenarioIntelReportCoverag
 import { isTortcovQuery, buildTortcovScript } from "./TaskRiskReportCoverage";
 import { isSrkrrQuery, buildSrkrrScript } from "./SwarmRiskKnowledgeReadiness";
 import { isCginfexQuery, buildCginfexScript } from "./ContactGraphInfluenceExposure";
+import { isDiaswanQuery, buildDiaswanScript } from "./DatasetIntelSwarmNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1620,6 +1621,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cginfex-toggle"));
       let script = "";
       try { script = await buildCginfexScript(); } catch { script = "Contact influence exposure index CGINFEX online, sir. Cross-referencing all contacts against high-centrality graph nodes and known intel actor profiles to classify exposure levels now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F97: Dataset × IntelProfile × SwarmJob Intelligence Automation Nexus — open DIASWAN panel + speak nexus brief.
+    if (isDiaswanQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:diaswan-toggle"));
+      let script = "";
+      try { script = await buildDiaswanScript(); } catch { script = "Dataset intelligence automation nexus DIASWAN online, sir. Cross-referencing all datasets against intel actor profiles and swarm jobs to classify fully-armed, actor-linked, swarm-active, and unlinked datasets now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

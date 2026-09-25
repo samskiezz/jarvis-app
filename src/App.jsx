@@ -320,6 +320,7 @@ import ScenarioIntelReportCoverage from '@/components/cinematic/ScenarioIntelRep
 import TaskRiskReportCoverage from '@/components/cinematic/TaskRiskReportCoverage';
 import SwarmRiskKnowledgeReadiness from '@/components/cinematic/SwarmRiskKnowledgeReadiness';
 import ContactGraphInfluenceExposure from '@/components/cinematic/ContactGraphInfluenceExposure';
+import DatasetIntelSwarmNexus from '@/components/cinematic/DatasetIntelSwarmNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -998,6 +999,8 @@ function App() {
             <SwarmRiskKnowledgeReadiness />
             {/* F96 (overnight 2026-09-25): Contact × Graph Centrality × IntelProfile Influence Exposure Index (CGINFEX) — ◈ CGINFEX button (left:996680, bottom:8, zIndex:158); parallel-fetches /entities/Contact + /v1/graph/centrality + /entities/IntelProfile; keyword-correlates each contact against high-centrality graph nodes AND known threat actor profiles to classify FULLY_EXPOSED/GRAPH_LINKED/ACTOR_LINKED/CLEAR; red pulse badge on fully-exposed count; filter tabs + search; expand contact → matched graph node cards (cyan) + intel actor cards (orange) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isCginfexQuery+buildCginfexScript wired in JarvisBrain; "cginfex/contact graph/contact centrality/contact influence/graph exposure/actor exposure/influence exposure index" voice trigger; jarvis:cginfex-toggle event; 90-s auto-refresh */}
             <ContactGraphInfluenceExposure />
+            {/* F97 (overnight 2026-09-25): Dataset × IntelProfile × SwarmJob Intelligence Automation Nexus (DIASWAN) — ◈ DIASWAN button (left:997240, bottom:8, zIndex:159); parallel-fetches /v1/datasets + /entities/IntelProfile + /entities/SwarmJob; keyword-correlates each dataset against intel actor profiles AND swarm jobs to classify FULLY_ARMED/ACTOR_LINKED/SWARM_ACTIVE/UNLINKED; amber badge on unlinked count; filter tabs + search; expand dataset → matched intel actor cards (orange) + swarm job cards (cyan) with relevance bars; ▶ ASSESS NEXUS → /v1/jarvis/agent/chat + TTS; isDiaswanQuery+buildDiaswanScript wired in JarvisBrain; "diaswan/dataset intel swarm/intel dataset/swarm dataset/armed dataset" voice trigger; jarvis:diaswan-toggle event; 90-s auto-refresh */}
+            <DatasetIntelSwarmNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
