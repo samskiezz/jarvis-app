@@ -321,6 +321,7 @@ import TaskRiskReportCoverage from '@/components/cinematic/TaskRiskReportCoverag
 import SwarmRiskKnowledgeReadiness from '@/components/cinematic/SwarmRiskKnowledgeReadiness';
 import ContactGraphInfluenceExposure from '@/components/cinematic/ContactGraphInfluenceExposure';
 import DatasetIntelSwarmNexus from '@/components/cinematic/DatasetIntelSwarmNexus';
+import ReportInvestigationContactNexus from '@/components/cinematic/ReportInvestigationContactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1001,6 +1002,8 @@ function App() {
             <ContactGraphInfluenceExposure />
             {/* F97 (overnight 2026-09-25): Dataset × IntelProfile × SwarmJob Intelligence Automation Nexus (DIASWAN) — ◈ DIASWAN button (left:997240, bottom:8, zIndex:159); parallel-fetches /v1/datasets + /entities/IntelProfile + /entities/SwarmJob; keyword-correlates each dataset against intel actor profiles AND swarm jobs to classify FULLY_ARMED/ACTOR_LINKED/SWARM_ACTIVE/UNLINKED; amber badge on unlinked count; filter tabs + search; expand dataset → matched intel actor cards (orange) + swarm job cards (cyan) with relevance bars; ▶ ASSESS NEXUS → /v1/jarvis/agent/chat + TTS; isDiaswanQuery+buildDiaswanScript wired in JarvisBrain; "diaswan/dataset intel swarm/intel dataset/swarm dataset/armed dataset" voice trigger; jarvis:diaswan-toggle event; 90-s auto-refresh */}
             <DatasetIntelSwarmNexus />
+            {/* F98 (overnight 2026-09-25): Report × Investigation × Contact Insight Coverage Nexus (RICCOV) — ◈ RICCOV button (left:997800, bottom:8, zIndex:160); parallel-fetches /v1/reports + /v1/investigations + /entities/Contact; keyword-correlates each report against investigations AND contacts to classify FULLY_LINKED/INV_TRACKED/CONTACT_ASSIGNED/UNASSIGNED; amber badge on unassigned count; filter tabs + search; expand report → matched investigation cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isRiccovQuery+buildRiccovScript wired in JarvisBrain; "riccov/report investigation contact/unassigned reports/report coverage/insight coverage" voice trigger; jarvis:riccov-toggle event; 90-s auto-refresh */}
+            <ReportInvestigationContactNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>

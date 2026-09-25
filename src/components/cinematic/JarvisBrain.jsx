@@ -163,6 +163,7 @@ import { isTortcovQuery, buildTortcovScript } from "./TaskRiskReportCoverage";
 import { isSrkrrQuery, buildSrkrrScript } from "./SwarmRiskKnowledgeReadiness";
 import { isCginfexQuery, buildCginfexScript } from "./ContactGraphInfluenceExposure";
 import { isDiaswanQuery, buildDiaswanScript } from "./DatasetIntelSwarmNexus";
+import { isRiccovQuery, buildRiccovScript } from "./ReportInvestigationContactNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1630,6 +1631,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:diaswan-toggle"));
       let script = "";
       try { script = await buildDiaswanScript(); } catch { script = "Dataset intelligence automation nexus DIASWAN online, sir. Cross-referencing all datasets against intel actor profiles and swarm jobs to classify fully-armed, actor-linked, swarm-active, and unlinked datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F98: Report × Investigation × Contact Insight Coverage Nexus — open RICCOV panel + speak coverage brief.
+    if (isRiccovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:riccov-toggle"));
+      let script = "";
+      try { script = await buildRiccovScript(); } catch { script = "Report investigation contact coverage nexus RICCOV online, sir. Cross-referencing all intelligence reports against active investigations and responsible contacts to classify fully-linked, investigation-tracked, contact-assigned, and unassigned reports now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

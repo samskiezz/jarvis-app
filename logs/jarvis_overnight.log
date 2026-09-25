@@ -88,3 +88,4 @@
 2026-09-25 F95 SwarmRiskKnowledgeReadiness.jsx created; /entities/SwarmJob × /entities/RiskSignal × /knowledge/ triple correlation; FULLY_PREPARED/RISK_AWARE/KB_BACKED/UNPREPARED; isSrkrrQuery+buildSrkrrScript wired in JarvisBrain.jsx; App.jsx mounted; build exit 0
 [2026-09-25] F96 ContactGraphInfluenceExposure.jsx — Contact × Graph Centrality × IntelProfile CGINFEX panel; fetches /entities/Contact + /v1/graph/centrality + /entities/IntelProfile; FULLY_EXPOSED/GRAPH_LINKED/ACTOR_LINKED/CLEAR classification; wired in App.jsx + JarvisBrain.jsx; build exit 0
 [2026-09-25] F97 DIASWAN — DatasetIntelSwarmNexus.jsx created; wired to App.jsx + JarvisBrain.jsx; /v1/datasets × /entities/IntelProfile × /entities/SwarmJob; build exit 0
+[2026-09-25] F98 RICCOV: ReportInvestigationContactNexus.jsx created; /v1/reports × /v1/investigations × /entities/Contact; FULLY_LINKED/INV_TRACKED/CONTACT_ASSIGNED/UNASSIGNED classification; wired in App.jsx + JarvisBrain.jsx; build exit 0
