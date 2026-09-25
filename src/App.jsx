@@ -302,6 +302,7 @@ import KnowledgeOpsRiskTriple from '@/components/cinematic/KnowledgeOpsRiskTripl
 import SwarmRiskScenarioMatrix from '@/components/cinematic/SwarmRiskScenarioMatrix';
 import OpsEventContactCoverage from '@/components/cinematic/OpsEventContactCoverage';
 import ContactTaskInvestigationTriple from '@/components/cinematic/ContactTaskInvestigationTriple';
+import InvestigationOpsRiskDashboard from '@/components/cinematic/InvestigationOpsRiskDashboard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -939,6 +940,9 @@ function App() {
 
             {/* F78 (overnight 2026-09-24): Contact × Task × Investigation Engagement Triple (CTINV) — ◈ CTINV button (left:987160, bottom:8, zIndex:141); parallel-fetches /entities/Contact × /entities/Task × /v1/investigations; keyword-correlates each contact against tasks AND investigations to classify FULLY_ENGAGED/TASK_ACTIVE/INV_LINKED/AVAILABLE; amber badge on available (idle) count; filter tabs ALL/FULLY_ENGAGED/TASK_ACTIVE/INV_LINKED/AVAILABLE + text search; expand contact → matched task cards (cyan) + matched investigation cards (purple) with relevance bars; ▶ ASSESS ENGAGEMENT → /v1/jarvis/agent/chat + TTS; isCtinvQuery+buildCtinvScript wired in JarvisBrain; "ctinv/contact engagement/idle contacts/contact task investigation" voice trigger; jarvis:ctinv-toggle event; 90-s auto-refresh */}
             <ContactTaskInvestigationTriple />
+
+            {/* F79 (overnight 2026-09-25): Investigation × Ops Event × Risk Signal Active Threat Dashboard (IORSTD) — ◈ IORSTD button (left:987720, bottom:8, zIndex:142); parallel-fetches /v1/investigations × /v1/ops/events × /entities/RiskSignal; keyword-correlates each investigation against ops events AND risk signals to classify TRIPLE_ACTIVE/OPS_FLAGGED/RISK_BACKED/DORMANT; red badge on triple-active count; filter tabs + text search; expand investigation → matched ops event cards (blue) + risk signal cards (red/severity) with relevance bars; ▶ ASSESS THREAT STATUS → /v1/jarvis/agent/chat + TTS; isIorstdQuery+buildIorstdScript wired in JarvisBrain; "iorstd/investigation threat/active investigation/live threat/ops risk investigation" voice trigger; jarvis:iorstd-toggle event; 90-s auto-refresh */}
+            <InvestigationOpsRiskDashboard />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -144,6 +144,7 @@ import { isKorstriQuery, buildKorstriScript } from "./KnowledgeOpsRiskTriple";
 import { isSrsmQuery, buildSrsmScript } from "./SwarmRiskScenarioMatrix";
 import { isOecrcQuery, buildOecrcScript } from "./OpsEventContactCoverage";
 import { isCtinvQuery, buildCtinvScript } from "./ContactTaskInvestigationTriple";
+import { isIorstdQuery, buildIorstdScript } from "./InvestigationOpsRiskDashboard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1449,6 +1450,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ctinv-toggle"));
       let script = "";
       try { script = await buildCtinvScript(); } catch { script = "Contact Engagement Triple online, sir. Cross-referencing contacts against tasks and investigations to identify idle engagement gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F79: Investigation × Ops Event × Risk Signal Active Threat Dashboard — open IORSTD panel + speak live threat brief.
+    if (isIorstdQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iorstd-toggle"));
+      let script = "";
+      try { script = await buildIorstdScript(); } catch { script = "Investigation Ops-Risk Dashboard online, sir. Cross-referencing investigations against live ops events and active risk signals to surface triple-active threats now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
