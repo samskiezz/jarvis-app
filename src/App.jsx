@@ -319,6 +319,7 @@ import ReportScenarioDatasetTriad from '@/components/cinematic/ReportScenarioDat
 import ScenarioIntelReportCoverage from '@/components/cinematic/ScenarioIntelReportCoverage';
 import TaskRiskReportCoverage from '@/components/cinematic/TaskRiskReportCoverage';
 import SwarmRiskKnowledgeReadiness from '@/components/cinematic/SwarmRiskKnowledgeReadiness';
+import ContactGraphInfluenceExposure from '@/components/cinematic/ContactGraphInfluenceExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -995,6 +996,8 @@ function App() {
             <TaskRiskReportCoverage />
             {/* F95 (overnight 2026-09-25): SwarmJob × RiskSignal × Knowledge Response Readiness (SRKRR) — ◈ SRKRR button (left:996120, bottom:8, zIndex:157); parallel-fetches /entities/SwarmJob + /entities/RiskSignal + /knowledge/; keyword-correlates each swarm job against risk signals AND KB articles to classify FULLY_PREPARED/RISK_AWARE/KB_BACKED/UNPREPARED; amber badge on unprepared count; filter tabs + search; expand job → matched risk signal cards (red) + KB article cards (teal) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isSrkrrQuery+buildSrkrrScript wired in JarvisBrain; "srkrr/swarm readiness/swarm knowledge risk/unprepared swarm" voice trigger; jarvis:srkrr-toggle event; 90-s auto-refresh */}
             <SwarmRiskKnowledgeReadiness />
+            {/* F96 (overnight 2026-09-25): Contact × Graph Centrality × IntelProfile Influence Exposure Index (CGINFEX) — ◈ CGINFEX button (left:996680, bottom:8, zIndex:158); parallel-fetches /entities/Contact + /v1/graph/centrality + /entities/IntelProfile; keyword-correlates each contact against high-centrality graph nodes AND known threat actor profiles to classify FULLY_EXPOSED/GRAPH_LINKED/ACTOR_LINKED/CLEAR; red pulse badge on fully-exposed count; filter tabs + search; expand contact → matched graph node cards (cyan) + intel actor cards (orange) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isCginfexQuery+buildCginfexScript wired in JarvisBrain; "cginfex/contact graph/contact centrality/contact influence/graph exposure/actor exposure/influence exposure index" voice trigger; jarvis:cginfex-toggle event; 90-s auto-refresh */}
+            <ContactGraphInfluenceExposure />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -161,6 +161,7 @@ import { isRsdatQuery, buildRsdatScript } from "./ReportScenarioDatasetTriad";
 import { isSipwcovQuery, buildSipwcovScript } from "./ScenarioIntelReportCoverage";
 import { isTortcovQuery, buildTortcovScript } from "./TaskRiskReportCoverage";
 import { isSrkrrQuery, buildSrkrrScript } from "./SwarmRiskKnowledgeReadiness";
+import { isCginfexQuery, buildCginfexScript } from "./ContactGraphInfluenceExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1610,6 +1611,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:srkrr-toggle"));
       let script = "";
       try { script = await buildSrkrrScript(); } catch { script = "Swarm response readiness matrix online, sir. Cross-referencing all swarm jobs against active risk signals and knowledge base articles to classify readiness levels now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F96: Contact × Graph Centrality × IntelProfile Influence Exposure Index — open CGINFEX panel + speak exposure brief.
+    if (isCginfexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cginfex-toggle"));
+      let script = "";
+      try { script = await buildCginfexScript(); } catch { script = "Contact influence exposure index CGINFEX online, sir. Cross-referencing all contacts against high-centrality graph nodes and known intel actor profiles to classify exposure levels now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
