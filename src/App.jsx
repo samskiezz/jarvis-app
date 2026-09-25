@@ -313,6 +313,7 @@ import ScenarioKnowledgeOpsReadiness from '@/components/cinematic/ScenarioKnowle
 import GraphCentralityThreatNexus from '@/components/cinematic/GraphCentralityThreatNexus';
 import LiveIntelGroundTruthPulse from '@/components/cinematic/LiveIntelGroundTruthPulse';
 import TaskIntelOpsResponse from '@/components/cinematic/TaskIntelOpsResponse';
+import DatasetTaskKnowledgeHealth from '@/components/cinematic/DatasetTaskKnowledgeHealth';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -977,6 +978,8 @@ function App() {
             <LiveIntelGroundTruthPulse />
             {/* F89 (overnight 2026-09-25): Task × IntelProfile × Ops Event Active Response Coverage (TIORCOV) — ◈ TIORCOV button (left:992760, bottom:8, zIndex:151); parallel-fetches /entities/Task + /entities/IntelProfile + /v1/ops/events; keyword-correlates each task against intel profiles AND ops events; ACTIVE_RESPONSE/THREAT_TASKED/OPS_DRIVEN/BACKGROUND; red badge on active-response count; filter tabs + search; expand task → matched intel profiles (orange) + matched ops events (blue) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isTiorcovQuery+buildTiorcovScript wired in JarvisBrain; "tiorcov/task intel ops/active response task/threat tasked task/ops driven task" voice trigger; jarvis:tiorcov-toggle event; 90-s auto-refresh */}
             <TaskIntelOpsResponse />
+            {/* F90 (overnight 2026-09-25): Dataset × Task × Knowledge Coverage Health Report (DTKHEALTH) — ◈ DTKHEALTH button (left:993320, bottom:8, zIndex:152); parallel-fetches /v1/datasets + /entities/Task + /knowledge/; keyword-correlates each dataset against tasks AND KB articles to classify FULLY_GROUNDED/TASK_LINKED/KB_NOTED/ORPHANED; amber badge on orphaned count; filter tabs + search; expand dataset → matched task cards (teal) + KB article cards (purple) with relevance bars; ▶ ASSESS HEALTH → /v1/jarvis/agent/chat + TTS; isDtkhealthQuery+buildDtkhealthScript wired in JarvisBrain; "dtkhealth/dataset task knowledge/dataset coverage/orphaned datasets/dataset health" voice trigger; jarvis:dtkhealth-toggle event; 90-s auto-refresh */}
+            <DatasetTaskKnowledgeHealth />
 
             <Suspense fallback={<Loading />}>
               <Routes>

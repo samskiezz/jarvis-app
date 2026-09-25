@@ -155,6 +155,7 @@ import { isSkopriQuery, buildSkopriScript } from "./ScenarioKnowledgeOpsReadines
 import { isGcrthinQuery, buildGcrthinScript } from "./GraphCentralityThreatNexus";
 import { isLkrpulseQuery, buildLkrpulseScript } from "./LiveIntelGroundTruthPulse";
 import { isTiorcovQuery, buildTiorcovScript } from "./TaskIntelOpsResponse";
+import { isDtkhealthQuery, buildDtkhealthScript } from "./DatasetTaskKnowledgeHealth";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1559,6 +1560,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tiorcov-toggle"));
       let script = "";
       try { script = await buildTiorcovScript(); } catch { script = "Task Active Response Coverage online, sir. Cross-referencing tasks against intel profiles and ops events to classify active-response, threat-tasked, and background tasks now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F90: Dataset × Task × Knowledge Coverage Health Report — open DTKHEALTH panel + speak coverage health brief.
+    if (isDtkhealthQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dtkhealth-toggle"));
+      let script = "";
+      try { script = await buildDtkhealthScript(); } catch { script = "Dataset coverage health report online, sir. Cross-referencing datasets against active tasks and knowledge base articles to classify fully-grounded, task-linked, KB-noted, and orphaned datasets now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
