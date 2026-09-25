@@ -167,6 +167,7 @@ import { isRiccovQuery, buildRiccovScript } from "./ReportInvestigationContactNe
 import { isIkofirmQuery, buildIkofirmScript } from "./InvestmentKnowledgeOpsFirm";
 import { isFstrcQuery, buildFstrcScript } from "./FullSpectrumThreatCoverage";
 import { isGcnitxQuery, buildGcnitxScript } from "./GraphCommunityNetworkThreatIndex";
+import { isKipswatQuery, buildKipswatScript } from "./KnowledgeThreatAwarenessCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1670,6 +1671,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcnitx-toggle"));
       let script = "";
       try { script = await buildGcnitxScript(); } catch { script = "Graph Community Network Threat Index GCNITX online, sir. Cross-referencing all graph community clusters against open investigations and active risk signals to classify triple-threat, investigation-linked, risk-flagged, and clear communities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F102: Knowledge × IntelProfile × SwarmJob Threat Awareness Coverage — open KIPSWTA panel + speak coverage brief.
+    if (isKipswatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kipswta-toggle"));
+      let script = "";
+      try { script = await buildKipswatScript(); } catch { script = "Knowledge Threat Awareness Coverage KIPSWTA online, sir. Cross-referencing all knowledge base articles against intel actor profiles and swarm operations to classify fully-contextualised, actor-aware, swarm-supported, and isolated articles now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

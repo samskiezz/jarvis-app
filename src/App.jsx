@@ -325,6 +325,7 @@ import ReportInvestigationContactNexus from '@/components/cinematic/ReportInvest
 import InvestmentKnowledgeOpsFirm from '@/components/cinematic/InvestmentKnowledgeOpsFirm';
 import FullSpectrumThreatCoverage from '@/components/cinematic/FullSpectrumThreatCoverage';
 import GraphCommunityNetworkThreatIndex from '@/components/cinematic/GraphCommunityNetworkThreatIndex';
+import KnowledgeThreatAwarenessCoverage from '@/components/cinematic/KnowledgeThreatAwarenessCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1013,6 +1014,8 @@ function App() {
             <FullSpectrumThreatCoverage />
             {/* F101 (overnight 2026-09-25): Graph Community × Investigation × RiskSignal Network Threat Index (GCNITX) — ◈ GCNITX button (left:999480, bottom:8, zIndex:163); parallel-fetches /v1/graph/communities + /v1/investigations + /entities/RiskSignal; keyword-correlates each graph community cluster against open investigations AND active risk signals to classify TRIPLE_THREAT/INVESTIGATION_LINKED/RISK_FLAGGED/CLEAR; red pulse badge on triple-threat count; stat tiles + filter tabs ALL/TRIPLE_THREAT/INVESTIGATION_LINKED/RISK_FLAGGED/CLEAR + text search; expand community → matched investigation cards (blue) + risk signal cards (red/severity) with relevance bars; ▶ ASSESS NETWORK THREAT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcnitxQuery+buildGcnitxScript wired in JarvisBrain; "gcnitx/graph community threat/network threat index/community investigation/community risk" voice trigger; jarvis:gcnitx-toggle event; 90-s auto-refresh */}
             <GraphCommunityNetworkThreatIndex />
+            {/* F102 (overnight 2026-09-25): Knowledge × IntelProfile × SwarmJob Threat Awareness Coverage (KIPSWTA) — ◈ KIPSWTA button (left:1000040, bottom:8, zIndex:164); parallel-fetches /knowledge/ + /entities/IntelProfile + /entities/SwarmJob; keyword-correlates each KB article against intel actor profiles AND swarm operations to classify FULLY_CONTEXTUALIZED/ACTOR_AWARE/SWARM_SUPPORTED/ISOLATED; amber badge on isolated count; filter tabs + search; expand article → matched intel actor cards (orange) + swarm job cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isKipswatQuery+buildKipswatScript wired in JarvisBrain; "kipswta/knowledge threat awareness/knowledge intel swarm/isolated knowledge" voice trigger; jarvis:kipswta-toggle event; 90-s auto-refresh */}
+            <KnowledgeThreatAwarenessCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
