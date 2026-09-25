@@ -156,6 +156,7 @@ import { isGcrthinQuery, buildGcrthinScript } from "./GraphCentralityThreatNexus
 import { isLkrpulseQuery, buildLkrpulseScript } from "./LiveIntelGroundTruthPulse";
 import { isTiorcovQuery, buildTiorcovScript } from "./TaskIntelOpsResponse";
 import { isDtkhealthQuery, buildDtkhealthScript } from "./DatasetTaskKnowledgeHealth";
+import { isIssmapQuery, buildIssmapScript } from "./InvestmentSwarmScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1569,6 +1570,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dtkhealth-toggle"));
       let script = "";
       try { script = await buildDtkhealthScript(); } catch { script = "Dataset coverage health report online, sir. Cross-referencing datasets against active tasks and knowledge base articles to classify fully-grounded, task-linked, KB-noted, and orphaned datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F91: Investment × Swarm × Scenario Coverage — open ISSMAP panel + speak portfolio deployment brief.
+    if (isIssmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:issmap-toggle"));
+      let script = "";
+      try { script = await buildIssmapScript(); } catch { script = "Investment swarm and scenario coverage map online, sir. Cross-referencing all investments against active swarm operations and contingency scenarios to classify fully-deployed, swarm-active, scenario-planned, and unprotected assets now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

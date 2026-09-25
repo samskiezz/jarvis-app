@@ -314,6 +314,7 @@ import GraphCentralityThreatNexus from '@/components/cinematic/GraphCentralityTh
 import LiveIntelGroundTruthPulse from '@/components/cinematic/LiveIntelGroundTruthPulse';
 import TaskIntelOpsResponse from '@/components/cinematic/TaskIntelOpsResponse';
 import DatasetTaskKnowledgeHealth from '@/components/cinematic/DatasetTaskKnowledgeHealth';
+import InvestmentSwarmScenarioCoverage from '@/components/cinematic/InvestmentSwarmScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -980,6 +981,8 @@ function App() {
             <TaskIntelOpsResponse />
             {/* F90 (overnight 2026-09-25): Dataset × Task × Knowledge Coverage Health Report (DTKHEALTH) — ◈ DTKHEALTH button (left:993320, bottom:8, zIndex:152); parallel-fetches /v1/datasets + /entities/Task + /knowledge/; keyword-correlates each dataset against tasks AND KB articles to classify FULLY_GROUNDED/TASK_LINKED/KB_NOTED/ORPHANED; amber badge on orphaned count; filter tabs + search; expand dataset → matched task cards (teal) + KB article cards (purple) with relevance bars; ▶ ASSESS HEALTH → /v1/jarvis/agent/chat + TTS; isDtkhealthQuery+buildDtkhealthScript wired in JarvisBrain; "dtkhealth/dataset task knowledge/dataset coverage/orphaned datasets/dataset health" voice trigger; jarvis:dtkhealth-toggle event; 90-s auto-refresh */}
             <DatasetTaskKnowledgeHealth />
+            {/* F91 (overnight 2026-09-25): Investment × Swarm × Scenario Coverage (ISSMAP) — ◈ ISSMAP button (left:993880, bottom:8, zIndex:153); parallel-fetches /entities/Investment + /entities/SwarmJob + /v1/scenario/list; keyword-correlates each investment against swarm jobs AND scenarios to classify FULLY_DEPLOYED/SWARM_ACTIVE/SCENARIO_PLANNED/UNPROTECTED; red pulse badge on unprotected count; filter tabs ALL/FULLY_DEPLOYED/SWARM_ACTIVE/SCENARIO_PLANNED/UNPROTECTED + text search; expand investment → matched swarm job cards (cyan) + scenario cards (purple) with relevance bars; isIssmapQuery+buildIssmapScript wired in JarvisBrain; "issmap/investment swarm/portfolio deployment/asset protection/unprotected investments" voice trigger; jarvis:issmap-toggle event; 90-s auto-refresh */}
+            <InvestmentSwarmScenarioCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
