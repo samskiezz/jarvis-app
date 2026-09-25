@@ -307,6 +307,7 @@ import ReportKnowledgeOpsGap from '@/components/cinematic/ReportKnowledgeOpsGap'
 import InvestmentScenarioContactMap from '@/components/cinematic/InvestmentScenarioContactMap';
 import ContactKnowledgeScenarioReadiness from '@/components/cinematic/ContactKnowledgeScenarioReadiness';
 import IntelActorDeploymentMatrix from '@/components/cinematic/IntelActorDeploymentMatrix';
+import ContactInvestmentRiskNexus from '@/components/cinematic/ContactInvestmentRiskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -959,6 +960,8 @@ function App() {
 
             {/* F83 (overnight 2026-09-25): IntelProfile × SwarmJob × Scenario Actor Deployment Status (IASAD) — ◈ IASAD button (left:989960, bottom:8, zIndex:146); parallel-fetches /entities/IntelProfile + /entities/SwarmJob + /v1/scenario/list; keyword-correlates each threat actor profile against swarm operations AND scenario playbooks to classify FULLY_COUNTERED/SWARM_TARGETED/SCENARIO_PLANNED/UNMITIGATED; red badge + red pulse on unmitigated count; filter tabs ALL/FULLY_COUNTERED/SWARM_TARGETED/SCENARIO_PLANNED/UNMITIGATED + text search; expand actor → matched swarm job cards (cyan) + scenario cards (orange) with relevance bars; ▶ ASSESS DEPLOYMENT → /v1/jarvis/agent/chat 2-sentence countermeasure gap brief + TTS; isIasadQuery+buildIasadScript wired in JarvisBrain; "iasad/intel actor deployment/threat actor swarm/unmitigated actor/actor counter/threat countermeasure" voice trigger; jarvis:iasad-toggle event; 90-s auto-refresh */}
             <IntelActorDeploymentMatrix />
+            {/* F84 (overnight 2026-09-25): Contact × Investment × RiskSignal Financial Exposure Nexus (CIFINEX) — ◈ CIFINEX button (left:960480, bottom:8, zIndex:661); parallel-fetches /entities/Contact × /entities/Investment × /entities/RiskSignal; keyword-correlates each contact against investments AND risk signals to classify FULLY_MONITORED/INVEST_ONLY/RISK_ONLY/UNMONITORED; amber badge on unmonitored count; filter tabs ALL/FULLY_MONITORED/INVEST_ONLY/RISK_ONLY/UNMONITORED + text search; expand contact → matched investment cards (gold) + risk signal cards (red) with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCifinexQuery+buildCifinexScript wired in JarvisBrain; "cifinex/contact financial/financial exposure/contact investment/financial monitoring/unmonitored contact" voice trigger; jarvis:cifinex-toggle event; 90-s auto-refresh */}
+            <ContactInvestmentRiskNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>

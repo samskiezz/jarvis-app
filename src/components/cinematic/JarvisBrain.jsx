@@ -149,6 +149,7 @@ import { isRkogapQuery, buildRkogapScript } from "./ReportKnowledgeOpsGap";
 import { isIexrmQuery, buildIexrmScript } from "./InvestmentScenarioContactMap";
 import { isCkiriQuery, buildCkiriScript } from "./ContactKnowledgeScenarioReadiness";
 import { isIasadQuery, buildIasadScript } from "./IntelActorDeploymentMatrix";
+import { isCifinexQuery, buildCifinexScript } from "./ContactInvestmentRiskNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1499,6 +1500,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iasad-toggle"));
       let script = "";
       try { script = await buildIasadScript(); } catch { script = "Intel Actor Deployment Matrix online, sir. Cross-referencing all threat actor profiles against active swarm operations and scenario playbooks to identify unmitigated actors with no countermeasure coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F84: Contact × Investment × RiskSignal Financial Exposure Nexus — open CIFINEX panel + speak financial monitoring brief.
+    if (isCifinexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cifinex-toggle"));
+      let script = "";
+      try { script = await buildCifinexScript(); } catch { script = "Financial Exposure Nexus online, sir. Cross-referencing all contacts against active investments and risk signals to identify unmonitored personnel with no financial exposure coverage now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
