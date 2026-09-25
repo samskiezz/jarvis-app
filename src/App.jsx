@@ -311,6 +311,7 @@ import ContactInvestmentRiskNexus from '@/components/cinematic/ContactInvestment
 import SwarmKnowledgeReportNexus from '@/components/cinematic/SwarmKnowledgeReportNexus';
 import ScenarioKnowledgeOpsReadiness from '@/components/cinematic/ScenarioKnowledgeOpsReadiness';
 import GraphCentralityThreatNexus from '@/components/cinematic/GraphCentralityThreatNexus';
+import LiveIntelGroundTruthPulse from '@/components/cinematic/LiveIntelGroundTruthPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -971,6 +972,8 @@ function App() {
             <ScenarioKnowledgeOpsReadiness />
             {/* F87 (overnight 2026-09-25): Graph Centrality × RiskSignal × IntelProfile Threat Influence Nexus (GCRTHIN) — ◈ GCRTHIN button (left:991640, bottom:8, zIndex:149); parallel-fetches /v1/graph/centrality + /entities/RiskSignal + /entities/IntelProfile; keyword-correlates each high-centrality node against risk signals AND intel profiles to classify THREAT_HUB/RISK_NEXUS/ACTOR_LINKED/NEUTRAL; red pulse + badge on threatened count; filter tabs + text search; expand node → matched risk signal cards (red) + intel actor cards (orange) with severity badge + relevance bars; ▶ ASSESS THREAT → /v1/jarvis/agent/chat + TTS; isGcrthinQuery+buildGcrthinScript wired in JarvisBrain; "gcrthin/graph centrality threat/threat hub/influence nexus/centrality threat" voice trigger; jarvis:gcrthin-toggle event; 90-s auto-refresh */}
             <GraphCentralityThreatNexus />
+            {/* F88 (overnight 2026-09-25): Live Intel × Knowledge × Risk Signal Ground Truth Pulse (LKRPULSE) — ◈ LKRPULSE button (left:992200, bottom:8, zIndex:150); parallel-fetches /functions/getLiveIntel + /knowledge/ + /entities/RiskSignal; keyword-correlates each live world event (quake/crypto/FX) against KB articles AND risk signals to classify CONFIRMED/MONITORED/DOCUMENTED/UNTRACKED; amber badge on untracked count; filter tabs ALL/CONFIRMED/MONITORED/DOCUMENTED/UNTRACKED + text search; expand event → matched KB article cards (blue) + risk signal cards (red) with relevance bars; ▶ ASSESS GROUND TRUTH → /v1/jarvis/agent/chat + TTS; isLkrpulseQuery+buildLkrpulseScript wired in JarvisBrain; "lkrpulse/live intel ground truth/live event coverage/intel classification/world event status/ground truth pulse" voice trigger; jarvis:lkrpulse-toggle event; 5-min auto-refresh */}
+            <LiveIntelGroundTruthPulse />
 
             <Suspense fallback={<Loading />}>
               <Routes>

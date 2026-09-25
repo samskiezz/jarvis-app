@@ -153,6 +153,7 @@ import { isCifinexQuery, buildCifinexScript } from "./ContactInvestmentRiskNexus
 import { isSjkbrepQuery, buildSjkbrepScript } from "./SwarmKnowledgeReportNexus";
 import { isSkopriQuery, buildSkopriScript } from "./ScenarioKnowledgeOpsReadiness";
 import { isGcrthinQuery, buildGcrthinScript } from "./GraphCentralityThreatNexus";
+import { isLkrpulseQuery, buildLkrpulseScript } from "./LiveIntelGroundTruthPulse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1539,6 +1540,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcrthin-toggle"));
       let script = "";
       try { script = await buildGcrthinScript(); } catch { script = "Graph Centrality Threat Influence Nexus online, sir. Cross-referencing high-centrality graph nodes against active risk signals and known threat actor profiles to identify threat hubs and influence nexus points now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F88: Live Intel × Knowledge × Risk Signal Ground Truth Pulse — open LKRPULSE panel + speak ground truth brief.
+    if (isLkrpulseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lkrpulse-toggle"));
+      let script = "";
+      try { script = await buildLkrpulseScript(); } catch { script = "Live Intel Ground Truth Pulse online, sir. Cross-referencing live world events against the knowledge base and active risk signals to classify ground truth coverage now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
