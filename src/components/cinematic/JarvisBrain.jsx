@@ -154,6 +154,7 @@ import { isSjkbrepQuery, buildSjkbrepScript } from "./SwarmKnowledgeReportNexus"
 import { isSkopriQuery, buildSkopriScript } from "./ScenarioKnowledgeOpsReadiness";
 import { isGcrthinQuery, buildGcrthinScript } from "./GraphCentralityThreatNexus";
 import { isLkrpulseQuery, buildLkrpulseScript } from "./LiveIntelGroundTruthPulse";
+import { isTiorcovQuery, buildTiorcovScript } from "./TaskIntelOpsResponse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1549,6 +1550,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:lkrpulse-toggle"));
       let script = "";
       try { script = await buildLkrpulseScript(); } catch { script = "Live Intel Ground Truth Pulse online, sir. Cross-referencing live world events against the knowledge base and active risk signals to classify ground truth coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F89: Task × IntelProfile × Ops Event Active Response Coverage — open TIORCOV panel + speak response coverage brief.
+    if (isTiorcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tiorcov-toggle"));
+      let script = "";
+      try { script = await buildTiorcovScript(); } catch { script = "Task Active Response Coverage online, sir. Cross-referencing tasks against intel profiles and ops events to classify active-response, threat-tasked, and background tasks now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

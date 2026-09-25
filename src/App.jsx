@@ -312,6 +312,7 @@ import SwarmKnowledgeReportNexus from '@/components/cinematic/SwarmKnowledgeRepo
 import ScenarioKnowledgeOpsReadiness from '@/components/cinematic/ScenarioKnowledgeOpsReadiness';
 import GraphCentralityThreatNexus from '@/components/cinematic/GraphCentralityThreatNexus';
 import LiveIntelGroundTruthPulse from '@/components/cinematic/LiveIntelGroundTruthPulse';
+import TaskIntelOpsResponse from '@/components/cinematic/TaskIntelOpsResponse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -974,6 +975,8 @@ function App() {
             <GraphCentralityThreatNexus />
             {/* F88 (overnight 2026-09-25): Live Intel × Knowledge × Risk Signal Ground Truth Pulse (LKRPULSE) — ◈ LKRPULSE button (left:992200, bottom:8, zIndex:150); parallel-fetches /functions/getLiveIntel + /knowledge/ + /entities/RiskSignal; keyword-correlates each live world event (quake/crypto/FX) against KB articles AND risk signals to classify CONFIRMED/MONITORED/DOCUMENTED/UNTRACKED; amber badge on untracked count; filter tabs ALL/CONFIRMED/MONITORED/DOCUMENTED/UNTRACKED + text search; expand event → matched KB article cards (blue) + risk signal cards (red) with relevance bars; ▶ ASSESS GROUND TRUTH → /v1/jarvis/agent/chat + TTS; isLkrpulseQuery+buildLkrpulseScript wired in JarvisBrain; "lkrpulse/live intel ground truth/live event coverage/intel classification/world event status/ground truth pulse" voice trigger; jarvis:lkrpulse-toggle event; 5-min auto-refresh */}
             <LiveIntelGroundTruthPulse />
+            {/* F89 (overnight 2026-09-25): Task × IntelProfile × Ops Event Active Response Coverage (TIORCOV) — ◈ TIORCOV button (left:992760, bottom:8, zIndex:151); parallel-fetches /entities/Task + /entities/IntelProfile + /v1/ops/events; keyword-correlates each task against intel profiles AND ops events; ACTIVE_RESPONSE/THREAT_TASKED/OPS_DRIVEN/BACKGROUND; red badge on active-response count; filter tabs + search; expand task → matched intel profiles (orange) + matched ops events (blue) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isTiorcovQuery+buildTiorcovScript wired in JarvisBrain; "tiorcov/task intel ops/active response task/threat tasked task/ops driven task" voice trigger; jarvis:tiorcov-toggle event; 90-s auto-refresh */}
+            <TaskIntelOpsResponse />
 
             <Suspense fallback={<Loading />}>
               <Routes>
