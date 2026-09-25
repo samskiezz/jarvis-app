@@ -316,6 +316,7 @@ import TaskIntelOpsResponse from '@/components/cinematic/TaskIntelOpsResponse';
 import DatasetTaskKnowledgeHealth from '@/components/cinematic/DatasetTaskKnowledgeHealth';
 import InvestmentSwarmScenarioCoverage from '@/components/cinematic/InvestmentSwarmScenarioCoverage';
 import ReportScenarioDatasetTriad from '@/components/cinematic/ReportScenarioDatasetTriad';
+import ScenarioIntelReportCoverage from '@/components/cinematic/ScenarioIntelReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -986,6 +987,8 @@ function App() {
             <InvestmentSwarmScenarioCoverage />
             {/* F92 (overnight 2026-09-25): Report × Scenario × Dataset Coverage Triad (RSDAT) — ◈ RSDAT button (left:994440, bottom:8, zIndex:154); parallel-fetches /v1/reports + /v1/scenario/list + /v1/datasets; keyword-correlates each report against scenarios AND datasets to classify FULLY_GROUNDED/SCENARIO_BACKED/DATASET_LINKED/UNANCHORED; amber badge on unanchored count; filter tabs + text search; expand report → matched scenario cards (cyan) + dataset cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRsdatQuery+buildRsdatScript wired in JarvisBrain; "rsdat/report scenario dataset/unanchored reports/report coverage triad" voice trigger; jarvis:rsdat-toggle event; 90-s auto-refresh */}
             <ReportScenarioDatasetTriad />
+            {/* F93 (overnight 2026-09-25): Scenario × IntelProfile × Report Intelligence Coverage (SIPWCOV) — ◈ SIPWCOV button (left:995000, bottom:8, zIndex:155); parallel-fetches /v1/scenario/list + /entities/IntelProfile + /v1/reports; keyword-correlates each scenario against intel actor profiles AND reports to classify FULLY_ARMED/ACTOR_PLANNED/REPORT_BACKED/BLIND; red pulse badge on blind count; filter tabs ALL/FULLY_ARMED/ACTOR_PLANNED/REPORT_BACKED/BLIND + text search; expand scenario → matched intel profile cards (orange) + report cards (purple) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isSipwcovQuery+buildSipwcovScript wired in JarvisBrain; "sipwcov/scenario intel report/weapon coverage/armed scenario/blind scenario" voice trigger; jarvis:sipwcov-toggle event; 90-s auto-refresh */}
+            <ScenarioIntelReportCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

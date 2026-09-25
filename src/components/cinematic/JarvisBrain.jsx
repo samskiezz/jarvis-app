@@ -158,6 +158,7 @@ import { isTiorcovQuery, buildTiorcovScript } from "./TaskIntelOpsResponse";
 import { isDtkhealthQuery, buildDtkhealthScript } from "./DatasetTaskKnowledgeHealth";
 import { isIssmapQuery, buildIssmapScript } from "./InvestmentSwarmScenarioCoverage";
 import { isRsdatQuery, buildRsdatScript } from "./ReportScenarioDatasetTriad";
+import { isSipwcovQuery, buildSipwcovScript } from "./ScenarioIntelReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1589,6 +1590,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsdat-toggle"));
       let script = "";
       try { script = await buildRsdatScript(); } catch { script = "Report scenario dataset coverage triad online, sir. Cross-referencing all intelligence reports against scenario playbooks and data sources to classify fully-grounded, scenario-backed, dataset-linked, and unanchored reports now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F93: Scenario × IntelProfile × Report Intelligence Coverage — open SIPWCOV panel + speak readiness brief.
+    if (isSipwcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sipwcov-toggle"));
+      let script = "";
+      try { script = await buildSipwcovScript(); } catch { script = "Scenario intelligence coverage online, sir. Cross-referencing all scenario playbooks against intel actor profiles and intelligence reports to classify armed, actor-planned, report-backed, and blind scenarios now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
