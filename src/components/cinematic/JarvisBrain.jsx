@@ -152,6 +152,7 @@ import { isIasadQuery, buildIasadScript } from "./IntelActorDeploymentMatrix";
 import { isCifinexQuery, buildCifinexScript } from "./ContactInvestmentRiskNexus";
 import { isSjkbrepQuery, buildSjkbrepScript } from "./SwarmKnowledgeReportNexus";
 import { isSkopriQuery, buildSkopriScript } from "./ScenarioKnowledgeOpsReadiness";
+import { isGcrthinQuery, buildGcrthinScript } from "./GraphCentralityThreatNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1529,6 +1530,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skopri-toggle"));
       let script = "";
       try { script = await buildSkopriScript(); } catch { script = "Scenario Mission Readiness Index online, sir. Cross-referencing all scenarios against the knowledge base and operational events to identify unprimed missions with no context coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F87: Graph Centrality × RiskSignal × IntelProfile Threat Influence Nexus — open GCRTHIN panel + speak threat influence brief.
+    if (isGcrthinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcrthin-toggle"));
+      let script = "";
+      try { script = await buildGcrthinScript(); } catch { script = "Graph Centrality Threat Influence Nexus online, sir. Cross-referencing high-centrality graph nodes against active risk signals and known threat actor profiles to identify threat hubs and influence nexus points now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

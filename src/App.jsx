@@ -310,6 +310,7 @@ import IntelActorDeploymentMatrix from '@/components/cinematic/IntelActorDeploym
 import ContactInvestmentRiskNexus from '@/components/cinematic/ContactInvestmentRiskNexus';
 import SwarmKnowledgeReportNexus from '@/components/cinematic/SwarmKnowledgeReportNexus';
 import ScenarioKnowledgeOpsReadiness from '@/components/cinematic/ScenarioKnowledgeOpsReadiness';
+import GraphCentralityThreatNexus from '@/components/cinematic/GraphCentralityThreatNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -968,6 +969,8 @@ function App() {
             <SwarmKnowledgeReportNexus />
             {/* F86 (overnight 2026-09-25): Scenario × Knowledge × Ops Event Mission Readiness Index (SKOPRI) — ◈ SKOPRI button (left:991080, bottom:8, zIndex:148); parallel-fetches /v1/scenario/list + /knowledge/ + /v1/ops/events; keyword-correlates each scenario against KB articles AND ops events to classify FULLY_PRIMED/KB_BACKED/OPS_LINKED/UNPRIMED; amber badge on unprimed count; filter tabs + text search; expand scenario → matched KB article cards (green) + ops event cards (blue) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isSkopriQuery+buildSkopriScript wired in JarvisBrain; "skopri/scenario knowledge ops/mission readiness/unprimed scenarios/scenario readiness index" voice trigger; jarvis:skopri-toggle event; 90-s auto-refresh */}
             <ScenarioKnowledgeOpsReadiness />
+            {/* F87 (overnight 2026-09-25): Graph Centrality × RiskSignal × IntelProfile Threat Influence Nexus (GCRTHIN) — ◈ GCRTHIN button (left:991640, bottom:8, zIndex:149); parallel-fetches /v1/graph/centrality + /entities/RiskSignal + /entities/IntelProfile; keyword-correlates each high-centrality node against risk signals AND intel profiles to classify THREAT_HUB/RISK_NEXUS/ACTOR_LINKED/NEUTRAL; red pulse + badge on threatened count; filter tabs + text search; expand node → matched risk signal cards (red) + intel actor cards (orange) with severity badge + relevance bars; ▶ ASSESS THREAT → /v1/jarvis/agent/chat + TTS; isGcrthinQuery+buildGcrthinScript wired in JarvisBrain; "gcrthin/graph centrality threat/threat hub/influence nexus/centrality threat" voice trigger; jarvis:gcrthin-toggle event; 90-s auto-refresh */}
+            <GraphCentralityThreatNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
