@@ -318,6 +318,7 @@ import InvestmentSwarmScenarioCoverage from '@/components/cinematic/InvestmentSw
 import ReportScenarioDatasetTriad from '@/components/cinematic/ReportScenarioDatasetTriad';
 import ScenarioIntelReportCoverage from '@/components/cinematic/ScenarioIntelReportCoverage';
 import TaskRiskReportCoverage from '@/components/cinematic/TaskRiskReportCoverage';
+import SwarmRiskKnowledgeReadiness from '@/components/cinematic/SwarmRiskKnowledgeReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -992,6 +993,8 @@ function App() {
             <ScenarioIntelReportCoverage />
             {/* F94 (overnight 2026-09-25): Task × RiskSignal × Report Operational Threat Coverage (TORTCOV) — ◈ TORTCOV button (left:995560, bottom:8, zIndex:156); parallel-fetches /entities/Task + /entities/RiskSignal + /v1/reports; keyword-correlates each task against risk signals AND reports to classify FULLY_COVERED/RISK_FLAGGED/REPORT_BACKED/UNMONITORED; amber badge on unmonitored count; filter tabs + search; expand task → matched risk signal cards (red) + report cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isTortcovQuery+buildTortcovScript wired in JarvisBrain; "tortcov/task risk report/operational threat coverage/unmonitored task" voice trigger; jarvis:tortcov-toggle event; 90-s auto-refresh */}
             <TaskRiskReportCoverage />
+            {/* F95 (overnight 2026-09-25): SwarmJob × RiskSignal × Knowledge Response Readiness (SRKRR) — ◈ SRKRR button (left:996120, bottom:8, zIndex:157); parallel-fetches /entities/SwarmJob + /entities/RiskSignal + /knowledge/; keyword-correlates each swarm job against risk signals AND KB articles to classify FULLY_PREPARED/RISK_AWARE/KB_BACKED/UNPREPARED; amber badge on unprepared count; filter tabs + search; expand job → matched risk signal cards (red) + KB article cards (teal) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isSrkrrQuery+buildSrkrrScript wired in JarvisBrain; "srkrr/swarm readiness/swarm knowledge risk/unprepared swarm" voice trigger; jarvis:srkrr-toggle event; 90-s auto-refresh */}
+            <SwarmRiskKnowledgeReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>

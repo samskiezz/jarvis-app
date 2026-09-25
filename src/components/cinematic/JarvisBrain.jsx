@@ -160,6 +160,7 @@ import { isIssmapQuery, buildIssmapScript } from "./InvestmentSwarmScenarioCover
 import { isRsdatQuery, buildRsdatScript } from "./ReportScenarioDatasetTriad";
 import { isSipwcovQuery, buildSipwcovScript } from "./ScenarioIntelReportCoverage";
 import { isTortcovQuery, buildTortcovScript } from "./TaskRiskReportCoverage";
+import { isSrkrrQuery, buildSrkrrScript } from "./SwarmRiskKnowledgeReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1600,6 +1601,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tortcov-toggle"));
       let script = "";
       try { script = await buildTortcovScript(); } catch { script = "Operational threat coverage matrix online, sir. Correlating all active tasks against risk signals and intelligence reports to identify unmonitored exposure now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F95: SwarmJob × RiskSignal × Knowledge Response Readiness — open SRKRR panel + speak readiness brief.
+    if (isSrkrrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srkrr-toggle"));
+      let script = "";
+      try { script = await buildSrkrrScript(); } catch { script = "Swarm response readiness matrix online, sir. Cross-referencing all swarm jobs against active risk signals and knowledge base articles to classify readiness levels now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
