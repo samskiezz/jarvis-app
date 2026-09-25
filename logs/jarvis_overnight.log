@@ -70,3 +70,4 @@
 2026-09-24T22:17:47Z F77 OpsEventContactCoverage.jsx: /v1/ops/events × /entities/Contact RESPONSE_ASSIGNED|UNASSIGNED; amber badge; 90-s poll; voice oecrc; build exit 0
 2026-09-24 F78 ContactTaskInvestigationTriple (CTINV): new component; /entities/Contact × /entities/Task × /v1/investigations; FULLY_ENGAGED/TASK_ACTIVE/INV_LINKED/AVAILABLE; wired in App.jsx + JarvisBrain.jsx; build exit 0
 [2026-09-25] F79 IORSTD — InvestigationOpsRiskDashboard.jsx created; Investigation × Ops Event × Risk Signal triple correlation; TRIPLE_ACTIVE/OPS_FLAGGED/RISK_BACKED/DORMANT classification; imported+mounted in App.jsx; isIorstdQuery+buildIorstdScript wired in JarvisBrain.jsx; build exit 0
+2026-09-25 F80 RKOGAP: Report × Knowledge × Ops Event Intelligence Gap Triad — new ReportKnowledgeOpsGap.jsx; /v1/reports × /knowledge/ × /v1/ops/events; FULLY_GROUNDED/KB_ONLY/OPS_ONLY/UNANCHORED classification; isRkogapQuery+buildRkogapScript wired in JarvisBrain.jsx; build exit 0

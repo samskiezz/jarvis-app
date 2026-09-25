@@ -145,6 +145,7 @@ import { isSrsmQuery, buildSrsmScript } from "./SwarmRiskScenarioMatrix";
 import { isOecrcQuery, buildOecrcScript } from "./OpsEventContactCoverage";
 import { isCtinvQuery, buildCtinvScript } from "./ContactTaskInvestigationTriple";
 import { isIorstdQuery, buildIorstdScript } from "./InvestigationOpsRiskDashboard";
+import { isRkogapQuery, buildRkogapScript } from "./ReportKnowledgeOpsGap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1459,6 +1460,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iorstd-toggle"));
       let script = "";
       try { script = await buildIorstdScript(); } catch { script = "Investigation Ops-Risk Dashboard online, sir. Cross-referencing investigations against live ops events and active risk signals to surface triple-active threats now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F80: Report × Knowledge × Ops Event Intelligence Gap Triad — open RKOGAP panel + speak intel grounding brief.
+    if (isRkogapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rkogap-toggle"));
+      let script = "";
+      try { script = await buildRkogapScript(); } catch { script = "Report Knowledge-Ops Gap Triad online, sir. Cross-referencing intelligence reports against knowledge articles and ops events to surface unanchored intelligence gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

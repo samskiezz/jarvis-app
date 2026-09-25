@@ -303,6 +303,7 @@ import SwarmRiskScenarioMatrix from '@/components/cinematic/SwarmRiskScenarioMat
 import OpsEventContactCoverage from '@/components/cinematic/OpsEventContactCoverage';
 import ContactTaskInvestigationTriple from '@/components/cinematic/ContactTaskInvestigationTriple';
 import InvestigationOpsRiskDashboard from '@/components/cinematic/InvestigationOpsRiskDashboard';
+import ReportKnowledgeOpsGap from '@/components/cinematic/ReportKnowledgeOpsGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -943,6 +944,9 @@ function App() {
 
             {/* F79 (overnight 2026-09-25): Investigation × Ops Event × Risk Signal Active Threat Dashboard (IORSTD) — ◈ IORSTD button (left:987720, bottom:8, zIndex:142); parallel-fetches /v1/investigations × /v1/ops/events × /entities/RiskSignal; keyword-correlates each investigation against ops events AND risk signals to classify TRIPLE_ACTIVE/OPS_FLAGGED/RISK_BACKED/DORMANT; red badge on triple-active count; filter tabs + text search; expand investigation → matched ops event cards (blue) + risk signal cards (red/severity) with relevance bars; ▶ ASSESS THREAT STATUS → /v1/jarvis/agent/chat + TTS; isIorstdQuery+buildIorstdScript wired in JarvisBrain; "iorstd/investigation threat/active investigation/live threat/ops risk investigation" voice trigger; jarvis:iorstd-toggle event; 90-s auto-refresh */}
             <InvestigationOpsRiskDashboard />
+
+            {/* F80 (overnight 2026-09-25): Report × Knowledge × Ops Event Intelligence Gap Triad (RKOGAP) — ◈ RKOGAP button (left:988280, bottom:8, zIndex:143); parallel-fetches /v1/reports + /knowledge/ + /v1/ops/events; keyword-correlates each report against KB articles AND ops events to classify FULLY_GROUNDED/KB_ONLY/OPS_ONLY/UNANCHORED; amber badge on unanchored count; filter tabs; expand report → matched KB article cards (green) + ops event cards (amber) with relevance bars; ▶ ASSESS INTEL GAPS → /v1/jarvis/agent/chat + TTS; isRkogapQuery+buildRkogapScript wired in JarvisBrain; "rkogap/report knowledge gap/intel grounding/unanchored reports/report ops gap" voice trigger; jarvis:rkogap-toggle event; 90-s auto-refresh */}
+            <ReportKnowledgeOpsGap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
