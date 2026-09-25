@@ -322,6 +322,7 @@ import SwarmRiskKnowledgeReadiness from '@/components/cinematic/SwarmRiskKnowled
 import ContactGraphInfluenceExposure from '@/components/cinematic/ContactGraphInfluenceExposure';
 import DatasetIntelSwarmNexus from '@/components/cinematic/DatasetIntelSwarmNexus';
 import ReportInvestigationContactNexus from '@/components/cinematic/ReportInvestigationContactNexus';
+import InvestmentKnowledgeOpsFirm from '@/components/cinematic/InvestmentKnowledgeOpsFirm';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1004,6 +1005,8 @@ function App() {
             <DatasetIntelSwarmNexus />
             {/* F98 (overnight 2026-09-25): Report × Investigation × Contact Insight Coverage Nexus (RICCOV) — ◈ RICCOV button (left:997800, bottom:8, zIndex:160); parallel-fetches /v1/reports + /v1/investigations + /entities/Contact; keyword-correlates each report against investigations AND contacts to classify FULLY_LINKED/INV_TRACKED/CONTACT_ASSIGNED/UNASSIGNED; amber badge on unassigned count; filter tabs + search; expand report → matched investigation cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isRiccovQuery+buildRiccovScript wired in JarvisBrain; "riccov/report investigation contact/unassigned reports/report coverage/insight coverage" voice trigger; jarvis:riccov-toggle event; 90-s auto-refresh */}
             <ReportInvestigationContactNexus />
+            {/* F99 (overnight 2026-09-25): Investment × Knowledge × Ops Event Financial Intelligence Readiness Monitor (IKOFIRM) — ◈ IKOFIRM button (left:998360, bottom:8, zIndex:161); parallel-fetches /entities/Investment + /knowledge/ + /v1/ops/events; keyword-correlates each investment against KB articles AND ops events to classify FULLY_INFORMED/OPS_TRACKED/KB_RESEARCHED/BLIND; red badge on blind count; filter tabs + search; expand investment → matched KB article cards (green) + ops event cards (blue) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isIkofirmQuery+buildIkofirmScript wired in JarvisBrain; "ikofirm/investment knowledge ops/financial intelligence readiness/blind investments" voice trigger; jarvis:ikofirm-toggle event; 90-s auto-refresh */}
+            <InvestmentKnowledgeOpsFirm />
 
             <Suspense fallback={<Loading />}>
               <Routes>

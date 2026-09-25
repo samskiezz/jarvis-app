@@ -164,6 +164,7 @@ import { isSrkrrQuery, buildSrkrrScript } from "./SwarmRiskKnowledgeReadiness";
 import { isCginfexQuery, buildCginfexScript } from "./ContactGraphInfluenceExposure";
 import { isDiaswanQuery, buildDiaswanScript } from "./DatasetIntelSwarmNexus";
 import { isRiccovQuery, buildRiccovScript } from "./ReportInvestigationContactNexus";
+import { isIkofirmQuery, buildIkofirmScript } from "./InvestmentKnowledgeOpsFirm";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1640,6 +1641,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:riccov-toggle"));
       let script = "";
       try { script = await buildRiccovScript(); } catch { script = "Report investigation contact coverage nexus RICCOV online, sir. Cross-referencing all intelligence reports against active investigations and responsible contacts to classify fully-linked, investigation-tracked, contact-assigned, and unassigned reports now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F99: Investment × Knowledge × Ops Event Financial Intelligence Readiness Monitor — open IKOFIRM panel + speak financial intelligence readiness brief.
+    if (isIkofirmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ikofirm-toggle"));
+      let script = "";
+      try { script = await buildIkofirmScript(); } catch { script = "IKOFIRM financial intelligence readiness monitor online, sir. Cross-referencing all investments against knowledge base articles and operational events to classify fully-informed, ops-tracked, KB-researched, and blind portfolio positions now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
