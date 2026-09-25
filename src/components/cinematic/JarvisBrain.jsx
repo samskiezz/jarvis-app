@@ -148,6 +148,7 @@ import { isIorstdQuery, buildIorstdScript } from "./InvestigationOpsRiskDashboar
 import { isRkogapQuery, buildRkogapScript } from "./ReportKnowledgeOpsGap";
 import { isIexrmQuery, buildIexrmScript } from "./InvestmentScenarioContactMap";
 import { isCkiriQuery, buildCkiriScript } from "./ContactKnowledgeScenarioReadiness";
+import { isIasadQuery, buildIasadScript } from "./IntelActorDeploymentMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1489,6 +1490,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ckiri-toggle"));
       let script = "";
       try { script = await buildCkiriScript(); } catch { script = "Contact Intelligence Readiness Index online, sir. Cross-referencing all contacts against the knowledge base and scenario library to identify personnel with insufficient intelligence coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F83: IntelProfile × SwarmJob × Scenario Actor Deployment Status — open IASAD panel + speak countermeasure coverage brief.
+    if (isIasadQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iasad-toggle"));
+      let script = "";
+      try { script = await buildIasadScript(); } catch { script = "Intel Actor Deployment Matrix online, sir. Cross-referencing all threat actor profiles against active swarm operations and scenario playbooks to identify unmitigated actors with no countermeasure coverage now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

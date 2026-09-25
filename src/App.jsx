@@ -306,6 +306,7 @@ import InvestigationOpsRiskDashboard from '@/components/cinematic/InvestigationO
 import ReportKnowledgeOpsGap from '@/components/cinematic/ReportKnowledgeOpsGap';
 import InvestmentScenarioContactMap from '@/components/cinematic/InvestmentScenarioContactMap';
 import ContactKnowledgeScenarioReadiness from '@/components/cinematic/ContactKnowledgeScenarioReadiness';
+import IntelActorDeploymentMatrix from '@/components/cinematic/IntelActorDeploymentMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -955,6 +956,9 @@ function App() {
 
             {/* F82 (overnight 2026-09-25): Contact × Knowledge × Scenario Intelligence Readiness Index (CKIRI) — ◈ CKIRI button (left:989400, bottom:8, zIndex:145); parallel-fetches /entities/Contact + /knowledge/ + /v1/scenario/list; keyword-correlates each contact against KB articles AND scenarios to classify FULLY_BRIEFED/KB_INFORMED/SCENARIO_PLACED/UNINFORMED; amber badge on uninformed count; filter tabs ALL/FULLY_BRIEFED/KB_INFORMED/SCENARIO_PLACED/UNINFORMED + text search; expand contact → matched KB article cards (green) + scenario cards (purple) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isCkiriQuery+buildCkiriScript wired in JarvisBrain; "ckiri/contact intelligence/contact briefing/contact readiness/personnel readiness" voice trigger; jarvis:ckiri-toggle event; 90-s auto-refresh */}
             <ContactKnowledgeScenarioReadiness />
+
+            {/* F83 (overnight 2026-09-25): IntelProfile × SwarmJob × Scenario Actor Deployment Status (IASAD) — ◈ IASAD button (left:989960, bottom:8, zIndex:146); parallel-fetches /entities/IntelProfile + /entities/SwarmJob + /v1/scenario/list; keyword-correlates each threat actor profile against swarm operations AND scenario playbooks to classify FULLY_COUNTERED/SWARM_TARGETED/SCENARIO_PLANNED/UNMITIGATED; red badge + red pulse on unmitigated count; filter tabs ALL/FULLY_COUNTERED/SWARM_TARGETED/SCENARIO_PLANNED/UNMITIGATED + text search; expand actor → matched swarm job cards (cyan) + scenario cards (orange) with relevance bars; ▶ ASSESS DEPLOYMENT → /v1/jarvis/agent/chat 2-sentence countermeasure gap brief + TTS; isIasadQuery+buildIasadScript wired in JarvisBrain; "iasad/intel actor deployment/threat actor swarm/unmitigated actor/actor counter/threat countermeasure" voice trigger; jarvis:iasad-toggle event; 90-s auto-refresh */}
+            <IntelActorDeploymentMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
