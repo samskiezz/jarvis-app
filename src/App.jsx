@@ -315,6 +315,7 @@ import LiveIntelGroundTruthPulse from '@/components/cinematic/LiveIntelGroundTru
 import TaskIntelOpsResponse from '@/components/cinematic/TaskIntelOpsResponse';
 import DatasetTaskKnowledgeHealth from '@/components/cinematic/DatasetTaskKnowledgeHealth';
 import InvestmentSwarmScenarioCoverage from '@/components/cinematic/InvestmentSwarmScenarioCoverage';
+import ReportScenarioDatasetTriad from '@/components/cinematic/ReportScenarioDatasetTriad';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -983,6 +984,8 @@ function App() {
             <DatasetTaskKnowledgeHealth />
             {/* F91 (overnight 2026-09-25): Investment × Swarm × Scenario Coverage (ISSMAP) — ◈ ISSMAP button (left:993880, bottom:8, zIndex:153); parallel-fetches /entities/Investment + /entities/SwarmJob + /v1/scenario/list; keyword-correlates each investment against swarm jobs AND scenarios to classify FULLY_DEPLOYED/SWARM_ACTIVE/SCENARIO_PLANNED/UNPROTECTED; red pulse badge on unprotected count; filter tabs ALL/FULLY_DEPLOYED/SWARM_ACTIVE/SCENARIO_PLANNED/UNPROTECTED + text search; expand investment → matched swarm job cards (cyan) + scenario cards (purple) with relevance bars; isIssmapQuery+buildIssmapScript wired in JarvisBrain; "issmap/investment swarm/portfolio deployment/asset protection/unprotected investments" voice trigger; jarvis:issmap-toggle event; 90-s auto-refresh */}
             <InvestmentSwarmScenarioCoverage />
+            {/* F92 (overnight 2026-09-25): Report × Scenario × Dataset Coverage Triad (RSDAT) — ◈ RSDAT button (left:994440, bottom:8, zIndex:154); parallel-fetches /v1/reports + /v1/scenario/list + /v1/datasets; keyword-correlates each report against scenarios AND datasets to classify FULLY_GROUNDED/SCENARIO_BACKED/DATASET_LINKED/UNANCHORED; amber badge on unanchored count; filter tabs + text search; expand report → matched scenario cards (cyan) + dataset cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRsdatQuery+buildRsdatScript wired in JarvisBrain; "rsdat/report scenario dataset/unanchored reports/report coverage triad" voice trigger; jarvis:rsdat-toggle event; 90-s auto-refresh */}
+            <ReportScenarioDatasetTriad />
 
             <Suspense fallback={<Loading />}>
               <Routes>

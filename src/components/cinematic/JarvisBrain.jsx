@@ -157,6 +157,7 @@ import { isLkrpulseQuery, buildLkrpulseScript } from "./LiveIntelGroundTruthPuls
 import { isTiorcovQuery, buildTiorcovScript } from "./TaskIntelOpsResponse";
 import { isDtkhealthQuery, buildDtkhealthScript } from "./DatasetTaskKnowledgeHealth";
 import { isIssmapQuery, buildIssmapScript } from "./InvestmentSwarmScenarioCoverage";
+import { isRsdatQuery, buildRsdatScript } from "./ReportScenarioDatasetTriad";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1579,6 +1580,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:issmap-toggle"));
       let script = "";
       try { script = await buildIssmapScript(); } catch { script = "Investment swarm and scenario coverage map online, sir. Cross-referencing all investments against active swarm operations and contingency scenarios to classify fully-deployed, swarm-active, scenario-planned, and unprotected assets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F92: Report × Scenario × Dataset Coverage Triad — open RSDAT panel + speak coverage brief.
+    if (isRsdatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsdat-toggle"));
+      let script = "";
+      try { script = await buildRsdatScript(); } catch { script = "Report scenario dataset coverage triad online, sir. Cross-referencing all intelligence reports against scenario playbooks and data sources to classify fully-grounded, scenario-backed, dataset-linked, and unanchored reports now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
