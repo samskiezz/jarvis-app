@@ -151,6 +151,7 @@ import { isCkiriQuery, buildCkiriScript } from "./ContactKnowledgeScenarioReadin
 import { isIasadQuery, buildIasadScript } from "./IntelActorDeploymentMatrix";
 import { isCifinexQuery, buildCifinexScript } from "./ContactInvestmentRiskNexus";
 import { isSjkbrepQuery, buildSjkbrepScript } from "./SwarmKnowledgeReportNexus";
+import { isSkopriQuery, buildSkopriScript } from "./ScenarioKnowledgeOpsReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1519,6 +1520,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sjkbrep-toggle"));
       let script = "";
       try { script = await buildSjkbrepScript(); } catch { script = "Swarm Documentation Nexus online, sir. Cross-referencing all swarm jobs against the knowledge base and report library to identify undocumented operations with no documentation coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F86: Scenario × Knowledge × Ops Event Mission Readiness Index — open SKOPRI panel + speak mission readiness brief.
+    if (isSkopriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skopri-toggle"));
+      let script = "";
+      try { script = await buildSkopriScript(); } catch { script = "Scenario Mission Readiness Index online, sir. Cross-referencing all scenarios against the knowledge base and operational events to identify unprimed missions with no context coverage now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -309,6 +309,7 @@ import ContactKnowledgeScenarioReadiness from '@/components/cinematic/ContactKno
 import IntelActorDeploymentMatrix from '@/components/cinematic/IntelActorDeploymentMatrix';
 import ContactInvestmentRiskNexus from '@/components/cinematic/ContactInvestmentRiskNexus';
 import SwarmKnowledgeReportNexus from '@/components/cinematic/SwarmKnowledgeReportNexus';
+import ScenarioKnowledgeOpsReadiness from '@/components/cinematic/ScenarioKnowledgeOpsReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -965,6 +966,8 @@ function App() {
             <ContactInvestmentRiskNexus />
             {/* F85 (overnight 2026-09-25): Swarm Job × Knowledge Base × Report Documentation Nexus (SJKBREP) — ◈ SJKBREP button (left:990520, bottom:8, zIndex:147); parallel-fetches /entities/SwarmJob + /knowledge/ + /v1/reports; keyword-correlates each swarm job against KB articles AND reports to classify FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED; amber badge on undocumented count; filter tabs ALL/FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED + text search; expand job → matched KB article cards (cyan) + report cards (purple) with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSjkbrepQuery+buildSjkbrepScript wired in JarvisBrain; "sjkbrep/swarm job knowledge/swarm documentation/undocumented swarm/swarm report coverage/job documentation" voice trigger; jarvis:sjkbrep-toggle event; 90-s auto-refresh */}
             <SwarmKnowledgeReportNexus />
+            {/* F86 (overnight 2026-09-25): Scenario × Knowledge × Ops Event Mission Readiness Index (SKOPRI) — ◈ SKOPRI button (left:991080, bottom:8, zIndex:148); parallel-fetches /v1/scenario/list + /knowledge/ + /v1/ops/events; keyword-correlates each scenario against KB articles AND ops events to classify FULLY_PRIMED/KB_BACKED/OPS_LINKED/UNPRIMED; amber badge on unprimed count; filter tabs + text search; expand scenario → matched KB article cards (green) + ops event cards (blue) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isSkopriQuery+buildSkopriScript wired in JarvisBrain; "skopri/scenario knowledge ops/mission readiness/unprimed scenarios/scenario readiness index" voice trigger; jarvis:skopri-toggle event; 90-s auto-refresh */}
+            <ScenarioKnowledgeOpsReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>
