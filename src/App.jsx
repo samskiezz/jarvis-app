@@ -342,6 +342,7 @@ import { RiskDataOpsTriad } from '@/components/cinematic/RiskDataOpsTriad';
 import { InvestigationDatasetKnowledgePulse } from '@/components/cinematic/InvestigationDatasetKnowledgePulse';
 import { ContactDatasetReportMatrix } from '@/components/cinematic/ContactDatasetReportMatrix';
 import { InvestmentGraphReportNexus } from '@/components/cinematic/InvestmentGraphReportNexus';
+import { SwarmIntelReportCoverage } from '@/components/cinematic/SwarmIntelReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1078,6 +1079,9 @@ function App() {
 
             {/* F118 (overnight 2026-09-26): Investment × Graph Centrality × Report Portfolio Intelligence Nexus (IGRNEX) — ◈ IGRNEX button (left:1009000, bottom:8, zIndex:180); parallel-fetches /entities/Investment + /v1/graph/centrality + /v1/reports; keyword-correlates each investment against high-centrality graph nodes AND reports to classify FULLY_TRACKED/GRAPH_LINKED/REPORT_BACKED/BLIND; amber badge on blind count; stat tiles INVESTMENTS/GRAPH NODES/REPORTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_TRACKED/GRAPH_LINKED/REPORT_BACKED/BLIND + text search; expand investment → matched graph node cards (cyan, centrality score) + report cards (purple, type badge) with relevance bars; ▶ ASSESS NEXUS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIgrnexQuery+buildIgrnexScript wired in JarvisBrain; "igrnex/investment graph/investment report/portfolio nexus/investment intelligence network/graph investment report" voice trigger; jarvis:igrnex-toggle event; 90-s auto-refresh */}
             <InvestmentGraphReportNexus />
+
+            {/* F119 (overnight 2026-09-26): SwarmJob × IntelProfile × Report Counter-Intelligence Coverage (SJIRCIC) — ◈ SJIRCIC button (left:1009560, bottom:8, zIndex:181); parallel-fetches /entities/SwarmJob + /entities/IntelProfile + /v1/reports; keyword-correlates each swarm job against intel actor profiles AND reports to classify FULLY_COVERED/INTEL_MATCHED/REPORT_BACKED/UNTRACKED; amber badge on untracked count; stat tiles SWARM JOBS/INTEL PROFILES/REPORTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_COVERED/INTEL_MATCHED/REPORT_BACKED/UNTRACKED + text search; expand job → matched intel profile cards (orange) + report cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence counter-intel brief + TTS; isSjircicQuery+buildSjircicScript wired in JarvisBrain; "sjircic/swarm intel report/counter intelligence coverage/swarm counter intel/swarm actor report" voice trigger; jarvis:sjircic-toggle event; 90-s auto-refresh */}
+            <SwarmIntelReportCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

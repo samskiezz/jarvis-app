@@ -184,6 +184,7 @@ import { isRdoetriQuery, buildRdoetriScript } from "./RiskDataOpsTriad";
 import { isIdkpulsQuery, buildIdkpulsScript } from "./InvestigationDatasetKnowledgePulse";
 import { isCdirmatQuery, buildCdirmatScript } from "./ContactDatasetReportMatrix";
 import { isIgrnexQuery, buildIgrnexScript } from "./InvestmentGraphReportNexus";
+import { isSjircicQuery, buildSjircicScript } from "./SwarmIntelReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1795,6 +1796,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igrnex-toggle"));
       let script = "";
       try { script = await buildIgrnexScript(); } catch { script = "Investment Graph Report Nexus IGRNEX online, sir. Cross-referencing all portfolio investments against high-centrality graph nodes and intelligence reports to classify fully-tracked, graph-linked, report-backed, and blind investments now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F119: SwarmJob × IntelProfile × Report Counter-Intelligence Coverage — open SJIRCIC panel + speak counter-intel coverage brief.
+    if (isSjircicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjircic-toggle"));
+      let script = "";
+      try { script = await buildSjircicScript(); } catch { script = "Swarm Counter-Intelligence Coverage SJIRCIC online, sir. Cross-referencing all swarm jobs against intel actor profiles and intelligence reports to classify fully-covered, intel-matched, report-backed, and untracked jobs now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
