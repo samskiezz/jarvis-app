@@ -337,6 +337,7 @@ import ScenarioRiskContactResponse from '@/components/cinematic/ScenarioRiskCont
 import InvestmentOpsKnowledgePulse from '@/components/cinematic/InvestmentOpsKnowledgePulse';
 import OpsEventIntelContactTracker from '@/components/cinematic/OpsEventIntelContactTracker';
 import GraphAnnotationKnowledgeMap from '@/components/cinematic/GraphAnnotationKnowledgeMap';
+import SystemWideAlertEscalator from '@/components/cinematic/SystemWideAlertEscalator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1058,6 +1059,9 @@ function App() {
 
             {/* F113 (overnight 2026-09-26): Graph Annotation × Knowledge × IntelProfile Contextual Intelligence Map (GAKCIMAP) — ◈ GAKCIMAP button (left:1006200, bottom:8, zIndex:175); parallel-fetches /v1/graph/annotations + /knowledge/ + /entities/IntelProfile; keyword-correlates each annotation against KB articles AND intel actor profiles to classify FULLY_CONTEXTUALIZED/KB_BACKED/ACTOR_TAGGED/UNCONTEXTUALIZED; amber badge on uncontextualized count; filter tabs ALL/FULLY_CONTEXTUALIZED/KB_BACKED/ACTOR_TAGGED/UNCONTEXTUALIZED + text search; expand annotation → matched KB article cards (teal) + intel profile cards (orange) with relevance bars; ▶ ASSESS CONTEXT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGakcimapQuery+buildGakcimapScript wired in JarvisBrain; "gakcimap/graph annotation/annotation context/annotation knowledge/actor annotation/uncontextualized annotation" voice trigger; jarvis:gakcimap-toggle event; 90-s auto-refresh */}
             <GraphAnnotationKnowledgeMap />
+
+            {/* F114 (overnight 2026-09-26): System-Wide Alert Escalation Queue (ALESCQ) — ◈ ALESCQ button (left:1006760, bottom:8, zIndex:176); parallel-fetches /v1/jarvis/system/status + /entities/RiskSignal + /v1/ops/events + /v1/investigations; merges into severity-sorted escalation queue CRITICAL/HIGH/MEDIUM/INFO; source badges SYSTEM/RISK/OPS/CASE; per-row ▶ ESC → /v1/jarvis/agent/chat triage + TTS; ▶ ASSESS ALL → 2-sentence brief + TTS; red pulse badge on critical+high count; filter tabs ALL/SYSTEM/RISK/OPS/CASE; 60-s auto-refresh; isAlescqQuery+buildAlescqScript wired in JarvisBrain; "alescq/escalation queue/alert queue/escalate/all alerts/critical escalation" voice trigger */}
+            <SystemWideAlertEscalator />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -179,6 +179,7 @@ import { isScrrpQuery, buildScrrpScript } from "./ScenarioRiskContactResponse";
 import { isIoefipQuery, buildIoefipScript } from "./InvestmentOpsKnowledgePulse";
 import { isOictrcQuery, buildOictrcScript } from "./OpsEventIntelContactTracker";
 import { isGakcimapQuery, buildGakcimapScript } from "./GraphAnnotationKnowledgeMap";
+import { isAlescqQuery, buildAlescqScript } from "./SystemWideAlertEscalator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1754,6 +1755,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:oictrc-toggle"));
       let script = "";
       try { script = await buildOictrcScript(); } catch { script = "Threat Response Tracker OICTRC online, sir. Cross-referencing all operational events against intel actor profiles and assigned contacts to classify response-coordinated, actor-tracked, contact-notified, and unhandled events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F114: System-Wide Alert Escalation Queue — open ALESCQ panel + speak full escalation brief.
+    if (isAlescqQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:alescq-toggle"));
+      let script = "";
+      try { script = await buildAlescqScript(); } catch { script = "Alert Escalation Queue ALESCQ online, sir. Aggregating JARVIS system health, active risk signals, operations events, and open investigations into a unified severity-sorted escalation queue now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
