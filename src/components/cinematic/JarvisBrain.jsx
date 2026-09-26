@@ -177,6 +177,7 @@ import { isKcoppulsQuery, buildKcoppulsScript } from "./KnowledgeContactOpsPulse
 import { isIdktrepQuery, buildIdktrepScript } from "./IntelProfileDatasetKnowledgeCoverage";
 import { isScrrpQuery, buildScrrpScript } from "./ScenarioRiskContactResponse";
 import { isIoefipQuery, buildIoefipScript } from "./InvestmentOpsKnowledgePulse";
+import { isOictrcQuery, buildOictrcScript } from "./OpsEventIntelContactTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1743,6 +1744,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ioefip-toggle"));
       let script = "";
       try { script = await buildIoefipScript(); } catch { script = "Financial Intelligence Pulse IOEFIP online, sir. Cross-referencing the investment portfolio against operational events and knowledge-base articles to classify fully-monitored, ops-tracked, KB-researched, and unmonitored assets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F112: Ops Event × IntelProfile × Contact Threat Response Tracker — open OICTRC panel + speak threat response brief.
+    if (isOictrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oictrc-toggle"));
+      let script = "";
+      try { script = await buildOictrcScript(); } catch { script = "Threat Response Tracker OICTRC online, sir. Cross-referencing all operational events against intel actor profiles and assigned contacts to classify response-coordinated, actor-tracked, contact-notified, and unhandled events now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

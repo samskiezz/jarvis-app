@@ -335,6 +335,7 @@ import KnowledgeContactOpsPulse from '@/components/cinematic/KnowledgeContactOps
 import IntelProfileDatasetKnowledgeCoverage from '@/components/cinematic/IntelProfileDatasetKnowledgeCoverage';
 import ScenarioRiskContactResponse from '@/components/cinematic/ScenarioRiskContactResponse';
 import InvestmentOpsKnowledgePulse from '@/components/cinematic/InvestmentOpsKnowledgePulse';
+import OpsEventIntelContactTracker from '@/components/cinematic/OpsEventIntelContactTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1050,6 +1051,9 @@ function App() {
 
             {/* F111 (overnight 2026-09-26): Investment × Ops Event × Knowledge Financial Intelligence Pulse (IOEFIP) — ◈ IOEFIP button (left:1005080, bottom:8, zIndex:173); parallel-fetches /entities/Investment + /v1/ops/events + /knowledge/; keyword-correlates each investment against ops events AND KB articles to classify FULLY_MONITORED/OPS_TRACKED/KB_RESEARCHED/UNMONITORED; amber badge on unmonitored count; stat tiles INVESTMENTS/OPS EVENTS/KB ARTICLES + all four class counts + COVERAGE%; filter tabs ALL/FULLY_MONITORED/OPS_TRACKED/KB_RESEARCHED/UNMONITORED + text search; expand investment → matched ops event cards (blue) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIoefipQuery+buildIoefipScript wired in JarvisBrain; "ioefip/investment ops knowledge/financial intel pulse/unmonitored investments/financial intelligence" voice trigger; jarvis:ioefip-toggle event; 90-s auto-refresh */}
             <InvestmentOpsKnowledgePulse />
+
+            {/* F112 (overnight 2026-09-26): Ops Event × IntelProfile × Contact Threat Response Tracker (OICTRC) — ◈ OICTRC button (left:1005640, bottom:8, zIndex:174); parallel-fetches /v1/ops/events + /entities/IntelProfile + /entities/Contact; keyword-correlates each ops event against intel actor profiles AND contacts to classify RESPONSE_COORDINATED/ACTOR_TRACKED/CONTACT_NOTIFIED/UNHANDLED; red pulse badge on unhandled count; stat tiles OPS EVENTS/INTEL PROFILES/CONTACTS + all four class counts + RESPONSE%; filter tabs ALL/RESPONSE_COORDINATED/ACTOR_TRACKED/CONTACT_NOTIFIED/UNHANDLED + text search; expand event → matched intel profile cards (orange) + contact cards (teal) with relevance bars; ▶ ASSESS RESPONSE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOictrcQuery+buildOictrcScript wired in JarvisBrain; "oictrc/ops intel contact/threat response tracker/unhandled events/event response tracker" voice trigger; jarvis:oictrc-toggle event; 90-s auto-refresh */}
+            <OpsEventIntelContactTracker />
 
             <Suspense fallback={<Loading />}>
               <Routes>
