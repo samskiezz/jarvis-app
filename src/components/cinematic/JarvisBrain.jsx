@@ -175,6 +175,7 @@ import { isTgkpulseQuery, buildTgkpulseScript } from "./TaskGraphKnowledgePulse"
 import { isOdcsrcQuery, buildOdcsrcScript } from "./OpsDatasetContactCoverage";
 import { isKcoppulsQuery, buildKcoppulsScript } from "./KnowledgeContactOpsPulse";
 import { isIdktrepQuery, buildIdktrepScript } from "./IntelProfileDatasetKnowledgeCoverage";
+import { isScrrpQuery, buildScrrpScript } from "./ScenarioRiskContactResponse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1723,6 +1724,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:idktrep-toggle"));
       let script = "";
       try { script = await buildIdktrepScript(); } catch { script = "Threat Intelligence Repository Coverage IDKTREP online, sir. Cross-referencing all intel actor profiles against available datasets and knowledge base articles to classify fully-documented, data-linked, KB-noted, and undocumented actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F110: Scenario × RiskSignal × Contact Rapid Response Plan — open SCRRP panel + speak response readiness brief.
+    if (isScrrpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scrrp-toggle"));
+      let script = "";
+      try { script = await buildScrrpScript(); } catch { script = "Rapid Response Plan Coverage SCRRP online, sir. Cross-referencing all active risk signals against scenario playbooks and assigned contacts to classify response-ready, scenario-only, contact-only, and fully-exposed signals now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

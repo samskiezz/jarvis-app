@@ -333,6 +333,7 @@ import TaskGraphKnowledgePulse from '@/components/cinematic/TaskGraphKnowledgePu
 import OpsDatasetContactCoverage from '@/components/cinematic/OpsDatasetContactCoverage';
 import KnowledgeContactOpsPulse from '@/components/cinematic/KnowledgeContactOpsPulse';
 import IntelProfileDatasetKnowledgeCoverage from '@/components/cinematic/IntelProfileDatasetKnowledgeCoverage';
+import ScenarioRiskContactResponse from '@/components/cinematic/ScenarioRiskContactResponse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1042,6 +1043,9 @@ function App() {
 
             {/* F109 (overnight 2026-09-26): IntelProfile × Dataset × Knowledge Threat Intelligence Repository Coverage (IDKTREP) — ◈ IDKTREP button (left:1003960, bottom:8, zIndex:171); parallel-fetches /entities/IntelProfile + /v1/datasets + /knowledge/; keyword-correlates each threat actor profile against datasets AND KB articles to classify FULLY_DOCUMENTED/DATA_LINKED/KB_NOTED/UNDOCUMENTED; amber badge on undocumented count; stat tiles + coverage bar; filter tabs ALL/FULLY_DOCUMENTED/DATA_LINKED/KB_NOTED/UNDOCUMENTED + search; expand profile → matched dataset cards (purple) + KB article cards (teal) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence intel-repository brief + TTS; isIdktrepQuery+buildIdktrepScript wired in JarvisBrain; "idktrep/intel profile dataset/threat actor documentation/undocumented actors/intel repository/actor knowledge coverage" voice trigger; jarvis:idktrep-toggle event; 90-s auto-refresh */}
             <IntelProfileDatasetKnowledgeCoverage />
+
+            {/* F110 (overnight 2026-09-26): Scenario × RiskSignal × Contact Rapid Response Plan (SCRRP) — ◈ SCRRP button (left:1004520, bottom:8, zIndex:172); parallel-fetches /v1/scenario/list + /entities/RiskSignal + /entities/Contact; keyword-correlates each risk signal against scenario playbooks AND contacts to classify RESPONSE_READY/SCENARIO_ONLY/CONTACT_ONLY/EXPOSED; red pulse badge on exposed count; stat tiles RISK SIGNALS/SCENARIOS/CONTACTS + all four class counts + READINESS%; filter tabs ALL/RESPONSE_READY/SCENARIO_ONLY/CONTACT_ONLY/EXPOSED + text search; expand signal → matched scenario cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS RESPONSE PLAN → /v1/jarvis/agent/chat 2-sentence brief + TTS; isScrrpQuery+buildScrrpScript wired in JarvisBrain; "scrrp/scenario risk contact/rapid response plan/response ready/exposed risks/risk response coverage" voice trigger; jarvis:scrrp-toggle event; 90-s auto-refresh */}
+            <ScenarioRiskContactResponse />
 
             <Suspense fallback={<Loading />}>
               <Routes>
