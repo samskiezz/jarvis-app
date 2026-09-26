@@ -328,6 +328,7 @@ import GraphCommunityNetworkThreatIndex from '@/components/cinematic/GraphCommun
 import KnowledgeThreatAwarenessCoverage from '@/components/cinematic/KnowledgeThreatAwarenessCoverage';
 import GraphNodeOperationalMesh from '@/components/cinematic/GraphNodeOperationalMesh';
 import IntelActorResponseCoverage from '@/components/cinematic/IntelActorResponseCoverage';
+import ScenarioSwarmContactTriangle from '@/components/cinematic/ScenarioSwarmContactTriangle';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1023,6 +1024,9 @@ function App() {
 
             {/* F104 (overnight 2026-09-26): IntelProfile × Contact × Task Actor Response Coverage (ICTARC) — ◈ ICTARC button (left:1001160, bottom:8, zIndex:166); parallel-fetches /entities/IntelProfile + /entities/Contact + /entities/Task; keyword-correlates each threat actor profile against contacts AND tasks to classify FULLY_RESPONDED/CONTACT_ENGAGED/TASK_ACTIVE/UNRESPONDED; red pulse badge on unresponded count; stat tiles ACTORS/CONTACTS/TASKS + all four class counts + RESPONSE%; filter tabs ALL/FULLY_RESPONDED/CONTACT_ENGAGED/TASK_ACTIVE/UNRESPONDED + text search; expand actor → matched contact cards (orange) + task cards (teal) with relevance bars; ▶ ASSESS RESPONSE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIctarcQuery+buildIctarcScript wired in JarvisBrain; "ictarc/actor response/intel response/threat actor contact/unresponded actors/actor coverage/threat response coverage" voice trigger; jarvis:ictarc-toggle event; 90-s auto-refresh */}
             <IntelActorResponseCoverage />
+
+            {/* F105 (overnight 2026-09-26): Scenario × SwarmJob × Contact Execution Triangle (SSCEXE) — ◈ SSCEXE button (left:1001720, bottom:8, zIndex:167); parallel-fetches /v1/scenario/list + /entities/SwarmJob + /entities/Contact; keyword-correlates each scenario against swarm jobs AND contacts to classify FULLY_EXECUTABLE/SWARM_DEPLOYED/CONTACT_READY/INCOMPLETE; amber badge on incomplete count; stat tiles SCENARIOS/SWARM JOBS/CONTACTS + all four class counts + EXEC%; filter tabs ALL/FULLY_EXECUTABLE/SWARM_DEPLOYED/CONTACT_READY/INCOMPLETE + text search; expand scenario → matched swarm job cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS EXECUTION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSscexeQuery+buildSscexeScript wired in JarvisBrain; "sscexe/scenario execution/swarm contact/incomplete scenario/execution triangle" voice trigger; jarvis:sscexe-toggle event; 90-s auto-refresh */}
+            <ScenarioSwarmContactTriangle />
 
             <Suspense fallback={<Loading />}>
               <Routes>
