@@ -341,6 +341,7 @@ import SystemWideAlertEscalator from '@/components/cinematic/SystemWideAlertEsca
 import { RiskDataOpsTriad } from '@/components/cinematic/RiskDataOpsTriad';
 import { InvestigationDatasetKnowledgePulse } from '@/components/cinematic/InvestigationDatasetKnowledgePulse';
 import { ContactDatasetReportMatrix } from '@/components/cinematic/ContactDatasetReportMatrix';
+import { InvestmentGraphReportNexus } from '@/components/cinematic/InvestmentGraphReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1074,6 +1075,9 @@ function App() {
 
             {/* F117 (overnight 2026-09-26): Contact × Dataset × Report Intelligence Coverage Matrix (CDIRMAT) — ◈ CDIRMAT button (left:1008440, bottom:8, zIndex:179); parallel-fetches /entities/Contact + /v1/datasets + /v1/reports; keyword-correlates each contact against datasets AND reports to classify FULLY_DOCUMENTED/DATA_LINKED/REPORT_BACKED/UNDOCUMENTED; amber badge on undocumented count; stat tiles CONTACTS/DATASETS/REPORTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_DOCUMENTED/DATA_LINKED/REPORT_BACKED/UNDOCUMENTED + text search; expand contact → matched dataset cards (purple) + report cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCdirmatQuery+buildCdirmatScript wired in JarvisBrain; "cdirmat/contact data report/contact documentation/undocumented contacts/contact coverage matrix" voice trigger; jarvis:cdirmat-toggle event; 90-s auto-refresh */}
             <ContactDatasetReportMatrix />
+
+            {/* F118 (overnight 2026-09-26): Investment × Graph Centrality × Report Portfolio Intelligence Nexus (IGRNEX) — ◈ IGRNEX button (left:1009000, bottom:8, zIndex:180); parallel-fetches /entities/Investment + /v1/graph/centrality + /v1/reports; keyword-correlates each investment against high-centrality graph nodes AND reports to classify FULLY_TRACKED/GRAPH_LINKED/REPORT_BACKED/BLIND; amber badge on blind count; stat tiles INVESTMENTS/GRAPH NODES/REPORTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_TRACKED/GRAPH_LINKED/REPORT_BACKED/BLIND + text search; expand investment → matched graph node cards (cyan, centrality score) + report cards (purple, type badge) with relevance bars; ▶ ASSESS NEXUS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIgrnexQuery+buildIgrnexScript wired in JarvisBrain; "igrnex/investment graph/investment report/portfolio nexus/investment intelligence network/graph investment report" voice trigger; jarvis:igrnex-toggle event; 90-s auto-refresh */}
+            <InvestmentGraphReportNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>

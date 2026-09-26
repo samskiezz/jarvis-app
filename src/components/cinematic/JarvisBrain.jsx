@@ -183,6 +183,7 @@ import { isAlescqQuery, buildAlescqScript } from "./SystemWideAlertEscalator";
 import { isRdoetriQuery, buildRdoetriScript } from "./RiskDataOpsTriad";
 import { isIdkpulsQuery, buildIdkpulsScript } from "./InvestigationDatasetKnowledgePulse";
 import { isCdirmatQuery, buildCdirmatScript } from "./ContactDatasetReportMatrix";
+import { isIgrnexQuery, buildIgrnexScript } from "./InvestmentGraphReportNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1785,6 +1786,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cdirmat-toggle"));
       let script = "";
       try { script = await buildCdirmatScript(); } catch { script = "Contact Dataset Report Intelligence Coverage Matrix CDIRMAT online, sir. Cross-referencing all known contacts against available datasets and intelligence reports to classify fully-documented, data-linked, report-backed, and undocumented contacts now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F118: Investment × Graph Centrality × Report Portfolio Intelligence Nexus — open IGRNEX panel + speak portfolio intel brief.
+    if (isIgrnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:igrnex-toggle"));
+      let script = "";
+      try { script = await buildIgrnexScript(); } catch { script = "Investment Graph Report Nexus IGRNEX online, sir. Cross-referencing all portfolio investments against high-centrality graph nodes and intelligence reports to classify fully-tracked, graph-linked, report-backed, and blind investments now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
