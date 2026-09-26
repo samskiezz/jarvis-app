@@ -334,6 +334,7 @@ import OpsDatasetContactCoverage from '@/components/cinematic/OpsDatasetContactC
 import KnowledgeContactOpsPulse from '@/components/cinematic/KnowledgeContactOpsPulse';
 import IntelProfileDatasetKnowledgeCoverage from '@/components/cinematic/IntelProfileDatasetKnowledgeCoverage';
 import ScenarioRiskContactResponse from '@/components/cinematic/ScenarioRiskContactResponse';
+import InvestmentOpsKnowledgePulse from '@/components/cinematic/InvestmentOpsKnowledgePulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1046,6 +1047,9 @@ function App() {
 
             {/* F110 (overnight 2026-09-26): Scenario × RiskSignal × Contact Rapid Response Plan (SCRRP) — ◈ SCRRP button (left:1004520, bottom:8, zIndex:172); parallel-fetches /v1/scenario/list + /entities/RiskSignal + /entities/Contact; keyword-correlates each risk signal against scenario playbooks AND contacts to classify RESPONSE_READY/SCENARIO_ONLY/CONTACT_ONLY/EXPOSED; red pulse badge on exposed count; stat tiles RISK SIGNALS/SCENARIOS/CONTACTS + all four class counts + READINESS%; filter tabs ALL/RESPONSE_READY/SCENARIO_ONLY/CONTACT_ONLY/EXPOSED + text search; expand signal → matched scenario cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS RESPONSE PLAN → /v1/jarvis/agent/chat 2-sentence brief + TTS; isScrrpQuery+buildScrrpScript wired in JarvisBrain; "scrrp/scenario risk contact/rapid response plan/response ready/exposed risks/risk response coverage" voice trigger; jarvis:scrrp-toggle event; 90-s auto-refresh */}
             <ScenarioRiskContactResponse />
+
+            {/* F111 (overnight 2026-09-26): Investment × Ops Event × Knowledge Financial Intelligence Pulse (IOEFIP) — ◈ IOEFIP button (left:1005080, bottom:8, zIndex:173); parallel-fetches /entities/Investment + /v1/ops/events + /knowledge/; keyword-correlates each investment against ops events AND KB articles to classify FULLY_MONITORED/OPS_TRACKED/KB_RESEARCHED/UNMONITORED; amber badge on unmonitored count; stat tiles INVESTMENTS/OPS EVENTS/KB ARTICLES + all four class counts + COVERAGE%; filter tabs ALL/FULLY_MONITORED/OPS_TRACKED/KB_RESEARCHED/UNMONITORED + text search; expand investment → matched ops event cards (blue) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIoefipQuery+buildIoefipScript wired in JarvisBrain; "ioefip/investment ops knowledge/financial intel pulse/unmonitored investments/financial intelligence" voice trigger; jarvis:ioefip-toggle event; 90-s auto-refresh */}
+            <InvestmentOpsKnowledgePulse />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -176,6 +176,7 @@ import { isOdcsrcQuery, buildOdcsrcScript } from "./OpsDatasetContactCoverage";
 import { isKcoppulsQuery, buildKcoppulsScript } from "./KnowledgeContactOpsPulse";
 import { isIdktrepQuery, buildIdktrepScript } from "./IntelProfileDatasetKnowledgeCoverage";
 import { isScrrpQuery, buildScrrpScript } from "./ScenarioRiskContactResponse";
+import { isIoefipQuery, buildIoefipScript } from "./InvestmentOpsKnowledgePulse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1733,6 +1734,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scrrp-toggle"));
       let script = "";
       try { script = await buildScrrpScript(); } catch { script = "Rapid Response Plan Coverage SCRRP online, sir. Cross-referencing all active risk signals against scenario playbooks and assigned contacts to classify response-ready, scenario-only, contact-only, and fully-exposed signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F111: Investment × Ops Event × Knowledge Financial Intelligence Pulse — open IOEFIP panel + speak financial intel brief.
+    if (isIoefipQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ioefip-toggle"));
+      let script = "";
+      try { script = await buildIoefipScript(); } catch { script = "Financial Intelligence Pulse IOEFIP online, sir. Cross-referencing the investment portfolio against operational events and knowledge-base articles to classify fully-monitored, ops-tracked, KB-researched, and unmonitored assets now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
