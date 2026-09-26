@@ -340,6 +340,7 @@ import GraphAnnotationKnowledgeMap from '@/components/cinematic/GraphAnnotationK
 import SystemWideAlertEscalator from '@/components/cinematic/SystemWideAlertEscalator';
 import { RiskDataOpsTriad } from '@/components/cinematic/RiskDataOpsTriad';
 import { InvestigationDatasetKnowledgePulse } from '@/components/cinematic/InvestigationDatasetKnowledgePulse';
+import { ContactDatasetReportMatrix } from '@/components/cinematic/ContactDatasetReportMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1070,6 +1071,9 @@ function App() {
 
             {/* F116 (overnight 2026-09-26): Investigation × Dataset × Knowledge Intelligence Pulse (IDKPULS) — ◈ IDKPULS button (left:1007880, bottom:8, zIndex:178); parallel-fetches /v1/investigations + /v1/datasets + /knowledge/; keyword-correlates each investigation against available datasets AND KB articles to classify FULLY_RESOURCED/DATA_BACKED/KB_BACKED/BARE; amber badge on bare count; stat tiles INVESTIGATIONS/DATASETS/KB ARTICLES + all four class counts + INTEL%; filter tabs ALL/FULLY_RESOURCED/DATA_BACKED/KB_BACKED/BARE + text search; expand investigation → matched dataset cards (purple) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIdkpulsQuery+buildIdkpulsScript wired in JarvisBrain; "idkpuls/investigation dataset knowledge/data backed investigation/investigation intelligence/bare investigations/investigation resource coverage" voice trigger; jarvis:idkpuls-toggle event; 90-s auto-refresh */}
             <InvestigationDatasetKnowledgePulse />
+
+            {/* F117 (overnight 2026-09-26): Contact × Dataset × Report Intelligence Coverage Matrix (CDIRMAT) — ◈ CDIRMAT button (left:1008440, bottom:8, zIndex:179); parallel-fetches /entities/Contact + /v1/datasets + /v1/reports; keyword-correlates each contact against datasets AND reports to classify FULLY_DOCUMENTED/DATA_LINKED/REPORT_BACKED/UNDOCUMENTED; amber badge on undocumented count; stat tiles CONTACTS/DATASETS/REPORTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_DOCUMENTED/DATA_LINKED/REPORT_BACKED/UNDOCUMENTED + text search; expand contact → matched dataset cards (purple) + report cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCdirmatQuery+buildCdirmatScript wired in JarvisBrain; "cdirmat/contact data report/contact documentation/undocumented contacts/contact coverage matrix" voice trigger; jarvis:cdirmat-toggle event; 90-s auto-refresh */}
+            <ContactDatasetReportMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -182,6 +182,7 @@ import { isGakcimapQuery, buildGakcimapScript } from "./GraphAnnotationKnowledge
 import { isAlescqQuery, buildAlescqScript } from "./SystemWideAlertEscalator";
 import { isRdoetriQuery, buildRdoetriScript } from "./RiskDataOpsTriad";
 import { isIdkpulsQuery, buildIdkpulsScript } from "./InvestigationDatasetKnowledgePulse";
+import { isCdirmatQuery, buildCdirmatScript } from "./ContactDatasetReportMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1775,6 +1776,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:idkpuls-toggle"));
       let script = "";
       try { script = await buildIdkpulsScript(); } catch { script = "Investigation Dataset Knowledge Pulse IDKPULS online, sir. Cross-referencing all open investigations against available datasets and knowledge base articles to classify fully-resourced, data-backed, KB-backed, and bare investigations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F117: Contact × Dataset × Report Intelligence Coverage Matrix — open CDIRMAT panel + speak coverage brief.
+    if (isCdirmatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cdirmat-toggle"));
+      let script = "";
+      try { script = await buildCdirmatScript(); } catch { script = "Contact Dataset Report Intelligence Coverage Matrix CDIRMAT online, sir. Cross-referencing all known contacts against available datasets and intelligence reports to classify fully-documented, data-linked, report-backed, and undocumented contacts now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
