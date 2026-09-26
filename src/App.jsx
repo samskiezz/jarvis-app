@@ -339,6 +339,7 @@ import OpsEventIntelContactTracker from '@/components/cinematic/OpsEventIntelCon
 import GraphAnnotationKnowledgeMap from '@/components/cinematic/GraphAnnotationKnowledgeMap';
 import SystemWideAlertEscalator from '@/components/cinematic/SystemWideAlertEscalator';
 import { RiskDataOpsTriad } from '@/components/cinematic/RiskDataOpsTriad';
+import { InvestigationDatasetKnowledgePulse } from '@/components/cinematic/InvestigationDatasetKnowledgePulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1066,6 +1067,9 @@ function App() {
 
             {/* F115 (overnight 2026-09-26): Risk Signal × Dataset × Ops Event Data Coverage Triad (RDOETRI) — ◈ RDOETRI button (left:1007320, bottom:8, zIndex:177); parallel-fetches /entities/RiskSignal + /v1/datasets + /v1/ops/events; keyword-correlates each risk signal against datasets AND ops events to classify FULLY_GROUNDED/DATA_LINKED/OPS_LINKED/UNGROUNDED; amber badge on ungrounded count; stat tiles + coverage bar; filter tabs ALL/FULLY_GROUNDED/DATA_LINKED/OPS_LINKED/UNGROUNDED + search; expand signal → dataset cards (purple) + ops event cards (blue) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRdoetriQuery+buildRdoetriScript wired in JarvisBrain; "rdoetri/risk data ops/risk signal data/grounded risk/ungrounded risk/risk event coverage" voice trigger; jarvis:rdoetri-toggle event; 90-s auto-refresh */}
             <RiskDataOpsTriad />
+
+            {/* F116 (overnight 2026-09-26): Investigation × Dataset × Knowledge Intelligence Pulse (IDKPULS) — ◈ IDKPULS button (left:1007880, bottom:8, zIndex:178); parallel-fetches /v1/investigations + /v1/datasets + /knowledge/; keyword-correlates each investigation against available datasets AND KB articles to classify FULLY_RESOURCED/DATA_BACKED/KB_BACKED/BARE; amber badge on bare count; stat tiles INVESTIGATIONS/DATASETS/KB ARTICLES + all four class counts + INTEL%; filter tabs ALL/FULLY_RESOURCED/DATA_BACKED/KB_BACKED/BARE + text search; expand investigation → matched dataset cards (purple) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIdkpulsQuery+buildIdkpulsScript wired in JarvisBrain; "idkpuls/investigation dataset knowledge/data backed investigation/investigation intelligence/bare investigations/investigation resource coverage" voice trigger; jarvis:idkpuls-toggle event; 90-s auto-refresh */}
+            <InvestigationDatasetKnowledgePulse />
 
             <Suspense fallback={<Loading />}>
               <Routes>
