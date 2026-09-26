@@ -345,6 +345,7 @@ import { InvestmentGraphReportNexus } from '@/components/cinematic/InvestmentGra
 import { SwarmIntelReportCoverage } from '@/components/cinematic/SwarmIntelReportCoverage';
 import { TaskReportScenarioCoverage } from '@/components/cinematic/TaskReportScenarioCoverage';
 import OperationalReadinessScore from '@/components/cinematic/OperationalReadinessScore';
+import LiveIntelStreamHealth from '@/components/cinematic/LiveIntelStreamHealth';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1090,6 +1091,9 @@ function App() {
 
             {/* F121 (overnight 2026-09-26): Operational Readiness Score Dashboard (ORSCORE) — ◈ ORSCORE button (left:1010680, bottom:8, zIndex:183); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /entities/SwarmJob + /entities/Task + /entities/RiskSignal; computes five sub-scores (system health, intelligence density, automation coverage, task velocity, threat clear) into a composite 0–100 readiness score; central ring + radar pentagon + stat tiles; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOrscoreQuery+buildOrscoreScript wired in JarvisBrain; "orscore/operational readiness/readiness score/ops score/jarvis readiness" voice trigger; jarvis:orscore-toggle event; 60-s auto-refresh */}
             <OperationalReadinessScore />
+
+            {/* F122 (overnight 2026-09-26): Live Intel Stream Health Monitor (LISHM) — ◈ LISHM button (left:1011240, bottom:8, zIndex:184); parallel-fetches /functions/getLiveIntel + /v1/jarvis/system/status + /v1/cinematic/brain; computes per-stream freshness (LIVE/STALE/OFFLINE) for quakes/crypto/FX + composite Stream Health Index 0–100; 3-column source grid with status badges + item counts + last-seen age; red badge on degraded count; ▶ ASSESS STREAM HEALTH → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLishmQuery+buildLishmScript wired in JarvisBrain; "lishm/live intel health/stream health/data freshness/intel stream status" voice trigger; jarvis:lishm-toggle event; 60-s auto-refresh */}
+            <LiveIntelStreamHealth />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -187,6 +187,7 @@ import { isIgrnexQuery, buildIgrnexScript } from "./InvestmentGraphReportNexus";
 import { isSjircicQuery, buildSjircicScript } from "./SwarmIntelReportCoverage";
 import { isTrsconQuery, buildTrsconScript } from "./TaskReportScenarioCoverage";
 import { isOrscoreQuery, buildOrscoreScript } from "./OperationalReadinessScore";
+import { isLishmQuery, buildLishmScript } from "./LiveIntelStreamHealth";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1807,6 +1808,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:orscore-toggle"));
       let script = "";
       try { script = await buildOrscoreScript(); } catch { script = "Operational Readiness Score Dashboard online, sir. Calculating composite readiness across system health, intelligence density, automation coverage, task velocity, and threat exposure now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F122: Live Intel Stream Health Monitor — open LISHM panel + speak stream health brief.
+    if (isLishmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lishm-toggle"));
+      let script = "";
+      try { script = await buildLishmScript(); } catch { script = "Live Intel Stream Health Monitor online, sir. Checking quake, crypto, and FX stream freshness against system health and brain metrics now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
