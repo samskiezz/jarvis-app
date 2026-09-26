@@ -186,6 +186,7 @@ import { isCdirmatQuery, buildCdirmatScript } from "./ContactDatasetReportMatrix
 import { isIgrnexQuery, buildIgrnexScript } from "./InvestmentGraphReportNexus";
 import { isSjircicQuery, buildSjircicScript } from "./SwarmIntelReportCoverage";
 import { isTrsconQuery, buildTrsconScript } from "./TaskReportScenarioCoverage";
+import { isOrscoreQuery, buildOrscoreScript } from "./OperationalReadinessScore";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1797,6 +1798,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igrnex-toggle"));
       let script = "";
       try { script = await buildIgrnexScript(); } catch { script = "Investment Graph Report Nexus IGRNEX online, sir. Cross-referencing all portfolio investments against high-centrality graph nodes and intelligence reports to classify fully-tracked, graph-linked, report-backed, and blind investments now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F121: Operational Readiness Score Dashboard — open ORSCORE panel + speak composite readiness brief.
+    if (isOrscoreQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:orscore-toggle"));
+      let script = "";
+      try { script = await buildOrscoreScript(); } catch { script = "Operational Readiness Score Dashboard online, sir. Calculating composite readiness across system health, intelligence density, automation coverage, task velocity, and threat exposure now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

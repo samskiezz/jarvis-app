@@ -344,6 +344,7 @@ import { ContactDatasetReportMatrix } from '@/components/cinematic/ContactDatase
 import { InvestmentGraphReportNexus } from '@/components/cinematic/InvestmentGraphReportNexus';
 import { SwarmIntelReportCoverage } from '@/components/cinematic/SwarmIntelReportCoverage';
 import { TaskReportScenarioCoverage } from '@/components/cinematic/TaskReportScenarioCoverage';
+import OperationalReadinessScore from '@/components/cinematic/OperationalReadinessScore';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1086,6 +1087,9 @@ function App() {
 
             {/* F120 (overnight 2026-09-26): Task × Report × Scenario Operational Coverage Nexus (TRSCON) — ◈ TRSCON button (left:1010120, bottom:8, zIndex:182); parallel-fetches /entities/Task + /v1/reports + /v1/scenario/list; keyword-correlates each task against intelligence reports AND scenario playbooks to classify FULLY_DOCUMENTED/REPORT_BACKED/SCENARIO_PLANNED/UNCOORDINATED; amber badge on uncoordinated count; isTrsconQuery+buildTrsconScript wired in JarvisBrain; "trscon/task report scenario/task coordination/uncoordinated tasks/task coverage nexus" voice trigger; jarvis:trscon-toggle event; 90-s auto-refresh */}
             <TaskReportScenarioCoverage />
+
+            {/* F121 (overnight 2026-09-26): Operational Readiness Score Dashboard (ORSCORE) — ◈ ORSCORE button (left:1010680, bottom:8, zIndex:183); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /entities/SwarmJob + /entities/Task + /entities/RiskSignal; computes five sub-scores (system health, intelligence density, automation coverage, task velocity, threat clear) into a composite 0–100 readiness score; central ring + radar pentagon + stat tiles; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOrscoreQuery+buildOrscoreScript wired in JarvisBrain; "orscore/operational readiness/readiness score/ops score/jarvis readiness" voice trigger; jarvis:orscore-toggle event; 60-s auto-refresh */}
+            <OperationalReadinessScore />
 
             <Suspense fallback={<Loading />}>
               <Routes>
