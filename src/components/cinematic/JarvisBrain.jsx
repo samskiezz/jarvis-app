@@ -188,6 +188,7 @@ import { isSjircicQuery, buildSjircicScript } from "./SwarmIntelReportCoverage";
 import { isTrsconQuery, buildTrsconScript } from "./TaskReportScenarioCoverage";
 import { isOrscoreQuery, buildOrscoreScript } from "./OperationalReadinessScore";
 import { isLishmQuery, buildLishmScript } from "./LiveIntelStreamHealth";
+import { isIptcmapQuery, buildIptcmapScript } from "./GraphCommunityIntelScenarioMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1889,6 +1890,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sipwcov-toggle"));
       let script = "";
       try { script = await buildSipwcovScript(); } catch { script = "Scenario intelligence coverage online, sir. Cross-referencing all scenario playbooks against intel actor profiles and intelligence reports to classify armed, actor-planned, report-backed, and blind scenarios now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F123: Graph Community × IntelProfile × Scenario Threat Cluster Map — open IPTCMAP panel + speak cluster brief.
+    if (isIptcmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iptcmap-toggle"));
+      let script = "";
+      try { script = await buildIptcmapScript(); } catch { script = "Threat Cluster Map IPTCMAP online, sir. Cross-referencing all graph community clusters against intel actor profiles and scenario playbooks to classify threat clusters, intel-exposed, scenario-covered, and neutral communities now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

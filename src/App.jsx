@@ -346,6 +346,7 @@ import { SwarmIntelReportCoverage } from '@/components/cinematic/SwarmIntelRepor
 import { TaskReportScenarioCoverage } from '@/components/cinematic/TaskReportScenarioCoverage';
 import OperationalReadinessScore from '@/components/cinematic/OperationalReadinessScore';
 import LiveIntelStreamHealth from '@/components/cinematic/LiveIntelStreamHealth';
+import GraphCommunityIntelScenarioMap from '@/components/cinematic/GraphCommunityIntelScenarioMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1094,6 +1095,9 @@ function App() {
 
             {/* F122 (overnight 2026-09-26): Live Intel Stream Health Monitor (LISHM) — ◈ LISHM button (left:1011240, bottom:8, zIndex:184); parallel-fetches /functions/getLiveIntel + /v1/jarvis/system/status + /v1/cinematic/brain; computes per-stream freshness (LIVE/STALE/OFFLINE) for quakes/crypto/FX + composite Stream Health Index 0–100; 3-column source grid with status badges + item counts + last-seen age; red badge on degraded count; ▶ ASSESS STREAM HEALTH → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLishmQuery+buildLishmScript wired in JarvisBrain; "lishm/live intel health/stream health/data freshness/intel stream status" voice trigger; jarvis:lishm-toggle event; 60-s auto-refresh */}
             <LiveIntelStreamHealth />
+
+            {/* F123 (overnight 2026-09-26): Graph Community × IntelProfile × Scenario Threat Cluster Map (IPTCMAP) — ◈ IPTCMAP button (left:1011800, bottom:8, zIndex:185); parallel-fetches /v1/graph/communities + /entities/IntelProfile + /v1/scenario/list; keyword-correlates each community against intel actor profiles AND scenario playbooks to classify THREAT_CLUSTER/INTEL_EXPOSED/SCENARIO_COVERED/NEUTRAL; red badge on threat cluster count; stat tiles COMMUNITIES/INTEL PROFILES/SCENARIOS + all four class counts + COVERAGE%; filter tabs + search; expand community → matched intel profile cards (orange) + matched scenario cards (green) with relevance bars; ▶ ASSESS CLUSTERS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIptcmapQuery+buildIptcmapScript wired in JarvisBrain; "iptcmap/threat cluster/intel cluster/community threat/graph community scenario/threat community map/community intel scenario" voice trigger; jarvis:iptcmap-toggle event; 90-s auto-refresh */}
+            <GraphCommunityIntelScenarioMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
