@@ -172,6 +172,7 @@ import { isGntiopQuery, buildGntiopScript } from "./GraphNodeOperationalMesh";
 import { isIctarcQuery, buildIctarcScript } from "./IntelActorResponseCoverage";
 import { isSscexeQuery, buildSscexeScript } from "./ScenarioSwarmContactTriangle";
 import { isTgkpulseQuery, buildTgkpulseScript } from "./TaskGraphKnowledgePulse";
+import { isOdcsrcQuery, buildOdcsrcScript } from "./OpsDatasetContactCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1693,6 +1694,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tgkpulse-toggle"));
       let script = "";
       try { script = await buildTgkpulseScript(); } catch { script = "Task Intelligence Pulse TGKPULSE online, sir. Cross-referencing all active tasks against high-centrality graph nodes and knowledge base articles to classify fully-informed, graph-linked, KB-backed, and uninformed tasks now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F107: Ops Event × Dataset × Contact Situational Response Coverage — open ODCSRC panel + speak coverage brief.
+    if (isOdcsrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:odcsrc-toggle"));
+      let script = "";
+      try { script = await buildOdcsrcScript(); } catch { script = "Situational Response Coverage ODCSRC online, sir. Cross-referencing all ops events against available datasets and contacts to classify fully-resourced, data-backed, contact-engaged, and unresourced events now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

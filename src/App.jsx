@@ -330,6 +330,7 @@ import GraphNodeOperationalMesh from '@/components/cinematic/GraphNodeOperationa
 import IntelActorResponseCoverage from '@/components/cinematic/IntelActorResponseCoverage';
 import ScenarioSwarmContactTriangle from '@/components/cinematic/ScenarioSwarmContactTriangle';
 import TaskGraphKnowledgePulse from '@/components/cinematic/TaskGraphKnowledgePulse';
+import OpsDatasetContactCoverage from '@/components/cinematic/OpsDatasetContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1031,6 +1032,8 @@ function App() {
 
             {/* F106 (overnight 2026-09-26): Task × Graph Centrality × Knowledge Operational Intelligence Pulse (TGKPULSE) — ◈ TGKPULSE button (left:1002280, bottom:8, zIndex:168); parallel-fetches /entities/Task + /v1/graph/centrality + /knowledge/; keyword-correlates each task against high-centrality graph nodes AND KB articles to classify FULLY_INFORMED/GRAPH_LINKED/KB_BACKED/UNINFORMED; amber badge on uninformed count; stat tiles TASKS/GRAPH NODES/KB ARTICLES + all four class counts + INTEL%; filter tabs ALL/FULLY_INFORMED/GRAPH_LINKED/KB_BACKED/UNINFORMED + text search; expand task → matched graph node cards (cyan) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTgkpulseQuery+buildTgkpulseScript wired in JarvisBrain; "tgkpulse/task graph knowledge/task intelligence pulse/uninformed tasks/task knowledge graph/operational intelligence pulse" voice trigger; jarvis:tgkpulse-toggle event; 90-s auto-refresh */}
             <TaskGraphKnowledgePulse />
+            {/* F107 (overnight 2026-09-26): Ops Event × Dataset × Contact Situational Response Coverage (ODCSRC) */}
+            <OpsDatasetContactCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
