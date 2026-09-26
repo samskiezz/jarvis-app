@@ -174,6 +174,7 @@ import { isSscexeQuery, buildSscexeScript } from "./ScenarioSwarmContactTriangle
 import { isTgkpulseQuery, buildTgkpulseScript } from "./TaskGraphKnowledgePulse";
 import { isOdcsrcQuery, buildOdcsrcScript } from "./OpsDatasetContactCoverage";
 import { isKcoppulsQuery, buildKcoppulsScript } from "./KnowledgeContactOpsPulse";
+import { isIdktrepQuery, buildIdktrepScript } from "./IntelProfileDatasetKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1713,6 +1714,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kcoppuls-toggle"));
       let script = "";
       try { script = await buildKcoppulsScript(); } catch { script = "Personnel Intelligence Pulse KCOPPULS online, sir. Cross-referencing all contacts against knowledge base articles and ops events to assess who is fully briefed, knowledge-informed, ops-exposed, and uninformed now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F109: IntelProfile × Dataset × Knowledge Threat Intelligence Repository Coverage — open IDKTREP panel + speak intel-repository brief.
+    if (isIdktrepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:idktrep-toggle"));
+      let script = "";
+      try { script = await buildIdktrepScript(); } catch { script = "Threat Intelligence Repository Coverage IDKTREP online, sir. Cross-referencing all intel actor profiles against available datasets and knowledge base articles to classify fully-documented, data-linked, KB-noted, and undocumented actors now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -332,6 +332,7 @@ import ScenarioSwarmContactTriangle from '@/components/cinematic/ScenarioSwarmCo
 import TaskGraphKnowledgePulse from '@/components/cinematic/TaskGraphKnowledgePulse';
 import OpsDatasetContactCoverage from '@/components/cinematic/OpsDatasetContactCoverage';
 import KnowledgeContactOpsPulse from '@/components/cinematic/KnowledgeContactOpsPulse';
+import IntelProfileDatasetKnowledgeCoverage from '@/components/cinematic/IntelProfileDatasetKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1038,6 +1039,9 @@ function App() {
 
             {/* F108 (overnight 2026-09-26): Knowledge × Contact × Ops Event Personnel Intelligence Pulse (KCOPPULS) — ◈ KCOPPULS button (left:1003400, bottom:8, zIndex:170); parallel-fetches /knowledge/ + /entities/Contact + /v1/ops/events; keyword-correlates each contact against KB articles AND ops events to classify FULLY_BRIEFED/KB_INFORMED/OPS_EXPOSED/UNINFORMED; amber badge on uninformed count; stat tiles CONTACTS/KB ARTICLES/OPS EVENTS + all four class counts + INTEL%; filter tabs + search; expand contact → matched KB article cards (cyan) + ops event cards (blue) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat + TTS; isKcoppulsQuery+buildKcoppulsScript wired in JarvisBrain; "kcoppuls/contact intel pulse/personnel intelligence/briefed contacts ops/uninformed personnel/contact knowledge ops" voice trigger; jarvis:kcoppuls-toggle event; 90-s auto-refresh */}
             <KnowledgeContactOpsPulse />
+
+            {/* F109 (overnight 2026-09-26): IntelProfile × Dataset × Knowledge Threat Intelligence Repository Coverage (IDKTREP) — ◈ IDKTREP button (left:1003960, bottom:8, zIndex:171); parallel-fetches /entities/IntelProfile + /v1/datasets + /knowledge/; keyword-correlates each threat actor profile against datasets AND KB articles to classify FULLY_DOCUMENTED/DATA_LINKED/KB_NOTED/UNDOCUMENTED; amber badge on undocumented count; stat tiles + coverage bar; filter tabs ALL/FULLY_DOCUMENTED/DATA_LINKED/KB_NOTED/UNDOCUMENTED + search; expand profile → matched dataset cards (purple) + KB article cards (teal) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence intel-repository brief + TTS; isIdktrepQuery+buildIdktrepScript wired in JarvisBrain; "idktrep/intel profile dataset/threat actor documentation/undocumented actors/intel repository/actor knowledge coverage" voice trigger; jarvis:idktrep-toggle event; 90-s auto-refresh */}
+            <IntelProfileDatasetKnowledgeCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
