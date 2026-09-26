@@ -327,6 +327,7 @@ import FullSpectrumThreatCoverage from '@/components/cinematic/FullSpectrumThrea
 import GraphCommunityNetworkThreatIndex from '@/components/cinematic/GraphCommunityNetworkThreatIndex';
 import KnowledgeThreatAwarenessCoverage from '@/components/cinematic/KnowledgeThreatAwarenessCoverage';
 import GraphNodeOperationalMesh from '@/components/cinematic/GraphNodeOperationalMesh';
+import IntelActorResponseCoverage from '@/components/cinematic/IntelActorResponseCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1019,6 +1020,9 @@ function App() {
             <KnowledgeThreatAwarenessCoverage />
             {/* F103 (overnight 2026-09-26): Graph Node × Task × Investigation Operational Mesh (GNTIOP) — ◈ GNTIOP button (left:1000600, bottom:8, zIndex:165); parallel-fetches /v1/graph/centrality + /entities/Task + /v1/investigations; keyword-correlates each high-centrality node against active tasks AND open investigations to classify FULLY_ACTIVE/TASK_DRIVEN/INVESTIGATION_LINKED/DORMANT; red pulse badge on fully-active count; stat tiles NODES/TASKS/INV + class counts + MESH COVER%; filter tabs ALL/FULLY_ACTIVE/TASK_DRIVEN/INVESTIGATION_LINKED/DORMANT + text search; expand node → matched task cards (teal) + investigation cards (blue) with relevance bars; ▶ ASSESS MESH → /v1/jarvis/agent/chat + TTS; isGntiopQuery+buildGntiopScript wired in JarvisBrain; "gntiop/graph node task/graph node investigation/operational mesh/node operational/graph operational mesh/graph active nodes" voice trigger; jarvis:gntiop-toggle event; 90-s auto-refresh */}
             <GraphNodeOperationalMesh />
+
+            {/* F104 (overnight 2026-09-26): IntelProfile × Contact × Task Actor Response Coverage (ICTARC) — ◈ ICTARC button (left:1001160, bottom:8, zIndex:166); parallel-fetches /entities/IntelProfile + /entities/Contact + /entities/Task; keyword-correlates each threat actor profile against contacts AND tasks to classify FULLY_RESPONDED/CONTACT_ENGAGED/TASK_ACTIVE/UNRESPONDED; red pulse badge on unresponded count; stat tiles ACTORS/CONTACTS/TASKS + all four class counts + RESPONSE%; filter tabs ALL/FULLY_RESPONDED/CONTACT_ENGAGED/TASK_ACTIVE/UNRESPONDED + text search; expand actor → matched contact cards (orange) + task cards (teal) with relevance bars; ▶ ASSESS RESPONSE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIctarcQuery+buildIctarcScript wired in JarvisBrain; "ictarc/actor response/intel response/threat actor contact/unresponded actors/actor coverage/threat response coverage" voice trigger; jarvis:ictarc-toggle event; 90-s auto-refresh */}
+            <IntelActorResponseCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

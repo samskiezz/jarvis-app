@@ -169,6 +169,7 @@ import { isFstrcQuery, buildFstrcScript } from "./FullSpectrumThreatCoverage";
 import { isGcnitxQuery, buildGcnitxScript } from "./GraphCommunityNetworkThreatIndex";
 import { isKipswatQuery, buildKipswatScript } from "./KnowledgeThreatAwarenessCoverage";
 import { isGntiopQuery, buildGntiopScript } from "./GraphNodeOperationalMesh";
+import { isIctarcQuery, buildIctarcScript } from "./IntelActorResponseCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1681,6 +1682,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kipswta-toggle"));
       let script = "";
       try { script = await buildKipswatScript(); } catch { script = "Knowledge Threat Awareness Coverage KIPSWTA online, sir. Cross-referencing all knowledge base articles against intel actor profiles and swarm operations to classify fully-contextualised, actor-aware, swarm-supported, and isolated articles now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F104: IntelProfile × Contact × Task Actor Response Coverage — open ICTARC panel + speak actor response brief.
+    if (isIctarcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ictarc-toggle"));
+      let script = "";
+      try { script = await buildIctarcScript(); } catch { script = "Actor Response Coverage ICTARC online, sir. Cross-referencing all threat actor profiles against assigned contacts and active tasks to classify fully-responded, contact-engaged, task-active, and unresponded actors now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
