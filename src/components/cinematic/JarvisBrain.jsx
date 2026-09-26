@@ -191,6 +191,7 @@ import { isLishmQuery, buildLishmScript } from "./LiveIntelStreamHealth";
 import { isIptcmapQuery, buildIptcmapScript } from "./GraphCommunityIntelScenarioMap";
 import { isGaoscovQuery, buildGaoscovScript } from "./GraphAnnotationOpsSwarmCoverage";
 import { isSctrocQuery, buildSctrocScript } from "./SceneTaskReportGrounding";
+import { isSvimapQuery, buildSvimapScript } from "./SwarmJobInvestmentContactMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1919,6 +1920,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sctroc-toggle"));
       let script = "";
       try { script = await buildSctrocScript(); } catch { script = "SCTROC Scene Reality Check online, sir. Cross-referencing all 10 cinematic scenes against live tasks and intelligence reports to assess operational grounding now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F126: SwarmJob × Investment × Contact Operational Finance Coverage — open SVINMAP panel + speak coordination brief.
+    if (isSvimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:svinmap-toggle"));
+      let script = "";
+      try { script = await buildSvimapScript(); } catch { script = "SVINMAP Operational Finance Coverage online, sir. Cross-referencing swarm jobs against live investments and contacts to assess coordination coverage now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

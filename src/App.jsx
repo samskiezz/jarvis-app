@@ -349,6 +349,7 @@ import LiveIntelStreamHealth from '@/components/cinematic/LiveIntelStreamHealth'
 import GraphCommunityIntelScenarioMap from '@/components/cinematic/GraphCommunityIntelScenarioMap';
 import GraphAnnotationOpsSwarmCoverage from '@/components/cinematic/GraphAnnotationOpsSwarmCoverage';
 import SceneTaskReportGrounding from '@/components/cinematic/SceneTaskReportGrounding';
+import SwarmJobInvestmentContactMap from '@/components/cinematic/SwarmJobInvestmentContactMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1105,6 +1106,8 @@ function App() {
             <GraphAnnotationOpsSwarmCoverage />
             {/* F125 (overnight 2026-09-26): Cinematic Scene × Task × Report Operational Reality Check (SCTROC) — ◈ SCTROC button (left:1012920, bottom:8, zIndex:187); parallel-fetches /v1/cinematic/scene/01..10 + /entities/Task + /v1/reports; keyword-correlates each scene's anchor/description text against tasks AND reports to classify FULLY_GROUNDED/TASK_ACTIVE/REPORT_BACKED/SPECULATIVE; amber badge on speculative count; stat tiles SCENES/TASKS/REPORTS + all four class counts + GROUNDING%; filter tabs ALL/FULLY_GROUNDED/TASK_ACTIVE/REPORT_BACKED/SPECULATIVE + text search; expand scene → matched task cards (cyan) + report cards (purple) with relevance bars; ▶ ASSESS GROUNDING → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSctrocQuery+buildSctrocScript wired in JarvisBrain; "sctroc/scene reality check/speculative scenes/cinematic tasks/scene grounding/scene report" voice trigger; jarvis:sctroc-toggle event; 90-s auto-refresh */}
             <SceneTaskReportGrounding />
+            {/* F126 (overnight 2026-09-26): SwarmJob × Investment × Contact Operational Finance Coverage (SVINMAP) — ◈ SVINMAP button (left:1013480, bottom:8, zIndex:188); parallel-fetches /entities/SwarmJob + /entities/Investment + /entities/Contact; keyword-correlates each swarm job against investments AND contacts to classify FULLY_COORDINATED/INVESTMENT_LINKED/CONTACT_ASSIGNED/UNCOORDINATED; amber badge on uncoordinated count; stat tiles SWARM JOBS/INVESTMENTS/CONTACTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_COORDINATED/INVESTMENT_LINKED/CONTACT_ASSIGNED/UNCOORDINATED + text search; expand job → matched investment cards (gold) + contact cards (orange) with relevance bars; ▶ ASSESS COORDINATION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSvimapQuery+buildSvimapScript wired in JarvisBrain; "svinmap/swarm investment/swarm finance/coordinated swarm/uncoordinated swarm/swarm investment coverage" voice trigger; jarvis:svinmap-toggle event; 90-s auto-refresh */}
+            <SwarmJobInvestmentContactMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
