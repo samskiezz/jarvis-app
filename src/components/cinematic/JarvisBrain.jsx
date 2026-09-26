@@ -180,6 +180,7 @@ import { isIoefipQuery, buildIoefipScript } from "./InvestmentOpsKnowledgePulse"
 import { isOictrcQuery, buildOictrcScript } from "./OpsEventIntelContactTracker";
 import { isGakcimapQuery, buildGakcimapScript } from "./GraphAnnotationKnowledgeMap";
 import { isAlescqQuery, buildAlescqScript } from "./SystemWideAlertEscalator";
+import { isRdoetriQuery, buildRdoetriScript } from "./RiskDataOpsTriad";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1764,6 +1765,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:alescq-toggle"));
       let script = "";
       try { script = await buildAlescqScript(); } catch { script = "Alert Escalation Queue ALESCQ online, sir. Aggregating JARVIS system health, active risk signals, operations events, and open investigations into a unified severity-sorted escalation queue now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F115: Risk Signal × Dataset × Ops Event Data Coverage Triad — open RDOETRI panel + speak data-coverage brief.
+    if (isRdoetriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rdoetri-toggle"));
+      let script = "";
+      try { script = await buildRdoetriScript(); } catch { script = "Risk Data Ops Triad RDOETRI online, sir. Cross-referencing all active risk signals against available datasets and operations events to classify fully-grounded, data-linked, ops-linked, and ungrounded signals now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

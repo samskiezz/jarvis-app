@@ -338,6 +338,7 @@ import InvestmentOpsKnowledgePulse from '@/components/cinematic/InvestmentOpsKno
 import OpsEventIntelContactTracker from '@/components/cinematic/OpsEventIntelContactTracker';
 import GraphAnnotationKnowledgeMap from '@/components/cinematic/GraphAnnotationKnowledgeMap';
 import SystemWideAlertEscalator from '@/components/cinematic/SystemWideAlertEscalator';
+import { RiskDataOpsTriad } from '@/components/cinematic/RiskDataOpsTriad';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1062,6 +1063,9 @@ function App() {
 
             {/* F114 (overnight 2026-09-26): System-Wide Alert Escalation Queue (ALESCQ) — ◈ ALESCQ button (left:1006760, bottom:8, zIndex:176); parallel-fetches /v1/jarvis/system/status + /entities/RiskSignal + /v1/ops/events + /v1/investigations; merges into severity-sorted escalation queue CRITICAL/HIGH/MEDIUM/INFO; source badges SYSTEM/RISK/OPS/CASE; per-row ▶ ESC → /v1/jarvis/agent/chat triage + TTS; ▶ ASSESS ALL → 2-sentence brief + TTS; red pulse badge on critical+high count; filter tabs ALL/SYSTEM/RISK/OPS/CASE; 60-s auto-refresh; isAlescqQuery+buildAlescqScript wired in JarvisBrain; "alescq/escalation queue/alert queue/escalate/all alerts/critical escalation" voice trigger */}
             <SystemWideAlertEscalator />
+
+            {/* F115 (overnight 2026-09-26): Risk Signal × Dataset × Ops Event Data Coverage Triad (RDOETRI) — ◈ RDOETRI button (left:1007320, bottom:8, zIndex:177); parallel-fetches /entities/RiskSignal + /v1/datasets + /v1/ops/events; keyword-correlates each risk signal against datasets AND ops events to classify FULLY_GROUNDED/DATA_LINKED/OPS_LINKED/UNGROUNDED; amber badge on ungrounded count; stat tiles + coverage bar; filter tabs ALL/FULLY_GROUNDED/DATA_LINKED/OPS_LINKED/UNGROUNDED + search; expand signal → dataset cards (purple) + ops event cards (blue) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRdoetriQuery+buildRdoetriScript wired in JarvisBrain; "rdoetri/risk data ops/risk signal data/grounded risk/ungrounded risk/risk event coverage" voice trigger; jarvis:rdoetri-toggle event; 90-s auto-refresh */}
+            <RiskDataOpsTriad />
 
             <Suspense fallback={<Loading />}>
               <Routes>
