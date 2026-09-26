@@ -173,6 +173,7 @@ import { isIctarcQuery, buildIctarcScript } from "./IntelActorResponseCoverage";
 import { isSscexeQuery, buildSscexeScript } from "./ScenarioSwarmContactTriangle";
 import { isTgkpulseQuery, buildTgkpulseScript } from "./TaskGraphKnowledgePulse";
 import { isOdcsrcQuery, buildOdcsrcScript } from "./OpsDatasetContactCoverage";
+import { isKcoppulsQuery, buildKcoppulsScript } from "./KnowledgeContactOpsPulse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1703,6 +1704,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:odcsrc-toggle"));
       let script = "";
       try { script = await buildOdcsrcScript(); } catch { script = "Situational Response Coverage ODCSRC online, sir. Cross-referencing all ops events against available datasets and contacts to classify fully-resourced, data-backed, contact-engaged, and unresourced events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F108: Knowledge × Contact × Ops Event Personnel Intelligence Pulse — open KCOPPULS panel + speak intel brief.
+    if (isKcoppulsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kcoppuls-toggle"));
+      let script = "";
+      try { script = await buildKcoppulsScript(); } catch { script = "Personnel Intelligence Pulse KCOPPULS online, sir. Cross-referencing all contacts against knowledge base articles and ops events to assess who is fully briefed, knowledge-informed, ops-exposed, and uninformed now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

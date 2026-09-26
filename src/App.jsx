@@ -331,6 +331,7 @@ import IntelActorResponseCoverage from '@/components/cinematic/IntelActorRespons
 import ScenarioSwarmContactTriangle from '@/components/cinematic/ScenarioSwarmContactTriangle';
 import TaskGraphKnowledgePulse from '@/components/cinematic/TaskGraphKnowledgePulse';
 import OpsDatasetContactCoverage from '@/components/cinematic/OpsDatasetContactCoverage';
+import KnowledgeContactOpsPulse from '@/components/cinematic/KnowledgeContactOpsPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1034,6 +1035,9 @@ function App() {
             <TaskGraphKnowledgePulse />
             {/* F107 (overnight 2026-09-26): Ops Event × Dataset × Contact Situational Response Coverage (ODCSRC) */}
             <OpsDatasetContactCoverage />
+
+            {/* F108 (overnight 2026-09-26): Knowledge × Contact × Ops Event Personnel Intelligence Pulse (KCOPPULS) — ◈ KCOPPULS button (left:1003400, bottom:8, zIndex:170); parallel-fetches /knowledge/ + /entities/Contact + /v1/ops/events; keyword-correlates each contact against KB articles AND ops events to classify FULLY_BRIEFED/KB_INFORMED/OPS_EXPOSED/UNINFORMED; amber badge on uninformed count; stat tiles CONTACTS/KB ARTICLES/OPS EVENTS + all four class counts + INTEL%; filter tabs + search; expand contact → matched KB article cards (cyan) + ops event cards (blue) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat + TTS; isKcoppulsQuery+buildKcoppulsScript wired in JarvisBrain; "kcoppuls/contact intel pulse/personnel intelligence/briefed contacts ops/uninformed personnel/contact knowledge ops" voice trigger; jarvis:kcoppuls-toggle event; 90-s auto-refresh */}
+            <KnowledgeContactOpsPulse />
 
             <Suspense fallback={<Loading />}>
               <Routes>
