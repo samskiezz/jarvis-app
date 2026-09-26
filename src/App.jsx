@@ -336,6 +336,7 @@ import IntelProfileDatasetKnowledgeCoverage from '@/components/cinematic/IntelPr
 import ScenarioRiskContactResponse from '@/components/cinematic/ScenarioRiskContactResponse';
 import InvestmentOpsKnowledgePulse from '@/components/cinematic/InvestmentOpsKnowledgePulse';
 import OpsEventIntelContactTracker from '@/components/cinematic/OpsEventIntelContactTracker';
+import GraphAnnotationKnowledgeMap from '@/components/cinematic/GraphAnnotationKnowledgeMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1054,6 +1055,9 @@ function App() {
 
             {/* F112 (overnight 2026-09-26): Ops Event × IntelProfile × Contact Threat Response Tracker (OICTRC) — ◈ OICTRC button (left:1005640, bottom:8, zIndex:174); parallel-fetches /v1/ops/events + /entities/IntelProfile + /entities/Contact; keyword-correlates each ops event against intel actor profiles AND contacts to classify RESPONSE_COORDINATED/ACTOR_TRACKED/CONTACT_NOTIFIED/UNHANDLED; red pulse badge on unhandled count; stat tiles OPS EVENTS/INTEL PROFILES/CONTACTS + all four class counts + RESPONSE%; filter tabs ALL/RESPONSE_COORDINATED/ACTOR_TRACKED/CONTACT_NOTIFIED/UNHANDLED + text search; expand event → matched intel profile cards (orange) + contact cards (teal) with relevance bars; ▶ ASSESS RESPONSE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOictrcQuery+buildOictrcScript wired in JarvisBrain; "oictrc/ops intel contact/threat response tracker/unhandled events/event response tracker" voice trigger; jarvis:oictrc-toggle event; 90-s auto-refresh */}
             <OpsEventIntelContactTracker />
+
+            {/* F113 (overnight 2026-09-26): Graph Annotation × Knowledge × IntelProfile Contextual Intelligence Map (GAKCIMAP) — ◈ GAKCIMAP button (left:1006200, bottom:8, zIndex:175); parallel-fetches /v1/graph/annotations + /knowledge/ + /entities/IntelProfile; keyword-correlates each annotation against KB articles AND intel actor profiles to classify FULLY_CONTEXTUALIZED/KB_BACKED/ACTOR_TAGGED/UNCONTEXTUALIZED; amber badge on uncontextualized count; filter tabs ALL/FULLY_CONTEXTUALIZED/KB_BACKED/ACTOR_TAGGED/UNCONTEXTUALIZED + text search; expand annotation → matched KB article cards (teal) + intel profile cards (orange) with relevance bars; ▶ ASSESS CONTEXT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGakcimapQuery+buildGakcimapScript wired in JarvisBrain; "gakcimap/graph annotation/annotation context/annotation knowledge/actor annotation/uncontextualized annotation" voice trigger; jarvis:gakcimap-toggle event; 90-s auto-refresh */}
+            <GraphAnnotationKnowledgeMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

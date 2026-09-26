@@ -103,3 +103,4 @@
 2026-09-26T07:16:20Z F110 ScenarioRiskContactResponse.jsx — Scenario × RiskSignal × Contact Rapid Response Plan (SCRRP); new component + App.jsx mount + JarvisBrain.jsx voice wiring; build exit 0
 [2026-09-26] F111 IOEFIP — InvestmentOpsKnowledgePulse.jsx: Investment × Ops Event × Knowledge Financial Intelligence Pulse; imported+mounted in App.jsx; wired JarvisBrain.jsx; build exit 0
 [2026-09-26] F112 OICTRC: OpsEventIntelContactTracker.jsx created; /v1/ops/events × /entities/IntelProfile × /entities/Contact triple coverage; mounted in App.jsx; wired in JarvisBrain.jsx; build exit 0
+2026-09-26 F113 GAKCIMAP — GraphAnnotationKnowledgeMap.jsx: parallel-fetches /v1/graph/annotations + /knowledge/ + /entities/IntelProfile; FULLY_CONTEXTUALIZED/KB_BACKED/ACTOR_TAGGED/UNCONTEXTUALIZED classification; wired in App.jsx + JarvisBrain.jsx; build exit 0

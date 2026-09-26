@@ -178,6 +178,7 @@ import { isIdktrepQuery, buildIdktrepScript } from "./IntelProfileDatasetKnowled
 import { isScrrpQuery, buildScrrpScript } from "./ScenarioRiskContactResponse";
 import { isIoefipQuery, buildIoefipScript } from "./InvestmentOpsKnowledgePulse";
 import { isOictrcQuery, buildOictrcScript } from "./OpsEventIntelContactTracker";
+import { isGakcimapQuery, buildGakcimapScript } from "./GraphAnnotationKnowledgeMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1753,6 +1754,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:oictrc-toggle"));
       let script = "";
       try { script = await buildOictrcScript(); } catch { script = "Threat Response Tracker OICTRC online, sir. Cross-referencing all operational events against intel actor profiles and assigned contacts to classify response-coordinated, actor-tracked, contact-notified, and unhandled events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F113: Graph Annotation × Knowledge × IntelProfile Contextual Intelligence Map — open GAKCIMAP panel + speak context brief.
+    if (isGakcimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gakcimap-toggle"));
+      let script = "";
+      try { script = await buildGakcimapScript(); } catch { script = "Graph Annotation Context Map GAKCIMAP online, sir. Cross-referencing all graph annotations against knowledge base articles and intel actor profiles to classify fully-contextualized, KB-backed, actor-tagged, and uncontextualized annotations now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
