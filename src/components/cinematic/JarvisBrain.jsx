@@ -185,6 +185,7 @@ import { isIdkpulsQuery, buildIdkpulsScript } from "./InvestigationDatasetKnowle
 import { isCdirmatQuery, buildCdirmatScript } from "./ContactDatasetReportMatrix";
 import { isIgrnexQuery, buildIgrnexScript } from "./InvestmentGraphReportNexus";
 import { isSjircicQuery, buildSjircicScript } from "./SwarmIntelReportCoverage";
+import { isTrsconQuery, buildTrsconScript } from "./TaskReportScenarioCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1796,6 +1797,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igrnex-toggle"));
       let script = "";
       try { script = await buildIgrnexScript(); } catch { script = "Investment Graph Report Nexus IGRNEX online, sir. Cross-referencing all portfolio investments against high-centrality graph nodes and intelligence reports to classify fully-tracked, graph-linked, report-backed, and blind investments now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F120: Task × Report × Scenario Operational Coverage Nexus — open TRSCON panel + speak coordination gap brief.
+    if (isTrsconQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trscon-toggle"));
+      let script = "";
+      try { script = await buildTrsconScript(); } catch { script = "Operational Coverage Nexus TRSCON online, sir. Cross-referencing all active tasks against intelligence reports and scenario playbooks to classify fully-documented, report-backed, scenario-planned, and uncoordinated tasks now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

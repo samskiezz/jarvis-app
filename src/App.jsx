@@ -343,6 +343,7 @@ import { InvestigationDatasetKnowledgePulse } from '@/components/cinematic/Inves
 import { ContactDatasetReportMatrix } from '@/components/cinematic/ContactDatasetReportMatrix';
 import { InvestmentGraphReportNexus } from '@/components/cinematic/InvestmentGraphReportNexus';
 import { SwarmIntelReportCoverage } from '@/components/cinematic/SwarmIntelReportCoverage';
+import { TaskReportScenarioCoverage } from '@/components/cinematic/TaskReportScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1082,6 +1083,9 @@ function App() {
 
             {/* F119 (overnight 2026-09-26): SwarmJob × IntelProfile × Report Counter-Intelligence Coverage (SJIRCIC) — ◈ SJIRCIC button (left:1009560, bottom:8, zIndex:181); parallel-fetches /entities/SwarmJob + /entities/IntelProfile + /v1/reports; keyword-correlates each swarm job against intel actor profiles AND reports to classify FULLY_COVERED/INTEL_MATCHED/REPORT_BACKED/UNTRACKED; amber badge on untracked count; stat tiles SWARM JOBS/INTEL PROFILES/REPORTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_COVERED/INTEL_MATCHED/REPORT_BACKED/UNTRACKED + text search; expand job → matched intel profile cards (orange) + report cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence counter-intel brief + TTS; isSjircicQuery+buildSjircicScript wired in JarvisBrain; "sjircic/swarm intel report/counter intelligence coverage/swarm counter intel/swarm actor report" voice trigger; jarvis:sjircic-toggle event; 90-s auto-refresh */}
             <SwarmIntelReportCoverage />
+
+            {/* F120 (overnight 2026-09-26): Task × Report × Scenario Operational Coverage Nexus (TRSCON) — ◈ TRSCON button (left:1010120, bottom:8, zIndex:182); parallel-fetches /entities/Task + /v1/reports + /v1/scenario/list; keyword-correlates each task against intelligence reports AND scenario playbooks to classify FULLY_DOCUMENTED/REPORT_BACKED/SCENARIO_PLANNED/UNCOORDINATED; amber badge on uncoordinated count; isTrsconQuery+buildTrsconScript wired in JarvisBrain; "trscon/task report scenario/task coordination/uncoordinated tasks/task coverage nexus" voice trigger; jarvis:trscon-toggle event; 90-s auto-refresh */}
+            <TaskReportScenarioCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
