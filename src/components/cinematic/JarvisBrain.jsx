@@ -190,6 +190,7 @@ import { isOrscoreQuery, buildOrscoreScript } from "./OperationalReadinessScore"
 import { isLishmQuery, buildLishmScript } from "./LiveIntelStreamHealth";
 import { isIptcmapQuery, buildIptcmapScript } from "./GraphCommunityIntelScenarioMap";
 import { isGaoscovQuery, buildGaoscovScript } from "./GraphAnnotationOpsSwarmCoverage";
+import { isSctrocQuery, buildSctrocScript } from "./SceneTaskReportGrounding";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1909,6 +1910,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gaoscov-toggle"));
       let script = "";
       try { script = await buildGaoscovScript(); } catch { script = "GAOSCOV Operational Annotation Coverage online, sir. Cross-referencing all graph annotations against live operational events and swarm jobs to classify fully operational, ops-linked, swarm-active, and dormant annotations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F125: Cinematic Scene × Task × Report Operational Reality Check — open SCTROC panel + speak grounding brief.
+    if (isSctrocQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sctroc-toggle"));
+      let script = "";
+      try { script = await buildSctrocScript(); } catch { script = "SCTROC Scene Reality Check online, sir. Cross-referencing all 10 cinematic scenes against live tasks and intelligence reports to assess operational grounding now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -348,6 +348,7 @@ import OperationalReadinessScore from '@/components/cinematic/OperationalReadine
 import LiveIntelStreamHealth from '@/components/cinematic/LiveIntelStreamHealth';
 import GraphCommunityIntelScenarioMap from '@/components/cinematic/GraphCommunityIntelScenarioMap';
 import GraphAnnotationOpsSwarmCoverage from '@/components/cinematic/GraphAnnotationOpsSwarmCoverage';
+import SceneTaskReportGrounding from '@/components/cinematic/SceneTaskReportGrounding';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1102,6 +1103,8 @@ function App() {
 
             {/* F124 (overnight 2026-09-26): Graph Annotation × Ops Event × SwarmJob Operational Annotation Coverage (GAOSCOV) — ◈ GAOSCOV button (left:1012360, bottom:8, zIndex:186); parallel-fetches /v1/graph/annotations + /v1/ops/events + /entities/SwarmJob; keyword-correlates each graph annotation against ops events AND swarm jobs to classify FULLY_OPERATIONAL/OPS_LINKED/SWARM_ACTIVE/DORMANT; amber badge on dormant count; stat tiles ANNOTATIONS/OPS EVENTS/SWARM JOBS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_OPERATIONAL/OPS_LINKED/SWARM_ACTIVE/DORMANT + text search; expand annotation → matched ops event cards (blue) + swarm job cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGaoscovQuery+buildGaoscovScript wired in JarvisBrain; "gaoscov/graph annotation ops/annotation coverage/annotation swarm/operational annotation/dormant annotation" voice trigger; jarvis:gaoscov-toggle event; 90-s auto-refresh */}
             <GraphAnnotationOpsSwarmCoverage />
+            {/* F125 (overnight 2026-09-26): Cinematic Scene × Task × Report Operational Reality Check (SCTROC) — ◈ SCTROC button (left:1012920, bottom:8, zIndex:187); parallel-fetches /v1/cinematic/scene/01..10 + /entities/Task + /v1/reports; keyword-correlates each scene's anchor/description text against tasks AND reports to classify FULLY_GROUNDED/TASK_ACTIVE/REPORT_BACKED/SPECULATIVE; amber badge on speculative count; stat tiles SCENES/TASKS/REPORTS + all four class counts + GROUNDING%; filter tabs ALL/FULLY_GROUNDED/TASK_ACTIVE/REPORT_BACKED/SPECULATIVE + text search; expand scene → matched task cards (cyan) + report cards (purple) with relevance bars; ▶ ASSESS GROUNDING → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSctrocQuery+buildSctrocScript wired in JarvisBrain; "sctroc/scene reality check/speculative scenes/cinematic tasks/scene grounding/scene report" voice trigger; jarvis:sctroc-toggle event; 90-s auto-refresh */}
+            <SceneTaskReportGrounding />
 
             <Suspense fallback={<Loading />}>
               <Routes>
