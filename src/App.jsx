@@ -326,6 +326,7 @@ import InvestmentKnowledgeOpsFirm from '@/components/cinematic/InvestmentKnowled
 import FullSpectrumThreatCoverage from '@/components/cinematic/FullSpectrumThreatCoverage';
 import GraphCommunityNetworkThreatIndex from '@/components/cinematic/GraphCommunityNetworkThreatIndex';
 import KnowledgeThreatAwarenessCoverage from '@/components/cinematic/KnowledgeThreatAwarenessCoverage';
+import GraphNodeOperationalMesh from '@/components/cinematic/GraphNodeOperationalMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1016,6 +1017,8 @@ function App() {
             <GraphCommunityNetworkThreatIndex />
             {/* F102 (overnight 2026-09-25): Knowledge × IntelProfile × SwarmJob Threat Awareness Coverage (KIPSWTA) — ◈ KIPSWTA button (left:1000040, bottom:8, zIndex:164); parallel-fetches /knowledge/ + /entities/IntelProfile + /entities/SwarmJob; keyword-correlates each KB article against intel actor profiles AND swarm operations to classify FULLY_CONTEXTUALIZED/ACTOR_AWARE/SWARM_SUPPORTED/ISOLATED; amber badge on isolated count; filter tabs + search; expand article → matched intel actor cards (orange) + swarm job cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isKipswatQuery+buildKipswatScript wired in JarvisBrain; "kipswta/knowledge threat awareness/knowledge intel swarm/isolated knowledge" voice trigger; jarvis:kipswta-toggle event; 90-s auto-refresh */}
             <KnowledgeThreatAwarenessCoverage />
+            {/* F103 (overnight 2026-09-26): Graph Node × Task × Investigation Operational Mesh (GNTIOP) — ◈ GNTIOP button (left:1000600, bottom:8, zIndex:165); parallel-fetches /v1/graph/centrality + /entities/Task + /v1/investigations; keyword-correlates each high-centrality node against active tasks AND open investigations to classify FULLY_ACTIVE/TASK_DRIVEN/INVESTIGATION_LINKED/DORMANT; red pulse badge on fully-active count; stat tiles NODES/TASKS/INV + class counts + MESH COVER%; filter tabs ALL/FULLY_ACTIVE/TASK_DRIVEN/INVESTIGATION_LINKED/DORMANT + text search; expand node → matched task cards (teal) + investigation cards (blue) with relevance bars; ▶ ASSESS MESH → /v1/jarvis/agent/chat + TTS; isGntiopQuery+buildGntiopScript wired in JarvisBrain; "gntiop/graph node task/graph node investigation/operational mesh/node operational/graph operational mesh/graph active nodes" voice trigger; jarvis:gntiop-toggle event; 90-s auto-refresh */}
+            <GraphNodeOperationalMesh />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -168,6 +168,7 @@ import { isIkofirmQuery, buildIkofirmScript } from "./InvestmentKnowledgeOpsFirm
 import { isFstrcQuery, buildFstrcScript } from "./FullSpectrumThreatCoverage";
 import { isGcnitxQuery, buildGcnitxScript } from "./GraphCommunityNetworkThreatIndex";
 import { isKipswatQuery, buildKipswatScript } from "./KnowledgeThreatAwarenessCoverage";
+import { isGntiopQuery, buildGntiopScript } from "./GraphNodeOperationalMesh";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1680,6 +1681,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kipswta-toggle"));
       let script = "";
       try { script = await buildKipswatScript(); } catch { script = "Knowledge Threat Awareness Coverage KIPSWTA online, sir. Cross-referencing all knowledge base articles against intel actor profiles and swarm operations to classify fully-contextualised, actor-aware, swarm-supported, and isolated articles now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F103: Graph Node × Task × Investigation Operational Mesh — open GNTIOP panel + speak operational mesh brief.
+    if (isGntiopQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gntiop-toggle"));
+      let script = "";
+      try { script = await buildGntiopScript(); } catch { script = "Graph Node Operational Mesh GNTIOP online, sir. Cross-referencing all high-centrality graph nodes against active tasks and open investigations to classify fully-active, task-driven, investigation-linked, and dormant nodes now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
