@@ -347,6 +347,7 @@ import { TaskReportScenarioCoverage } from '@/components/cinematic/TaskReportSce
 import OperationalReadinessScore from '@/components/cinematic/OperationalReadinessScore';
 import LiveIntelStreamHealth from '@/components/cinematic/LiveIntelStreamHealth';
 import GraphCommunityIntelScenarioMap from '@/components/cinematic/GraphCommunityIntelScenarioMap';
+import GraphAnnotationOpsSwarmCoverage from '@/components/cinematic/GraphAnnotationOpsSwarmCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1098,6 +1099,9 @@ function App() {
 
             {/* F123 (overnight 2026-09-26): Graph Community × IntelProfile × Scenario Threat Cluster Map (IPTCMAP) — ◈ IPTCMAP button (left:1011800, bottom:8, zIndex:185); parallel-fetches /v1/graph/communities + /entities/IntelProfile + /v1/scenario/list; keyword-correlates each community against intel actor profiles AND scenario playbooks to classify THREAT_CLUSTER/INTEL_EXPOSED/SCENARIO_COVERED/NEUTRAL; red badge on threat cluster count; stat tiles COMMUNITIES/INTEL PROFILES/SCENARIOS + all four class counts + COVERAGE%; filter tabs + search; expand community → matched intel profile cards (orange) + matched scenario cards (green) with relevance bars; ▶ ASSESS CLUSTERS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIptcmapQuery+buildIptcmapScript wired in JarvisBrain; "iptcmap/threat cluster/intel cluster/community threat/graph community scenario/threat community map/community intel scenario" voice trigger; jarvis:iptcmap-toggle event; 90-s auto-refresh */}
             <GraphCommunityIntelScenarioMap />
+
+            {/* F124 (overnight 2026-09-26): Graph Annotation × Ops Event × SwarmJob Operational Annotation Coverage (GAOSCOV) — ◈ GAOSCOV button (left:1012360, bottom:8, zIndex:186); parallel-fetches /v1/graph/annotations + /v1/ops/events + /entities/SwarmJob; keyword-correlates each graph annotation against ops events AND swarm jobs to classify FULLY_OPERATIONAL/OPS_LINKED/SWARM_ACTIVE/DORMANT; amber badge on dormant count; stat tiles ANNOTATIONS/OPS EVENTS/SWARM JOBS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_OPERATIONAL/OPS_LINKED/SWARM_ACTIVE/DORMANT + text search; expand annotation → matched ops event cards (blue) + swarm job cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGaoscovQuery+buildGaoscovScript wired in JarvisBrain; "gaoscov/graph annotation ops/annotation coverage/annotation swarm/operational annotation/dormant annotation" voice trigger; jarvis:gaoscov-toggle event; 90-s auto-refresh */}
+            <GraphAnnotationOpsSwarmCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

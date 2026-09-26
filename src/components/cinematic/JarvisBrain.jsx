@@ -189,6 +189,7 @@ import { isTrsconQuery, buildTrsconScript } from "./TaskReportScenarioCoverage";
 import { isOrscoreQuery, buildOrscoreScript } from "./OperationalReadinessScore";
 import { isLishmQuery, buildLishmScript } from "./LiveIntelStreamHealth";
 import { isIptcmapQuery, buildIptcmapScript } from "./GraphCommunityIntelScenarioMap";
+import { isGaoscovQuery, buildGaoscovScript } from "./GraphAnnotationOpsSwarmCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1899,6 +1900,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iptcmap-toggle"));
       let script = "";
       try { script = await buildIptcmapScript(); } catch { script = "Threat Cluster Map IPTCMAP online, sir. Cross-referencing all graph community clusters against intel actor profiles and scenario playbooks to classify threat clusters, intel-exposed, scenario-covered, and neutral communities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F124: Graph Annotation × Ops Event × SwarmJob Operational Annotation Coverage — open GAOSCOV panel + speak coverage brief.
+    if (isGaoscovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gaoscov-toggle"));
+      let script = "";
+      try { script = await buildGaoscovScript(); } catch { script = "GAOSCOV Operational Annotation Coverage online, sir. Cross-referencing all graph annotations against live operational events and swarm jobs to classify fully operational, ops-linked, swarm-active, and dormant annotations now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
