@@ -171,6 +171,7 @@ import { isKipswatQuery, buildKipswatScript } from "./KnowledgeThreatAwarenessCo
 import { isGntiopQuery, buildGntiopScript } from "./GraphNodeOperationalMesh";
 import { isIctarcQuery, buildIctarcScript } from "./IntelActorResponseCoverage";
 import { isSscexeQuery, buildSscexeScript } from "./ScenarioSwarmContactTriangle";
+import { isTgkpulseQuery, buildTgkpulseScript } from "./TaskGraphKnowledgePulse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1683,6 +1684,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kipswta-toggle"));
       let script = "";
       try { script = await buildKipswatScript(); } catch { script = "Knowledge Threat Awareness Coverage KIPSWTA online, sir. Cross-referencing all knowledge base articles against intel actor profiles and swarm operations to classify fully-contextualised, actor-aware, swarm-supported, and isolated articles now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F106: Task × Graph Centrality × Knowledge Operational Intelligence Pulse — open TGKPULSE panel + speak intel brief.
+    if (isTgkpulseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tgkpulse-toggle"));
+      let script = "";
+      try { script = await buildTgkpulseScript(); } catch { script = "Task Intelligence Pulse TGKPULSE online, sir. Cross-referencing all active tasks against high-centrality graph nodes and knowledge base articles to classify fully-informed, graph-linked, KB-backed, and uninformed tasks now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

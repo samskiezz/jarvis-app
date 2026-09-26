@@ -329,6 +329,7 @@ import KnowledgeThreatAwarenessCoverage from '@/components/cinematic/KnowledgeTh
 import GraphNodeOperationalMesh from '@/components/cinematic/GraphNodeOperationalMesh';
 import IntelActorResponseCoverage from '@/components/cinematic/IntelActorResponseCoverage';
 import ScenarioSwarmContactTriangle from '@/components/cinematic/ScenarioSwarmContactTriangle';
+import TaskGraphKnowledgePulse from '@/components/cinematic/TaskGraphKnowledgePulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1027,6 +1028,9 @@ function App() {
 
             {/* F105 (overnight 2026-09-26): Scenario × SwarmJob × Contact Execution Triangle (SSCEXE) — ◈ SSCEXE button (left:1001720, bottom:8, zIndex:167); parallel-fetches /v1/scenario/list + /entities/SwarmJob + /entities/Contact; keyword-correlates each scenario against swarm jobs AND contacts to classify FULLY_EXECUTABLE/SWARM_DEPLOYED/CONTACT_READY/INCOMPLETE; amber badge on incomplete count; stat tiles SCENARIOS/SWARM JOBS/CONTACTS + all four class counts + EXEC%; filter tabs ALL/FULLY_EXECUTABLE/SWARM_DEPLOYED/CONTACT_READY/INCOMPLETE + text search; expand scenario → matched swarm job cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS EXECUTION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSscexeQuery+buildSscexeScript wired in JarvisBrain; "sscexe/scenario execution/swarm contact/incomplete scenario/execution triangle" voice trigger; jarvis:sscexe-toggle event; 90-s auto-refresh */}
             <ScenarioSwarmContactTriangle />
+
+            {/* F106 (overnight 2026-09-26): Task × Graph Centrality × Knowledge Operational Intelligence Pulse (TGKPULSE) — ◈ TGKPULSE button (left:1002280, bottom:8, zIndex:168); parallel-fetches /entities/Task + /v1/graph/centrality + /knowledge/; keyword-correlates each task against high-centrality graph nodes AND KB articles to classify FULLY_INFORMED/GRAPH_LINKED/KB_BACKED/UNINFORMED; amber badge on uninformed count; stat tiles TASKS/GRAPH NODES/KB ARTICLES + all four class counts + INTEL%; filter tabs ALL/FULLY_INFORMED/GRAPH_LINKED/KB_BACKED/UNINFORMED + text search; expand task → matched graph node cards (cyan) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTgkpulseQuery+buildTgkpulseScript wired in JarvisBrain; "tgkpulse/task graph knowledge/task intelligence pulse/uninformed tasks/task knowledge graph/operational intelligence pulse" voice trigger; jarvis:tgkpulse-toggle event; 90-s auto-refresh */}
+            <TaskGraphKnowledgePulse />
 
             <Suspense fallback={<Loading />}>
               <Routes>
