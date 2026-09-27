@@ -364,6 +364,7 @@ import TaskGraphOpsKnowledgeNexus from '@/components/cinematic/TaskGraphOpsKnowl
 import AipSkillFullOpsCoverage from '@/components/cinematic/AipSkillFullOpsCoverage';
 import ScenarioRiskSwarmContainment from '@/components/cinematic/ScenarioRiskSwarmContainment';
 import SceneAipRiskCoverageMap from '@/components/cinematic/SceneAipRiskCoverageMap';
+import ScenarioCommOpsDataSaturation from '@/components/cinematic/ScenarioCommOpsDataSaturation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1150,6 +1151,8 @@ function App() {
             <ScenarioRiskSwarmContainment />
             {/* F140 (overnight 2026-09-27): Cinematic Scene × AIP Skill × RiskSignal Intelligence Coverage Map (SCIAIP) — ◈ SCIAIP button (left:1021320, bottom:8, zIndex:202); parallel-fetches /v1/cinematic/scene/01..10 + /v1/aip/skill + /entities/RiskSignal; keyword-correlates each scene's anchor/description text against AIP skills AND risk signals to classify FULLY_ARMED/SKILL_BACKED/RISK_FLAGGED/UNMONITORED; amber badge on unmonitored count; filter tabs ALL/FULLY_ARMED/SKILL_BACKED/RISK_FLAGGED/UNMONITORED + text search; expand scene → AIP skill cards (cyan) + risk signal cards (red) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSciaipQuery+buildSciaipScript wired in JarvisBrain; "sciaip/scene intelligence/scene skill/scene risk/armed scenes/unmonitored scenes/scene coverage map" voice trigger; jarvis:sciaip-toggle event; 90-s auto-refresh */}
             <SceneAipRiskCoverageMap />
+            {/* F141 (overnight 2026-09-27): Scenario × Graph Community × Ops Event × Dataset Intelligence Saturation Map (SGODSAT) — ◈ SGODSAT button (left:1021880, bottom:8, zIndex:203); parallel-fetches /v1/scenario/list + /v1/graph/communities + /v1/ops/events + /v1/datasets; keyword-correlates each scenario against communities AND ops events AND datasets to classify FULLY_SATURATED/DUAL_LINKED/SINGLE_LINKED/UNSATURATED; amber badge on unsaturated count; filter tabs + text search; expand scenario → community cards (purple) + ops event cards (blue) + dataset cards (green) with relevance bars; ▶ ASSESS SATURATION → /v1/jarvis/agent/chat + TTS; "sgodsat/scenario saturation/community scenario/unsaturated scenario/scenario intelligence saturation" voice trigger; jarvis:sgodsat-toggle event; 90-s auto-refresh */}
+            <ScenarioCommOpsDataSaturation />
 
             <Suspense fallback={<Loading />}>
               <Routes>
