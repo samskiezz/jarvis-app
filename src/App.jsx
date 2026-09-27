@@ -359,6 +359,7 @@ import IntelActorFullMissionCoverage from '@/components/cinematic/IntelActorFull
 import RiskSignalEvidenceMatrix from '@/components/cinematic/RiskSignalEvidenceMatrix';
 import InvestmentRiskIntelDashboard from '@/components/cinematic/InvestmentRiskIntelDashboard';
 import LiveIntelMarketExposureTracker from '@/components/cinematic/LiveIntelMarketExposureTracker';
+import ContactScenarioReportReadiness from '@/components/cinematic/ContactScenarioReportReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1135,6 +1136,8 @@ function App() {
             <InvestmentRiskIntelDashboard />
             {/* F135 (overnight 2026-09-27): Live Intel × Contact × Investment Market Exposure Tracker (LICIMEX) — ◈ LICIMEX button (left:1018520, bottom:8, zIndex:197); parallel-fetches /functions/getLiveIntel + /entities/Contact + /entities/Investment; keyword-correlates each live world event (quakes/crypto/FX) against contacts AND investments to classify BOTH_EXPOSED/CONTACT_ONLY/INVESTMENT_ONLY/CLEAR; amber badge on both-exposed count; filter tabs ALL/BOTH_EXPOSED/CONTACT_ONLY/INVESTMENT_ONLY/CLEAR + text search; expand event → matched contact cards (orange) + investment cards (gold) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLicimexQuery+buildLicimexScript wired in JarvisBrain; "licimex/live intel market/live market exposure/intel exposure/world event portfolio/event exposure" voice trigger; jarvis:licimex-toggle event; 5-min auto-refresh */}
             <LiveIntelMarketExposureTracker />
+            {/* F136 (overnight 2026-09-27): Contact × Scenario × Report × Knowledge Personnel Readiness Index (CSRPRI) — ◈ CSRPRI button (left:1019080, bottom:8, zIndex:198); parallel-fetches /entities/Contact + /v1/scenario/list + /v1/reports + /knowledge/; keyword-correlates each contact against scenarios AND reports AND KB articles to classify FULLY_EQUIPPED/DUAL_COVERED/SINGLE_TRACKED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/FULLY_EQUIPPED/DUAL_COVERED/SINGLE_TRACKED/UNCOVERED + text search; expand contact → matched scenario cards (teal) + report cards (purple) + KB article cards (green) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCsrpriQuery+buildCsrpriScript wired in JarvisBrain; "csrpri/contact readiness/personnel readiness index/contact equipped/uncovered contacts/personnel readiness" voice trigger; jarvis:csrpri-toggle event; 90-s auto-refresh */}
+            <ContactScenarioReportReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>

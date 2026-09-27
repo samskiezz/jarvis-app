@@ -201,6 +201,7 @@ import { isFamicovQuery, buildFamicovScript } from "./IntelActorFullMissionCover
 import { isRkoithemQuery, buildRkoithemScript } from "./RiskSignalEvidenceMatrix";
 import { isIrorfdQuery, buildIrorfdScript } from "./InvestmentRiskIntelDashboard";
 import { isLicimexQuery, buildLicimexScript } from "./LiveIntelMarketExposureTracker";
+import { isCsrpriQuery, buildCsrpriScript } from "./ContactScenarioReportReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2011,6 +2012,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:licimex-toggle"));
       let script = "";
       try { script = await buildLicimexScript(); } catch { script = "LICIMEX Live Intel Market Exposure Tracker online, sir. Correlating live world events against contacts and investments to surface real-world exposure now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCsrpriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csrpri-toggle"));
+      let script = "";
+      try { script = await buildCsrpriScript(); } catch { script = "CSRPRI Contact Personnel Readiness Index online, sir. Cross-referencing contacts against scenarios, reports, and knowledge base to surface readiness gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

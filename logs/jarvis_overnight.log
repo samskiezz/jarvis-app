@@ -126,3 +126,4 @@
 [2026-09-27] F133 RKOITHEM: RiskSignalEvidenceMatrix.jsx created; wired App.jsx + JarvisBrain.jsx; build exit 0
 2026-09-27T07:18:02Z F134 IRORFD — Investment x Report x Ops Event x RiskSignal Financial Risk Intel Dashboard; new InvestmentRiskIntelDashboard.jsx; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
 2026-09-27 F135 LICIMEX: LiveIntelMarketExposureTracker.jsx — Live Intel × Contact × Investment Market Exposure Tracker; parallel-fetches /functions/getLiveIntel + /entities/Contact + /entities/Investment; BOTH_EXPOSED/CONTACT_ONLY/INVESTMENT_ONLY/CLEAR classification; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
+[2026-09-27] F136 CSRPRI — Contact × Scenario × Report × Knowledge Personnel Readiness Index — ContactScenarioReportReadiness.jsx created; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
