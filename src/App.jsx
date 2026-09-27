@@ -351,6 +351,7 @@ import GraphAnnotationOpsSwarmCoverage from '@/components/cinematic/GraphAnnotat
 import SceneTaskReportGrounding from '@/components/cinematic/SceneTaskReportGrounding';
 import SwarmJobInvestmentContactMap from '@/components/cinematic/SwarmJobInvestmentContactMap';
 import IntelActorImpactNexus from '@/components/cinematic/IntelActorImpactNexus';
+import OpsIncidentIntelMesh from '@/components/cinematic/OpsIncidentIntelMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1111,6 +1112,8 @@ function App() {
             <SwarmJobInvestmentContactMap />
             {/* F127 (overnight 2026-09-27): IntelProfile × Task × Investment × Knowledge Actor Impact Nexus (AIKIN) — ◈ AIKIN button (left:1014040, bottom:8, zIndex:189); parallel-fetches /entities/IntelProfile + /entities/Task + /entities/Investment + /knowledge/; keyword-correlates each threat actor profile against tasks AND investments AND KB articles to classify FULL_IMPACT/HIGH_IMPACT/TRACKED/UNTRACKED; red pulse badge on full-impact count; stat tiles ACTORS/TASKS/INVESTMENTS/KB ARTICLES + all four class counts + COVERAGE%; filter tabs ALL/FULL_IMPACT/HIGH_IMPACT/TRACKED/UNTRACKED + text search; expand actor → matched task cards (teal) + investment cards (gold) + KB article cards (green) with relevance bars; ▶ ASSESS IMPACT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isAikinQuery+buildAikinScript wired in JarvisBrain; "aikin/actor impact/intel actor impact/threat actor nexus/full impact actor/untracked actors/actor exposure nexus" voice trigger; jarvis:aikin-toggle event; 90-s auto-refresh */}
             <IntelActorImpactNexus />
+            {/* F128 (overnight 2026-09-27): Ops Event × Graph Centrality × Knowledge × Contact Incident Intelligence Mesh (OINCM) — ◈ OINCM button (left:1014600, bottom:8, zIndex:190); parallel-fetches /v1/ops/events + /v1/graph/centrality + /knowledge/ + /entities/Contact; keyword-correlates each ops event against graph nodes AND KB articles AND contacts to classify FULLY_MESHED/INTEL_LINKED/PARTIAL/ISOLATED; amber badge on isolated count; stat tiles OPS EVENTS/GRAPH NODES/KB ARTICLES/CONTACTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_MESHED/INTEL_LINKED/PARTIAL/ISOLATED + text search; expand event → matched graph node cards (cyan) + KB article cards (green) + contact cards (orange) with relevance bars; ▶ ASSESS MESH → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOincmQuery+buildOincmScript wired in JarvisBrain; "oincm/ops incident mesh/incident intelligence/isolated events/event intelligence coverage/ops knowledge mesh" voice trigger; jarvis:oincm-toggle event; 90-s auto-refresh */}
+            <OpsIncidentIntelMesh />
 
             <Suspense fallback={<Loading />}>
               <Routes>

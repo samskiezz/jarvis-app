@@ -193,6 +193,7 @@ import { isGaoscovQuery, buildGaoscovScript } from "./GraphAnnotationOpsSwarmCov
 import { isSctrocQuery, buildSctrocScript } from "./SceneTaskReportGrounding";
 import { isSvimapQuery, buildSvimapScript } from "./SwarmJobInvestmentContactMap";
 import { isAikinQuery, buildAikinScript } from "./IntelActorImpactNexus";
+import { isOincmQuery, buildOincmScript } from "./OpsIncidentIntelMesh";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1939,6 +1940,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:aikin-toggle"));
       let script = "";
       try { script = await buildAikinScript(); } catch { script = "AIKIN Actor Impact Nexus online, sir. Cross-referencing threat actor profiles against live tasks, investments, and knowledge base to classify full-impact, high-impact, tracked, and untracked actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOincmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oincm-toggle"));
+      let script = "";
+      try { script = await buildOincmScript(); } catch { script = "OINCM Incident Intelligence Mesh online, sir. Cross-referencing ops events against graph centrality nodes, KB articles, and contacts to classify fully-meshed, intel-linked, partial, and isolated events now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
