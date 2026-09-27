@@ -360,6 +360,7 @@ import RiskSignalEvidenceMatrix from '@/components/cinematic/RiskSignalEvidenceM
 import InvestmentRiskIntelDashboard from '@/components/cinematic/InvestmentRiskIntelDashboard';
 import LiveIntelMarketExposureTracker from '@/components/cinematic/LiveIntelMarketExposureTracker';
 import ContactScenarioReportReadiness from '@/components/cinematic/ContactScenarioReportReadiness';
+import TaskGraphOpsKnowledgeNexus from '@/components/cinematic/TaskGraphOpsKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1138,6 +1139,8 @@ function App() {
             <LiveIntelMarketExposureTracker />
             {/* F136 (overnight 2026-09-27): Contact × Scenario × Report × Knowledge Personnel Readiness Index (CSRPRI) — ◈ CSRPRI button (left:1019080, bottom:8, zIndex:198); parallel-fetches /entities/Contact + /v1/scenario/list + /v1/reports + /knowledge/; keyword-correlates each contact against scenarios AND reports AND KB articles to classify FULLY_EQUIPPED/DUAL_COVERED/SINGLE_TRACKED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/FULLY_EQUIPPED/DUAL_COVERED/SINGLE_TRACKED/UNCOVERED + text search; expand contact → matched scenario cards (teal) + report cards (purple) + KB article cards (green) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCsrpriQuery+buildCsrpriScript wired in JarvisBrain; "csrpri/contact readiness/personnel readiness index/contact equipped/uncovered contacts/personnel readiness" voice trigger; jarvis:csrpri-toggle event; 90-s auto-refresh */}
             <ContactScenarioReportReadiness />
+            {/* F137 (overnight 2026-09-27): Task × Graph Annotations × Ops Event × Knowledge Operational Intelligence Nexus (TGOKNEX) — ◈ TGOKNEX button (left:1019640, bottom:8, zIndex:199); parallel-fetches /entities/Task + /v1/graph/annotations + /v1/ops/events + /knowledge/; keyword-correlates each task against graph annotations AND ops events AND KB articles to classify FULLY_GROUNDED/DUAL_GROUNDED/SINGLE_LINKED/BARE; amber badge on bare count; filter tabs ALL/FULLY_GROUNDED/DUAL_GROUNDED/SINGLE_LINKED/BARE + text search; expand task → annotation cards (purple) + ops event cards (blue) + KB article cards (green) with relevance bars; ▶ ASSESS NEXUS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTgoknexQuery+buildTgoknexScript wired in JarvisBrain; "tgoknex/task graph ops knowledge/task operational nexus/bare tasks/task annotation ops/task knowledge ops" voice trigger; jarvis:tgoknex-toggle event; 90-s auto-refresh */}
+            <TaskGraphOpsKnowledgeNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
