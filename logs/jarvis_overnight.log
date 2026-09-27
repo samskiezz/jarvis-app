@@ -120,3 +120,4 @@
 [2026-09-27] F127 AIKIN: IntelActorImpactNexus.jsx — IntelProfile × Task × Investment × Knowledge 4-source actor impact nexus; FULL_IMPACT/HIGH_IMPACT/TRACKED/UNTRACKED; red pulse badge; AI brief+TTS; voice aikin/actor impact; build exit 0
 [2026-09-27] F128 OINCM: OpsIncidentIntelMesh.jsx — Ops Event × Graph Centrality × Knowledge × Contact 4-source incident intelligence mesh; FULLY_MESHED/INTEL_LINKED/PARTIAL/ISOLATED; amber badge on isolated; AI brief+TTS; voice oincm/ops incident mesh; build exit 0
 [2026-09-27] F129 DGOKGND — DatasetGraphOpsKnowledgeNexus.jsx: Dataset × Graph Annotation × Ops Event × Knowledge grounding nexus. New file created, mounted in App.jsx, wired in JarvisBrain.jsx. Build exit 0.
+[2026-09-27] F130 SwarmScenarioReportKnowledgeDoc.jsx (SSRKMDOC): SwarmJob x Scenario x Report x Knowledge 4-source mission documentation coverage; amber badge undocumented; voice 'ssrkmdoc'; build exit 0

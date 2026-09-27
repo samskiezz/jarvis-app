@@ -195,6 +195,7 @@ import { isSvimapQuery, buildSvimapScript } from "./SwarmJobInvestmentContactMap
 import { isAikinQuery, buildAikinScript } from "./IntelActorImpactNexus";
 import { isOincmQuery, buildOincmScript } from "./OpsIncidentIntelMesh";
 import { isDgokgndQuery, buildDgokgndScript } from "./DatasetGraphOpsKnowledgeNexus";
+import { isSsrkmdocQuery, buildSsrkmdocScript } from "./SwarmScenarioReportKnowledgeDoc";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1957,6 +1958,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dgokgnd-toggle"));
       let script = "";
       try { script = await buildDgokgndScript(); } catch { script = "DGOKGND Intelligence Grounding Nexus online, sir. Cross-referencing datasets against graph annotations, ops events, and KB articles to classify fully-grounded, dual-linked, single-linked, and ungrounded datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSsrkmdocQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssrkmdoc-toggle"));
+      let script = "";
+      try { script = await buildSsrkmdocScript(); } catch { script = "SSRKMDOC Mission Documentation Coverage online, sir. Cross-referencing swarm jobs against scenarios, reports, and KB articles to assess documentation completeness now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

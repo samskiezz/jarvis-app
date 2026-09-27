@@ -353,6 +353,7 @@ import SwarmJobInvestmentContactMap from '@/components/cinematic/SwarmJobInvestm
 import IntelActorImpactNexus from '@/components/cinematic/IntelActorImpactNexus';
 import OpsIncidentIntelMesh from '@/components/cinematic/OpsIncidentIntelMesh';
 import DatasetGraphOpsKnowledgeNexus from '@/components/cinematic/DatasetGraphOpsKnowledgeNexus';
+import SwarmScenarioReportKnowledgeDoc from '@/components/cinematic/SwarmScenarioReportKnowledgeDoc';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1117,6 +1118,8 @@ function App() {
             <OpsIncidentIntelMesh />
             {/* F129 (overnight 2026-09-27): Dataset × Graph Annotation × Ops Event × Knowledge Intelligence Grounding Nexus (DGOKGND) — ◈ DGOKGND button (left:1015160, bottom:8, zIndex:191); parallel-fetches /v1/datasets + /v1/graph/annotations + /v1/ops/events + /knowledge/; keyword-correlates each dataset against graph annotations AND ops events AND KB articles to classify FULLY_GROUNDED/DUAL_LINKED/SINGLE_LINKED/UNGROUNDED; amber badge on ungrounded count; filter tabs ALL/FULLY_GROUNDED/DUAL_LINKED/SINGLE_LINKED/UNGROUNDED + text search; expand dataset → matched annotation cards (purple) + ops event cards (orange) + KB article cards (green) with relevance bars; ▶ ASSESS GROUNDING → /v1/jarvis/agent/chat 2-sentence brief + TTS; isDgokgndQuery+buildDgokgndScript wired in JarvisBrain; "dgokgnd/dataset grounding nexus/grounded dataset/ungrounded dataset/dataset annotation/dataset ops knowledge" voice trigger; jarvis:dgokgnd-toggle event; 90-s auto-refresh */}
             <DatasetGraphOpsKnowledgeNexus />
+            {/* F130 (overnight 2026-09-27): SwarmJob × Scenario × Report × Knowledge Mission Documentation Coverage (SSRKMDOC) — ◈ SSRKMDOC button (left:1015720, bottom:8, zIndex:192); parallel-fetches /entities/SwarmJob + /v1/scenario/list + /v1/reports + /knowledge/; keyword-correlates each swarm job against scenarios AND reports AND KB articles to classify FULLY_DOCUMENTED/DUAL_BACKED/SINGLE_BACKED/UNDOCUMENTED; amber badge on undocumented count; filter tabs ALL/FULLY_DOCUMENTED/DUAL_BACKED/SINGLE_BACKED/UNDOCUMENTED + text search; expand job → matched scenario cards (green) + report cards (purple) + KB article cards (teal) with relevance bars; ▶ ASSESS DOCUMENTATION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSsrkmdocQuery+buildSsrkmdocScript wired in JarvisBrain; "ssrkmdoc/swarm documentation/swarm scenario report/undocumented swarm/mission documentation/swarm knowledge coverage" voice trigger; jarvis:ssrkmdoc-toggle event; 90-s auto-refresh */}
+            <SwarmScenarioReportKnowledgeDoc />
 
             <Suspense fallback={<Loading />}>
               <Routes>
