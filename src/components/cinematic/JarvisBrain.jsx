@@ -214,6 +214,7 @@ import { isSocdmapQuery, buildSocdmapScript } from "./SwarmOpsCapacityMap";
 import { isIskfullQuery, buildIskfullScript } from "./InvestigationFullCoverage";
 import { isDgorsimQuery, buildDgorsimScript } from "./DatasetGraphOpsRiskSituationalMap";
 import { isNdratlasQuery, buildNdratlasScript } from "./AipSkillNetworkDefenseAtlas";
+import { isAnequadQuery, buildAnequadScript } from "./IntelActorNetworkExposure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2128,6 +2129,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ndratlas-toggle"));
       let script = "";
       try { script = await buildNdratlasScript(); } catch { script = "NDRATLAS Network Defense Readiness Atlas online, sir. Mapping AIP skills across graph communities, knowledge base, and risk signals to surface networked and isolated capabilities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAnequadQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:anequad-toggle"));
+      let script = "";
+      try { script = await buildAnequadScript(); } catch { script = "ANEQUAD Actor Network Exposure Quadrant online, sir. Cross-referencing intel actor profiles against graph communities, intelligence reports, and ops events to surface fully-exposed threat actors now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

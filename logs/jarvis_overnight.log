@@ -139,3 +139,4 @@
 2026-09-27 F146 ISKFULL: Investigation × AIP Skill × Contact × Knowledge Full-Spectrum Coverage — InvestigationFullCoverage.jsx created; mounted in App.jsx; wired in JarvisBrain.jsx; build exit 0
 2026-09-27 F147 DGORSIM: DatasetGraphOpsRiskSituationalMap.jsx created; Dataset x Graph Community x Ops Event x RiskSignal situational map; imported+mounted in App.jsx; isDgorsimQuery+buildDgorsimScript wired in JarvisBrain.jsx; build exit 0
 [2026-09-27] F148 NDRATLAS: AIP Skill x Graph Community x Knowledge x RiskSignal Network Defense Readiness Atlas — AipSkillNetworkDefenseAtlas.jsx created, mounted in App.jsx, wired in JarvisBrain.jsx, build exit 0
+2026-09-27 F149 ANEQUAD IntelActorNetworkExposure.jsx — IntelProfile × Graph Community × Report × Ops Event Actor Network Exposure Quadrant; build exit 0

@@ -372,6 +372,7 @@ import SwarmOpsCapacityMap from '@/components/cinematic/SwarmOpsCapacityMap';
 import InvestigationFullCoverage from '@/components/cinematic/InvestigationFullCoverage';
 import DatasetGraphOpsRiskSituationalMap from '@/components/cinematic/DatasetGraphOpsRiskSituationalMap';
 import AipSkillNetworkDefenseAtlas from '@/components/cinematic/AipSkillNetworkDefenseAtlas';
+import IntelActorNetworkExposure from '@/components/cinematic/IntelActorNetworkExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1174,6 +1175,8 @@ function App() {
             <DatasetGraphOpsRiskSituationalMap />
             {/* F148 (overnight 2026-09-27): AIP Skill × Graph Community × Knowledge × RiskSignal Network Defense Readiness Atlas (NDRATLAS) — ◈ NDRATLAS button (left:1025800, bottom:8, zIndex:210); parallel-fetches /v1/aip/skill + /v1/graph/communities + /knowledge/ + /entities/RiskSignal; keyword-correlates each skill against community clusters AND KB articles AND risk signals to classify FULLY_NETWORKED/DUAL_NETWORKED/SINGLE_LINKED/ISOLATED; amber badge on isolated count; filter tabs + text search; expand skill → community cards (purple) + KB article cards (green) + risk signal cards (red, severity) with relevance bars; ▶ ASSESS DEFENSE READINESS → /v1/jarvis/agent/chat + TTS; isNdratlasQuery+buildNdratlasScript wired in JarvisBrain; "ndratlas/network defense/skill network/community skill coverage/network ready skills/networked skill" voice trigger; jarvis:ndratlas-toggle event; 90-s auto-refresh */}
             <AipSkillNetworkDefenseAtlas />
+            {/* F149 (overnight 2026-09-27): IntelProfile × Graph Community × Report × Ops Event Actor Network Exposure Quadrant (ANEQUAD) — ◈ ANEQUAD button (left:1026360, bottom:8, zIndex:211); parallel-fetches /entities/IntelProfile + /v1/graph/communities + /v1/reports + /v1/ops/events; keyword-correlates each intel actor profile against network communities AND reports AND ops events to classify FULLY_EXPOSED/DUAL_EXPOSED/SINGLE_LINKED/CONTAINED; red pulse badge on fully-exposed count; filter tabs ALL/FULLY_EXPOSED/DUAL_EXPOSED/SINGLE_LINKED/CONTAINED + text search; expand actor → community cards (purple) + report cards (blue, type badge) + ops event cards (amber) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isAnequadQuery+buildAnequadScript wired in JarvisBrain; "anequad/actor network/intel network exposure/exposed actor/network exposure quadrant/actor graph report" voice trigger; jarvis:anequad-toggle event; 90-s auto-refresh */}
+            <IntelActorNetworkExposure />
 
             <Suspense fallback={<Loading />}>
               <Routes>
