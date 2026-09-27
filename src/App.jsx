@@ -354,6 +354,7 @@ import IntelActorImpactNexus from '@/components/cinematic/IntelActorImpactNexus'
 import OpsIncidentIntelMesh from '@/components/cinematic/OpsIncidentIntelMesh';
 import DatasetGraphOpsKnowledgeNexus from '@/components/cinematic/DatasetGraphOpsKnowledgeNexus';
 import SwarmScenarioReportKnowledgeDoc from '@/components/cinematic/SwarmScenarioReportKnowledgeDoc';
+import ContactOpsGraphAttributionNetwork from '@/components/cinematic/ContactOpsGraphAttributionNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1120,6 +1121,8 @@ function App() {
             <DatasetGraphOpsKnowledgeNexus />
             {/* F130 (overnight 2026-09-27): SwarmJob × Scenario × Report × Knowledge Mission Documentation Coverage (SSRKMDOC) — ◈ SSRKMDOC button (left:1015720, bottom:8, zIndex:192); parallel-fetches /entities/SwarmJob + /v1/scenario/list + /v1/reports + /knowledge/; keyword-correlates each swarm job against scenarios AND reports AND KB articles to classify FULLY_DOCUMENTED/DUAL_BACKED/SINGLE_BACKED/UNDOCUMENTED; amber badge on undocumented count; filter tabs ALL/FULLY_DOCUMENTED/DUAL_BACKED/SINGLE_BACKED/UNDOCUMENTED + text search; expand job → matched scenario cards (green) + report cards (purple) + KB article cards (teal) with relevance bars; ▶ ASSESS DOCUMENTATION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSsrkmdocQuery+buildSsrkmdocScript wired in JarvisBrain; "ssrkmdoc/swarm documentation/swarm scenario report/undocumented swarm/mission documentation/swarm knowledge coverage" voice trigger; jarvis:ssrkmdoc-toggle event; 90-s auto-refresh */}
             <SwarmScenarioReportKnowledgeDoc />
+            {/* F131 (overnight 2026-09-27): Contact × Ops Event × Graph Annotation Incident Attribution Network (COEGAN) — ◈ COEGAN button (left:1016280, bottom:8, zIndex:193); parallel-fetches /entities/Contact + /v1/ops/events + /v1/graph/annotations; keyword-correlates each contact against ops events AND graph annotations to classify FULLY_ATTRIBUTED/OPS_LINKED/GRAPH_TAGGED/UNATTRIBUTED; amber badge on unattributed count; filter tabs ALL/FULLY_ATTRIBUTED/OPS_LINKED/GRAPH_TAGGED/UNATTRIBUTED + text search; expand contact → matched ops event cards (blue) + graph annotation cards (purple) with relevance bars; ▶ ASSESS ATTRIBUTION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCoeganQuery+buildCoeganScript wired in JarvisBrain; "coegan/contact attribution/incident attribution/contact ops graph/unattributed contacts/contact event attribution" voice trigger; jarvis:coegan-toggle event; 90-s auto-refresh */}
+            <ContactOpsGraphAttributionNetwork />
 
             <Suspense fallback={<Loading />}>
               <Routes>

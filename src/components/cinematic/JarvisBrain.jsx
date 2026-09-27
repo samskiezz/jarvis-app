@@ -196,6 +196,7 @@ import { isAikinQuery, buildAikinScript } from "./IntelActorImpactNexus";
 import { isOincmQuery, buildOincmScript } from "./OpsIncidentIntelMesh";
 import { isDgokgndQuery, buildDgokgndScript } from "./DatasetGraphOpsKnowledgeNexus";
 import { isSsrkmdocQuery, buildSsrkmdocScript } from "./SwarmScenarioReportKnowledgeDoc";
+import { isCoeganQuery, buildCoeganScript } from "./ContactOpsGraphAttributionNetwork";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1966,6 +1967,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ssrkmdoc-toggle"));
       let script = "";
       try { script = await buildSsrkmdocScript(); } catch { script = "SSRKMDOC Mission Documentation Coverage online, sir. Cross-referencing swarm jobs against scenarios, reports, and KB articles to assess documentation completeness now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCoeganQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:coegan-toggle"));
+      let script = "";
+      try { script = await buildCoeganScript(); } catch { script = "COEGAN Incident Attribution Network online, sir. Cross-referencing contacts against operational events and graph annotations to surface attribution gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
