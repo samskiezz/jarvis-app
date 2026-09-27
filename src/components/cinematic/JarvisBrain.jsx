@@ -213,6 +213,7 @@ import { isCsoermQuery, buildCsoermScript } from "./ContactScenarioOpsRiskMatrix
 import { isSocdmapQuery, buildSocdmapScript } from "./SwarmOpsCapacityMap";
 import { isIskfullQuery, buildIskfullScript } from "./InvestigationFullCoverage";
 import { isDgorsimQuery, buildDgorsimScript } from "./DatasetGraphOpsRiskSituationalMap";
+import { isNdratlasQuery, buildNdratlasScript } from "./AipSkillNetworkDefenseAtlas";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2119,6 +2120,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dgorsim-toggle"));
       let script = "";
       try { script = await buildDgorsimScript(); } catch { script = "DGORSIM Situational Intelligence Map online, sir. Cross-referencing datasets against graph communities, ops events, and risk signals to surface grounded and orphaned datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isNdratlasQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ndratlas-toggle"));
+      let script = "";
+      try { script = await buildNdratlasScript(); } catch { script = "NDRATLAS Network Defense Readiness Atlas online, sir. Mapping AIP skills across graph communities, knowledge base, and risk signals to surface networked and isolated capabilities now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -371,6 +371,7 @@ import ContactScenarioOpsRiskMatrix from '@/components/cinematic/ContactScenario
 import SwarmOpsCapacityMap from '@/components/cinematic/SwarmOpsCapacityMap';
 import InvestigationFullCoverage from '@/components/cinematic/InvestigationFullCoverage';
 import DatasetGraphOpsRiskSituationalMap from '@/components/cinematic/DatasetGraphOpsRiskSituationalMap';
+import AipSkillNetworkDefenseAtlas from '@/components/cinematic/AipSkillNetworkDefenseAtlas';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1171,6 +1172,8 @@ function App() {
             <InvestigationFullCoverage />
             {/* F147 (overnight 2026-09-27): Dataset × Graph Community × Ops Event × RiskSignal Situational Intelligence Map (DGORSIM) — ◈ DGORSIM button (left:1025240, bottom:8, zIndex:209); parallel-fetches /v1/datasets + /v1/graph/communities + /v1/ops/events + /entities/RiskSignal; keyword-correlates each dataset against community clusters AND ops events AND risk signals to classify FULLY_GROUNDED/DUAL_LINKED/SINGLE_LINKED/ORPHANED; amber badge on orphaned count; filter tabs + text search; expand dataset → community cards (purple) + ops event cards (blue) + risk signal cards (red, severity) with relevance bars; ▶ ASSESS SITUATION → /v1/jarvis/agent/chat + TTS; isDgorsimQuery+buildDgorsimScript wired in JarvisBrain; "dgorsim/dataset situation/situational dataset/orphaned dataset situation/dataset threat context" voice trigger; jarvis:dgorsim-toggle event; 90-s auto-refresh */}
             <DatasetGraphOpsRiskSituationalMap />
+            {/* F148 (overnight 2026-09-27): AIP Skill × Graph Community × Knowledge × RiskSignal Network Defense Readiness Atlas (NDRATLAS) — ◈ NDRATLAS button (left:1025800, bottom:8, zIndex:210); parallel-fetches /v1/aip/skill + /v1/graph/communities + /knowledge/ + /entities/RiskSignal; keyword-correlates each skill against community clusters AND KB articles AND risk signals to classify FULLY_NETWORKED/DUAL_NETWORKED/SINGLE_LINKED/ISOLATED; amber badge on isolated count; filter tabs + text search; expand skill → community cards (purple) + KB article cards (green) + risk signal cards (red, severity) with relevance bars; ▶ ASSESS DEFENSE READINESS → /v1/jarvis/agent/chat + TTS; isNdratlasQuery+buildNdratlasScript wired in JarvisBrain; "ndratlas/network defense/skill network/community skill coverage/network ready skills/networked skill" voice trigger; jarvis:ndratlas-toggle event; 90-s auto-refresh */}
+            <AipSkillNetworkDefenseAtlas />
 
             <Suspense fallback={<Loading />}>
               <Routes>

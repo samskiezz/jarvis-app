@@ -138,3 +138,4 @@
 [2026-09-27] F145 SOCDMAP — SwarmOpsCapacityMap.jsx created; SwarmJob × AIP Skill × Contact × Dataset Operational Capacity Map; imported+mounted in App.jsx; isSocdmapQuery+buildSocdmapScript wired in JarvisBrain.jsx; build exit 0
 2026-09-27 F146 ISKFULL: Investigation × AIP Skill × Contact × Knowledge Full-Spectrum Coverage — InvestigationFullCoverage.jsx created; mounted in App.jsx; wired in JarvisBrain.jsx; build exit 0
 2026-09-27 F147 DGORSIM: DatasetGraphOpsRiskSituationalMap.jsx created; Dataset x Graph Community x Ops Event x RiskSignal situational map; imported+mounted in App.jsx; isDgorsimQuery+buildDgorsimScript wired in JarvisBrain.jsx; build exit 0
+[2026-09-27] F148 NDRATLAS: AIP Skill x Graph Community x Knowledge x RiskSignal Network Defense Readiness Atlas — AipSkillNetworkDefenseAtlas.jsx created, mounted in App.jsx, wired in JarvisBrain.jsx, build exit 0
