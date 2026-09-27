@@ -210,6 +210,7 @@ import { isSgodsatQuery, buildSgodsatScript } from "./ScenarioCommOpsDataSaturat
 import { isGcknipQuery, buildGcknipScript } from "./GraphCommunityKnowledgeIntelCoverage";
 import { isTikdoiQuery, buildTikdoiScript } from "./TaskIntelDatasetKnowledgeCoverage";
 import { isCsoermQuery, buildCsoermScript } from "./ContactScenarioOpsRiskMatrix";
+import { isSocdmapQuery, buildSocdmapScript } from "./SwarmOpsCapacityMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2092,6 +2093,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:csoerm-toggle"));
       let script = "";
       try { script = await buildCsoermScript(); } catch { script = "CSOERM Personnel Threat Activation Matrix online, sir. Correlating contacts against scenario, ops event, and risk signal dimensions to surface fully activated and passive personnel now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSocdmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:socdmap-toggle"));
+      let script = "";
+      try { script = await buildSocdmapScript(); } catch { script = "SOCDMAP Operational Capacity Map online, sir. Cross-referencing swarm jobs against AIP skills, contacts, and datasets to surface fully staffed and unsupported operations now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

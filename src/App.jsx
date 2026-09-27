@@ -368,6 +368,7 @@ import ScenarioCommOpsDataSaturation from '@/components/cinematic/ScenarioCommOp
 import GraphCommunityKnowledgeIntelCoverage from '@/components/cinematic/GraphCommunityKnowledgeIntelCoverage';
 import TaskIntelDatasetKnowledgeCoverage from '@/components/cinematic/TaskIntelDatasetKnowledgeCoverage';
 import ContactScenarioOpsRiskMatrix from '@/components/cinematic/ContactScenarioOpsRiskMatrix';
+import SwarmOpsCapacityMap from '@/components/cinematic/SwarmOpsCapacityMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1162,6 +1163,8 @@ function App() {
             <TaskIntelDatasetKnowledgeCoverage />
             {/* F144 (overnight 2026-09-27): Contact × Scenario × Ops Event × RiskSignal Personnel Threat Activation Matrix (CSOERM) — ◈ CSOERM button (left:1023560, bottom:8, zIndex:206); parallel-fetches /entities/Contact + /v1/scenario/list + /v1/ops/events + /entities/RiskSignal; keyword-correlates each contact against scenario playbooks AND ops events AND risk signals to classify FULLY_ACTIVATED/DUAL_ACTIVATED/SINGLE_LINKED/PASSIVE; red pulse badge on fully-activated count; filter tabs + text search; expand contact → scenario cards (green) + ops event cards (blue) + risk signal cards (red, severity) with relevance bars; ▶ ASSESS ACTIVATION → /v1/jarvis/agent/chat + TTS; isCsoermQuery+buildCsoermScript wired in JarvisBrain; "csoerm/contact activation/personnel activation/activated contacts/scenario contact risk/contact threat activation" voice trigger; jarvis:csoerm-toggle event; 90-s auto-refresh */}
             <ContactScenarioOpsRiskMatrix />
+            {/* F145 (overnight 2026-09-27): SwarmJob × AIP Skill × Contact × Dataset Operational Capacity Map (SOCDMAP) — ◈ SOCDMAP button (left:1024120, bottom:8, zIndex:207); parallel-fetches /entities/SwarmJob + /v1/aip/skill + /entities/Contact + /v1/datasets; keyword-correlates each swarm job against AIP skills AND contacts AND datasets to classify FULLY_STAFFED/DUAL_STAFFED/SINGLE_LINKED/UNSUPPORTED; amber badge on unsupported count; filter tabs + text search; expand job → skill cards (cyan) + contact cards (orange) + dataset cards (purple) with relevance bars; ▶ ASSESS CAPACITY → /v1/jarvis/agent/chat + TTS; isSocdmapQuery+buildSocdmapScript wired in JarvisBrain; "socdmap/swarm capacity/swarm staffed/unsupported swarm" voice trigger; jarvis:socdmap-toggle event; 90-s auto-refresh */}
+            <SwarmOpsCapacityMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
