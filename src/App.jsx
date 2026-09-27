@@ -367,6 +367,7 @@ import SceneAipRiskCoverageMap from '@/components/cinematic/SceneAipRiskCoverage
 import ScenarioCommOpsDataSaturation from '@/components/cinematic/ScenarioCommOpsDataSaturation';
 import GraphCommunityKnowledgeIntelCoverage from '@/components/cinematic/GraphCommunityKnowledgeIntelCoverage';
 import TaskIntelDatasetKnowledgeCoverage from '@/components/cinematic/TaskIntelDatasetKnowledgeCoverage';
+import ContactScenarioOpsRiskMatrix from '@/components/cinematic/ContactScenarioOpsRiskMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1159,6 +1160,8 @@ function App() {
             <GraphCommunityKnowledgeIntelCoverage />
             {/* F143 (overnight 2026-09-27): Task × IntelProfile × Dataset × Knowledge Operational Intelligence Coverage (TIKDOI) — ◈ TIKDOI button (left:1023000, bottom:8, zIndex:205); parallel-fetches /entities/Task + /entities/IntelProfile + /v1/datasets + /knowledge/; keyword-correlates each task against intel profiles AND datasets AND KB articles to classify FULLY_COVERED/DUAL_COVERED/SINGLE_COVERED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/FULLY_COVERED/DUAL_COVERED/SINGLE_COVERED/UNCOVERED + text search; expand task → intel profile cards (orange) + dataset cards (purple) + KB article cards (green) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTikdoiQuery+buildTikdoiScript wired in JarvisBrain; "tikdoi/task intelligence coverage/uncovered tasks/task intel data/task full coverage" voice trigger; jarvis:tikdoi-toggle event; 90-s auto-refresh */}
             <TaskIntelDatasetKnowledgeCoverage />
+            {/* F144 (overnight 2026-09-27): Contact × Scenario × Ops Event × RiskSignal Personnel Threat Activation Matrix (CSOERM) — ◈ CSOERM button (left:1023560, bottom:8, zIndex:206); parallel-fetches /entities/Contact + /v1/scenario/list + /v1/ops/events + /entities/RiskSignal; keyword-correlates each contact against scenario playbooks AND ops events AND risk signals to classify FULLY_ACTIVATED/DUAL_ACTIVATED/SINGLE_LINKED/PASSIVE; red pulse badge on fully-activated count; filter tabs + text search; expand contact → scenario cards (green) + ops event cards (blue) + risk signal cards (red, severity) with relevance bars; ▶ ASSESS ACTIVATION → /v1/jarvis/agent/chat + TTS; isCsoermQuery+buildCsoermScript wired in JarvisBrain; "csoerm/contact activation/personnel activation/activated contacts/scenario contact risk/contact threat activation" voice trigger; jarvis:csoerm-toggle event; 90-s auto-refresh */}
+            <ContactScenarioOpsRiskMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
