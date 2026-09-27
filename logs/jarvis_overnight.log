@@ -124,3 +124,4 @@
 [2026-09-27] F131 COEGAN: ContactOpsGraphAttributionNetwork.jsx — Contact × Ops Event × Graph Annotation Incident Attribution Network; imported+mounted App.jsx; wired JarvisBrain.jsx; build exit 0
 2026-09-27 F132 IntelActorFullMissionCoverage.jsx (FAMICOV) — IntelProfile × Task × Knowledge × Scenario full actor mission intelligence coverage; 4-class FULLY_TRACKED/DUAL_COVERED/SINGLE_TRACKED/UNTRACKED; wired App.jsx + JarvisBrain.jsx; build exit 0
 [2026-09-27] F133 RKOITHEM: RiskSignalEvidenceMatrix.jsx created; wired App.jsx + JarvisBrain.jsx; build exit 0
+2026-09-27T07:18:02Z F134 IRORFD — Investment x Report x Ops Event x RiskSignal Financial Risk Intel Dashboard; new InvestmentRiskIntelDashboard.jsx; mounted App.jsx; wired JarvisBrain.jsx; build exit 0

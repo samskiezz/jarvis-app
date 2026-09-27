@@ -357,6 +357,7 @@ import SwarmScenarioReportKnowledgeDoc from '@/components/cinematic/SwarmScenari
 import ContactOpsGraphAttributionNetwork from '@/components/cinematic/ContactOpsGraphAttributionNetwork';
 import IntelActorFullMissionCoverage from '@/components/cinematic/IntelActorFullMissionCoverage';
 import RiskSignalEvidenceMatrix from '@/components/cinematic/RiskSignalEvidenceMatrix';
+import InvestmentRiskIntelDashboard from '@/components/cinematic/InvestmentRiskIntelDashboard';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1129,6 +1130,8 @@ function App() {
             <IntelActorFullMissionCoverage />
             {/* F133 (overnight 2026-09-27): Risk Signal × Knowledge × Ops Event × IntelProfile Comprehensive Threat Evidence Matrix (RKOITHEM) — ◈ RKOITHEM button (left:1017400, bottom:8, zIndex:195); parallel-fetches /entities/RiskSignal + /knowledge/ + /v1/ops/events + /entities/IntelProfile; keyword-correlates each risk signal against KB articles AND ops events AND intel profiles to classify FULLY_EVIDENCED/DUAL_EVIDENCED/SINGLE_EVIDENCED/UNEVIDENCED; red pulse badge on unevidenced count; stat tiles RISK SIGS/KB ARTICLES/OPS EVENTS/INTEL PROFILES + all four class counts + EVIDENCE%; filter tabs ALL/FULLY_EVIDENCED/DUAL_EVIDENCED/SINGLE_EVIDENCED/UNEVIDENCED + text search; expand signal → matched KB article cards (green) + ops event cards (blue) + intel profile cards (orange) with relevance bars; ▶ ASSESS EVIDENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRkoithemQuery+buildRkoithemScript wired in JarvisBrain; "rkoithem/threat evidence/risk evidence/evidenced risk/unevidenced risk/comprehensive threat evidence" voice trigger; jarvis:rkoithem-toggle event; 90-s auto-refresh */}
             <RiskSignalEvidenceMatrix />
+            {/* F134 (overnight 2026-09-27): Investment × Report × Ops Event × RiskSignal Financial Risk Intelligence Dashboard (IRORFD) — ◈ IRORFD button (left:1017960, bottom:8, zIndex:196); parallel-fetches /entities/Investment + /v1/reports + /v1/ops/events + /entities/RiskSignal; keyword-correlates each investment against reports AND ops events AND risk signals to classify FULLY_TRACKED/DUAL_TRACKED/PARTIAL/UNTRACKED; amber badge on untracked count; stat tiles INVESTMENTS/REPORTS/OPS EVENTS/RISK SIGS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_TRACKED/DUAL_TRACKED/PARTIAL/UNTRACKED + text search; expand investment → matched report cards (purple, type badge) + ops event cards (blue) + risk signal cards (red, severity badge) with relevance bars; ▶ ASSESS RISK INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIrorfdQuery+buildIrorfdScript wired in JarvisBrain; "irorfd/investment risk intelligence/financial risk dashboard/untracked investments/investment intel dashboard/financial intelligence coverage" voice trigger; jarvis:irorfd-toggle event; 90-s auto-refresh */}
+            <InvestmentRiskIntelDashboard />
 
             <Suspense fallback={<Loading />}>
               <Routes>

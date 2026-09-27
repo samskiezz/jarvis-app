@@ -199,6 +199,7 @@ import { isSsrkmdocQuery, buildSsrkmdocScript } from "./SwarmScenarioReportKnowl
 import { isCoeganQuery, buildCoeganScript } from "./ContactOpsGraphAttributionNetwork";
 import { isFamicovQuery, buildFamicovScript } from "./IntelActorFullMissionCoverage";
 import { isRkoithemQuery, buildRkoithemScript } from "./RiskSignalEvidenceMatrix";
+import { isIrorfdQuery, buildIrorfdScript } from "./InvestmentRiskIntelDashboard";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1993,6 +1994,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rkoithem-toggle"));
       let script = "";
       try { script = await buildRkoithemScript(); } catch { script = "RKOITHEM Threat Evidence Matrix online, sir. Correlating risk signals against KB articles, ops events, and intel profiles to surface unevidenced threats now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIrorfdQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:irorfd-toggle"));
+      let script = "";
+      try { script = await buildIrorfdScript(); } catch { script = "IRORFD Financial Risk Intelligence Dashboard online, sir. Correlating investments against reports, ops events, and risk signals to surface untracked assets now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
