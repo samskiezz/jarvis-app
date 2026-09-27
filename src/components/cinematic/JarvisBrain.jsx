@@ -215,6 +215,7 @@ import { isIskfullQuery, buildIskfullScript } from "./InvestigationFullCoverage"
 import { isDgorsimQuery, buildDgorsimScript } from "./DatasetGraphOpsRiskSituationalMap";
 import { isNdratlasQuery, buildNdratlasScript } from "./AipSkillNetworkDefenseAtlas";
 import { isAnequadQuery, buildAnequadScript } from "./IntelActorNetworkExposure";
+import { isForknQuery, buildForknScript } from "./InvestmentOpsRiskNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2137,6 +2138,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:anequad-toggle"));
       let script = "";
       try { script = await buildAnequadScript(); } catch { script = "ANEQUAD Actor Network Exposure Quadrant online, sir. Cross-referencing intel actor profiles against graph communities, intelligence reports, and ops events to surface fully-exposed threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isForknQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:forkn-toggle"));
+      let script = "";
+      try { script = await buildForknScript(); } catch { script = "FORKN Financial Operations Risk Nexus online, sir. Correlating investments against swarm automation, scenario playbooks, and active risk signals to surface portfolio blind spots now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

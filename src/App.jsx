@@ -373,6 +373,7 @@ import InvestigationFullCoverage from '@/components/cinematic/InvestigationFullC
 import DatasetGraphOpsRiskSituationalMap from '@/components/cinematic/DatasetGraphOpsRiskSituationalMap';
 import AipSkillNetworkDefenseAtlas from '@/components/cinematic/AipSkillNetworkDefenseAtlas';
 import IntelActorNetworkExposure from '@/components/cinematic/IntelActorNetworkExposure';
+import InvestmentOpsRiskNexus from '@/components/cinematic/InvestmentOpsRiskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1177,6 +1178,8 @@ function App() {
             <AipSkillNetworkDefenseAtlas />
             {/* F149 (overnight 2026-09-27): IntelProfile × Graph Community × Report × Ops Event Actor Network Exposure Quadrant (ANEQUAD) — ◈ ANEQUAD button (left:1026360, bottom:8, zIndex:211); parallel-fetches /entities/IntelProfile + /v1/graph/communities + /v1/reports + /v1/ops/events; keyword-correlates each intel actor profile against network communities AND reports AND ops events to classify FULLY_EXPOSED/DUAL_EXPOSED/SINGLE_LINKED/CONTAINED; red pulse badge on fully-exposed count; filter tabs ALL/FULLY_EXPOSED/DUAL_EXPOSED/SINGLE_LINKED/CONTAINED + text search; expand actor → community cards (purple) + report cards (blue, type badge) + ops event cards (amber) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isAnequadQuery+buildAnequadScript wired in JarvisBrain; "anequad/actor network/intel network exposure/exposed actor/network exposure quadrant/actor graph report" voice trigger; jarvis:anequad-toggle event; 90-s auto-refresh */}
             <IntelActorNetworkExposure />
+            {/* F150 (overnight 2026-09-27): Investment × SwarmJob × Scenario × RiskSignal Financial Operations Risk Nexus (FORKN) — ◈ FORKN button (left:1026920, bottom:8, zIndex:212); parallel-fetches /entities/Investment + /entities/SwarmJob + /v1/scenario/list + /entities/RiskSignal; keyword-correlates each investment against swarm jobs AND scenarios AND risk signals to classify FULLY_MANAGED/DUAL_MANAGED/SINGLE_LINKED/UNMANAGED; amber badge on unmanaged count; filter tabs + text search; expand investment → swarm job cards (cyan) + scenario cards (green) + risk signal cards (red, severity badge) with relevance bars; ▶ ASSESS RISK NEXUS → /v1/jarvis/agent/chat + TTS; isForknQuery+buildForknScript wired in JarvisBrain; "forkn/investment risk nexus/financial operations/unmanaged investment" voice trigger; jarvis:forkn-toggle event; 90-s auto-refresh */}
+            <InvestmentOpsRiskNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
