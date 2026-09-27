@@ -365,6 +365,7 @@ import AipSkillFullOpsCoverage from '@/components/cinematic/AipSkillFullOpsCover
 import ScenarioRiskSwarmContainment from '@/components/cinematic/ScenarioRiskSwarmContainment';
 import SceneAipRiskCoverageMap from '@/components/cinematic/SceneAipRiskCoverageMap';
 import ScenarioCommOpsDataSaturation from '@/components/cinematic/ScenarioCommOpsDataSaturation';
+import GraphCommunityKnowledgeIntelCoverage from '@/components/cinematic/GraphCommunityKnowledgeIntelCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1153,6 +1154,8 @@ function App() {
             <SceneAipRiskCoverageMap />
             {/* F141 (overnight 2026-09-27): Scenario × Graph Community × Ops Event × Dataset Intelligence Saturation Map (SGODSAT) — ◈ SGODSAT button (left:1021880, bottom:8, zIndex:203); parallel-fetches /v1/scenario/list + /v1/graph/communities + /v1/ops/events + /v1/datasets; keyword-correlates each scenario against communities AND ops events AND datasets to classify FULLY_SATURATED/DUAL_LINKED/SINGLE_LINKED/UNSATURATED; amber badge on unsaturated count; filter tabs + text search; expand scenario → community cards (purple) + ops event cards (blue) + dataset cards (green) with relevance bars; ▶ ASSESS SATURATION → /v1/jarvis/agent/chat + TTS; "sgodsat/scenario saturation/community scenario/unsaturated scenario/scenario intelligence saturation" voice trigger; jarvis:sgodsat-toggle event; 90-s auto-refresh */}
             <ScenarioCommOpsDataSaturation />
+            {/* F142 (overnight 2026-09-27): Graph Community × Knowledge × IntelProfile Network Intelligence Coverage (GCKNIP) — ◈ GCKNIP button (left:1022440, bottom:8, zIndex:204); parallel-fetches /v1/graph/communities + /knowledge/ + /entities/IntelProfile; keyword-correlates each network community against KB articles AND intel actor profiles to classify FULLY_MAPPED/KB_BACKED/ACTOR_LINKED/UNMAPPED; amber badge on unmapped count; filter tabs ALL/FULLY_MAPPED/KB_BACKED/ACTOR_LINKED/UNMAPPED + text search; expand community → KB article cards (green) + intel profile cards (orange) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcknipQuery+buildGcknipScript wired in JarvisBrain; "gcknip/graph community knowledge/network intel coverage/unmapped community/community knowledge/community actor" voice trigger; jarvis:gcknip-toggle event; 90-s auto-refresh */}
+            <GraphCommunityKnowledgeIntelCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
