@@ -205,6 +205,7 @@ import { isCsrpriQuery, buildCsrpriScript } from "./ContactScenarioReportReadine
 import { isTgoknexQuery, buildTgoknexScript } from "./TaskGraphOpsKnowledgeNexus";
 import { isFocohQuery, buildFocohScript } from "./AipSkillFullOpsCoverage";
 import { isStcixQuery, buildStcixScript } from "./ScenarioRiskSwarmContainment";
+import { isSciaipQuery, buildSciaipScript } from "./SceneAipRiskCoverageMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2047,6 +2048,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:stcix-toggle"));
       let script = "";
       try { script = await buildStcixScript(); } catch { script = "STCIX Threat Containment Index online, sir. Correlating scenarios against risk signals, swarm jobs, and intel profiles to surface containment gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSciaipQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sciaip-toggle"));
+      let script = "";
+      try { script = await buildSciaipScript(); } catch { script = "SCIAIP Scene Intelligence Coverage Map online, sir. Cross-referencing cinematic scenes against AIP skills and risk signals to surface unmonitored dimensions now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

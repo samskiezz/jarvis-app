@@ -363,6 +363,7 @@ import ContactScenarioReportReadiness from '@/components/cinematic/ContactScenar
 import TaskGraphOpsKnowledgeNexus from '@/components/cinematic/TaskGraphOpsKnowledgeNexus';
 import AipSkillFullOpsCoverage from '@/components/cinematic/AipSkillFullOpsCoverage';
 import ScenarioRiskSwarmContainment from '@/components/cinematic/ScenarioRiskSwarmContainment';
+import SceneAipRiskCoverageMap from '@/components/cinematic/SceneAipRiskCoverageMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1147,6 +1148,8 @@ function App() {
             <AipSkillFullOpsCoverage />
             {/* F139 (overnight 2026-09-27): Scenario × RiskSignal × SwarmJob × IntelProfile Threat Containment Index (STCIX) — ◈ STCIX button (left:1020760, bottom:8, zIndex:201); parallel-fetches /v1/scenario/list + /entities/RiskSignal + /entities/SwarmJob + /entities/IntelProfile; keyword-correlates each scenario against risk signals AND swarm jobs AND intel profiles to classify FULLY_CONTAINED/DUAL_COVERED/PARTIALLY_COVERED/UNCONTAINED; red pulse badge on uncontained count; stat tiles SCENARIOS/RISK SIGS/SWARM JOBS/INTEL PROFILES + all four class counts + COVERAGE%; filter tabs ALL/FULLY_CONTAINED/DUAL_COVERED/PARTIALLY_COVERED/UNCONTAINED + text search; expand scenario → matched risk signal cards (red, severity) + swarm job cards (cyan, status) + intel profile cards (orange, role) with relevance bars; ▶ ASSESS CONTAINMENT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isStcixQuery+buildStcixScript wired in JarvisBrain; "stcix/threat containment/scenario containment/uncontained scenario/risk containment/containment index" voice trigger; jarvis:stcix-toggle event; 90-s auto-refresh */}
             <ScenarioRiskSwarmContainment />
+            {/* F140 (overnight 2026-09-27): Cinematic Scene × AIP Skill × RiskSignal Intelligence Coverage Map (SCIAIP) — ◈ SCIAIP button (left:1021320, bottom:8, zIndex:202); parallel-fetches /v1/cinematic/scene/01..10 + /v1/aip/skill + /entities/RiskSignal; keyword-correlates each scene's anchor/description text against AIP skills AND risk signals to classify FULLY_ARMED/SKILL_BACKED/RISK_FLAGGED/UNMONITORED; amber badge on unmonitored count; filter tabs ALL/FULLY_ARMED/SKILL_BACKED/RISK_FLAGGED/UNMONITORED + text search; expand scene → AIP skill cards (cyan) + risk signal cards (red) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSciaipQuery+buildSciaipScript wired in JarvisBrain; "sciaip/scene intelligence/scene skill/scene risk/armed scenes/unmonitored scenes/scene coverage map" voice trigger; jarvis:sciaip-toggle event; 90-s auto-refresh */}
+            <SceneAipRiskCoverageMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
