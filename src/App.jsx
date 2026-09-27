@@ -370,6 +370,7 @@ import TaskIntelDatasetKnowledgeCoverage from '@/components/cinematic/TaskIntelD
 import ContactScenarioOpsRiskMatrix from '@/components/cinematic/ContactScenarioOpsRiskMatrix';
 import SwarmOpsCapacityMap from '@/components/cinematic/SwarmOpsCapacityMap';
 import InvestigationFullCoverage from '@/components/cinematic/InvestigationFullCoverage';
+import DatasetGraphOpsRiskSituationalMap from '@/components/cinematic/DatasetGraphOpsRiskSituationalMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1168,6 +1169,8 @@ function App() {
             <SwarmOpsCapacityMap />
             {/* F146 (overnight 2026-09-27): Investigation × AIP Skill × Contact × Knowledge Full-Spectrum Investigation Coverage (ISKFULL) — ◈ ISKFULL button (left:1024680, bottom:8, zIndex:208); parallel-fetches /v1/investigations + /v1/aip/skill + /entities/Contact + /knowledge/; keyword-correlates each investigation against AIP skills AND contacts AND KB articles to classify FULLY_COVERED/DUAL_COVERED/SINGLE_LINKED/BARE; amber badge on bare count; filter tabs + text search; expand investigation → skill cards (cyan) + contact cards (orange) + KB article cards (green) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isIskfullQuery+buildIskfullScript wired in JarvisBrain; "iskfull/investigation coverage/bare investigations" voice trigger; jarvis:iskfull-toggle event; 90-s auto-refresh */}
             <InvestigationFullCoverage />
+            {/* F147 (overnight 2026-09-27): Dataset × Graph Community × Ops Event × RiskSignal Situational Intelligence Map (DGORSIM) — ◈ DGORSIM button (left:1025240, bottom:8, zIndex:209); parallel-fetches /v1/datasets + /v1/graph/communities + /v1/ops/events + /entities/RiskSignal; keyword-correlates each dataset against community clusters AND ops events AND risk signals to classify FULLY_GROUNDED/DUAL_LINKED/SINGLE_LINKED/ORPHANED; amber badge on orphaned count; filter tabs + text search; expand dataset → community cards (purple) + ops event cards (blue) + risk signal cards (red, severity) with relevance bars; ▶ ASSESS SITUATION → /v1/jarvis/agent/chat + TTS; isDgorsimQuery+buildDgorsimScript wired in JarvisBrain; "dgorsim/dataset situation/situational dataset/orphaned dataset situation/dataset threat context" voice trigger; jarvis:dgorsim-toggle event; 90-s auto-refresh */}
+            <DatasetGraphOpsRiskSituationalMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

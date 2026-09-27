@@ -212,6 +212,7 @@ import { isTikdoiQuery, buildTikdoiScript } from "./TaskIntelDatasetKnowledgeCov
 import { isCsoermQuery, buildCsoermScript } from "./ContactScenarioOpsRiskMatrix";
 import { isSocdmapQuery, buildSocdmapScript } from "./SwarmOpsCapacityMap";
 import { isIskfullQuery, buildIskfullScript } from "./InvestigationFullCoverage";
+import { isDgorsimQuery, buildDgorsimScript } from "./DatasetGraphOpsRiskSituationalMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2110,6 +2111,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iskfull-toggle"));
       let script = "";
       try { script = await buildIskfullScript(); } catch { script = "ISKFULL Full Investigation Coverage online, sir. Cross-referencing investigations against AIP skills, contacts, and knowledge base articles to surface fully covered and bare investigations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDgorsimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dgorsim-toggle"));
+      let script = "";
+      try { script = await buildDgorsimScript(); } catch { script = "DGORSIM Situational Intelligence Map online, sir. Cross-referencing datasets against graph communities, ops events, and risk signals to surface grounded and orphaned datasets now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
