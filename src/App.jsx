@@ -358,6 +358,7 @@ import ContactOpsGraphAttributionNetwork from '@/components/cinematic/ContactOps
 import IntelActorFullMissionCoverage from '@/components/cinematic/IntelActorFullMissionCoverage';
 import RiskSignalEvidenceMatrix from '@/components/cinematic/RiskSignalEvidenceMatrix';
 import InvestmentRiskIntelDashboard from '@/components/cinematic/InvestmentRiskIntelDashboard';
+import LiveIntelMarketExposureTracker from '@/components/cinematic/LiveIntelMarketExposureTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1132,6 +1133,8 @@ function App() {
             <RiskSignalEvidenceMatrix />
             {/* F134 (overnight 2026-09-27): Investment × Report × Ops Event × RiskSignal Financial Risk Intelligence Dashboard (IRORFD) — ◈ IRORFD button (left:1017960, bottom:8, zIndex:196); parallel-fetches /entities/Investment + /v1/reports + /v1/ops/events + /entities/RiskSignal; keyword-correlates each investment against reports AND ops events AND risk signals to classify FULLY_TRACKED/DUAL_TRACKED/PARTIAL/UNTRACKED; amber badge on untracked count; stat tiles INVESTMENTS/REPORTS/OPS EVENTS/RISK SIGS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_TRACKED/DUAL_TRACKED/PARTIAL/UNTRACKED + text search; expand investment → matched report cards (purple, type badge) + ops event cards (blue) + risk signal cards (red, severity badge) with relevance bars; ▶ ASSESS RISK INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIrorfdQuery+buildIrorfdScript wired in JarvisBrain; "irorfd/investment risk intelligence/financial risk dashboard/untracked investments/investment intel dashboard/financial intelligence coverage" voice trigger; jarvis:irorfd-toggle event; 90-s auto-refresh */}
             <InvestmentRiskIntelDashboard />
+            {/* F135 (overnight 2026-09-27): Live Intel × Contact × Investment Market Exposure Tracker (LICIMEX) — ◈ LICIMEX button (left:1018520, bottom:8, zIndex:197); parallel-fetches /functions/getLiveIntel + /entities/Contact + /entities/Investment; keyword-correlates each live world event (quakes/crypto/FX) against contacts AND investments to classify BOTH_EXPOSED/CONTACT_ONLY/INVESTMENT_ONLY/CLEAR; amber badge on both-exposed count; filter tabs ALL/BOTH_EXPOSED/CONTACT_ONLY/INVESTMENT_ONLY/CLEAR + text search; expand event → matched contact cards (orange) + investment cards (gold) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLicimexQuery+buildLicimexScript wired in JarvisBrain; "licimex/live intel market/live market exposure/intel exposure/world event portfolio/event exposure" voice trigger; jarvis:licimex-toggle event; 5-min auto-refresh */}
+            <LiveIntelMarketExposureTracker />
 
             <Suspense fallback={<Loading />}>
               <Routes>

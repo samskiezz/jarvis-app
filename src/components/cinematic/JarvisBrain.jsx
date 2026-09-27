@@ -200,6 +200,7 @@ import { isCoeganQuery, buildCoeganScript } from "./ContactOpsGraphAttributionNe
 import { isFamicovQuery, buildFamicovScript } from "./IntelActorFullMissionCoverage";
 import { isRkoithemQuery, buildRkoithemScript } from "./RiskSignalEvidenceMatrix";
 import { isIrorfdQuery, buildIrorfdScript } from "./InvestmentRiskIntelDashboard";
+import { isLicimexQuery, buildLicimexScript } from "./LiveIntelMarketExposureTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2002,6 +2003,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:irorfd-toggle"));
       let script = "";
       try { script = await buildIrorfdScript(); } catch { script = "IRORFD Financial Risk Intelligence Dashboard online, sir. Correlating investments against reports, ops events, and risk signals to surface untracked assets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLicimexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:licimex-toggle"));
+      let script = "";
+      try { script = await buildLicimexScript(); } catch { script = "LICIMEX Live Intel Market Exposure Tracker online, sir. Correlating live world events against contacts and investments to surface real-world exposure now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
