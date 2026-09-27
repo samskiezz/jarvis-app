@@ -136,3 +136,4 @@
 [2026-09-27] F143 TIKDOI — Task × IntelProfile × Dataset × Knowledge Operational Intelligence Coverage — TaskIntelDatasetKnowledgeCoverage.jsx created; imported+mounted in App.jsx; isTikdoiQuery+buildTikdoiScript wired in JarvisBrain.jsx; build exit 0
 [2026-09-27] F144 CSOERM — ContactScenarioOpsRiskMatrix.jsx created; imported+mounted in App.jsx; isCsoermQuery+buildCsoermScript wired in JarvisBrain.jsx; build exit 0
 [2026-09-27] F145 SOCDMAP — SwarmOpsCapacityMap.jsx created; SwarmJob × AIP Skill × Contact × Dataset Operational Capacity Map; imported+mounted in App.jsx; isSocdmapQuery+buildSocdmapScript wired in JarvisBrain.jsx; build exit 0
+2026-09-27 F146 ISKFULL: Investigation × AIP Skill × Contact × Knowledge Full-Spectrum Coverage — InvestigationFullCoverage.jsx created; mounted in App.jsx; wired in JarvisBrain.jsx; build exit 0

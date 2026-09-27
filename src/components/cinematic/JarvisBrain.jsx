@@ -211,6 +211,7 @@ import { isGcknipQuery, buildGcknipScript } from "./GraphCommunityKnowledgeIntel
 import { isTikdoiQuery, buildTikdoiScript } from "./TaskIntelDatasetKnowledgeCoverage";
 import { isCsoermQuery, buildCsoermScript } from "./ContactScenarioOpsRiskMatrix";
 import { isSocdmapQuery, buildSocdmapScript } from "./SwarmOpsCapacityMap";
+import { isIskfullQuery, buildIskfullScript } from "./InvestigationFullCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2101,6 +2102,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:socdmap-toggle"));
       let script = "";
       try { script = await buildSocdmapScript(); } catch { script = "SOCDMAP Operational Capacity Map online, sir. Cross-referencing swarm jobs against AIP skills, contacts, and datasets to surface fully staffed and unsupported operations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIskfullQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iskfull-toggle"));
+      let script = "";
+      try { script = await buildIskfullScript(); } catch { script = "ISKFULL Full Investigation Coverage online, sir. Cross-referencing investigations against AIP skills, contacts, and knowledge base articles to surface fully covered and bare investigations now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
