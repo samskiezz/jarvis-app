@@ -208,6 +208,7 @@ import { isStcixQuery, buildStcixScript } from "./ScenarioRiskSwarmContainment";
 import { isSciaipQuery, buildSciaipScript } from "./SceneAipRiskCoverageMap";
 import { isSgodsatQuery, buildSgodsatScript } from "./ScenarioCommOpsDataSaturation";
 import { isGcknipQuery, buildGcknipScript } from "./GraphCommunityKnowledgeIntelCoverage";
+import { isTikdoiQuery, buildTikdoiScript } from "./TaskIntelDatasetKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2074,6 +2075,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gcknip-toggle"));
       let script = "";
       try { script = await buildGcknipScript(); } catch { script = "GCKNIP Network Intelligence Coverage online, sir. Correlating graph communities against knowledge base and intel actor profiles to surface unmapped network intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTikdoiQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tikdoi-toggle"));
+      let script = "";
+      try { script = await buildTikdoiScript(); } catch { script = "TIKDOI Task Intelligence Coverage online, sir. Correlating tasks against intel profiles, datasets, and knowledge base to surface operationally uncovered missions now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

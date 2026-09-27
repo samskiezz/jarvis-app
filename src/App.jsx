@@ -366,6 +366,7 @@ import ScenarioRiskSwarmContainment from '@/components/cinematic/ScenarioRiskSwa
 import SceneAipRiskCoverageMap from '@/components/cinematic/SceneAipRiskCoverageMap';
 import ScenarioCommOpsDataSaturation from '@/components/cinematic/ScenarioCommOpsDataSaturation';
 import GraphCommunityKnowledgeIntelCoverage from '@/components/cinematic/GraphCommunityKnowledgeIntelCoverage';
+import TaskIntelDatasetKnowledgeCoverage from '@/components/cinematic/TaskIntelDatasetKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1156,6 +1157,8 @@ function App() {
             <ScenarioCommOpsDataSaturation />
             {/* F142 (overnight 2026-09-27): Graph Community × Knowledge × IntelProfile Network Intelligence Coverage (GCKNIP) — ◈ GCKNIP button (left:1022440, bottom:8, zIndex:204); parallel-fetches /v1/graph/communities + /knowledge/ + /entities/IntelProfile; keyword-correlates each network community against KB articles AND intel actor profiles to classify FULLY_MAPPED/KB_BACKED/ACTOR_LINKED/UNMAPPED; amber badge on unmapped count; filter tabs ALL/FULLY_MAPPED/KB_BACKED/ACTOR_LINKED/UNMAPPED + text search; expand community → KB article cards (green) + intel profile cards (orange) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcknipQuery+buildGcknipScript wired in JarvisBrain; "gcknip/graph community knowledge/network intel coverage/unmapped community/community knowledge/community actor" voice trigger; jarvis:gcknip-toggle event; 90-s auto-refresh */}
             <GraphCommunityKnowledgeIntelCoverage />
+            {/* F143 (overnight 2026-09-27): Task × IntelProfile × Dataset × Knowledge Operational Intelligence Coverage (TIKDOI) — ◈ TIKDOI button (left:1023000, bottom:8, zIndex:205); parallel-fetches /entities/Task + /entities/IntelProfile + /v1/datasets + /knowledge/; keyword-correlates each task against intel profiles AND datasets AND KB articles to classify FULLY_COVERED/DUAL_COVERED/SINGLE_COVERED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/FULLY_COVERED/DUAL_COVERED/SINGLE_COVERED/UNCOVERED + text search; expand task → intel profile cards (orange) + dataset cards (purple) + KB article cards (green) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTikdoiQuery+buildTikdoiScript wired in JarvisBrain; "tikdoi/task intelligence coverage/uncovered tasks/task intel data/task full coverage" voice trigger; jarvis:tikdoi-toggle event; 90-s auto-refresh */}
+            <TaskIntelDatasetKnowledgeCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
