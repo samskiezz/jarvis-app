@@ -194,6 +194,7 @@ import { isSctrocQuery, buildSctrocScript } from "./SceneTaskReportGrounding";
 import { isSvimapQuery, buildSvimapScript } from "./SwarmJobInvestmentContactMap";
 import { isAikinQuery, buildAikinScript } from "./IntelActorImpactNexus";
 import { isOincmQuery, buildOincmScript } from "./OpsIncidentIntelMesh";
+import { isDgokgndQuery, buildDgokgndScript } from "./DatasetGraphOpsKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1948,6 +1949,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:oincm-toggle"));
       let script = "";
       try { script = await buildOincmScript(); } catch { script = "OINCM Incident Intelligence Mesh online, sir. Cross-referencing ops events against graph centrality nodes, KB articles, and contacts to classify fully-meshed, intel-linked, partial, and isolated events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDgokgndQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dgokgnd-toggle"));
+      let script = "";
+      try { script = await buildDgokgndScript(); } catch { script = "DGOKGND Intelligence Grounding Nexus online, sir. Cross-referencing datasets against graph annotations, ops events, and KB articles to classify fully-grounded, dual-linked, single-linked, and ungrounded datasets now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
