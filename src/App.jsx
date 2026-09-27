@@ -355,6 +355,7 @@ import OpsIncidentIntelMesh from '@/components/cinematic/OpsIncidentIntelMesh';
 import DatasetGraphOpsKnowledgeNexus from '@/components/cinematic/DatasetGraphOpsKnowledgeNexus';
 import SwarmScenarioReportKnowledgeDoc from '@/components/cinematic/SwarmScenarioReportKnowledgeDoc';
 import ContactOpsGraphAttributionNetwork from '@/components/cinematic/ContactOpsGraphAttributionNetwork';
+import IntelActorFullMissionCoverage from '@/components/cinematic/IntelActorFullMissionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1123,6 +1124,8 @@ function App() {
             <SwarmScenarioReportKnowledgeDoc />
             {/* F131 (overnight 2026-09-27): Contact × Ops Event × Graph Annotation Incident Attribution Network (COEGAN) — ◈ COEGAN button (left:1016280, bottom:8, zIndex:193); parallel-fetches /entities/Contact + /v1/ops/events + /v1/graph/annotations; keyword-correlates each contact against ops events AND graph annotations to classify FULLY_ATTRIBUTED/OPS_LINKED/GRAPH_TAGGED/UNATTRIBUTED; amber badge on unattributed count; filter tabs ALL/FULLY_ATTRIBUTED/OPS_LINKED/GRAPH_TAGGED/UNATTRIBUTED + text search; expand contact → matched ops event cards (blue) + graph annotation cards (purple) with relevance bars; ▶ ASSESS ATTRIBUTION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCoeganQuery+buildCoeganScript wired in JarvisBrain; "coegan/contact attribution/incident attribution/contact ops graph/unattributed contacts/contact event attribution" voice trigger; jarvis:coegan-toggle event; 90-s auto-refresh */}
             <ContactOpsGraphAttributionNetwork />
+            {/* F132 (overnight 2026-09-27): IntelProfile × Task × Knowledge × Scenario Full Actor Mission Intelligence Coverage (FAMICOV) — ◈ FAMICOV button (left:1016840, bottom:8, zIndex:194); parallel-fetches /entities/IntelProfile + /entities/Task + /knowledge/ + /v1/scenario/list; keyword-correlates each intel actor against tasks AND KB articles AND scenarios to classify FULLY_TRACKED/DUAL_COVERED/SINGLE_TRACKED/UNTRACKED; red badge on untracked count; filter tabs ALL/FULLY_TRACKED/DUAL_COVERED/SINGLE_TRACKED/UNTRACKED + text search; expand actor → matched task cards (teal) + KB article cards (green) + scenario cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isFamicovQuery+buildFamicovScript wired in JarvisBrain; "famicov/full actor coverage/actor mission intel/intel actor mission/tracked actors/untracked actors" voice trigger; jarvis:famicov-toggle event; 90-s auto-refresh */}
+            <IntelActorFullMissionCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
