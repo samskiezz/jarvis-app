@@ -129,3 +129,4 @@
 [2026-09-27] F136 CSRPRI — Contact × Scenario × Report × Knowledge Personnel Readiness Index — ContactScenarioReportReadiness.jsx created; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
 [2026-09-27] F137 TGOKNEX: Task × Graph Annotations × Ops Event × Knowledge Operational Intelligence Nexus — TaskGraphOpsKnowledgeNexus.jsx created; imported+mounted in App.jsx; isTgoknexQuery+buildTgoknexScript wired in JarvisBrain.jsx; build verified exit 0
 [2026-09-27] F138 AipSkillFullOpsCoverage.jsx — FOCOH (AIP Skill × Contact × Report × Ops Event Full Operational Coverage Hub); isFocohQuery+buildFocohScript wired in JarvisBrain.jsx; mounted in App.jsx; build verified exit 0
+[2026-09-27] F139 ScenarioRiskSwarmContainment.jsx (STCIX): Scenario × RiskSignal × SwarmJob × IntelProfile Threat Containment Index; wired in JarvisBrain.jsx + App.jsx; build exit 0

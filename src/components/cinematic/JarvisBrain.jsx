@@ -204,6 +204,7 @@ import { isLicimexQuery, buildLicimexScript } from "./LiveIntelMarketExposureTra
 import { isCsrpriQuery, buildCsrpriScript } from "./ContactScenarioReportReadiness";
 import { isTgoknexQuery, buildTgoknexScript } from "./TaskGraphOpsKnowledgeNexus";
 import { isFocohQuery, buildFocohScript } from "./AipSkillFullOpsCoverage";
+import { isStcixQuery, buildStcixScript } from "./ScenarioRiskSwarmContainment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2038,6 +2039,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:focoh-toggle"));
       let script = "";
       try { script = await buildFocohScript(); } catch { script = "FOCOH Full Operational Coverage Hub online, sir. Cross-referencing AIP skills against contacts, reports, and ops events to surface activation gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isStcixQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:stcix-toggle"));
+      let script = "";
+      try { script = await buildStcixScript(); } catch { script = "STCIX Threat Containment Index online, sir. Correlating scenarios against risk signals, swarm jobs, and intel profiles to surface containment gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

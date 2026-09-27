@@ -362,6 +362,7 @@ import LiveIntelMarketExposureTracker from '@/components/cinematic/LiveIntelMark
 import ContactScenarioReportReadiness from '@/components/cinematic/ContactScenarioReportReadiness';
 import TaskGraphOpsKnowledgeNexus from '@/components/cinematic/TaskGraphOpsKnowledgeNexus';
 import AipSkillFullOpsCoverage from '@/components/cinematic/AipSkillFullOpsCoverage';
+import ScenarioRiskSwarmContainment from '@/components/cinematic/ScenarioRiskSwarmContainment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1144,6 +1145,8 @@ function App() {
             <TaskGraphOpsKnowledgeNexus />
             {/* F138 (overnight 2026-09-27): AIP Skill × Contact × Report × Ops Event Full Operational Coverage Hub (FOCOH) — ◈ FOCOH button (left:1020200, bottom:8, zIndex:200); parallel-fetches /v1/aip/skill + /entities/Contact + /v1/reports + /v1/ops/events; keyword-correlates each AIP skill against contacts AND reports AND ops events to classify FULLY_ACTIVE/DUAL_ACTIVE/SINGLE_ACTIVE/DORMANT; amber badge on dormant count; stat tiles AIP SKILLS/CONTACTS/REPORTS/OPS EVENTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_ACTIVE/DUAL_ACTIVE/SINGLE_ACTIVE/DORMANT + text search; expand skill → matched contact cards (orange) + report cards (purple) + ops event cards (blue) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isFocohQuery+buildFocohScript wired in JarvisBrain; "focoh/full operational coverage/skill activation/operational hub/active skills coverage" voice trigger; jarvis:focoh-toggle event; 90-s auto-refresh */}
             <AipSkillFullOpsCoverage />
+            {/* F139 (overnight 2026-09-27): Scenario × RiskSignal × SwarmJob × IntelProfile Threat Containment Index (STCIX) — ◈ STCIX button (left:1020760, bottom:8, zIndex:201); parallel-fetches /v1/scenario/list + /entities/RiskSignal + /entities/SwarmJob + /entities/IntelProfile; keyword-correlates each scenario against risk signals AND swarm jobs AND intel profiles to classify FULLY_CONTAINED/DUAL_COVERED/PARTIALLY_COVERED/UNCONTAINED; red pulse badge on uncontained count; stat tiles SCENARIOS/RISK SIGS/SWARM JOBS/INTEL PROFILES + all four class counts + COVERAGE%; filter tabs ALL/FULLY_CONTAINED/DUAL_COVERED/PARTIALLY_COVERED/UNCONTAINED + text search; expand scenario → matched risk signal cards (red, severity) + swarm job cards (cyan, status) + intel profile cards (orange, role) with relevance bars; ▶ ASSESS CONTAINMENT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isStcixQuery+buildStcixScript wired in JarvisBrain; "stcix/threat containment/scenario containment/uncontained scenario/risk containment/containment index" voice trigger; jarvis:stcix-toggle event; 90-s auto-refresh */}
+            <ScenarioRiskSwarmContainment />
 
             <Suspense fallback={<Loading />}>
               <Routes>
