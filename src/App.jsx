@@ -350,6 +350,7 @@ import GraphCommunityIntelScenarioMap from '@/components/cinematic/GraphCommunit
 import GraphAnnotationOpsSwarmCoverage from '@/components/cinematic/GraphAnnotationOpsSwarmCoverage';
 import SceneTaskReportGrounding from '@/components/cinematic/SceneTaskReportGrounding';
 import SwarmJobInvestmentContactMap from '@/components/cinematic/SwarmJobInvestmentContactMap';
+import IntelActorImpactNexus from '@/components/cinematic/IntelActorImpactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1108,6 +1109,8 @@ function App() {
             <SceneTaskReportGrounding />
             {/* F126 (overnight 2026-09-26): SwarmJob × Investment × Contact Operational Finance Coverage (SVINMAP) — ◈ SVINMAP button (left:1013480, bottom:8, zIndex:188); parallel-fetches /entities/SwarmJob + /entities/Investment + /entities/Contact; keyword-correlates each swarm job against investments AND contacts to classify FULLY_COORDINATED/INVESTMENT_LINKED/CONTACT_ASSIGNED/UNCOORDINATED; amber badge on uncoordinated count; stat tiles SWARM JOBS/INVESTMENTS/CONTACTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_COORDINATED/INVESTMENT_LINKED/CONTACT_ASSIGNED/UNCOORDINATED + text search; expand job → matched investment cards (gold) + contact cards (orange) with relevance bars; ▶ ASSESS COORDINATION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSvimapQuery+buildSvimapScript wired in JarvisBrain; "svinmap/swarm investment/swarm finance/coordinated swarm/uncoordinated swarm/swarm investment coverage" voice trigger; jarvis:svinmap-toggle event; 90-s auto-refresh */}
             <SwarmJobInvestmentContactMap />
+            {/* F127 (overnight 2026-09-27): IntelProfile × Task × Investment × Knowledge Actor Impact Nexus (AIKIN) — ◈ AIKIN button (left:1014040, bottom:8, zIndex:189); parallel-fetches /entities/IntelProfile + /entities/Task + /entities/Investment + /knowledge/; keyword-correlates each threat actor profile against tasks AND investments AND KB articles to classify FULL_IMPACT/HIGH_IMPACT/TRACKED/UNTRACKED; red pulse badge on full-impact count; stat tiles ACTORS/TASKS/INVESTMENTS/KB ARTICLES + all four class counts + COVERAGE%; filter tabs ALL/FULL_IMPACT/HIGH_IMPACT/TRACKED/UNTRACKED + text search; expand actor → matched task cards (teal) + investment cards (gold) + KB article cards (green) with relevance bars; ▶ ASSESS IMPACT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isAikinQuery+buildAikinScript wired in JarvisBrain; "aikin/actor impact/intel actor impact/threat actor nexus/full impact actor/untracked actors/actor exposure nexus" voice trigger; jarvis:aikin-toggle event; 90-s auto-refresh */}
+            <IntelActorImpactNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>

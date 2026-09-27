@@ -192,6 +192,7 @@ import { isIptcmapQuery, buildIptcmapScript } from "./GraphCommunityIntelScenari
 import { isGaoscovQuery, buildGaoscovScript } from "./GraphAnnotationOpsSwarmCoverage";
 import { isSctrocQuery, buildSctrocScript } from "./SceneTaskReportGrounding";
 import { isSvimapQuery, buildSvimapScript } from "./SwarmJobInvestmentContactMap";
+import { isAikinQuery, buildAikinScript } from "./IntelActorImpactNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1929,6 +1930,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:svinmap-toggle"));
       let script = "";
       try { script = await buildSvimapScript(); } catch { script = "SVINMAP Operational Finance Coverage online, sir. Cross-referencing swarm jobs against live investments and contacts to assess coordination coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F127: IntelProfile × Task × Investment × Knowledge Actor Impact Nexus — open AIKIN panel + speak impact brief.
+    if (isAikinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aikin-toggle"));
+      let script = "";
+      try { script = await buildAikinScript(); } catch { script = "AIKIN Actor Impact Nexus online, sir. Cross-referencing threat actor profiles against live tasks, investments, and knowledge base to classify full-impact, high-impact, tracked, and untracked actors now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
