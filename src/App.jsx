@@ -361,6 +361,7 @@ import InvestmentRiskIntelDashboard from '@/components/cinematic/InvestmentRiskI
 import LiveIntelMarketExposureTracker from '@/components/cinematic/LiveIntelMarketExposureTracker';
 import ContactScenarioReportReadiness from '@/components/cinematic/ContactScenarioReportReadiness';
 import TaskGraphOpsKnowledgeNexus from '@/components/cinematic/TaskGraphOpsKnowledgeNexus';
+import AipSkillFullOpsCoverage from '@/components/cinematic/AipSkillFullOpsCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1141,6 +1142,8 @@ function App() {
             <ContactScenarioReportReadiness />
             {/* F137 (overnight 2026-09-27): Task × Graph Annotations × Ops Event × Knowledge Operational Intelligence Nexus (TGOKNEX) — ◈ TGOKNEX button (left:1019640, bottom:8, zIndex:199); parallel-fetches /entities/Task + /v1/graph/annotations + /v1/ops/events + /knowledge/; keyword-correlates each task against graph annotations AND ops events AND KB articles to classify FULLY_GROUNDED/DUAL_GROUNDED/SINGLE_LINKED/BARE; amber badge on bare count; filter tabs ALL/FULLY_GROUNDED/DUAL_GROUNDED/SINGLE_LINKED/BARE + text search; expand task → annotation cards (purple) + ops event cards (blue) + KB article cards (green) with relevance bars; ▶ ASSESS NEXUS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTgoknexQuery+buildTgoknexScript wired in JarvisBrain; "tgoknex/task graph ops knowledge/task operational nexus/bare tasks/task annotation ops/task knowledge ops" voice trigger; jarvis:tgoknex-toggle event; 90-s auto-refresh */}
             <TaskGraphOpsKnowledgeNexus />
+            {/* F138 (overnight 2026-09-27): AIP Skill × Contact × Report × Ops Event Full Operational Coverage Hub (FOCOH) — ◈ FOCOH button (left:1020200, bottom:8, zIndex:200); parallel-fetches /v1/aip/skill + /entities/Contact + /v1/reports + /v1/ops/events; keyword-correlates each AIP skill against contacts AND reports AND ops events to classify FULLY_ACTIVE/DUAL_ACTIVE/SINGLE_ACTIVE/DORMANT; amber badge on dormant count; stat tiles AIP SKILLS/CONTACTS/REPORTS/OPS EVENTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_ACTIVE/DUAL_ACTIVE/SINGLE_ACTIVE/DORMANT + text search; expand skill → matched contact cards (orange) + report cards (purple) + ops event cards (blue) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isFocohQuery+buildFocohScript wired in JarvisBrain; "focoh/full operational coverage/skill activation/operational hub/active skills coverage" voice trigger; jarvis:focoh-toggle event; 90-s auto-refresh */}
+            <AipSkillFullOpsCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

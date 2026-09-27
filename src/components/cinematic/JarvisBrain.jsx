@@ -203,6 +203,7 @@ import { isIrorfdQuery, buildIrorfdScript } from "./InvestmentRiskIntelDashboard
 import { isLicimexQuery, buildLicimexScript } from "./LiveIntelMarketExposureTracker";
 import { isCsrpriQuery, buildCsrpriScript } from "./ContactScenarioReportReadiness";
 import { isTgoknexQuery, buildTgoknexScript } from "./TaskGraphOpsKnowledgeNexus";
+import { isFocohQuery, buildFocohScript } from "./AipSkillFullOpsCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2029,6 +2030,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tgoknex-toggle"));
       let script = "";
       try { script = await buildTgoknexScript(); } catch { script = "TGOKNEX Operational Intelligence Nexus online, sir. Cross-referencing tasks against graph annotations, ops events, and knowledge base to surface intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isFocohQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:focoh-toggle"));
+      let script = "";
+      try { script = await buildFocohScript(); } catch { script = "FOCOH Full Operational Coverage Hub online, sir. Cross-referencing AIP skills against contacts, reports, and ops events to surface activation gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
