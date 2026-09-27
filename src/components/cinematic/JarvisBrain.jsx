@@ -198,6 +198,7 @@ import { isDgokgndQuery, buildDgokgndScript } from "./DatasetGraphOpsKnowledgeNe
 import { isSsrkmdocQuery, buildSsrkmdocScript } from "./SwarmScenarioReportKnowledgeDoc";
 import { isCoeganQuery, buildCoeganScript } from "./ContactOpsGraphAttributionNetwork";
 import { isFamicovQuery, buildFamicovScript } from "./IntelActorFullMissionCoverage";
+import { isRkoithemQuery, buildRkoithemScript } from "./RiskSignalEvidenceMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -1984,6 +1985,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:famicov-toggle"));
       let script = "";
       try { script = await buildFamicovScript(); } catch { script = "FAMICOV Full Actor Mission Coverage online, sir. Cross-referencing intel profiles against tasks, knowledge, and scenarios to surface untracked threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRkoithemQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rkoithem-toggle"));
+      let script = "";
+      try { script = await buildRkoithemScript(); } catch { script = "RKOITHEM Threat Evidence Matrix online, sir. Correlating risk signals against KB articles, ops events, and intel profiles to surface unevidenced threats now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

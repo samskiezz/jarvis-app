@@ -356,6 +356,7 @@ import DatasetGraphOpsKnowledgeNexus from '@/components/cinematic/DatasetGraphOp
 import SwarmScenarioReportKnowledgeDoc from '@/components/cinematic/SwarmScenarioReportKnowledgeDoc';
 import ContactOpsGraphAttributionNetwork from '@/components/cinematic/ContactOpsGraphAttributionNetwork';
 import IntelActorFullMissionCoverage from '@/components/cinematic/IntelActorFullMissionCoverage';
+import RiskSignalEvidenceMatrix from '@/components/cinematic/RiskSignalEvidenceMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1126,6 +1127,8 @@ function App() {
             <ContactOpsGraphAttributionNetwork />
             {/* F132 (overnight 2026-09-27): IntelProfile × Task × Knowledge × Scenario Full Actor Mission Intelligence Coverage (FAMICOV) — ◈ FAMICOV button (left:1016840, bottom:8, zIndex:194); parallel-fetches /entities/IntelProfile + /entities/Task + /knowledge/ + /v1/scenario/list; keyword-correlates each intel actor against tasks AND KB articles AND scenarios to classify FULLY_TRACKED/DUAL_COVERED/SINGLE_TRACKED/UNTRACKED; red badge on untracked count; filter tabs ALL/FULLY_TRACKED/DUAL_COVERED/SINGLE_TRACKED/UNTRACKED + text search; expand actor → matched task cards (teal) + KB article cards (green) + scenario cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isFamicovQuery+buildFamicovScript wired in JarvisBrain; "famicov/full actor coverage/actor mission intel/intel actor mission/tracked actors/untracked actors" voice trigger; jarvis:famicov-toggle event; 90-s auto-refresh */}
             <IntelActorFullMissionCoverage />
+            {/* F133 (overnight 2026-09-27): Risk Signal × Knowledge × Ops Event × IntelProfile Comprehensive Threat Evidence Matrix (RKOITHEM) — ◈ RKOITHEM button (left:1017400, bottom:8, zIndex:195); parallel-fetches /entities/RiskSignal + /knowledge/ + /v1/ops/events + /entities/IntelProfile; keyword-correlates each risk signal against KB articles AND ops events AND intel profiles to classify FULLY_EVIDENCED/DUAL_EVIDENCED/SINGLE_EVIDENCED/UNEVIDENCED; red pulse badge on unevidenced count; stat tiles RISK SIGS/KB ARTICLES/OPS EVENTS/INTEL PROFILES + all four class counts + EVIDENCE%; filter tabs ALL/FULLY_EVIDENCED/DUAL_EVIDENCED/SINGLE_EVIDENCED/UNEVIDENCED + text search; expand signal → matched KB article cards (green) + ops event cards (blue) + intel profile cards (orange) with relevance bars; ▶ ASSESS EVIDENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRkoithemQuery+buildRkoithemScript wired in JarvisBrain; "rkoithem/threat evidence/risk evidence/evidenced risk/unevidenced risk/comprehensive threat evidence" voice trigger; jarvis:rkoithem-toggle event; 90-s auto-refresh */}
+            <RiskSignalEvidenceMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
