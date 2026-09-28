@@ -391,6 +391,7 @@ import InvestigationReadinessMatrix from '@/components/cinematic/InvestigationRe
 import AipSkillGraphOpsSignalMesh from '@/components/cinematic/AipSkillGraphOpsSignalMesh';
 import CommunityIntelDocMap from '@/components/cinematic/CommunityIntelDocMap';
 import PersonnelResponseCoverage from '@/components/cinematic/PersonnelResponseCoverage';
+import DataScienceNexus from '@/components/cinematic/DataScienceNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1232,6 +1233,8 @@ function App() {
             <CommunityIntelDocMap />
             {/* F166 (overnight 2026-09-28): Contact × Ops Event × RiskSignal Personnel Response Coverage (PERCOV) */}
             <PersonnelResponseCoverage />
+            {/* F167 (overnight 2026-09-28): Dataset × AIP Skill × Investigation Data Science Nexus (DSINEX) */}
+            <DataScienceNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
