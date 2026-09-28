@@ -387,6 +387,7 @@ import ScenarioTaskContactKnowledgeGrid from '@/components/cinematic/ScenarioTas
 import RiskTaskInvestigationCoverage from '@/components/cinematic/RiskTaskInvestigationCoverage';
 import OpsContactTaskMap from '@/components/cinematic/OpsContactTaskMap';
 import KnowledgeOpsCommunitySyncMap from '@/components/cinematic/KnowledgeOpsCommunitySyncMap';
+import InvestigationReadinessMatrix from '@/components/cinematic/InvestigationReadinessMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1220,6 +1221,8 @@ function App() {
             <OpsContactTaskMap />
             {/* F162 (overnight 2026-09-28): Knowledge × Ops Event × Graph Community Intelligence Synchrony Map (KOGSYNC) — ◈ KOGSYNC button (left:1033080, bottom:8, zIndex:223); parallel-fetches /knowledge/ + /v1/ops/events + /v1/graph/communities; keyword-correlates each KB article against ops events AND community clusters to classify FULLY_SYNCHRONIZED/OPS_TRACKED/COMMUNITY_MAPPED/ISOLATED; amber badge on isolated count; synchrony coverage bar; filter tabs + text search; expand article → matched ops event cards (blue) + community cards (purple) with relevance bars; ▶ ASSESS SYNCHRONY → /v1/jarvis/agent/chat 2-sentence brief + TTS; isKogsyncQuery+buildKogsyncScript wired in JarvisBrain; "kogsync/knowledge ops sync/knowledge synchrony/knowledge community/synchronized knowledge/knowledge isolation" voice trigger; jarvis:kogsync-toggle event; 90-s auto-refresh */}
             <KnowledgeOpsCommunitySyncMap />
+            {/* F163 (overnight 2026-09-28): Investigation × Scenario × Contact × Dataset Full Intelligence Readiness Matrix (ISCDRIM) — ◈ ISCDRIM button (left:1033640, bottom:8, zIndex:224); parallel-fetches /v1/investigations + /v1/scenario/list + /entities/Contact + /v1/datasets; keyword-correlates each investigation against scenario playbooks AND contacts AND datasets to classify FULLY_EQUIPPED/DUAL_EQUIPPED/SINGLE_LINKED/BARE; amber badge on bare count; filter tabs + text search; expand → matched scenario (teal) + contact (orange) + dataset (purple) cards with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIscdrimQuery+buildIscdrimScript wired in JarvisBrain; "iscdrim/investigation readiness/investigation equipped/bare investigations/investigation full coverage/investigation resources" voice trigger; jarvis:iscdrim-toggle event; 90-s auto-refresh */}
+            <InvestigationReadinessMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>

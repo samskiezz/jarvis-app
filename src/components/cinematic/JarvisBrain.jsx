@@ -229,6 +229,7 @@ import { isStckorgQuery, buildStckorgScript } from "./ScenarioTaskContactKnowled
 import { isRtsicmQuery, buildRtsicmScript } from "./RiskTaskInvestigationCoverage";
 import { isOtccmQuery, buildOtccmScript } from "./OpsContactTaskMap";
 import { isKogsyncQuery, buildKogsyncScript } from "./KnowledgeOpsCommunitySyncMap";
+import { isIscdrimQuery, buildIscdrimScript } from "./InvestigationReadinessMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2263,6 +2264,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kogsync-toggle"));
       let script = "";
       try { script = await buildKogsyncScript(); } catch { script = "KOGSYNC online, sir. Cross-referencing knowledge articles against live ops events and graph communities to surface isolated knowledge gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIscdrimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iscdrim-toggle"));
+      let script = "";
+      try { script = await buildIscdrimScript(); } catch { script = "ISCDRIM online, sir. Cross-referencing investigations against scenario playbooks, contacts, and datasets to surface bare investigations with no assigned resources now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
