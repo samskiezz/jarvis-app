@@ -216,6 +216,7 @@ import { isDgorsimQuery, buildDgorsimScript } from "./DatasetGraphOpsRiskSituati
 import { isNdratlasQuery, buildNdratlasScript } from "./AipSkillNetworkDefenseAtlas";
 import { isAnequadQuery, buildAnequadScript } from "./IntelActorNetworkExposure";
 import { isForknQuery, buildForknScript } from "./InvestmentOpsRiskNexus";
+import { isBasirQuery, buildBasirScript } from "./BrainAipSkillRatio";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2146,6 +2147,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:forkn-toggle"));
       let script = "";
       try { script = await buildForknScript(); } catch { script = "FORKN Financial Operations Risk Nexus online, sir. Correlating investments against swarm automation, scenario playbooks, and active risk signals to surface portfolio blind spots now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isBasirQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:basir-toggle"));
+      let script = "";
+      try { script = await buildBasirScript(); } catch { script = "BASIR Brain AIP Skill Intelligence Ratio online, sir. Computing brain node to active skill ratio and assessing cognitive capacity now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

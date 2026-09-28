@@ -374,6 +374,7 @@ import DatasetGraphOpsRiskSituationalMap from '@/components/cinematic/DatasetGra
 import AipSkillNetworkDefenseAtlas from '@/components/cinematic/AipSkillNetworkDefenseAtlas';
 import IntelActorNetworkExposure from '@/components/cinematic/IntelActorNetworkExposure';
 import InvestmentOpsRiskNexus from '@/components/cinematic/InvestmentOpsRiskNexus';
+import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1180,6 +1181,8 @@ function App() {
             <IntelActorNetworkExposure />
             {/* F150 (overnight 2026-09-27): Investment × SwarmJob × Scenario × RiskSignal Financial Operations Risk Nexus (FORKN) — ◈ FORKN button (left:1026920, bottom:8, zIndex:212); parallel-fetches /entities/Investment + /entities/SwarmJob + /v1/scenario/list + /entities/RiskSignal; keyword-correlates each investment against swarm jobs AND scenarios AND risk signals to classify FULLY_MANAGED/DUAL_MANAGED/SINGLE_LINKED/UNMANAGED; amber badge on unmanaged count; filter tabs + text search; expand investment → swarm job cards (cyan) + scenario cards (green) + risk signal cards (red, severity badge) with relevance bars; ▶ ASSESS RISK NEXUS → /v1/jarvis/agent/chat + TTS; isForknQuery+buildForknScript wired in JarvisBrain; "forkn/investment risk nexus/financial operations/unmanaged investment" voice trigger; jarvis:forkn-toggle event; 90-s auto-refresh */}
             <InvestmentOpsRiskNexus />
+            {/* F151 (overnight 2026-09-28): Brain × AIP Skill Intelligence Ratio (BASIR) — ◈ BASIR button (left:1980, bottom:18, zIndex:68); parallel-fetches /v1/cinematic/brain + /v1/aip/skill; computes B:S ratio (nodes÷skills) → SURPLUS/BALANCED/STRAINED/OVERLOADED; stat tiles NODES/SYNAPSES/SKILLS/RATIO; each skill row shows node allocation bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence cognitive capacity brief + TTS; isBasirQuery+buildBasirScript wired in JarvisBrain; "basir/brain skill/skill brain/brain capacity/skill ratio/cognitive skill ratio" voice trigger; jarvis:basir-toggle event; 60-s auto-refresh */}
+            <BrainAipSkillRatio />
 
             <Suspense fallback={<Loading />}>
               <Routes>
