@@ -219,6 +219,7 @@ import { isForknQuery, buildForknScript } from "./InvestmentOpsRiskNexus";
 import { isBasirQuery, buildBasirScript } from "./BrainAipSkillRatio";
 import { isOkrtricQuery, buildOkrtricScript } from "./OpsEventIntelCoverage";
 import { isSktimpQuery, buildSktimpScript } from "./SwarmMissionReadinessPulse";
+import { isCgnimapQuery, buildCgnimapScript } from "./ContactGraphIntelAlignmentMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2173,6 +2174,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sktimp-toggle"));
       let script = "";
       try { script = await buildSktimpScript(); } catch { script = "SKTIMP Swarm Mission Readiness Pulse online, sir. Cross-referencing swarm jobs against knowledge base, active tasks, and intel profiles to classify mission readiness now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCgnimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cgnimap-toggle"));
+      let script = "";
+      try { script = await buildCgnimapScript(); } catch { script = "CGNIMAP Contact Network Alignment Map online, sir. Cross-referencing contacts against graph community clusters and intel profiles to assess network alignment now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

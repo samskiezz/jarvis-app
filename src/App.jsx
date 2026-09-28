@@ -377,6 +377,7 @@ import InvestmentOpsRiskNexus from '@/components/cinematic/InvestmentOpsRiskNexu
 import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
 import OpsEventIntelCoverage from '@/components/cinematic/OpsEventIntelCoverage';
 import SwarmMissionReadinessPulse from '@/components/cinematic/SwarmMissionReadinessPulse';
+import ContactGraphIntelAlignmentMap from '@/components/cinematic/ContactGraphIntelAlignmentMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1189,6 +1190,8 @@ function App() {
             <OpsEventIntelCoverage />
             {/* F153 (overnight 2026-09-28): SwarmJob × Knowledge × Task × IntelProfile Mission Readiness Pulse (SKTIMP) — ◈ SKTIMP button (left:1028040, bottom:8, zIndex:214); parallel-fetches /entities/SwarmJob + /knowledge/ + /entities/Task + /entities/IntelProfile; keyword-correlates each swarm job against KB articles AND tasks AND intel profiles to classify FULLY_READY/DUAL_READY/SINGLE_LINKED/DARK; amber badge on dark count; readiness coverage bar; filter tabs ALL/FULLY_READY/DUAL_READY/SINGLE_LINKED/DARK + text search; expand job → matched KB article cards (green) + task cards (teal) + intel profile cards (orange) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence readiness brief + TTS; isSktimpQuery+buildSktimpScript wired in JarvisBrain; "sktimp/swarm readiness/mission readiness pulse/dark swarm/swarm mission ready/swarm knowledge task/swarm intel readiness" voice trigger; jarvis:sktimp-toggle event; 90-s auto-refresh */}
             <SwarmMissionReadinessPulse />
+            {/* F154 (overnight 2026-09-28): Contact × Graph Community × IntelProfile Network Alignment Map (CGNIMAP) — ◈ CGNIMAP button (left:1028600, bottom:8, zIndex:215); parallel-fetches /entities/Contact + /v1/graph/communities + /entities/IntelProfile; keyword-correlates each contact against community clusters AND intel profiles to classify FULLY_ALIGNED/COMMUNITY_LINKED/PROFILED_ONLY/ISOLATED; amber badge on isolated count; filter tabs ALL/FULLY_ALIGNED/COMMUNITY_LINKED/PROFILED_ONLY/ISOLATED + text search; alignment coverage bar; expand contact → matched community cards (purple) + intel profile cards (orange) with relevance bars; ▶ ASSESS ALIGNMENT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCgnimapQuery+buildCgnimapScript wired in JarvisBrain; "cgnimap/contact network/contact community/contact alignment/isolated contacts/contact graph alignment/network contact intel" voice trigger; jarvis:cgnimap-toggle event; 90-s auto-refresh */}
+            <ContactGraphIntelAlignmentMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
