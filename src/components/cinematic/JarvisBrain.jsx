@@ -232,6 +232,7 @@ import { isKogsyncQuery, buildKogsyncScript } from "./KnowledgeOpsCommunitySyncM
 import { isIscdrimQuery, buildIscdrimScript } from "./InvestigationReadinessMatrix";
 import { isOsigsmQuery, buildOsigsmScript } from "./AipSkillGraphOpsSignalMesh";
 import { isCgrimapQuery, buildCgrimapScript } from "./CommunityIntelDocMap";
+import { isPercovQuery, buildPercovScript } from "./PersonnelResponseCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2290,6 +2291,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cgrimap-toggle"));
       let script = "";
       try { script = await buildCgrimapScript(); } catch { script = "CGRIMAP Community Intelligence Documentation Map online, sir. Cross-referencing graph community clusters against intelligence reports and investigations to surface undocumented communities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPercovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:percov-toggle"));
+      let script = "";
+      try { script = await buildPercovScript(); } catch { script = "PERCOV Personnel Response Coverage online, sir. Cross-referencing contacts against ops events and risk signals to surface unengaged personnel now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

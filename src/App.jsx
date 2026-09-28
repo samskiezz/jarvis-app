@@ -390,6 +390,7 @@ import KnowledgeOpsCommunitySyncMap from '@/components/cinematic/KnowledgeOpsCom
 import InvestigationReadinessMatrix from '@/components/cinematic/InvestigationReadinessMatrix';
 import AipSkillGraphOpsSignalMesh from '@/components/cinematic/AipSkillGraphOpsSignalMesh';
 import CommunityIntelDocMap from '@/components/cinematic/CommunityIntelDocMap';
+import PersonnelResponseCoverage from '@/components/cinematic/PersonnelResponseCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1229,6 +1230,8 @@ function App() {
             <AipSkillGraphOpsSignalMesh />
             {/* F165 (overnight 2026-09-28): Graph Community × Report × Investigation Intelligence Documentation Map (CGRIMAP) */}
             <CommunityIntelDocMap />
+            {/* F166 (overnight 2026-09-28): Contact × Ops Event × RiskSignal Personnel Response Coverage (PERCOV) */}
+            <PersonnelResponseCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -157,3 +157,4 @@
 [2026-09-28] F163 ISCDRIM: Investigation × Scenario × Contact × Dataset Full Intelligence Readiness Matrix — new InvestigationReadinessMatrix.jsx; wired App.jsx + JarvisBrain.jsx; build exit 0
 2026-09-28 F164 OSIGSM — AIP Skill × Graph Centrality × Ops Event Operational Signal Mesh: new AipSkillGraphOpsSignalMesh.jsx created; imported+mounted in App.jsx; isOsigsmQuery+buildOsigsmScript wired in JarvisBrain.jsx; build verified exit 0
 2026-09-28 F165 CGRIMAP: Graph Community × Report × Investigation Intelligence Documentation Map — new CommunityIntelDocMap.jsx; imported+mounted in App.jsx; isCgrimapQuery+buildCgrimapScript wired in JarvisBrain.jsx; build verified exit 0
+2026-09-28 F166 PERCOV — PersonnelResponseCoverage.jsx: /entities/Contact × /v1/ops/events × /entities/RiskSignal personnel response coverage; FULLY_ENGAGED/OPS_RESPONDING/RISK_EXPOSED/UNENGAGED classification; amber badge; AI response brief + TTS; build exit 0
