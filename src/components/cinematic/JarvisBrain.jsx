@@ -221,6 +221,7 @@ import { isOkrtricQuery, buildOkrtricScript } from "./OpsEventIntelCoverage";
 import { isSktimpQuery, buildSktimpScript } from "./SwarmMissionReadinessPulse";
 import { isCgnimapQuery, buildCgnimapScript } from "./ContactGraphIntelAlignmentMap";
 import { isIcknexQuery, buildIcknexScript } from "./InvestmentContactKnowledgeNexus";
+import { isTricmQuery, buildTricmScript } from "./TaskRiskIntelCoverageMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2191,6 +2192,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:icknex-toggle"));
       let script = "";
       try { script = await buildIcknexScript(); } catch { script = "ICKNEX Investment Intelligence Nexus online, sir. Correlating investments against contacts and knowledge base articles to surface intelligence blind spots now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTricmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tricm-toggle"));
+      let script = "";
+      try { script = await buildTricmScript(); } catch { script = "TRICM Threat Coverage Matrix online, sir. Cross-referencing tasks against risk signals and intel profiles to surface exposed missions now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

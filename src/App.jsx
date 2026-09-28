@@ -379,6 +379,7 @@ import OpsEventIntelCoverage from '@/components/cinematic/OpsEventIntelCoverage'
 import SwarmMissionReadinessPulse from '@/components/cinematic/SwarmMissionReadinessPulse';
 import ContactGraphIntelAlignmentMap from '@/components/cinematic/ContactGraphIntelAlignmentMap';
 import InvestmentContactKnowledgeNexus from '@/components/cinematic/InvestmentContactKnowledgeNexus';
+import TaskRiskIntelCoverageMatrix from '@/components/cinematic/TaskRiskIntelCoverageMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1195,6 +1196,8 @@ function App() {
             <ContactGraphIntelAlignmentMap />
             {/* F155 (overnight 2026-09-28): Investment × Contact × Knowledge Opportunity Intelligence Nexus (ICKNEX) — ◈ ICKNEX button (left:1029160, bottom:8, zIndex:216); parallel-fetches /entities/Investment + /entities/Contact + /knowledge/; keyword-correlates each investment against contacts AND KB articles to classify FULLY_INFORMED/CONTACT_MANAGED/KB_RESEARCHED/BLIND; amber badge on blind count; filter tabs ALL/FULLY_INFORMED/CONTACT_MANAGED/KB_RESEARCHED/BLIND + text search; intel coverage bar; expand investment → matched contact cards (orange, role badge) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIcknexQuery+buildIcknexScript wired in JarvisBrain; "icknex/investment contact knowledge/opportunity intelligence/blind investments/investment intel coverage/investment intelligence nexus" voice trigger; jarvis:icknex-toggle event; 90-s auto-refresh */}
             <InvestmentContactKnowledgeNexus />
+            {/* F156 (overnight 2026-09-28): Task × Risk Signal × IntelProfile Threat Coverage Matrix (TRICM) — ◈ TRICM button (left:1029720, bottom:8, zIndex:217); parallel-fetches /entities/Task + /entities/RiskSignal + /entities/IntelProfile; keyword-correlates each task against risk signals AND intel profiles to classify THREAT_MONITORED/RISK_FLAGGED/ACTOR_TRACKED/EXPOSED; red badge on exposed count; filter tabs ALL/THREAT_MONITORED/RISK_FLAGGED/ACTOR_TRACKED/EXPOSED + text search; expand task → matched risk signal cards (red, severity badge) + intel profile cards (orange, role badge) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isTricmQuery+buildTricmScript wired in JarvisBrain; "tricm/task risk intel/task threat coverage/exposed tasks/task actor/task threat monitoring/threat coverage matrix" voice trigger; jarvis:tricm-toggle event; 90-s auto-refresh */}
+            <TaskRiskIntelCoverageMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
