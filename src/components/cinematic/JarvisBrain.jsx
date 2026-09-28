@@ -228,6 +228,7 @@ import { isLifriskQuery, buildLifriskScript } from "./LiveIntelInvestmentRisk";
 import { isStckorgQuery, buildStckorgScript } from "./ScenarioTaskContactKnowledgeGrid";
 import { isRtsicmQuery, buildRtsicmScript } from "./RiskTaskInvestigationCoverage";
 import { isOtccmQuery, buildOtccmScript } from "./OpsContactTaskMap";
+import { isKogsyncQuery, buildKogsyncScript } from "./KnowledgeOpsCommunitySyncMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2254,6 +2255,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:otccm-toggle"));
       let script = "";
       try { script = await buildOtccmScript(); } catch { script = "OTCCM Command Responsibility Map online, sir. Correlating operational events against assigned contacts and active tasks to surface unresponded events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKogsyncQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kogsync-toggle"));
+      let script = "";
+      try { script = await buildKogsyncScript(); } catch { script = "KOGSYNC online, sir. Cross-referencing knowledge articles against live ops events and graph communities to surface isolated knowledge gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

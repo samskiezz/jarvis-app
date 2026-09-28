@@ -386,6 +386,7 @@ import LiveIntelInvestmentRisk from '@/components/cinematic/LiveIntelInvestmentR
 import ScenarioTaskContactKnowledgeGrid from '@/components/cinematic/ScenarioTaskContactKnowledgeGrid';
 import RiskTaskInvestigationCoverage from '@/components/cinematic/RiskTaskInvestigationCoverage';
 import OpsContactTaskMap from '@/components/cinematic/OpsContactTaskMap';
+import KnowledgeOpsCommunitySyncMap from '@/components/cinematic/KnowledgeOpsCommunitySyncMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1217,6 +1218,8 @@ function App() {
 
             {/* F161 (overnight 2026-09-28): Ops Events × Contact × Task Command Responsibility Map (OTCCM) — ◈ OTCCM button (left:1032520, bottom:8, zIndex:222); parallel-fetches /v1/ops/events + /entities/Contact + /entities/Task; keyword-correlates each ops event against contacts AND tasks to classify FULLY_ACCOUNTABLE/TASKED_ONLY/CONTACT_ASSIGNED/UNRESPONDED; red badge on unresponded count; accountability coverage bar; filter tabs ALL/FULLY_ACCOUNTABLE/TASKED_ONLY/CONTACT_ASSIGNED/UNRESPONDED + text search; expand event → matched contact cards (orange, role badge) + task cards (teal, status badge) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOtccmQuery+buildOtccmScript wired in JarvisBrain; "otccm/ops contact task/unresponded events/command responsibility/ops accountability/event accountability" voice trigger; jarvis:otccm-toggle event; 90-s auto-refresh */}
             <OpsContactTaskMap />
+            {/* F162 (overnight 2026-09-28): Knowledge × Ops Event × Graph Community Intelligence Synchrony Map (KOGSYNC) — ◈ KOGSYNC button (left:1033080, bottom:8, zIndex:223); parallel-fetches /knowledge/ + /v1/ops/events + /v1/graph/communities; keyword-correlates each KB article against ops events AND community clusters to classify FULLY_SYNCHRONIZED/OPS_TRACKED/COMMUNITY_MAPPED/ISOLATED; amber badge on isolated count; synchrony coverage bar; filter tabs + text search; expand article → matched ops event cards (blue) + community cards (purple) with relevance bars; ▶ ASSESS SYNCHRONY → /v1/jarvis/agent/chat 2-sentence brief + TTS; isKogsyncQuery+buildKogsyncScript wired in JarvisBrain; "kogsync/knowledge ops sync/knowledge synchrony/knowledge community/synchronized knowledge/knowledge isolation" voice trigger; jarvis:kogsync-toggle event; 90-s auto-refresh */}
+            <KnowledgeOpsCommunitySyncMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
