@@ -380,6 +380,7 @@ import SwarmMissionReadinessPulse from '@/components/cinematic/SwarmMissionReadi
 import ContactGraphIntelAlignmentMap from '@/components/cinematic/ContactGraphIntelAlignmentMap';
 import InvestmentContactKnowledgeNexus from '@/components/cinematic/InvestmentContactKnowledgeNexus';
 import TaskRiskIntelCoverageMatrix from '@/components/cinematic/TaskRiskIntelCoverageMatrix';
+import SwarmScenarioDataTriad from '@/components/cinematic/SwarmScenarioDataTriad';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1198,6 +1199,8 @@ function App() {
             <InvestmentContactKnowledgeNexus />
             {/* F156 (overnight 2026-09-28): Task × Risk Signal × IntelProfile Threat Coverage Matrix (TRICM) — ◈ TRICM button (left:1029720, bottom:8, zIndex:217); parallel-fetches /entities/Task + /entities/RiskSignal + /entities/IntelProfile; keyword-correlates each task against risk signals AND intel profiles to classify THREAT_MONITORED/RISK_FLAGGED/ACTOR_TRACKED/EXPOSED; red badge on exposed count; filter tabs ALL/THREAT_MONITORED/RISK_FLAGGED/ACTOR_TRACKED/EXPOSED + text search; expand task → matched risk signal cards (red, severity badge) + intel profile cards (orange, role badge) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isTricmQuery+buildTricmScript wired in JarvisBrain; "tricm/task risk intel/task threat coverage/exposed tasks/task actor/task threat monitoring/threat coverage matrix" voice trigger; jarvis:tricm-toggle event; 90-s auto-refresh */}
             <TaskRiskIntelCoverageMatrix />
+            {/* F157 (overnight 2026-09-28): SwarmJob × Scenario × Dataset Operational Execution Triad (SWEDAT) — ◈ SWEDAT button (left:1030280, bottom:8, zIndex:218); parallel-fetches /entities/SwarmJob + /v1/scenario/list + /v1/datasets; keyword-correlates each swarm job against scenario playbooks AND datasets to classify FULLY_SUPPORTED/SCENARIO_DRIVEN/DATA_BACKED/UNSUPPORTED; amber badge on unsupported count; support coverage bar; filter tabs ALL/FULLY_SUPPORTED/SCENARIO_DRIVEN/DATA_BACKED/UNSUPPORTED + text search; expand job → matched scenario cards (purple, type badge) + dataset cards (teal) with relevance bars; ▶ ASSESS EXECUTION → /v1/jarvis/agent/chat + TTS; isSwedatQuery+buildSwedatScript wired in JarvisBrain; "swedat/swarm execution/swarm scenario/swarm dataset/unsupported swarm/operational execution triad" voice trigger; jarvis:swedat-toggle event; 90-s auto-refresh */}
+            <SwarmScenarioDataTriad />
 
             <Suspense fallback={<Loading />}>
               <Routes>

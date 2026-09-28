@@ -222,6 +222,7 @@ import { isSktimpQuery, buildSktimpScript } from "./SwarmMissionReadinessPulse";
 import { isCgnimapQuery, buildCgnimapScript } from "./ContactGraphIntelAlignmentMap";
 import { isIcknexQuery, buildIcknexScript } from "./InvestmentContactKnowledgeNexus";
 import { isTricmQuery, buildTricmScript } from "./TaskRiskIntelCoverageMatrix";
+import { isSwedatQuery, buildSwedatScript } from "./SwarmScenarioDataTriad";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2200,6 +2201,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tricm-toggle"));
       let script = "";
       try { script = await buildTricmScript(); } catch { script = "TRICM Threat Coverage Matrix online, sir. Cross-referencing tasks against risk signals and intel profiles to surface exposed missions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSwedatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swedat-toggle"));
+      let script = "";
+      try { script = await buildSwedatScript(); } catch { script = "SWEDAT Operational Execution Triad online, sir. Cross-referencing swarm jobs against scenario playbooks and datasets to surface unsupported operations now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
