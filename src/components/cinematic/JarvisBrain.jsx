@@ -220,6 +220,7 @@ import { isBasirQuery, buildBasirScript } from "./BrainAipSkillRatio";
 import { isOkrtricQuery, buildOkrtricScript } from "./OpsEventIntelCoverage";
 import { isSktimpQuery, buildSktimpScript } from "./SwarmMissionReadinessPulse";
 import { isCgnimapQuery, buildCgnimapScript } from "./ContactGraphIntelAlignmentMap";
+import { isIcknexQuery, buildIcknexScript } from "./InvestmentContactKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2182,6 +2183,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cgnimap-toggle"));
       let script = "";
       try { script = await buildCgnimapScript(); } catch { script = "CGNIMAP Contact Network Alignment Map online, sir. Cross-referencing contacts against graph community clusters and intel profiles to assess network alignment now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIcknexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:icknex-toggle"));
+      let script = "";
+      try { script = await buildIcknexScript(); } catch { script = "ICKNEX Investment Intelligence Nexus online, sir. Correlating investments against contacts and knowledge base articles to surface intelligence blind spots now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

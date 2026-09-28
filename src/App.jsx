@@ -378,6 +378,7 @@ import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
 import OpsEventIntelCoverage from '@/components/cinematic/OpsEventIntelCoverage';
 import SwarmMissionReadinessPulse from '@/components/cinematic/SwarmMissionReadinessPulse';
 import ContactGraphIntelAlignmentMap from '@/components/cinematic/ContactGraphIntelAlignmentMap';
+import InvestmentContactKnowledgeNexus from '@/components/cinematic/InvestmentContactKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1192,6 +1193,8 @@ function App() {
             <SwarmMissionReadinessPulse />
             {/* F154 (overnight 2026-09-28): Contact × Graph Community × IntelProfile Network Alignment Map (CGNIMAP) — ◈ CGNIMAP button (left:1028600, bottom:8, zIndex:215); parallel-fetches /entities/Contact + /v1/graph/communities + /entities/IntelProfile; keyword-correlates each contact against community clusters AND intel profiles to classify FULLY_ALIGNED/COMMUNITY_LINKED/PROFILED_ONLY/ISOLATED; amber badge on isolated count; filter tabs ALL/FULLY_ALIGNED/COMMUNITY_LINKED/PROFILED_ONLY/ISOLATED + text search; alignment coverage bar; expand contact → matched community cards (purple) + intel profile cards (orange) with relevance bars; ▶ ASSESS ALIGNMENT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCgnimapQuery+buildCgnimapScript wired in JarvisBrain; "cgnimap/contact network/contact community/contact alignment/isolated contacts/contact graph alignment/network contact intel" voice trigger; jarvis:cgnimap-toggle event; 90-s auto-refresh */}
             <ContactGraphIntelAlignmentMap />
+            {/* F155 (overnight 2026-09-28): Investment × Contact × Knowledge Opportunity Intelligence Nexus (ICKNEX) — ◈ ICKNEX button (left:1029160, bottom:8, zIndex:216); parallel-fetches /entities/Investment + /entities/Contact + /knowledge/; keyword-correlates each investment against contacts AND KB articles to classify FULLY_INFORMED/CONTACT_MANAGED/KB_RESEARCHED/BLIND; amber badge on blind count; filter tabs ALL/FULLY_INFORMED/CONTACT_MANAGED/KB_RESEARCHED/BLIND + text search; intel coverage bar; expand investment → matched contact cards (orange, role badge) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIcknexQuery+buildIcknexScript wired in JarvisBrain; "icknex/investment contact knowledge/opportunity intelligence/blind investments/investment intel coverage/investment intelligence nexus" voice trigger; jarvis:icknex-toggle event; 90-s auto-refresh */}
+            <InvestmentContactKnowledgeNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
