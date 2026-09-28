@@ -227,6 +227,7 @@ import { isSwedatQuery, buildSwedatScript } from "./SwarmScenarioDataTriad";
 import { isLifriskQuery, buildLifriskScript } from "./LiveIntelInvestmentRisk";
 import { isStckorgQuery, buildStckorgScript } from "./ScenarioTaskContactKnowledgeGrid";
 import { isRtsicmQuery, buildRtsicmScript } from "./RiskTaskInvestigationCoverage";
+import { isOtccmQuery, buildOtccmScript } from "./OpsContactTaskMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2245,6 +2246,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rtsicm-toggle"));
       let script = "";
       try { script = await buildRtsicmScript(); } catch { script = "RTSICM Risk Management Coverage online, sir. Cross-referencing risk signals against active tasks and investigations to surface unmitigated threats now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOtccmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:otccm-toggle"));
+      let script = "";
+      try { script = await buildOtccmScript(); } catch { script = "OTCCM Command Responsibility Map online, sir. Correlating operational events against assigned contacts and active tasks to surface unresponded events now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

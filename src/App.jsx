@@ -385,6 +385,7 @@ import SwarmScenarioDataTriad from '@/components/cinematic/SwarmScenarioDataTria
 import LiveIntelInvestmentRisk from '@/components/cinematic/LiveIntelInvestmentRisk';
 import ScenarioTaskContactKnowledgeGrid from '@/components/cinematic/ScenarioTaskContactKnowledgeGrid';
 import RiskTaskInvestigationCoverage from '@/components/cinematic/RiskTaskInvestigationCoverage';
+import OpsContactTaskMap from '@/components/cinematic/OpsContactTaskMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1213,6 +1214,9 @@ function App() {
             <ScenarioTaskContactKnowledgeGrid />
             {/* F160 (overnight 2026-09-28): Risk Signal × Task × Investigation Management Coverage (RTSICM) — ◈ RTSICM button (left:1031960, bottom:8, zIndex:221); parallel-fetches /entities/RiskSignal + /entities/Task + /v1/investigations; keyword-correlates each risk signal against tasks AND investigations to classify FULLY_MANAGED/TASK_ONLY/INVESTIGATED/UNMITIGATED; red badge on unmitigated count; coverage bar; filter tabs ALL/FULLY_MANAGED/TASK_ONLY/INVESTIGATED/UNMITIGATED + text search; expand signal → matched task cards (teal) + investigation cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isRtsicmQuery+buildRtsicmScript wired in JarvisBrain; "rtsicm/risk task coverage/unmitigated risk/risk management coverage/managed risk/risk investigation" voice trigger; jarvis:rtsicm-toggle event; 90-s auto-refresh */}
             <RiskTaskInvestigationCoverage />
+
+            {/* F161 (overnight 2026-09-28): Ops Events × Contact × Task Command Responsibility Map (OTCCM) — ◈ OTCCM button (left:1032520, bottom:8, zIndex:222); parallel-fetches /v1/ops/events + /entities/Contact + /entities/Task; keyword-correlates each ops event against contacts AND tasks to classify FULLY_ACCOUNTABLE/TASKED_ONLY/CONTACT_ASSIGNED/UNRESPONDED; red badge on unresponded count; accountability coverage bar; filter tabs ALL/FULLY_ACCOUNTABLE/TASKED_ONLY/CONTACT_ASSIGNED/UNRESPONDED + text search; expand event → matched contact cards (orange, role badge) + task cards (teal, status badge) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOtccmQuery+buildOtccmScript wired in JarvisBrain; "otccm/ops contact task/unresponded events/command responsibility/ops accountability/event accountability" voice trigger; jarvis:otccm-toggle event; 90-s auto-refresh */}
+            <OpsContactTaskMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

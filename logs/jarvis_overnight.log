@@ -152,3 +152,4 @@
 2026-09-28 F159 STCKORG: Scenario×Task×Contact×Knowledge Operational Readiness Grid — ScenarioTaskContactKnowledgeGrid.jsx created; imported+mounted in App.jsx; isStckorgQuery+buildStckorgScript wired in JarvisBrain.jsx; build verified exit 0
 [2026-09-28] F150 SwarmMissionCommandCoverage.jsx (MCOCOV) — SwarmJob×Investigation×RiskSignal×Contact Mission Command Coverage; build exit 0; pushed to jarvis-overnight
 [2026-09-28] F160 RiskTaskInvestigationCoverage (RTSICM): /entities/RiskSignal × /entities/Task × /v1/investigations → FULLY_MANAGED/TASK_ONLY/INVESTIGATED/UNMITIGATED; red badge on unmitigated; expand drill-down; AI assess + TTS; build verified exit 0
+2026-09-28T14:17:20Z [F161] OpsContactTaskMap.jsx — Ops Events × Contact × Task Command Responsibility Map (OTCCM); wired isOtccmQuery+buildOtccmScript in JarvisBrain.jsx; mounted in App.jsx; build exit 0
