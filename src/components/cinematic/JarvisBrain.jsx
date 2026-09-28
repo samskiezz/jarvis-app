@@ -215,6 +215,7 @@ import { isIskfullQuery, buildIskfullScript } from "./InvestigationFullCoverage"
 import { isDgorsimQuery, buildDgorsimScript } from "./DatasetGraphOpsRiskSituationalMap";
 import { isNdratlasQuery, buildNdratlasScript } from "./AipSkillNetworkDefenseAtlas";
 import { isAnequadQuery, buildAnequadScript } from "./IntelActorNetworkExposure";
+import { isMcocovQuery, buildMcocovScript } from "./SwarmMissionCommandCoverage";
 import { isForknQuery, buildForknScript } from "./InvestmentOpsRiskNexus";
 import { isBasirQuery, buildBasirScript } from "./BrainAipSkillRatio";
 import { isOkrtricQuery, buildOkrtricScript } from "./OpsEventIntelCoverage";
@@ -2147,6 +2148,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:anequad-toggle"));
       let script = "";
       try { script = await buildAnequadScript(); } catch { script = "ANEQUAD Actor Network Exposure Quadrant online, sir. Cross-referencing intel actor profiles against graph communities, intelligence reports, and ops events to surface fully-exposed threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMcocovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mcocov-toggle"));
+      let script = "";
+      try { script = await buildMcocovScript(); } catch { script = "MCOCOV Mission Command Coverage online, sir. Cross-referencing swarm jobs against investigations, risk signals, and contacts to surface uncontrolled autonomous operations requiring command assignment now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
