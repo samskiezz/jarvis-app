@@ -230,6 +230,7 @@ import { isRtsicmQuery, buildRtsicmScript } from "./RiskTaskInvestigationCoverag
 import { isOtccmQuery, buildOtccmScript } from "./OpsContactTaskMap";
 import { isKogsyncQuery, buildKogsyncScript } from "./KnowledgeOpsCommunitySyncMap";
 import { isIscdrimQuery, buildIscdrimScript } from "./InvestigationReadinessMatrix";
+import { isOsigsmQuery, buildOsigsmScript } from "./AipSkillGraphOpsSignalMesh";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2272,6 +2273,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iscdrim-toggle"));
       let script = "";
       try { script = await buildIscdrimScript(); } catch { script = "ISCDRIM online, sir. Cross-referencing investigations against scenario playbooks, contacts, and datasets to surface bare investigations with no assigned resources now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOsigsmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:osigsm-toggle"));
+      let script = "";
+      try { script = await buildOsigsmScript(); } catch { script = "OSIGSM Operational Signal Mesh online, sir. Cross-referencing AIP skills against graph centrality nodes and ops events to surface dormant skills now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

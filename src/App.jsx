@@ -388,6 +388,7 @@ import RiskTaskInvestigationCoverage from '@/components/cinematic/RiskTaskInvest
 import OpsContactTaskMap from '@/components/cinematic/OpsContactTaskMap';
 import KnowledgeOpsCommunitySyncMap from '@/components/cinematic/KnowledgeOpsCommunitySyncMap';
 import InvestigationReadinessMatrix from '@/components/cinematic/InvestigationReadinessMatrix';
+import AipSkillGraphOpsSignalMesh from '@/components/cinematic/AipSkillGraphOpsSignalMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1223,6 +1224,8 @@ function App() {
             <KnowledgeOpsCommunitySyncMap />
             {/* F163 (overnight 2026-09-28): Investigation × Scenario × Contact × Dataset Full Intelligence Readiness Matrix (ISCDRIM) — ◈ ISCDRIM button (left:1033640, bottom:8, zIndex:224); parallel-fetches /v1/investigations + /v1/scenario/list + /entities/Contact + /v1/datasets; keyword-correlates each investigation against scenario playbooks AND contacts AND datasets to classify FULLY_EQUIPPED/DUAL_EQUIPPED/SINGLE_LINKED/BARE; amber badge on bare count; filter tabs + text search; expand → matched scenario (teal) + contact (orange) + dataset (purple) cards with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIscdrimQuery+buildIscdrimScript wired in JarvisBrain; "iscdrim/investigation readiness/investigation equipped/bare investigations/investigation full coverage/investigation resources" voice trigger; jarvis:iscdrim-toggle event; 90-s auto-refresh */}
             <InvestigationReadinessMatrix />
+            {/* F164 (overnight 2026-09-28): AIP Skill × Graph Centrality × Ops Event Operational Signal Mesh (OSIGSM) */}
+            <AipSkillGraphOpsSignalMesh />
 
             <Suspense fallback={<Loading />}>
               <Routes>

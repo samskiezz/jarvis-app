@@ -155,3 +155,4 @@
 2026-09-28T14:17:20Z [F161] OpsContactTaskMap.jsx — Ops Events × Contact × Task Command Responsibility Map (OTCCM); wired isOtccmQuery+buildOtccmScript in JarvisBrain.jsx; mounted in App.jsx; build exit 0
 [2026-09-28] F162 KOGSYNC: KnowledgeOpsCommunitySyncMap.jsx created; wired in JarvisBrain.jsx + App.jsx; build exit 0
 [2026-09-28] F163 ISCDRIM: Investigation × Scenario × Contact × Dataset Full Intelligence Readiness Matrix — new InvestigationReadinessMatrix.jsx; wired App.jsx + JarvisBrain.jsx; build exit 0
+2026-09-28 F164 OSIGSM — AIP Skill × Graph Centrality × Ops Event Operational Signal Mesh: new AipSkillGraphOpsSignalMesh.jsx created; imported+mounted in App.jsx; isOsigsmQuery+buildOsigsmScript wired in JarvisBrain.jsx; build verified exit 0
