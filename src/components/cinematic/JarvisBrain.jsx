@@ -226,6 +226,7 @@ import { isTricmQuery, buildTricmScript } from "./TaskRiskIntelCoverageMatrix";
 import { isSwedatQuery, buildSwedatScript } from "./SwarmScenarioDataTriad";
 import { isLifriskQuery, buildLifriskScript } from "./LiveIntelInvestmentRisk";
 import { isStckorgQuery, buildStckorgScript } from "./ScenarioTaskContactKnowledgeGrid";
+import { isRtsicmQuery, buildRtsicmScript } from "./RiskTaskInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2236,6 +2237,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:stckorg-toggle"));
       let script = "";
       try { script = await buildStckorgScript(); } catch { script = "STCKORG Operational Readiness Grid online, sir. Cross-referencing scenarios against tasks, contacts, and knowledge to surface unresourced gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRtsicmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rtsicm-toggle"));
+      let script = "";
+      try { script = await buildRtsicmScript(); } catch { script = "RTSICM Risk Management Coverage online, sir. Cross-referencing risk signals against active tasks and investigations to surface unmitigated threats now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

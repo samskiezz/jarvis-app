@@ -384,6 +384,7 @@ import TaskRiskIntelCoverageMatrix from '@/components/cinematic/TaskRiskIntelCov
 import SwarmScenarioDataTriad from '@/components/cinematic/SwarmScenarioDataTriad';
 import LiveIntelInvestmentRisk from '@/components/cinematic/LiveIntelInvestmentRisk';
 import ScenarioTaskContactKnowledgeGrid from '@/components/cinematic/ScenarioTaskContactKnowledgeGrid';
+import RiskTaskInvestigationCoverage from '@/components/cinematic/RiskTaskInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1210,6 +1211,8 @@ function App() {
             <LiveIntelInvestmentRisk />
             {/* F159 (overnight 2026-09-28): Scenario × Task × Contact × Knowledge Operational Readiness Grid (STCKORG) — ◈ STCKORG button (left:1031400, bottom:8, zIndex:220); parallel-fetches /v1/scenario/list + /entities/Task + /entities/Contact + /knowledge/; keyword-correlates each scenario against tasks AND contacts AND KB articles to classify FULLY_RESOURCED/DUAL_RESOURCED/SINGLE_LINKED/UNRESOURCED; amber badge on unresourced count; coverage bar; filter tabs ALL/FULLY_RESOURCED/DUAL_RESOURCED/SINGLE_LINKED/UNRESOURCED + text search; expand scenario → matched task cards (teal, status badge) + contact cards (amber, role badge) + KB article cards (green, category badge) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isStckorgQuery+buildStckorgScript wired in JarvisBrain; "stckorg/scenario readiness/operational readiness grid/unresourced scenario/scenario staffing knowledge/scenario task contact" voice trigger; jarvis:stckorg-toggle event; 90-s auto-refresh */}
             <ScenarioTaskContactKnowledgeGrid />
+            {/* F160 (overnight 2026-09-28): Risk Signal × Task × Investigation Management Coverage (RTSICM) — ◈ RTSICM button (left:1031960, bottom:8, zIndex:221); parallel-fetches /entities/RiskSignal + /entities/Task + /v1/investigations; keyword-correlates each risk signal against tasks AND investigations to classify FULLY_MANAGED/TASK_ONLY/INVESTIGATED/UNMITIGATED; red badge on unmitigated count; coverage bar; filter tabs ALL/FULLY_MANAGED/TASK_ONLY/INVESTIGATED/UNMITIGATED + text search; expand signal → matched task cards (teal) + investigation cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isRtsicmQuery+buildRtsicmScript wired in JarvisBrain; "rtsicm/risk task coverage/unmitigated risk/risk management coverage/managed risk/risk investigation" voice trigger; jarvis:rtsicm-toggle event; 90-s auto-refresh */}
+            <RiskTaskInvestigationCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

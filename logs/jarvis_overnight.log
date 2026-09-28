@@ -151,3 +151,4 @@
 2026-09-28 F158 LIFRISK — LiveIntelInvestmentRisk.jsx: /functions/getLiveIntel × /entities/Investment × /entities/RiskSignal financial threat pulse; THREAT_FLAGGED/MARKET_VOLATILE/RISK_MONITORED/STABLE classification; red badge; AI exposure brief + TTS; build exit 0
 2026-09-28 F159 STCKORG: Scenario×Task×Contact×Knowledge Operational Readiness Grid — ScenarioTaskContactKnowledgeGrid.jsx created; imported+mounted in App.jsx; isStckorgQuery+buildStckorgScript wired in JarvisBrain.jsx; build verified exit 0
 [2026-09-28] F150 SwarmMissionCommandCoverage.jsx (MCOCOV) — SwarmJob×Investigation×RiskSignal×Contact Mission Command Coverage; build exit 0; pushed to jarvis-overnight
+[2026-09-28] F160 RiskTaskInvestigationCoverage (RTSICM): /entities/RiskSignal × /entities/Task × /v1/investigations → FULLY_MANAGED/TASK_ONLY/INVESTIGATED/UNMITIGATED; red badge on unmitigated; expand drill-down; AI assess + TTS; build verified exit 0
