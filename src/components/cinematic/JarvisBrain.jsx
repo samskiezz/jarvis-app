@@ -231,6 +231,7 @@ import { isOtccmQuery, buildOtccmScript } from "./OpsContactTaskMap";
 import { isKogsyncQuery, buildKogsyncScript } from "./KnowledgeOpsCommunitySyncMap";
 import { isIscdrimQuery, buildIscdrimScript } from "./InvestigationReadinessMatrix";
 import { isOsigsmQuery, buildOsigsmScript } from "./AipSkillGraphOpsSignalMesh";
+import { isCgrimapQuery, buildCgrimapScript } from "./CommunityIntelDocMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2281,6 +2282,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:osigsm-toggle"));
       let script = "";
       try { script = await buildOsigsmScript(); } catch { script = "OSIGSM Operational Signal Mesh online, sir. Cross-referencing AIP skills against graph centrality nodes and ops events to surface dormant skills now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCgrimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cgrimap-toggle"));
+      let script = "";
+      try { script = await buildCgrimapScript(); } catch { script = "CGRIMAP Community Intelligence Documentation Map online, sir. Cross-referencing graph community clusters against intelligence reports and investigations to surface undocumented communities now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
