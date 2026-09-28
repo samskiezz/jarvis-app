@@ -217,6 +217,7 @@ import { isNdratlasQuery, buildNdratlasScript } from "./AipSkillNetworkDefenseAt
 import { isAnequadQuery, buildAnequadScript } from "./IntelActorNetworkExposure";
 import { isForknQuery, buildForknScript } from "./InvestmentOpsRiskNexus";
 import { isBasirQuery, buildBasirScript } from "./BrainAipSkillRatio";
+import { isOkrtricQuery, buildOkrtricScript } from "./OpsEventIntelCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2155,6 +2156,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:basir-toggle"));
       let script = "";
       try { script = await buildBasirScript(); } catch { script = "BASIR Brain AIP Skill Intelligence Ratio online, sir. Computing brain node to active skill ratio and assessing cognitive capacity now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOkrtricQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:okrtric-toggle"));
+      let script = "";
+      try { script = await buildOkrtricScript(); } catch { script = "OKRTRIC Ops Event Intelligence Coverage online, sir. Cross-referencing operational events against knowledge base and intelligence reports to surface undocumented blind spots now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

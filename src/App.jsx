@@ -375,6 +375,7 @@ import AipSkillNetworkDefenseAtlas from '@/components/cinematic/AipSkillNetworkD
 import IntelActorNetworkExposure from '@/components/cinematic/IntelActorNetworkExposure';
 import InvestmentOpsRiskNexus from '@/components/cinematic/InvestmentOpsRiskNexus';
 import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
+import OpsEventIntelCoverage from '@/components/cinematic/OpsEventIntelCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1183,6 +1184,8 @@ function App() {
             <InvestmentOpsRiskNexus />
             {/* F151 (overnight 2026-09-28): Brain × AIP Skill Intelligence Ratio (BASIR) — ◈ BASIR button (left:1980, bottom:18, zIndex:68); parallel-fetches /v1/cinematic/brain + /v1/aip/skill; computes B:S ratio (nodes÷skills) → SURPLUS/BALANCED/STRAINED/OVERLOADED; stat tiles NODES/SYNAPSES/SKILLS/RATIO; each skill row shows node allocation bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence cognitive capacity brief + TTS; isBasirQuery+buildBasirScript wired in JarvisBrain; "basir/brain skill/skill brain/brain capacity/skill ratio/cognitive skill ratio" voice trigger; jarvis:basir-toggle event; 60-s auto-refresh */}
             <BrainAipSkillRatio />
+            {/* F152 (overnight 2026-09-28): Ops Event × Knowledge × Report Real-Time Intelligence Coverage (OKRTRIC) — ◈ OKRTRIC button (left:1027480, bottom:8, zIndex:213); parallel-fetches /v1/ops/events + /knowledge/ + /v1/reports; keyword-correlates each ops event against KB articles AND intelligence reports to classify FULLY_DOCUMENTED/KB_BACKED/REPORT_COVERED/UNDOCUMENTED; amber/red badge on undocumented count; filter tabs ALL/FULLY_DOCUMENTED/KB_BACKED/REPORT_COVERED/UNDOCUMENTED + text search; coverage bar; expand event → matched KB article cards (green) + report cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence intelligence gap brief + TTS; isOkrtricQuery+buildOkrtricScript wired in JarvisBrain; "okrtric/ops coverage/ops documentation/undocumented events/event knowledge report/ops intelligence coverage/intel gap ops/ops intel coverage" voice trigger; jarvis:okrtric-toggle event; 90-s auto-refresh */}
+            <OpsEventIntelCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
