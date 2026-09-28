@@ -382,6 +382,7 @@ import InvestmentContactKnowledgeNexus from '@/components/cinematic/InvestmentCo
 import TaskRiskIntelCoverageMatrix from '@/components/cinematic/TaskRiskIntelCoverageMatrix';
 import SwarmScenarioDataTriad from '@/components/cinematic/SwarmScenarioDataTriad';
 import LiveIntelInvestmentRisk from '@/components/cinematic/LiveIntelInvestmentRisk';
+import ScenarioTaskContactKnowledgeGrid from '@/components/cinematic/ScenarioTaskContactKnowledgeGrid';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1204,6 +1205,8 @@ function App() {
             <SwarmScenarioDataTriad />
             {/* F158 (overnight 2026-09-28): Live Intel × Investment × Risk Signal Financial Threat Pulse (LIFRISK) — ◈ LIFRISK button (left:1030840, bottom:8, zIndex:219); parallel-fetches /functions/getLiveIntel + /entities/Investment + /entities/RiskSignal; keyword-correlates crypto/FX live events against portfolio investments AND risk signals to classify THREAT_FLAGGED/MARKET_VOLATILE/RISK_MONITORED/STABLE; red badge on threat-flagged count; threat exposure bar; filter tabs ALL/THREAT_FLAGGED/MARKET_VOLATILE/RISK_MONITORED/STABLE + text search; expand investment → matched live intel event cards (orange) + risk signal cards (red, severity badge) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isLifriskQuery+buildLifriskScript wired in JarvisBrain; "lifrisk/financial threat/live investment threat/market risk pulse/investment market risk/crypto investment risk" voice trigger; jarvis:lifrisk-toggle event; 5-min auto-refresh */}
             <LiveIntelInvestmentRisk />
+            {/* F159 (overnight 2026-09-28): Scenario × Task × Contact × Knowledge Operational Readiness Grid (STCKORG) — ◈ STCKORG button (left:1031400, bottom:8, zIndex:220); parallel-fetches /v1/scenario/list + /entities/Task + /entities/Contact + /knowledge/; keyword-correlates each scenario against tasks AND contacts AND KB articles to classify FULLY_RESOURCED/DUAL_RESOURCED/SINGLE_LINKED/UNRESOURCED; amber badge on unresourced count; coverage bar; filter tabs ALL/FULLY_RESOURCED/DUAL_RESOURCED/SINGLE_LINKED/UNRESOURCED + text search; expand scenario → matched task cards (teal, status badge) + contact cards (amber, role badge) + KB article cards (green, category badge) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isStckorgQuery+buildStckorgScript wired in JarvisBrain; "stckorg/scenario readiness/operational readiness grid/unresourced scenario/scenario staffing knowledge/scenario task contact" voice trigger; jarvis:stckorg-toggle event; 90-s auto-refresh */}
+            <ScenarioTaskContactKnowledgeGrid />
 
             <Suspense fallback={<Loading />}>
               <Routes>

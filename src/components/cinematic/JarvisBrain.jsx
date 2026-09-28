@@ -224,6 +224,7 @@ import { isIcknexQuery, buildIcknexScript } from "./InvestmentContactKnowledgeNe
 import { isTricmQuery, buildTricmScript } from "./TaskRiskIntelCoverageMatrix";
 import { isSwedatQuery, buildSwedatScript } from "./SwarmScenarioDataTriad";
 import { isLifriskQuery, buildLifriskScript } from "./LiveIntelInvestmentRisk";
+import { isStckorgQuery, buildStckorgScript } from "./ScenarioTaskContactKnowledgeGrid";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2218,6 +2219,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:lifrisk-toggle"));
       let script = "";
       try { script = await buildLifriskScript(); } catch { script = "LIFRISK Financial Threat Pulse active, sir. Cross-referencing portfolio investments against live market intel and risk signals to surface threat-flagged positions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isStckorgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:stckorg-toggle"));
+      let script = "";
+      try { script = await buildStckorgScript(); } catch { script = "STCKORG Operational Readiness Grid online, sir. Cross-referencing scenarios against tasks, contacts, and knowledge to surface unresourced gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
