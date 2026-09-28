@@ -381,6 +381,7 @@ import ContactGraphIntelAlignmentMap from '@/components/cinematic/ContactGraphIn
 import InvestmentContactKnowledgeNexus from '@/components/cinematic/InvestmentContactKnowledgeNexus';
 import TaskRiskIntelCoverageMatrix from '@/components/cinematic/TaskRiskIntelCoverageMatrix';
 import SwarmScenarioDataTriad from '@/components/cinematic/SwarmScenarioDataTriad';
+import LiveIntelInvestmentRisk from '@/components/cinematic/LiveIntelInvestmentRisk';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1201,6 +1202,8 @@ function App() {
             <TaskRiskIntelCoverageMatrix />
             {/* F157 (overnight 2026-09-28): SwarmJob × Scenario × Dataset Operational Execution Triad (SWEDAT) — ◈ SWEDAT button (left:1030280, bottom:8, zIndex:218); parallel-fetches /entities/SwarmJob + /v1/scenario/list + /v1/datasets; keyword-correlates each swarm job against scenario playbooks AND datasets to classify FULLY_SUPPORTED/SCENARIO_DRIVEN/DATA_BACKED/UNSUPPORTED; amber badge on unsupported count; support coverage bar; filter tabs ALL/FULLY_SUPPORTED/SCENARIO_DRIVEN/DATA_BACKED/UNSUPPORTED + text search; expand job → matched scenario cards (purple, type badge) + dataset cards (teal) with relevance bars; ▶ ASSESS EXECUTION → /v1/jarvis/agent/chat + TTS; isSwedatQuery+buildSwedatScript wired in JarvisBrain; "swedat/swarm execution/swarm scenario/swarm dataset/unsupported swarm/operational execution triad" voice trigger; jarvis:swedat-toggle event; 90-s auto-refresh */}
             <SwarmScenarioDataTriad />
+            {/* F158 (overnight 2026-09-28): Live Intel × Investment × Risk Signal Financial Threat Pulse (LIFRISK) — ◈ LIFRISK button (left:1030840, bottom:8, zIndex:219); parallel-fetches /functions/getLiveIntel + /entities/Investment + /entities/RiskSignal; keyword-correlates crypto/FX live events against portfolio investments AND risk signals to classify THREAT_FLAGGED/MARKET_VOLATILE/RISK_MONITORED/STABLE; red badge on threat-flagged count; threat exposure bar; filter tabs ALL/THREAT_FLAGGED/MARKET_VOLATILE/RISK_MONITORED/STABLE + text search; expand investment → matched live intel event cards (orange) + risk signal cards (red, severity badge) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isLifriskQuery+buildLifriskScript wired in JarvisBrain; "lifrisk/financial threat/live investment threat/market risk pulse/investment market risk/crypto investment risk" voice trigger; jarvis:lifrisk-toggle event; 5-min auto-refresh */}
+            <LiveIntelInvestmentRisk />
 
             <Suspense fallback={<Loading />}>
               <Routes>

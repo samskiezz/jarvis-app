@@ -223,6 +223,7 @@ import { isCgnimapQuery, buildCgnimapScript } from "./ContactGraphIntelAlignment
 import { isIcknexQuery, buildIcknexScript } from "./InvestmentContactKnowledgeNexus";
 import { isTricmQuery, buildTricmScript } from "./TaskRiskIntelCoverageMatrix";
 import { isSwedatQuery, buildSwedatScript } from "./SwarmScenarioDataTriad";
+import { isLifriskQuery, buildLifriskScript } from "./LiveIntelInvestmentRisk";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2209,6 +2210,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:swedat-toggle"));
       let script = "";
       try { script = await buildSwedatScript(); } catch { script = "SWEDAT Operational Execution Triad online, sir. Cross-referencing swarm jobs against scenario playbooks and datasets to surface unsupported operations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLifriskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lifrisk-toggle"));
+      let script = "";
+      try { script = await buildLifriskScript(); } catch { script = "LIFRISK Financial Threat Pulse active, sir. Cross-referencing portfolio investments against live market intel and risk signals to surface threat-flagged positions now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
