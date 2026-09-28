@@ -376,6 +376,7 @@ import IntelActorNetworkExposure from '@/components/cinematic/IntelActorNetworkE
 import InvestmentOpsRiskNexus from '@/components/cinematic/InvestmentOpsRiskNexus';
 import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
 import OpsEventIntelCoverage from '@/components/cinematic/OpsEventIntelCoverage';
+import SwarmMissionReadinessPulse from '@/components/cinematic/SwarmMissionReadinessPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1186,6 +1187,8 @@ function App() {
             <BrainAipSkillRatio />
             {/* F152 (overnight 2026-09-28): Ops Event × Knowledge × Report Real-Time Intelligence Coverage (OKRTRIC) — ◈ OKRTRIC button (left:1027480, bottom:8, zIndex:213); parallel-fetches /v1/ops/events + /knowledge/ + /v1/reports; keyword-correlates each ops event against KB articles AND intelligence reports to classify FULLY_DOCUMENTED/KB_BACKED/REPORT_COVERED/UNDOCUMENTED; amber/red badge on undocumented count; filter tabs ALL/FULLY_DOCUMENTED/KB_BACKED/REPORT_COVERED/UNDOCUMENTED + text search; coverage bar; expand event → matched KB article cards (green) + report cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence intelligence gap brief + TTS; isOkrtricQuery+buildOkrtricScript wired in JarvisBrain; "okrtric/ops coverage/ops documentation/undocumented events/event knowledge report/ops intelligence coverage/intel gap ops/ops intel coverage" voice trigger; jarvis:okrtric-toggle event; 90-s auto-refresh */}
             <OpsEventIntelCoverage />
+            {/* F153 (overnight 2026-09-28): SwarmJob × Knowledge × Task × IntelProfile Mission Readiness Pulse (SKTIMP) — ◈ SKTIMP button (left:1028040, bottom:8, zIndex:214); parallel-fetches /entities/SwarmJob + /knowledge/ + /entities/Task + /entities/IntelProfile; keyword-correlates each swarm job against KB articles AND tasks AND intel profiles to classify FULLY_READY/DUAL_READY/SINGLE_LINKED/DARK; amber badge on dark count; readiness coverage bar; filter tabs ALL/FULLY_READY/DUAL_READY/SINGLE_LINKED/DARK + text search; expand job → matched KB article cards (green) + task cards (teal) + intel profile cards (orange) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence readiness brief + TTS; isSktimpQuery+buildSktimpScript wired in JarvisBrain; "sktimp/swarm readiness/mission readiness pulse/dark swarm/swarm mission ready/swarm knowledge task/swarm intel readiness" voice trigger; jarvis:sktimp-toggle event; 90-s auto-refresh */}
+            <SwarmMissionReadinessPulse />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -218,6 +218,7 @@ import { isAnequadQuery, buildAnequadScript } from "./IntelActorNetworkExposure"
 import { isForknQuery, buildForknScript } from "./InvestmentOpsRiskNexus";
 import { isBasirQuery, buildBasirScript } from "./BrainAipSkillRatio";
 import { isOkrtricQuery, buildOkrtricScript } from "./OpsEventIntelCoverage";
+import { isSktimpQuery, buildSktimpScript } from "./SwarmMissionReadinessPulse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2164,6 +2165,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:okrtric-toggle"));
       let script = "";
       try { script = await buildOkrtricScript(); } catch { script = "OKRTRIC Ops Event Intelligence Coverage online, sir. Cross-referencing operational events against knowledge base and intelligence reports to surface undocumented blind spots now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSktimpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sktimp-toggle"));
+      let script = "";
+      try { script = await buildSktimpScript(); } catch { script = "SKTIMP Swarm Mission Readiness Pulse online, sir. Cross-referencing swarm jobs against knowledge base, active tasks, and intel profiles to classify mission readiness now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
