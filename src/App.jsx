@@ -392,6 +392,7 @@ import AipSkillGraphOpsSignalMesh from '@/components/cinematic/AipSkillGraphOpsS
 import CommunityIntelDocMap from '@/components/cinematic/CommunityIntelDocMap';
 import PersonnelResponseCoverage from '@/components/cinematic/PersonnelResponseCoverage';
 import DataScienceNexus from '@/components/cinematic/DataScienceNexus';
+import InvestmentScenarioKnowledgeNexus from '@/components/cinematic/InvestmentScenarioKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1235,6 +1236,8 @@ function App() {
             <PersonnelResponseCoverage />
             {/* F167 (overnight 2026-09-28): Dataset × AIP Skill × Investigation Data Science Nexus (DSINEX) */}
             <DataScienceNexus />
+            {/* F168 (overnight 2026-09-28): Investment × Scenario × Knowledge Portfolio Intelligence Nexus (ISKPIN) */}
+            <InvestmentScenarioKnowledgeNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>

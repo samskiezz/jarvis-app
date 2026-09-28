@@ -159,3 +159,4 @@
 2026-09-28 F165 CGRIMAP: Graph Community × Report × Investigation Intelligence Documentation Map — new CommunityIntelDocMap.jsx; imported+mounted in App.jsx; isCgrimapQuery+buildCgrimapScript wired in JarvisBrain.jsx; build verified exit 0
 2026-09-28 F166 PERCOV — PersonnelResponseCoverage.jsx: /entities/Contact × /v1/ops/events × /entities/RiskSignal personnel response coverage; FULLY_ENGAGED/OPS_RESPONDING/RISK_EXPOSED/UNENGAGED classification; amber badge; AI response brief + TTS; build exit 0
 2026-09-28 F167 DataScienceNexus.jsx — Dataset × AIP Skill × Investigation DSINEX panel; isDsinexQuery+buildDsinexScript wired in JarvisBrain.jsx; build exit 0
+2026-09-28 F168 InvestmentScenarioKnowledgeNexus.jsx — /entities/Investment × /v1/scenario/list × /knowledge/ → ISKPIN portfolio intelligence nexus; build exit 0

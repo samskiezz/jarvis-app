@@ -234,6 +234,7 @@ import { isOsigsmQuery, buildOsigsmScript } from "./AipSkillGraphOpsSignalMesh";
 import { isCgrimapQuery, buildCgrimapScript } from "./CommunityIntelDocMap";
 import { isPercovQuery, buildPercovScript } from "./PersonnelResponseCoverage";
 import { isDsinexQuery, buildDsinexScript } from "./DataScienceNexus";
+import { isIskpinQuery, buildIskpinScript } from "./InvestmentScenarioKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2308,6 +2309,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dsinex-toggle"));
       let script = "";
       try { script = await buildDsinexScript(); } catch { script = "DSINEX Data Science Nexus online, sir. Cross-referencing datasets against AIP skills and investigations to surface dark datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIskpinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iskpin-toggle"));
+      let script = "";
+      try { script = await buildIskpinScript(); } catch { script = "ISKPIN Portfolio Intelligence Nexus online, sir. Cross-referencing investments against scenarios and knowledge articles to surface unsupported assets now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
