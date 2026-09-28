@@ -160,3 +160,4 @@
 2026-09-28 F166 PERCOV — PersonnelResponseCoverage.jsx: /entities/Contact × /v1/ops/events × /entities/RiskSignal personnel response coverage; FULLY_ENGAGED/OPS_RESPONDING/RISK_EXPOSED/UNENGAGED classification; amber badge; AI response brief + TTS; build exit 0
 2026-09-28 F167 DataScienceNexus.jsx — Dataset × AIP Skill × Investigation DSINEX panel; isDsinexQuery+buildDsinexScript wired in JarvisBrain.jsx; build exit 0
 2026-09-28 F168 InvestmentScenarioKnowledgeNexus.jsx — /entities/Investment × /v1/scenario/list × /knowledge/ → ISKPIN portfolio intelligence nexus; build exit 0
+2026-09-28 F169 IntelActorScenarioRiskNexus.jsx — /entities/IntelProfile × /v1/scenario/list × /entities/RiskSignal → ATHNEX actor threat nexus; FULLY_TRACKED/SCENARIO_MAPPED/RISK_MONITORED/UNTRACKED; red badge on untracked; AI brief + TTS; build exit 0

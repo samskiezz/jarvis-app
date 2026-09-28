@@ -393,6 +393,7 @@ import CommunityIntelDocMap from '@/components/cinematic/CommunityIntelDocMap';
 import PersonnelResponseCoverage from '@/components/cinematic/PersonnelResponseCoverage';
 import DataScienceNexus from '@/components/cinematic/DataScienceNexus';
 import InvestmentScenarioKnowledgeNexus from '@/components/cinematic/InvestmentScenarioKnowledgeNexus';
+import IntelActorScenarioRiskNexus from '@/components/cinematic/IntelActorScenarioRiskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1238,6 +1239,8 @@ function App() {
             <DataScienceNexus />
             {/* F168 (overnight 2026-09-28): Investment × Scenario × Knowledge Portfolio Intelligence Nexus (ISKPIN) */}
             <InvestmentScenarioKnowledgeNexus />
+            {/* F169 (overnight 2026-09-28): IntelProfile × Scenario × RiskSignal Actor Threat Nexus (ATHNEX) */}
+            <IntelActorScenarioRiskNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
