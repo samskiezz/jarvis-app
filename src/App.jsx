@@ -394,6 +394,7 @@ import PersonnelResponseCoverage from '@/components/cinematic/PersonnelResponseC
 import DataScienceNexus from '@/components/cinematic/DataScienceNexus';
 import InvestmentScenarioKnowledgeNexus from '@/components/cinematic/InvestmentScenarioKnowledgeNexus';
 import IntelActorScenarioRiskNexus from '@/components/cinematic/IntelActorScenarioRiskNexus';
+import SwarmMissionIntelNet from '@/components/cinematic/SwarmMissionIntelNet';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1241,6 +1242,8 @@ function App() {
             <InvestmentScenarioKnowledgeNexus />
             {/* F169 (overnight 2026-09-28): IntelProfile × Scenario × RiskSignal Actor Threat Nexus (ATHNEX) */}
             <IntelActorScenarioRiskNexus />
+            {/* F170 (overnight 2026-09-28): SwarmJob × Graph Community × Knowledge × Contact Mission Intelligence Network (SMICNET) */}
+            <SwarmMissionIntelNet />
 
             <Suspense fallback={<Loading />}>
               <Routes>

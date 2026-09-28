@@ -236,6 +236,7 @@ import { isPercovQuery, buildPercovScript } from "./PersonnelResponseCoverage";
 import { isDsinexQuery, buildDsinexScript } from "./DataScienceNexus";
 import { isIskpinQuery, buildIskpinScript } from "./InvestmentScenarioKnowledgeNexus";
 import { isAthnexQuery, buildAthnexScript } from "./IntelActorScenarioRiskNexus";
+import { isSmicnetQuery, buildSmicnetScript } from "./SwarmMissionIntelNet";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2326,6 +2327,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:athnex-toggle"));
       let script = "";
       try { script = await buildAthnexScript(); } catch { script = "ATHNEX Actor Threat Nexus online, sir. Cross-referencing intel profiles against scenario playbooks and risk signals to surface untracked threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSmicnetQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:smicnet-toggle"));
+      let script = "";
+      try { script = await buildSmicnetScript(); } catch { script = "SMICNET Swarm Mission Intelligence Network online, sir. Correlating swarm jobs against graph communities, knowledge base, and contact network now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
