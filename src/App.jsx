@@ -398,6 +398,7 @@ import SwarmMissionIntelNet from '@/components/cinematic/SwarmMissionIntelNet';
 import TaskKnowledgeCommunityMap from '@/components/cinematic/TaskKnowledgeCommunityMap';
 import OpsReadinessIndex from '@/components/cinematic/OpsReadinessIndex';
 import InvestigationFullStackCoverage from '@/components/cinematic/InvestigationFullStackCoverage';
+import ScenarioMissionIntelGrid from '@/components/cinematic/ScenarioMissionIntelGrid';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1253,6 +1254,8 @@ function App() {
             <OpsReadinessIndex />
             {/* F173 (overnight 2026-09-29): Investigation × Contact × Dataset × RiskSignal Full-Stack Operations Coverage (FSOPS) */}
             <InvestigationFullStackCoverage />
+            {/* F174 (overnight 2026-09-29): Scenario × Knowledge × Contact × SwarmJob Mission Intelligence Grid (MKCSIG) */}
+            <ScenarioMissionIntelGrid />
 
             <Suspense fallback={<Loading />}>
               <Routes>

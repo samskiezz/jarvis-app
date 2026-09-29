@@ -240,6 +240,7 @@ import { isSmicnetQuery, buildSmicnetScript } from "./SwarmMissionIntelNet";
 import { isTkgmQuery, buildTkgmScript } from "./TaskKnowledgeCommunityMap";
 import { isOpridxQuery, buildOpridxScript } from "./OpsReadinessIndex";
 import { isFsopsQuery, buildFsopsScript } from "./InvestigationFullStackCoverage";
+import { isMkcsigQuery, buildMkcsigScript } from "./ScenarioMissionIntelGrid";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2362,6 +2363,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:fsops-toggle"));
       let script = "";
       try { script = await buildFsopsScript(); } catch { script = "Full-Stack Operations Coverage online, sir. Cross-referencing investigations against contacts, datasets, and risk signals to surface bare investigations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMkcsigQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mkcsig-toggle"));
+      let script = "";
+      try { script = await buildMkcsigScript(); } catch { script = "Scenario Mission Intelligence Grid online, sir. Cross-referencing scenarios against knowledge articles, contacts, and swarm jobs to surface unresourced missions now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
