@@ -237,6 +237,7 @@ import { isDsinexQuery, buildDsinexScript } from "./DataScienceNexus";
 import { isIskpinQuery, buildIskpinScript } from "./InvestmentScenarioKnowledgeNexus";
 import { isAthnexQuery, buildAthnexScript } from "./IntelActorScenarioRiskNexus";
 import { isSmicnetQuery, buildSmicnetScript } from "./SwarmMissionIntelNet";
+import { isTkgmQuery, buildTkgmScript } from "./TaskKnowledgeCommunityMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2335,6 +2336,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:smicnet-toggle"));
       let script = "";
       try { script = await buildSmicnetScript(); } catch { script = "SMICNET Swarm Mission Intelligence Network online, sir. Correlating swarm jobs against graph communities, knowledge base, and contact network now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTkgmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tkgm-toggle"));
+      let script = "";
+      try { script = await buildTkgmScript(); } catch { script = "TKGM Task Guidance Map online, sir. Correlating tasks against the knowledge base and graph communities to surface guidance gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
