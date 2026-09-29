@@ -250,6 +250,7 @@ import { isCosiaQuery, buildCosiaScript } from "./ContactOpsSwarmInvestigationMa
 import { isTmickiQuery, buildTmickiScript } from "./TaskIntelScenarioKnowledgeIndex";
 import { isOdremQuery, buildOdremScript } from "./DatasetOpsRiskExposureMap";
 import { isTcrmapQuery, buildTcrmapScript } from "./ThreatContextReadinessMap";
+import { isRsditriQuery, buildRsditriScript } from "./RiskSignalDatasetInvestigationTriage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2452,6 +2453,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tcrmap-toggle"));
       let script = "";
       try { script = await buildTcrmapScript(); } catch { script = "TCRMAP Threat Context Readiness Map online, sir. Correlating all intel profiles against knowledge base articles and ops events to surface uncontextualized threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRsditriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsditri-toggle"));
+      let script = "";
+      try { script = await buildRsditriScript(); } catch { script = "RSDITRI Triage Map online, sir. Cross-referencing all risk signals against datasets and active investigations to surface untriaged signals now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

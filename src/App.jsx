@@ -408,6 +408,7 @@ import ContactOpsSwarmInvestigationMatrix from '@/components/cinematic/ContactOp
 import TaskIntelScenarioKnowledgeIndex from '@/components/cinematic/TaskIntelScenarioKnowledgeIndex';
 import DatasetOpsRiskExposureMap from '@/components/cinematic/DatasetOpsRiskExposureMap';
 import ThreatContextReadinessMap from '@/components/cinematic/ThreatContextReadinessMap';
+import RiskSignalDatasetInvestigationTriage from '@/components/cinematic/RiskSignalDatasetInvestigationTriage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1283,6 +1284,8 @@ function App() {
             <DatasetOpsRiskExposureMap />
             {/* F183 (overnight 2026-09-29): IntelProfile × Knowledge × Ops Event Threat Context Readiness Map (TCRMAP) */}
             <ThreatContextReadinessMap />
+            {/* F184 (overnight 2026-09-29): RiskSignal × Dataset × Investigation Triage Map (RSDITRI) */}
+            <RiskSignalDatasetInvestigationTriage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
