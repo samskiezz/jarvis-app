@@ -256,6 +256,7 @@ import { isAmcovQuery, buildAmcovScript } from "./SwarmScenarioKnowledgeCoverage
 import { isTdipmapQuery, buildTdipmapScript } from "./TaskDatasetIntelProfileMap";
 import { isCprsmapQuery, buildCprsmapScript } from "./ContactPersonnelReadinessMap";
 import { isGdinexQuery, buildGdinexScript } from "./GraphDatasetInvestigationNexus";
+import { isPrsmapQuery, buildPrsmapScript } from "./InvestmentScenarioRiskMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2506,6 +2507,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gdinex-toggle"));
       let script = "";
       try { script = await buildGdinexScript(); } catch { script = "GDINEX Graph-Data-Investigation Nexus online, sir. Correlating all graph community clusters against datasets and investigations to surface ungrounded network nodes now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPrsmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:prsmap-toggle"));
+      let script = "";
+      try { script = await buildPrsmapScript(); } catch { script = "PRSMAP Portfolio Risk Strategy online, sir. Correlating all investment positions against scenario playbooks and risk signals to surface exposed portfolio gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

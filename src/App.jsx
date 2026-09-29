@@ -414,6 +414,7 @@ import SwarmScenarioKnowledgeCoverage from '@/components/cinematic/SwarmScenario
 import TaskDatasetIntelProfileMap from '@/components/cinematic/TaskDatasetIntelProfileMap';
 import ContactPersonnelReadinessMap from '@/components/cinematic/ContactPersonnelReadinessMap';
 import GraphDatasetInvestigationNexus from '@/components/cinematic/GraphDatasetInvestigationNexus';
+import InvestmentScenarioRiskMap from '@/components/cinematic/InvestmentScenarioRiskMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1301,6 +1302,8 @@ function App() {
             <ContactPersonnelReadinessMap />
             {/* F189 (overnight 2026-09-29): Graph Community × Dataset × Investigation Data Intelligence Coverage Nexus (GDINEX) */}
             <GraphDatasetInvestigationNexus />
+            {/* F190 (overnight 2026-09-29): Investment × Scenario × RiskSignal Portfolio Risk Strategy Map (PRSMAP) */}
+            <InvestmentScenarioRiskMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
