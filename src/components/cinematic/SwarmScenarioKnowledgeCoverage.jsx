@@ -24,8 +24,8 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
 import { apiBase } from "@/api/cinematicDataAdapters";
 
-const BTN_LEFT = 1_045_960;
-const Z_INDEX  = 246;
+const BTN_LEFT = 1_046_520;
+const Z_INDEX  = 247;
 const POLL_MS  = 90_000;
 const API_KEY  = import.meta.env.VITE_API_KEY || "";
 

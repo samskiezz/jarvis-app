@@ -176,4 +176,5 @@
 2026-09-29 F182 ODREM — Dataset × Ops Event × RiskSignal Operational Data Risk Exposure Map: new DatasetOpsRiskExposureMap.jsx; imported+mounted in App.jsx; isOdremQuery+buildOdremScript wired in JarvisBrain.jsx; build verified exit 0
 [2026-09-29] F183 ThreatContextReadinessMap.jsx — IntelProfile×Knowledge×Ops Event TCRMAP; build exit 0; imported+mounted in App.jsx; isTcrmapQuery+buildTcrmapScript wired in JarvisBrain.jsx
 [2026-09-29] F184 RiskSignalDatasetInvestigationTriage.jsx (RSDITRI) — /entities/RiskSignal x /v1/datasets x /v1/investigations triage map; build exit 0
-[2026-09-29] F185 SwarmScenarioKnowledgeCoverage.jsx (AMCOV) — /entities/SwarmJob x /v1/scenario/list x /knowledge/ autonomous mission coverage; build exit 0
+[2026-09-29 15:09 UTC] F185 TSRMAP — ThreatScenarioReadinessMap.jsx created; Scenario×IntelProfile×RiskSignal readiness correlation; mounted App.jsx; JarvisBrain wired isTsrmapQuery+buildTsrmapScript; build exit 0
+[2026-09-29] F186 SwarmScenarioKnowledgeCoverage.jsx (AMCOV) — /entities/SwarmJob x /v1/scenario/list x /knowledge/ autonomous mission coverage; build exit 0

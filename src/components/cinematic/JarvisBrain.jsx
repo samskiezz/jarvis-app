@@ -251,6 +251,7 @@ import { isTmickiQuery, buildTmickiScript } from "./TaskIntelScenarioKnowledgeIn
 import { isOdremQuery, buildOdremScript } from "./DatasetOpsRiskExposureMap";
 import { isTcrmapQuery, buildTcrmapScript } from "./ThreatContextReadinessMap";
 import { isRsditriQuery, buildRsditriScript } from "./RiskSignalDatasetInvestigationTriage";
+import { isTsrmapQuery, buildTsrmapScript } from "./ThreatScenarioReadinessMap";
 import { isAmcovQuery, buildAmcovScript } from "./SwarmScenarioKnowledgeCoverage";
 
 /**
@@ -2462,6 +2463,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsditri-toggle"));
       let script = "";
       try { script = await buildRsditriScript(); } catch { script = "RSDITRI Triage Map online, sir. Cross-referencing all risk signals against datasets and active investigations to surface untriaged signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTsrmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tsrmap-toggle"));
+      let script = "";
+      try { script = await buildTsrmapScript(); } catch { script = "TSRMAP Threat Scenario Readiness Map online, sir. Correlating all scenarios against intel actor profiles and risk signals to assess readiness now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
