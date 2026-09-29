@@ -403,6 +403,7 @@ import JarvisIntelNexusScore from '@/components/cinematic/JarvisIntelNexusScore'
 import AipSkillReportInvestigationPulse from '@/components/cinematic/AipSkillReportInvestigationPulse';
 import ActorIntelPreparednessMap from '@/components/cinematic/ActorIntelPreparednessMap';
 import InvestmentKnowledgeRiskMap from '@/components/cinematic/InvestmentKnowledgeRiskMap';
+import SwarmReportIntelMap from '@/components/cinematic/SwarmReportIntelMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1268,6 +1269,8 @@ function App() {
             <ActorIntelPreparednessMap />
             {/* F178 (overnight 2026-09-29): Investment × Knowledge × RiskSignal Portfolio Risk Intelligence Map (IKRIMAP) */}
             <InvestmentKnowledgeRiskMap />
+            {/* F179 (overnight 2026-09-29): Swarm × Report × IntelProfile Active Operations Intelligence Map (SRIMAP) */}
+            <SwarmReportIntelMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
