@@ -242,6 +242,7 @@ import { isOpridxQuery, buildOpridxScript } from "./OpsReadinessIndex";
 import { isFsopsQuery, buildFsopsScript } from "./InvestigationFullStackCoverage";
 import { isMkcsigQuery, buildMkcsigScript } from "./ScenarioMissionIntelGrid";
 import { JINSCORE_RE, buildJinscoreScript } from "./JarvisIntelNexusScore";
+import { isAricpQuery, buildAricpScript } from "./AipSkillReportInvestigationPulse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2380,6 +2381,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:jinscore-toggle"));
       let script = "";
       try { script = await buildJinscoreScript(); } catch { script = "JARVIS Intelligence Nexus Score panel online, sir. Computing composite intelligence readiness across system health, brain depth, threat awareness, skill coverage, active cases, and knowledge base now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAricpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aricp-toggle"));
+      let script = "";
+      try { script = await buildAricpScript(); } catch { script = "AIP Skill Report Investigation Coverage Pulse online, sir. Cross-referencing capability skills against intelligence reports and open investigations to surface uncovered capability gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

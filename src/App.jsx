@@ -400,6 +400,7 @@ import OpsReadinessIndex from '@/components/cinematic/OpsReadinessIndex';
 import InvestigationFullStackCoverage from '@/components/cinematic/InvestigationFullStackCoverage';
 import ScenarioMissionIntelGrid from '@/components/cinematic/ScenarioMissionIntelGrid';
 import JarvisIntelNexusScore from '@/components/cinematic/JarvisIntelNexusScore';
+import AipSkillReportInvestigationPulse from '@/components/cinematic/AipSkillReportInvestigationPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1259,6 +1260,8 @@ function App() {
             <ScenarioMissionIntelGrid />
             {/* F175 (overnight 2026-09-29): JARVIS Intelligence Nexus Score (JINSCORE) */}
             <JarvisIntelNexusScore />
+            {/* F176 (overnight 2026-09-29): AIP Skill × Report × Investigation Coverage Pulse (ARICP) — ◈ ARICP button (left:1040920, bottom:8, zIndex:237); parallel-fetches /v1/aip/skill + /v1/reports + /v1/investigations; keyword-correlates each AIP skill against reports AND investigations to classify FULLY_COVERED/REPORT_ONLY/INVESTIGATED/UNCOVERED; red badge on uncovered count; filter tabs + text search; expand skill → matched report cards (purple, type badge) + investigation cards (cyan, status badge) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isAricpQuery+buildAricpScript wired in JarvisBrain; "aricp/aip report coverage/skill report/skill investigation coverage/uncovered skills/capability report gap/skill intelligence coverage" voice trigger; jarvis:aricp-toggle event; 90-s auto-refresh */}
+            <AipSkillReportInvestigationPulse />
 
             <Suspense fallback={<Loading />}>
               <Routes>
