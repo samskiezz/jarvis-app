@@ -247,6 +247,7 @@ import { isAipmapQuery, buildAipmapScript } from "./ActorIntelPreparednessMap";
 import { isIkrimapQuery, buildIkrimapScript } from "./InvestmentKnowledgeRiskMap";
 import { isSrimapQuery, buildSrimapScript } from "./SwarmReportIntelMap";
 import { isCosiaQuery, buildCosiaScript } from "./ContactOpsSwarmInvestigationMatrix";
+import { isTmickiQuery, buildTmickiScript } from "./TaskIntelScenarioKnowledgeIndex";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2425,6 +2426,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cosia-toggle"));
       let script = "";
       try { script = await buildCosiaScript(); } catch { script = "Contact Accountability Matrix online, sir. Cross-referencing all contacts against ops events, swarm jobs, and investigations to surface accountability gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTmickiQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tmicki-toggle"));
+      let script = "";
+      try { script = await buildTmickiScript(); } catch { script = "TMICKI Mission Intelligence Completeness Index online, sir. Correlating tasks against intel profiles, scenario playbooks, and knowledge articles to surface mission coverage gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
