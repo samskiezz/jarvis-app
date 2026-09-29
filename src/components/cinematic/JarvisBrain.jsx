@@ -251,6 +251,7 @@ import { isTmickiQuery, buildTmickiScript } from "./TaskIntelScenarioKnowledgeIn
 import { isOdremQuery, buildOdremScript } from "./DatasetOpsRiskExposureMap";
 import { isTcrmapQuery, buildTcrmapScript } from "./ThreatContextReadinessMap";
 import { isRsditriQuery, buildRsditriScript } from "./RiskSignalDatasetInvestigationTriage";
+import { isAmcovQuery, buildAmcovScript } from "./SwarmScenarioKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2461,6 +2462,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsditri-toggle"));
       let script = "";
       try { script = await buildRsditriScript(); } catch { script = "RSDITRI Triage Map online, sir. Cross-referencing all risk signals against datasets and active investigations to surface untriaged signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAmcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:amcov-toggle"));
+      let script = "";
+      try { script = await buildAmcovScript(); } catch { script = "AMCOV Autonomous Mission Coverage online, sir. Cross-referencing all swarm jobs against scenario playbooks and KB articles to surface dark missions now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
