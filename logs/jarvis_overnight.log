@@ -164,3 +164,4 @@
 [2026-09-28] F170 SwarmMissionIntelNet.jsx — SwarmJob × Graph Community × Knowledge × Contact SMICNET panel; isSmicnetQuery+buildSmicnetScript wired in JarvisBrain.jsx; build exit 0
 2026-09-29 F171 TaskKnowledgeCommunityMap (TKGM): Task×Knowledge×GraphCommunity guidance classifier; /entities/Task+/knowledge/+/v1/graph/communities; FULLY_GUIDED/KB_ONLY/COMMUNITY_ONLY/UNGUIDED; build exit 0
 2026-09-29 F172 OPRIDX — Ops Event × Knowledge × RiskSignal Operational Readiness Index; new OpsReadinessIndex.jsx; imported+mounted in App.jsx; isOpridxQuery+buildOpridxScript wired in JarvisBrain.jsx; build verified exit 0
+2026-09-29 F173 InvestigationFullStackCoverage.jsx — Investigation × Contact × Dataset × RiskSignal Full-Stack Operations Coverage (FSOPS); build verified exit 0; pushed to jarvis-overnight
