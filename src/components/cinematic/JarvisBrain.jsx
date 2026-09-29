@@ -249,6 +249,7 @@ import { isSrimapQuery, buildSrimapScript } from "./SwarmReportIntelMap";
 import { isCosiaQuery, buildCosiaScript } from "./ContactOpsSwarmInvestigationMatrix";
 import { isTmickiQuery, buildTmickiScript } from "./TaskIntelScenarioKnowledgeIndex";
 import { isOdremQuery, buildOdremScript } from "./DatasetOpsRiskExposureMap";
+import { isTcrmapQuery, buildTcrmapScript } from "./ThreatContextReadinessMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2443,6 +2444,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:odrem-toggle"));
       let script = "";
       try { script = await buildOdremScript(); } catch { script = "ODREM Operational Data Risk Exposure Map online, sir. Cross-referencing all datasets against ops events and risk signals to surface unmonitored data risk blind spots now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTcrmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tcrmap-toggle"));
+      let script = "";
+      try { script = await buildTcrmapScript(); } catch { script = "TCRMAP Threat Context Readiness Map online, sir. Correlating all intel profiles against knowledge base articles and ops events to surface uncontextualized threat actors now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
