@@ -418,6 +418,7 @@ import InvestmentScenarioRiskMap from '@/components/cinematic/InvestmentScenario
 import WorldThreatClusterMap from '@/components/cinematic/WorldThreatClusterMap';
 import GraphCommunityMissionDensity from '@/components/cinematic/GraphCommunityMissionDensity';
 import WorkforceActivityMatrix from '@/components/cinematic/WorkforceActivityMatrix';
+import MissionBriefingCoverage from '@/components/cinematic/MissionBriefingCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1313,6 +1314,8 @@ function App() {
             <GraphCommunityMissionDensity />
             {/* F193 (overnight 2026-09-29): Contact × SwarmJob × Task Workforce Activity Matrix (WFACT) */}
             <WorkforceActivityMatrix />
+            {/* F194 (overnight 2026-09-29): IntelProfile × Task × Report Mission Briefing Coverage (MTRBCOV) */}
+            <MissionBriefingCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

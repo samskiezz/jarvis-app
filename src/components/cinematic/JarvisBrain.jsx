@@ -260,6 +260,7 @@ import { isPrsmapQuery, buildPrsmapScript } from "./InvestmentScenarioRiskMap";
 import { isWtcmapQuery, buildWtcmapScript } from "./WorldThreatClusterMap";
 import { isMdheatQuery, buildMdheatScript } from "./GraphCommunityMissionDensity";
 import { isWfactQuery, buildWfactScript } from "./WorkforceActivityMatrix";
+import { isMtrbcovQuery, buildMtrbcovScript } from "./MissionBriefingCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2542,6 +2543,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:wfact-toggle"));
       let script = "";
       try { script = await buildWfactScript(); } catch { script = "WFACT Workforce Activity Matrix online, sir. Cross-referencing all contacts against active tasks and swarm jobs to surface inactive workforce gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMtrbcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mtrbcov-toggle"));
+      let script = "";
+      try { script = await buildMtrbcovScript(); } catch { script = "MTRBCOV Mission Briefing Coverage online, sir. Cross-referencing all active tasks against intel actor profiles and intelligence reports to surface unbriefed missions now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
