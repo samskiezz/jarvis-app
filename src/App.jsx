@@ -399,6 +399,7 @@ import TaskKnowledgeCommunityMap from '@/components/cinematic/TaskKnowledgeCommu
 import OpsReadinessIndex from '@/components/cinematic/OpsReadinessIndex';
 import InvestigationFullStackCoverage from '@/components/cinematic/InvestigationFullStackCoverage';
 import ScenarioMissionIntelGrid from '@/components/cinematic/ScenarioMissionIntelGrid';
+import JarvisIntelNexusScore from '@/components/cinematic/JarvisIntelNexusScore';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1256,6 +1257,8 @@ function App() {
             <InvestigationFullStackCoverage />
             {/* F174 (overnight 2026-09-29): Scenario × Knowledge × Contact × SwarmJob Mission Intelligence Grid (MKCSIG) */}
             <ScenarioMissionIntelGrid />
+            {/* F175 (overnight 2026-09-29): JARVIS Intelligence Nexus Score (JINSCORE) */}
+            <JarvisIntelNexusScore />
 
             <Suspense fallback={<Loading />}>
               <Routes>

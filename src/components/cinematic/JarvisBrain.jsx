@@ -241,6 +241,7 @@ import { isTkgmQuery, buildTkgmScript } from "./TaskKnowledgeCommunityMap";
 import { isOpridxQuery, buildOpridxScript } from "./OpsReadinessIndex";
 import { isFsopsQuery, buildFsopsScript } from "./InvestigationFullStackCoverage";
 import { isMkcsigQuery, buildMkcsigScript } from "./ScenarioMissionIntelGrid";
+import { JINSCORE_RE, buildJinscoreScript } from "./JarvisIntelNexusScore";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2371,6 +2372,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:mkcsig-toggle"));
       let script = "";
       try { script = await buildMkcsigScript(); } catch { script = "Scenario Mission Intelligence Grid online, sir. Cross-referencing scenarios against knowledge articles, contacts, and swarm jobs to surface unresourced missions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (JINSCORE_RE.test(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:jinscore-toggle"));
+      let script = "";
+      try { script = await buildJinscoreScript(); } catch { script = "JARVIS Intelligence Nexus Score panel online, sir. Computing composite intelligence readiness across system health, brain depth, threat awareness, skill coverage, active cases, and knowledge base now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
