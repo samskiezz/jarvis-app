@@ -257,6 +257,7 @@ import { isTdipmapQuery, buildTdipmapScript } from "./TaskDatasetIntelProfileMap
 import { isCprsmapQuery, buildCprsmapScript } from "./ContactPersonnelReadinessMap";
 import { isGdinexQuery, buildGdinexScript } from "./GraphDatasetInvestigationNexus";
 import { isPrsmapQuery, buildPrsmapScript } from "./InvestmentScenarioRiskMap";
+import { isWtcmapQuery, buildWtcmapScript } from "./WorldThreatClusterMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2515,6 +2516,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:prsmap-toggle"));
       let script = "";
       try { script = await buildPrsmapScript(); } catch { script = "PRSMAP Portfolio Risk Strategy online, sir. Correlating all investment positions against scenario playbooks and risk signals to surface exposed portfolio gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isWtcmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wtcmap-toggle"));
+      let script = "";
+      try { script = await buildWtcmapScript(); } catch { script = "WTCMAP World Threat Cluster Map online, sir. Cross-correlating live intelligence events against graph community clusters and active risk signals to surface the highest-severity threat clusters now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
