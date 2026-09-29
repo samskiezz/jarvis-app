@@ -396,6 +396,7 @@ import InvestmentScenarioKnowledgeNexus from '@/components/cinematic/InvestmentS
 import IntelActorScenarioRiskNexus from '@/components/cinematic/IntelActorScenarioRiskNexus';
 import SwarmMissionIntelNet from '@/components/cinematic/SwarmMissionIntelNet';
 import TaskKnowledgeCommunityMap from '@/components/cinematic/TaskKnowledgeCommunityMap';
+import OpsReadinessIndex from '@/components/cinematic/OpsReadinessIndex';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1247,6 +1248,8 @@ function App() {
             <SwarmMissionIntelNet />
             {/* F171 (overnight 2026-09-29): Task × Knowledge × Graph Community Task Guidance Map (TKGM) */}
             <TaskKnowledgeCommunityMap />
+            {/* F172 (overnight 2026-09-29): Ops Event × Knowledge × RiskSignal Operational Readiness Index (OPRIDX) */}
+            <OpsReadinessIndex />
 
             <Suspense fallback={<Loading />}>
               <Routes>
