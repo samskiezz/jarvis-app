@@ -246,6 +246,7 @@ import { isAricpQuery, buildAricpScript } from "./AipSkillReportInvestigationPul
 import { isAipmapQuery, buildAipmapScript } from "./ActorIntelPreparednessMap";
 import { isIkrimapQuery, buildIkrimapScript } from "./InvestmentKnowledgeRiskMap";
 import { isSrimapQuery, buildSrimapScript } from "./SwarmReportIntelMap";
+import { isCosiaQuery, buildCosiaScript } from "./ContactOpsSwarmInvestigationMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2416,6 +2417,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:srimap-toggle"));
       let script = "";
       try { script = await buildSrimapScript(); } catch { script = "Swarm Operations Intelligence Map online, sir. Cross-referencing active swarm jobs against intelligence reports and threat actor profiles to surface unsupported operations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCosiaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cosia-toggle"));
+      let script = "";
+      try { script = await buildCosiaScript(); } catch { script = "Contact Accountability Matrix online, sir. Cross-referencing all contacts against ops events, swarm jobs, and investigations to surface accountability gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

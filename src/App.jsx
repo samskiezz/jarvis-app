@@ -404,6 +404,7 @@ import AipSkillReportInvestigationPulse from '@/components/cinematic/AipSkillRep
 import ActorIntelPreparednessMap from '@/components/cinematic/ActorIntelPreparednessMap';
 import InvestmentKnowledgeRiskMap from '@/components/cinematic/InvestmentKnowledgeRiskMap';
 import SwarmReportIntelMap from '@/components/cinematic/SwarmReportIntelMap';
+import ContactOpsSwarmInvestigationMatrix from '@/components/cinematic/ContactOpsSwarmInvestigationMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1271,6 +1272,8 @@ function App() {
             <InvestmentKnowledgeRiskMap />
             {/* F179 (overnight 2026-09-29): Swarm × Report × IntelProfile Active Operations Intelligence Map (SRIMAP) */}
             <SwarmReportIntelMap />
+            {/* F180 (overnight 2026-09-29): Contact × Ops Event × SwarmJob × Investigation Full Accountability Matrix (COSIA) */}
+            <ContactOpsSwarmInvestigationMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
