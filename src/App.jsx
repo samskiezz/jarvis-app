@@ -412,6 +412,7 @@ import RiskSignalDatasetInvestigationTriage from '@/components/cinematic/RiskSig
 import ThreatScenarioReadinessMap from '@/components/cinematic/ThreatScenarioReadinessMap';
 import SwarmScenarioKnowledgeCoverage from '@/components/cinematic/SwarmScenarioKnowledgeCoverage';
 import TaskDatasetIntelProfileMap from '@/components/cinematic/TaskDatasetIntelProfileMap';
+import ContactPersonnelReadinessMap from '@/components/cinematic/ContactPersonnelReadinessMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1295,6 +1296,8 @@ function App() {
             <SwarmScenarioKnowledgeCoverage />
             {/* F187 (overnight 2026-09-29): Task × Dataset × IntelProfile Intelligence Task Coverage (TDIPMAP) */}
             <TaskDatasetIntelProfileMap />
+            {/* F188 (overnight 2026-09-29): Contact × Knowledge × Scenario Personnel Readiness Map (CPRSMAP) */}
+            <ContactPersonnelReadinessMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
