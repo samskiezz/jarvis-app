@@ -253,6 +253,7 @@ import { isTcrmapQuery, buildTcrmapScript } from "./ThreatContextReadinessMap";
 import { isRsditriQuery, buildRsditriScript } from "./RiskSignalDatasetInvestigationTriage";
 import { isTsrmapQuery, buildTsrmapScript } from "./ThreatScenarioReadinessMap";
 import { isAmcovQuery, buildAmcovScript } from "./SwarmScenarioKnowledgeCoverage";
+import { isTdipmapQuery, buildTdipmapScript } from "./TaskDatasetIntelProfileMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2479,6 +2480,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:amcov-toggle"));
       let script = "";
       try { script = await buildAmcovScript(); } catch { script = "AMCOV Autonomous Mission Coverage online, sir. Cross-referencing all swarm jobs against scenario playbooks and KB articles to surface dark missions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTdipmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tdipmap-toggle"));
+      let script = "";
+      try { script = await buildTdipmapScript(); } catch { script = "TDIPMAP Task Intelligence Coverage online, sir. Cross-referencing all tasks against datasets and intel profiles to surface unanchored missions now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
