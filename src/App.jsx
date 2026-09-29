@@ -406,6 +406,7 @@ import InvestmentKnowledgeRiskMap from '@/components/cinematic/InvestmentKnowled
 import SwarmReportIntelMap from '@/components/cinematic/SwarmReportIntelMap';
 import ContactOpsSwarmInvestigationMatrix from '@/components/cinematic/ContactOpsSwarmInvestigationMatrix';
 import TaskIntelScenarioKnowledgeIndex from '@/components/cinematic/TaskIntelScenarioKnowledgeIndex';
+import DatasetOpsRiskExposureMap from '@/components/cinematic/DatasetOpsRiskExposureMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1277,6 +1278,8 @@ function App() {
             <ContactOpsSwarmInvestigationMatrix />
             {/* F181 (overnight 2026-09-29): Task × IntelProfile × Scenario × Knowledge Mission Intelligence Completeness Index (TMICKI) */}
             <TaskIntelScenarioKnowledgeIndex />
+            {/* F182 (overnight 2026-09-29): Dataset × Ops Event × RiskSignal Operational Data Risk Exposure Map (ODREM) */}
+            <DatasetOpsRiskExposureMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
