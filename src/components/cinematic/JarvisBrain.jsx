@@ -244,6 +244,7 @@ import { isMkcsigQuery, buildMkcsigScript } from "./ScenarioMissionIntelGrid";
 import { JINSCORE_RE, buildJinscoreScript } from "./JarvisIntelNexusScore";
 import { isAricpQuery, buildAricpScript } from "./AipSkillReportInvestigationPulse";
 import { isAipmapQuery, buildAipmapScript } from "./ActorIntelPreparednessMap";
+import { isIkrimapQuery, buildIkrimapScript } from "./InvestmentKnowledgeRiskMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2398,6 +2399,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:aipmap-toggle"));
       let script = "";
       try { script = await buildAipmapScript(); } catch { script = "Actor Intelligence Preparedness Map online, sir. Cross-referencing scenarios against threat actor profiles and knowledge base articles to surface unprepared intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIkrimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ikrimap-toggle"));
+      let script = "";
+      try { script = await buildIkrimapScript(); } catch { script = "Portfolio Risk Intelligence Map online, sir. Cross-referencing investments against knowledge base articles and active risk signals to surface exposed portfolio positions now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

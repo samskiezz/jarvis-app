@@ -402,6 +402,7 @@ import ScenarioMissionIntelGrid from '@/components/cinematic/ScenarioMissionInte
 import JarvisIntelNexusScore from '@/components/cinematic/JarvisIntelNexusScore';
 import AipSkillReportInvestigationPulse from '@/components/cinematic/AipSkillReportInvestigationPulse';
 import ActorIntelPreparednessMap from '@/components/cinematic/ActorIntelPreparednessMap';
+import InvestmentKnowledgeRiskMap from '@/components/cinematic/InvestmentKnowledgeRiskMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1265,6 +1266,8 @@ function App() {
             <AipSkillReportInvestigationPulse />
             {/* F177 (overnight 2026-09-29): Scenario × IntelProfile × Knowledge Actor Intelligence Preparedness Map (AIPMAP) */}
             <ActorIntelPreparednessMap />
+            {/* F178 (overnight 2026-09-29): Investment × Knowledge × RiskSignal Portfolio Risk Intelligence Map (IKRIMAP) */}
+            <InvestmentKnowledgeRiskMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
