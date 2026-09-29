@@ -255,6 +255,7 @@ import { isTsrmapQuery, buildTsrmapScript } from "./ThreatScenarioReadinessMap";
 import { isAmcovQuery, buildAmcovScript } from "./SwarmScenarioKnowledgeCoverage";
 import { isTdipmapQuery, buildTdipmapScript } from "./TaskDatasetIntelProfileMap";
 import { isCprsmapQuery, buildCprsmapScript } from "./ContactPersonnelReadinessMap";
+import { isGdinexQuery, buildGdinexScript } from "./GraphDatasetInvestigationNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2497,6 +2498,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cprsmap-toggle"));
       let script = "";
       try { script = await buildCprsmapScript(); } catch { script = "CPRSMAP Personnel Readiness Map online, sir. Correlating all contacts against knowledge articles and scenario playbooks to surface unready personnel now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGdinexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gdinex-toggle"));
+      let script = "";
+      try { script = await buildGdinexScript(); } catch { script = "GDINEX Graph-Data-Investigation Nexus online, sir. Correlating all graph community clusters against datasets and investigations to surface ungrounded network nodes now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
