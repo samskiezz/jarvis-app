@@ -416,6 +416,7 @@ import ContactPersonnelReadinessMap from '@/components/cinematic/ContactPersonne
 import GraphDatasetInvestigationNexus from '@/components/cinematic/GraphDatasetInvestigationNexus';
 import InvestmentScenarioRiskMap from '@/components/cinematic/InvestmentScenarioRiskMap';
 import WorldThreatClusterMap from '@/components/cinematic/WorldThreatClusterMap';
+import GraphCommunityMissionDensity from '@/components/cinematic/GraphCommunityMissionDensity';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1307,6 +1308,8 @@ function App() {
             <InvestmentScenarioRiskMap />
             {/* F191 (overnight 2026-09-29): Live Intel × Graph Community × RiskSignal World Threat Cluster Map (WTCMAP) */}
             <WorldThreatClusterMap />
+            {/* F192 (overnight 2026-09-29): Graph Community × Task × SwarmJob Mission Density Heatmap (MDHEAT) */}
+            <GraphCommunityMissionDensity />
 
             <Suspense fallback={<Loading />}>
               <Routes>

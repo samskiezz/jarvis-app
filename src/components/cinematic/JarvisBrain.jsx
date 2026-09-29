@@ -258,6 +258,7 @@ import { isCprsmapQuery, buildCprsmapScript } from "./ContactPersonnelReadinessM
 import { isGdinexQuery, buildGdinexScript } from "./GraphDatasetInvestigationNexus";
 import { isPrsmapQuery, buildPrsmapScript } from "./InvestmentScenarioRiskMap";
 import { isWtcmapQuery, buildWtcmapScript } from "./WorldThreatClusterMap";
+import { isMdheatQuery, buildMdheatScript } from "./GraphCommunityMissionDensity";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2524,6 +2525,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:wtcmap-toggle"));
       let script = "";
       try { script = await buildWtcmapScript(); } catch { script = "WTCMAP World Threat Cluster Map online, sir. Cross-correlating live intelligence events against graph community clusters and active risk signals to surface the highest-severity threat clusters now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMdheatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mdheat-toggle"));
+      let script = "";
+      try { script = await buildMdheatScript(); } catch { script = "MDHEAT Mission Density Heatmap online, sir. Correlating all graph community clusters against active tasks and swarm jobs to surface dormant network zones now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
