@@ -275,6 +275,7 @@ import { isTargQuery, buildTargScript } from "./ThreatActorResponseGrid";
 import { isDpciQuery, buildDpciScript } from "./DefensivePlaybookCoverageIndex";
 import { isLtasorpQuery, buildLtasorpScript } from "./LiveIntelAipScenarioReadiness";
 import { isAstroQuery, buildAstroScript } from "./SwarmJobRiskSignalReportOrchestrator";
+import { isSpiamQuery, buildSpiamScript } from "./TaskInvestmentRiskAlignmentMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2677,6 +2678,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:astro-toggle"));
       let script = "";
       try { script = await buildAstroScript(); } catch { script = "ASTRO Automated Threat Response Orchestrator online, sir. Cross-referencing swarm jobs against active risk signals and intelligence reports to identify automation gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSpiamQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:spiam-toggle"));
+      let script = "";
+      try { script = await buildSpiamScript(); } catch { script = "SPIAM Strategic Priority Alignment Map online, sir. Correlating active tasks against investments and risk signals to surface unanchored priorities now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

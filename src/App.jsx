@@ -433,6 +433,7 @@ import ThreatActorResponseGrid from '@/components/cinematic/ThreatActorResponseG
 import DefensivePlaybookCoverageIndex from '@/components/cinematic/DefensivePlaybookCoverageIndex';
 import LiveIntelAipScenarioReadiness from '@/components/cinematic/LiveIntelAipScenarioReadiness';
 import SwarmJobRiskSignalReportOrchestrator from '@/components/cinematic/SwarmJobRiskSignalReportOrchestrator';
+import TaskInvestmentRiskAlignmentMap from '@/components/cinematic/TaskInvestmentRiskAlignmentMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1358,6 +1359,8 @@ function App() {
             <LiveIntelAipScenarioReadiness />
             {/* F208 (overnight 2026-09-30): SwarmJob × RiskSignal × Report Automated Threat Response Orchestrator (ASTRO) */}
             <SwarmJobRiskSignalReportOrchestrator />
+            {/* F209 (overnight 2026-09-30): Task × Investment × RiskSignal Strategic Priority Alignment Map (SPIAM) */}
+            <TaskInvestmentRiskAlignmentMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
