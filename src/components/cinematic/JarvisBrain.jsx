@@ -272,6 +272,7 @@ import { isOasrmapQuery, buildOasrmapScript } from "./OpsEventAipSkillReportMap"
 import { isCodinQuery, buildCodinScript } from "./ContactDatasetOpsNetwork";
 import { isCrskpoiQuery, buildCrskpoiScript } from "./ContactReportScenarioKnowledgeMap";
 import { isTargQuery, buildTargScript } from "./ThreatActorResponseGrid";
+import { isDpciQuery, buildDpciScript } from "./DefensivePlaybookCoverageIndex";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2650,6 +2651,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:targ-toggle"));
       let script = "";
       try { script = await buildTargScript(); } catch { script = "TARG Threat Actor Response Grid online, sir. Cross-referencing all intel profiles against operational events and scenario playbooks to surface unengaged threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDpciQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dpci-toggle"));
+      let script = "";
+      try { script = await buildDpciScript(); } catch { script = "DPCI Defensive Playbook Coverage Index online, sir. Cross-referencing all active risk signals against knowledge base articles, scenario playbooks, and swarm automation jobs to identify defensive coverage gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
