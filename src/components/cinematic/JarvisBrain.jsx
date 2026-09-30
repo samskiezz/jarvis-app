@@ -276,6 +276,7 @@ import { isDpciQuery, buildDpciScript } from "./DefensivePlaybookCoverageIndex";
 import { isLtasorpQuery, buildLtasorpScript } from "./LiveIntelAipScenarioReadiness";
 import { isAstroQuery, buildAstroScript } from "./SwarmJobRiskSignalReportOrchestrator";
 import { isSpiamQuery, buildSpiamScript } from "./TaskInvestmentRiskAlignmentMap";
+import { isDicnexQuery, buildDicnexScript } from "./DatasetContactIntelProfileNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2686,6 +2687,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:spiam-toggle"));
       let script = "";
       try { script = await buildSpiamScript(); } catch { script = "SPIAM Strategic Priority Alignment Map online, sir. Correlating active tasks against investments and risk signals to surface unanchored priorities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDicnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dicnex-toggle"));
+      let script = "";
+      try { script = await buildDicnexScript(); } catch { script = "DICNEX Data Intelligence Coverage Nexus online, sir. Cross-referencing datasets against contacts and intel profiles to surface uncovered data assets now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -434,6 +434,7 @@ import DefensivePlaybookCoverageIndex from '@/components/cinematic/DefensivePlay
 import LiveIntelAipScenarioReadiness from '@/components/cinematic/LiveIntelAipScenarioReadiness';
 import SwarmJobRiskSignalReportOrchestrator from '@/components/cinematic/SwarmJobRiskSignalReportOrchestrator';
 import TaskInvestmentRiskAlignmentMap from '@/components/cinematic/TaskInvestmentRiskAlignmentMap';
+import DatasetContactIntelProfileNexus from '@/components/cinematic/DatasetContactIntelProfileNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1361,6 +1362,8 @@ function App() {
             <SwarmJobRiskSignalReportOrchestrator />
             {/* F209 (overnight 2026-09-30): Task × Investment × RiskSignal Strategic Priority Alignment Map (SPIAM) */}
             <TaskInvestmentRiskAlignmentMap />
+            {/* F210 (overnight 2026-09-30): Dataset × Contact × IntelProfile Data Intelligence Coverage Nexus (DICNEX) */}
+            <DatasetContactIntelProfileNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
