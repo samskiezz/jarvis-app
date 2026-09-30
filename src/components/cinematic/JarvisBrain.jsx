@@ -281,6 +281,7 @@ import { isSticnexQuery, buildSticnexScript } from "./StrategicIntelCoverageNexu
 import { isMidossQuery, buildMidossScript } from "./ScenarioIntelReportDossier";
 import { isTfinexQuery, buildTfinexScript } from "./ThreatFinanceNexus";
 import { isAiomapQuery, buildAiomapScript } from "./AutonomousIntelOpsMap";
+import { isArbnexQuery, buildArbnexScript } from "./GraphAnnotationRiskIntelNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2731,6 +2732,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:aiomap-toggle"));
       let script = "";
       try { script = await buildAiomapScript(); } catch { script = "AIOMAP Autonomous Intelligence Operations Map online, sir. Cross-referencing swarm jobs against AIP skills and intel actor profiles to surface autonomous intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isArbnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:arbnex-toggle"));
+      let script = "";
+      try { script = await buildArbnexScript(); } catch { script = "ARBNEX Graph Annotation Risk Attribution Nexus online, sir. Cross-referencing graph annotations against risk signals and intel actor profiles to surface unattributed intelligence gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

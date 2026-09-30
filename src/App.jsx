@@ -439,6 +439,7 @@ import StrategicIntelCoverageNexus from '@/components/cinematic/StrategicIntelCo
 import ScenarioIntelReportDossier from '@/components/cinematic/ScenarioIntelReportDossier';
 import ThreatFinanceNexus from '@/components/cinematic/ThreatFinanceNexus';
 import AutonomousIntelOpsMap from '@/components/cinematic/AutonomousIntelOpsMap';
+import GraphAnnotationRiskIntelNexus from '@/components/cinematic/GraphAnnotationRiskIntelNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1376,6 +1377,8 @@ function App() {
             <ThreatFinanceNexus />
             {/* F214 (overnight 2026-09-30): SwarmJob × AIP Skill × IntelProfile Autonomous Intelligence Operations Map (AIOMAP) */}
             <AutonomousIntelOpsMap />
+            {/* F215 (overnight 2026-09-30): Graph Annotation × RiskSignal × IntelProfile Risk Attribution Nexus (ARBNEX) */}
+            <GraphAnnotationRiskIntelNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>

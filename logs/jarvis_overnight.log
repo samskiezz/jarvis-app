@@ -206,3 +206,4 @@
 2026-09-30 F212 STICNEX Knowledge×Task×Investment Strategic Intelligence Coverage Nexus: StrategicIntelCoverageNexus.jsx created, imported+mounted in App.jsx, isSticnexQuery+buildSticnexScript wired in JarvisBrain.jsx, build exit 0
 [2026-09-30] F213 ThreatFinanceNexus.jsx — Ops Event x Investment x IntelProfile Threat Finance Nexus; build exit 0; pushed to jarvis-overnight
 [2026-09-30] F214 AIOMAP — SwarmJob × AIP Skill × IntelProfile Autonomous Intelligence Operations Map; AutonomousIntelOpsMap.jsx created; mounted in App.jsx; wired in JarvisBrain.jsx; build exit 0
+[2026-09-30] F215 Graph Annotation × RiskSignal × IntelProfile Risk Attribution Nexus (ARBNEX): new GraphAnnotationRiskIntelNexus.jsx; parallel-fetches /v1/graph/annotations+/entities/RiskSignal+/entities/IntelProfile; classifies THREAT_ATTRIBUTED/RISK_ONLY/ACTOR_ONLY/UNATTRIBUTED; BTN_LEFT=1062760 Z_INDEX=276; wired in App.jsx + JarvisBrain.jsx; build exit 0
