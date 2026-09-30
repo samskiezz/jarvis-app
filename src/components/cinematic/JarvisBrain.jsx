@@ -263,6 +263,7 @@ import { isWfactQuery, buildWfactScript } from "./WorkforceActivityMatrix";
 import { isMtrbcovQuery, buildMtrbcovScript } from "./MissionBriefingCoverage";
 import { isKoecpQuery, buildKoecpScript } from "./KnowledgeOpsEventContextPulse";
 import { isGadevaQuery, buildGadevaScript } from "./GraphAnnotationDataEvidenceAtlas";
+import { isOctatmQuery, buildOctatmScript } from "./OpsEventContactTaskMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2569,6 +2570,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:gadeva-toggle"));
       let script = "";
       try { script = await buildGadevaScript(); } catch { script = "GADEVA Data Evidence Atlas online, sir. Cross-referencing all graph annotations against available datasets and investigations to surface unevidenced annotations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOctatmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:octatm-toggle"));
+      let script = "";
+      try { script = await buildOctatmScript(); } catch { script = "OCTATM Operational Attribution Matrix online, sir. Cross-referencing all ops events against contacts and active tasks to surface unattributed events now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

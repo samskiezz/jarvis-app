@@ -421,6 +421,7 @@ import WorkforceActivityMatrix from '@/components/cinematic/WorkforceActivityMat
 import MissionBriefingCoverage from '@/components/cinematic/MissionBriefingCoverage';
 import KnowledgeOpsEventContextPulse from '@/components/cinematic/KnowledgeOpsEventContextPulse';
 import GraphAnnotationDataEvidenceAtlas from '@/components/cinematic/GraphAnnotationDataEvidenceAtlas';
+import OpsEventContactTaskMatrix from '@/components/cinematic/OpsEventContactTaskMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1322,6 +1323,8 @@ function App() {
             <KnowledgeOpsEventContextPulse />
             {/* F196 (overnight 2026-09-30): Graph Annotation × Dataset × Investigation Data Evidence Atlas (GADEVA) */}
             <GraphAnnotationDataEvidenceAtlas />
+            {/* F197 (overnight 2026-09-30): Ops Event × Contact × Task Operational Attribution Matrix (OCTATM) */}
+            <OpsEventContactTaskMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
