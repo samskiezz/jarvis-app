@@ -264,6 +264,7 @@ import { isMtrbcovQuery, buildMtrbcovScript } from "./MissionBriefingCoverage";
 import { isKoecpQuery, buildKoecpScript } from "./KnowledgeOpsEventContextPulse";
 import { isGadevaQuery, buildGadevaScript } from "./GraphAnnotationDataEvidenceAtlas";
 import { isOctatmQuery, buildOctatmScript } from "./OpsEventContactTaskMatrix";
+import { isIdenexQuery, buildIdenexScript } from "./IntelProfileDatasetOpsNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2578,6 +2579,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:octatm-toggle"));
       let script = "";
       try { script = await buildOctatmScript(); } catch { script = "OCTATM Operational Attribution Matrix online, sir. Cross-referencing all ops events against contacts and active tasks to surface unattributed events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIdenexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:idenex-toggle"));
+      let script = "";
+      try { script = await buildIdenexScript(); } catch { script = "IDENEX Intelligence Evidence Nexus online, sir. Cross-referencing all intel profiles against available datasets and ops events to surface unevidenced actors now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
