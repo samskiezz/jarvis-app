@@ -274,6 +274,7 @@ import { isCrskpoiQuery, buildCrskpoiScript } from "./ContactReportScenarioKnowl
 import { isTargQuery, buildTargScript } from "./ThreatActorResponseGrid";
 import { isDpciQuery, buildDpciScript } from "./DefensivePlaybookCoverageIndex";
 import { isLtasorpQuery, buildLtasorpScript } from "./LiveIntelAipScenarioReadiness";
+import { isAstroQuery, buildAstroScript } from "./SwarmJobRiskSignalReportOrchestrator";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2668,6 +2669,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ltasorp-toggle"));
       let script = "";
       try { script = await buildLtasorpScript(); } catch { script = "LTASORP Operational Readiness Pulse online, sir. Correlating live world events against AIP skills and scenario playbooks to quantify operational coverage gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAstroQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:astro-toggle"));
+      let script = "";
+      try { script = await buildAstroScript(); } catch { script = "ASTRO Automated Threat Response Orchestrator online, sir. Cross-referencing swarm jobs against active risk signals and intelligence reports to identify automation gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

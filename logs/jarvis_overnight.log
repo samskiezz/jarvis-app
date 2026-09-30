@@ -199,3 +199,4 @@
 [2026-09-30] F205 ThreatActorResponseGrid (TARG): IntelProfile x OpsEvent x Scenario; FULLY_ENGAGED/OPS_ACTIVE/SCENARIO_PLANNED/UNENGAGED; new ThreatActorResponseGrid.jsx; mounted App.jsx; isTargQuery+buildTargScript wired JarvisBrain.jsx; build exit 0
 [2026-09-30] F206 DefensivePlaybookCoverageIndex.jsx: RiskSignal x KB x Scenario x SwarmJob DPCI; build exit 0; pushed to jarvis-overnight
 2026-09-30T12:17:51Z F207 LiveIntelAipScenarioReadiness.jsx — Live Intel x AIP Skill x Scenario LTASORP panel; parallel-fetches /functions/getLiveIntel+/v1/aip/skill+/v1/scenario/list; SKILL_AND_SCENARIO/SKILL_ONLY/SCENARIO_ONLY/UNADDRESSED classification; readiness%, coverage bar, AI assess, TTS; wired in App.jsx+JarvisBrain.jsx; build exit 0
+2026-09-30 F208 SwarmJobRiskSignalReportOrchestrator (ASTRO) — /entities/SwarmJob × /entities/RiskSignal × /v1/reports; FULLY_ORCHESTRATED/SIGNAL_ACTIVE/REPORT_BACKED/IDLE; isAstroQuery+buildAstroScript wired; build exit 0
