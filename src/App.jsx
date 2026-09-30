@@ -435,6 +435,7 @@ import LiveIntelAipScenarioReadiness from '@/components/cinematic/LiveIntelAipSc
 import SwarmJobRiskSignalReportOrchestrator from '@/components/cinematic/SwarmJobRiskSignalReportOrchestrator';
 import TaskInvestmentRiskAlignmentMap from '@/components/cinematic/TaskInvestmentRiskAlignmentMap';
 import DatasetContactIntelProfileNexus from '@/components/cinematic/DatasetContactIntelProfileNexus';
+import ScenarioIntelReportDossier from '@/components/cinematic/ScenarioIntelReportDossier';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1364,6 +1365,8 @@ function App() {
             <TaskInvestmentRiskAlignmentMap />
             {/* F210 (overnight 2026-09-30): Dataset × Contact × IntelProfile Data Intelligence Coverage Nexus (DICNEX) */}
             <DatasetContactIntelProfileNexus />
+            {/* F211 (overnight 2026-09-30): Scenario × IntelProfile × Report Mission Intelligence Dossier (MIDOSS) */}
+            <ScenarioIntelReportDossier />
 
             <Suspense fallback={<Loading />}>
               <Routes>

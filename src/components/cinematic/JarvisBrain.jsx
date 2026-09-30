@@ -277,6 +277,7 @@ import { isLtasorpQuery, buildLtasorpScript } from "./LiveIntelAipScenarioReadin
 import { isAstroQuery, buildAstroScript } from "./SwarmJobRiskSignalReportOrchestrator";
 import { isSpiamQuery, buildSpiamScript } from "./TaskInvestmentRiskAlignmentMap";
 import { isDicnexQuery, buildDicnexScript } from "./DatasetContactIntelProfileNexus";
+import { isMidossQuery, buildMidossScript } from "./ScenarioIntelReportDossier";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2695,6 +2696,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dicnex-toggle"));
       let script = "";
       try { script = await buildDicnexScript(); } catch { script = "DICNEX Data Intelligence Coverage Nexus online, sir. Cross-referencing datasets against contacts and intel profiles to surface uncovered data assets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMidossQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:midoss-toggle"));
+      let script = "";
+      try { script = await buildMidossScript(); } catch { script = "MIDOSS Mission Intelligence Dossier online, sir. Cross-referencing scenarios against intel profiles and intelligence reports to surface unbriefed mission gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
