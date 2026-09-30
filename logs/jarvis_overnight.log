@@ -205,3 +205,4 @@
 2026-09-30 F211 MIDOSS Scenario×IntelProfile×Report Mission Intelligence Dossier: ScenarioIntelReportDossier.jsx created, imported+mounted in App.jsx, isMidossQuery+buildMidossScript wired in JarvisBrain.jsx, build exit 0
 2026-09-30 F212 STICNEX Knowledge×Task×Investment Strategic Intelligence Coverage Nexus: StrategicIntelCoverageNexus.jsx created, imported+mounted in App.jsx, isSticnexQuery+buildSticnexScript wired in JarvisBrain.jsx, build exit 0
 [2026-09-30] F213 ThreatFinanceNexus.jsx — Ops Event x Investment x IntelProfile Threat Finance Nexus; build exit 0; pushed to jarvis-overnight
+[2026-09-30] F214 AIOMAP — SwarmJob × AIP Skill × IntelProfile Autonomous Intelligence Operations Map; AutonomousIntelOpsMap.jsx created; mounted in App.jsx; wired in JarvisBrain.jsx; build exit 0
