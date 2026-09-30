@@ -431,6 +431,7 @@ import ContactDatasetOpsNetwork from '@/components/cinematic/ContactDatasetOpsNe
 import ContactReportScenarioKnowledgeMap from '@/components/cinematic/ContactReportScenarioKnowledgeMap';
 import ThreatActorResponseGrid from '@/components/cinematic/ThreatActorResponseGrid';
 import DefensivePlaybookCoverageIndex from '@/components/cinematic/DefensivePlaybookCoverageIndex';
+import LiveIntelAipScenarioReadiness from '@/components/cinematic/LiveIntelAipScenarioReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1352,6 +1353,8 @@ function App() {
             <ThreatActorResponseGrid />
             {/* F206 (overnight 2026-09-30): Knowledge × Scenario × SwarmJob × RiskSignal Defensive Playbook Coverage Index (DPCI) */}
             <DefensivePlaybookCoverageIndex />
+            {/* F207 (overnight 2026-09-30): Live Intel × AIP Skill × Scenario Operational Readiness Pulse (LTASORP) */}
+            <LiveIntelAipScenarioReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>

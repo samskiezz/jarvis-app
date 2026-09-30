@@ -273,6 +273,7 @@ import { isCodinQuery, buildCodinScript } from "./ContactDatasetOpsNetwork";
 import { isCrskpoiQuery, buildCrskpoiScript } from "./ContactReportScenarioKnowledgeMap";
 import { isTargQuery, buildTargScript } from "./ThreatActorResponseGrid";
 import { isDpciQuery, buildDpciScript } from "./DefensivePlaybookCoverageIndex";
+import { isLtasorpQuery, buildLtasorpScript } from "./LiveIntelAipScenarioReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2659,6 +2660,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dpci-toggle"));
       let script = "";
       try { script = await buildDpciScript(); } catch { script = "DPCI Defensive Playbook Coverage Index online, sir. Cross-referencing all active risk signals against knowledge base articles, scenario playbooks, and swarm automation jobs to identify defensive coverage gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLtasorpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ltasorp-toggle"));
+      let script = "";
+      try { script = await buildLtasorpScript(); } catch { script = "LTASORP Operational Readiness Pulse online, sir. Correlating live world events against AIP skills and scenario playbooks to quantify operational coverage gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
