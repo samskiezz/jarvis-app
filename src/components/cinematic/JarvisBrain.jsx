@@ -277,6 +277,7 @@ import { isLtasorpQuery, buildLtasorpScript } from "./LiveIntelAipScenarioReadin
 import { isAstroQuery, buildAstroScript } from "./SwarmJobRiskSignalReportOrchestrator";
 import { isSpiamQuery, buildSpiamScript } from "./TaskInvestmentRiskAlignmentMap";
 import { isDicnexQuery, buildDicnexScript } from "./DatasetContactIntelProfileNexus";
+import { isSticnexQuery, buildSticnexScript } from "./StrategicIntelCoverageNexus";
 import { isMidossQuery, buildMidossScript } from "./ScenarioIntelReportDossier";
 
 /**
@@ -2696,6 +2697,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dicnex-toggle"));
       let script = "";
       try { script = await buildDicnexScript(); } catch { script = "DICNEX Data Intelligence Coverage Nexus online, sir. Cross-referencing datasets against contacts and intel profiles to surface uncovered data assets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSticnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sticnex-toggle"));
+      let script = "";
+      try { script = await buildSticnexScript(); } catch { script = "STICNEX Strategic Intelligence Coverage Nexus online, sir. Cross-referencing knowledge articles against tasks and investments to surface strategic gaps now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
