@@ -426,6 +426,7 @@ import IntelProfileDatasetOpsNexus from '@/components/cinematic/IntelProfileData
 import RiskSwarmKnowledgeResponseMap from '@/components/cinematic/RiskSwarmKnowledgeResponseMap';
 import GraphAnnotationScenarioContactNexus from '@/components/cinematic/GraphAnnotationScenarioContactNexus';
 import PortfolioIntelCoverageMap from '@/components/cinematic/PortfolioIntelCoverageMap';
+import OpsEventAipSkillReportMap from '@/components/cinematic/OpsEventAipSkillReportMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1337,6 +1338,8 @@ function App() {
             <GraphAnnotationScenarioContactNexus />
             {/* F201 (overnight 2026-09-30): Investment × Knowledge × Report Portfolio Intelligence Coverage Map (PIKMAP) */}
             <PortfolioIntelCoverageMap />
+            {/* F202 (overnight 2026-09-30): Ops Event × AIP Skill × Report Operational Response Coverage (OASRMAP) */}
+            <OpsEventAipSkillReportMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
