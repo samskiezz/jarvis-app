@@ -261,6 +261,7 @@ import { isWtcmapQuery, buildWtcmapScript } from "./WorldThreatClusterMap";
 import { isMdheatQuery, buildMdheatScript } from "./GraphCommunityMissionDensity";
 import { isWfactQuery, buildWfactScript } from "./WorkforceActivityMatrix";
 import { isMtrbcovQuery, buildMtrbcovScript } from "./MissionBriefingCoverage";
+import { isKoecpQuery, buildKoecpScript } from "./KnowledgeOpsEventContextPulse";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2551,6 +2552,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:mtrbcov-toggle"));
       let script = "";
       try { script = await buildMtrbcovScript(); } catch { script = "MTRBCOV Mission Briefing Coverage online, sir. Cross-referencing all active tasks against intel actor profiles and intelligence reports to surface unbriefed missions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKoecpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:koecp-toggle"));
+      let script = "";
+      try { script = await buildKoecpScript(); } catch { script = "KOECP Intel Context Coverage Pulse online, sir. Cross-referencing all knowledge base articles against operational events and active risk signals to surface isolated knowledge now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

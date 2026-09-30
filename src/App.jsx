@@ -419,6 +419,7 @@ import WorldThreatClusterMap from '@/components/cinematic/WorldThreatClusterMap'
 import GraphCommunityMissionDensity from '@/components/cinematic/GraphCommunityMissionDensity';
 import WorkforceActivityMatrix from '@/components/cinematic/WorkforceActivityMatrix';
 import MissionBriefingCoverage from '@/components/cinematic/MissionBriefingCoverage';
+import KnowledgeOpsEventContextPulse from '@/components/cinematic/KnowledgeOpsEventContextPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1316,6 +1317,8 @@ function App() {
             <WorkforceActivityMatrix />
             {/* F194 (overnight 2026-09-29): IntelProfile × Task × Report Mission Briefing Coverage (MTRBCOV) */}
             <MissionBriefingCoverage />
+            {/* F195 (overnight 2026-09-30): Knowledge × Ops Event × RiskSignal Intel Context Coverage Pulse (KOECP) */}
+            <KnowledgeOpsEventContextPulse />
 
             <Suspense fallback={<Loading />}>
               <Routes>
