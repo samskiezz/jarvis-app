@@ -269,6 +269,7 @@ import { isArsrmapQuery, buildArsrmapScript } from "./RiskSwarmKnowledgeResponse
 import { isGascrinQuery, buildGascrinScript } from "./GraphAnnotationScenarioContactNexus";
 import { isPikmapQuery, buildPikmapScript } from "./PortfolioIntelCoverageMap";
 import { isOasrmapQuery, buildOasrmapScript } from "./OpsEventAipSkillReportMap";
+import { isCodinQuery, buildCodinScript } from "./ContactDatasetOpsNetwork";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2623,6 +2624,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:oasrmap-toggle"));
       let script = "";
       try { script = await buildOasrmapScript(); } catch { script = "OASRMAP Operational Response Coverage online, sir. Cross-referencing all operational events against AIP skills and intelligence reports to surface unresponded events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCodinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:codin-toggle"));
+      let script = "";
+      try { script = await buildCodinScript(); } catch { script = "CODIN Operational Intelligence Network online, sir. Cross-referencing all contacts against datasets and operational events to surface isolated contacts now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
