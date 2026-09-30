@@ -283,6 +283,7 @@ import { isTfinexQuery, buildTfinexScript } from "./ThreatFinanceNexus";
 import { isAiomapQuery, buildAiomapScript } from "./AutonomousIntelOpsMap";
 import { isArbnexQuery, buildArbnexScript } from "./GraphAnnotationRiskIntelNexus";
 import { isTrkarmQuery, buildTrkarmScript } from "./TaskReportKnowledgeReadiness";
+import { isIgcaimQuery, buildIgcaimScript } from "./InvestigationNetworkCoverageMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2749,6 +2750,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:trkarm-toggle"));
       let script = "";
       try { script = await buildTrkarmScript(); } catch { script = "TRKARM Task Action Intelligence Readiness Map online, sir. Cross-referencing active tasks against intelligence reports and knowledge base articles to surface blind tasks requiring briefing now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIgcaimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:igcaim-toggle"));
+      let script = "";
+      try { script = await buildIgcaimScript(); } catch { script = "IGCAIM Investigation Network Coverage Map online, sir. Cross-referencing active investigations against graph community clusters and AIP skills to surface isolated investigations with no network intelligence coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

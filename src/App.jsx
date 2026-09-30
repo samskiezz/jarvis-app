@@ -441,6 +441,7 @@ import ThreatFinanceNexus from '@/components/cinematic/ThreatFinanceNexus';
 import AutonomousIntelOpsMap from '@/components/cinematic/AutonomousIntelOpsMap';
 import GraphAnnotationRiskIntelNexus from '@/components/cinematic/GraphAnnotationRiskIntelNexus';
 import TaskReportKnowledgeReadiness from '@/components/cinematic/TaskReportKnowledgeReadiness';
+import InvestigationNetworkCoverageMap from '@/components/cinematic/InvestigationNetworkCoverageMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1382,6 +1383,8 @@ function App() {
             <GraphAnnotationRiskIntelNexus />
             {/* F216 (overnight 2026-09-30): Task × Report × Knowledge Action Intelligence Readiness Map (TRKARM) */}
             <TaskReportKnowledgeReadiness />
+            {/* F217 (overnight 2026-09-30): Investigation × Graph Community × AIP Skill Network Intelligence Coverage Map (IGCAIM) */}
+            <InvestigationNetworkCoverageMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
