@@ -428,6 +428,7 @@ import GraphAnnotationScenarioContactNexus from '@/components/cinematic/GraphAnn
 import PortfolioIntelCoverageMap from '@/components/cinematic/PortfolioIntelCoverageMap';
 import OpsEventAipSkillReportMap from '@/components/cinematic/OpsEventAipSkillReportMap';
 import ContactDatasetOpsNetwork from '@/components/cinematic/ContactDatasetOpsNetwork';
+import ContactReportScenarioKnowledgeMap from '@/components/cinematic/ContactReportScenarioKnowledgeMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1343,6 +1344,8 @@ function App() {
             <OpsEventAipSkillReportMap />
             {/* F203 (overnight 2026-09-30): Contact × Dataset × Ops Event Operational Intelligence Network (CODIN) */}
             <ContactDatasetOpsNetwork />
+            {/* F204 (overnight 2026-09-30): Contact × Report × Scenario × Knowledge Personnel Operational Intelligence Map (CRSKPOI) */}
+            <ContactReportScenarioKnowledgeMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

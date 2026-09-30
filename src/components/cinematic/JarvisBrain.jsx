@@ -270,6 +270,7 @@ import { isGascrinQuery, buildGascrinScript } from "./GraphAnnotationScenarioCon
 import { isPikmapQuery, buildPikmapScript } from "./PortfolioIntelCoverageMap";
 import { isOasrmapQuery, buildOasrmapScript } from "./OpsEventAipSkillReportMap";
 import { isCodinQuery, buildCodinScript } from "./ContactDatasetOpsNetwork";
+import { isCrskpoiQuery, buildCrskpoiScript } from "./ContactReportScenarioKnowledgeMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2632,6 +2633,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:codin-toggle"));
       let script = "";
       try { script = await buildCodinScript(); } catch { script = "CODIN Operational Intelligence Network online, sir. Cross-referencing all contacts against datasets and operational events to surface isolated contacts now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCrskpoiQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:crskpoi-toggle"));
+      let script = "";
+      try { script = await buildCrskpoiScript(); } catch { script = "CRSKPOI Personnel Operational Intelligence Map online, sir. Cross-referencing all contacts against reports, scenarios, and knowledge base articles to surface uninformed personnel now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
