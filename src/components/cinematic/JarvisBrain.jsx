@@ -279,6 +279,7 @@ import { isSpiamQuery, buildSpiamScript } from "./TaskInvestmentRiskAlignmentMap
 import { isDicnexQuery, buildDicnexScript } from "./DatasetContactIntelProfileNexus";
 import { isSticnexQuery, buildSticnexScript } from "./StrategicIntelCoverageNexus";
 import { isMidossQuery, buildMidossScript } from "./ScenarioIntelReportDossier";
+import { isTfinexQuery, buildTfinexScript } from "./ThreatFinanceNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2713,6 +2714,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:midoss-toggle"));
       let script = "";
       try { script = await buildMidossScript(); } catch { script = "MIDOSS Mission Intelligence Dossier online, sir. Cross-referencing scenarios against intel profiles and intelligence reports to surface unbriefed mission gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTfinexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tfinex-toggle"));
+      let script = "";
+      try { script = await buildTfinexScript(); } catch { script = "TFINEX Threat Finance Nexus online, sir. Cross-referencing operational events against portfolio investments and threat actor intel profiles to surface full-risk exposures now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

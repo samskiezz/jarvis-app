@@ -437,6 +437,7 @@ import TaskInvestmentRiskAlignmentMap from '@/components/cinematic/TaskInvestmen
 import DatasetContactIntelProfileNexus from '@/components/cinematic/DatasetContactIntelProfileNexus';
 import StrategicIntelCoverageNexus from '@/components/cinematic/StrategicIntelCoverageNexus';
 import ScenarioIntelReportDossier from '@/components/cinematic/ScenarioIntelReportDossier';
+import ThreatFinanceNexus from '@/components/cinematic/ThreatFinanceNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1370,6 +1371,8 @@ function App() {
             <StrategicIntelCoverageNexus />
             {/* F211 (overnight 2026-09-30): Scenario × IntelProfile × Report Mission Intelligence Dossier (MIDOSS) */}
             <ScenarioIntelReportDossier />
+            {/* F213 (overnight 2026-09-30): Ops Event × Investment × IntelProfile Threat Finance Nexus (TFINEX) */}
+            <ThreatFinanceNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
