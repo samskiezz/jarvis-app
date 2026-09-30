@@ -420,6 +420,7 @@ import GraphCommunityMissionDensity from '@/components/cinematic/GraphCommunityM
 import WorkforceActivityMatrix from '@/components/cinematic/WorkforceActivityMatrix';
 import MissionBriefingCoverage from '@/components/cinematic/MissionBriefingCoverage';
 import KnowledgeOpsEventContextPulse from '@/components/cinematic/KnowledgeOpsEventContextPulse';
+import GraphAnnotationDataEvidenceAtlas from '@/components/cinematic/GraphAnnotationDataEvidenceAtlas';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1319,6 +1320,8 @@ function App() {
             <MissionBriefingCoverage />
             {/* F195 (overnight 2026-09-30): Knowledge × Ops Event × RiskSignal Intel Context Coverage Pulse (KOECP) */}
             <KnowledgeOpsEventContextPulse />
+            {/* F196 (overnight 2026-09-30): Graph Annotation × Dataset × Investigation Data Evidence Atlas (GADEVA) */}
+            <GraphAnnotationDataEvidenceAtlas />
 
             <Suspense fallback={<Loading />}>
               <Routes>

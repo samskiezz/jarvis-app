@@ -262,6 +262,7 @@ import { isMdheatQuery, buildMdheatScript } from "./GraphCommunityMissionDensity
 import { isWfactQuery, buildWfactScript } from "./WorkforceActivityMatrix";
 import { isMtrbcovQuery, buildMtrbcovScript } from "./MissionBriefingCoverage";
 import { isKoecpQuery, buildKoecpScript } from "./KnowledgeOpsEventContextPulse";
+import { isGadevaQuery, buildGadevaScript } from "./GraphAnnotationDataEvidenceAtlas";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2560,6 +2561,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:koecp-toggle"));
       let script = "";
       try { script = await buildKoecpScript(); } catch { script = "KOECP Intel Context Coverage Pulse online, sir. Cross-referencing all knowledge base articles against operational events and active risk signals to surface isolated knowledge now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGadevaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gadeva-toggle"));
+      let script = "";
+      try { script = await buildGadevaScript(); } catch { script = "GADEVA Data Evidence Atlas online, sir. Cross-referencing all graph annotations against available datasets and investigations to surface unevidenced annotations now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

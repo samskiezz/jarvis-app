@@ -187,3 +187,4 @@
 [2026-09-29 22:11 UTC] F193 WorkforceActivityMatrix.jsx — Contact × SwarmJob × Task WFACT panel; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
 [2026-09-29 23:18 UTC] F194 MissionBriefingCoverage.jsx — IntelProfile × Task × Report MTRBCOV panel; mounted App.jsx; wired JarvisBrain.jsx; build exit 0
 [2026-09-30] F195 KOECP Knowledge × Ops Event × RiskSignal Intel Context Coverage Pulse — KnowledgeOpsEventContextPulse.jsx created; mounted in App.jsx; isKoecpQuery+buildKoecpScript wired in JarvisBrain.jsx; build verified exit 0
+[2026-09-30] F196 GADEVA: GraphAnnotationDataEvidenceAtlas.jsx created; correlates /v1/graph/annotations × /v1/datasets × /v1/investigations; FULLY_EVIDENCED/DATASET_LINKED/INVESTIGATION_LINKED/UNEVIDENCED classification; wired in App.jsx + JarvisBrain.jsx; build exit 0
