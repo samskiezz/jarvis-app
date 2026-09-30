@@ -423,6 +423,7 @@ import KnowledgeOpsEventContextPulse from '@/components/cinematic/KnowledgeOpsEv
 import GraphAnnotationDataEvidenceAtlas from '@/components/cinematic/GraphAnnotationDataEvidenceAtlas';
 import OpsEventContactTaskMatrix from '@/components/cinematic/OpsEventContactTaskMatrix';
 import IntelProfileDatasetOpsNexus from '@/components/cinematic/IntelProfileDatasetOpsNexus';
+import RiskSwarmKnowledgeResponseMap from '@/components/cinematic/RiskSwarmKnowledgeResponseMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1328,6 +1329,8 @@ function App() {
             <OpsEventContactTaskMatrix />
             {/* F198 (overnight 2026-09-30): IntelProfile × Dataset × Ops Event Intelligence Evidence Nexus (IDENEX) */}
             <IntelProfileDatasetOpsNexus />
+            {/* F199 (overnight 2026-09-30): RiskSignal × SwarmJob × Knowledge Autonomous Risk Response Map (ARSRMAP) */}
+            <RiskSwarmKnowledgeResponseMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

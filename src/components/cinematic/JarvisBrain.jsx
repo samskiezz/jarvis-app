@@ -265,6 +265,7 @@ import { isKoecpQuery, buildKoecpScript } from "./KnowledgeOpsEventContextPulse"
 import { isGadevaQuery, buildGadevaScript } from "./GraphAnnotationDataEvidenceAtlas";
 import { isOctatmQuery, buildOctatmScript } from "./OpsEventContactTaskMatrix";
 import { isIdenexQuery, buildIdenexScript } from "./IntelProfileDatasetOpsNexus";
+import { isArsrmapQuery, buildArsrmapScript } from "./RiskSwarmKnowledgeResponseMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2587,6 +2588,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:idenex-toggle"));
       let script = "";
       try { script = await buildIdenexScript(); } catch { script = "IDENEX Intelligence Evidence Nexus online, sir. Cross-referencing all intel profiles against available datasets and ops events to surface unevidenced actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isArsrmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:arsrmap-toggle"));
+      let script = "";
+      try { script = await buildArsrmapScript(); } catch { script = "ARSRMAP Autonomous Risk Response Map online, sir. Cross-referencing all risk signals against active swarm jobs and knowledge base to surface exposed risks now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
