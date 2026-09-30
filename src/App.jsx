@@ -424,6 +424,7 @@ import GraphAnnotationDataEvidenceAtlas from '@/components/cinematic/GraphAnnota
 import OpsEventContactTaskMatrix from '@/components/cinematic/OpsEventContactTaskMatrix';
 import IntelProfileDatasetOpsNexus from '@/components/cinematic/IntelProfileDatasetOpsNexus';
 import RiskSwarmKnowledgeResponseMap from '@/components/cinematic/RiskSwarmKnowledgeResponseMap';
+import GraphAnnotationScenarioContactNexus from '@/components/cinematic/GraphAnnotationScenarioContactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1331,6 +1332,8 @@ function App() {
             <IntelProfileDatasetOpsNexus />
             {/* F199 (overnight 2026-09-30): RiskSignal × SwarmJob × Knowledge Autonomous Risk Response Map (ARSRMAP) */}
             <RiskSwarmKnowledgeResponseMap />
+            {/* F200 (overnight 2026-09-30): Graph Annotation × Scenario × Contact Intelligence Readiness Nexus (GASCRIN) */}
+            <GraphAnnotationScenarioContactNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
