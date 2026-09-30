@@ -429,6 +429,7 @@ import PortfolioIntelCoverageMap from '@/components/cinematic/PortfolioIntelCove
 import OpsEventAipSkillReportMap from '@/components/cinematic/OpsEventAipSkillReportMap';
 import ContactDatasetOpsNetwork from '@/components/cinematic/ContactDatasetOpsNetwork';
 import ContactReportScenarioKnowledgeMap from '@/components/cinematic/ContactReportScenarioKnowledgeMap';
+import ThreatActorResponseGrid from '@/components/cinematic/ThreatActorResponseGrid';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1346,6 +1347,8 @@ function App() {
             <ContactDatasetOpsNetwork />
             {/* F204 (overnight 2026-09-30): Contact × Report × Scenario × Knowledge Personnel Operational Intelligence Map (CRSKPOI) */}
             <ContactReportScenarioKnowledgeMap />
+            {/* F205 (overnight 2026-09-30): IntelProfile × Ops Event × Scenario Threat Actor Response Grid (TARG) */}
+            <ThreatActorResponseGrid />
 
             <Suspense fallback={<Loading />}>
               <Routes>

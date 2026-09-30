@@ -271,6 +271,7 @@ import { isPikmapQuery, buildPikmapScript } from "./PortfolioIntelCoverageMap";
 import { isOasrmapQuery, buildOasrmapScript } from "./OpsEventAipSkillReportMap";
 import { isCodinQuery, buildCodinScript } from "./ContactDatasetOpsNetwork";
 import { isCrskpoiQuery, buildCrskpoiScript } from "./ContactReportScenarioKnowledgeMap";
+import { isTargQuery, buildTargScript } from "./ThreatActorResponseGrid";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2641,6 +2642,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:crskpoi-toggle"));
       let script = "";
       try { script = await buildCrskpoiScript(); } catch { script = "CRSKPOI Personnel Operational Intelligence Map online, sir. Cross-referencing all contacts against reports, scenarios, and knowledge base articles to surface uninformed personnel now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTargQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:targ-toggle"));
+      let script = "";
+      try { script = await buildTargScript(); } catch { script = "TARG Threat Actor Response Grid online, sir. Cross-referencing all intel profiles against operational events and scenario playbooks to surface unengaged threat actors now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

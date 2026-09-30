@@ -196,3 +196,4 @@
 [2026-09-30] F202 OASRMAP: Ops Event × AIP Skill × Report Operational Response Coverage — new OpsEventAipSkillReportMap.jsx; imported+mounted in App.jsx; isOasrmapQuery+buildOasrmapScript wired in JarvisBrain.jsx; build verified exit 0
 2026-09-30 F203 ContactDatasetOpsNetwork (CODIN): Contact × Dataset × Ops Event Operational Intelligence Network — new component, App.jsx mount, JarvisBrain voice wiring, build exit 0
 2026-09-30 F204 CRSKPOI: Contact × Report × Scenario × Knowledge Personnel Operational Intelligence Map — new ContactReportScenarioKnowledgeMap.jsx; imported+mounted in App.jsx; isCrskpoiQuery+buildCrskpoiScript wired in JarvisBrain.jsx; build verified exit 0
+[2026-09-30] F205 ThreatActorResponseGrid (TARG): IntelProfile x OpsEvent x Scenario; FULLY_ENGAGED/OPS_ACTIVE/SCENARIO_PLANNED/UNENGAGED; new ThreatActorResponseGrid.jsx; mounted App.jsx; isTargQuery+buildTargScript wired JarvisBrain.jsx; build exit 0
