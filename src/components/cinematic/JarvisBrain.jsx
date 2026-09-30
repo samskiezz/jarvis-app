@@ -284,6 +284,7 @@ import { isAiomapQuery, buildAiomapScript } from "./AutonomousIntelOpsMap";
 import { isArbnexQuery, buildArbnexScript } from "./GraphAnnotationRiskIntelNexus";
 import { isTrkarmQuery, buildTrkarmScript } from "./TaskReportKnowledgeReadiness";
 import { isIgcaimQuery, buildIgcaimScript } from "./InvestigationNetworkCoverageMap";
+import { isCoedrnQuery, buildCoedrnScript } from "./ContactOpsDataRiskNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2758,6 +2759,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igcaim-toggle"));
       let script = "";
       try { script = await buildIgcaimScript(); } catch { script = "IGCAIM Investigation Network Coverage Map online, sir. Cross-referencing active investigations against graph community clusters and AIP skills to surface isolated investigations with no network intelligence coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCoedrnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:coedrn-toggle"));
+      let script = "";
+      try { script = await buildCoedrnScript(); } catch { script = "COEDRN Operational Exposure Nexus online, sir. Cross-referencing contacts against ops events, datasets, and risk signals to surface fully-exposed personnel across all three intelligence sources."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -442,6 +442,7 @@ import AutonomousIntelOpsMap from '@/components/cinematic/AutonomousIntelOpsMap'
 import GraphAnnotationRiskIntelNexus from '@/components/cinematic/GraphAnnotationRiskIntelNexus';
 import TaskReportKnowledgeReadiness from '@/components/cinematic/TaskReportKnowledgeReadiness';
 import InvestigationNetworkCoverageMap from '@/components/cinematic/InvestigationNetworkCoverageMap';
+import ContactOpsDataRiskNexus from '@/components/cinematic/ContactOpsDataRiskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1385,6 +1386,8 @@ function App() {
             <TaskReportKnowledgeReadiness />
             {/* F217 (overnight 2026-09-30): Investigation × Graph Community × AIP Skill Network Intelligence Coverage Map (IGCAIM) */}
             <InvestigationNetworkCoverageMap />
+            {/* F218 (overnight 2026-09-30): Contact × Ops Event × Dataset × RiskSignal Operational Exposure Nexus (COEDRN) */}
+            <ContactOpsDataRiskNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
