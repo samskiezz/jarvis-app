@@ -445,6 +445,7 @@ import InvestigationNetworkCoverageMap from '@/components/cinematic/Investigatio
 import ContactOpsDataRiskNexus from '@/components/cinematic/ContactOpsDataRiskNexus';
 import InvestmentKnowledgeTaskSwarmMap from '@/components/cinematic/InvestmentKnowledgeTaskSwarmMap';
 import ScenarioReportTaskMissionMap from '@/components/cinematic/ScenarioReportTaskMissionMap';
+import ThreatActorActivityMonitor from '@/components/cinematic/ThreatActorActivityMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1393,6 +1394,9 @@ function App() {
             <InvestmentKnowledgeTaskSwarmMap />
             {/* F220 (overnight 2026-10-01): Scenario × Report × Task Mission Execution Coverage Map (SRTMEC) */}
             <ScenarioReportTaskMissionMap />
+
+            {/* F221 (overnight 2026-10-01): IntelProfile × Ops Event × Knowledge Threat Actor Activity Monitor (TAAM) */}
+            <ThreatActorActivityMonitor />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -212,3 +212,4 @@
 [2026-09-30] F218 COEDRN — Contact × Ops Event × Dataset × RiskSignal Operational Exposure Nexus — ContactOpsDataRiskNexus.jsx created; imported+mounted in App.jsx; isCoedrnQuery+buildCoedrnScript wired in JarvisBrain.jsx; build verified exit 0
 2026-10-01 F219 SACMAP — Investment×Knowledge×Task×SwarmJob Strategic Autonomy Coverage Map; new InvestmentKnowledgeTaskSwarmMap.jsx; mounted in App.jsx; isSacmapQuery+buildSacmapScript wired in JarvisBrain.jsx; build exit 0
 2026-10-01 F220 SRTMEC — Scenario × Report × Task Mission Execution Coverage Map: new ScenarioReportTaskMissionMap.jsx; imported+mounted in App.jsx; isSrtmecQuery+buildSrtmecScript wired in JarvisBrain.jsx; build verified exit 0
+[2026-10-01] F221 ThreatActorActivityMonitor.jsx — IntelProfile×OpsEvent×Knowledge TAAM; isTaamQuery+buildTaamScript wired in JarvisBrain.jsx; build exit 0
