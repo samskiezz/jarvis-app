@@ -302,6 +302,7 @@ import { isIticmapQuery, buildIticmapScript } from "./IntelProfileTaskInvestigat
 import { isOrcnexQuery, buildOrcnexScript } from "./TaskKnowledgeSkillNexus";
 import { isTdrmapQuery, buildTdrmapScript } from "./IntelProfileDataScenarioMap";
 import { isSmrnexQuery, buildSmrnexScript } from "./SwarmReportScenarioNexus";
+import { isGaccovQuery, buildGaccovScript } from "./GraphAnnotationSkillContactBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2927,6 +2928,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:smrnex-toggle"));
       let script = "";
       try { script = await buildSmrnexScript(); } catch { script = "SMRNEX Mission Coverage Nexus online, sir. Cross-referencing swarm jobs against intelligence reports and mission scenarios to identify mission coverage gaps requiring immediate report and scenario assignment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F236: Graph Annotation × AIP Skill × Contact Intelligence Coverage Bridge — open GACCOV panel + speak coverage brief.
+    if (isGaccovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gaccov-toggle"));
+      let script = "";
+      try { script = await buildGaccovScript(); } catch { script = "GACCOV Annotation Intelligence Bridge online, sir. Cross-referencing graph annotations against AIP skills and contacts to surface uncharted annotation coverage gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

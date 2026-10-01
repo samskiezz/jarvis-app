@@ -460,6 +460,7 @@ import IntelProfileTaskInvestigationMatrix from '@/components/cinematic/IntelPro
 import TaskKnowledgeSkillNexus from '@/components/cinematic/TaskKnowledgeSkillNexus';
 import IntelProfileDataScenarioMap from '@/components/cinematic/IntelProfileDataScenarioMap';
 import SwarmReportScenarioNexus from '@/components/cinematic/SwarmReportScenarioNexus';
+import GraphAnnotationSkillContactBridge from '@/components/cinematic/GraphAnnotationSkillContactBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1451,6 +1452,9 @@ function App() {
 
             {/* F235 (overnight 2026-10-01): SwarmJob × Report × Scenario Mission Coverage Nexus (SMRNEX) */}
             <SwarmReportScenarioNexus />
+
+            {/* F236 (overnight 2026-10-01): Graph Annotation × AIP Skill × Contact Intelligence Coverage Bridge (GACCOV) */}
+            <GraphAnnotationSkillContactBridge />
 
             <Suspense fallback={<Loading />}>
               <Routes>
