@@ -454,6 +454,7 @@ import OperationalMeshCoverageMap from '@/components/cinematic/OperationalMeshCo
 import DatasetGraphIntelMap from '@/components/cinematic/DatasetGraphIntelMap';
 import OpsEventContactKnowledgeMap from '@/components/cinematic/OpsEventContactKnowledgeMap';
 import WorldEventThreatMatrix from '@/components/cinematic/WorldEventThreatMatrix';
+import DatasetSkillReportNexus from '@/components/cinematic/DatasetSkillReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1429,6 +1430,9 @@ function App() {
 
             {/* F229 (overnight 2026-10-01): Live Intel × Scenario × RiskSignal World Event Threat Matrix (WETMAT) */}
             <WorldEventThreatMatrix />
+
+            {/* F230 (overnight 2026-10-01): Dataset × AIP Skill × Report Intelligence Automation Nexus (DARINEX) */}
+            <DatasetSkillReportNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
