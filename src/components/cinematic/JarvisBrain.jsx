@@ -300,6 +300,7 @@ import { isDarinexQuery, buildDarinexScript } from "./DatasetSkillReportNexus";
 import { isCkoeabQuery, buildCkoeabScript } from "./ContactKnowledgeOpsAwarenessBridge";
 import { isIticmapQuery, buildIticmapScript } from "./IntelProfileTaskInvestigationMatrix";
 import { isOrcnexQuery, buildOrcnexScript } from "./TaskKnowledgeSkillNexus";
+import { isTdrmapQuery, buildTdrmapScript } from "./IntelProfileDataScenarioMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2907,6 +2908,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:orcnex-toggle"));
       let script = "";
       try { script = await buildOrcnexScript(); } catch { script = "ORCNEX Operational Readiness Coverage Nexus online, sir. Cross-referencing active tasks against knowledge articles and AIP skills to identify operationally unsupported tasks requiring immediate coverage assignment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F234: IntelProfile × Dataset × Scenario Threat Data Readiness Map — open TDRMAP panel + speak readiness brief.
+    if (isTdrmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tdrmap-toggle"));
+      let script = "";
+      try { script = await buildTdrmapScript(); } catch { script = "TDRMAP Threat Data Readiness Map online, sir. Cross-referencing intel actor profiles against datasets and threat scenarios to identify actor intelligence blind spots requiring immediate data and scenario assignment."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

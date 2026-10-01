@@ -458,6 +458,7 @@ import DatasetSkillReportNexus from '@/components/cinematic/DatasetSkillReportNe
 import ContactKnowledgeOpsAwarenessBridge from '@/components/cinematic/ContactKnowledgeOpsAwarenessBridge';
 import IntelProfileTaskInvestigationMatrix from '@/components/cinematic/IntelProfileTaskInvestigationMatrix';
 import TaskKnowledgeSkillNexus from '@/components/cinematic/TaskKnowledgeSkillNexus';
+import IntelProfileDataScenarioMap from '@/components/cinematic/IntelProfileDataScenarioMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1443,6 +1444,9 @@ function App() {
             <IntelProfileTaskInvestigationMatrix />
             {/* F233 (overnight 2026-10-01): Task × Knowledge × AIP Skill Operational Readiness Coverage Nexus (ORCNEX) */}
             <TaskKnowledgeSkillNexus />
+
+            {/* F234 (overnight 2026-10-01): IntelProfile × Dataset × Scenario Threat Data Readiness Map (TDRMAP) */}
+            <IntelProfileDataScenarioMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
