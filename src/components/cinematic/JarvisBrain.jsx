@@ -286,6 +286,7 @@ import { isTrkarmQuery, buildTrkarmScript } from "./TaskReportKnowledgeReadiness
 import { isIgcaimQuery, buildIgcaimScript } from "./InvestigationNetworkCoverageMap";
 import { isCoedrnQuery, buildCoedrnScript } from "./ContactOpsDataRiskNexus";
 import { isSacmapQuery, buildSacmapScript } from "./InvestmentKnowledgeTaskSwarmMap";
+import { isSrtmecQuery, buildSrtmecScript } from "./ScenarioReportTaskMissionMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2776,6 +2777,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sacmap-toggle"));
       let script = "";
       try { script = await buildSacmapScript(); } catch { script = "SACMAP Strategic Autonomy Coverage Map online, sir. Cross-referencing investments against knowledge base articles, active tasks, and swarm jobs to identify unmanaged portfolio positions lacking operational automation coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSrtmecQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srtmec-toggle"));
+      let script = "";
+      try { script = await buildSrtmecScript(); } catch { script = "SRTMEC Mission Execution Coverage Map online, sir. Cross-referencing scenarios against intelligence reports and active tasks to identify unexecuted missions lacking operational coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
