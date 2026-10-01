@@ -293,6 +293,7 @@ import { isMdirsQuery, buildMdirsScript } from "./AipSkillReportKnowledgeReadine
 import { isIrcmapQuery, buildIrcmapScript } from "./OpsEventIntegratedResponseMap";
 import { isKrsdefQuery, buildKrsdefScript } from "./KnowledgeRiskScenarioDefMap";
 import { isOmcmapQuery, buildOmcmapScript } from "./OperationalMeshCoverageMap";
+import { isDgkimapQuery, buildDgkimapScript } from "./DatasetGraphIntelMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2839,6 +2840,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:omcmap-toggle"));
       let script = "";
       try { script = await buildOmcmapScript(); } catch { script = "OMCMAP Operational Mesh Coverage Map online, sir. Cross-referencing active tasks against graph community clusters and swarm jobs to surface operational mesh gaps where tasks lack both network intelligence and automation coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDgkimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dgkimap-toggle"));
+      let script = "";
+      try { script = await buildDgkimapScript(); } catch { script = "DGKIMAP Dataset Graph Intelligence Coverage Map online, sir. Cross-referencing datasets against graph community clusters, knowledge base articles, and active investigations to surface dark datasets with no intelligence coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
