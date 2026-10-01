@@ -449,6 +449,7 @@ import ThreatActorActivityMonitor from '@/components/cinematic/ThreatActorActivi
 import ContactGraphIntelMap from '@/components/cinematic/ContactGraphIntelMap';
 import AipSkillReportKnowledgeReadiness from '@/components/cinematic/AipSkillReportKnowledgeReadiness';
 import OpsEventIntegratedResponseMap from '@/components/cinematic/OpsEventIntegratedResponseMap';
+import KnowledgeRiskScenarioDefMap from '@/components/cinematic/KnowledgeRiskScenarioDefMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1409,6 +1410,9 @@ function App() {
 
             {/* F224 (overnight 2026-10-01): Ops Event × Contact × Investment × Scenario Integrated Response Map (IRCMAP) */}
             <OpsEventIntegratedResponseMap />
+
+            {/* F225 (overnight 2026-10-01): Knowledge × RiskSignal × Scenario Defensive Coverage Map (KRSDEF) */}
+            <KnowledgeRiskScenarioDefMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

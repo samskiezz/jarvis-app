@@ -291,6 +291,7 @@ import { isTaamQuery, buildTaamScript } from "./ThreatActorActivityMonitor";
 import { isNcaimQuery, buildNcaimScript } from "./ContactGraphIntelMap";
 import { isMdirsQuery, buildMdirsScript } from "./AipSkillReportKnowledgeReadiness";
 import { isIrcmapQuery, buildIrcmapScript } from "./OpsEventIntegratedResponseMap";
+import { isKrsdefQuery, buildKrsdefScript } from "./KnowledgeRiskScenarioDefMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2821,6 +2822,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ircmap-toggle"));
       let script = "";
       try { script = await buildIrcmapScript(); } catch { script = "IRCMAP Integrated Response Map online, sir. Cross-referencing operational events against contacts, investments, and scenario playbooks to surface response coverage gaps requiring immediate attention."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKrsdefQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:krsdef-toggle"));
+      let script = "";
+      try { script = await buildKrsdefScript(); } catch { script = "KRSDEF Defensive Coverage Map online, sir. Cross-referencing knowledge base articles against risk signals and scenario playbooks to surface defensive intelligence gaps requiring attention."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
