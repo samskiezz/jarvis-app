@@ -231,3 +231,4 @@
 2026-10-01 F237 IRCNEX: IntelProfileResponseNexus.jsx — Intel Profile × Contact × Investigation × Ops Event Response Nexus; build exit 0
 2026-10-01 F238 TMINEX RiskSignalMitigationNexus.jsx — RiskSignal×Knowledge×Contact×Dataset mitigation nexus; BTN_LEFT=1074520, zIndex=297; classifies FULLY_MITIGATED/DUAL_COVERED/SINGLE_LINKED/UNMITIGATED; build exit 0
 [2026-10-01] F239 TaskSwarmInvestmentResourceNexus.jsx — Task×SwarmJob×Investment resource classification (FULLY_RESOURCED/SWARM_ONLY/FUNDED_ONLY/UNFUNDED); ◈ TRPIN button; isTrpinQuery+buildTrpinScript wired in JarvisBrain.jsx; build exit 0
+[2026-10-01] F240 OpsSkillContactAlignment (OASALIGN): new OpsSkillContactAlignment.jsx; parallel-fetches /v1/ops/events+/v1/aip/skill+/entities/Contact; FULLY_ALIGNED/SKILL_ONLY/CONTACT_ONLY/UNALIGNED classification; wired App.jsx+JarvisBrain.jsx; build exit 0; pushed to jarvis-overnight

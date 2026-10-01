@@ -306,6 +306,7 @@ import { isGaccovQuery, buildGaccovScript } from "./GraphAnnotationSkillContactB
 import { isIrcnexQuery, buildIrcnexScript } from "./IntelProfileResponseNexus";
 import { isTminexQuery, buildTminexScript } from "./RiskSignalMitigationNexus";
 import { isTrpinQuery, buildTrpinScript } from "./TaskSwarmInvestmentResourceNexus";
+import { isOasalignQuery, buildOasalignScript } from "./OpsSkillContactAlignment";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2967,6 +2968,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:trpin-toggle"));
       let script = "";
       try { script = await buildTrpinScript(); } catch { script = "Task Resource Priority Nexus online, sir. Cross-referencing tasks against swarm jobs and investments to identify unfunded operational gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F240: Ops Event × AIP Skill × Contact Operational Response Alignment — open OASALIGN panel + speak alignment brief.
+    if (isOasalignQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oasalign-toggle"));
+      let script = "";
+      try { script = await buildOasalignScript(); } catch { script = "Operational Response Alignment online, sir. Cross-referencing ops events against AIP skills and contacts to identify unaligned response gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
