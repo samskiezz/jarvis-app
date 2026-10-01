@@ -297,6 +297,7 @@ import { isDgkimapQuery, buildDgkimapScript } from "./DatasetGraphIntelMap";
 import { isOcasamQuery, buildOcasamScript } from "./OpsEventContactKnowledgeMap";
 import { isWetmatQuery, buildWetmatScript } from "./WorldEventThreatMatrix";
 import { isDarinexQuery, buildDarinexScript } from "./DatasetSkillReportNexus";
+import { isCkoeabQuery, buildCkoeabScript } from "./ContactKnowledgeOpsAwarenessBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2877,6 +2878,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:darinex-toggle"));
       let script = "";
       try { script = await buildDarinexScript(); } catch { script = "DARINEX Dataset Intelligence Automation Nexus online, sir. Cross-referencing datasets against AIP skills and intelligence reports to identify unmapped datasets with no automation coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F231: Contact Knowledge Ops Awareness Bridge — open CKOEAB panel + speak situational awareness brief.
+    if (isCkoeabQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ckoeab-toggle"));
+      let script = "";
+      try { script = await buildCkoeabScript(); } catch { script = "CKOEAB Contact Situational Awareness Bridge online, sir. Cross-referencing contacts against knowledge articles and operational events to identify contacts with no situational awareness coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

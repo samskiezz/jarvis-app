@@ -455,6 +455,7 @@ import DatasetGraphIntelMap from '@/components/cinematic/DatasetGraphIntelMap';
 import OpsEventContactKnowledgeMap from '@/components/cinematic/OpsEventContactKnowledgeMap';
 import WorldEventThreatMatrix from '@/components/cinematic/WorldEventThreatMatrix';
 import DatasetSkillReportNexus from '@/components/cinematic/DatasetSkillReportNexus';
+import ContactKnowledgeOpsAwarenessBridge from '@/components/cinematic/ContactKnowledgeOpsAwarenessBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1433,6 +1434,9 @@ function App() {
 
             {/* F230 (overnight 2026-10-01): Dataset × AIP Skill × Report Intelligence Automation Nexus (DARINEX) */}
             <DatasetSkillReportNexus />
+
+            {/* F231 (overnight 2026-10-01): Contact × Knowledge × Ops Event Situational Awareness Bridge (CKOEAB) */}
+            <ContactKnowledgeOpsAwarenessBridge />
 
             <Suspense fallback={<Loading />}>
               <Routes>
