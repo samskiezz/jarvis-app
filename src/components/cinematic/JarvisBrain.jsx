@@ -298,6 +298,7 @@ import { isOcasamQuery, buildOcasamScript } from "./OpsEventContactKnowledgeMap"
 import { isWetmatQuery, buildWetmatScript } from "./WorldEventThreatMatrix";
 import { isDarinexQuery, buildDarinexScript } from "./DatasetSkillReportNexus";
 import { isCkoeabQuery, buildCkoeabScript } from "./ContactKnowledgeOpsAwarenessBridge";
+import { isIticmapQuery, buildIticmapScript } from "./IntelProfileTaskInvestigationMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2887,6 +2888,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ckoeab-toggle"));
       let script = "";
       try { script = await buildCkoeabScript(); } catch { script = "CKOEAB Contact Situational Awareness Bridge online, sir. Cross-referencing contacts against knowledge articles and operational events to identify contacts with no situational awareness coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F232: IntelProfile Task Investigation Coverage Matrix — open ITICMAP panel + speak coverage brief.
+    if (isIticmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iticmap-toggle"));
+      let script = "";
+      try { script = await buildIticmapScript(); } catch { script = "ITICMAP Intel Profile Coverage Matrix online, sir. Cross-referencing intel profiles against operational tasks and active investigations to identify untracked intelligence gaps requiring immediate assignment."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

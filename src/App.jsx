@@ -456,6 +456,7 @@ import OpsEventContactKnowledgeMap from '@/components/cinematic/OpsEventContactK
 import WorldEventThreatMatrix from '@/components/cinematic/WorldEventThreatMatrix';
 import DatasetSkillReportNexus from '@/components/cinematic/DatasetSkillReportNexus';
 import ContactKnowledgeOpsAwarenessBridge from '@/components/cinematic/ContactKnowledgeOpsAwarenessBridge';
+import IntelProfileTaskInvestigationMatrix from '@/components/cinematic/IntelProfileTaskInvestigationMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1437,6 +1438,8 @@ function App() {
 
             {/* F231 (overnight 2026-10-01): Contact × Knowledge × Ops Event Situational Awareness Bridge (CKOEAB) */}
             <ContactKnowledgeOpsAwarenessBridge />
+            {/* F232 (overnight 2026-10-01): IntelProfile × Task × Investigation Coverage Matrix (ITICMAP) */}
+            <IntelProfileTaskInvestigationMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
