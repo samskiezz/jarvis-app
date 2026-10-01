@@ -295,6 +295,7 @@ import { isKrsdefQuery, buildKrsdefScript } from "./KnowledgeRiskScenarioDefMap"
 import { isOmcmapQuery, buildOmcmapScript } from "./OperationalMeshCoverageMap";
 import { isDgkimapQuery, buildDgkimapScript } from "./DatasetGraphIntelMap";
 import { isOcasamQuery, buildOcasamScript } from "./OpsEventContactKnowledgeMap";
+import { isWetmatQuery, buildWetmatScript } from "./WorldEventThreatMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2857,6 +2858,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ocasam-toggle"));
       let script = "";
       try { script = await buildOcasamScript(); } catch { script = "OCASAM Ops Event Situational Awareness Map online, sir. Cross-referencing operational events against contacts and knowledge base articles to surface blind events with no contact attribution and no knowledge coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F229: World Event Threat Matrix — open WETMAT panel + speak world-threat brief.
+    if (isWetmatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wetmat-toggle"));
+      let script = "";
+      try { script = await buildWetmatScript(); } catch { script = "World event threat matrix online, sir. Cross-referencing live world events against scenario playbooks and risk signals to classify threat coverage now."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

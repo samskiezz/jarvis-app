@@ -453,6 +453,7 @@ import KnowledgeRiskScenarioDefMap from '@/components/cinematic/KnowledgeRiskSce
 import OperationalMeshCoverageMap from '@/components/cinematic/OperationalMeshCoverageMap';
 import DatasetGraphIntelMap from '@/components/cinematic/DatasetGraphIntelMap';
 import OpsEventContactKnowledgeMap from '@/components/cinematic/OpsEventContactKnowledgeMap';
+import WorldEventThreatMatrix from '@/components/cinematic/WorldEventThreatMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1425,6 +1426,9 @@ function App() {
 
             {/* F228 (overnight 2026-10-01): Ops Event × Contact × Knowledge Situational Awareness Map (OCASAM) */}
             <OpsEventContactKnowledgeMap />
+
+            {/* F229 (overnight 2026-10-01): Live Intel × Scenario × RiskSignal World Event Threat Matrix (WETMAT) */}
+            <WorldEventThreatMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
