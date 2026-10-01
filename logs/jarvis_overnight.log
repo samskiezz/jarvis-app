@@ -214,3 +214,4 @@
 2026-10-01 F220 SRTMEC — Scenario × Report × Task Mission Execution Coverage Map: new ScenarioReportTaskMissionMap.jsx; imported+mounted in App.jsx; isSrtmecQuery+buildSrtmecScript wired in JarvisBrain.jsx; build verified exit 0
 [2026-10-01] F221 ThreatActorActivityMonitor.jsx — IntelProfile×OpsEvent×Knowledge TAAM; isTaamQuery+buildTaamScript wired in JarvisBrain.jsx; build exit 0
 [2026-10-01] F222 ContactGraphIntelMap.jsx — Contact×GraphCommunity×IntelProfile NCAIM; isNcaimQuery+buildNcaimScript wired in JarvisBrain.jsx; build exit 0
+2026-10-01 F223 MDIRS — AipSkillReportKnowledgeReadiness.jsx created; /v1/aip/skill × /v1/reports × /knowledge/ cross-ref; isMdirsQuery+buildMdirsScript wired in JarvisBrain.jsx; mounted in App.jsx; build verified exit 0

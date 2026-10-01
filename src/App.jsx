@@ -447,6 +447,7 @@ import InvestmentKnowledgeTaskSwarmMap from '@/components/cinematic/InvestmentKn
 import ScenarioReportTaskMissionMap from '@/components/cinematic/ScenarioReportTaskMissionMap';
 import ThreatActorActivityMonitor from '@/components/cinematic/ThreatActorActivityMonitor';
 import ContactGraphIntelMap from '@/components/cinematic/ContactGraphIntelMap';
+import AipSkillReportKnowledgeReadiness from '@/components/cinematic/AipSkillReportKnowledgeReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1401,6 +1402,9 @@ function App() {
 
             {/* F222 (overnight 2026-10-01): Contact × Graph Community × IntelProfile Network Actor Intelligence Map (NCAIM) */}
             <ContactGraphIntelMap />
+
+            {/* F223 (overnight 2026-10-01): AIP Skill × Report × Knowledge Multi-Domain Intelligence Readiness (MDIRS) */}
+            <AipSkillReportKnowledgeReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -289,6 +289,7 @@ import { isSacmapQuery, buildSacmapScript } from "./InvestmentKnowledgeTaskSwarm
 import { isSrtmecQuery, buildSrtmecScript } from "./ScenarioReportTaskMissionMap";
 import { isTaamQuery, buildTaamScript } from "./ThreatActorActivityMonitor";
 import { isNcaimQuery, buildNcaimScript } from "./ContactGraphIntelMap";
+import { isMdirsQuery, buildMdirsScript } from "./AipSkillReportKnowledgeReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2803,6 +2804,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ncaim-toggle"));
       let script = "";
       try { script = await buildNcaimScript(); } catch { script = "NCAIM Network Actor Intelligence Map online, sir. Cross-referencing contacts against graph community clusters and intel actor profiles to identify unmapped contacts with no network community or intelligence profile association."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMdirsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mdirs-toggle"));
+      let script = "";
+      try { script = await buildMdirsScript(); } catch { script = "MDIRS Multi-Domain Intelligence Readiness online, sir. Cross-referencing AIP skills against intelligence reports and knowledge base articles to surface undocumented capabilities with no operational or knowledge base coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
