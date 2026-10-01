@@ -299,6 +299,7 @@ import { isWetmatQuery, buildWetmatScript } from "./WorldEventThreatMatrix";
 import { isDarinexQuery, buildDarinexScript } from "./DatasetSkillReportNexus";
 import { isCkoeabQuery, buildCkoeabScript } from "./ContactKnowledgeOpsAwarenessBridge";
 import { isIticmapQuery, buildIticmapScript } from "./IntelProfileTaskInvestigationMatrix";
+import { isOrcnexQuery, buildOrcnexScript } from "./TaskKnowledgeSkillNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2897,6 +2898,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iticmap-toggle"));
       let script = "";
       try { script = await buildIticmapScript(); } catch { script = "ITICMAP Intel Profile Coverage Matrix online, sir. Cross-referencing intel profiles against operational tasks and active investigations to identify untracked intelligence gaps requiring immediate assignment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F233: Task × Knowledge × AIP Skill Operational Readiness Coverage Nexus — open ORCNEX panel + speak readiness brief.
+    if (isOrcnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:orcnex-toggle"));
+      let script = "";
+      try { script = await buildOrcnexScript(); } catch { script = "ORCNEX Operational Readiness Coverage Nexus online, sir. Cross-referencing active tasks against knowledge articles and AIP skills to identify operationally unsupported tasks requiring immediate coverage assignment."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
