@@ -465,6 +465,7 @@ import IntelProfileResponseNexus from '@/components/cinematic/IntelProfileRespon
 import RiskSignalMitigationNexus from '@/components/cinematic/RiskSignalMitigationNexus';
 import TaskSwarmInvestmentResourceNexus from '@/components/cinematic/TaskSwarmInvestmentResourceNexus';
 import OpsSkillContactAlignment from '@/components/cinematic/OpsSkillContactAlignment';
+import SwarmIntelReportNexus from '@/components/cinematic/SwarmIntelReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1471,6 +1472,9 @@ function App() {
 
             {/* F240 (overnight 2026-10-01): Ops Event × AIP Skill × Contact Operational Response Alignment (OASALIGN) */}
             <OpsSkillContactAlignment />
+
+            {/* F241 (overnight 2026-10-01): SwarmJob × IntelProfile × Report Intelligence Production Assessment (IPASSESS) */}
+            <SwarmIntelReportNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>

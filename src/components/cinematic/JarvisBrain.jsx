@@ -307,6 +307,7 @@ import { isIrcnexQuery, buildIrcnexScript } from "./IntelProfileResponseNexus";
 import { isTminexQuery, buildTminexScript } from "./RiskSignalMitigationNexus";
 import { isTrpinQuery, buildTrpinScript } from "./TaskSwarmInvestmentResourceNexus";
 import { isOasalignQuery, buildOasalignScript } from "./OpsSkillContactAlignment";
+import { isIpassessQuery, buildIpassessScript } from "./SwarmIntelReportNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2977,6 +2978,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:oasalign-toggle"));
       let script = "";
       try { script = await buildOasalignScript(); } catch { script = "Operational Response Alignment online, sir. Cross-referencing ops events against AIP skills and contacts to identify unaligned response gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F241: SwarmJob × IntelProfile × Report Intelligence Production Assessment — open IPASSESS panel + speak production brief.
+    if (isIpassessQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipassess-toggle"));
+      let script = "";
+      try { script = await buildIpassessScript(); } catch { script = "Intelligence Production Assessment online, sir. Cross-referencing swarm jobs against intel profiles and reports to identify production gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
