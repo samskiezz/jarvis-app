@@ -301,6 +301,7 @@ import { isCkoeabQuery, buildCkoeabScript } from "./ContactKnowledgeOpsAwareness
 import { isIticmapQuery, buildIticmapScript } from "./IntelProfileTaskInvestigationMatrix";
 import { isOrcnexQuery, buildOrcnexScript } from "./TaskKnowledgeSkillNexus";
 import { isTdrmapQuery, buildTdrmapScript } from "./IntelProfileDataScenarioMap";
+import { isSmrnexQuery, buildSmrnexScript } from "./SwarmReportScenarioNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2917,6 +2918,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tdrmap-toggle"));
       let script = "";
       try { script = await buildTdrmapScript(); } catch { script = "TDRMAP Threat Data Readiness Map online, sir. Cross-referencing intel actor profiles against datasets and threat scenarios to identify actor intelligence blind spots requiring immediate data and scenario assignment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F235: SwarmJob × Report × Scenario Mission Coverage Nexus — open SMRNEX panel + speak coverage brief.
+    if (isSmrnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:smrnex-toggle"));
+      let script = "";
+      try { script = await buildSmrnexScript(); } catch { script = "SMRNEX Mission Coverage Nexus online, sir. Cross-referencing swarm jobs against intelligence reports and mission scenarios to identify mission coverage gaps requiring immediate report and scenario assignment."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

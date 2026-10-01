@@ -459,6 +459,7 @@ import ContactKnowledgeOpsAwarenessBridge from '@/components/cinematic/ContactKn
 import IntelProfileTaskInvestigationMatrix from '@/components/cinematic/IntelProfileTaskInvestigationMatrix';
 import TaskKnowledgeSkillNexus from '@/components/cinematic/TaskKnowledgeSkillNexus';
 import IntelProfileDataScenarioMap from '@/components/cinematic/IntelProfileDataScenarioMap';
+import SwarmReportScenarioNexus from '@/components/cinematic/SwarmReportScenarioNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1447,6 +1448,9 @@ function App() {
 
             {/* F234 (overnight 2026-10-01): IntelProfile × Dataset × Scenario Threat Data Readiness Map (TDRMAP) */}
             <IntelProfileDataScenarioMap />
+
+            {/* F235 (overnight 2026-10-01): SwarmJob × Report × Scenario Mission Coverage Nexus (SMRNEX) */}
+            <SwarmReportScenarioNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
