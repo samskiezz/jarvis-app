@@ -288,6 +288,7 @@ import { isCoedrnQuery, buildCoedrnScript } from "./ContactOpsDataRiskNexus";
 import { isSacmapQuery, buildSacmapScript } from "./InvestmentKnowledgeTaskSwarmMap";
 import { isSrtmecQuery, buildSrtmecScript } from "./ScenarioReportTaskMissionMap";
 import { isTaamQuery, buildTaamScript } from "./ThreatActorActivityMonitor";
+import { isNcaimQuery, buildNcaimScript } from "./ContactGraphIntelMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2794,6 +2795,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:taam-toggle"));
       let script = "";
       try { script = await buildTaamScript(); } catch { script = "TAAM Threat Actor Activity Monitor online, sir. Cross-referencing intel profiles against operational events and knowledge base articles to identify dark threat actors with no operational tracking or knowledge coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isNcaimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ncaim-toggle"));
+      let script = "";
+      try { script = await buildNcaimScript(); } catch { script = "NCAIM Network Actor Intelligence Map online, sir. Cross-referencing contacts against graph community clusters and intel actor profiles to identify unmapped contacts with no network community or intelligence profile association."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

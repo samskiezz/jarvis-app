@@ -446,6 +446,7 @@ import ContactOpsDataRiskNexus from '@/components/cinematic/ContactOpsDataRiskNe
 import InvestmentKnowledgeTaskSwarmMap from '@/components/cinematic/InvestmentKnowledgeTaskSwarmMap';
 import ScenarioReportTaskMissionMap from '@/components/cinematic/ScenarioReportTaskMissionMap';
 import ThreatActorActivityMonitor from '@/components/cinematic/ThreatActorActivityMonitor';
+import ContactGraphIntelMap from '@/components/cinematic/ContactGraphIntelMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1397,6 +1398,9 @@ function App() {
 
             {/* F221 (overnight 2026-10-01): IntelProfile × Ops Event × Knowledge Threat Actor Activity Monitor (TAAM) */}
             <ThreatActorActivityMonitor />
+
+            {/* F222 (overnight 2026-10-01): Contact × Graph Community × IntelProfile Network Actor Intelligence Map (NCAIM) */}
+            <ContactGraphIntelMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
