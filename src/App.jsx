@@ -450,6 +450,7 @@ import ContactGraphIntelMap from '@/components/cinematic/ContactGraphIntelMap';
 import AipSkillReportKnowledgeReadiness from '@/components/cinematic/AipSkillReportKnowledgeReadiness';
 import OpsEventIntegratedResponseMap from '@/components/cinematic/OpsEventIntegratedResponseMap';
 import KnowledgeRiskScenarioDefMap from '@/components/cinematic/KnowledgeRiskScenarioDefMap';
+import OperationalMeshCoverageMap from '@/components/cinematic/OperationalMeshCoverageMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1413,6 +1414,9 @@ function App() {
 
             {/* F225 (overnight 2026-10-01): Knowledge × RiskSignal × Scenario Defensive Coverage Map (KRSDEF) */}
             <KnowledgeRiskScenarioDefMap />
+
+            {/* F226 (overnight 2026-10-01): Task × Graph Community × SwarmJob Operational Mesh Coverage Map (OMCMAP) */}
+            <OperationalMeshCoverageMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

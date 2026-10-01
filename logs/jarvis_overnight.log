@@ -217,3 +217,4 @@
 2026-10-01 F223 MDIRS — AipSkillReportKnowledgeReadiness.jsx created; /v1/aip/skill × /v1/reports × /knowledge/ cross-ref; isMdirsQuery+buildMdirsScript wired in JarvisBrain.jsx; mounted in App.jsx; build verified exit 0
 [2026-10-01] F224 OpsEventIntegratedResponseMap.jsx — Ops Event × Contact × Investment × Scenario IRCMAP; build exit 0
 [2026-10-01] F225 KnowledgeRiskScenarioDefMap.jsx — Knowledge×RiskSignal×Scenario KRSDEF; isKrsdefQuery+buildKrsdefScript wired in JarvisBrain.jsx; build exit 0
+[2026-10-01] F226 OperationalMeshCoverageMap.jsx (OMCMAP): Task × Graph Community × SwarmJob operational mesh coverage map; FULLY_MESHED/COMMUNITY_BACKED/SWARM_DRIVEN/ISOLATED classification; wired in App.jsx + JarvisBrain.jsx; build exit 0

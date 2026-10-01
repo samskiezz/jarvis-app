@@ -292,6 +292,7 @@ import { isNcaimQuery, buildNcaimScript } from "./ContactGraphIntelMap";
 import { isMdirsQuery, buildMdirsScript } from "./AipSkillReportKnowledgeReadiness";
 import { isIrcmapQuery, buildIrcmapScript } from "./OpsEventIntegratedResponseMap";
 import { isKrsdefQuery, buildKrsdefScript } from "./KnowledgeRiskScenarioDefMap";
+import { isOmcmapQuery, buildOmcmapScript } from "./OperationalMeshCoverageMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2830,6 +2831,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:krsdef-toggle"));
       let script = "";
       try { script = await buildKrsdefScript(); } catch { script = "KRSDEF Defensive Coverage Map online, sir. Cross-referencing knowledge base articles against risk signals and scenario playbooks to surface defensive intelligence gaps requiring attention."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOmcmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:omcmap-toggle"));
+      let script = "";
+      try { script = await buildOmcmapScript(); } catch { script = "OMCMAP Operational Mesh Coverage Map online, sir. Cross-referencing active tasks against graph community clusters and swarm jobs to surface operational mesh gaps where tasks lack both network intelligence and automation coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
