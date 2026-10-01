@@ -452,6 +452,7 @@ import OpsEventIntegratedResponseMap from '@/components/cinematic/OpsEventIntegr
 import KnowledgeRiskScenarioDefMap from '@/components/cinematic/KnowledgeRiskScenarioDefMap';
 import OperationalMeshCoverageMap from '@/components/cinematic/OperationalMeshCoverageMap';
 import DatasetGraphIntelMap from '@/components/cinematic/DatasetGraphIntelMap';
+import OpsEventContactKnowledgeMap from '@/components/cinematic/OpsEventContactKnowledgeMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1421,6 +1422,9 @@ function App() {
 
             {/* F227 (overnight 2026-10-01): Dataset × Graph Community × Knowledge × Investigation Coverage Intelligence Map (DGKIMAP) */}
             <DatasetGraphIntelMap />
+
+            {/* F228 (overnight 2026-10-01): Ops Event × Contact × Knowledge Situational Awareness Map (OCASAM) */}
+            <OpsEventContactKnowledgeMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

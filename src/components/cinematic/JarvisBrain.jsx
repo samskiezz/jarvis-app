@@ -294,6 +294,7 @@ import { isIrcmapQuery, buildIrcmapScript } from "./OpsEventIntegratedResponseMa
 import { isKrsdefQuery, buildKrsdefScript } from "./KnowledgeRiskScenarioDefMap";
 import { isOmcmapQuery, buildOmcmapScript } from "./OperationalMeshCoverageMap";
 import { isDgkimapQuery, buildDgkimapScript } from "./DatasetGraphIntelMap";
+import { isOcasamQuery, buildOcasamScript } from "./OpsEventContactKnowledgeMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2848,6 +2849,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:dgkimap-toggle"));
       let script = "";
       try { script = await buildDgkimapScript(); } catch { script = "DGKIMAP Dataset Graph Intelligence Coverage Map online, sir. Cross-referencing datasets against graph community clusters, knowledge base articles, and active investigations to surface dark datasets with no intelligence coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOcasamQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ocasam-toggle"));
+      let script = "";
+      try { script = await buildOcasamScript(); } catch { script = "OCASAM Ops Event Situational Awareness Map online, sir. Cross-referencing operational events against contacts and knowledge base articles to surface blind events with no contact attribution and no knowledge coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
