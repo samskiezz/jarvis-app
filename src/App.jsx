@@ -448,6 +448,7 @@ import ScenarioReportTaskMissionMap from '@/components/cinematic/ScenarioReportT
 import ThreatActorActivityMonitor from '@/components/cinematic/ThreatActorActivityMonitor';
 import ContactGraphIntelMap from '@/components/cinematic/ContactGraphIntelMap';
 import AipSkillReportKnowledgeReadiness from '@/components/cinematic/AipSkillReportKnowledgeReadiness';
+import OpsEventIntegratedResponseMap from '@/components/cinematic/OpsEventIntegratedResponseMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1405,6 +1406,9 @@ function App() {
 
             {/* F223 (overnight 2026-10-01): AIP Skill × Report × Knowledge Multi-Domain Intelligence Readiness (MDIRS) */}
             <AipSkillReportKnowledgeReadiness />
+
+            {/* F224 (overnight 2026-10-01): Ops Event × Contact × Investment × Scenario Integrated Response Map (IRCMAP) */}
+            <OpsEventIntegratedResponseMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
