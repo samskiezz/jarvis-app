@@ -305,6 +305,7 @@ import { isSmrnexQuery, buildSmrnexScript } from "./SwarmReportScenarioNexus";
 import { isGaccovQuery, buildGaccovScript } from "./GraphAnnotationSkillContactBridge";
 import { isIrcnexQuery, buildIrcnexScript } from "./IntelProfileResponseNexus";
 import { isTminexQuery, buildTminexScript } from "./RiskSignalMitigationNexus";
+import { isTrpinQuery, buildTrpinScript } from "./TaskSwarmInvestmentResourceNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2957,6 +2958,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tminex-toggle"));
       let script = "";
       try { script = await buildTminexScript(); } catch { script = "Threat Mitigation Nexus online, sir. Cross-referencing risk signals against knowledge articles, contacts, and datasets to identify unmitigated threats."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F239: Task × SwarmJob × Investment Resource Priority Nexus — open TRPIN panel + speak resource brief.
+    if (isTrpinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trpin-toggle"));
+      let script = "";
+      try { script = await buildTrpinScript(); } catch { script = "Task Resource Priority Nexus online, sir. Cross-referencing tasks against swarm jobs and investments to identify unfunded operational gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

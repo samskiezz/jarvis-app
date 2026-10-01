@@ -230,3 +230,4 @@
 [2026-10-01] F236 DONE — GraphAnnotationSkillContactBridge.jsx (GACCOV); parallel-fetches /v1/graph/annotations + /v1/aip/skill + /entities/Contact; 4-class FULLY_COVERED/SKILL_ONLY/CONTACT_LINKED/UNCHARTED; imported+mounted in App.jsx; isGaccovQuery+buildGaccovScript wired in JarvisBrain.jsx; build verified exit 0
 2026-10-01 F237 IRCNEX: IntelProfileResponseNexus.jsx — Intel Profile × Contact × Investigation × Ops Event Response Nexus; build exit 0
 2026-10-01 F238 TMINEX RiskSignalMitigationNexus.jsx — RiskSignal×Knowledge×Contact×Dataset mitigation nexus; BTN_LEFT=1074520, zIndex=297; classifies FULLY_MITIGATED/DUAL_COVERED/SINGLE_LINKED/UNMITIGATED; build exit 0
+[2026-10-01] F239 TaskSwarmInvestmentResourceNexus.jsx — Task×SwarmJob×Investment resource classification (FULLY_RESOURCED/SWARM_ONLY/FUNDED_ONLY/UNFUNDED); ◈ TRPIN button; isTrpinQuery+buildTrpinScript wired in JarvisBrain.jsx; build exit 0

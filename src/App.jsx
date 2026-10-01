@@ -463,6 +463,7 @@ import SwarmReportScenarioNexus from '@/components/cinematic/SwarmReportScenario
 import GraphAnnotationSkillContactBridge from '@/components/cinematic/GraphAnnotationSkillContactBridge';
 import IntelProfileResponseNexus from '@/components/cinematic/IntelProfileResponseNexus';
 import RiskSignalMitigationNexus from '@/components/cinematic/RiskSignalMitigationNexus';
+import TaskSwarmInvestmentResourceNexus from '@/components/cinematic/TaskSwarmInvestmentResourceNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1463,6 +1464,9 @@ function App() {
 
             {/* F238 (overnight 2026-10-01): RiskSignal × Knowledge × Contact × Dataset Threat Mitigation Intelligence Nexus (TMINEX) */}
             <RiskSignalMitigationNexus />
+
+            {/* F239 (overnight 2026-10-01): Task × SwarmJob × Investment Resource Priority Nexus (TRPIN) */}
+            <TaskSwarmInvestmentResourceNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
