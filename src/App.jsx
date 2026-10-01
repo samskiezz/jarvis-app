@@ -443,6 +443,7 @@ import GraphAnnotationRiskIntelNexus from '@/components/cinematic/GraphAnnotatio
 import TaskReportKnowledgeReadiness from '@/components/cinematic/TaskReportKnowledgeReadiness';
 import InvestigationNetworkCoverageMap from '@/components/cinematic/InvestigationNetworkCoverageMap';
 import ContactOpsDataRiskNexus from '@/components/cinematic/ContactOpsDataRiskNexus';
+import InvestmentKnowledgeTaskSwarmMap from '@/components/cinematic/InvestmentKnowledgeTaskSwarmMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1388,6 +1389,7 @@ function App() {
             <InvestigationNetworkCoverageMap />
             {/* F218 (overnight 2026-09-30): Contact × Ops Event × Dataset × RiskSignal Operational Exposure Nexus (COEDRN) */}
             <ContactOpsDataRiskNexus />
+            <InvestmentKnowledgeTaskSwarmMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
