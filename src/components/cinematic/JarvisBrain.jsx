@@ -308,6 +308,7 @@ import { isTminexQuery, buildTminexScript } from "./RiskSignalMitigationNexus";
 import { isTrpinQuery, buildTrpinScript } from "./TaskSwarmInvestmentResourceNexus";
 import { isOasalignQuery, buildOasalignScript } from "./OpsSkillContactAlignment";
 import { isIpassessQuery, buildIpassessScript } from "./SwarmIntelReportNexus";
+import { isIskrnexQuery, buildIskrnexScript } from "./InvestigationScenarioKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2987,6 +2988,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipassess-toggle"));
       let script = "";
       try { script = await buildIpassessScript(); } catch { script = "Intelligence Production Assessment online, sir. Cross-referencing swarm jobs against intel profiles and reports to identify production gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F242: Investigation × Scenario × Knowledge Intelligence Response Nexus — open ISKRNEX panel + speak brief.
+    if (isIskrnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iskrnex-toggle"));
+      let script = "";
+      try { script = await buildIskrnexScript(); } catch { script = "Intelligence Response Nexus online, sir. Cross-referencing investigations against scenarios and knowledge articles to identify uncovered response gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
