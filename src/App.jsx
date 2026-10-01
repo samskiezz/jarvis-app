@@ -462,6 +462,7 @@ import IntelProfileDataScenarioMap from '@/components/cinematic/IntelProfileData
 import SwarmReportScenarioNexus from '@/components/cinematic/SwarmReportScenarioNexus';
 import GraphAnnotationSkillContactBridge from '@/components/cinematic/GraphAnnotationSkillContactBridge';
 import IntelProfileResponseNexus from '@/components/cinematic/IntelProfileResponseNexus';
+import RiskSignalMitigationNexus from '@/components/cinematic/RiskSignalMitigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1459,6 +1460,9 @@ function App() {
 
             {/* F237 (overnight 2026-10-01): Intel Profile × Contact × Investigation × Ops Event Response Nexus (IRCNEX) */}
             <IntelProfileResponseNexus />
+
+            {/* F238 (overnight 2026-10-01): RiskSignal × Knowledge × Contact × Dataset Threat Mitigation Intelligence Nexus (TMINEX) */}
+            <RiskSignalMitigationNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>

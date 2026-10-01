@@ -304,6 +304,7 @@ import { isTdrmapQuery, buildTdrmapScript } from "./IntelProfileDataScenarioMap"
 import { isSmrnexQuery, buildSmrnexScript } from "./SwarmReportScenarioNexus";
 import { isGaccovQuery, buildGaccovScript } from "./GraphAnnotationSkillContactBridge";
 import { isIrcnexQuery, buildIrcnexScript } from "./IntelProfileResponseNexus";
+import { isTminexQuery, buildTminexScript } from "./RiskSignalMitigationNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2947,6 +2948,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ircnex-toggle"));
       let script = "";
       try { script = await buildIrcnexScript(); } catch { script = "Intel Profile Response Nexus online, sir. Cross-referencing threat actor profiles against contacts, investigations, and ops events to identify actors with no active response coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F238: Threat Mitigation Intelligence Nexus — open TMINEX panel + speak mitigation brief.
+    if (isTminexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tminex-toggle"));
+      let script = "";
+      try { script = await buildTminexScript(); } catch { script = "Threat Mitigation Nexus online, sir. Cross-referencing risk signals against knowledge articles, contacts, and datasets to identify unmitigated threats."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
