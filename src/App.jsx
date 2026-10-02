@@ -483,6 +483,7 @@ import GraphCommunityInvestmentOpsNexus from '@/components/cinematic/GraphCommun
 import TaskIntelReportClosure from '@/components/cinematic/TaskIntelReportClosure';
 import SwarmRiskKnowledgeThreatReview from '@/components/cinematic/SwarmRiskKnowledgeThreatReview';
 import GraphNodeOperationalCoverage from '@/components/cinematic/GraphNodeOperationalCoverage';
+import RiskSignalAutomatedResponseCoverage from '@/components/cinematic/RiskSignalAutomatedResponseCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1537,6 +1538,9 @@ function App() {
 
             {/* F258 (overnight 2026-10-02): Graph Node × Contact × Task Operational Coverage — GNOCOV button; /v1/graph/centrality × /entities/Contact × /entities/Task */}
             <GraphNodeOperationalCoverage />
+
+            {/* F259 (overnight 2026-10-02): RiskSignal × AIP Skill × Ops Event Automated Response Coverage — ARSCOV button; /entities/RiskSignal × /v1/aip/skill × /v1/ops/events */}
+            <RiskSignalAutomatedResponseCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

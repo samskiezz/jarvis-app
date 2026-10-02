@@ -250,3 +250,4 @@
 [2026-10-02] F256 TIPREX: Task × IntelProfile × Report Intelligence Closure Review — new TaskIntelReportClosure.jsx; /entities/Task × /entities/IntelProfile × /v1/reports; FULLY_CLOSED/REPORTED_ONLY/PROFILED_ONLY/OPEN_LOOP classification; red pulse on OPEN_LOOP; isTiprexQuery+buildTiprexScript wired in JarvisBrain+App.jsx; build exit 0
 [2026-10-02] F257 TEIXREV — SwarmRiskKnowledgeThreatReview.jsx created; mounted App.jsx; JarvisBrain wired isTeixrevQuery+buildTeixrevScript; build exit 0
 [2026-10-02] F258 Graph Node × Contact × Task Operational Coverage (GNOCOV): new GraphNodeOperationalCoverage.jsx; imported+mounted in App.jsx; isGnocovQuery+buildGnocovScript wired in JarvisBrain.jsx; build verified exit 0
+[2026-10-02] F259 RiskSignalAutomatedResponseCoverage.jsx — ARSCOV panel; /entities/RiskSignal × /v1/aip/skill × /v1/ops/events; FULLY_RESPONDED/AUTOMATED_ONLY/EVENT_DRIVEN/UNRESPONDED; build exit 0
