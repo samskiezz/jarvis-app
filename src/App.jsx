@@ -484,6 +484,7 @@ import TaskIntelReportClosure from '@/components/cinematic/TaskIntelReportClosur
 import SwarmRiskKnowledgeThreatReview from '@/components/cinematic/SwarmRiskKnowledgeThreatReview';
 import GraphNodeOperationalCoverage from '@/components/cinematic/GraphNodeOperationalCoverage';
 import RiskSignalAutomatedResponseCoverage from '@/components/cinematic/RiskSignalAutomatedResponseCoverage';
+import FullPersonnelAlertCoverage from '@/components/cinematic/FullPersonnelAlertCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1541,6 +1542,9 @@ function App() {
 
             {/* F259 (overnight 2026-10-02): RiskSignal × AIP Skill × Ops Event Automated Response Coverage — ARSCOV button; /entities/RiskSignal × /v1/aip/skill × /v1/ops/events */}
             <RiskSignalAutomatedResponseCoverage />
+
+            {/* F260 (overnight 2026-10-02): Contact × RiskSignal × Knowledge × Ops Event Full Personnel Alert Coverage — FPACOV button; /entities/Contact × /entities/RiskSignal × /knowledge/ × /v1/ops/events */}
+            <FullPersonnelAlertCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

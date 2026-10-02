@@ -326,6 +326,7 @@ import { isTiprexQuery, buildTiprexScript } from "./TaskIntelReportClosure";
 import { isTeixrevQuery, buildTeixrevScript } from "./SwarmRiskKnowledgeThreatReview";
 import { isGnocovQuery, buildGnocovScript } from "./GraphNodeOperationalCoverage";
 import { isArscovQuery, buildArscovScript } from "./RiskSignalAutomatedResponseCoverage";
+import { isFpacovQuery, buildFpacovScript } from "./FullPersonnelAlertCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3152,6 +3153,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:arscov-toggle"));
       let script = "";
       try { script = await buildArscovScript(); } catch { script = "ARSCOV online, sir. Correlating risk signals against AIP skills and ops events for automated response coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isFpacovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:fpacov-toggle"));
+      let script = "";
+      try { script = await buildFpacovScript(); } catch { script = "FPACOV online, sir. Correlating contacts against risk signals, knowledge entries, and ops events for full personnel alert coverage analysis."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
