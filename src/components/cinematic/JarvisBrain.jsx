@@ -313,6 +313,7 @@ import { isTrmeshQuery, buildTrmeshScript } from "./ThreatResponseMesh";
 import { isDrascovQuery, buildDrascovScript } from "./DatasetReportSkillRiskCoverage";
 import { isIpoestRQuery, buildIpoestRScript } from "./IntelProfileOpsThreatTracker";
 import { isTrocasQuery, buildTrocasScript } from "./TaskReportInvestigationClosure";
+import { isFracmapQuery, buildFracmapScript } from "./OpsAlertCommunityInvestmentMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3035,6 +3036,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:trocas-toggle"));
       let script = "";
       try { script = await buildTrocasScript(); } catch { script = "Operational Closure Assessment online, sir. Cross-referencing active tasks against intelligence reports and investigations to identify open-loop tasks with no closure coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isFracmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:fracmap-toggle"));
+      let script = "";
+      try { script = await buildFracmapScript(); } catch { script = "Financial Risk Alert Map online, sir. Cross-referencing operational alerts against graph communities and portfolio investments to identify alerts with no financial context coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

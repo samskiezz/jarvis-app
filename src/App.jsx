@@ -471,6 +471,7 @@ import ThreatResponseMesh from '@/components/cinematic/ThreatResponseMesh';
 import DatasetReportSkillRiskCoverage from '@/components/cinematic/DatasetReportSkillRiskCoverage';
 import IntelProfileOpsThreatTracker from '@/components/cinematic/IntelProfileOpsThreatTracker';
 import TaskReportInvestigationClosure from '@/components/cinematic/TaskReportInvestigationClosure';
+import OpsAlertCommunityInvestmentMap from '@/components/cinematic/OpsAlertCommunityInvestmentMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1495,6 +1496,8 @@ function App() {
 
             {/* F246 (overnight 2026-10-02): Task × Report × Investigation Operational Closure Assessment — TROCAS button; /entities/Task × /v1/reports × /v1/investigations */}
             <TaskReportInvestigationClosure />
+            {/* F247 (overnight 2026-10-02): Ops Alert × Graph Community × Investment Financial Risk Alert Map — FRACMAP button; /v1/ops/alerts × /v1/graph/communities × /entities/Investment */}
+            <OpsAlertCommunityInvestmentMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
