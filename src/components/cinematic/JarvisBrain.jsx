@@ -316,6 +316,7 @@ import { isTrocasQuery, buildTrocasScript } from "./TaskReportInvestigationClosu
 import { isFracmapQuery, buildFracmapScript } from "./OpsAlertCommunityInvestmentMap";
 import { isKoatracQuery, buildKoatracScript } from "./KnowledgeOpsAlertSkillCoverage";
 import { isRsirixQuery, buildRsirixScript } from "./RiskSignalSkillInvestigationIndex";
+import { isCsdcovQuery, buildCsdcovScript } from "./ContactScenarioDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3062,6 +3063,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsirix-toggle"));
       let script = "";
       try { script = await buildRsirixScript(); } catch { script = "RSIRIX online, sir. Cross-referencing active risk signals against AIP automation skills and open investigations to identify threats with no response coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCsdcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csdcov-toggle"));
+      let script = "";
+      try { script = await buildCsdcovScript(); } catch { script = "CSDCOV online, sir. Cross-referencing contacts against operational scenarios and datasets to assess intelligence coverage gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

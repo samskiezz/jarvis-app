@@ -474,6 +474,7 @@ import TaskReportInvestigationClosure from '@/components/cinematic/TaskReportInv
 import OpsAlertCommunityInvestmentMap from '@/components/cinematic/OpsAlertCommunityInvestmentMap';
 import KnowledgeOpsAlertSkillCoverage from '@/components/cinematic/KnowledgeOpsAlertSkillCoverage';
 import RiskSignalSkillInvestigationIndex from '@/components/cinematic/RiskSignalSkillInvestigationIndex';
+import ContactScenarioDatasetCoverage from '@/components/cinematic/ContactScenarioDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1504,6 +1505,8 @@ function App() {
             <KnowledgeOpsAlertSkillCoverage />
             {/* F249 (overnight 2026-10-02): RiskSignal × AIP Skill × Investigation Intelligence Response Index — RSIRIX button; /entities/RiskSignal × /v1/aip/skill × /v1/investigations */}
             <RiskSignalSkillInvestigationIndex />
+            {/* F250 (overnight 2026-10-02): Contact × Scenario × Dataset Operational Intelligence Coverage — CSDCOV button; /entities/Contact × /v1/scenario/list × /v1/datasets */}
+            <ContactScenarioDatasetCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
