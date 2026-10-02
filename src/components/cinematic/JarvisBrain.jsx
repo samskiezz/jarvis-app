@@ -310,6 +310,7 @@ import { isOasalignQuery, buildOasalignScript } from "./OpsSkillContactAlignment
 import { isIpassessQuery, buildIpassessScript } from "./SwarmIntelReportNexus";
 import { isIskrnexQuery, buildIskrnexScript } from "./InvestigationScenarioKnowledgeNexus";
 import { isTrmeshQuery, buildTrmeshScript } from "./ThreatResponseMesh";
+import { isDrascovQuery, buildDrascovScript } from "./DatasetReportSkillRiskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3007,6 +3008,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:trmesh-toggle"));
       let script = "";
       try { script = await buildTrmeshScript(); } catch { script = "Threat Response Mesh online, sir. Cross-referencing risk signals against contacts and response scenarios to identify uncovered threat response gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F244: Dataset × Report × AIP Skill × RiskSignal Intelligence Production Coverage — open DRASCOV panel + speak brief.
+    if (isDrascovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:drascov-toggle"));
+      let script = "";
+      try { script = await buildDrascovScript(); } catch { script = "Intelligence Production Coverage online, sir. Cross-referencing datasets against reports, AIP skills, and risk signals to identify uncovered intelligence production gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
