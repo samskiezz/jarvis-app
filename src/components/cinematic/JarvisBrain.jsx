@@ -327,6 +327,7 @@ import { isTeixrevQuery, buildTeixrevScript } from "./SwarmRiskKnowledgeThreatRe
 import { isGnocovQuery, buildGnocovScript } from "./GraphNodeOperationalCoverage";
 import { isArscovQuery, buildArscovScript } from "./RiskSignalAutomatedResponseCoverage";
 import { isFpacovQuery, buildFpacovScript } from "./FullPersonnelAlertCoverage";
+import { isIdrnQuery, buildIdrnScript } from "./InvestmentDatasetRiskNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3161,6 +3162,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:fpacov-toggle"));
       let script = "";
       try { script = await buildFpacovScript(); } catch { script = "FPACOV online, sir. Correlating contacts against risk signals, knowledge entries, and ops events for full personnel alert coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIdrnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:idrn-toggle"));
+      let script = "";
+      try { script = await buildIdrnScript(); } catch { script = "IDRN online, sir. Correlating investments against datasets and risk signals for cross-coverage nexus analysis."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

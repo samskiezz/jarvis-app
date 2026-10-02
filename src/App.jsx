@@ -485,6 +485,7 @@ import SwarmRiskKnowledgeThreatReview from '@/components/cinematic/SwarmRiskKnow
 import GraphNodeOperationalCoverage from '@/components/cinematic/GraphNodeOperationalCoverage';
 import RiskSignalAutomatedResponseCoverage from '@/components/cinematic/RiskSignalAutomatedResponseCoverage';
 import FullPersonnelAlertCoverage from '@/components/cinematic/FullPersonnelAlertCoverage';
+import InvestmentDatasetRiskNexus from '@/components/cinematic/InvestmentDatasetRiskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1545,6 +1546,9 @@ function App() {
 
             {/* F260 (overnight 2026-10-02): Contact × RiskSignal × Knowledge × Ops Event Full Personnel Alert Coverage — FPACOV button; /entities/Contact × /entities/RiskSignal × /knowledge/ × /v1/ops/events */}
             <FullPersonnelAlertCoverage />
+
+            {/* F261 (overnight 2026-10-02): Investment × Dataset × RiskSignal Cross-Coverage Nexus — IDRN button; /entities/Investment × /v1/datasets × /entities/RiskSignal */}
+            <InvestmentDatasetRiskNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
