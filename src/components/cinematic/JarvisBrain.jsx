@@ -318,6 +318,7 @@ import { isKoatracQuery, buildKoatracScript } from "./KnowledgeOpsAlertSkillCove
 import { isRsirixQuery, buildRsirixScript } from "./RiskSignalSkillInvestigationIndex";
 import { isCsdcovQuery, buildCsdcovScript } from "./ContactScenarioDatasetCoverage";
 import { isScknexQuery, buildScknexScript } from "./SwarmContactKnowledgeNexus";
+import { isTfscovQuery, buildTfscovScript } from "./InvestmentScenarioIntelCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3080,6 +3081,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scknex-toggle"));
       let script = "";
       try { script = await buildScknexScript(); } catch { script = "SCKNEX online, sir. Assessing swarm job capability readiness against contacts and knowledge articles."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTfscovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tfscov-toggle"));
+      let script = "";
+      try { script = await buildTfscovScript(); } catch { script = "TFSCOV online, sir. Assessing portfolio investment coverage against threat scenarios and intel profiles."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
