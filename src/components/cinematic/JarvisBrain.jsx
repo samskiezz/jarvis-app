@@ -322,6 +322,7 @@ import { isTfscovQuery, buildTfscovScript } from "./InvestmentScenarioIntelCover
 import { isOkrsriQuery, buildOkrsriScript } from "./OpsEventKnowledgeScenarioReadiness";
 import { isAgdsixQuery, buildAgdsixScript } from "./AipSkillGraphDatasetSaturation";
 import { isGiocnexQuery, buildGiocnexScript } from "./GraphCommunityInvestmentOpsNexus";
+import { isTiprexQuery, buildTiprexScript } from "./TaskIntelReportClosure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3116,6 +3117,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:giocnex-toggle"));
       let script = "";
       try { script = await buildGiocnexScript(); } catch { script = "GIOCNEX online, sir. Correlating graph communities against investments and operational events for coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTiprexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tiprex-toggle"));
+      let script = "";
+      try { script = await buildTiprexScript(); } catch { script = "TIPREX online, sir. Correlating tasks against intel profiles and intelligence reports for closure analysis."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

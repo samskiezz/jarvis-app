@@ -480,6 +480,7 @@ import InvestmentScenarioIntelCoverage from '@/components/cinematic/InvestmentSc
 import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventKnowledgeScenarioReadiness';
 import AipSkillGraphDatasetSaturation from '@/components/cinematic/AipSkillGraphDatasetSaturation';
 import GraphCommunityInvestmentOpsNexus from '@/components/cinematic/GraphCommunityInvestmentOpsNexus';
+import TaskIntelReportClosure from '@/components/cinematic/TaskIntelReportClosure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1526,6 +1527,8 @@ function App() {
 
             {/* F255 (overnight 2026-10-02): Graph Community × Investment × Ops Event Coverage Nexus — GIOCNEX button; /v1/graph/communities × /entities/Investment × /v1/ops/events */}
             <GraphCommunityInvestmentOpsNexus />
+            {/* F256 (overnight 2026-10-02): Task × IntelProfile × Report Intelligence Closure Review — TIPREX button; /entities/Task × /entities/IntelProfile × /v1/reports */}
+            <TaskIntelReportClosure />
 
             <Suspense fallback={<Loading />}>
               <Routes>
