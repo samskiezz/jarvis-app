@@ -477,6 +477,7 @@ import RiskSignalSkillInvestigationIndex from '@/components/cinematic/RiskSignal
 import ContactScenarioDatasetCoverage from '@/components/cinematic/ContactScenarioDatasetCoverage';
 import SwarmContactKnowledgeNexus from '@/components/cinematic/SwarmContactKnowledgeNexus';
 import InvestmentScenarioIntelCoverage from '@/components/cinematic/InvestmentScenarioIntelCoverage';
+import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventKnowledgeScenarioReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1514,6 +1515,9 @@ function App() {
 
             {/* F252 (overnight 2026-10-02): Investment × Scenario × IntelProfile Threat-Funded Scenario Coverage — TFSCOV button; /entities/Investment × /v1/scenario/list × /entities/IntelProfile */}
             <InvestmentScenarioIntelCoverage />
+
+            {/* F253 (overnight 2026-10-02): Ops Events × Knowledge × Scenario Response Readiness Index — OKRSRI button; /v1/ops/events × /knowledge/ × /v1/scenario/list */}
+            <OpsEventKnowledgeScenarioReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>

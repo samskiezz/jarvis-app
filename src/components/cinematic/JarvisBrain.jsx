@@ -319,6 +319,7 @@ import { isRsirixQuery, buildRsirixScript } from "./RiskSignalSkillInvestigation
 import { isCsdcovQuery, buildCsdcovScript } from "./ContactScenarioDatasetCoverage";
 import { isScknexQuery, buildScknexScript } from "./SwarmContactKnowledgeNexus";
 import { isTfscovQuery, buildTfscovScript } from "./InvestmentScenarioIntelCoverage";
+import { isOkrsriQuery, buildOkrsriScript } from "./OpsEventKnowledgeScenarioReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3089,6 +3090,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tfscov-toggle"));
       let script = "";
       try { script = await buildTfscovScript(); } catch { script = "TFSCOV online, sir. Assessing portfolio investment coverage against threat scenarios and intel profiles."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOkrsriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:okrsri-toggle"));
+      let script = "";
+      try { script = await buildOkrsriScript(); } catch { script = "OKRSRI online, sir. Assessing operational event response readiness against knowledge base and scenario playbooks."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

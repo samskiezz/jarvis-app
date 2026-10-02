@@ -1,525 +1,398 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { apiBase } from "@/api/cinematicDataAdapters";
+import { getActiveVoice } from "@/components/cinematic/MultiVoiceToggle";
 
-const CY = "#29E7FF";
-const AM = "#FFB300";
-const GN = "#4ADE80";
-const RD = "#FF4444";
-const PU = "#A78BFA";
+const AM = "#FFB300"; const CY = "#00E5FF"; const GN = "#4CAF50";
+const OR = "#FF9800"; const RD = "#FF3D3D";
+const DIM = "rgba(255,255,255,0.04)"; const BG = "rgba(6,10,18,0.94)";
+const MN = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
 
 const API_KEY =
-  (typeof import.meta !== "undefined" && import.meta.env && import.meta.env.VITE_API_KEY) ||
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_JARVIS_API_KEY) ||
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||
   "dev-key";
 
-const OKSRDY_RE =
-  /\b(oksrdy|ops[._-]?ready|ops[._-]?readiness|ops[._-]?knowledge[._-]?scenario|ops[._-]?event[._-]?readiness|ops[._-]?kb[._-]?scenario|event[._-]?readiness[._-]?map|operational[._-]?readiness|how[._-]?ready[._-]?are[._-]?ops|ops[._-]?coverage[._-]?check)\b/i;
+const REFRESH_MS = 90_000;
+const BTN_LEFT   = 1098400;
+const Z_IDX      = 677;
 
-export function isOksrdyQuery(t) {
-  return OKSRDY_RE.test(t || "");
+const OKRSRI_RE = /\b(okrsri|ops readiness|ops knowledge scenario|event knowledge|event scenario readiness|response readiness|operational readiness index)\b/i;
+export function isOkrsriQuery(t) { return OKRSRI_RE.test(t || ""); }
+
+function tokens(s) {
+  return String(s || "").toLowerCase().split(/[\s,;:|\/\-_]+/).filter(w => w.length > 3);
 }
-
-function tok(s) {
-  return (s || "")
-    .toLowerCase()
-    .replace(/[^a-z0-9]+/g, " ")
-    .trim()
-    .split(/\s+/)
-    .filter((w) => w.length > 2);
-}
-
 function overlap(a, b) {
-  const sa = new Set(tok(a));
-  const sb = tok(b);
-  if (!sa.size || !sb.length) return 0;
-  let hits = 0;
-  for (const w of sb) if (sa.has(w)) hits++;
-  return hits / Math.max(sa.size, sb.length);
+  const sa = new Set(tokens(a));
+  let n = 0;
+  for (const w of tokens(b)) if (sa.has(w)) n++;
+  return n;
 }
 
-function eventHaystack(ev) {
-  return [
-    ev.title, ev.name, ev.description, ev.event_type, ev.category,
-    ev.kind, ev.service, ev.source,
-    ...(Array.isArray(ev.tags) ? ev.tags : []),
-  ].join(" ");
-}
-
-function articleNeedle(a) {
-  return [a.title, a.category, a.summary, a.tags, a.author].join(" ");
-}
-
-function scenarioNeedle(s) {
-  return [
-    s.title, s.name, s.description, s.summary, s.category, s.type,
-    ...(Array.isArray(s.tags) ? s.tags : []),
-  ].join(" ");
-}
-
-function normaliseOpsEvents(raw) {
-  if (!raw) return [];
-  const arr = Array.isArray(raw)
-    ? raw
+function normEvents(raw) {
+  const arr = Array.isArray(raw) ? raw
     : Array.isArray(raw?.events) ? raw.events
-    : Array.isArray(raw?.items)  ? raw.items
     : Array.isArray(raw?.results) ? raw.results
-    : Array.isArray(raw?.data)   ? raw.data
+    : Array.isArray(raw?.data) ? raw.data
     : [];
-  return arr.map((ev, i) => ({
-    id:          ev.id       || String(i),
-    title:       ev.title    || ev.name        || ev.event_type || `Event ${i + 1}`,
-    description: (ev.description || ev.body    || ev.message    || "").toString().slice(0, 300),
-    severity:    ev.severity || ev.level       || ev.priority    || "",
-    category:    ev.category || ev.event_type  || ev.kind        || "",
-    service:     ev.service  || ev.source      || "",
-    tags:        Array.isArray(ev.tags) ? ev.tags.join(" ") : (ev.tags || ""),
-    ts:          ev.timestamp || ev.created_at  || ev.time        || "",
+  return arr.map(e => ({
+    id: e.id || e._id || "",
+    label: e.title || e.name || e.label || e.event_type || String(e.id || ""),
+    description: e.description || e.summary || e.details || "",
+    type: e.type || e.category || e.event_type || "",
+    severity: e.severity || e.level || "",
+    tags: Array.isArray(e.tags) ? e.tags.join(" ") : String(e.tags || ""),
   }));
 }
 
-function normaliseKB(raw) {
-  if (!raw) return [];
-  const arr = Array.isArray(raw)            ? raw
-    : Array.isArray(raw?.articles)          ? raw.articles
-    : Array.isArray(raw?.items)             ? raw.items
-    : Array.isArray(raw?.results)           ? raw.results
-    : Array.isArray(raw?.data)              ? raw.data
+function normKnowledge(raw) {
+  const arr = Array.isArray(raw) ? raw
+    : Array.isArray(raw?.articles) ? raw.articles
+    : Array.isArray(raw?.items) ? raw.items
+    : Array.isArray(raw?.results) ? raw.results
+    : Array.isArray(raw?.data) ? raw.data
     : [];
-  return arr.map((a, i) => ({
-    id:       a.id       || a.slug      || String(i),
-    title:    a.title    || a.name      || `Article ${i + 1}`,
-    category: a.category || a.type      || a.domain || "",
-    summary:  (a.summary || a.content   || a.body || a.description || "").toString().slice(0, 300),
-    tags:     Array.isArray(a.tags) ? a.tags.join(" ") : (a.tags || ""),
-    author:   a.author   || "",
+  return arr.map(k => ({
+    id: k.id || k._id || "",
+    label: k.title || k.name || k.label || String(k.id || ""),
+    description: k.content || k.summary || k.body || k.description || "",
+    category: k.category || k.type || "",
+    tags: Array.isArray(k.tags) ? k.tags.join(" ") : String(k.tags || ""),
   }));
 }
 
-function normaliseScenarios(raw) {
-  if (!raw) return [];
-  if (Array.isArray(raw)) return raw;
-  for (const k of ["scenarios", "items", "results", "data", "records"]) {
-    if (Array.isArray(raw[k])) return raw[k];
-  }
-  return [];
+function normScenarios(raw) {
+  const arr = Array.isArray(raw) ? raw
+    : Array.isArray(raw?.scenarios) ? raw.scenarios
+    : Array.isArray(raw?.results) ? raw.results
+    : Array.isArray(raw?.data) ? raw.data
+    : [];
+  return arr.map(s => ({
+    id: s.id || s._id || "",
+    label: s.name || s.title || s.label || String(s.id || ""),
+    description: s.description || s.summary || s.objective || "",
+    type: s.type || s.category || "",
+    tags: Array.isArray(s.tags) ? s.tags.join(" ") : String(s.tags || ""),
+  }));
 }
 
-function classify(ev, articles, scenarios) {
-  const hay = eventHaystack(ev);
-  const hasKb  = articles .some((a) => overlap(hay, articleNeedle(a))  > 0.12);
-  const hasSc  = scenarios.some((s) => overlap(hay, scenarioNeedle(s)) > 0.12);
-  if (hasKb && hasSc) return "READY";
-  if (hasKb)          return "KB-ONLY";
-  if (hasSc)          return "SCENARIO-ONLY";
-  return "BLIND";
+function classify(evt, knowledge, scenarios) {
+  const hay = evt.label + " " + evt.description + " " + evt.type + " " + evt.tags;
+  const hasKB       = knowledge.some(k => overlap(hay, k.label + " " + k.description + " " + k.category + " " + k.tags) >= 1);
+  const hasScenario = scenarios.some(s => overlap(hay, s.label + " " + s.description + " " + s.type + " " + s.tags) >= 1);
+  if (hasKB && hasScenario) return "FULLY_PREPARED";
+  if (hasKB)                return "KB_ONLY";
+  if (hasScenario)          return "SCENARIO_ONLY";
+  return "UNPREPARED";
 }
 
-function matchedKB(ev, articles) {
-  const hay = eventHaystack(ev);
-  return articles
-    .map((a) => ({ a, sc: overlap(hay, articleNeedle(a)) }))
-    .filter((x) => x.sc > 0.05)
-    .sort((a, b) => b.sc - a.sc)
-    .slice(0, 5);
+function relevance(hay, itemText) {
+  return Math.min(100, overlap(hay, itemText) * 20);
 }
 
-function matchedScenarios(ev, scenarios) {
-  const hay = eventHaystack(ev);
-  return scenarios
-    .map((s) => ({ s, sc: overlap(hay, scenarioNeedle(s)) }))
-    .filter((x) => x.sc > 0.05)
-    .sort((a, b) => b.sc - a.sc)
-    .slice(0, 5);
+const clsColor = cls => ({
+  FULLY_PREPARED: GN,
+  KB_ONLY:        CY,
+  SCENARIO_ONLY:  OR,
+  UNPREPARED:     RD,
+}[cls] || "#888");
+
+const clsLabel = cls => ({
+  FULLY_PREPARED: "FULLY PREPARED",
+  KB_ONLY:        "KB ONLY",
+  SCENARIO_ONLY:  "SCENARIO ONLY",
+  UNPREPARED:     "UNPREPARED",
+}[cls] || cls);
+
+export async function buildOkrsriScript() {
+  const base = apiBase();
+  const hdr = { Authorization: `Bearer ${API_KEY}` };
+  const [evRaw, kbRaw, scRaw] = await Promise.all([
+    fetch(`${base}/v1/ops/events`,    { headers: hdr }).then(r => r.ok ? r.json() : []),
+    fetch(`${base}/knowledge/`,        { headers: hdr }).then(r => r.ok ? r.json() : []),
+    fetch(`${base}/v1/scenario/list`,  { headers: hdr }).then(r => r.ok ? r.json() : []),
+  ]);
+  const events    = normEvents(evRaw);
+  const knowledge = normKnowledge(kbRaw);
+  const scenarios = normScenarios(scRaw);
+  const counts = { FULLY_PREPARED: 0, KB_ONLY: 0, SCENARIO_ONLY: 0, UNPREPARED: 0 };
+  events.forEach(e => counts[classify(e, knowledge, scenarios)]++);
+  return `OKRSRI online, sir. ${events.length} operational events assessed for response readiness. `
+    + `${counts.FULLY_PREPARED} fully prepared (KB + playbook), ${counts.KB_ONLY} knowledge-only, `
+    + `${counts.SCENARIO_ONLY} scenario-only, ${counts.UNPREPARED} unprepared — readiness gaps detected. `
+    + `${knowledge.length} KB articles and ${scenarios.length} scenarios correlated.`;
 }
-
-export async function buildOksrdyScript() {
-  try {
-    const base = apiBase();
-    const hdr = { Authorization: `Bearer ${API_KEY}` };
-    const [evR, kbR, scR] = await Promise.allSettled([
-      fetch(`${base}/v1/ops/events`,    { headers: hdr }).then((r) => r.json()),
-      fetch(`${base}/knowledge/`,        { headers: hdr }).then((r) => r.json()),
-      fetch(`${base}/v1/scenario/list`, { headers: hdr }).then((r) => r.json()),
-    ]);
-    const events    = normaliseOpsEvents(evR.status === "fulfilled" ? evR.value : []).slice(0, 200);
-    const articles  = normaliseKB(kbR.status === "fulfilled" ? kbR.value : []).slice(0, 200);
-    const scenarios = normaliseScenarios(scR.status === "fulfilled" ? scR.value : []).slice(0, 200);
-    const classified = events.map((ev) => ({ ...ev, _class: classify(ev, articles, scenarios) }));
-    const ready    = classified.filter((e) => e._class === "READY").length;
-    const kbOnly   = classified.filter((e) => e._class === "KB-ONLY").length;
-    const scOnly   = classified.filter((e) => e._class === "SCENARIO-ONLY").length;
-    const blind    = classified.filter((e) => e._class === "BLIND").length;
-    const topBlind = classified.filter((e) => e._class === "BLIND").slice(0, 4)
-      .map((e) => e.title).join(", ") || "none";
-    return (
-      `Ops Event × Knowledge × Scenario Readiness: ${events.length} events, ${articles.length} KB articles, ${scenarios.length} scenarios. ` +
-      `${ready} events are FULLY READY (KB + scenario coverage); ${kbOnly} KB-ONLY; ${scOnly} SCENARIO-ONLY; ${blind} BLIND (no coverage). ` +
-      `Top blind events: ${topBlind}. Recommend creating scenarios or KB articles for the blind events.`
-    );
-  } catch (e) {
-    return `Ops readiness assessment failed: ${String(e)}`;
-  }
-}
-
-const TABS = ["ALL", "READY", "KB-ONLY", "SCENARIO-ONLY", "BLIND"];
-
-const chip = (label, color = CY) => (
-  <span
-    style={{
-      display: "inline-block", padding: "1px 6px", borderRadius: 3,
-      border: `1px solid ${color}44`, background: `${color}14`,
-      color, fontSize: 9, letterSpacing: 1, marginRight: 3,
-    }}
-  >{label}</span>
-);
-
-const ScoreBar = ({ sc, color }) => (
-  <div style={{ display: "inline-flex", alignItems: "center", gap: 3, verticalAlign: "middle" }}>
-    <div style={{ width: 52, height: 3, background: "#1a2535", borderRadius: 2, overflow: "hidden" }}>
-      <div style={{ width: `${Math.round(sc * 100)}%`, height: "100%", background: color, borderRadius: 2 }} />
-    </div>
-    <span style={{ color: "#6E8AA0", fontSize: 9 }}>{Math.round(sc * 100)}%</span>
-  </div>
-);
-
-const classColor = (cl) => {
-  if (cl === "READY")           return GN;
-  if (cl === "KB-ONLY")         return CY;
-  if (cl === "SCENARIO-ONLY")   return PU;
-  return RD;
-};
-
-const severityColor = (sv) => {
-  const s = (sv || "").toLowerCase();
-  if (s === "critical" || s === "high") return RD;
-  if (s === "warning" || s === "medium") return AM;
-  if (s === "info" || s === "low") return CY;
-  return "#6E8AA0";
-};
-
-const mono = { fontFamily: "'JetBrains Mono',monospace" };
 
 export default function OpsEventKnowledgeScenarioReadiness() {
-  const [open, setOpen]         = useState(false);
-  const [events, setEvents]     = useState([]);
-  const [articles, setArticles] = useState([]);
+  const [open, setOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [events, setEvents] = useState([]);
+  const [knowledge, setKnowledge] = useState([]);
   const [scenarios, setScenarios] = useState([]);
-  const [loading, setLoading]   = useState(false);
-  const [tab, setTab]           = useState("ALL");
-  const [search, setSearch]     = useState("");
+  const [tab, setTab] = useState("ALL");
+  const [search, setSearch] = useState("");
   const [expanded, setExpanded] = useState(null);
   const [assessing, setAssessing] = useState(false);
-  const [assessText, setAssessText] = useState("");
-  const [err, setErr]           = useState("");
-  const timerRef                = useRef(null);
+  const [brief, setBrief] = useState("");
+  const timer = useRef(null);
 
-  async function load() {
+  const load = useCallback(async () => {
     setLoading(true);
-    setErr("");
     try {
       const base = apiBase();
-      const hdr  = { Authorization: `Bearer ${API_KEY}` };
-      const [evR, kbR, scR] = await Promise.allSettled([
-        fetch(`${base}/v1/ops/events`,    { headers: hdr }).then((r) => r.json()),
-        fetch(`${base}/knowledge/`,        { headers: hdr }).then((r) => r.json()),
-        fetch(`${base}/v1/scenario/list`, { headers: hdr }).then((r) => r.json()),
+      const hdr = { Authorization: `Bearer ${API_KEY}` };
+      const [evRaw, kbRaw, scRaw] = await Promise.all([
+        fetch(`${base}/v1/ops/events`,   { headers: hdr }).then(r => r.ok ? r.json() : []),
+        fetch(`${base}/knowledge/`,       { headers: hdr }).then(r => r.ok ? r.json() : []),
+        fetch(`${base}/v1/scenario/list`, { headers: hdr }).then(r => r.ok ? r.json() : []),
       ]);
-      setEvents(normaliseOpsEvents(evR.status === "fulfilled" ? evR.value : []).slice(0, 200));
-      setArticles(normaliseKB(kbR.status === "fulfilled" ? kbR.value : []).slice(0, 200));
-      setScenarios(normaliseScenarios(scR.status === "fulfilled" ? scR.value : []).slice(0, 200));
-    } catch (e) {
-      setErr(String(e));
-    } finally {
-      setLoading(false);
-    }
-  }
+      setEvents(normEvents(evRaw));
+      setKnowledge(normKnowledge(kbRaw));
+      setScenarios(normScenarios(scRaw));
+    } catch { /* stay stale */ }
+    setLoading(false);
+  }, []);
 
   useEffect(() => {
-    function onToggle() {
-      setOpen((o) => {
-        if (!o) load();
-        return !o;
-      });
-    }
-    window.addEventListener("jarvis:oksrdy-toggle", onToggle);
-    return () => window.removeEventListener("jarvis:oksrdy-toggle", onToggle);
+    const handler = () => { setOpen(v => !v); };
+    window.addEventListener("jarvis:okrsri-toggle", handler);
+    return () => window.removeEventListener("jarvis:okrsri-toggle", handler);
   }, []);
 
   useEffect(() => {
     if (!open) return;
-    timerRef.current = setInterval(load, 90_000);
-    return () => clearInterval(timerRef.current);
-  }, [open]);
+    load();
+    timer.current = setInterval(load, REFRESH_MS);
+    return () => clearInterval(timer.current);
+  }, [open, load]);
 
-  const enriched = events.map((ev) => ({
-    ...ev,
-    _class: classify(ev, articles, scenarios),
-    _kb:    matchedKB(ev, articles),
-    _sc:    matchedScenarios(ev, scenarios),
-  }));
+  const classified = events.map(e => ({ ...e, cls: classify(e, knowledge, scenarios) }));
+  const unpreparedCount = classified.filter(e => e.cls === "UNPREPARED").length;
 
-  const readyCount  = enriched.filter((e) => e._class === "READY").length;
-  const kbCount     = enriched.filter((e) => e._class === "KB-ONLY").length;
-  const scCount     = enriched.filter((e) => e._class === "SCENARIO-ONLY").length;
-  const blindCount  = enriched.filter((e) => e._class === "BLIND").length;
+  const tabs = ["ALL", "FULLY_PREPARED", "KB_ONLY", "SCENARIO_ONLY", "UNPREPARED"];
+  const filtered = classified
+    .filter(e => tab === "ALL" || e.cls === tab)
+    .filter(e => !search || e.label.toLowerCase().includes(search.toLowerCase()) || e.description.toLowerCase().includes(search.toLowerCase()));
 
-  const filtered = enriched.filter((e) => {
-    if (tab !== "ALL" && e._class !== tab) return false;
-    if (search) {
-      const q = search.toLowerCase();
-      return (
-        e.title.toLowerCase().includes(q) ||
-        e.description.toLowerCase().includes(q) ||
-        (e.category || "").toLowerCase().includes(q) ||
-        (e.service || "").toLowerCase().includes(q)
-      );
-    }
-    return true;
-  });
+  const counts = { FULLY_PREPARED: 0, KB_ONLY: 0, SCENARIO_ONLY: 0, UNPREPARED: 0 };
+  classified.forEach(e => counts[e.cls]++);
 
-  async function assess() {
+  const assess = async () => {
     setAssessing(true);
-    setAssessText("");
+    setBrief("");
     try {
-      const script = await buildOksrdyScript();
       const base = apiBase();
+      const hdr = { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` };
+      const ctx = `${classified.length} ops events: ${counts.FULLY_PREPARED} fully prepared, ${counts.KB_ONLY} KB-only, ${counts.SCENARIO_ONLY} scenario-only, ${counts.UNPREPARED} unprepared.`;
       const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({ message: script }),
+        method: "POST", headers: hdr,
+        body: JSON.stringify({ message: `OKRSRI operational readiness assessment: ${ctx} Give a 2-sentence brief on response readiness gaps and recommended priority actions.` }),
       });
       const d = await r.json();
-      const answer = (d.answer || script).replace(/<<ACTION:[^>]*>>/g, "").trim();
-      setAssessText(answer);
-      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text: answer } }));
-    } catch {
-      setAssessText(await buildOksrdyScript());
-    } finally {
-      setAssessing(false);
-    }
-  }
-
-  if (!open) {
-    return (
-      <button
-        onClick={() => { setOpen(true); load(); }}
-        title="Ops Event × Knowledge × Scenario Readiness (OKSRDY)"
-        style={{
-          position: "fixed",
-          left: 730000,
-          bottom: 8,
-          zIndex: 332,
-          background: blindCount > 0 ? `${AM}22` : "#0a0a0a",
-          border: `1px solid ${blindCount > 0 ? AM : "#333"}`,
-          color: blindCount > 0 ? AM : "#888",
-          ...mono,
-          fontSize: 9,
-          padding: "3px 7px",
-          borderRadius: 3,
-          cursor: "pointer",
-          letterSpacing: 1,
-        }}
-      >
-        ◈ OKSRDY{blindCount > 0 ? ` ▲${blindCount}` : ""}
-      </button>
-    );
-  }
+      const text = d.response || d.answer || d.message || d.result || "";
+      setBrief(text);
+      if (text) {
+        const ttsR = await fetch(`${base}/v1/voice/tts`, {
+          method: "POST", headers: hdr,
+          body: JSON.stringify({ text, voice: getActiveVoice() }),
+        });
+        if (ttsR.ok) {
+          const blob = await ttsR.blob();
+          new Audio(URL.createObjectURL(blob)).play();
+        }
+      }
+    } catch { setBrief("Assessment unavailable — backend unreachable."); }
+    setAssessing(false);
+  };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: 40,
-        left: "50%",
-        transform: "translateX(-50%)",
-        width: 800,
-        maxHeight: "85vh",
-        overflowY: "auto",
-        background: "#060810",
-        border: "1px solid #1a2a3a",
-        borderRadius: 6,
-        zIndex: 9502,
-        ...mono,
-        fontSize: 11,
-        color: "#ccc",
-      }}
-    >
-      {/* header */}
-      <div style={{ display: "flex", alignItems: "center", padding: "10px 14px", borderBottom: "1px solid #1a2a3a", gap: 8 }}>
-        <span style={{ color: AM, fontSize: 13, fontWeight: 700, flex: 1 }}>
-          ◈ OPS EVENT × KNOWLEDGE × SCENARIO READINESS
-        </span>
-        {loading && <span style={{ color: "#555", fontSize: 9 }}>LOADING…</span>}
-        <button
-          onClick={assess}
-          disabled={assessing}
-          style={{ background: "#111", border: `1px solid ${CY}`, color: CY, fontSize: 9, padding: "2px 8px", borderRadius: 3, cursor: "pointer" }}
-        >
-          {assessing ? "ASSESSING…" : "▶ ASSESS"}
-        </button>
-        <button
-          onClick={() => setOpen(false)}
-          style={{ background: "none", border: "none", color: "#555", fontSize: 14, cursor: "pointer" }}
-        >✕</button>
-      </div>
-
-      {/* stat tiles */}
-      <div style={{ display: "flex", gap: 6, padding: "10px 14px", borderBottom: "1px solid #111" }}>
-        {[
-          ["OPS EVENTS", events.length, "#888"],
-          ["KB ARTICLES", articles.length, "#888"],
-          ["SCENARIOS", scenarios.length, "#888"],
-          ["READY", readyCount, GN],
-          ["KB-ONLY", kbCount, CY],
-          ["SCENARIO-ONLY", scCount, PU],
-          ["BLIND", blindCount, RD],
-        ].map(([label, val, color]) => (
-          <div key={label} style={{ flex: 1, background: "#0c0c0c", border: "1px solid #1a1a1a", borderRadius: 3, padding: "6px 4px", textAlign: "center" }}>
-            <div style={{ color, fontSize: 15, fontWeight: 700 }}>{val}</div>
-            <div style={{ color: "#555", fontSize: 8, letterSpacing: 1 }}>{label}</div>
-          </div>
-        ))}
-      </div>
-
-      {/* coverage bar */}
-      {events.length > 0 && (
-        <div style={{ padding: "6px 14px", borderBottom: "1px solid #111" }}>
-          <div style={{ display: "flex", height: 5, borderRadius: 3, overflow: "hidden" }}>
-            {[
-              [readyCount, GN],
-              [kbCount,    CY],
-              [scCount,    PU],
-              [blindCount, RD],
-            ].map(([count, color], i) => (
-              <div
-                key={i}
-                style={{ width: `${(count / events.length) * 100}%`, background: color }}
-              />
-            ))}
-          </div>
-          <div style={{ display: "flex", gap: 14, marginTop: 4, fontSize: 8, color: "#555" }}>
-            {[["READY", GN], ["KB-ONLY", CY], ["SCENARIO-ONLY", PU], ["BLIND", RD]].map(([label, color]) => (
-              <span key={label} style={{ color }}>{label}</span>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* assess text */}
-      {assessText && (
-        <div style={{ padding: "8px 14px", borderBottom: "1px solid #111", color: "#aaa", fontSize: 10, lineHeight: 1.6, background: "#080808" }}>
-          {assessText}
-        </div>
-      )}
-
-      {/* search + tabs */}
-      <div style={{ padding: "8px 14px", borderBottom: "1px solid #111", display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
-        <input
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-          placeholder="Search ops events…"
-          style={{
-            background: "#0c0c0c", border: "1px solid #222", color: "#ccc",
-            padding: "3px 8px", borderRadius: 3, fontSize: 10, flex: 1, minWidth: 120, outline: "none",
-          }}
-        />
-        {TABS.map((t) => (
-          <button
-            key={t}
-            onClick={() => setTab(t)}
-            style={{
-              background: tab === t ? `${AM}22` : "none",
-              border: `1px solid ${tab === t ? AM : "#222"}`,
-              color: tab === t ? AM : "#555",
-              fontSize: 8, padding: "2px 6px", borderRadius: 3, cursor: "pointer", letterSpacing: 1,
-            }}
-          >{t}</button>
-        ))}
-      </div>
-
-      {err && <div style={{ padding: "6px 14px", color: RD, fontSize: 9 }}>ERROR: {err}</div>}
-
-      {/* rows */}
-      <div style={{ padding: "6px 0" }}>
-        {filtered.length === 0 && (
-          <div style={{ padding: "16px 14px", color: "#444", textAlign: "center", fontSize: 10 }}>
-            {loading ? "Loading…" : "No ops events match the current filter."}
-          </div>
+    <>
+      <button
+        onClick={() => setOpen(v => !v)}
+        style={{
+          position: "fixed", bottom: 8, left: BTN_LEFT, zIndex: Z_IDX,
+          background: open ? `${AM}22` : "rgba(10,14,24,0.82)",
+          border: `1px solid ${open ? AM : "#333"}`,
+          borderRadius: 4, color: open ? AM : "#666",
+          fontFamily: MN, fontSize: 9, fontWeight: 700,
+          padding: "3px 8px", cursor: "pointer", letterSpacing: 1,
+        }}
+      >
+        ◈ OKRSRI
+        {unpreparedCount > 0 && (
+          <span style={{
+            marginLeft: 5, background: RD, color: "#fff",
+            borderRadius: 8, fontSize: 8, padding: "1px 5px", fontWeight: 900,
+          }}>{unpreparedCount}</span>
         )}
-        {filtered.map((ev) => {
-          const isExp = expanded === ev.id;
-          const cc = classColor(ev._class);
-          return (
-            <div key={ev.id} style={{ borderBottom: "1px solid #0d0d0d" }}>
-              <div
-                onClick={() => setExpanded(isExp ? null : ev.id)}
-                style={{ display: "flex", alignItems: "center", padding: "7px 14px", gap: 8, cursor: "pointer" }}
-              >
-                <span style={{ color: cc, fontSize: 9, minWidth: 120, letterSpacing: 1 }}>
-                  {ev._class}
-                </span>
-                <span style={{ flex: 1, color: "#ccc", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                  {ev.title}
-                </span>
-                {ev.severity && chip(ev.severity.toUpperCase(), severityColor(ev.severity))}
-                {ev.category && chip(ev.category, "#555")}
-                {ev.service  && chip(ev.service, "#444")}
-                <span style={{ color: "#333", fontSize: 9 }}>{isExp ? "▲" : "▼"}</span>
+      </button>
+
+      {open && (
+        <div style={{
+          position: "fixed", bottom: 36, left: Math.min(BTN_LEFT, window.innerWidth - 480),
+          width: 460, maxHeight: "72vh", overflowY: "auto",
+          background: BG, border: `1px solid ${AM}55`, borderRadius: 8,
+          zIndex: Z_IDX + 1, padding: 14, fontFamily: MN,
+          boxShadow: `0 0 24px ${AM}22`,
+        }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 10 }}>
+            <span style={{ color: AM, fontWeight: 900, fontSize: 12, letterSpacing: 2 }}>OKRSRI — OPS RESPONSE READINESS INDEX</span>
+            <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", color: "#555", fontSize: 14, cursor: "pointer" }}>✕</button>
+          </div>
+
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 6, marginBottom: 10 }}>
+            {[
+              ["EVENTS",         classified.length,                           "#888"],
+              ["FULLY PREPARED", counts.FULLY_PREPARED,                       GN],
+              ["PARTIAL",        counts.KB_ONLY + counts.SCENARIO_ONLY,       CY],
+              ["UNPREPARED",     counts.UNPREPARED,                           RD],
+            ].map(([label, val, color]) => (
+              <div key={label} style={{ background: `${color}11`, border: `1px solid ${color}33`, borderRadius: 5, padding: "6px 4px", textAlign: "center" }}>
+                <div style={{ color, fontWeight: 900, fontSize: 16 }}>{loading ? "…" : val}</div>
+                <div style={{ color: "#666", fontSize: 8, letterSpacing: 1 }}>{label}</div>
               </div>
+            ))}
+          </div>
 
-              {isExp && (
-                <div style={{ padding: "0 14px 10px", display: "flex", gap: 10 }}>
-                  {/* KB pane */}
-                  <div style={{ flex: 1 }}>
-                    <div style={{ color: CY, fontSize: 8, letterSpacing: 1, marginBottom: 4 }}>
-                      KB ARTICLES ({ev._kb.length})
-                    </div>
-                    {ev._kb.length === 0 ? (
-                      <div style={{ color: "#333", fontSize: 9 }}>No KB coverage for this event.</div>
-                    ) : ev._kb.map(({ a, sc }, i) => (
-                      <div key={i} style={{ marginBottom: 6 }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
-                          <span style={{ color: "#bbb", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "70%" }}>
-                            {a.title}
-                          </span>
-                          <span style={{ color: CY, fontSize: 9 }}>{Math.round(sc * 100)}%</span>
-                        </div>
-                        {a.category && chip(a.category, "#444")}
-                        <ScoreBar sc={sc} color={CY} />
-                      </div>
-                    ))}
+          {classified.length > 0 && (
+            <div style={{ marginBottom: 10 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 3 }}>
+                <span style={{ color: "#888", fontSize: 9 }}>READINESS COVERAGE</span>
+                <span style={{ color: GN, fontSize: 9, fontWeight: 700 }}>{Math.round(counts.FULLY_PREPARED / classified.length * 100)}%</span>
+              </div>
+              <div style={{ background: "#111", borderRadius: 3, height: 4 }}>
+                <div style={{ width: `${Math.round(counts.FULLY_PREPARED / classified.length * 100)}%`, height: "100%", background: GN, borderRadius: 3 }} />
+              </div>
+            </div>
+          )}
+
+          <div style={{ display: "flex", gap: 4, marginBottom: 8, flexWrap: "wrap" }}>
+            {tabs.map(t => (
+              <button key={t} onClick={() => setTab(t)} style={{
+                background: tab === t ? `${AM}22` : "none",
+                border: `1px solid ${tab === t ? AM : "#333"}`,
+                color: tab === t ? AM : "#555",
+                borderRadius: 3, fontSize: 8, padding: "2px 7px", cursor: "pointer", fontFamily: MN,
+              }}>{t === "ALL" ? `ALL (${classified.length})` : `${clsLabel(t)} (${counts[t] || 0})`}</button>
+            ))}
+          </div>
+
+          <input
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search ops events…"
+            style={{
+              width: "100%", background: "#0a0f18", border: "1px solid #222", borderRadius: 4,
+              color: "#ccc", fontFamily: MN, fontSize: 11, padding: "5px 8px",
+              marginBottom: 8, boxSizing: "border-box",
+            }}
+          />
+
+          {loading && <div style={{ color: "#555", textAlign: "center", padding: 20, fontSize: 11 }}>Loading…</div>}
+
+          {!loading && filtered.map(evt => {
+            const hay = evt.label + " " + evt.description + " " + evt.type + " " + evt.tags;
+            const isExp = expanded === evt.id;
+            const matchedKB       = knowledge.filter(k => overlap(hay, k.label + " " + k.description + " " + k.category + " " + k.tags) >= 1);
+            const matchedScenarios = scenarios.filter(s => overlap(hay, s.label + " " + s.description + " " + s.type + " " + s.tags) >= 1);
+            return (
+              <div key={evt.id} style={{
+                background: DIM, border: `1px solid ${clsColor(evt.cls)}22`,
+                borderRadius: 5, marginBottom: 6, padding: "7px 10px",
+                animation: evt.cls === "UNPREPARED" ? "okrsriPulse 2.4s ease-in-out infinite" : "none",
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                  <div>
+                    <span style={{ color: "#fff", fontWeight: 700 }}>{evt.label}</span>
+                    {evt.type     && <span style={{ color: "#888", marginLeft: 6, fontSize: 10 }}>{evt.type}</span>}
+                    {evt.severity && <span style={{ color: OR,    marginLeft: 6, fontSize: 10 }}>{evt.severity}</span>}
                   </div>
-
-                  {/* Scenario pane */}
-                  <div style={{ flex: 1 }}>
-                    <div style={{ color: PU, fontSize: 8, letterSpacing: 1, marginBottom: 4 }}>
-                      SCENARIOS ({ev._sc.length})
-                    </div>
-                    {ev._sc.length === 0 ? (
-                      <div style={{ color: "#333", fontSize: 9 }}>No scenario alignment for this event.</div>
-                    ) : ev._sc.map(({ s, sc }, i) => (
-                      <div key={i} style={{ marginBottom: 6 }}>
-                        <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 2 }}>
-                          <span style={{ color: "#bbb", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", maxWidth: "70%" }}>
-                            {s.title || s.name || "Scenario"}
-                          </span>
-                          <span style={{ color: PU, fontSize: 9 }}>{Math.round(sc * 100)}%</span>
-                        </div>
-                        {(s.status || s.category) && (
-                          <>
-                            {s.status   && chip(s.status, "#555")}
-                            {s.category && chip(s.category, "#444")}
-                          </>
-                        )}
-                        <ScoreBar sc={sc} color={PU} />
-                      </div>
-                    ))}
+                  <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                    <span style={{
+                      background: `${clsColor(evt.cls)}22`, border: `1px solid ${clsColor(evt.cls)}`,
+                      color: clsColor(evt.cls), borderRadius: 3, padding: "1px 5px", fontSize: 9, fontWeight: 700,
+                    }}>{clsLabel(evt.cls)}</span>
+                    <button onClick={() => setExpanded(isExp ? null : evt.id)} style={{
+                      background: "none", border: `1px solid #333`, borderRadius: 3,
+                      color: "#888", fontSize: 9, padding: "1px 5px", cursor: "pointer",
+                    }}>{isExp ? "▲" : "▼"}</button>
                   </div>
                 </div>
-              )}
+
+                {isExp && (
+                  <div style={{ marginTop: 8 }}>
+                    {matchedKB.length > 0 && (
+                      <div style={{ marginBottom: 6 }}>
+                        <div style={{ color: GN, fontSize: 10, fontWeight: 700, marginBottom: 4 }}>MATCHED KB ARTICLES ({matchedKB.length})</div>
+                        {matchedKB.slice(0, 4).map(k => {
+                          const rel = relevance(hay, k.label + " " + k.description + " " + k.category + " " + k.tags);
+                          return (
+                            <div key={k.id} style={{ background: `${GN}0a`, border: `1px solid ${GN}22`, borderRadius: 3, padding: "4px 8px", marginBottom: 3 }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <span style={{ color: "#ccc", fontSize: 11 }}>{k.label}</span>
+                                {k.category && <span style={{ background: `${GN}22`, color: GN, borderRadius: 2, padding: "0 4px", fontSize: 8 }}>{k.category}</span>}
+                              </div>
+                              <div style={{ marginTop: 3, background: "#111", borderRadius: 2, height: 3 }}>
+                                <div style={{ width: `${rel}%`, height: "100%", background: GN, borderRadius: 2 }} />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                    {matchedScenarios.length > 0 && (
+                      <div>
+                        <div style={{ color: CY, fontSize: 10, fontWeight: 700, marginBottom: 4 }}>MATCHED SCENARIOS ({matchedScenarios.length})</div>
+                        {matchedScenarios.slice(0, 4).map(s => {
+                          const rel = relevance(hay, s.label + " " + s.description + " " + s.type + " " + s.tags);
+                          return (
+                            <div key={s.id} style={{ background: `${CY}0a`, border: `1px solid ${CY}22`, borderRadius: 3, padding: "4px 8px", marginBottom: 3 }}>
+                              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                                <span style={{ color: "#ccc", fontSize: 11 }}>{s.label}</span>
+                                {s.type && <span style={{ background: `${CY}22`, color: CY, borderRadius: 2, padding: "0 4px", fontSize: 8 }}>{s.type}</span>}
+                              </div>
+                              <div style={{ marginTop: 3, background: "#111", borderRadius: 2, height: 3 }}>
+                                <div style={{ width: `${rel}%`, height: "100%", background: CY, borderRadius: 2 }} />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    )}
+                    {matchedKB.length === 0 && matchedScenarios.length === 0 && (
+                      <div style={{ color: RD, fontSize: 10, padding: "4px 0" }}>No KB article or scenario match — operational readiness gap.</div>
+                    )}
+                  </div>
+                )}
+              </div>
+            );
+          })}
+
+          <button
+            onClick={assess}
+            disabled={assessing}
+            style={{
+              marginTop: 10, width: "100%", background: assessing ? "#111" : `${AM}22`,
+              border: `1px solid ${AM}`, borderRadius: 4, color: AM,
+              fontFamily: MN, fontSize: 11, fontWeight: 700, padding: "6px 0", cursor: assessing ? "default" : "pointer",
+            }}
+          >
+            {assessing ? "ASSESSING…" : "▶ ASSESS RESPONSE READINESS"}
+          </button>
+          {brief && (
+            <div style={{ marginTop: 8, background: `${AM}11`, border: `1px solid ${AM}33`, borderRadius: 4, padding: 8, color: "#ccc", fontSize: 11, lineHeight: 1.5 }}>
+              {brief}
             </div>
-          );
-        })}
-      </div>
-    </div>
+          )}
+        </div>
+      )}
+
+      <style>{`
+        @keyframes okrsriPulse {
+          0%,100% { border-color: ${RD}22; }
+          50% { border-color: ${RD}88; box-shadow: 0 0 6px ${RD}44; }
+        }
+      `}</style>
+    </>
   );
 }
