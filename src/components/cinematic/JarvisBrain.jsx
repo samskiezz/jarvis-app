@@ -309,6 +309,7 @@ import { isTrpinQuery, buildTrpinScript } from "./TaskSwarmInvestmentResourceNex
 import { isOasalignQuery, buildOasalignScript } from "./OpsSkillContactAlignment";
 import { isIpassessQuery, buildIpassessScript } from "./SwarmIntelReportNexus";
 import { isIskrnexQuery, buildIskrnexScript } from "./InvestigationScenarioKnowledgeNexus";
+import { isTrmeshQuery, buildTrmeshScript } from "./ThreatResponseMesh";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -2997,6 +2998,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iskrnex-toggle"));
       let script = "";
       try { script = await buildIskrnexScript(); } catch { script = "Intelligence Response Nexus online, sir. Cross-referencing investigations against scenarios and knowledge articles to identify uncovered response gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F243: RiskSignal × Contact × Scenario Threat Response Mesh — open TRMESH panel + speak brief.
+    if (isTrmeshQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trmesh-toggle"));
+      let script = "";
+      try { script = await buildTrmeshScript(); } catch { script = "Threat Response Mesh online, sir. Cross-referencing risk signals against contacts and response scenarios to identify uncovered threat response gaps."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

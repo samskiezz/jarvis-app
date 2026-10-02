@@ -467,6 +467,7 @@ import TaskSwarmInvestmentResourceNexus from '@/components/cinematic/TaskSwarmIn
 import OpsSkillContactAlignment from '@/components/cinematic/OpsSkillContactAlignment';
 import SwarmIntelReportNexus from '@/components/cinematic/SwarmIntelReportNexus';
 import InvestigationScenarioKnowledgeNexus from '@/components/cinematic/InvestigationScenarioKnowledgeNexus';
+import ThreatResponseMesh from '@/components/cinematic/ThreatResponseMesh';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1479,6 +1480,9 @@ function App() {
 
             {/* F242: Investigation × Scenario × Knowledge Intelligence Response Nexus — ISKRNEX button; /v1/investigations × /v1/scenario/list × /knowledge/ */}
             <InvestigationScenarioKnowledgeNexus />
+
+            {/* F243 (overnight 2026-10-02): RiskSignal × Contact × Scenario Threat Response Mesh — TRMESH button; /entities/RiskSignal × /entities/Contact × /v1/scenario/list */}
+            <ThreatResponseMesh />
 
             <Suspense fallback={<Loading />}>
               <Routes>
