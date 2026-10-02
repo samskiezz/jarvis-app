@@ -315,6 +315,7 @@ import { isIpoestRQuery, buildIpoestRScript } from "./IntelProfileOpsThreatTrack
 import { isTrocasQuery, buildTrocasScript } from "./TaskReportInvestigationClosure";
 import { isFracmapQuery, buildFracmapScript } from "./OpsAlertCommunityInvestmentMap";
 import { isKoatracQuery, buildKoatracScript } from "./KnowledgeOpsAlertSkillCoverage";
+import { isRsirixQuery, buildRsirixScript } from "./RiskSignalSkillInvestigationIndex";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3053,6 +3054,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:koatrac-toggle"));
       let script = "";
       try { script = await buildKoatracScript(); } catch { script = "KOATRAC online, sir. Analysing knowledge base automation coverage across operational alerts and AIP skills to identify passive items requiring manual triage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRsirixQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsirix-toggle"));
+      let script = "";
+      try { script = await buildRsirixScript(); } catch { script = "RSIRIX online, sir. Cross-referencing active risk signals against AIP automation skills and open investigations to identify threats with no response coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

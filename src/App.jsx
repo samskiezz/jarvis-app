@@ -473,6 +473,7 @@ import IntelProfileOpsThreatTracker from '@/components/cinematic/IntelProfileOps
 import TaskReportInvestigationClosure from '@/components/cinematic/TaskReportInvestigationClosure';
 import OpsAlertCommunityInvestmentMap from '@/components/cinematic/OpsAlertCommunityInvestmentMap';
 import KnowledgeOpsAlertSkillCoverage from '@/components/cinematic/KnowledgeOpsAlertSkillCoverage';
+import RiskSignalSkillInvestigationIndex from '@/components/cinematic/RiskSignalSkillInvestigationIndex';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1501,6 +1502,8 @@ function App() {
             <OpsAlertCommunityInvestmentMap />
             {/* F248 (overnight 2026-10-02): Knowledge × Ops Alert × AIP Skill Threat-Response Automation Coverage — KOATRAC button; /knowledge/ × /v1/ops/alerts × /v1/aip/skill */}
             <KnowledgeOpsAlertSkillCoverage />
+            {/* F249 (overnight 2026-10-02): RiskSignal × AIP Skill × Investigation Intelligence Response Index — RSIRIX button; /entities/RiskSignal × /v1/aip/skill × /v1/investigations */}
+            <RiskSignalSkillInvestigationIndex />
 
             <Suspense fallback={<Loading />}>
               <Routes>
