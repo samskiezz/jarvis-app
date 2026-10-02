@@ -328,6 +328,7 @@ import { isGnocovQuery, buildGnocovScript } from "./GraphNodeOperationalCoverage
 import { isArscovQuery, buildArscovScript } from "./RiskSignalAutomatedResponseCoverage";
 import { isFpacovQuery, buildFpacovScript } from "./FullPersonnelAlertCoverage";
 import { isIdrnQuery, buildIdrnScript } from "./InvestmentDatasetRiskNexus";
+import { isPcrcovQuery, buildPcrcovScript } from "./AipSkillContactRiskCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3170,6 +3171,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:idrn-toggle"));
       let script = "";
       try { script = await buildIdrnScript(); } catch { script = "IDRN online, sir. Correlating investments against datasets and risk signals for cross-coverage nexus analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPcrcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:pcrcov-toggle"));
+      let script = "";
+      try { script = await buildPcrcovScript(); } catch { script = "PCRCOV online, sir. Correlating AIP skills against personnel contacts and risk signals for capability coverage analysis."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

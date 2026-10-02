@@ -486,6 +486,7 @@ import GraphNodeOperationalCoverage from '@/components/cinematic/GraphNodeOperat
 import RiskSignalAutomatedResponseCoverage from '@/components/cinematic/RiskSignalAutomatedResponseCoverage';
 import FullPersonnelAlertCoverage from '@/components/cinematic/FullPersonnelAlertCoverage';
 import InvestmentDatasetRiskNexus from '@/components/cinematic/InvestmentDatasetRiskNexus';
+import AipSkillContactRiskCoverage from '@/components/cinematic/AipSkillContactRiskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1549,6 +1550,8 @@ function App() {
 
             {/* F261 (overnight 2026-10-02): Investment × Dataset × RiskSignal Cross-Coverage Nexus — IDRN button; /entities/Investment × /v1/datasets × /entities/RiskSignal */}
             <InvestmentDatasetRiskNexus />
+            {/* F262 (overnight 2026-10-02): AIP Skill × Contact × RiskSignal Personnel Capability Risk Coverage — PCRCOV button; /v1/aip/skill × /entities/Contact × /entities/RiskSignal */}
+            <AipSkillContactRiskCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

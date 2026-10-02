@@ -253,3 +253,4 @@
 [2026-10-02] F259 RiskSignalAutomatedResponseCoverage.jsx — ARSCOV panel; /entities/RiskSignal × /v1/aip/skill × /v1/ops/events; FULLY_RESPONDED/AUTOMATED_ONLY/EVENT_DRIVEN/UNRESPONDED; build exit 0
 [2026-10-02] F260 FullPersonnelAlertCoverage.jsx — FPACOV panel; /entities/Contact × /entities/RiskSignal × /knowledge/ × /v1/ops/events; FULLY_COVERED/DUAL_COVERED/SINGLE_LINKED/UNCOVERED classification; isFpacovQuery+buildFpacovScript wired in JarvisBrain+App.jsx; build exit 0
 [2026-10-02] F261 InvestmentDatasetRiskNexus (IDRN): new component; /entities/Investment × /v1/datasets × /entities/RiskSignal; FULLY_TRACKED/DATA_LINKED/RISK_FLAGGED/UNTRACKED classification; wired App.jsx + JarvisBrain.jsx; build exit 0
+[2026-10-02] F262 PCRCOV — AIP Skill × Contact × RiskSignal Personnel Capability Risk Coverage: new AipSkillContactRiskCoverage.jsx; wired in App.jsx + JarvisBrain.jsx; build exit 0
