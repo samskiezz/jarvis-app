@@ -312,6 +312,7 @@ import { isIskrnexQuery, buildIskrnexScript } from "./InvestigationScenarioKnowl
 import { isTrmeshQuery, buildTrmeshScript } from "./ThreatResponseMesh";
 import { isDrascovQuery, buildDrascovScript } from "./DatasetReportSkillRiskCoverage";
 import { isIpoestRQuery, buildIpoestRScript } from "./IntelProfileOpsThreatTracker";
+import { isTrocasQuery, buildTrocasScript } from "./TaskReportInvestigationClosure";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3026,6 +3027,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ipoestr-toggle"));
       let script = "";
       try { script = await buildIpoestRScript(); } catch { script = "Intel Profile Ops Threat Tracker online, sir. Cross-referencing threat actor profiles against live ops events and response scenarios to identify dark actors with no coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTrocasQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trocas-toggle"));
+      let script = "";
+      try { script = await buildTrocasScript(); } catch { script = "Operational Closure Assessment online, sir. Cross-referencing active tasks against intelligence reports and investigations to identify open-loop tasks with no closure coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

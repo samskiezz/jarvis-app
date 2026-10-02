@@ -470,6 +470,7 @@ import InvestigationScenarioKnowledgeNexus from '@/components/cinematic/Investig
 import ThreatResponseMesh from '@/components/cinematic/ThreatResponseMesh';
 import DatasetReportSkillRiskCoverage from '@/components/cinematic/DatasetReportSkillRiskCoverage';
 import IntelProfileOpsThreatTracker from '@/components/cinematic/IntelProfileOpsThreatTracker';
+import TaskReportInvestigationClosure from '@/components/cinematic/TaskReportInvestigationClosure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1491,6 +1492,9 @@ function App() {
 
             {/* F245 (overnight 2026-10-02): IntelProfile × Ops Event × Scenario Active Threat Tracking — IPOESTR button; /entities/IntelProfile × /v1/ops/events × /v1/scenario/list */}
             <IntelProfileOpsThreatTracker />
+
+            {/* F246 (overnight 2026-10-02): Task × Report × Investigation Operational Closure Assessment — TROCAS button; /entities/Task × /v1/reports × /v1/investigations */}
+            <TaskReportInvestigationClosure />
 
             <Suspense fallback={<Loading />}>
               <Routes>
