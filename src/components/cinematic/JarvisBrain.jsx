@@ -323,6 +323,7 @@ import { isOkrsriQuery, buildOkrsriScript } from "./OpsEventKnowledgeScenarioRea
 import { isAgdsixQuery, buildAgdsixScript } from "./AipSkillGraphDatasetSaturation";
 import { isGiocnexQuery, buildGiocnexScript } from "./GraphCommunityInvestmentOpsNexus";
 import { isTiprexQuery, buildTiprexScript } from "./TaskIntelReportClosure";
+import { isTeixrevQuery, buildTeixrevScript } from "./SwarmRiskKnowledgeThreatReview";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3125,6 +3126,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tiprex-toggle"));
       let script = "";
       try { script = await buildTiprexScript(); } catch { script = "TIPREX online, sir. Correlating tasks against intel profiles and intelligence reports for closure analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTeixrevQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:teixrev-toggle"));
+      let script = "";
+      try { script = await buildTeixrevScript(); } catch { script = "TEIXREV online, sir. Correlating swarm jobs against risk signals and knowledge items for threat execution coverage analysis."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

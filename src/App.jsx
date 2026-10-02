@@ -481,6 +481,7 @@ import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventK
 import AipSkillGraphDatasetSaturation from '@/components/cinematic/AipSkillGraphDatasetSaturation';
 import GraphCommunityInvestmentOpsNexus from '@/components/cinematic/GraphCommunityInvestmentOpsNexus';
 import TaskIntelReportClosure from '@/components/cinematic/TaskIntelReportClosure';
+import SwarmRiskKnowledgeThreatReview from '@/components/cinematic/SwarmRiskKnowledgeThreatReview';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1529,6 +1530,9 @@ function App() {
             <GraphCommunityInvestmentOpsNexus />
             {/* F256 (overnight 2026-10-02): Task × IntelProfile × Report Intelligence Closure Review — TIPREX button; /entities/Task × /entities/IntelProfile × /v1/reports */}
             <TaskIntelReportClosure />
+
+            {/* F257 (overnight 2026-10-02): SwarmJob × RiskSignal × Knowledge Threat Execution Intelligence Review — TEIXREV button; /entities/SwarmJob × /entities/RiskSignal × /knowledge/ */}
+            <SwarmRiskKnowledgeThreatReview />
 
             <Suspense fallback={<Loading />}>
               <Routes>
