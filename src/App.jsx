@@ -469,6 +469,7 @@ import SwarmIntelReportNexus from '@/components/cinematic/SwarmIntelReportNexus'
 import InvestigationScenarioKnowledgeNexus from '@/components/cinematic/InvestigationScenarioKnowledgeNexus';
 import ThreatResponseMesh from '@/components/cinematic/ThreatResponseMesh';
 import DatasetReportSkillRiskCoverage from '@/components/cinematic/DatasetReportSkillRiskCoverage';
+import IntelProfileOpsThreatTracker from '@/components/cinematic/IntelProfileOpsThreatTracker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1487,6 +1488,9 @@ function App() {
 
             {/* F244 (overnight 2026-10-02): Dataset × Report × AIP Skill × RiskSignal Intelligence Production Coverage — DRASCOV button; /v1/datasets × /v1/reports × /v1/aip/skill × /entities/RiskSignal */}
             <DatasetReportSkillRiskCoverage />
+
+            {/* F245 (overnight 2026-10-02): IntelProfile × Ops Event × Scenario Active Threat Tracking — IPOESTR button; /entities/IntelProfile × /v1/ops/events × /v1/scenario/list */}
+            <IntelProfileOpsThreatTracker />
 
             <Suspense fallback={<Loading />}>
               <Routes>

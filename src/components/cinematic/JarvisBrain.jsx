@@ -311,6 +311,7 @@ import { isIpassessQuery, buildIpassessScript } from "./SwarmIntelReportNexus";
 import { isIskrnexQuery, buildIskrnexScript } from "./InvestigationScenarioKnowledgeNexus";
 import { isTrmeshQuery, buildTrmeshScript } from "./ThreatResponseMesh";
 import { isDrascovQuery, buildDrascovScript } from "./DatasetReportSkillRiskCoverage";
+import { isIpoestRQuery, buildIpoestRScript } from "./IntelProfileOpsThreatTracker";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3017,6 +3018,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:drascov-toggle"));
       let script = "";
       try { script = await buildDrascovScript(); } catch { script = "Intelligence Production Coverage online, sir. Cross-referencing datasets against reports, AIP skills, and risk signals to identify uncovered intelligence production gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIpoestRQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipoestr-toggle"));
+      let script = "";
+      try { script = await buildIpoestRScript(); } catch { script = "Intel Profile Ops Threat Tracker online, sir. Cross-referencing threat actor profiles against live ops events and response scenarios to identify dark actors with no coverage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
