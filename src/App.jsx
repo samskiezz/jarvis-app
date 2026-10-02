@@ -472,6 +472,7 @@ import DatasetReportSkillRiskCoverage from '@/components/cinematic/DatasetReport
 import IntelProfileOpsThreatTracker from '@/components/cinematic/IntelProfileOpsThreatTracker';
 import TaskReportInvestigationClosure from '@/components/cinematic/TaskReportInvestigationClosure';
 import OpsAlertCommunityInvestmentMap from '@/components/cinematic/OpsAlertCommunityInvestmentMap';
+import KnowledgeOpsAlertSkillCoverage from '@/components/cinematic/KnowledgeOpsAlertSkillCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1498,6 +1499,8 @@ function App() {
             <TaskReportInvestigationClosure />
             {/* F247 (overnight 2026-10-02): Ops Alert × Graph Community × Investment Financial Risk Alert Map — FRACMAP button; /v1/ops/alerts × /v1/graph/communities × /entities/Investment */}
             <OpsAlertCommunityInvestmentMap />
+            {/* F248 (overnight 2026-10-02): Knowledge × Ops Alert × AIP Skill Threat-Response Automation Coverage — KOATRAC button; /knowledge/ × /v1/ops/alerts × /v1/aip/skill */}
+            <KnowledgeOpsAlertSkillCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

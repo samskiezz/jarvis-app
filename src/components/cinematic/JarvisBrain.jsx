@@ -314,6 +314,7 @@ import { isDrascovQuery, buildDrascovScript } from "./DatasetReportSkillRiskCove
 import { isIpoestRQuery, buildIpoestRScript } from "./IntelProfileOpsThreatTracker";
 import { isTrocasQuery, buildTrocasScript } from "./TaskReportInvestigationClosure";
 import { isFracmapQuery, buildFracmapScript } from "./OpsAlertCommunityInvestmentMap";
+import { isKoatracQuery, buildKoatracScript } from "./KnowledgeOpsAlertSkillCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3044,6 +3045,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:fracmap-toggle"));
       let script = "";
       try { script = await buildFracmapScript(); } catch { script = "Financial Risk Alert Map online, sir. Cross-referencing operational alerts against graph communities and portfolio investments to identify alerts with no financial context coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKoatracQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:koatrac-toggle"));
+      let script = "";
+      try { script = await buildKoatracScript(); } catch { script = "KOATRAC online, sir. Analysing knowledge base automation coverage across operational alerts and AIP skills to identify passive items requiring manual triage."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
