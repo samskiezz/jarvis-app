@@ -482,6 +482,7 @@ import AipSkillGraphDatasetSaturation from '@/components/cinematic/AipSkillGraph
 import GraphCommunityInvestmentOpsNexus from '@/components/cinematic/GraphCommunityInvestmentOpsNexus';
 import TaskIntelReportClosure from '@/components/cinematic/TaskIntelReportClosure';
 import SwarmRiskKnowledgeThreatReview from '@/components/cinematic/SwarmRiskKnowledgeThreatReview';
+import GraphNodeOperationalCoverage from '@/components/cinematic/GraphNodeOperationalCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1533,6 +1534,9 @@ function App() {
 
             {/* F257 (overnight 2026-10-02): SwarmJob × RiskSignal × Knowledge Threat Execution Intelligence Review — TEIXREV button; /entities/SwarmJob × /entities/RiskSignal × /knowledge/ */}
             <SwarmRiskKnowledgeThreatReview />
+
+            {/* F258 (overnight 2026-10-02): Graph Node × Contact × Task Operational Coverage — GNOCOV button; /v1/graph/centrality × /entities/Contact × /entities/Task */}
+            <GraphNodeOperationalCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -324,6 +324,7 @@ import { isAgdsixQuery, buildAgdsixScript } from "./AipSkillGraphDatasetSaturati
 import { isGiocnexQuery, buildGiocnexScript } from "./GraphCommunityInvestmentOpsNexus";
 import { isTiprexQuery, buildTiprexScript } from "./TaskIntelReportClosure";
 import { isTeixrevQuery, buildTeixrevScript } from "./SwarmRiskKnowledgeThreatReview";
+import { isGnocovQuery, buildGnocovScript } from "./GraphNodeOperationalCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3134,6 +3135,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:teixrev-toggle"));
       let script = "";
       try { script = await buildTeixrevScript(); } catch { script = "TEIXREV online, sir. Correlating swarm jobs against risk signals and knowledge items for threat execution coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGnocovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gnocov-toggle"));
+      let script = "";
+      try { script = await buildGnocovScript(); } catch { script = "GNOCOV online, sir. Correlating graph nodes against contacts and tasks for operational coverage analysis."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
