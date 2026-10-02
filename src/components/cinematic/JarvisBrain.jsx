@@ -320,6 +320,7 @@ import { isCsdcovQuery, buildCsdcovScript } from "./ContactScenarioDatasetCovera
 import { isScknexQuery, buildScknexScript } from "./SwarmContactKnowledgeNexus";
 import { isTfscovQuery, buildTfscovScript } from "./InvestmentScenarioIntelCoverage";
 import { isOkrsriQuery, buildOkrsriScript } from "./OpsEventKnowledgeScenarioReadiness";
+import { isAgdsixQuery, buildAgdsixScript } from "./AipSkillGraphDatasetSaturation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3098,6 +3099,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:okrsri-toggle"));
       let script = "";
       try { script = await buildOkrsriScript(); } catch { script = "OKRSRI online, sir. Assessing operational event response readiness against knowledge base and scenario playbooks."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAgdsixQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:agdsix-toggle"));
+      let script = "";
+      try { script = await buildAgdsixScript(); } catch { script = "AGDSIX online, sir. Correlating AIP skills against graph communities and datasets for intelligence saturation analysis."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

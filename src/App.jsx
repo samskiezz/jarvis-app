@@ -478,6 +478,7 @@ import ContactScenarioDatasetCoverage from '@/components/cinematic/ContactScenar
 import SwarmContactKnowledgeNexus from '@/components/cinematic/SwarmContactKnowledgeNexus';
 import InvestmentScenarioIntelCoverage from '@/components/cinematic/InvestmentScenarioIntelCoverage';
 import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventKnowledgeScenarioReadiness';
+import AipSkillGraphDatasetSaturation from '@/components/cinematic/AipSkillGraphDatasetSaturation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1518,6 +1519,9 @@ function App() {
 
             {/* F253 (overnight 2026-10-02): Ops Events × Knowledge × Scenario Response Readiness Index — OKRSRI button; /v1/ops/events × /knowledge/ × /v1/scenario/list */}
             <OpsEventKnowledgeScenarioReadiness />
+
+            {/* F254 (overnight 2026-10-02): AIP Skill × Graph Community × Dataset Intelligence Saturation Index — AGDSIX button; /v1/aip/skill × /v1/graph/communities × /v1/datasets */}
+            <AipSkillGraphDatasetSaturation />
 
             <Suspense fallback={<Loading />}>
               <Routes>
