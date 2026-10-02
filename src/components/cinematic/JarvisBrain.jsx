@@ -317,6 +317,7 @@ import { isFracmapQuery, buildFracmapScript } from "./OpsAlertCommunityInvestmen
 import { isKoatracQuery, buildKoatracScript } from "./KnowledgeOpsAlertSkillCoverage";
 import { isRsirixQuery, buildRsirixScript } from "./RiskSignalSkillInvestigationIndex";
 import { isCsdcovQuery, buildCsdcovScript } from "./ContactScenarioDatasetCoverage";
+import { isScknexQuery, buildScknexScript } from "./SwarmContactKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3071,6 +3072,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:csdcov-toggle"));
       let script = "";
       try { script = await buildCsdcovScript(); } catch { script = "CSDCOV online, sir. Cross-referencing contacts against operational scenarios and datasets to assess intelligence coverage gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isScknexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scknex-toggle"));
+      let script = "";
+      try { script = await buildScknexScript(); } catch { script = "SCKNEX online, sir. Assessing swarm job capability readiness against contacts and knowledge articles."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

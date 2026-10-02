@@ -475,6 +475,7 @@ import OpsAlertCommunityInvestmentMap from '@/components/cinematic/OpsAlertCommu
 import KnowledgeOpsAlertSkillCoverage from '@/components/cinematic/KnowledgeOpsAlertSkillCoverage';
 import RiskSignalSkillInvestigationIndex from '@/components/cinematic/RiskSignalSkillInvestigationIndex';
 import ContactScenarioDatasetCoverage from '@/components/cinematic/ContactScenarioDatasetCoverage';
+import SwarmContactKnowledgeNexus from '@/components/cinematic/SwarmContactKnowledgeNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1507,6 +1508,8 @@ function App() {
             <RiskSignalSkillInvestigationIndex />
             {/* F250 (overnight 2026-10-02): Contact × Scenario × Dataset Operational Intelligence Coverage — CSDCOV button; /entities/Contact × /v1/scenario/list × /v1/datasets */}
             <ContactScenarioDatasetCoverage />
+            {/* F251 (overnight 2026-10-02): SwarmJob × Contact × Knowledge Capability Readiness Nexus — SCKNEX button; /entities/SwarmJob × /entities/Contact × /knowledge/ */}
+            <SwarmContactKnowledgeNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
