@@ -479,6 +479,7 @@ import SwarmContactKnowledgeNexus from '@/components/cinematic/SwarmContactKnowl
 import InvestmentScenarioIntelCoverage from '@/components/cinematic/InvestmentScenarioIntelCoverage';
 import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventKnowledgeScenarioReadiness';
 import AipSkillGraphDatasetSaturation from '@/components/cinematic/AipSkillGraphDatasetSaturation';
+import GraphCommunityInvestmentOpsNexus from '@/components/cinematic/GraphCommunityInvestmentOpsNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1522,6 +1523,9 @@ function App() {
 
             {/* F254 (overnight 2026-10-02): AIP Skill × Graph Community × Dataset Intelligence Saturation Index — AGDSIX button; /v1/aip/skill × /v1/graph/communities × /v1/datasets */}
             <AipSkillGraphDatasetSaturation />
+
+            {/* F255 (overnight 2026-10-02): Graph Community × Investment × Ops Event Coverage Nexus — GIOCNEX button; /v1/graph/communities × /entities/Investment × /v1/ops/events */}
+            <GraphCommunityInvestmentOpsNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
