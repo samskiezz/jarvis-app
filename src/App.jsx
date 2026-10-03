@@ -504,6 +504,7 @@ import ContactDatasetAlertCoverage from '@/components/cinematic/ContactDatasetAl
 import InvestigationSkillKnowledgeCoverage from '@/components/cinematic/InvestigationSkillKnowledgeCoverage';
 import OpsAlertRiskSignalContactCoverage from '@/components/cinematic/OpsAlertRiskSignalContactCoverage';
 import SwarmContactOpsEventNexus from '@/components/cinematic/SwarmContactOpsEventNexus';
+import InvestmentIntelScenarioCoverage from '@/components/cinematic/InvestmentIntelScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1603,6 +1604,8 @@ function App() {
             <OpsAlertRiskSignalContactCoverage />
             {/* F280 (overnight 2026-10-03): SwarmJob × Contact × Ops Event Mission Execution Nexus — SCOEMEX button; /entities/SwarmJob × /entities/Contact × /v1/ops/events */}
             <SwarmContactOpsEventNexus />
+            {/* F281 (overnight 2026-10-03): Investment × IntelProfile × Scenario Strategic Coverage Nexus — IISCOVNEX button; /entities/Investment × /entities/IntelProfile × /v1/scenario/list */}
+            <InvestmentIntelScenarioCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
