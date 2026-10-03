@@ -341,6 +341,7 @@ import { isRoganexQuery, buildRoganexScript } from "./ReportOpsAnnotationNexus";
 import { isScrarxQuery, buildScrarxScript } from "./AipSkillContactAlertReadiness";
 import { isEntityActivityQuery, buildEntityActivityScript } from "./EntityActivityHeatmap";
 import { isTiksnexQuery, buildTiksnexScript } from "./TaskRiskKnowledgeSkillNexus";
+import { isSaanexQuery, buildSaanexScript } from "./SwarmSkillAlertNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3287,6 +3288,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tiksnex-toggle"));
       let script = "";
       try { script = await buildTiksnexScript(); } catch { script = "TIKSNEX online, sir. Assessing task operational intel coverage across risk signals, knowledge base, and AIP skills."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSaanexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:saanex-toggle"));
+      let script = "";
+      try { script = await buildSaanexScript(); } catch { script = "SAANEX online, sir. Assessing swarm job automation coverage across AIP skills and operational alerts."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

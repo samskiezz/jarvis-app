@@ -498,6 +498,7 @@ import SwarmJobInvestigationDatasetCoverage from '@/components/cinematic/SwarmJo
 import ReportOpsAnnotationNexus from '@/components/cinematic/ReportOpsAnnotationNexus';
 import AipSkillContactAlertReadiness from '@/components/cinematic/AipSkillContactAlertReadiness';
 import TaskRiskKnowledgeSkillNexus from '@/components/cinematic/TaskRiskKnowledgeSkillNexus';
+import SwarmSkillAlertNexus from '@/components/cinematic/SwarmSkillAlertNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1585,6 +1586,8 @@ function App() {
             <AipSkillContactAlertReadiness />
             {/* F274 (overnight 2026-10-03): Task × RiskSignal × Knowledge × AIP Skill Operational Intel Nexus — TIKSNEX button; /entities/Task × /entities/RiskSignal × /knowledge/ × /v1/aip/skill */}
             <TaskRiskKnowledgeSkillNexus />
+            {/* F275 (overnight 2026-10-03): SwarmJob × AIP Skill × Ops Alert Automation Coverage Nexus — SAANEX button; /entities/SwarmJob × /v1/aip/skill × /v1/ops/alerts */}
+            <SwarmSkillAlertNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
