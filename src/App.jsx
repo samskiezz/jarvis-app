@@ -503,6 +503,7 @@ import IntelProfileRiskInvestigationDatasetMatrix from '@/components/cinematic/I
 import ContactDatasetAlertCoverage from '@/components/cinematic/ContactDatasetAlertCoverage';
 import InvestigationSkillKnowledgeCoverage from '@/components/cinematic/InvestigationSkillKnowledgeCoverage';
 import OpsAlertRiskSignalContactCoverage from '@/components/cinematic/OpsAlertRiskSignalContactCoverage';
+import SwarmContactOpsEventNexus from '@/components/cinematic/SwarmContactOpsEventNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1600,6 +1601,8 @@ function App() {
             <InvestigationSkillKnowledgeCoverage />
             {/* F279 (overnight 2026-10-03): Ops Alert × RiskSignal × Contact Response Coverage — ARCOV button; /v1/ops/alerts × /entities/RiskSignal × /entities/Contact */}
             <OpsAlertRiskSignalContactCoverage />
+            {/* F280 (overnight 2026-10-03): SwarmJob × Contact × Ops Event Mission Execution Nexus — SCOEMEX button; /entities/SwarmJob × /entities/Contact × /v1/ops/events */}
+            <SwarmContactOpsEventNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
