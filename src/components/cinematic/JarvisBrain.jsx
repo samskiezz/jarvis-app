@@ -338,6 +338,7 @@ import { isFtnexQuery, buildFtnexScript } from "./IntelProfileInvestmentAlertNex
 import { isCsksrbQuery, buildCsksrbScript } from "./ContactScenarioKnowledgeRiskBridge";
 import { isSidicovQuery, buildSidicovScript } from "./SwarmJobInvestigationDatasetCoverage";
 import { isRoganexQuery, buildRoganexScript } from "./ReportOpsAnnotationNexus";
+import { isScrarxQuery, buildScrarxScript } from "./AipSkillContactAlertReadiness";
 import { isEntityActivityQuery, buildEntityActivityScript } from "./EntityActivityHeatmap";
 
 /**
@@ -3261,6 +3262,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:roganex-toggle"));
       let script = "";
       try { script = await buildRoganexScript(); } catch { script = "ROGANEX online, sir. Correlating intelligence reports against ops events and graph annotations for response nexus analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isScrarxQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scrarx-toggle"));
+      let script = "";
+      try { script = await buildScrarxScript(); } catch { script = "SCRARX online, sir. Assessing AIP skill response readiness against contacts and ops alerts."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

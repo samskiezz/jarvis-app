@@ -496,6 +496,7 @@ import IntelProfileInvestmentAlertNexus from '@/components/cinematic/IntelProfil
 import ContactScenarioKnowledgeRiskBridge from '@/components/cinematic/ContactScenarioKnowledgeRiskBridge';
 import SwarmJobInvestigationDatasetCoverage from '@/components/cinematic/SwarmJobInvestigationDatasetCoverage';
 import ReportOpsAnnotationNexus from '@/components/cinematic/ReportOpsAnnotationNexus';
+import AipSkillContactAlertReadiness from '@/components/cinematic/AipSkillContactAlertReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1579,6 +1580,8 @@ function App() {
             <SwarmJobInvestigationDatasetCoverage />
             {/* F271 (overnight 2026-10-03): Report × Ops Event × Graph Annotation Intelligence Response Nexus — ROGANEX button; /v1/reports × /v1/ops/events × /v1/graph/annotations */}
             <ReportOpsAnnotationNexus />
+            {/* F272 (overnight 2026-10-03): AIP Skill × Contact × Ops Alert Response Readiness Index — SCRARX button; /v1/aip/skill × /entities/Contact × /v1/ops/alerts */}
+            <AipSkillContactAlertReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>
