@@ -342,6 +342,7 @@ import { isScrarxQuery, buildScrarxScript } from "./AipSkillContactAlertReadines
 import { isEntityActivityQuery, buildEntityActivityScript } from "./EntityActivityHeatmap";
 import { isTiksnexQuery, buildTiksnexScript } from "./TaskRiskKnowledgeSkillNexus";
 import { isSaanexQuery, buildSaanexScript } from "./SwarmSkillAlertNexus";
+import { isIrcmatQuery, buildIrcmatScript } from "./IntelProfileRiskInvestigationDatasetMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3296,6 +3297,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:saanex-toggle"));
       let script = "";
       try { script = await buildSaanexScript(); } catch { script = "SAANEX online, sir. Assessing swarm job automation coverage across AIP skills and operational alerts."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIrcmatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ircmat-toggle"));
+      let script = "";
+      try { script = await buildIrcmatScript(); } catch { script = "IRCMAT online, sir. Assessing intel profile risk coverage across risk signals, investigations, and datasets."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
