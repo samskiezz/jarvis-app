@@ -490,6 +490,7 @@ import AipSkillContactRiskCoverage from '@/components/cinematic/AipSkillContactR
 import ReportContactSwarmNexus from '@/components/cinematic/ReportContactSwarmNexus';
 import ScenarioKnowledgeDatasetContactNexus from '@/components/cinematic/ScenarioKnowledgeDatasetContactNexus';
 import SwarmReportOpsKnowledgeBridge from '@/components/cinematic/SwarmReportOpsKnowledgeBridge';
+import IntelProfileThreatActorResolution from '@/components/cinematic/IntelProfileThreatActorResolution';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1561,6 +1562,8 @@ function App() {
             <ScenarioKnowledgeDatasetContactNexus />
             {/* F265 (overnight 2026-10-03): SwarmJob × Report × Ops Event × Knowledge Mission Context Bridge — SROCKB button; /entities/SwarmJob × /v1/reports × /v1/ops/events × /knowledge/ */}
             <SwarmReportOpsKnowledgeBridge />
+            {/* F266 (overnight 2026-10-03): IntelProfile × Graph Centrality × Investigation × Ops Alert Threat Actor Resolution Coverage — TAREC button; /entities/IntelProfile × /v1/graph/centrality × /v1/investigations × /v1/ops/alerts */}
+            <IntelProfileThreatActorResolution />
 
             <Suspense fallback={<Loading />}>
               <Routes>

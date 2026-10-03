@@ -332,6 +332,7 @@ import { isPcrcovQuery, buildPcrcovScript } from "./AipSkillContactRiskCoverage"
 import { isRcsanQuery, buildRcsanScript } from "./ReportContactSwarmNexus";
 import { isSkdcrnexQuery, buildSkdcrnexScript } from "./ScenarioKnowledgeDatasetContactNexus";
 import { isSrockbQuery, buildSrockbScript } from "./SwarmReportOpsKnowledgeBridge";
+import { isTarecQuery, buildTarecScript } from "./IntelProfileThreatActorResolution";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3206,6 +3207,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:srockb-toggle"));
       let script = "";
       try { script = await buildSrockbScript(); } catch { script = "SROCKB online, sir. Correlating swarm jobs against reports, ops events, and knowledge for mission context assessment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTarecQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tarec-toggle"));
+      let script = "";
+      try { script = await buildTarecScript(); } catch { script = "TAREC online, sir. Evaluating threat actor resolution coverage across graph centrality, investigations, and operational alerts."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
