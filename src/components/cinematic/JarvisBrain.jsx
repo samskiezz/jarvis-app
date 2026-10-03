@@ -337,6 +337,7 @@ import { isTdoacovQuery, buildTdoacovScript } from "./TaskDatasetOpsAlertCoverag
 import { isFtnexQuery, buildFtnexScript } from "./IntelProfileInvestmentAlertNexus";
 import { isCsksrbQuery, buildCsksrbScript } from "./ContactScenarioKnowledgeRiskBridge";
 import { isSidicovQuery, buildSidicovScript } from "./SwarmJobInvestigationDatasetCoverage";
+import { isRoganexQuery, buildRoganexScript } from "./ReportOpsAnnotationNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3251,6 +3252,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:sidicov-toggle"));
       let script = "";
       try { script = await buildSidicovScript(); } catch { script = "SIDICOV online, sir. Evaluating swarm job intelligence completion coverage across investigations and datasets."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRoganexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:roganex-toggle"));
+      let script = "";
+      try { script = await buildRoganexScript(); } catch { script = "ROGANEX online, sir. Correlating intelligence reports against ops events and graph annotations for response nexus analysis."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

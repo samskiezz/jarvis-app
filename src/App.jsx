@@ -495,6 +495,7 @@ import TaskDatasetOpsAlertCoverage from '@/components/cinematic/TaskDatasetOpsAl
 import IntelProfileInvestmentAlertNexus from '@/components/cinematic/IntelProfileInvestmentAlertNexus';
 import ContactScenarioKnowledgeRiskBridge from '@/components/cinematic/ContactScenarioKnowledgeRiskBridge';
 import SwarmJobInvestigationDatasetCoverage from '@/components/cinematic/SwarmJobInvestigationDatasetCoverage';
+import ReportOpsAnnotationNexus from '@/components/cinematic/ReportOpsAnnotationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1576,6 +1577,8 @@ function App() {
             <ContactScenarioKnowledgeRiskBridge />
             {/* F270 (overnight 2026-10-03): SwarmJob × Investigation × Dataset Intelligence Completion Coverage — SIDICOV button; /entities/SwarmJob × /v1/investigations × /v1/datasets */}
             <SwarmJobInvestigationDatasetCoverage />
+            {/* F271 (overnight 2026-10-03): Report × Ops Event × Graph Annotation Intelligence Response Nexus — ROGANEX button; /v1/reports × /v1/ops/events × /v1/graph/annotations */}
+            <ReportOpsAnnotationNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
