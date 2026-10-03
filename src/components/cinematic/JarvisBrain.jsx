@@ -330,6 +330,7 @@ import { isFpacovQuery, buildFpacovScript } from "./FullPersonnelAlertCoverage";
 import { isIdrnQuery, buildIdrnScript } from "./InvestmentDatasetRiskNexus";
 import { isPcrcovQuery, buildPcrcovScript } from "./AipSkillContactRiskCoverage";
 import { isRcsanQuery, buildRcsanScript } from "./ReportContactSwarmNexus";
+import { isSkdcrnexQuery, buildSkdcrnexScript } from "./ScenarioKnowledgeDatasetContactNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3188,6 +3189,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rcsan-toggle"));
       let script = "";
       try { script = await buildRcsanScript(); } catch { script = "RCSAN online, sir. Correlating reports against contacts and swarm jobs for intelligence action coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSkdcrnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skdcrnex-toggle"));
+      let script = "";
+      try { script = await buildSkdcrnexScript(); } catch { script = "SKDCRNEX online, sir. Correlating scenarios against knowledge, datasets, and contacts for full readiness assessment."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

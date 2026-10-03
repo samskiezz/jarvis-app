@@ -488,6 +488,7 @@ import FullPersonnelAlertCoverage from '@/components/cinematic/FullPersonnelAler
 import InvestmentDatasetRiskNexus from '@/components/cinematic/InvestmentDatasetRiskNexus';
 import AipSkillContactRiskCoverage from '@/components/cinematic/AipSkillContactRiskCoverage';
 import ReportContactSwarmNexus from '@/components/cinematic/ReportContactSwarmNexus';
+import ScenarioKnowledgeDatasetContactNexus from '@/components/cinematic/ScenarioKnowledgeDatasetContactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1555,6 +1556,8 @@ function App() {
             <AipSkillContactRiskCoverage />
             {/* F263 (overnight 2026-10-03): Report × Contact × SwarmJob Intelligence Action Nexus — RCSAN button; /v1/reports × /entities/Contact × /entities/SwarmJob */}
             <ReportContactSwarmNexus />
+            {/* F264 (overnight 2026-10-03): Scenario × Knowledge × Dataset × Contact Full Readiness Nexus — SKDCRNEX button; /v1/scenario/list × /knowledge/ × /v1/datasets × /entities/Contact */}
+            <ScenarioKnowledgeDatasetContactNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>

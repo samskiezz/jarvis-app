@@ -255,3 +255,4 @@
 [2026-10-02] F261 InvestmentDatasetRiskNexus (IDRN): new component; /entities/Investment × /v1/datasets × /entities/RiskSignal; FULLY_TRACKED/DATA_LINKED/RISK_FLAGGED/UNTRACKED classification; wired App.jsx + JarvisBrain.jsx; build exit 0
 [2026-10-02] F262 PCRCOV — AIP Skill × Contact × RiskSignal Personnel Capability Risk Coverage: new AipSkillContactRiskCoverage.jsx; wired in App.jsx + JarvisBrain.jsx; build exit 0
 2026-10-03 F263 ReportContactSwarmNexus (RCSAN): Report×Contact×SwarmJob Intelligence Action Nexus — new ReportContactSwarmNexus.jsx; wired JarvisBrain.jsx+App.jsx; build exit 0
+[2026-10-03] F264 SKDCRNEX — ScenarioKnowledgeDatasetContactNexus.jsx: /v1/scenario/list × /knowledge/ × /v1/datasets × /entities/Contact cross-readiness nexus; BTN_LEFT=1104560 Z_IDX=688; build exit 0; pushed to jarvis-overnight
