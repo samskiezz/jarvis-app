@@ -261,3 +261,4 @@
 [2026-10-03] F267 Task × Dataset × Ops Alert Workflow Intelligence Coverage (TDOACOV) — TaskDatasetOpsAlertCoverage.jsx; /entities/Task × /v1/datasets × /v1/ops/alerts; build exit 0
 2026-10-03 F268 FTNEX IntelProfileInvestmentAlertNexus.jsx — IntelProfile × Investment × Ops Alert Financial Threat Nexus wired; build exit 0; pushed jarvis-overnight
 2026-10-03 F269 CSKSRB ContactScenarioKnowledgeRiskBridge.jsx — Contact × Scenario × Knowledge × RiskSignal Intelligence Bridge wired; FULLY_BRIDGED/DUAL_BRIDGED/SINGLE_LINKED/ISOLATED classification; isCsksrbQuery+buildCsksrbScript wired in JarvisBrain.jsx; mounted in App.jsx; build exit 0
+[2026-10-03] F270 SIDICOV — SwarmJob × Investigation × Dataset Intelligence Completion Coverage: new SwarmJobInvestigationDatasetCoverage.jsx; imported+mounted in App.jsx; isSidicovQuery+buildSidicovScript wired in JarvisBrain.jsx; build verified exit 0

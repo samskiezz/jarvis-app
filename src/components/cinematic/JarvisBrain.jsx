@@ -336,6 +336,7 @@ import { isTarecQuery, buildTarecScript } from "./IntelProfileThreatActorResolut
 import { isTdoacovQuery, buildTdoacovScript } from "./TaskDatasetOpsAlertCoverage";
 import { isFtnexQuery, buildFtnexScript } from "./IntelProfileInvestmentAlertNexus";
 import { isCsksrbQuery, buildCsksrbScript } from "./ContactScenarioKnowledgeRiskBridge";
+import { isSidicovQuery, buildSidicovScript } from "./SwarmJobInvestigationDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3242,6 +3243,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:csksrb-toggle"));
       let script = "";
       try { script = await buildCsksrbScript(); } catch { script = "CSKSRB online, sir. Correlating contacts against scenarios, knowledge articles, and risk signals for intelligence bridge analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSidicovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sidicov-toggle"));
+      let script = "";
+      try { script = await buildSidicovScript(); } catch { script = "SIDICOV online, sir. Evaluating swarm job intelligence completion coverage across investigations and datasets."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

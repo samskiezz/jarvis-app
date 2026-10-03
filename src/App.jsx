@@ -494,6 +494,7 @@ import IntelProfileThreatActorResolution from '@/components/cinematic/IntelProfi
 import TaskDatasetOpsAlertCoverage from '@/components/cinematic/TaskDatasetOpsAlertCoverage';
 import IntelProfileInvestmentAlertNexus from '@/components/cinematic/IntelProfileInvestmentAlertNexus';
 import ContactScenarioKnowledgeRiskBridge from '@/components/cinematic/ContactScenarioKnowledgeRiskBridge';
+import SwarmJobInvestigationDatasetCoverage from '@/components/cinematic/SwarmJobInvestigationDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1573,6 +1574,8 @@ function App() {
             <IntelProfileInvestmentAlertNexus />
             {/* F269 (overnight 2026-10-03): Contact × Scenario × Knowledge × RiskSignal Intelligence Bridge — CSKSRB button; /entities/Contact × /v1/scenario/list × /knowledge/ × /entities/RiskSignal */}
             <ContactScenarioKnowledgeRiskBridge />
+            {/* F270 (overnight 2026-10-03): SwarmJob × Investigation × Dataset Intelligence Completion Coverage — SIDICOV button; /entities/SwarmJob × /v1/investigations × /v1/datasets */}
+            <SwarmJobInvestigationDatasetCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
