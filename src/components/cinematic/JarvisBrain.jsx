@@ -1,6 +1,344 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
+import { isStatusQuery, buildStatusScript } from "./SpokenStatusReport";
+import { isAlertQuery, buildAlertScript } from "./AlertToasts";
+import { isInvScenLinkerQuery, buildInvScenLinkerScript } from "./InvestigationScenarioLinker";
+import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
+import { isAmbientQuery } from "./AmbientReactorHum";
+import { isClockQuery, buildClockScript } from "./LiveClockUptime";
+import { isInvestmentQuery, buildInvestmentScript } from "./InvestmentWidget";
+import { isContactsQuery, buildContactsScript } from "./ContactsDirectory";
+import { isSwarmQuery, buildSwarmScript } from "./SwarmJobsMonitor";
+import { isCentralityQuery, buildCentralityScript } from "./GraphCentralityView";
+import { isDiagnosticsQuery, buildDiagnosticsScript } from "./ServiceDiagnostics";
+import { isHistoryQuery, buildHistoryScript } from "./CommandHistory";
+import { isOpsCoverageQuery, buildOpsCoverageScript } from "./OpsTaskCoverageChecker";
+import { isDataGapQuery, buildDataGapScript } from "./DatasetInvestigationGap";
+import { isInvPipeQuery, buildInvPipeScript } from "./InvestigationScenarioTaskPipeline";
+import { isRisGapQuery, buildRisGapScript } from "./RiskInvestigationMatrix";
+import { isPulseQuery, buildPulseScript } from "./OperationalPulseRing";
+import { isSkillProgressQuery, buildSkillProgressScript } from "./SkillProgressionTracker";
+import { isSkasQuery, buildSkasScript } from "./AipSkillScenarioCoverage";
+import { isToolRegistryQuery, buildToolRegistryScript } from "./AgentToolRegistry";
+import { isBssfQuery, buildBssfScript } from "./BrainSystemStatusFusion";
+import { isKbeQuery, buildKbeScript } from "./KnowledgeBaseExplorer";
+import { isCilQuery, buildCilScript } from "./ContactInvestmentLinker";
+import { isPathQuery, buildPathScript } from "./GraphPathExplorer";
+import { isOpsKnowQuery, buildOpsKnowScript } from "./OpsEventKnowledgeGap";
+import { isAsicQuery, buildAsicScript } from "./AipSkillInvestigationCoverage";
+import { isSwdpQuery, buildSwdpScript } from "./SwarmDatasetProvenance";
+import { isLitaQuery, buildLitaScript } from "./LiveIntelTaskActivator";
+import { isIdepcQuery, buildIdepcScript } from "./IntelProfileDatasetEvidence";
+import { isRepInvQuery, buildRepInvScript } from "./ReportInvestigationCoverage";
+import { isCrisisWarningQuery, buildCrisisWarningScript } from "./CrisisEarlyWarning";
+import { isSceneRiskQuery, buildSceneRiskScript } from "./SceneRiskPresence";
+import { isBrsmQuery, buildBrsmScript } from "./BrainRiskMonitor";
+import { isAtscenQuery, buildAtscenScript } from "./AgentToolScenarioCoverage";
+import { isBstpQuery, buildBstpScript } from "./BrainTaskProgressMonitor";
+import { isCreiskQuery, buildCreiskScript } from "./ContactRiskExposure";
+import { isSkrQuery, buildSkrScript } from "./ScenarioKnowledgeReadiness";
+import { isOpresQuery, buildOpresScript } from "./OpsReportCoverage";
+import { isScownQuery, buildScownScript } from "./SwarmContactOwnership";
+import { isIsexpQuery, buildIsexpScript } from "./InvestmentScenarioRisk";
+import { isItsmQuery, buildItsmScript } from "./IntelProfileScenarioThreat";
+import { isTaskRepQuery, buildTaskRepScript } from "./TaskReportCoverage";
+import { isScknQuery, buildScknScript } from "./SceneKnowledgeCoverage";
+import { isSkkgQuery, buildSkkgScript } from "./AipSkillKnowledgeGrounding";
+import { isInvkgQuery, buildInvkgScript } from "./InvestigationKnowledgeGrounding";
+import { isOpeicQuery, buildOpeicScript } from "./OpsEventIntelCorrelation";
+import { isCsemQuery, buildCsemScript } from "./ContactScenarioMapper";
+import { isOpscenQuery, buildOpscenScript } from "./OpsScenarioGap";
+import { isRsrptQuery, buildRsrptScript } from "./RiskSignalReportCoverage";
+import { isCinvQuery, buildCinvScript } from "./ContactInvestigationInvolvement";
+import { isAsrcQuery, buildAsrcScript } from "./AipSkillReportsCoverage";
+import { isDtconQuery, buildDtconScript } from "./DatasetTaskConsumption";
+import { isSwriskQuery, buildSwriskScript } from "./SwarmJobRiskCorrelation";
+import { isIptaskQuery, buildIptaskScript } from "./IntelProfileTasking";
+import { isInvcaseQuery, buildInvcaseScript } from "./InvestmentInvestigationCoverage";
+import { isCtknowQuery, buildCtknowScript } from "./ContactKnowledgeAdvisor";
+import { isScdsetQuery, buildScdsetScript } from "./ScenarioDatasetCoverage";
+import { isRattrQuery, buildRattrScript } from "./RiskSignalIntelAttribution";
+import { isRdlinQuery, buildRdlinScript } from "./ReportDatasetLineage";
+import { isIrepQuery, buildIrepScript } from "./InvestmentReportCoverage";
+import { isSjinvQuery, buildSjinvScript } from "./SwarmJobInvestigationCoverage";
+import { isSjkgQuery, buildSjkgScript } from "./SwarmJobKnowledgeGrounding";
+import { isCtaskQuery, buildCtaskScript } from "./ContactTaskAssignment";
+import { isOpeconQuery, buildOpeconScript } from "./OpsContactOwnership";
+import { isCtrptQuery, buildCtrptScript } from "./ContactReportCoverage";
+import { isSjaskQuery, buildSjaskScript } from "./SwarmJobAipSkillCoverage";
+import { isScrepQuery, buildScrepScript } from "./ScenarioReportIntelligence";
+import { isCntrkrskQuery, buildCntrkrskScript } from "./GraphCentralityRiskConvergence";
+import { isTaskkgQuery, buildTaskkgScript } from "./TaskKnowledgeGrounding";
+import { isIpopsQuery, buildIpopsScript } from "./IntelProfileOpsActivation";
+import { isRptkbQuery, buildRptkbScript } from "./ReportKnowledgeCoverage";
+import { isOpaskQuery, buildOpaskScript } from "./OpsAipSkillCoverage";
+import { isInvdsetQuery, buildInvdsetScript } from "./InvestigationDatasetEvidence";
+import { isGcknQuery, buildGcknScript } from "./GraphCentralityKnowledge";
+import { isInvkbQuery, buildInvkbScript } from "./InvestmentKnowledgeCoverage";
+import { isIpkbQuery, buildIpkbScript } from "./IntelProfileKnowledgeCoverage";
+import { isCtdsetQuery, buildCtdsetScript } from "./ContactDatasetExposure";
+import { isLirptQuery, buildLirptScript } from "./LiveIntelReportCoverage";
+import { isLiscenQuery, buildLiscenScript } from "./LiveIntelScenarioCoverage";
+import { isGcinQuery, buildGcinScript } from "./GraphCentralityInvestigations";
+import { isGcnjobQuery, buildGcnjobScript } from "./GraphCentralitySwarmJobs";
+import { isLiknowQuery, buildLiknowScript } from "./LiveIntelKnowledgeCoverage";
+import { isLicontactQuery, buildLicontactScript } from "./LiveIntelContactExposure";
+import { isLitaskQuery, buildLitaskScript } from "./LiveIntelTaskActivation";
+import { isGcaskQuery, buildGcaskScript } from "./GraphCentralityAipSkill";
+import { isKfmQuery, buildKfmScript } from "./KnowledgeFreshnessMonitor";
+import { isAgentToolsRunnerQuery, buildAgentToolsRunnerScript } from "./AgentToolsRunner";
+import { isIntelDigestQuery, buildIntelDigestScript } from "./IntelDigest";
+import { isReportViewerQuery, buildReportViewerScript } from "./ReportViewer";
+import { isWatchlistQuery, buildWatchlistScript } from "./EntityWatchlist";
+import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
+import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
+import { isTaskQuery, buildTaskScript } from "./TaskBoard";
+import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
+import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
+import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
+import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
+import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
+import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
+import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
+import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
+import { isTourQuery, buildTourScript } from "./SceneAutoTour";
+import { isExecBriefQuery, buildExecBriefScript } from "./ExecutiveBriefing";
+import { isDinvQuery, buildDinvScript } from "./DatasetInvestigationLinker";
+import { isOpsTempoQuery, buildOpsTempoScript } from "./OpsTempoIndex";
+import { isOpsHealthBannerQuery, buildOpsHealthBannerScript } from "./OpsHealthBanner";
+import { isChatQuery, buildChatScript } from "./AgentChatTranscript";
+import { isSctmQuery, buildSctmScript } from "./AipSkillContactTaskMesh";
+import { isOpmapQuery, buildOpmapScript } from "./AipSkillContactScenarioMap";
+import { isAthrepQuery, buildAthrepScript } from "./AdaptiveThreatReport";
+import { isBnvmQuery, buildBnvmScript } from "./BrainNodeVelocityMonitor";
+import { isBrainPulseQuery } from "./LiveBrainPulse";
+import { isSwarmDatasetQuery, buildSwarmDatasetScript } from "./SwarmDatasetTracker";
+import { isSsxcapQuery, buildSsxcapScript } from "./AipSkillSwarmScenarioMatrix";
+import { isIrsigQuery, buildIrsigScript } from "./InvestigationRiskCorrelator";
+import { isTskquadQuery, buildTskquadScript } from "./TaskPriorityQuadrant";
+import { isSsaipQuery, buildSsaipScript } from "./SystemStatusAipSkillCoverage";
+import { isCrseQuery, buildCrseScript } from "./ContactRiskExposureMatrix";
+import { isWrlrskQuery, buildWrlrskScript } from "./WorldRiskCorrelator";
+import { isLiicQuery, buildLiicScript } from "./LiveIntelInvestigationCorrelator";
+import { isRrsigQuery, buildRrsigScript } from "./ReportRiskSignalCoverage";
+import { isSddepQuery, buildSddepScript } from "./ScenarioDatasetDependencyMap";
+import { isOesgaQuery, buildOesgaScript } from "./OpsEventScenarioGap";
+import { isKimapQuery, buildKimapScript } from "./KnowledgeInvestigationMapper";
+import { isCiprQuery, buildCiprScript } from "./ContactIntelProfileCrossRef";
+import { isTscovQuery, buildTscovScript } from "./TaskScenarioCoverage";
+import { isSwimbQuery, buildSwimbScript } from "./SwarmInvestigationBridge";
+import { isIcpimQuery, buildIcpimScript } from "./InvestmentContactMap";
+import { isUitlQuery, buildUitlScript } from "./UnifiedIntelTimeline";
+import { isAipkrstriQuery, buildAipkrstriScript } from "./AipSkillKnowledgeRiskTriple";
+import { isSitrepQuery, buildSitrepScript } from "./SitrepCommander";
+import { isScgnQuery, buildScgnScript } from "./SceneGraphNodeCoverage";
+import { isRskscenQuery, buildRskscenScript } from "./RiskScenarioCoverage";
+import { isAsliannQuery, buildAsliannScript } from "./AipSkillLiveAnnotationTriple";
+import { isIprlinkQuery, buildIprlinkScript } from "./IntelProfileReportLinkage";
+import { isScrmxQuery, buildScrmxScript } from "./ScenarioContactReadinessMatrix";
+import { isTsdtriQuery, buildTsdtriScript } from "./TaskSwarmDatasetTriple";
+import { isPtexpQuery, buildPtexpScript } from "./PortfolioThreatExposure";
+import { isAsidtriQuery, buildAsidtriScript } from "./AipSkillInvestigationDatasetTriple";
+import { isKorstriQuery, buildKorstriScript } from "./KnowledgeOpsRiskTriple";
+import { isSrsmQuery, buildSrsmScript } from "./SwarmRiskScenarioMatrix";
+import { isOecrcQuery, buildOecrcScript } from "./OpsEventContactCoverage";
+import { isCtinvQuery, buildCtinvScript } from "./ContactTaskInvestigationTriple";
+import { isIorstdQuery, buildIorstdScript } from "./InvestigationOpsRiskDashboard";
+import { isRkogapQuery, buildRkogapScript } from "./ReportKnowledgeOpsGap";
+import { isIexrmQuery, buildIexrmScript } from "./InvestmentScenarioContactMap";
+import { isCkiriQuery, buildCkiriScript } from "./ContactKnowledgeScenarioReadiness";
+import { isIasadQuery, buildIasadScript } from "./IntelActorDeploymentMatrix";
+import { isCifinexQuery, buildCifinexScript } from "./ContactInvestmentRiskNexus";
+import { isSjkbrepQuery, buildSjkbrepScript } from "./SwarmKnowledgeReportNexus";
+import { isSkopriQuery, buildSkopriScript } from "./ScenarioKnowledgeOpsReadiness";
+import { isGcrthinQuery, buildGcrthinScript } from "./GraphCentralityThreatNexus";
+import { isLkrpulseQuery, buildLkrpulseScript } from "./LiveIntelGroundTruthPulse";
+import { isTiorcovQuery, buildTiorcovScript } from "./TaskIntelOpsResponse";
+import { isDtkhealthQuery, buildDtkhealthScript } from "./DatasetTaskKnowledgeHealth";
+import { isIssmapQuery, buildIssmapScript } from "./InvestmentSwarmScenarioCoverage";
+import { isRsdatQuery, buildRsdatScript } from "./ReportScenarioDatasetTriad";
+import { isSipwcovQuery, buildSipwcovScript } from "./ScenarioIntelReportCoverage";
+import { isTortcovQuery, buildTortcovScript } from "./TaskRiskReportCoverage";
+import { isSrkrrQuery, buildSrkrrScript } from "./SwarmRiskKnowledgeReadiness";
+import { isCginfexQuery, buildCginfexScript } from "./ContactGraphInfluenceExposure";
+import { isDiaswanQuery, buildDiaswanScript } from "./DatasetIntelSwarmNexus";
+import { isRiccovQuery, buildRiccovScript } from "./ReportInvestigationContactNexus";
+import { isIkofirmQuery, buildIkofirmScript } from "./InvestmentKnowledgeOpsFirm";
+import { isFstrcQuery, buildFstrcScript } from "./FullSpectrumThreatCoverage";
+import { isGcnitxQuery, buildGcnitxScript } from "./GraphCommunityNetworkThreatIndex";
+import { isKipswatQuery, buildKipswatScript } from "./KnowledgeThreatAwarenessCoverage";
+import { isGntiopQuery, buildGntiopScript } from "./GraphNodeOperationalMesh";
+import { isIctarcQuery, buildIctarcScript } from "./IntelActorResponseCoverage";
+import { isSscexeQuery, buildSscexeScript } from "./ScenarioSwarmContactTriangle";
+import { isTgkpulseQuery, buildTgkpulseScript } from "./TaskGraphKnowledgePulse";
+import { isOdcsrcQuery, buildOdcsrcScript } from "./OpsDatasetContactCoverage";
+import { isKcoppulsQuery, buildKcoppulsScript } from "./KnowledgeContactOpsPulse";
+import { isIdktrepQuery, buildIdktrepScript } from "./IntelProfileDatasetKnowledgeCoverage";
+import { isScrrpQuery, buildScrrpScript } from "./ScenarioRiskContactResponse";
+import { isIoefipQuery, buildIoefipScript } from "./InvestmentOpsKnowledgePulse";
+import { isOictrcQuery, buildOictrcScript } from "./OpsEventIntelContactTracker";
+import { isGakcimapQuery, buildGakcimapScript } from "./GraphAnnotationKnowledgeMap";
+import { isAlescqQuery, buildAlescqScript } from "./SystemWideAlertEscalator";
+import { isRdoetriQuery, buildRdoetriScript } from "./RiskDataOpsTriad";
+import { isIdkpulsQuery, buildIdkpulsScript } from "./InvestigationDatasetKnowledgePulse";
+import { isCdirmatQuery, buildCdirmatScript } from "./ContactDatasetReportMatrix";
+import { isIgrnexQuery, buildIgrnexScript } from "./InvestmentGraphReportNexus";
+import { isSjircicQuery, buildSjircicScript } from "./SwarmIntelReportCoverage";
+import { isTrsconQuery, buildTrsconScript } from "./TaskReportScenarioCoverage";
+import { isOrscoreQuery, buildOrscoreScript } from "./OperationalReadinessScore";
+import { isLishmQuery, buildLishmScript } from "./LiveIntelStreamHealth";
+import { isIptcmapQuery, buildIptcmapScript } from "./GraphCommunityIntelScenarioMap";
+import { isGaoscovQuery, buildGaoscovScript } from "./GraphAnnotationOpsSwarmCoverage";
+import { isSctrocQuery, buildSctrocScript } from "./SceneTaskReportGrounding";
+import { isSvimapQuery, buildSvimapScript } from "./SwarmJobInvestmentContactMap";
+import { isAikinQuery, buildAikinScript } from "./IntelActorImpactNexus";
+import { isOincmQuery, buildOincmScript } from "./OpsIncidentIntelMesh";
+import { isDgokgndQuery, buildDgokgndScript } from "./DatasetGraphOpsKnowledgeNexus";
+import { isSsrkmdocQuery, buildSsrkmdocScript } from "./SwarmScenarioReportKnowledgeDoc";
+import { isCoeganQuery, buildCoeganScript } from "./ContactOpsGraphAttributionNetwork";
+import { isFamicovQuery, buildFamicovScript } from "./IntelActorFullMissionCoverage";
+import { isRkoithemQuery, buildRkoithemScript } from "./RiskSignalEvidenceMatrix";
+import { isIrorfdQuery, buildIrorfdScript } from "./InvestmentRiskIntelDashboard";
+import { isLicimexQuery, buildLicimexScript } from "./LiveIntelMarketExposureTracker";
+import { isCsrpriQuery, buildCsrpriScript } from "./ContactScenarioReportReadiness";
+import { isTgoknexQuery, buildTgoknexScript } from "./TaskGraphOpsKnowledgeNexus";
+import { isFocohQuery, buildFocohScript } from "./AipSkillFullOpsCoverage";
+import { isStcixQuery, buildStcixScript } from "./ScenarioRiskSwarmContainment";
+import { isSciaipQuery, buildSciaipScript } from "./SceneAipRiskCoverageMap";
+import { isSgodsatQuery, buildSgodsatScript } from "./ScenarioCommOpsDataSaturation";
+import { isGcknipQuery, buildGcknipScript } from "./GraphCommunityKnowledgeIntelCoverage";
+import { isTikdoiQuery, buildTikdoiScript } from "./TaskIntelDatasetKnowledgeCoverage";
+import { isCsoermQuery, buildCsoermScript } from "./ContactScenarioOpsRiskMatrix";
+import { isSocdmapQuery, buildSocdmapScript } from "./SwarmOpsCapacityMap";
+import { isIskfullQuery, buildIskfullScript } from "./InvestigationFullCoverage";
+import { isDgorsimQuery, buildDgorsimScript } from "./DatasetGraphOpsRiskSituationalMap";
+import { isNdratlasQuery, buildNdratlasScript } from "./AipSkillNetworkDefenseAtlas";
+import { isAnequadQuery, buildAnequadScript } from "./IntelActorNetworkExposure";
+import { isMcocovQuery, buildMcocovScript } from "./SwarmMissionCommandCoverage";
+import { isForknQuery, buildForknScript } from "./InvestmentOpsRiskNexus";
+import { isBasirQuery, buildBasirScript } from "./BrainAipSkillRatio";
+import { isOkrtricQuery, buildOkrtricScript } from "./OpsEventIntelCoverage";
+import { isSktimpQuery, buildSktimpScript } from "./SwarmMissionReadinessPulse";
+import { isCgnimapQuery, buildCgnimapScript } from "./ContactGraphIntelAlignmentMap";
+import { isIcknexQuery, buildIcknexScript } from "./InvestmentContactKnowledgeNexus";
+import { isTricmQuery, buildTricmScript } from "./TaskRiskIntelCoverageMatrix";
+import { isSwedatQuery, buildSwedatScript } from "./SwarmScenarioDataTriad";
+import { isLifriskQuery, buildLifriskScript } from "./LiveIntelInvestmentRisk";
+import { isStckorgQuery, buildStckorgScript } from "./ScenarioTaskContactKnowledgeGrid";
+import { isRtsicmQuery, buildRtsicmScript } from "./RiskTaskInvestigationCoverage";
+import { isOtccmQuery, buildOtccmScript } from "./OpsContactTaskMap";
+import { isKogsyncQuery, buildKogsyncScript } from "./KnowledgeOpsCommunitySyncMap";
+import { isIscdrimQuery, buildIscdrimScript } from "./InvestigationReadinessMatrix";
+import { isOsigsmQuery, buildOsigsmScript } from "./AipSkillGraphOpsSignalMesh";
+import { isCgrimapQuery, buildCgrimapScript } from "./CommunityIntelDocMap";
+import { isPercovQuery, buildPercovScript } from "./PersonnelResponseCoverage";
+import { isDsinexQuery, buildDsinexScript } from "./DataScienceNexus";
+import { isIskpinQuery, buildIskpinScript } from "./InvestmentScenarioKnowledgeNexus";
+import { isAthnexQuery, buildAthnexScript } from "./IntelActorScenarioRiskNexus";
+import { isSmicnetQuery, buildSmicnetScript } from "./SwarmMissionIntelNet";
+import { isTkgmQuery, buildTkgmScript } from "./TaskKnowledgeCommunityMap";
+import { isOpridxQuery, buildOpridxScript } from "./OpsReadinessIndex";
+import { isFsopsQuery, buildFsopsScript } from "./InvestigationFullStackCoverage";
+import { isMkcsigQuery, buildMkcsigScript } from "./ScenarioMissionIntelGrid";
+import { JINSCORE_RE, buildJinscoreScript } from "./JarvisIntelNexusScore";
+import { isAricpQuery, buildAricpScript } from "./AipSkillReportInvestigationPulse";
+import { isAipmapQuery, buildAipmapScript } from "./ActorIntelPreparednessMap";
+import { isIkrimapQuery, buildIkrimapScript } from "./InvestmentKnowledgeRiskMap";
+import { isSrimapQuery, buildSrimapScript } from "./SwarmReportIntelMap";
+import { isCosiaQuery, buildCosiaScript } from "./ContactOpsSwarmInvestigationMatrix";
+import { isTmickiQuery, buildTmickiScript } from "./TaskIntelScenarioKnowledgeIndex";
+import { isOdremQuery, buildOdremScript } from "./DatasetOpsRiskExposureMap";
+import { isTcrmapQuery, buildTcrmapScript } from "./ThreatContextReadinessMap";
+import { isRsditriQuery, buildRsditriScript } from "./RiskSignalDatasetInvestigationTriage";
+import { isTsrmapQuery, buildTsrmapScript } from "./ThreatScenarioReadinessMap";
+import { isAmcovQuery, buildAmcovScript } from "./SwarmScenarioKnowledgeCoverage";
+import { isTdipmapQuery, buildTdipmapScript } from "./TaskDatasetIntelProfileMap";
+import { isCprsmapQuery, buildCprsmapScript } from "./ContactPersonnelReadinessMap";
+import { isGdinexQuery, buildGdinexScript } from "./GraphDatasetInvestigationNexus";
+import { isPrsmapQuery, buildPrsmapScript } from "./InvestmentScenarioRiskMap";
+import { isWtcmapQuery, buildWtcmapScript } from "./WorldThreatClusterMap";
+import { isMdheatQuery, buildMdheatScript } from "./GraphCommunityMissionDensity";
+import { isWfactQuery, buildWfactScript } from "./WorkforceActivityMatrix";
+import { isMtrbcovQuery, buildMtrbcovScript } from "./MissionBriefingCoverage";
+import { isKoecpQuery, buildKoecpScript } from "./KnowledgeOpsEventContextPulse";
+import { isGadevaQuery, buildGadevaScript } from "./GraphAnnotationDataEvidenceAtlas";
+import { isOctatmQuery, buildOctatmScript } from "./OpsEventContactTaskMatrix";
+import { isIdenexQuery, buildIdenexScript } from "./IntelProfileDatasetOpsNexus";
+import { isArsrmapQuery, buildArsrmapScript } from "./RiskSwarmKnowledgeResponseMap";
+import { isGascrinQuery, buildGascrinScript } from "./GraphAnnotationScenarioContactNexus";
+import { isPikmapQuery, buildPikmapScript } from "./PortfolioIntelCoverageMap";
+import { isOasrmapQuery, buildOasrmapScript } from "./OpsEventAipSkillReportMap";
+import { isCodinQuery, buildCodinScript } from "./ContactDatasetOpsNetwork";
+import { isCrskpoiQuery, buildCrskpoiScript } from "./ContactReportScenarioKnowledgeMap";
+import { isTargQuery, buildTargScript } from "./ThreatActorResponseGrid";
+import { isDpciQuery, buildDpciScript } from "./DefensivePlaybookCoverageIndex";
+import { isLtasorpQuery, buildLtasorpScript } from "./LiveIntelAipScenarioReadiness";
+import { isAstroQuery, buildAstroScript } from "./SwarmJobRiskSignalReportOrchestrator";
+import { isSpiamQuery, buildSpiamScript } from "./TaskInvestmentRiskAlignmentMap";
+import { isDicnexQuery, buildDicnexScript } from "./DatasetContactIntelProfileNexus";
+import { isSticnexQuery, buildSticnexScript } from "./StrategicIntelCoverageNexus";
+import { isMidossQuery, buildMidossScript } from "./ScenarioIntelReportDossier";
+import { isTfinexQuery, buildTfinexScript } from "./ThreatFinanceNexus";
+import { isAiomapQuery, buildAiomapScript } from "./AutonomousIntelOpsMap";
+import { isArbnexQuery, buildArbnexScript } from "./GraphAnnotationRiskIntelNexus";
+import { isTrkarmQuery, buildTrkarmScript } from "./TaskReportKnowledgeReadiness";
+import { isIgcaimQuery, buildIgcaimScript } from "./InvestigationNetworkCoverageMap";
+import { isCoedrnQuery, buildCoedrnScript } from "./ContactOpsDataRiskNexus";
+import { isSacmapQuery, buildSacmapScript } from "./InvestmentKnowledgeTaskSwarmMap";
+import { isSrtmecQuery, buildSrtmecScript } from "./ScenarioReportTaskMissionMap";
+import { isTaamQuery, buildTaamScript } from "./ThreatActorActivityMonitor";
+import { isNcaimQuery, buildNcaimScript } from "./ContactGraphIntelMap";
+import { isMdirsQuery, buildMdirsScript } from "./AipSkillReportKnowledgeReadiness";
+import { isIrcmapQuery, buildIrcmapScript } from "./OpsEventIntegratedResponseMap";
+import { isKrsdefQuery, buildKrsdefScript } from "./KnowledgeRiskScenarioDefMap";
+import { isOmcmapQuery, buildOmcmapScript } from "./OperationalMeshCoverageMap";
+import { isDgkimapQuery, buildDgkimapScript } from "./DatasetGraphIntelMap";
+import { isOcasamQuery, buildOcasamScript } from "./OpsEventContactKnowledgeMap";
+import { isWetmatQuery, buildWetmatScript } from "./WorldEventThreatMatrix";
+import { isDarinexQuery, buildDarinexScript } from "./DatasetSkillReportNexus";
+import { isCkoeabQuery, buildCkoeabScript } from "./ContactKnowledgeOpsAwarenessBridge";
+import { isIticmapQuery, buildIticmapScript } from "./IntelProfileTaskInvestigationMatrix";
+import { isOrcnexQuery, buildOrcnexScript } from "./TaskKnowledgeSkillNexus";
+import { isTdrmapQuery, buildTdrmapScript } from "./IntelProfileDataScenarioMap";
+import { isSmrnexQuery, buildSmrnexScript } from "./SwarmReportScenarioNexus";
+import { isGaccovQuery, buildGaccovScript } from "./GraphAnnotationSkillContactBridge";
+import { isIrcnexQuery, buildIrcnexScript } from "./IntelProfileResponseNexus";
+import { isTminexQuery, buildTminexScript } from "./RiskSignalMitigationNexus";
+import { isTrpinQuery, buildTrpinScript } from "./TaskSwarmInvestmentResourceNexus";
+import { isOasalignQuery, buildOasalignScript } from "./OpsSkillContactAlignment";
+import { isIpassessQuery, buildIpassessScript } from "./SwarmIntelReportNexus";
+import { isIskrnexQuery, buildIskrnexScript } from "./InvestigationScenarioKnowledgeNexus";
+import { isTrmeshQuery, buildTrmeshScript } from "./ThreatResponseMesh";
+import { isDrascovQuery, buildDrascovScript } from "./DatasetReportSkillRiskCoverage";
+import { isIpoestRQuery, buildIpoestRScript } from "./IntelProfileOpsThreatTracker";
+import { isTrocasQuery, buildTrocasScript } from "./TaskReportInvestigationClosure";
+import { isFracmapQuery, buildFracmapScript } from "./OpsAlertCommunityInvestmentMap";
+import { isKoatracQuery, buildKoatracScript } from "./KnowledgeOpsAlertSkillCoverage";
+import { isRsirixQuery, buildRsirixScript } from "./RiskSignalSkillInvestigationIndex";
+import { isCsdcovQuery, buildCsdcovScript } from "./ContactScenarioDatasetCoverage";
+import { isScknexQuery, buildScknexScript } from "./SwarmContactKnowledgeNexus";
+import { isTfscovQuery, buildTfscovScript } from "./InvestmentScenarioIntelCoverage";
+import { isOkrsriQuery, buildOkrsriScript } from "./OpsEventKnowledgeScenarioReadiness";
+import { isAgdsixQuery, buildAgdsixScript } from "./AipSkillGraphDatasetSaturation";
+import { isGiocnexQuery, buildGiocnexScript } from "./GraphCommunityInvestmentOpsNexus";
+import { isTiprexQuery, buildTiprexScript } from "./TaskIntelReportClosure";
+import { isTeixrevQuery, buildTeixrevScript } from "./SwarmRiskKnowledgeThreatReview";
+import { isGnocovQuery, buildGnocovScript } from "./GraphNodeOperationalCoverage";
+import { isArscovQuery, buildArscovScript } from "./RiskSignalAutomatedResponseCoverage";
+import { isFpacovQuery, buildFpacovScript } from "./FullPersonnelAlertCoverage";
+import { isIdrnQuery, buildIdrnScript } from "./InvestmentDatasetRiskNexus";
+import { isPcrcovQuery, buildPcrcovScript } from "./AipSkillContactRiskCoverage";
+import { isRcsanQuery, buildRcsanScript } from "./ReportContactSwarmNexus";
+import { isSkdcrnexQuery, buildSkdcrnexScript } from "./ScenarioKnowledgeDatasetContactNexus";
+import { isSrockbQuery, buildSrockbScript } from "./SwarmReportOpsKnowledgeBridge";
+import { isTarecQuery, buildTarecScript } from "./IntelProfileThreatActorResolution";
+import { isTdoacovQuery, buildTdoacovScript } from "./TaskDatasetOpsAlertCoverage";
+import { isFtnexQuery, buildFtnexScript } from "./IntelProfileInvestmentAlertNexus";
+import { isCsksrbQuery, buildCsksrbScript } from "./ContactScenarioKnowledgeRiskBridge";
+import { isSidicovQuery, buildSidicovScript } from "./SwarmJobInvestigationDatasetCoverage";
+import { isRoganexQuery, buildRoganexScript } from "./ReportOpsAnnotationNexus";
+import { isEntityActivityQuery, buildEntityActivityScript } from "./EntityActivityHeatmap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -55,7 +393,7 @@ export default function JarvisBrain() {
     try {
       const r = await fetch(`${apiBase()}/v1/voice/tts`, {
         method: "POST", headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: answer }),
+        body: JSON.stringify({ text: answer, voice: getActiveVoice() }),
       });
       if (!r.ok) return;
       const url = URL.createObjectURL(await r.blob());
@@ -77,20 +415,2879 @@ export default function JarvisBrain() {
 
   async function ask(q) {
     if (!q || !q.trim()) return;
+    // F20: "show me X" / "open X" / "view X" → re-route to the matching panel's keyword.
+    if (isShowMeQuery(q)) {
+      const resolved = resolveShowMeQuery(q);
+      window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: resolved } }));
+      return;
+    }
     clearTimeout(hideT.current);
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
+    // F19: ambient reactor hum toggle — dispatch event; AmbientReactorHum handles the WebAudio.
+    if (isAmbientQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ambient-toggle"));
+      const script = "Ambient reactor hum toggled, sir.";
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), 5000);
+      return;
+    }
+    if (isClockQuery(q)) {
+      const script = await buildClockScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(6000, script.length * 70));
+      return;
+    }
+    // F05: status queries bypass the agent and speak real telemetry directly.
+    if (isStatusQuery(q)) {
+      let script = "";
+      try { script = await buildStatusScript(); } catch { script = "Status telemetry unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F07: markets queries speak live crypto+FX top-movers directly.
+    if (isMarketsQuery(q)) {
+      let script = "";
+      try { script = await buildMarketsScript(); } catch { script = "Market data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F08: entity quick-search — open the panel and speak a one-line dossier.
+    if (isEntitySearchQuery(q)) {
+      const term = extractEntitySearchTerm(q) || "";
+      window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term } }));
+      let script = "";
+      try { script = await buildEntityDossierScript(term); } catch { script = "Entity search unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F10: task board — TaskBoard opens on jarvis:ask; JarvisBrain speaks the summary.
+    if (isTaskQuery(q)) {
+      let script = "";
+      try { script = await buildTaskScript(); } catch { script = "Mission board is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F11: datasets browser — DatasetsBrowser opens on jarvis:ask; JarvisBrain speaks the catalog summary.
+    if (isDatasetsQuery(q)) {
+      let script = "";
+      try { script = await buildDatasetsScript(); } catch { script = "Data Fusion Catalog is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F12: investigations — InvestigationsList opens on jarvis:ask; JarvisBrain speaks the case brief.
+    if (isInvestigationsQuery(q)) {
+      let script = "";
+      try { script = await buildInvestigationsScript(); } catch { script = "Investigations panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F13: scenario launcher — ScenarioLauncher opens on jarvis:ask; JarvisBrain speaks the theatre brief.
+    if (isScenarioQuery(q)) {
+      let script = "";
+      try { script = await buildScenarioScript(); } catch { script = "Simulation theatre is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F14: document search — DocumentSearch panel opens; JarvisBrain speaks vault summary.
+    if (isDocumentQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:document-search-toggle"));
+      let script = "";
+      try { script = await buildDocumentScript(); } catch { script = "Document vault is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F15: skill scorecard — open the panel and speak top performers.
+    if (isSkillQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: q } }));
+      let script = "";
+      try { script = await buildSkillScript(); } catch { script = "Skill metrics unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F16: brain-growth sparkline — toggle panel + speak nodes/synapses trend.
+    if (isBrainQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:brain-growth-toggle"));
+      let script = "";
+      try { script = await buildBrainScript(); } catch { script = "Brain growth telemetry unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F17: scene anchor drill-down — open panel + speak anchor summary.
+    if (isAnchorQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: q } }));
+      let script = "";
+      try { script = await buildAnchorScript(); } catch { script = "Anchor data unavailable for the current scene, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F22: alert queries speak the live ops alert summary directly.
+    if (isAlertQuery(q)) {
+      let script = "";
+      try { script = await buildAlertScript(); } catch { script = "Alert feed unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isInvScenLinkerQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:inv-scen-link-toggle"));
+      const script = await buildInvScenLinkerScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F23: investment/wealth queries speak a live portfolio brief directly.
+    if (isInvestmentQuery(q)) {
+      let script = "";
+      try { script = await buildInvestmentScript(); } catch { script = "Portfolio data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F24: contacts/people/directory queries speak a live directory brief directly.
+    if (isContactsQuery(q)) {
+      let script = "";
+      try { script = await buildContactsScript(); } catch { script = "Contacts directory unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F25: swarm jobs queries open the monitor and speak a live swarm brief directly.
+    if (isSwarmQuery(q)) {
+      let script = "";
+      try { script = await buildSwarmScript(); } catch { script = "Swarm jobs data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F26: centrality queries open the graph centrality view and speak a live influence brief.
+    if (isCentralityQuery(q)) {
+      let script = "";
+      try { script = await buildCentralityScript(); } catch { script = "Graph centrality data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F27: diagnostics queries open the service health panel and speak a live diagnostics brief.
+    if (isDiagnosticsQuery(q)) {
+      let script = "";
+      try { script = await buildDiagnosticsScript(); } catch { script = "Diagnostics unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F28: command history — read from localStorage, speak recent entries; panel opens via Alt+H or HIST button.
+    if (isHistoryQuery(q)) {
+      const script = buildHistoryScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F30: scene auto-tour — "JARVIS, start tour / give me a tour / walkthrough" → narrated cycle of all 10 scenes.
+    if (isTourQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tour-start"));
+      const script = buildTourScript();
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F29: multi-voice toggle — "JARVIS, switch to fable voice" / "change voice" cycles or sets ash/fable/onyx.
+    if (isVoiceQuery(q)) {
+      const chosen = applyVoiceFromQuery(q);
+      const script = `Voice profile switched to ${chosen}. All subsequent speech will use the ${chosen} engine, sir.`;
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+    // F32: ops-task coverage — dispatch toggle + speak live coverage summary.
+    if (isOpsCoverageQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ops-coverage-toggle"));
+      let script = "";
+      try { script = await buildOpsCoverageScript(); } catch { script = "Ops-task coverage checker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F33: dataset-investigation gap — dispatch toggle + speak live data-gap summary.
+    if (isDataGapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:datagap-toggle"));
+      let script = "";
+      try { script = await buildDataGapScript(); } catch { script = "Dataset-investigation gap checker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isInvPipeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invpipe-toggle"));
+      let script = "";
+      try { script = await buildInvPipeScript(); } catch { script = "Investigation resolution pipeline is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRisGapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:risgap-toggle"));
+      let script = "";
+      try { script = await buildRisGapScript(); } catch { script = "Risk-investigation matrix is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPulseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:pulse-show"));
+      const script = buildPulseScript(null);
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+    if (isSkillProgressQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skillp-toggle"));
+      let script = "";
+      try { script = await buildSkillProgressScript(); } catch { script = "Skill progression tracker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSkasQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skas-toggle"));
+      let script = "";
+      try { script = await buildSkasScript(); } catch { script = "AIP skill scenario coverage analysis is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isToolRegistryQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:atr-toggle"));
+      let script = "";
+      try { script = await buildToolRegistryScript(); } catch { script = "Tool registry is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isBssfQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:bssf-toggle"));
+      let script = "";
+      try { script = await buildBssfScript(); } catch { script = "Brain system fusion standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKbeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kbe-toggle"));
+      let script = "";
+      try { script = await buildKbeScript(); } catch { script = "Knowledge base explorer is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCilQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cil-toggle"));
+      let script = "";
+      try { script = await buildCilScript(); } catch { script = "Contact investment linker is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOpsKnowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opknow-toggle"));
+      let script = "";
+      try { script = await buildOpsKnowScript(); } catch { script = "Ops knowledge gap analysis is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPathQuery(q)) {
+      let script = "";
+      try { script = await buildPathScript(q); } catch { script = "Graph path explorer is standing by. Say path from X to Y to trace a connection, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAsicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:asic-toggle"));
+      let script = "";
+      try { script = await buildAsicScript(); } catch { script = "AIP skill investigation coverage analysis is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSwdpQuery(q)) {
+      let script = "";
+      try { script = await buildSwdpScript(); } catch { script = "Swarm dataset provenance panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLitaQuery(q)) {
+      let script = "";
+      try { script = await buildLitaScript(); } catch { script = "Live intel task activation panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIdepcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:idepc-toggle"));
+      let script = "";
+      try { script = await buildIdepcScript(); } catch { script = "Intel profile dataset evidence coverage is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRepInvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:repinv-toggle"));
+      let script = "";
+      try { script = await buildRepInvScript(); } catch { script = "Report investigation coverage analysis is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCrisisWarningQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:crisis-warning-toggle"));
+      let script = "";
+      try { script = await buildCrisisWarningScript(); } catch { script = "Crisis early warning system is standing by — endpoint temporarily unreachable, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSceneRiskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srisk-toggle"));
+      let script = "";
+      try { script = await buildSceneRiskScript(); } catch { script = "Scene risk presence panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isBrsmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:brsm-toggle"));
+      let script = "";
+      try { script = await buildBrsmScript(); } catch { script = "Brain risk monitor is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAtscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:atscen-toggle"));
+      let script = "";
+      try { script = await buildAtscenScript(); } catch { script = "Agent tool scenario coverage is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isBstpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:bstp-toggle"));
+      let script = "";
+      try { script = await buildBstpScript(); } catch { script = "Brain task progress monitor is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCreiskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:crisk-toggle"));
+      let script = "";
+      try { script = await buildCreiskScript(); } catch { script = "Contact risk exposure panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F60: investment × scenario risk — cross-correlates portfolio positions against threat scenarios.
+    if (isIsexpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:isexp-toggle"));
+      let script = "";
+      try { script = await buildIsexpScript(); } catch { script = "Investment scenario risk panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F62: task report coverage — cross-correlates tasks against reports for documentation gaps.
+    if (isTaskRepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trep-toggle"));
+      let script = "";
+      try { script = await buildTaskRepScript(); } catch { script = "Task report documentation coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F63: scene knowledge coverage — cross-correlates cinematic scenes against KB articles.
+    if (isScknQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sckn-toggle"));
+      let script = "";
+      try { script = await buildScknScript(); } catch { script = "Scene knowledge coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F64: AIP skill × knowledge grounding — correlates each JARVIS skill against KB articles.
+    if (isSkkgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skkg-toggle"));
+      let script = "";
+      try { script = await buildSkkgScript(); } catch { script = "AIP skill knowledge grounding panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F65: investigation × knowledge grounding — correlates open investigations against KB articles.
+    if (isInvkgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invkg-toggle"));
+      let script = "";
+      try { script = await buildInvkgScript(); } catch { script = "Investigation knowledge grounding panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F66: ops events × intel profile threat correlation — tracked vs untracked blind-spot events.
+    if (isOpeicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opeic-toggle"));
+      let script = "";
+      try { script = await buildOpeicScript(); } catch { script = "Ops event intel correlation panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F67: contact × scenario engagement mapper — surfaces ENGAGED vs CLEAR contacts per scenario.
+    if (isCsemQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csem-toggle"));
+      let script = "";
+      try { script = await buildCsemScript(); } catch { script = "Contact scenario engagement panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F69: risk signal × report coverage — DOCUMENTED vs UNDOCUMENTED risk signals.
+    if (isRsrptQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsrpt-toggle"));
+      let script = "";
+      try { script = await buildRsrptScript(); } catch { script = "Risk signal report coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F70: contact × investigation involvement — INVOLVED vs CLEAR contacts.
+    if (isCinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cinv-toggle"));
+      let script = "";
+      try { script = await buildCinvScript(); } catch { script = "Contact investigation involvement panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F71: AIP skill × reports coverage — REPORTED vs UNDOCUMENTED skills.
+    if (isAsrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:asrc-toggle"));
+      let script = "";
+      try { script = await buildAsrcScript(); } catch { script = "AIP skill report coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F72: dataset × task data consumption — CONSUMING vs IDLE datasets.
+    if (isDtconQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dtcon-toggle"));
+      let script = "";
+      try { script = await buildDtconScript(); } catch { script = "Dataset task consumption panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F77: contact × knowledge advisor — LINKED vs DARK contact knowledge coverage.
+    if (isCtknowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctknow-toggle"));
+      let script = "";
+      try { script = await buildCtknowScript(); } catch { script = "Contact knowledge advisor panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F78: scenario × dataset — DATA_BACKED/PARTIAL/DATA_DARK scenario data coverage.
+    if (isScdsetQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scdset-toggle"));
+      let script = "";
+      try { script = await buildScdsetScript(); } catch { script = "Scenario dataset coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F79: risk signal × intel profile — ATTRIBUTED vs UNATTRIBUTED threat attribution.
+    if (isRattrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rattr-toggle"));
+      let script = "";
+      try { script = await buildRattrScript(); } catch { script = "Risk attribution panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F76: investment × investigation — UNDER_INVESTIGATION vs CLEAN portfolio coverage.
+    if (isInvcaseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invcase-toggle"));
+      let script = "";
+      try { script = await buildInvcaseScript(); } catch { script = "Investment investigation coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F74: intel profile × task — TASKED vs AUTONOMOUS threat actor tasking analysis.
+    if (isIptaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iptask-toggle"));
+      let script = "";
+      try { script = await buildIptaskScript(); } catch { script = "Threat actor tasking panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F73: swarm job × risk signal — THREATENED vs SECURE job classification.
+    if (isSwriskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swrisk-toggle"));
+      let script = "";
+      try { script = await buildSwriskScript(); } catch { script = "Swarm risk correlation panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F68: ops events × scenario gap — surfaces COVERED vs UNCOVERED planning blind spots.
+    if (isOpscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opscen-toggle"));
+      let script = "";
+      try { script = await buildOpscenScript(); } catch { script = "Ops scenario gap panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F61: intel profile scenario threat match — correlates intel profiles against scenarios.
+    if (isItsmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:itsm-toggle"));
+      let script = "";
+      try { script = await buildItsmScript(); } catch { script = "Intel profile scenario threat match panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F59: swarm contact ownership — cross-correlates swarm jobs against contacts.
+    if (isScownQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scown-toggle"));
+      let script = "";
+      try { script = await buildScownScript(); } catch { script = "Swarm contact ownership panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F58: ops report coverage — cross-correlates ops events against reports.
+    if (isOpresQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opres-toggle"));
+      let script = "";
+      try { script = await buildOpresScript(); } catch { script = "Ops report coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F57: scenario knowledge readiness — cross-correlates scenarios against KB articles.
+    if (isSkrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skr-toggle"));
+      let script = "";
+      try { script = await buildSkrScript(); } catch { script = "Scenario knowledge readiness panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F80: report × dataset lineage — data governance / provenance.
+    if (isRdlinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rdlin-toggle"));
+      let script = "";
+      try { script = await buildRdlinScript(); } catch { script = "Report dataset lineage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F81: investment × report coverage — portfolio intelligence gap.
+    if (isIrepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:irep-toggle"));
+      let script = "";
+      try { script = await buildIrepScript(); } catch { script = "Investment report coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F82: swarm job × investigation coverage — orphan job detection.
+    if (isSjinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjinv-toggle"));
+      let script = "";
+      try { script = await buildSjinvScript(); } catch { script = "Swarm job investigation coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F83: swarm job × knowledge grounding — bare job detection.
+    if (isSjkgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjkg-toggle"));
+      let script = "";
+      try { script = await buildSjkgScript(); } catch { script = "Swarm job knowledge grounding panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F84: contact × task assignment — people workload coverage.
+    if (isCtaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctask-toggle"));
+      let script = "";
+      try { script = await buildCtaskScript(); } catch { script = "Contact task assignment panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F85: ops events × contact ownership — orphaned event detection.
+    if (isOpeconQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opecon-toggle"));
+      let script = "";
+      try { script = await buildOpeconScript(); } catch { script = "Ops contact ownership panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F86: contact × report coverage — surfaces contacts with no intelligence paper trail.
+    if (isCtrptQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctrpt-toggle"));
+      let script = "";
+      try { script = await buildCtrptScript(); } catch { script = "Contact report coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F87: swarm job × aip skill coverage — surfaces jobs with no AI capability assigned.
+    if (isSjaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjask-toggle"));
+      let script = "";
+      try { script = await buildSjaskScript(); } catch { script = "Swarm job AI skill coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F88: scenario × report intelligence coverage — surfaces scenarios with no intelligence report backing.
+    if (isScrepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:screp-toggle"));
+      let script = "";
+      try { script = await buildScrepScript(); } catch { script = "Scenario intelligence coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F89: graph centrality × risk signal convergence — surfaces high-centrality nodes with live risk signal matches.
+    if (isCntrkrskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cntrkrsk-toggle"));
+      let script = "";
+      try { script = await buildCntrkrskScript(); } catch { script = "Graph centrality risk convergence panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F90: task × knowledge grounding — surfaces BARE tasks with no KB article backing.
+    if (isTaskkgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:taskkg-toggle"));
+      let script = "";
+      try { script = await buildTaskkgScript(); } catch { script = "Task knowledge grounding panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F91: intel profile × ops events activation — surfaces ACTIVATED threat profiles matched by live ops events.
+    if (isIpopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipops-toggle"));
+      let script = "";
+      try { script = await buildIpopsScript(); } catch { script = "Intel profile ops activation panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRptkbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rptkb-toggle"));
+      let script = "";
+      try { script = await buildRptkbScript(); } catch { script = "Report knowledge coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F94: ops events × AIP skill coverage — surfaces ops events with no AI skill backing (UNSUPPORTED).
+    if (isOpaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opask-toggle"));
+      let script = "";
+      try { script = await buildOpaskScript(); } catch { script = "Ops AI skill coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F95: investigation × dataset evidence — surfaces DATA_DARK cases with no dataset backing.
+    if (isInvdsetQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invdset-toggle"));
+      let script = "";
+      try { script = await buildInvdsetScript(); } catch { script = "Investigation dataset evidence panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F96: graph centrality × knowledge coverage — surfaces BARE high-centrality nodes with no KB backing.
+    if (isGcknQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcnk-toggle"));
+      let script = "";
+      try { script = await buildGcknScript(); } catch { script = "Graph centrality knowledge coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F97: investment × knowledge coverage — surfaces DARK portfolio positions with no KB backing.
+    if (isInvkbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:invkb-toggle"));
+      let script = "";
+      try { script = await buildInvkbScript(); } catch { script = "Investment knowledge coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F99: intel profile × knowledge coverage — surfaces BARE threat profiles with no KB backing.
+    if (isIpkbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipkb-toggle"));
+      let script = "";
+      try { script = await buildIpkbScript(); } catch { script = "Intel profile knowledge coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F200: contact × dataset exposure — surfaces INVISIBLE contacts with no data trail in any dataset.
+    if (isCtdsetQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctdset-toggle"));
+      let script = "";
+      try { script = await buildCtdsetScript(); } catch { script = "Contact dataset exposure panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F201: live intel × reports coverage — surfaces live events with no intelligence report coverage.
+    if (isLirptQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lirpt-toggle"));
+      let script = "";
+      try { script = await buildLirptScript(); } catch { script = "Live intel report coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F202: live intel × scenario coverage — correlates live world events against threat scenarios.
+    if (isLiscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:liscen-toggle"));
+      let script = "";
+      try { script = await buildLiscenScript(); } catch { script = "Live intel scenario coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F203: graph centrality × investigations — surfaces influential nodes under active investigation.
+    if (isGcinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcin-toggle"));
+      let script = "";
+      try { script = await buildGcinScript(); } catch { script = "Graph centrality investigations panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLiknowQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:liknow-toggle"));
+      let script = "";
+      try { script = await buildLiknowScript(); } catch { script = "Live intel knowledge coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLicontactQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:licontact-toggle"));
+      let script = "";
+      try { script = await buildLicontactScript(); } catch { script = "Live intel contact exposure panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGcnjobQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcnjob-toggle"));
+      let script = "";
+      try { script = await buildGcnjobScript(); } catch { script = "Graph centrality swarm job tasking panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLitaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:litask-toggle"));
+      let script = "";
+      try { script = await buildLitaskScript(); } catch { script = "Live intel task activation panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGcaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcask-toggle"));
+      let script = "";
+      try { script = await buildGcaskScript(); } catch { script = "Graph centrality AIP skill coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKfmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kfm-toggle"));
+      let script = "";
+      try { script = await buildKfmScript(); } catch { script = "Knowledge freshness monitor is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAgentToolsRunnerQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:atr-toggle"));
+      let script = "";
+      try { script = await buildAgentToolsRunnerScript(); } catch { script = "Agent tools catalogue is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIntelDigestQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:intel-digest-toggle"));
+      let script = "";
+      try { script = await buildIntelDigestScript(); } catch { script = "Intelligence digest is online. Monitoring live feeds. Standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F36: report viewer — open the reports panel + speak report count and types.
+    if (isReportViewerQuery(q)) {
+      let script = "";
+      try { script = await buildReportViewerScript(); } catch { script = "Report viewer is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F37: entity watchlist — open watchlist panel + speak pinned item summary.
+    if (isWatchlistQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:watchlist-toggle"));
+      let script = "";
+      try { script = await buildWatchlistScript(); } catch { script = "Watchlist panel is ready, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F38: executive intel briefing — open BRIEF panel + speak AI-generated 3-sentence brief.
+    if (isExecBriefQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:exec-brief-toggle"));
+      let script = "";
+      try { script = await buildExecBriefScript(); } catch { script = "Executive briefing panel is ready, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(12000, script.length * 70));
+      return;
+    }
+    // F39: dataset × investigation linker — open DINV panel + speak 2-sentence coverage brief.
+    if (isDinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dinv-toggle"));
+      let script = "";
+      try { script = await buildDinvScript(); } catch { script = "Dataset investigation linker is ready, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F42: agent chat transcript — open persistent multi-turn chat panel + speak status.
+    if (isChatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:chat-toggle"));
+      let script = "";
+      try {
+        const stored = (() => { try { const r = localStorage.getItem("jarvis_chat_history"); return r ? JSON.parse(r) : []; } catch { return []; } })();
+        script = buildChatScript(stored);
+      } catch { script = "Chat transcript panel is open, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(8000, script.length * 70));
+      return;
+    }
+    // F41: ops health banner — toggle OHB strip + speak system/risk/task/swarm summary.
+    if (isOpsHealthBannerQuery(q)) {
+      let script = "";
+      try { script = await buildOpsHealthBannerScript(); } catch { script = "Ops health banner is active, sir. Monitoring system status, risk signals, tasks, and swarm jobs."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F43: AIP skill × contact × task mesh — open SCTM panel + speak coverage summary.
+    if (isSctmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sctm-toggle"));
+      let script = "";
+      try { script = await buildSctmScript(); } catch { script = "Skill contact task mesh is open, sir. Showing skill coverage gaps across contacts and tasks."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F45: adaptive threat report — open ATHREP panel + speak risk/profile/event summary.
+    if (isAthrepQuery(q)) {
+      let script = "";
+      try { script = await buildAthrepScript(); } catch { script = "Adaptive threat report panel open, sir. Synthesising risk signals and intelligence profiles."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F44: AIP skill × contact × scenario operator capability map — open OPMAP panel + speak summary.
+    if (isOpmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opmap-toggle"));
+      let script = "";
+      try { script = await buildOpmapScript(); } catch { script = "Operator capability map is open, sir. Showing skill coverage across contacts and scenarios."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F46: brain node velocity monitor — open BNVM panel + speak growth velocity.
+    if (isBnvmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:bnvm-toggle"));
+      let script = "";
+      try { script = await buildBnvmScript(); } catch { script = "Brain node velocity monitor is online, sir. Tracking neural growth rate and acceleration trend."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F47: live brain pulse — toggle ambient orb + speak live node/synapse counts from /v1/cinematic/brain.
+    if (isBrainPulseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:brain-pulse-toggle"));
+      let script = "Live brain pulse is active, sir.";
+      try {
+        const r = await fetch(`${apiBase()}/v1/cinematic/brain`, {
+          headers: { Authorization: `Bearer ${API_KEY}` },
+        });
+        if (r.ok) {
+          const d = await r.json();
+          const nodes = d.nodes ?? d.node_count ?? d.total_nodes ?? d.graph?.nodes ?? 0;
+          const synapses = d.synapses ?? d.synapse_count ?? d.edge_count ?? d.total_edges ?? d.graph?.edges ?? 0;
+          script = `Neural activity confirmed, sir. The cognitive graph currently holds ${nodes} nodes and ${synapses} synaptic connections. The ambient pulse indicator reflects live growth velocity.`;
+        }
+      } catch { /* silent */ }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F48: swarm-dataset ingestion tracker — cross-ref /entities/SwarmJob vs /v1/datasets; AUTOMATED vs MANUAL classification.
+    if (isSwarmDatasetQuery(q)) {
+      let script = "";
+      try { script = await buildSwarmDatasetScript(); } catch { script = "Swarm-Dataset Ingestion Tracker is online, sir. Analysing pipeline automation coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F49: AIP Skill × Swarm × Scenario Execution Capability Matrix — FULLY_DEPLOYED/SCENARIO_ONLY/SWARM_ONLY/IDLE.
+    if (isSsxcapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssxcap-toggle"));
+      let script = "";
+      try { script = await buildSsxcapScript(); } catch { script = "Skill execution capability matrix is online, sir. Cross-referencing AIP skills against scenarios and swarm jobs now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F50: Investigation × Risk Signal Correlator — CORROBORATED/UNCONFIRMED.
+    if (isIrsigQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:irsig-toggle"));
+      let script = "";
+      try { script = await buildIrsigScript(); } catch { script = "Investigation risk correlator is online, sir. Cross-referencing open investigations against active risk signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F51: Task Priority Quadrant — Eisenhower 2×2 DO FIRST/PLAN/DELEGATE/SKIP classification.
+    if (isTskquadQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tskquad-toggle"));
+      let script = "";
+      try { script = await buildTskquadScript(); } catch { script = "Task priority quadrant is online, sir. Classifying tasks by urgency and priority now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F52: System Status × AIP Skill Coverage — correlate services with automation skills.
+    if (isSsaipQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssaip-toggle"));
+      let script = "";
+      try { script = await buildSsaipScript(); } catch { script = "Service AIP skill coverage monitor is online, sir. Cross-referencing system services against automation skills now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F53: Contact × Risk Signal Exposure Matrix — surface AT_RISK personnel.
+    if (isCrseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:crse-toggle"));
+      let script = "";
+      try { script = await buildCrseScript(); } catch { script = "Contact risk exposure matrix is online, sir. Cross-referencing personnel against active risk signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F54: World Risk Correlator — open WRLRSK panel + speak geophysical risk brief.
+    if (isWrlrskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wrlrsk-toggle"));
+      let script = "";
+      try { script = await buildWrlrskScript(); } catch { script = "World risk correlator is online, sir. Cross-referencing live seismic events against the risk signal catalog now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F55: Live Intel × Investigation Correlator — open LIIC panel + speak flagged investigations brief.
+    if (isLiicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:liic-toggle"));
+      let script = "";
+      try { script = await buildLiicScript(); } catch { script = "Live intel investigation correlator is online, sir. Cross-referencing world events against open investigations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F56: Report × Risk Signal Coverage — open RRSIG panel + speak intelligence gap brief.
+    if (isRrsigQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rrsig-toggle"));
+      let script = "";
+      try { script = await buildRrsigScript(); } catch { script = "Report risk signal coverage monitor is online, sir. Cross-referencing intelligence reports against active risk signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F58: Ops Event × Scenario Gap Analysis — open OESGA panel + speak coverage gap brief.
+    if (isOesgaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oesga-toggle"));
+      let script = "";
+      try { script = await buildOesgaScript(); } catch { script = "Ops event scenario gap analysis is online, sir. Checking operational events against available playbooks now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F57: Scenario × Dataset Dependency Map — open SDDEP panel + speak coverage brief.
+    if (isSddepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sddep-toggle"));
+      let script = "";
+      try { script = await buildSddepScript(); } catch { script = "Scenario dataset dependency map is online, sir. Cross-referencing operational scenarios against available datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F59: Knowledge × Investigation Coverage Mapper — open KIMAP panel + speak coverage brief.
+    if (isKimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kimap-toggle"));
+      let script = "";
+      try { script = await buildKimapScript(); } catch { script = "Knowledge investigation mapper is online, sir. Cross-referencing knowledge articles against active investigations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F60: Contact × IntelProfile Cross-Reference — open CIPR panel + speak intelligence coverage brief.
+    if (isCiprQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cipr-toggle"));
+      let script = "";
+      try { script = await buildCiprScript(); } catch { script = "Contact intelligence cross-reference is online, sir. Correlating contacts against intel profiles to identify coverage gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F61: Task × Scenario Coverage — open TSCOV panel + speak playbook coverage brief.
+    if (isTscovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tscov-toggle"));
+      let script = "";
+      try { script = await buildTscovScript(); } catch { script = "Task scenario coverage analysis is online, sir. Cross-referencing tasks against scenario playbooks to identify unplanned operations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F63: Investment × Contact Portfolio Intelligence Map — open ICPIM panel + speak coverage brief.
+    if (isIcpimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:icpim-toggle"));
+      let script = "";
+      try { script = await buildIcpimScript(); } catch { script = "Investment contact portfolio map is online, sir. Cross-referencing portfolio positions against contact relationships to identify coverage gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F62: Swarm × Investigation Mission Bridge — open SWIMB panel + speak mission alignment brief.
+    if (isSwimbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swimb-toggle"));
+      let script = "";
+      try { script = await buildSwimbScript(); } catch { script = "Swarm investigation mission bridge is online, sir. Cross-referencing swarm jobs against active investigations to identify unaligned automation now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F64: Unified Intelligence Timeline — open UITL panel + speak unified situation brief.
+    if (isUitlQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:uitl-toggle"));
+      let script = "";
+      try { script = await buildUitlScript(); } catch { script = "Unified intelligence timeline is online, sir. Merging ops events, risk signals, and knowledge articles into a single chronological stream now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F65: AIP Skill × Knowledge × Risk Triple — open AIPKRSTRI panel + speak capability coverage.
+    if (isAipkrstriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aipkrstri-toggle"));
+      let script = "";
+      try { script = await buildAipkrstriScript(); } catch { script = "AIPKRSTRI skill triple analysis is online, sir. Assessing AIP skill coverage against the knowledge base and active risk signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F66: SITREP Commander — open SITREP panel + speak structured 5-bullet situation report.
+    if (isSitrepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sitrep-toggle"));
+      let script = "";
+      try { script = await buildSitrepScript(); } catch { script = "SITREP Commander is online, sir. Compiling your situation report now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F40: operational tempo index — open TEMPO panel + speak composite ops/risk/swarm score.
+    if (isOpsTempoQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ops-tempo-toggle"));
+      let script = "";
+      try { script = await buildOpsTempoScript(); } catch { script = "Operational tempo index is online, sir. Monitoring all activity streams."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(10000, script.length * 70));
+      return;
+    }
+    // F67: Scene × Graph Node Coverage — open SCGN panel + speak network-backed vs disconnected scene brief.
+    if (isScgnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scgn-toggle"));
+      let script = "";
+      try { script = await buildScgnScript(); } catch { script = "Scene graph node coverage panel is standing by, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F69: AIP Skill × Live Intel × Graph Annotation Triple — open ASLIANN panel + speak skill intelligence coverage.
+    if (isAsliannQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:asliann-toggle"));
+      let script = "";
+      try { script = await buildAsliannScript(); } catch { script = "AIP skill live annotation panel is standing by, sir. Cross-referencing active skills against live world events and graph annotations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F68: Risk Signal × Scenario Coverage — open RSKSCEN panel + speak playbook coverage brief.
+    if (isRskscenQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rskscen-toggle"));
+      let script = "";
+      try { script = await buildRskscenScript(); } catch { script = "Risk scenario coverage panel is standing by, sir. Cross-referencing active risk signals against available scenario playbooks now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F70: IntelProfile × Report Linkage — open IPRLINK panel + speak actor coverage brief.
+    if (isIprlinkQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iprlink-toggle"));
+      let script = "";
+      try { script = await buildIprlinkScript(); } catch { script = "Intel profile report linkage panel is standing by, sir. Cross-referencing tracked threat actor profiles against the intelligence report archive now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isScrmxQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scrmx-toggle"));
+      let script = "";
+      try { script = await buildScrmxScript(); } catch { script = "Scenario Contact Readiness Matrix is online, sir. Cross-referencing operational scenarios against available contacts to surface staffing gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTsdtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tsdtri-toggle"));
+      let script = "";
+      try { script = await buildTsdtriScript(); } catch { script = "Task Resource Triple online, sir. Correlating tasks against swarm jobs and datasets to surface automation and data coverage gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPtexpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ptexp-toggle"));
+      let script = "";
+      try { script = await buildPtexpScript(); } catch { script = "Portfolio Threat Exposure online, sir. Correlating investments against active risk signals and threat actor profiles to surface asset exposure."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAsidtriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:asidtri-toggle"));
+      let script = "";
+      try { script = await buildAsidtriScript(); } catch { script = "AIP Skill Investigation Dataset Triple Nexus online, sir. Cross-referencing skills against investigations and datasets to identify fully equipped versus dark capabilities."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKorstriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:korstri-toggle"));
+      let script = "";
+      try { script = await buildKorstriScript(); } catch { script = "Knowledge Ops Risk Triple Coverage panel online, sir. Cross-referencing knowledge articles against operational events and risk signals to identify isolated knowledge gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSrsmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srsm-toggle"));
+      let script = "";
+      try { script = await buildSrsmScript(); } catch { script = "Swarm Mission Risk Matrix online, sir. Cross-referencing swarm jobs against active risk signals and scenario playbooks to identify exposed, unmitigated operations."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOecrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oecrc-toggle"));
+      let script = "";
+      try { script = await buildOecrcScript(); } catch { script = "Ops Event Contact Coverage online, sir. Cross-referencing operational events against contacts to identify response assignment gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCtinvQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ctinv-toggle"));
+      let script = "";
+      try { script = await buildCtinvScript(); } catch { script = "Contact Engagement Triple online, sir. Cross-referencing contacts against tasks and investigations to identify idle engagement gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F79: Investigation × Ops Event × Risk Signal Active Threat Dashboard — open IORSTD panel + speak live threat brief.
+    if (isIorstdQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iorstd-toggle"));
+      let script = "";
+      try { script = await buildIorstdScript(); } catch { script = "Investigation Ops-Risk Dashboard online, sir. Cross-referencing investigations against live ops events and active risk signals to surface triple-active threats now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F80: Report × Knowledge × Ops Event Intelligence Gap Triad — open RKOGAP panel + speak intel grounding brief.
+    if (isRkogapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rkogap-toggle"));
+      let script = "";
+      try { script = await buildRkogapScript(); } catch { script = "Report Knowledge-Ops Gap Triad online, sir. Cross-referencing intelligence reports against knowledge articles and ops events to surface unanchored intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F81: Investment × Scenario × Contact Execution Readiness Map — open IEXRM panel + speak readiness brief.
+    if (isIexrmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iexrm-toggle"));
+      let script = "";
+      try { script = await buildIexrmScript(); } catch { script = "Investment Execution Readiness Map online, sir. Cross-referencing investments against scenario playbooks and responsible contacts to identify exposed assets with no execution coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F82: Contact × Knowledge × Scenario Intelligence Readiness Index — open CKIRI panel + speak readiness brief.
+    if (isCkiriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ckiri-toggle"));
+      let script = "";
+      try { script = await buildCkiriScript(); } catch { script = "Contact Intelligence Readiness Index online, sir. Cross-referencing all contacts against the knowledge base and scenario library to identify personnel with insufficient intelligence coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F83: IntelProfile × SwarmJob × Scenario Actor Deployment Status — open IASAD panel + speak countermeasure coverage brief.
+    if (isIasadQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iasad-toggle"));
+      let script = "";
+      try { script = await buildIasadScript(); } catch { script = "Intel Actor Deployment Matrix online, sir. Cross-referencing all threat actor profiles against active swarm operations and scenario playbooks to identify unmitigated actors with no countermeasure coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F84: Contact × Investment × RiskSignal Financial Exposure Nexus — open CIFINEX panel + speak financial monitoring brief.
+    if (isCifinexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cifinex-toggle"));
+      let script = "";
+      try { script = await buildCifinexScript(); } catch { script = "Financial Exposure Nexus online, sir. Cross-referencing all contacts against active investments and risk signals to identify unmonitored personnel with no financial exposure coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F85: Swarm Job × Knowledge Base × Report Documentation Nexus — open SJKBREP panel + speak documentation coverage brief.
+    if (isSjkbrepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjkbrep-toggle"));
+      let script = "";
+      try { script = await buildSjkbrepScript(); } catch { script = "Swarm Documentation Nexus online, sir. Cross-referencing all swarm jobs against the knowledge base and report library to identify undocumented operations with no documentation coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F86: Scenario × Knowledge × Ops Event Mission Readiness Index — open SKOPRI panel + speak mission readiness brief.
+    if (isSkopriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skopri-toggle"));
+      let script = "";
+      try { script = await buildSkopriScript(); } catch { script = "Scenario Mission Readiness Index online, sir. Cross-referencing all scenarios against the knowledge base and operational events to identify unprimed missions with no context coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F87: Graph Centrality × RiskSignal × IntelProfile Threat Influence Nexus — open GCRTHIN panel + speak threat influence brief.
+    if (isGcrthinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcrthin-toggle"));
+      let script = "";
+      try { script = await buildGcrthinScript(); } catch { script = "Graph Centrality Threat Influence Nexus online, sir. Cross-referencing high-centrality graph nodes against active risk signals and known threat actor profiles to identify threat hubs and influence nexus points now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F88: Live Intel × Knowledge × Risk Signal Ground Truth Pulse — open LKRPULSE panel + speak ground truth brief.
+    if (isLkrpulseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lkrpulse-toggle"));
+      let script = "";
+      try { script = await buildLkrpulseScript(); } catch { script = "Live Intel Ground Truth Pulse online, sir. Cross-referencing live world events against the knowledge base and active risk signals to classify ground truth coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F89: Task × IntelProfile × Ops Event Active Response Coverage — open TIORCOV panel + speak response coverage brief.
+    if (isTiorcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tiorcov-toggle"));
+      let script = "";
+      try { script = await buildTiorcovScript(); } catch { script = "Task Active Response Coverage online, sir. Cross-referencing tasks against intel profiles and ops events to classify active-response, threat-tasked, and background tasks now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F90: Dataset × Task × Knowledge Coverage Health Report — open DTKHEALTH panel + speak coverage health brief.
+    if (isDtkhealthQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dtkhealth-toggle"));
+      let script = "";
+      try { script = await buildDtkhealthScript(); } catch { script = "Dataset coverage health report online, sir. Cross-referencing datasets against active tasks and knowledge base articles to classify fully-grounded, task-linked, KB-noted, and orphaned datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F91: Investment × Swarm × Scenario Coverage — open ISSMAP panel + speak portfolio deployment brief.
+    if (isIssmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:issmap-toggle"));
+      let script = "";
+      try { script = await buildIssmapScript(); } catch { script = "Investment swarm and scenario coverage map online, sir. Cross-referencing all investments against active swarm operations and contingency scenarios to classify fully-deployed, swarm-active, scenario-planned, and unprotected assets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F92: Report × Scenario × Dataset Coverage Triad — open RSDAT panel + speak coverage brief.
+    if (isRsdatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsdat-toggle"));
+      let script = "";
+      try { script = await buildRsdatScript(); } catch { script = "Report scenario dataset coverage triad online, sir. Cross-referencing all intelligence reports against scenario playbooks and data sources to classify fully-grounded, scenario-backed, dataset-linked, and unanchored reports now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F94: Task × RiskSignal × Report Operational Threat Coverage — open TORTCOV panel + speak coverage brief.
+    if (isTortcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tortcov-toggle"));
+      let script = "";
+      try { script = await buildTortcovScript(); } catch { script = "Operational threat coverage matrix online, sir. Correlating all active tasks against risk signals and intelligence reports to identify unmonitored exposure now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F95: SwarmJob × RiskSignal × Knowledge Response Readiness — open SRKRR panel + speak readiness brief.
+    if (isSrkrrQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srkrr-toggle"));
+      let script = "";
+      try { script = await buildSrkrrScript(); } catch { script = "Swarm response readiness matrix online, sir. Cross-referencing all swarm jobs against active risk signals and knowledge base articles to classify readiness levels now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F96: Contact × Graph Centrality × IntelProfile Influence Exposure Index — open CGINFEX panel + speak exposure brief.
+    if (isCginfexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cginfex-toggle"));
+      let script = "";
+      try { script = await buildCginfexScript(); } catch { script = "Contact influence exposure index CGINFEX online, sir. Cross-referencing all contacts against high-centrality graph nodes and known intel actor profiles to classify exposure levels now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F97: Dataset × IntelProfile × SwarmJob Intelligence Automation Nexus — open DIASWAN panel + speak nexus brief.
+    if (isDiaswanQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:diaswan-toggle"));
+      let script = "";
+      try { script = await buildDiaswanScript(); } catch { script = "Dataset intelligence automation nexus DIASWAN online, sir. Cross-referencing all datasets against intel actor profiles and swarm jobs to classify fully-armed, actor-linked, swarm-active, and unlinked datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F98: Report × Investigation × Contact Insight Coverage Nexus — open RICCOV panel + speak coverage brief.
+    if (isRiccovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:riccov-toggle"));
+      let script = "";
+      try { script = await buildRiccovScript(); } catch { script = "Report investigation contact coverage nexus RICCOV online, sir. Cross-referencing all intelligence reports against active investigations and responsible contacts to classify fully-linked, investigation-tracked, contact-assigned, and unassigned reports now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F99: Investment × Knowledge × Ops Event Financial Intelligence Readiness Monitor — open IKOFIRM panel + speak financial intelligence readiness brief.
+    if (isIkofirmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ikofirm-toggle"));
+      let script = "";
+      try { script = await buildIkofirmScript(); } catch { script = "IKOFIRM financial intelligence readiness monitor online, sir. Cross-referencing all investments against knowledge base articles and operational events to classify fully-informed, ops-tracked, KB-researched, and blind portfolio positions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F100: AIP Skill × IntelProfile × Ops Event × RiskSignal Full-Spectrum Threat Response Coverage — open FSTRC panel + speak 4-source coverage brief.
+    if (isFstrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:fstrc-toggle"));
+      let script = "";
+      try { script = await buildFstrcScript(); } catch { script = "Full-Spectrum Threat Response Coverage online, sir. Cross-referencing all AIP skills against intel actor profiles, operational events, and risk signals to classify fully-countered, partially-covered, and dormant capabilities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F101: Graph Community × Investigation × RiskSignal Network Threat Index — open GCNITX panel + speak network threat brief.
+    if (isGcnitxQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcnitx-toggle"));
+      let script = "";
+      try { script = await buildGcnitxScript(); } catch { script = "Graph Community Network Threat Index GCNITX online, sir. Cross-referencing all graph community clusters against open investigations and active risk signals to classify triple-threat, investigation-linked, risk-flagged, and clear communities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F102: Knowledge × IntelProfile × SwarmJob Threat Awareness Coverage — open KIPSWTA panel + speak coverage brief.
+    if (isKipswatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kipswta-toggle"));
+      let script = "";
+      try { script = await buildKipswatScript(); } catch { script = "Knowledge Threat Awareness Coverage KIPSWTA online, sir. Cross-referencing all knowledge base articles against intel actor profiles and swarm operations to classify fully-contextualised, actor-aware, swarm-supported, and isolated articles now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F106: Task × Graph Centrality × Knowledge Operational Intelligence Pulse — open TGKPULSE panel + speak intel brief.
+    if (isTgkpulseQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tgkpulse-toggle"));
+      let script = "";
+      try { script = await buildTgkpulseScript(); } catch { script = "Task Intelligence Pulse TGKPULSE online, sir. Cross-referencing all active tasks against high-centrality graph nodes and knowledge base articles to classify fully-informed, graph-linked, KB-backed, and uninformed tasks now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F107: Ops Event × Dataset × Contact Situational Response Coverage — open ODCSRC panel + speak coverage brief.
+    if (isOdcsrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:odcsrc-toggle"));
+      let script = "";
+      try { script = await buildOdcsrcScript(); } catch { script = "Situational Response Coverage ODCSRC online, sir. Cross-referencing all ops events against available datasets and contacts to classify fully-resourced, data-backed, contact-engaged, and unresourced events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F108: Knowledge × Contact × Ops Event Personnel Intelligence Pulse — open KCOPPULS panel + speak intel brief.
+    if (isKcoppulsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kcoppuls-toggle"));
+      let script = "";
+      try { script = await buildKcoppulsScript(); } catch { script = "Personnel Intelligence Pulse KCOPPULS online, sir. Cross-referencing all contacts against knowledge base articles and ops events to assess who is fully briefed, knowledge-informed, ops-exposed, and uninformed now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F109: IntelProfile × Dataset × Knowledge Threat Intelligence Repository Coverage — open IDKTREP panel + speak intel-repository brief.
+    if (isIdktrepQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:idktrep-toggle"));
+      let script = "";
+      try { script = await buildIdktrepScript(); } catch { script = "Threat Intelligence Repository Coverage IDKTREP online, sir. Cross-referencing all intel actor profiles against available datasets and knowledge base articles to classify fully-documented, data-linked, KB-noted, and undocumented actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F110: Scenario × RiskSignal × Contact Rapid Response Plan — open SCRRP panel + speak response readiness brief.
+    if (isScrrpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scrrp-toggle"));
+      let script = "";
+      try { script = await buildScrrpScript(); } catch { script = "Rapid Response Plan Coverage SCRRP online, sir. Cross-referencing all active risk signals against scenario playbooks and assigned contacts to classify response-ready, scenario-only, contact-only, and fully-exposed signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F111: Investment × Ops Event × Knowledge Financial Intelligence Pulse — open IOEFIP panel + speak financial intel brief.
+    if (isIoefipQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ioefip-toggle"));
+      let script = "";
+      try { script = await buildIoefipScript(); } catch { script = "Financial Intelligence Pulse IOEFIP online, sir. Cross-referencing the investment portfolio against operational events and knowledge-base articles to classify fully-monitored, ops-tracked, KB-researched, and unmonitored assets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F112: Ops Event × IntelProfile × Contact Threat Response Tracker — open OICTRC panel + speak threat response brief.
+    if (isOictrcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oictrc-toggle"));
+      let script = "";
+      try { script = await buildOictrcScript(); } catch { script = "Threat Response Tracker OICTRC online, sir. Cross-referencing all operational events against intel actor profiles and assigned contacts to classify response-coordinated, actor-tracked, contact-notified, and unhandled events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F114: System-Wide Alert Escalation Queue — open ALESCQ panel + speak full escalation brief.
+    if (isAlescqQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:alescq-toggle"));
+      let script = "";
+      try { script = await buildAlescqScript(); } catch { script = "Alert Escalation Queue ALESCQ online, sir. Aggregating JARVIS system health, active risk signals, operations events, and open investigations into a unified severity-sorted escalation queue now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F116: Investigation × Dataset × Knowledge Intelligence Pulse — open IDKPULS panel + speak intel-resourcing brief.
+    if (isIdkpulsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:idkpuls-toggle"));
+      let script = "";
+      try { script = await buildIdkpulsScript(); } catch { script = "Investigation Dataset Knowledge Pulse IDKPULS online, sir. Cross-referencing all open investigations against available datasets and knowledge base articles to classify fully-resourced, data-backed, KB-backed, and bare investigations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F117: Contact × Dataset × Report Intelligence Coverage Matrix — open CDIRMAT panel + speak coverage brief.
+    if (isCdirmatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cdirmat-toggle"));
+      let script = "";
+      try { script = await buildCdirmatScript(); } catch { script = "Contact Dataset Report Intelligence Coverage Matrix CDIRMAT online, sir. Cross-referencing all known contacts against available datasets and intelligence reports to classify fully-documented, data-linked, report-backed, and undocumented contacts now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F118: Investment × Graph Centrality × Report Portfolio Intelligence Nexus — open IGRNEX panel + speak portfolio intel brief.
+    if (isIgrnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:igrnex-toggle"));
+      let script = "";
+      try { script = await buildIgrnexScript(); } catch { script = "Investment Graph Report Nexus IGRNEX online, sir. Cross-referencing all portfolio investments against high-centrality graph nodes and intelligence reports to classify fully-tracked, graph-linked, report-backed, and blind investments now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F121: Operational Readiness Score Dashboard — open ORSCORE panel + speak composite readiness brief.
+    if (isOrscoreQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:orscore-toggle"));
+      let script = "";
+      try { script = await buildOrscoreScript(); } catch { script = "Operational Readiness Score Dashboard online, sir. Calculating composite readiness across system health, intelligence density, automation coverage, task velocity, and threat exposure now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F122: Live Intel Stream Health Monitor — open LISHM panel + speak stream health brief.
+    if (isLishmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lishm-toggle"));
+      let script = "";
+      try { script = await buildLishmScript(); } catch { script = "Live Intel Stream Health Monitor online, sir. Checking quake, crypto, and FX stream freshness against system health and brain metrics now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F120: Task × Report × Scenario Operational Coverage Nexus — open TRSCON panel + speak coordination gap brief.
+    if (isTrsconQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trscon-toggle"));
+      let script = "";
+      try { script = await buildTrsconScript(); } catch { script = "Operational Coverage Nexus TRSCON online, sir. Cross-referencing all active tasks against intelligence reports and scenario playbooks to classify fully-documented, report-backed, scenario-planned, and uncoordinated tasks now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F119: SwarmJob × IntelProfile × Report Counter-Intelligence Coverage — open SJIRCIC panel + speak counter-intel coverage brief.
+    if (isSjircicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sjircic-toggle"));
+      let script = "";
+      try { script = await buildSjircicScript(); } catch { script = "Swarm Counter-Intelligence Coverage SJIRCIC online, sir. Cross-referencing all swarm jobs against intel actor profiles and intelligence reports to classify fully-covered, intel-matched, report-backed, and untracked jobs now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F115: Risk Signal × Dataset × Ops Event Data Coverage Triad — open RDOETRI panel + speak data-coverage brief.
+    if (isRdoetriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rdoetri-toggle"));
+      let script = "";
+      try { script = await buildRdoetriScript(); } catch { script = "Risk Data Ops Triad RDOETRI online, sir. Cross-referencing all active risk signals against available datasets and operations events to classify fully-grounded, data-linked, ops-linked, and ungrounded signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F113: Graph Annotation × Knowledge × IntelProfile Contextual Intelligence Map — open GAKCIMAP panel + speak context brief.
+    if (isGakcimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gakcimap-toggle"));
+      let script = "";
+      try { script = await buildGakcimapScript(); } catch { script = "Graph Annotation Context Map GAKCIMAP online, sir. Cross-referencing all graph annotations against knowledge base articles and intel actor profiles to classify fully-contextualized, KB-backed, actor-tagged, and uncontextualized annotations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F105: Scenario × SwarmJob × Contact Execution Triangle — open SSCEXE panel + speak execution brief.
+    if (isSscexeQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sscexe-toggle"));
+      let script = "";
+      try { script = await buildSscexeScript(); } catch { script = "Execution Triangle SSCEXE online, sir. Cross-referencing all scenarios against swarm job deployments and assigned contacts to classify fully-executable, swarm-deployed, contact-ready, and incomplete scenarios now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F104: IntelProfile × Contact × Task Actor Response Coverage — open ICTARC panel + speak actor response brief.
+    if (isIctarcQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ictarc-toggle"));
+      let script = "";
+      try { script = await buildIctarcScript(); } catch { script = "Actor Response Coverage ICTARC online, sir. Cross-referencing all threat actor profiles against assigned contacts and active tasks to classify fully-responded, contact-engaged, task-active, and unresponded actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F103: Graph Node × Task × Investigation Operational Mesh — open GNTIOP panel + speak operational mesh brief.
+    if (isGntiopQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gntiop-toggle"));
+      let script = "";
+      try { script = await buildGntiopScript(); } catch { script = "Graph Node Operational Mesh GNTIOP online, sir. Cross-referencing all high-centrality graph nodes against active tasks and open investigations to classify fully-active, task-driven, investigation-linked, and dormant nodes now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F93: Scenario × IntelProfile × Report Intelligence Coverage — open SIPWCOV panel + speak readiness brief.
+    if (isSipwcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sipwcov-toggle"));
+      let script = "";
+      try { script = await buildSipwcovScript(); } catch { script = "Scenario intelligence coverage online, sir. Cross-referencing all scenario playbooks against intel actor profiles and intelligence reports to classify armed, actor-planned, report-backed, and blind scenarios now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F123: Graph Community × IntelProfile × Scenario Threat Cluster Map — open IPTCMAP panel + speak cluster brief.
+    if (isIptcmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iptcmap-toggle"));
+      let script = "";
+      try { script = await buildIptcmapScript(); } catch { script = "Threat Cluster Map IPTCMAP online, sir. Cross-referencing all graph community clusters against intel actor profiles and scenario playbooks to classify threat clusters, intel-exposed, scenario-covered, and neutral communities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F124: Graph Annotation × Ops Event × SwarmJob Operational Annotation Coverage — open GAOSCOV panel + speak coverage brief.
+    if (isGaoscovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gaoscov-toggle"));
+      let script = "";
+      try { script = await buildGaoscovScript(); } catch { script = "GAOSCOV Operational Annotation Coverage online, sir. Cross-referencing all graph annotations against live operational events and swarm jobs to classify fully operational, ops-linked, swarm-active, and dormant annotations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F125: Cinematic Scene × Task × Report Operational Reality Check — open SCTROC panel + speak grounding brief.
+    if (isSctrocQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sctroc-toggle"));
+      let script = "";
+      try { script = await buildSctrocScript(); } catch { script = "SCTROC Scene Reality Check online, sir. Cross-referencing all 10 cinematic scenes against live tasks and intelligence reports to assess operational grounding now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F126: SwarmJob × Investment × Contact Operational Finance Coverage — open SVINMAP panel + speak coordination brief.
+    if (isSvimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:svinmap-toggle"));
+      let script = "";
+      try { script = await buildSvimapScript(); } catch { script = "SVINMAP Operational Finance Coverage online, sir. Cross-referencing swarm jobs against live investments and contacts to assess coordination coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F127: IntelProfile × Task × Investment × Knowledge Actor Impact Nexus — open AIKIN panel + speak impact brief.
+    if (isAikinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aikin-toggle"));
+      let script = "";
+      try { script = await buildAikinScript(); } catch { script = "AIKIN Actor Impact Nexus online, sir. Cross-referencing threat actor profiles against live tasks, investments, and knowledge base to classify full-impact, high-impact, tracked, and untracked actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOincmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oincm-toggle"));
+      let script = "";
+      try { script = await buildOincmScript(); } catch { script = "OINCM Incident Intelligence Mesh online, sir. Cross-referencing ops events against graph centrality nodes, KB articles, and contacts to classify fully-meshed, intel-linked, partial, and isolated events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDgokgndQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dgokgnd-toggle"));
+      let script = "";
+      try { script = await buildDgokgndScript(); } catch { script = "DGOKGND Intelligence Grounding Nexus online, sir. Cross-referencing datasets against graph annotations, ops events, and KB articles to classify fully-grounded, dual-linked, single-linked, and ungrounded datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSsrkmdocQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ssrkmdoc-toggle"));
+      let script = "";
+      try { script = await buildSsrkmdocScript(); } catch { script = "SSRKMDOC Mission Documentation Coverage online, sir. Cross-referencing swarm jobs against scenarios, reports, and KB articles to assess documentation completeness now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCoeganQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:coegan-toggle"));
+      let script = "";
+      try { script = await buildCoeganScript(); } catch { script = "COEGAN Incident Attribution Network online, sir. Cross-referencing contacts against operational events and graph annotations to surface attribution gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isFamicovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:famicov-toggle"));
+      let script = "";
+      try { script = await buildFamicovScript(); } catch { script = "FAMICOV Full Actor Mission Coverage online, sir. Cross-referencing intel profiles against tasks, knowledge, and scenarios to surface untracked threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRkoithemQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rkoithem-toggle"));
+      let script = "";
+      try { script = await buildRkoithemScript(); } catch { script = "RKOITHEM Threat Evidence Matrix online, sir. Correlating risk signals against KB articles, ops events, and intel profiles to surface unevidenced threats now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIrorfdQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:irorfd-toggle"));
+      let script = "";
+      try { script = await buildIrorfdScript(); } catch { script = "IRORFD Financial Risk Intelligence Dashboard online, sir. Correlating investments against reports, ops events, and risk signals to surface untracked assets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLicimexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:licimex-toggle"));
+      let script = "";
+      try { script = await buildLicimexScript(); } catch { script = "LICIMEX Live Intel Market Exposure Tracker online, sir. Correlating live world events against contacts and investments to surface real-world exposure now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCsrpriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csrpri-toggle"));
+      let script = "";
+      try { script = await buildCsrpriScript(); } catch { script = "CSRPRI Contact Personnel Readiness Index online, sir. Cross-referencing contacts against scenarios, reports, and knowledge base to surface readiness gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTgoknexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tgoknex-toggle"));
+      let script = "";
+      try { script = await buildTgoknexScript(); } catch { script = "TGOKNEX Operational Intelligence Nexus online, sir. Cross-referencing tasks against graph annotations, ops events, and knowledge base to surface intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isFocohQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:focoh-toggle"));
+      let script = "";
+      try { script = await buildFocohScript(); } catch { script = "FOCOH Full Operational Coverage Hub online, sir. Cross-referencing AIP skills against contacts, reports, and ops events to surface activation gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isStcixQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:stcix-toggle"));
+      let script = "";
+      try { script = await buildStcixScript(); } catch { script = "STCIX Threat Containment Index online, sir. Correlating scenarios against risk signals, swarm jobs, and intel profiles to surface containment gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSciaipQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sciaip-toggle"));
+      let script = "";
+      try { script = await buildSciaipScript(); } catch { script = "SCIAIP Scene Intelligence Coverage Map online, sir. Cross-referencing cinematic scenes against AIP skills and risk signals to surface unmonitored dimensions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSgodsatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sgodsat-toggle"));
+      let script = "";
+      try { script = await buildSgodsatScript(); } catch { script = "SGODSAT Scenario Intelligence Saturation Map online, sir. Cross-referencing scenarios against graph communities, ops events, and datasets to surface unsaturated planning gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGcknipQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gcknip-toggle"));
+      let script = "";
+      try { script = await buildGcknipScript(); } catch { script = "GCKNIP Network Intelligence Coverage online, sir. Correlating graph communities against knowledge base and intel actor profiles to surface unmapped network intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTikdoiQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tikdoi-toggle"));
+      let script = "";
+      try { script = await buildTikdoiScript(); } catch { script = "TIKDOI Task Intelligence Coverage online, sir. Correlating tasks against intel profiles, datasets, and knowledge base to surface operationally uncovered missions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCsoermQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csoerm-toggle"));
+      let script = "";
+      try { script = await buildCsoermScript(); } catch { script = "CSOERM Personnel Threat Activation Matrix online, sir. Correlating contacts against scenario, ops event, and risk signal dimensions to surface fully activated and passive personnel now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSocdmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:socdmap-toggle"));
+      let script = "";
+      try { script = await buildSocdmapScript(); } catch { script = "SOCDMAP Operational Capacity Map online, sir. Cross-referencing swarm jobs against AIP skills, contacts, and datasets to surface fully staffed and unsupported operations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIskfullQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iskfull-toggle"));
+      let script = "";
+      try { script = await buildIskfullScript(); } catch { script = "ISKFULL Full Investigation Coverage online, sir. Cross-referencing investigations against AIP skills, contacts, and knowledge base articles to surface fully covered and bare investigations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDgorsimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dgorsim-toggle"));
+      let script = "";
+      try { script = await buildDgorsimScript(); } catch { script = "DGORSIM Situational Intelligence Map online, sir. Cross-referencing datasets against graph communities, ops events, and risk signals to surface grounded and orphaned datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isNdratlasQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ndratlas-toggle"));
+      let script = "";
+      try { script = await buildNdratlasScript(); } catch { script = "NDRATLAS Network Defense Readiness Atlas online, sir. Mapping AIP skills across graph communities, knowledge base, and risk signals to surface networked and isolated capabilities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAnequadQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:anequad-toggle"));
+      let script = "";
+      try { script = await buildAnequadScript(); } catch { script = "ANEQUAD Actor Network Exposure Quadrant online, sir. Cross-referencing intel actor profiles against graph communities, intelligence reports, and ops events to surface fully-exposed threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMcocovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mcocov-toggle"));
+      let script = "";
+      try { script = await buildMcocovScript(); } catch { script = "MCOCOV Mission Command Coverage online, sir. Cross-referencing swarm jobs against investigations, risk signals, and contacts to surface uncontrolled autonomous operations requiring command assignment now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isForknQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:forkn-toggle"));
+      let script = "";
+      try { script = await buildForknScript(); } catch { script = "FORKN Financial Operations Risk Nexus online, sir. Correlating investments against swarm automation, scenario playbooks, and active risk signals to surface portfolio blind spots now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isBasirQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:basir-toggle"));
+      let script = "";
+      try { script = await buildBasirScript(); } catch { script = "BASIR Brain AIP Skill Intelligence Ratio online, sir. Computing brain node to active skill ratio and assessing cognitive capacity now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOkrtricQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:okrtric-toggle"));
+      let script = "";
+      try { script = await buildOkrtricScript(); } catch { script = "OKRTRIC Ops Event Intelligence Coverage online, sir. Cross-referencing operational events against knowledge base and intelligence reports to surface undocumented blind spots now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSktimpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sktimp-toggle"));
+      let script = "";
+      try { script = await buildSktimpScript(); } catch { script = "SKTIMP Swarm Mission Readiness Pulse online, sir. Cross-referencing swarm jobs against knowledge base, active tasks, and intel profiles to classify mission readiness now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCgnimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cgnimap-toggle"));
+      let script = "";
+      try { script = await buildCgnimapScript(); } catch { script = "CGNIMAP Contact Network Alignment Map online, sir. Cross-referencing contacts against graph community clusters and intel profiles to assess network alignment now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIcknexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:icknex-toggle"));
+      let script = "";
+      try { script = await buildIcknexScript(); } catch { script = "ICKNEX Investment Intelligence Nexus online, sir. Correlating investments against contacts and knowledge base articles to surface intelligence blind spots now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTricmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tricm-toggle"));
+      let script = "";
+      try { script = await buildTricmScript(); } catch { script = "TRICM Threat Coverage Matrix online, sir. Cross-referencing tasks against risk signals and intel profiles to surface exposed missions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSwedatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swedat-toggle"));
+      let script = "";
+      try { script = await buildSwedatScript(); } catch { script = "SWEDAT Operational Execution Triad online, sir. Cross-referencing swarm jobs against scenario playbooks and datasets to surface unsupported operations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLifriskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:lifrisk-toggle"));
+      let script = "";
+      try { script = await buildLifriskScript(); } catch { script = "LIFRISK Financial Threat Pulse active, sir. Cross-referencing portfolio investments against live market intel and risk signals to surface threat-flagged positions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isStckorgQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:stckorg-toggle"));
+      let script = "";
+      try { script = await buildStckorgScript(); } catch { script = "STCKORG Operational Readiness Grid online, sir. Cross-referencing scenarios against tasks, contacts, and knowledge to surface unresourced gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRtsicmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rtsicm-toggle"));
+      let script = "";
+      try { script = await buildRtsicmScript(); } catch { script = "RTSICM Risk Management Coverage online, sir. Cross-referencing risk signals against active tasks and investigations to surface unmitigated threats now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOtccmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:otccm-toggle"));
+      let script = "";
+      try { script = await buildOtccmScript(); } catch { script = "OTCCM Command Responsibility Map online, sir. Correlating operational events against assigned contacts and active tasks to surface unresponded events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKogsyncQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kogsync-toggle"));
+      let script = "";
+      try { script = await buildKogsyncScript(); } catch { script = "KOGSYNC online, sir. Cross-referencing knowledge articles against live ops events and graph communities to surface isolated knowledge gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIscdrimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iscdrim-toggle"));
+      let script = "";
+      try { script = await buildIscdrimScript(); } catch { script = "ISCDRIM online, sir. Cross-referencing investigations against scenario playbooks, contacts, and datasets to surface bare investigations with no assigned resources now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOsigsmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:osigsm-toggle"));
+      let script = "";
+      try { script = await buildOsigsmScript(); } catch { script = "OSIGSM Operational Signal Mesh online, sir. Cross-referencing AIP skills against graph centrality nodes and ops events to surface dormant skills now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCgrimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cgrimap-toggle"));
+      let script = "";
+      try { script = await buildCgrimapScript(); } catch { script = "CGRIMAP Community Intelligence Documentation Map online, sir. Cross-referencing graph community clusters against intelligence reports and investigations to surface undocumented communities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPercovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:percov-toggle"));
+      let script = "";
+      try { script = await buildPercovScript(); } catch { script = "PERCOV Personnel Response Coverage online, sir. Cross-referencing contacts against ops events and risk signals to surface unengaged personnel now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDsinexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dsinex-toggle"));
+      let script = "";
+      try { script = await buildDsinexScript(); } catch { script = "DSINEX Data Science Nexus online, sir. Cross-referencing datasets against AIP skills and investigations to surface dark datasets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIskpinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iskpin-toggle"));
+      let script = "";
+      try { script = await buildIskpinScript(); } catch { script = "ISKPIN Portfolio Intelligence Nexus online, sir. Cross-referencing investments against scenarios and knowledge articles to surface unsupported assets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAthnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:athnex-toggle"));
+      let script = "";
+      try { script = await buildAthnexScript(); } catch { script = "ATHNEX Actor Threat Nexus online, sir. Cross-referencing intel profiles against scenario playbooks and risk signals to surface untracked threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSmicnetQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:smicnet-toggle"));
+      let script = "";
+      try { script = await buildSmicnetScript(); } catch { script = "SMICNET Swarm Mission Intelligence Network online, sir. Correlating swarm jobs against graph communities, knowledge base, and contact network now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTkgmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tkgm-toggle"));
+      let script = "";
+      try { script = await buildTkgmScript(); } catch { script = "TKGM Task Guidance Map online, sir. Correlating tasks against the knowledge base and graph communities to surface guidance gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOpridxQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:opridx-toggle"));
+      let script = "";
+      try { script = await buildOpridxScript(); } catch { script = "Operational Readiness Index online, sir. Cross-referencing ops events against the knowledge base and risk signals to surface blind spots now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isFsopsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:fsops-toggle"));
+      let script = "";
+      try { script = await buildFsopsScript(); } catch { script = "Full-Stack Operations Coverage online, sir. Cross-referencing investigations against contacts, datasets, and risk signals to surface bare investigations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMkcsigQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mkcsig-toggle"));
+      let script = "";
+      try { script = await buildMkcsigScript(); } catch { script = "Scenario Mission Intelligence Grid online, sir. Cross-referencing scenarios against knowledge articles, contacts, and swarm jobs to surface unresourced missions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (JINSCORE_RE.test(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:jinscore-toggle"));
+      let script = "";
+      try { script = await buildJinscoreScript(); } catch { script = "JARVIS Intelligence Nexus Score panel online, sir. Computing composite intelligence readiness across system health, brain depth, threat awareness, skill coverage, active cases, and knowledge base now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAricpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aricp-toggle"));
+      let script = "";
+      try { script = await buildAricpScript(); } catch { script = "AIP Skill Report Investigation Coverage Pulse online, sir. Cross-referencing capability skills against intelligence reports and open investigations to surface uncovered capability gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAipmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aipmap-toggle"));
+      let script = "";
+      try { script = await buildAipmapScript(); } catch { script = "Actor Intelligence Preparedness Map online, sir. Cross-referencing scenarios against threat actor profiles and knowledge base articles to surface unprepared intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIkrimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ikrimap-toggle"));
+      let script = "";
+      try { script = await buildIkrimapScript(); } catch { script = "Portfolio Risk Intelligence Map online, sir. Cross-referencing investments against knowledge base articles and active risk signals to surface exposed portfolio positions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSrimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srimap-toggle"));
+      let script = "";
+      try { script = await buildSrimapScript(); } catch { script = "Swarm Operations Intelligence Map online, sir. Cross-referencing active swarm jobs against intelligence reports and threat actor profiles to surface unsupported operations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCosiaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cosia-toggle"));
+      let script = "";
+      try { script = await buildCosiaScript(); } catch { script = "Contact Accountability Matrix online, sir. Cross-referencing all contacts against ops events, swarm jobs, and investigations to surface accountability gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTmickiQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tmicki-toggle"));
+      let script = "";
+      try { script = await buildTmickiScript(); } catch { script = "TMICKI Mission Intelligence Completeness Index online, sir. Correlating tasks against intel profiles, scenario playbooks, and knowledge articles to surface mission coverage gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOdremQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:odrem-toggle"));
+      let script = "";
+      try { script = await buildOdremScript(); } catch { script = "ODREM Operational Data Risk Exposure Map online, sir. Cross-referencing all datasets against ops events and risk signals to surface unmonitored data risk blind spots now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTcrmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tcrmap-toggle"));
+      let script = "";
+      try { script = await buildTcrmapScript(); } catch { script = "TCRMAP Threat Context Readiness Map online, sir. Correlating all intel profiles against knowledge base articles and ops events to surface uncontextualized threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRsditriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsditri-toggle"));
+      let script = "";
+      try { script = await buildRsditriScript(); } catch { script = "RSDITRI Triage Map online, sir. Cross-referencing all risk signals against datasets and active investigations to surface untriaged signals now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTsrmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tsrmap-toggle"));
+      let script = "";
+      try { script = await buildTsrmapScript(); } catch { script = "TSRMAP Threat Scenario Readiness Map online, sir. Correlating all scenarios against intel actor profiles and risk signals to assess readiness now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAmcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:amcov-toggle"));
+      let script = "";
+      try { script = await buildAmcovScript(); } catch { script = "AMCOV Autonomous Mission Coverage online, sir. Cross-referencing all swarm jobs against scenario playbooks and KB articles to surface dark missions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTdipmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tdipmap-toggle"));
+      let script = "";
+      try { script = await buildTdipmapScript(); } catch { script = "TDIPMAP Task Intelligence Coverage online, sir. Cross-referencing all tasks against datasets and intel profiles to surface unanchored missions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCprsmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cprsmap-toggle"));
+      let script = "";
+      try { script = await buildCprsmapScript(); } catch { script = "CPRSMAP Personnel Readiness Map online, sir. Correlating all contacts against knowledge articles and scenario playbooks to surface unready personnel now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGdinexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gdinex-toggle"));
+      let script = "";
+      try { script = await buildGdinexScript(); } catch { script = "GDINEX Graph-Data-Investigation Nexus online, sir. Correlating all graph community clusters against datasets and investigations to surface ungrounded network nodes now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPrsmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:prsmap-toggle"));
+      let script = "";
+      try { script = await buildPrsmapScript(); } catch { script = "PRSMAP Portfolio Risk Strategy online, sir. Correlating all investment positions against scenario playbooks and risk signals to surface exposed portfolio gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isWtcmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wtcmap-toggle"));
+      let script = "";
+      try { script = await buildWtcmapScript(); } catch { script = "WTCMAP World Threat Cluster Map online, sir. Cross-correlating live intelligence events against graph community clusters and active risk signals to surface the highest-severity threat clusters now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMdheatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mdheat-toggle"));
+      let script = "";
+      try { script = await buildMdheatScript(); } catch { script = "MDHEAT Mission Density Heatmap online, sir. Correlating all graph community clusters against active tasks and swarm jobs to surface dormant network zones now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isWfactQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wfact-toggle"));
+      let script = "";
+      try { script = await buildWfactScript(); } catch { script = "WFACT Workforce Activity Matrix online, sir. Cross-referencing all contacts against active tasks and swarm jobs to surface inactive workforce gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMtrbcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mtrbcov-toggle"));
+      let script = "";
+      try { script = await buildMtrbcovScript(); } catch { script = "MTRBCOV Mission Briefing Coverage online, sir. Cross-referencing all active tasks against intel actor profiles and intelligence reports to surface unbriefed missions now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKoecpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:koecp-toggle"));
+      let script = "";
+      try { script = await buildKoecpScript(); } catch { script = "KOECP Intel Context Coverage Pulse online, sir. Cross-referencing all knowledge base articles against operational events and active risk signals to surface isolated knowledge now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGadevaQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gadeva-toggle"));
+      let script = "";
+      try { script = await buildGadevaScript(); } catch { script = "GADEVA Data Evidence Atlas online, sir. Cross-referencing all graph annotations against available datasets and investigations to surface unevidenced annotations now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOctatmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:octatm-toggle"));
+      let script = "";
+      try { script = await buildOctatmScript(); } catch { script = "OCTATM Operational Attribution Matrix online, sir. Cross-referencing all ops events against contacts and active tasks to surface unattributed events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIdenexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:idenex-toggle"));
+      let script = "";
+      try { script = await buildIdenexScript(); } catch { script = "IDENEX Intelligence Evidence Nexus online, sir. Cross-referencing all intel profiles against available datasets and ops events to surface unevidenced actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isArsrmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:arsrmap-toggle"));
+      let script = "";
+      try { script = await buildArsrmapScript(); } catch { script = "ARSRMAP Autonomous Risk Response Map online, sir. Cross-referencing all risk signals against active swarm jobs and knowledge base to surface exposed risks now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGascrinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gascrin-toggle"));
+      let script = "";
+      try { script = await buildGascrinScript(); } catch { script = "GASCRIN Intelligence Readiness Nexus online, sir. Correlating all graph annotations against scenario playbooks and contacts to surface unmapped annotation gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPikmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:pikmap-toggle"));
+      let script = "";
+      try { script = await buildPikmapScript(); } catch { script = "PIKMAP Portfolio Intelligence Coverage Map online, sir. Cross-referencing all investments against knowledge base articles and intelligence reports to identify portfolio blind spots now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOasrmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oasrmap-toggle"));
+      let script = "";
+      try { script = await buildOasrmapScript(); } catch { script = "OASRMAP Operational Response Coverage online, sir. Cross-referencing all operational events against AIP skills and intelligence reports to surface unresponded events now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCodinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:codin-toggle"));
+      let script = "";
+      try { script = await buildCodinScript(); } catch { script = "CODIN Operational Intelligence Network online, sir. Cross-referencing all contacts against datasets and operational events to surface isolated contacts now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCrskpoiQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:crskpoi-toggle"));
+      let script = "";
+      try { script = await buildCrskpoiScript(); } catch { script = "CRSKPOI Personnel Operational Intelligence Map online, sir. Cross-referencing all contacts against reports, scenarios, and knowledge base articles to surface uninformed personnel now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTargQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:targ-toggle"));
+      let script = "";
+      try { script = await buildTargScript(); } catch { script = "TARG Threat Actor Response Grid online, sir. Cross-referencing all intel profiles against operational events and scenario playbooks to surface unengaged threat actors now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDpciQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dpci-toggle"));
+      let script = "";
+      try { script = await buildDpciScript(); } catch { script = "DPCI Defensive Playbook Coverage Index online, sir. Cross-referencing all active risk signals against knowledge base articles, scenario playbooks, and swarm automation jobs to identify defensive coverage gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isLtasorpQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ltasorp-toggle"));
+      let script = "";
+      try { script = await buildLtasorpScript(); } catch { script = "LTASORP Operational Readiness Pulse online, sir. Correlating live world events against AIP skills and scenario playbooks to quantify operational coverage gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAstroQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:astro-toggle"));
+      let script = "";
+      try { script = await buildAstroScript(); } catch { script = "ASTRO Automated Threat Response Orchestrator online, sir. Cross-referencing swarm jobs against active risk signals and intelligence reports to identify automation gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSpiamQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:spiam-toggle"));
+      let script = "";
+      try { script = await buildSpiamScript(); } catch { script = "SPIAM Strategic Priority Alignment Map online, sir. Correlating active tasks against investments and risk signals to surface unanchored priorities now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDicnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dicnex-toggle"));
+      let script = "";
+      try { script = await buildDicnexScript(); } catch { script = "DICNEX Data Intelligence Coverage Nexus online, sir. Cross-referencing datasets against contacts and intel profiles to surface uncovered data assets now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSticnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sticnex-toggle"));
+      let script = "";
+      try { script = await buildSticnexScript(); } catch { script = "STICNEX Strategic Intelligence Coverage Nexus online, sir. Cross-referencing knowledge articles against tasks and investments to surface strategic gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMidossQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:midoss-toggle"));
+      let script = "";
+      try { script = await buildMidossScript(); } catch { script = "MIDOSS Mission Intelligence Dossier online, sir. Cross-referencing scenarios against intel profiles and intelligence reports to surface unbriefed mission gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTfinexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tfinex-toggle"));
+      let script = "";
+      try { script = await buildTfinexScript(); } catch { script = "TFINEX Threat Finance Nexus online, sir. Cross-referencing operational events against portfolio investments and threat actor intel profiles to surface full-risk exposures now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAiomapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aiomap-toggle"));
+      let script = "";
+      try { script = await buildAiomapScript(); } catch { script = "AIOMAP Autonomous Intelligence Operations Map online, sir. Cross-referencing swarm jobs against AIP skills and intel actor profiles to surface autonomous intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isArbnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:arbnex-toggle"));
+      let script = "";
+      try { script = await buildArbnexScript(); } catch { script = "ARBNEX Graph Annotation Risk Attribution Nexus online, sir. Cross-referencing graph annotations against risk signals and intel actor profiles to surface unattributed intelligence gaps now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTrkarmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trkarm-toggle"));
+      let script = "";
+      try { script = await buildTrkarmScript(); } catch { script = "TRKARM Task Action Intelligence Readiness Map online, sir. Cross-referencing active tasks against intelligence reports and knowledge base articles to surface blind tasks requiring briefing now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIgcaimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:igcaim-toggle"));
+      let script = "";
+      try { script = await buildIgcaimScript(); } catch { script = "IGCAIM Investigation Network Coverage Map online, sir. Cross-referencing active investigations against graph community clusters and AIP skills to surface isolated investigations with no network intelligence coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCoedrnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:coedrn-toggle"));
+      let script = "";
+      try { script = await buildCoedrnScript(); } catch { script = "COEDRN Operational Exposure Nexus online, sir. Cross-referencing contacts against ops events, datasets, and risk signals to surface fully-exposed personnel across all three intelligence sources."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSacmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sacmap-toggle"));
+      let script = "";
+      try { script = await buildSacmapScript(); } catch { script = "SACMAP Strategic Autonomy Coverage Map online, sir. Cross-referencing investments against knowledge base articles, active tasks, and swarm jobs to identify unmanaged portfolio positions lacking operational automation coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSrtmecQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srtmec-toggle"));
+      let script = "";
+      try { script = await buildSrtmecScript(); } catch { script = "SRTMEC Mission Execution Coverage Map online, sir. Cross-referencing scenarios against intelligence reports and active tasks to identify unexecuted missions lacking operational coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTaamQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:taam-toggle"));
+      let script = "";
+      try { script = await buildTaamScript(); } catch { script = "TAAM Threat Actor Activity Monitor online, sir. Cross-referencing intel profiles against operational events and knowledge base articles to identify dark threat actors with no operational tracking or knowledge coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isNcaimQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ncaim-toggle"));
+      let script = "";
+      try { script = await buildNcaimScript(); } catch { script = "NCAIM Network Actor Intelligence Map online, sir. Cross-referencing contacts against graph community clusters and intel actor profiles to identify unmapped contacts with no network community or intelligence profile association."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isMdirsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:mdirs-toggle"));
+      let script = "";
+      try { script = await buildMdirsScript(); } catch { script = "MDIRS Multi-Domain Intelligence Readiness online, sir. Cross-referencing AIP skills against intelligence reports and knowledge base articles to surface undocumented capabilities with no operational or knowledge base coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIrcmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ircmap-toggle"));
+      let script = "";
+      try { script = await buildIrcmapScript(); } catch { script = "IRCMAP Integrated Response Map online, sir. Cross-referencing operational events against contacts, investments, and scenario playbooks to surface response coverage gaps requiring immediate attention."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKrsdefQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:krsdef-toggle"));
+      let script = "";
+      try { script = await buildKrsdefScript(); } catch { script = "KRSDEF Defensive Coverage Map online, sir. Cross-referencing knowledge base articles against risk signals and scenario playbooks to surface defensive intelligence gaps requiring attention."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOmcmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:omcmap-toggle"));
+      let script = "";
+      try { script = await buildOmcmapScript(); } catch { script = "OMCMAP Operational Mesh Coverage Map online, sir. Cross-referencing active tasks against graph community clusters and swarm jobs to surface operational mesh gaps where tasks lack both network intelligence and automation coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isDgkimapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:dgkimap-toggle"));
+      let script = "";
+      try { script = await buildDgkimapScript(); } catch { script = "DGKIMAP Dataset Graph Intelligence Coverage Map online, sir. Cross-referencing datasets against graph community clusters, knowledge base articles, and active investigations to surface dark datasets with no intelligence coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOcasamQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ocasam-toggle"));
+      let script = "";
+      try { script = await buildOcasamScript(); } catch { script = "OCASAM Ops Event Situational Awareness Map online, sir. Cross-referencing operational events against contacts and knowledge base articles to surface blind events with no contact attribution and no knowledge coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F229: World Event Threat Matrix — open WETMAT panel + speak world-threat brief.
+    if (isWetmatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:wetmat-toggle"));
+      let script = "";
+      try { script = await buildWetmatScript(); } catch { script = "World event threat matrix online, sir. Cross-referencing live world events against scenario playbooks and risk signals to classify threat coverage now."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F230: Dataset Intelligence Automation Nexus — open DARINEX panel + speak automation brief.
+    if (isDarinexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:darinex-toggle"));
+      let script = "";
+      try { script = await buildDarinexScript(); } catch { script = "DARINEX Dataset Intelligence Automation Nexus online, sir. Cross-referencing datasets against AIP skills and intelligence reports to identify unmapped datasets with no automation coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F231: Contact Knowledge Ops Awareness Bridge — open CKOEAB panel + speak situational awareness brief.
+    if (isCkoeabQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ckoeab-toggle"));
+      let script = "";
+      try { script = await buildCkoeabScript(); } catch { script = "CKOEAB Contact Situational Awareness Bridge online, sir. Cross-referencing contacts against knowledge articles and operational events to identify contacts with no situational awareness coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F232: IntelProfile Task Investigation Coverage Matrix — open ITICMAP panel + speak coverage brief.
+    if (isIticmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iticmap-toggle"));
+      let script = "";
+      try { script = await buildIticmapScript(); } catch { script = "ITICMAP Intel Profile Coverage Matrix online, sir. Cross-referencing intel profiles against operational tasks and active investigations to identify untracked intelligence gaps requiring immediate assignment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F233: Task × Knowledge × AIP Skill Operational Readiness Coverage Nexus — open ORCNEX panel + speak readiness brief.
+    if (isOrcnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:orcnex-toggle"));
+      let script = "";
+      try { script = await buildOrcnexScript(); } catch { script = "ORCNEX Operational Readiness Coverage Nexus online, sir. Cross-referencing active tasks against knowledge articles and AIP skills to identify operationally unsupported tasks requiring immediate coverage assignment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F234: IntelProfile × Dataset × Scenario Threat Data Readiness Map — open TDRMAP panel + speak readiness brief.
+    if (isTdrmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tdrmap-toggle"));
+      let script = "";
+      try { script = await buildTdrmapScript(); } catch { script = "TDRMAP Threat Data Readiness Map online, sir. Cross-referencing intel actor profiles against datasets and threat scenarios to identify actor intelligence blind spots requiring immediate data and scenario assignment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F235: SwarmJob × Report × Scenario Mission Coverage Nexus — open SMRNEX panel + speak coverage brief.
+    if (isSmrnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:smrnex-toggle"));
+      let script = "";
+      try { script = await buildSmrnexScript(); } catch { script = "SMRNEX Mission Coverage Nexus online, sir. Cross-referencing swarm jobs against intelligence reports and mission scenarios to identify mission coverage gaps requiring immediate report and scenario assignment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F236: Graph Annotation × AIP Skill × Contact Intelligence Coverage Bridge — open GACCOV panel + speak coverage brief.
+    if (isGaccovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gaccov-toggle"));
+      let script = "";
+      try { script = await buildGaccovScript(); } catch { script = "GACCOV Annotation Intelligence Bridge online, sir. Cross-referencing graph annotations against AIP skills and contacts to surface uncharted annotation coverage gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F237: Intel Profile × Contact × Investigation × Ops Event Response Nexus — open IRCNEX panel + speak response brief.
+    if (isIrcnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ircnex-toggle"));
+      let script = "";
+      try { script = await buildIrcnexScript(); } catch { script = "Intel Profile Response Nexus online, sir. Cross-referencing threat actor profiles against contacts, investigations, and ops events to identify actors with no active response coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F238: Threat Mitigation Intelligence Nexus — open TMINEX panel + speak mitigation brief.
+    if (isTminexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tminex-toggle"));
+      let script = "";
+      try { script = await buildTminexScript(); } catch { script = "Threat Mitigation Nexus online, sir. Cross-referencing risk signals against knowledge articles, contacts, and datasets to identify unmitigated threats."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F239: Task × SwarmJob × Investment Resource Priority Nexus — open TRPIN panel + speak resource brief.
+    if (isTrpinQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trpin-toggle"));
+      let script = "";
+      try { script = await buildTrpinScript(); } catch { script = "Task Resource Priority Nexus online, sir. Cross-referencing tasks against swarm jobs and investments to identify unfunded operational gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F240: Ops Event × AIP Skill × Contact Operational Response Alignment — open OASALIGN panel + speak alignment brief.
+    if (isOasalignQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:oasalign-toggle"));
+      let script = "";
+      try { script = await buildOasalignScript(); } catch { script = "Operational Response Alignment online, sir. Cross-referencing ops events against AIP skills and contacts to identify unaligned response gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F241: SwarmJob × IntelProfile × Report Intelligence Production Assessment — open IPASSESS panel + speak production brief.
+    if (isIpassessQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipassess-toggle"));
+      let script = "";
+      try { script = await buildIpassessScript(); } catch { script = "Intelligence Production Assessment online, sir. Cross-referencing swarm jobs against intel profiles and reports to identify production gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F242: Investigation × Scenario × Knowledge Intelligence Response Nexus — open ISKRNEX panel + speak brief.
+    if (isIskrnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:iskrnex-toggle"));
+      let script = "";
+      try { script = await buildIskrnexScript(); } catch { script = "Intelligence Response Nexus online, sir. Cross-referencing investigations against scenarios and knowledge articles to identify uncovered response gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F243: RiskSignal × Contact × Scenario Threat Response Mesh — open TRMESH panel + speak brief.
+    if (isTrmeshQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trmesh-toggle"));
+      let script = "";
+      try { script = await buildTrmeshScript(); } catch { script = "Threat Response Mesh online, sir. Cross-referencing risk signals against contacts and response scenarios to identify uncovered threat response gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F244: Dataset × Report × AIP Skill × RiskSignal Intelligence Production Coverage — open DRASCOV panel + speak brief.
+    if (isDrascovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:drascov-toggle"));
+      let script = "";
+      try { script = await buildDrascovScript(); } catch { script = "Intelligence Production Coverage online, sir. Cross-referencing datasets against reports, AIP skills, and risk signals to identify uncovered intelligence production gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIpoestRQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ipoestr-toggle"));
+      let script = "";
+      try { script = await buildIpoestRScript(); } catch { script = "Intel Profile Ops Threat Tracker online, sir. Cross-referencing threat actor profiles against live ops events and response scenarios to identify dark actors with no coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTrocasQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:trocas-toggle"));
+      let script = "";
+      try { script = await buildTrocasScript(); } catch { script = "Operational Closure Assessment online, sir. Cross-referencing active tasks against intelligence reports and investigations to identify open-loop tasks with no closure coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isFracmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:fracmap-toggle"));
+      let script = "";
+      try { script = await buildFracmapScript(); } catch { script = "Financial Risk Alert Map online, sir. Cross-referencing operational alerts against graph communities and portfolio investments to identify alerts with no financial context coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isKoatracQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:koatrac-toggle"));
+      let script = "";
+      try { script = await buildKoatracScript(); } catch { script = "KOATRAC online, sir. Analysing knowledge base automation coverage across operational alerts and AIP skills to identify passive items requiring manual triage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRsirixQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rsirix-toggle"));
+      let script = "";
+      try { script = await buildRsirixScript(); } catch { script = "RSIRIX online, sir. Cross-referencing active risk signals against AIP automation skills and open investigations to identify threats with no response coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCsdcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csdcov-toggle"));
+      let script = "";
+      try { script = await buildCsdcovScript(); } catch { script = "CSDCOV online, sir. Cross-referencing contacts against operational scenarios and datasets to assess intelligence coverage gaps."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isScknexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scknex-toggle"));
+      let script = "";
+      try { script = await buildScknexScript(); } catch { script = "SCKNEX online, sir. Assessing swarm job capability readiness against contacts and knowledge articles."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTfscovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tfscov-toggle"));
+      let script = "";
+      try { script = await buildTfscovScript(); } catch { script = "TFSCOV online, sir. Assessing portfolio investment coverage against threat scenarios and intel profiles."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isOkrsriQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:okrsri-toggle"));
+      let script = "";
+      try { script = await buildOkrsriScript(); } catch { script = "OKRSRI online, sir. Assessing operational event response readiness against knowledge base and scenario playbooks."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAgdsixQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:agdsix-toggle"));
+      let script = "";
+      try { script = await buildAgdsixScript(); } catch { script = "AGDSIX online, sir. Correlating AIP skills against graph communities and datasets for intelligence saturation analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGiocnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:giocnex-toggle"));
+      let script = "";
+      try { script = await buildGiocnexScript(); } catch { script = "GIOCNEX online, sir. Correlating graph communities against investments and operational events for coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTiprexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tiprex-toggle"));
+      let script = "";
+      try { script = await buildTiprexScript(); } catch { script = "TIPREX online, sir. Correlating tasks against intel profiles and intelligence reports for closure analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTeixrevQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:teixrev-toggle"));
+      let script = "";
+      try { script = await buildTeixrevScript(); } catch { script = "TEIXREV online, sir. Correlating swarm jobs against risk signals and knowledge items for threat execution coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGnocovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gnocov-toggle"));
+      let script = "";
+      try { script = await buildGnocovScript(); } catch { script = "GNOCOV online, sir. Correlating graph nodes against contacts and tasks for operational coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isArscovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:arscov-toggle"));
+      let script = "";
+      try { script = await buildArscovScript(); } catch { script = "ARSCOV online, sir. Correlating risk signals against AIP skills and ops events for automated response coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isFpacovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:fpacov-toggle"));
+      let script = "";
+      try { script = await buildFpacovScript(); } catch { script = "FPACOV online, sir. Correlating contacts against risk signals, knowledge entries, and ops events for full personnel alert coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIdrnQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:idrn-toggle"));
+      let script = "";
+      try { script = await buildIdrnScript(); } catch { script = "IDRN online, sir. Correlating investments against datasets and risk signals for cross-coverage nexus analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPcrcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:pcrcov-toggle"));
+      let script = "";
+      try { script = await buildPcrcovScript(); } catch { script = "PCRCOV online, sir. Correlating AIP skills against personnel contacts and risk signals for capability coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRcsanQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rcsan-toggle"));
+      let script = "";
+      try { script = await buildRcsanScript(); } catch { script = "RCSAN online, sir. Correlating reports against contacts and swarm jobs for intelligence action coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSkdcrnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skdcrnex-toggle"));
+      let script = "";
+      try { script = await buildSkdcrnexScript(); } catch { script = "SKDCRNEX online, sir. Correlating scenarios against knowledge, datasets, and contacts for full readiness assessment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSrockbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srockb-toggle"));
+      let script = "";
+      try { script = await buildSrockbScript(); } catch { script = "SROCKB online, sir. Correlating swarm jobs against reports, ops events, and knowledge for mission context assessment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTarecQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tarec-toggle"));
+      let script = "";
+      try { script = await buildTarecScript(); } catch { script = "TAREC online, sir. Evaluating threat actor resolution coverage across graph centrality, investigations, and operational alerts."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTdoacovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tdoacov-toggle"));
+      let script = "";
+      try { script = await buildTdoacovScript(); } catch { script = "TDOACOV online, sir. Evaluating task workflow intelligence coverage across datasets and operational alerts."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (await isFtnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ftnex-toggle"));
+      let script = "";
+      try { script = await buildFtnexScript(); } catch { script = "FTNEX online, sir. Correlating intel profiles, investment entities, and operational alerts for financial threat nexus analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (await isCsksrbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csksrb-toggle"));
+      let script = "";
+      try { script = await buildCsksrbScript(); } catch { script = "CSKSRB online, sir. Correlating contacts against scenarios, knowledge articles, and risk signals for intelligence bridge analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSidicovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:sidicov-toggle"));
+      let script = "";
+      try { script = await buildSidicovScript(); } catch { script = "SIDICOV online, sir. Evaluating swarm job intelligence completion coverage across investigations and datasets."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRoganexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:roganex-toggle"));
+      let script = "";
+      try { script = await buildRoganexScript(); } catch { script = "ROGANEX online, sir. Correlating intelligence reports against ops events and graph annotations for response nexus analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isEntityActivityQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:eactv-toggle"));
+      let script = "";
+      try { script = await buildEntityActivityScript(); } catch { script = "Entity activity heatmap online, sir. Analysing activity density across all six entity types."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
     let answer = "";
     try {
-      const pageContext = { route: window.location.pathname, scene };
-      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-        body: JSON.stringify({ message: q, page_context: pageContext }),
-      });
-      const d = await r.json();
-      answer = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
+      // F05: intercept status queries — fetch real telemetry and speak it directly.
+      if (isStatusQuery(q)) {
+        answer = await buildStatusScript();
+      } else {
+        const pageContext = { route: window.location.pathname, scene };
+        const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+          body: JSON.stringify({ message: q, page_context: pageContext }),
+        });
+        const d = await r.json();
+        answer = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
+      }
     } catch {
       answer = "I'm afraid I couldn't reach my reasoning core just now, sir.";
     }

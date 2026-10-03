@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+// TTS is handled by JarvisBrain; this component shows the visual HUD card only.
 import { apiBase } from "@/api/cinematicDataAdapters";
 
 /**
@@ -58,9 +59,7 @@ function composeSpokenText(sys, brain) {
 }
 
 export default function StatusReporter() {
-  const [card, setCard]       = useState(null);
-  const [speaking, setSpeaking] = useState(false);
-  const audioRef  = useRef(null);
+  const [card, setCard] = useState(null);
   const hideTimer = useRef(null);
 
   async function runReport() {
@@ -78,24 +77,6 @@ export default function StatusReporter() {
     const spoken = composeSpokenText(sys, brain);
 
     setCard({ sys, brain, spoken, loading: false });
-
-    // Speak via TTS
-    try {
-      const r = await fetch(`${apiBase()}/v1/voice/tts`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text: spoken }),
-      });
-      if (r.ok) {
-        const url = URL.createObjectURL(await r.blob());
-        try { audioRef.current?.pause(); } catch {}
-        const a = new Audio(url);
-        audioRef.current = a;
-        a.onplay  = () => setSpeaking(true);
-        a.onended = () => { setSpeaking(false); URL.revokeObjectURL(url); };
-        a.play().catch(() => setSpeaking(false));
-      }
-    } catch {}
 
     hideTimer.current = setTimeout(() => setCard(null), 14_000);
   }
@@ -139,13 +120,10 @@ export default function StatusReporter() {
         <span style={{
           width: 10, height: 10, borderRadius: "50%", background: CY,
           boxShadow: `0 0 10px ${CY}`,
-          animation: (loading || speaking) ? "srpulse 1s ease-in-out infinite" : "none",
+          animation: loading ? "srpulse 1s ease-in-out infinite" : "none",
           flexShrink: 0,
         }} />
         <span style={{ color: CY, fontSize: 10, letterSpacing: 3 }}>STATUS REPORT</span>
-        {speaking && (
-          <span style={{ marginLeft: "auto", fontSize: 9, color: CY, letterSpacing: 1 }}>◍ speaking</span>
-        )}
       </div>
 
       {loading ? (
