@@ -345,6 +345,7 @@ import { isSaanexQuery, buildSaanexScript } from "./SwarmSkillAlertNexus";
 import { isIrcmatQuery, buildIrcmatScript } from "./IntelProfileRiskInvestigationDatasetMatrix";
 import { isCdoacovQuery, buildCdoacovScript } from "./ContactDatasetAlertCoverage";
 import { isIaskacovQuery, buildIaskacovScript } from "./InvestigationSkillKnowledgeCoverage";
+import { isArcovQuery, buildArcovScript } from "./OpsAlertRiskSignalContactCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3323,6 +3324,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iaskacov-toggle"));
       let script = "";
       try { script = await buildIaskacovScript(); } catch { script = "IASKACOV online, sir. Assessing investigation resource coverage across AIP skills and knowledge articles."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isArcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:arcov-toggle"));
+      let script = "";
+      try { script = await buildArcovScript(); } catch { script = "ARCOV online, sir. Assessing operational alert response coverage across risk signals and contacts."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
