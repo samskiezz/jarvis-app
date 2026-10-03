@@ -340,6 +340,7 @@ import { isSidicovQuery, buildSidicovScript } from "./SwarmJobInvestigationDatas
 import { isRoganexQuery, buildRoganexScript } from "./ReportOpsAnnotationNexus";
 import { isScrarxQuery, buildScrarxScript } from "./AipSkillContactAlertReadiness";
 import { isEntityActivityQuery, buildEntityActivityScript } from "./EntityActivityHeatmap";
+import { isTiksnexQuery, buildTiksnexScript } from "./TaskRiskKnowledgeSkillNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3278,6 +3279,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:eactv-toggle"));
       let script = "";
       try { script = await buildEntityActivityScript(); } catch { script = "Entity activity heatmap online, sir. Analysing activity density across all six entity types."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTiksnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tiksnex-toggle"));
+      let script = "";
+      try { script = await buildTiksnexScript(); } catch { script = "TIKSNEX online, sir. Assessing task operational intel coverage across risk signals, knowledge base, and AIP skills."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

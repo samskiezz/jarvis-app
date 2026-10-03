@@ -497,6 +497,7 @@ import ContactScenarioKnowledgeRiskBridge from '@/components/cinematic/ContactSc
 import SwarmJobInvestigationDatasetCoverage from '@/components/cinematic/SwarmJobInvestigationDatasetCoverage';
 import ReportOpsAnnotationNexus from '@/components/cinematic/ReportOpsAnnotationNexus';
 import AipSkillContactAlertReadiness from '@/components/cinematic/AipSkillContactAlertReadiness';
+import TaskRiskKnowledgeSkillNexus from '@/components/cinematic/TaskRiskKnowledgeSkillNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1582,6 +1583,8 @@ function App() {
             <ReportOpsAnnotationNexus />
             {/* F272 (overnight 2026-10-03): AIP Skill × Contact × Ops Alert Response Readiness Index — SCRARX button; /v1/aip/skill × /entities/Contact × /v1/ops/alerts */}
             <AipSkillContactAlertReadiness />
+            {/* F274 (overnight 2026-10-03): Task × RiskSignal × Knowledge × AIP Skill Operational Intel Nexus — TIKSNEX button; /entities/Task × /entities/RiskSignal × /knowledge/ × /v1/aip/skill */}
+            <TaskRiskKnowledgeSkillNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
