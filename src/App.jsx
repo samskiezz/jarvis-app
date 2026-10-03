@@ -500,6 +500,7 @@ import AipSkillContactAlertReadiness from '@/components/cinematic/AipSkillContac
 import TaskRiskKnowledgeSkillNexus from '@/components/cinematic/TaskRiskKnowledgeSkillNexus';
 import SwarmSkillAlertNexus from '@/components/cinematic/SwarmSkillAlertNexus';
 import IntelProfileRiskInvestigationDatasetMatrix from '@/components/cinematic/IntelProfileRiskInvestigationDatasetMatrix';
+import ContactDatasetAlertCoverage from '@/components/cinematic/ContactDatasetAlertCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1591,6 +1592,8 @@ function App() {
             <SwarmSkillAlertNexus />
             {/* F276 (overnight 2026-10-03): IntelProfile × RiskSignal × Investigation × Dataset Risk Coverage Matrix — IRCMAT button; /entities/IntelProfile × /entities/RiskSignal × /v1/investigations × /v1/datasets */}
             <IntelProfileRiskInvestigationDatasetMatrix />
+            {/* F277 (overnight 2026-10-03): Contact × Dataset × Ops Alert Response Coverage Matrix — CDOACOV button; /entities/Contact × /v1/datasets × /v1/ops/alerts */}
+            <ContactDatasetAlertCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

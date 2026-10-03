@@ -343,6 +343,7 @@ import { isEntityActivityQuery, buildEntityActivityScript } from "./EntityActivi
 import { isTiksnexQuery, buildTiksnexScript } from "./TaskRiskKnowledgeSkillNexus";
 import { isSaanexQuery, buildSaanexScript } from "./SwarmSkillAlertNexus";
 import { isIrcmatQuery, buildIrcmatScript } from "./IntelProfileRiskInvestigationDatasetMatrix";
+import { isCdoacovQuery, buildCdoacovScript } from "./ContactDatasetAlertCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3305,6 +3306,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ircmat-toggle"));
       let script = "";
       try { script = await buildIrcmatScript(); } catch { script = "IRCMAT online, sir. Assessing intel profile risk coverage across risk signals, investigations, and datasets."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isCdoacovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:cdoacov-toggle"));
+      let script = "";
+      try { script = await buildCdoacovScript(); } catch { script = "CDOACOV online, sir. Assessing contact response coverage across datasets and operational alerts."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
