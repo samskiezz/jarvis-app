@@ -329,6 +329,7 @@ import { isArscovQuery, buildArscovScript } from "./RiskSignalAutomatedResponseC
 import { isFpacovQuery, buildFpacovScript } from "./FullPersonnelAlertCoverage";
 import { isIdrnQuery, buildIdrnScript } from "./InvestmentDatasetRiskNexus";
 import { isPcrcovQuery, buildPcrcovScript } from "./AipSkillContactRiskCoverage";
+import { isRcsanQuery, buildRcsanScript } from "./ReportContactSwarmNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3179,6 +3180,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:pcrcov-toggle"));
       let script = "";
       try { script = await buildPcrcovScript(); } catch { script = "PCRCOV online, sir. Correlating AIP skills against personnel contacts and risk signals for capability coverage analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRcsanQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rcsan-toggle"));
+      let script = "";
+      try { script = await buildRcsanScript(); } catch { script = "RCSAN online, sir. Correlating reports against contacts and swarm jobs for intelligence action coverage analysis."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
