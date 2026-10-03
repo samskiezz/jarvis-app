@@ -492,6 +492,7 @@ import ScenarioKnowledgeDatasetContactNexus from '@/components/cinematic/Scenari
 import SwarmReportOpsKnowledgeBridge from '@/components/cinematic/SwarmReportOpsKnowledgeBridge';
 import IntelProfileThreatActorResolution from '@/components/cinematic/IntelProfileThreatActorResolution';
 import TaskDatasetOpsAlertCoverage from '@/components/cinematic/TaskDatasetOpsAlertCoverage';
+import IntelProfileInvestmentAlertNexus from '@/components/cinematic/IntelProfileInvestmentAlertNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1567,6 +1568,8 @@ function App() {
             <IntelProfileThreatActorResolution />
             {/* F267 (overnight 2026-10-03): Task × Dataset × Ops Alert Workflow Intelligence Coverage — TDOACOV button; /entities/Task × /v1/datasets × /v1/ops/alerts */}
             <TaskDatasetOpsAlertCoverage />
+            {/* F268 (overnight 2026-10-03): IntelProfile × Investment × Ops Alert Financial Threat Nexus — FTNEX button; /entities/IntelProfile × /entities/Investment × /v1/ops/alerts */}
+            <IntelProfileInvestmentAlertNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
