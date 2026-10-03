@@ -491,6 +491,7 @@ import ReportContactSwarmNexus from '@/components/cinematic/ReportContactSwarmNe
 import ScenarioKnowledgeDatasetContactNexus from '@/components/cinematic/ScenarioKnowledgeDatasetContactNexus';
 import SwarmReportOpsKnowledgeBridge from '@/components/cinematic/SwarmReportOpsKnowledgeBridge';
 import IntelProfileThreatActorResolution from '@/components/cinematic/IntelProfileThreatActorResolution';
+import TaskDatasetOpsAlertCoverage from '@/components/cinematic/TaskDatasetOpsAlertCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1564,6 +1565,8 @@ function App() {
             <SwarmReportOpsKnowledgeBridge />
             {/* F266 (overnight 2026-10-03): IntelProfile × Graph Centrality × Investigation × Ops Alert Threat Actor Resolution Coverage — TAREC button; /entities/IntelProfile × /v1/graph/centrality × /v1/investigations × /v1/ops/alerts */}
             <IntelProfileThreatActorResolution />
+            {/* F267 (overnight 2026-10-03): Task × Dataset × Ops Alert Workflow Intelligence Coverage — TDOACOV button; /entities/Task × /v1/datasets × /v1/ops/alerts */}
+            <TaskDatasetOpsAlertCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
