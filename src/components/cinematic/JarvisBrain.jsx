@@ -335,6 +335,7 @@ import { isSrockbQuery, buildSrockbScript } from "./SwarmReportOpsKnowledgeBridg
 import { isTarecQuery, buildTarecScript } from "./IntelProfileThreatActorResolution";
 import { isTdoacovQuery, buildTdoacovScript } from "./TaskDatasetOpsAlertCoverage";
 import { isFtnexQuery, buildFtnexScript } from "./IntelProfileInvestmentAlertNexus";
+import { isCsksrbQuery, buildCsksrbScript } from "./ContactScenarioKnowledgeRiskBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3233,6 +3234,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:ftnex-toggle"));
       let script = "";
       try { script = await buildFtnexScript(); } catch { script = "FTNEX online, sir. Correlating intel profiles, investment entities, and operational alerts for financial threat nexus analysis."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (await isCsksrbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:csksrb-toggle"));
+      let script = "";
+      try { script = await buildCsksrbScript(); } catch { script = "CSKSRB online, sir. Correlating contacts against scenarios, knowledge articles, and risk signals for intelligence bridge analysis."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

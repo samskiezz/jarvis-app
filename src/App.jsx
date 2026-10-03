@@ -493,6 +493,7 @@ import SwarmReportOpsKnowledgeBridge from '@/components/cinematic/SwarmReportOps
 import IntelProfileThreatActorResolution from '@/components/cinematic/IntelProfileThreatActorResolution';
 import TaskDatasetOpsAlertCoverage from '@/components/cinematic/TaskDatasetOpsAlertCoverage';
 import IntelProfileInvestmentAlertNexus from '@/components/cinematic/IntelProfileInvestmentAlertNexus';
+import ContactScenarioKnowledgeRiskBridge from '@/components/cinematic/ContactScenarioKnowledgeRiskBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1570,6 +1571,8 @@ function App() {
             <TaskDatasetOpsAlertCoverage />
             {/* F268 (overnight 2026-10-03): IntelProfile × Investment × Ops Alert Financial Threat Nexus — FTNEX button; /entities/IntelProfile × /entities/Investment × /v1/ops/alerts */}
             <IntelProfileInvestmentAlertNexus />
+            {/* F269 (overnight 2026-10-03): Contact × Scenario × Knowledge × RiskSignal Intelligence Bridge — CSKSRB button; /entities/Contact × /v1/scenario/list × /knowledge/ × /entities/RiskSignal */}
+            <ContactScenarioKnowledgeRiskBridge />
 
             <Suspense fallback={<Loading />}>
               <Routes>
