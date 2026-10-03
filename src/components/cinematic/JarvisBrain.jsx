@@ -331,6 +331,7 @@ import { isIdrnQuery, buildIdrnScript } from "./InvestmentDatasetRiskNexus";
 import { isPcrcovQuery, buildPcrcovScript } from "./AipSkillContactRiskCoverage";
 import { isRcsanQuery, buildRcsanScript } from "./ReportContactSwarmNexus";
 import { isSkdcrnexQuery, buildSkdcrnexScript } from "./ScenarioKnowledgeDatasetContactNexus";
+import { isSrockbQuery, buildSrockbScript } from "./SwarmReportOpsKnowledgeBridge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3197,6 +3198,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skdcrnex-toggle"));
       let script = "";
       try { script = await buildSkdcrnexScript(); } catch { script = "SKDCRNEX online, sir. Correlating scenarios against knowledge, datasets, and contacts for full readiness assessment."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSrockbQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:srockb-toggle"));
+      let script = "";
+      try { script = await buildSrockbScript(); } catch { script = "SROCKB online, sir. Correlating swarm jobs against reports, ops events, and knowledge for mission context assessment."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

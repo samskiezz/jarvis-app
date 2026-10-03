@@ -489,6 +489,7 @@ import InvestmentDatasetRiskNexus from '@/components/cinematic/InvestmentDataset
 import AipSkillContactRiskCoverage from '@/components/cinematic/AipSkillContactRiskCoverage';
 import ReportContactSwarmNexus from '@/components/cinematic/ReportContactSwarmNexus';
 import ScenarioKnowledgeDatasetContactNexus from '@/components/cinematic/ScenarioKnowledgeDatasetContactNexus';
+import SwarmReportOpsKnowledgeBridge from '@/components/cinematic/SwarmReportOpsKnowledgeBridge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1558,6 +1559,8 @@ function App() {
             <ReportContactSwarmNexus />
             {/* F264 (overnight 2026-10-03): Scenario × Knowledge × Dataset × Contact Full Readiness Nexus — SKDCRNEX button; /v1/scenario/list × /knowledge/ × /v1/datasets × /entities/Contact */}
             <ScenarioKnowledgeDatasetContactNexus />
+            {/* F265 (overnight 2026-10-03): SwarmJob × Report × Ops Event × Knowledge Mission Context Bridge — SROCKB button; /entities/SwarmJob × /v1/reports × /v1/ops/events × /knowledge/ */}
+            <SwarmReportOpsKnowledgeBridge />
 
             <Suspense fallback={<Loading />}>
               <Routes>
