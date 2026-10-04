@@ -349,6 +349,7 @@ import { isArcovQuery, buildArcovScript } from "./OpsAlertRiskSignalContactCover
 import { isScoemexQuery, buildScoemexScript } from "./SwarmContactOpsEventNexus";
 import { isIiscovnexQuery, buildIiscovnexScript } from "./InvestmentIntelScenarioCoverage";
 import { isAaknQuery, buildAaknScript } from "./AlertAipKnowledgeNexus";
+import { isTskmonQuery, buildTskmonScript } from "./TaskScenarioKnowledgeOpsNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3359,6 +3360,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:aakn-toggle"));
       let script = "";
       try { script = buildAaknScript(); } catch { script = "AAKN online, sir. Opening Alert AIP Knowledge Nexus — cross-referencing operational alerts against available skills and knowledge."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isTskmonQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:tskmon-toggle"));
+      let script = "";
+      try { script = buildTskmonScript(); } catch { script = "TSKMON online. Opening Task Mission Readiness Nexus — correlating tasks against scenarios, knowledge, and ops alerts."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
