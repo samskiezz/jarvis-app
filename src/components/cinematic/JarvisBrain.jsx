@@ -355,6 +355,7 @@ import { isPnetcovQuery, buildPnetcovScript } from "./ContactGraphOpsDatasetNexu
 import { isSoarnexQuery, buildSoarnexScript } from "./SwarmJobAipSkillAlertNexus";
 import { isCpricoverQuery, buildCpricoverScript } from "./ContactPersonnelIntelCoverage";
 import { isIgasnicQuery, buildIgasnicScript } from "./InvestigationGraphSkillRiskNexus";
+import { isGstarmexQuery, buildGstarmexScript } from "./GraphSubgraphTaskSkillReportNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3413,6 +3414,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:igasnic-toggle"));
       let script = "";
       try { script = buildIgasnicScript(); } catch { script = "IGASNIC online. Opening Investigation Graph Skill Risk Nexus."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isGstarmexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:gstarmex-toggle"));
+      let script = "";
+      try { script = buildGstarmexScript(); } catch { script = "GSTARMEX online. Opening Graph Subgraph Operational Mapping Nexus."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

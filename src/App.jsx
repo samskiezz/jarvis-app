@@ -512,6 +512,7 @@ import ContactGraphOpsDatasetNexus from '@/components/cinematic/ContactGraphOpsD
 import SwarmJobAipSkillAlertNexus from '@/components/cinematic/SwarmJobAipSkillAlertNexus';
 import ContactPersonnelIntelCoverage from '@/components/cinematic/ContactPersonnelIntelCoverage';
 import InvestigationGraphSkillRiskNexus from '@/components/cinematic/InvestigationGraphSkillRiskNexus';
+import GraphSubgraphTaskSkillReportNexus from '@/components/cinematic/GraphSubgraphTaskSkillReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1627,6 +1628,8 @@ function App() {
             <ContactPersonnelIntelCoverage />
             {/* F288 (overnight 2026-10-04): Investigation × Graph Community × AIP Skill × Risk Signal Network Intelligence Nexus — IGASNIC button; /v1/investigations × /v1/graph/communities × /v1/aip/skill × /entities/RiskSignal */}
             <InvestigationGraphSkillRiskNexus />
+            {/* F289 (overnight 2026-10-04): Graph Subgraph × Task × AIP Skill × Report Operational Mapping Nexus — GSTARMEX button; /v1/graph/subgraph × /entities/Task × /v1/aip/skill × /v1/reports */}
+            <GraphSubgraphTaskSkillReportNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
