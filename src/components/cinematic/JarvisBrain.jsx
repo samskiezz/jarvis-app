@@ -360,6 +360,7 @@ import { isRsrtreadQuery, buildRsrtreadScript } from "./RiskScenarioTaskReadines
 import { isIsrmapQuery, buildIsrmapScript } from "./InvestmentSkillScenarioMap";
 import { isIahmonQuery, buildIahmonScript } from "./OpsAlertHorizonMonitor";
 import { isTiscoverQuery, buildTiscoverScript } from "./TaskInvestmentSkillContactCoverage";
+import { isSmicovQuery, buildSmicovScript } from "./SwarmMissionIntelCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3458,6 +3459,14 @@ export default function JarvisBrain() {
       document.dispatchEvent(new CustomEvent("jarvis:tiscover-toggle"));
       let script = "";
       try { script = buildTiscoverScript(); } catch { script = "TISCOVER online. Opening Strategic Execution Coverage panel."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSmicovQuery(q)) {
+      document.dispatchEvent(new CustomEvent("jarvis:smicov-toggle"));
+      let script = "";
+      try { script = buildSmicovScript(); } catch { script = "SMICOV online. Opening Swarm Mission Intel Coverage panel."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

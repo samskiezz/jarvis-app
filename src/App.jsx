@@ -517,6 +517,7 @@ import RiskScenarioTaskReadiness from '@/components/cinematic/RiskScenarioTaskRe
 import InvestmentSkillScenarioMap from '@/components/cinematic/InvestmentSkillScenarioMap';
 import OpsAlertHorizonMonitor from '@/components/cinematic/OpsAlertHorizonMonitor';
 import TaskInvestmentSkillContactCoverage from '@/components/cinematic/TaskInvestmentSkillContactCoverage';
+import SwarmMissionIntelCoverage from '@/components/cinematic/SwarmMissionIntelCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1642,6 +1643,8 @@ function App() {
             <OpsAlertHorizonMonitor />
             {/* F293 (overnight 2026-10-04): Task × Investment × AIP Skill × Contact Strategic Execution Coverage — TISCOVER button; /entities/Task × /entities/Investment × /v1/aip/skill × /entities/Contact */}
             <TaskInvestmentSkillContactCoverage />
+            {/* F294 (overnight 2026-10-04): SwarmJob × Knowledge × Scenario × Contact Mission Intel Coverage — SMICOV button; /entities/SwarmJob × /knowledge/ × /v1/scenario/list × /entities/Contact */}
+            <SwarmMissionIntelCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
