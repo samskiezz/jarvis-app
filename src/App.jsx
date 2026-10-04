@@ -516,6 +516,7 @@ import GraphSubgraphTaskSkillReportNexus from '@/components/cinematic/GraphSubgr
 import RiskScenarioTaskReadiness from '@/components/cinematic/RiskScenarioTaskReadiness';
 import InvestmentSkillScenarioMap from '@/components/cinematic/InvestmentSkillScenarioMap';
 import OpsAlertHorizonMonitor from '@/components/cinematic/OpsAlertHorizonMonitor';
+import TaskInvestmentSkillContactCoverage from '@/components/cinematic/TaskInvestmentSkillContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1639,6 +1640,8 @@ function App() {
             <InvestmentSkillScenarioMap />
             {/* F292 (overnight 2026-10-04): Ops Alert × Graph Annotation × Knowledge × Dataset Intelligence Horizon Monitor — IAHMON button; /v1/ops/alerts × /v1/graph/annotations × /knowledge/ × /v1/datasets */}
             <OpsAlertHorizonMonitor />
+            {/* F293 (overnight 2026-10-04): Task × Investment × AIP Skill × Contact Strategic Execution Coverage — TISCOVER button; /entities/Task × /entities/Investment × /v1/aip/skill × /entities/Contact */}
+            <TaskInvestmentSkillContactCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
