@@ -352,6 +352,7 @@ import { isAaknQuery, buildAaknScript } from "./AlertAipKnowledgeNexus";
 import { isTskmonQuery, buildTskmonScript } from "./TaskScenarioKnowledgeOpsNexus";
 import { isRdiricovQuery, buildRdiricovScript } from "./RiskSignalDatasetIntelReportCoverage";
 import { isPnetcovQuery, buildPnetcovScript } from "./ContactGraphOpsDatasetNexus";
+import { isSoarnexQuery, buildSoarnexScript } from "./SwarmJobAipSkillAlertNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3386,6 +3387,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:pnetcov-toggle"));
       let script = "";
       try { script = buildPnetcovScript(); } catch { script = "PNETCOV online. Opening Personnel Network Coverage — correlating contacts against graph centrality, operational events, and datasets."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isSoarnexQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:soarnex-toggle"));
+      let script = "";
+      try { script = buildSoarnexScript(); } catch { script = "SOARNEX online. Opening Swarm Job Response Automation Nexus."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

@@ -509,6 +509,7 @@ import AlertAipKnowledgeNexus from '@/components/cinematic/AlertAipKnowledgeNexu
 import TaskScenarioKnowledgeOpsNexus from '@/components/cinematic/TaskScenarioKnowledgeOpsNexus';
 import RiskSignalDatasetIntelReportCoverage from '@/components/cinematic/RiskSignalDatasetIntelReportCoverage';
 import ContactGraphOpsDatasetNexus from '@/components/cinematic/ContactGraphOpsDatasetNexus';
+import SwarmJobAipSkillAlertNexus from '@/components/cinematic/SwarmJobAipSkillAlertNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1618,6 +1619,8 @@ function App() {
             <RiskSignalDatasetIntelReportCoverage />
             {/* F285 (overnight 2026-10-04): Contact × Graph Centrality × Ops Event × Dataset Personnel Network Coverage — PNETCOV button; /entities/Contact × /v1/graph/centrality × /v1/ops/events × /v1/datasets */}
             <ContactGraphOpsDatasetNexus />
+            {/* F286 (overnight 2026-10-04): SwarmJob × AIP Skill × Ops Alert Response Automation Nexus — SOARNEX button; /entities/SwarmJob × /v1/aip/skill × /v1/ops/alerts */}
+            <SwarmJobAipSkillAlertNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
