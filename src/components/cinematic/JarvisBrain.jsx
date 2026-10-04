@@ -348,6 +348,7 @@ import { isIaskacovQuery, buildIaskacovScript } from "./InvestigationSkillKnowle
 import { isArcovQuery, buildArcovScript } from "./OpsAlertRiskSignalContactCoverage";
 import { isScoemexQuery, buildScoemexScript } from "./SwarmContactOpsEventNexus";
 import { isIiscovnexQuery, buildIiscovnexScript } from "./InvestmentIntelScenarioCoverage";
+import { isAaknQuery, buildAaknScript } from "./AlertAipKnowledgeNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3350,6 +3351,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:iiscovnex-toggle"));
       let script = "";
       try { script = await buildIiscovnexScript(); } catch { script = "IISCOVNEX online, sir. Assessing investment strategic coverage across intelligence profiles and scenarios."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isAaknQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:aakn-toggle"));
+      let script = "";
+      try { script = buildAaknScript(); } catch { script = "AAKN online, sir. Opening Alert AIP Knowledge Nexus — cross-referencing operational alerts against available skills and knowledge."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
