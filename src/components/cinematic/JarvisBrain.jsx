@@ -351,6 +351,7 @@ import { isIiscovnexQuery, buildIiscovnexScript } from "./InvestmentIntelScenari
 import { isAaknQuery, buildAaknScript } from "./AlertAipKnowledgeNexus";
 import { isTskmonQuery, buildTskmonScript } from "./TaskScenarioKnowledgeOpsNexus";
 import { isRdiricovQuery, buildRdiricovScript } from "./RiskSignalDatasetIntelReportCoverage";
+import { isPnetcovQuery, buildPnetcovScript } from "./ContactGraphOpsDatasetNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3377,6 +3378,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rdiricov-toggle"));
       let script = "";
       try { script = buildRdiricovScript(); } catch { script = "RDIRICOV online. Opening RiskSignal Strategic Intelligence Coverage — correlating risk signals against datasets, intel profiles, and reports."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isPnetcovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:pnetcov-toggle"));
+      let script = "";
+      try { script = buildPnetcovScript(); } catch { script = "PNETCOV online. Opening Personnel Network Coverage — correlating contacts against graph centrality, operational events, and datasets."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

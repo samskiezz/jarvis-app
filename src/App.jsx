@@ -508,6 +508,7 @@ import InvestmentIntelScenarioCoverage from '@/components/cinematic/InvestmentIn
 import AlertAipKnowledgeNexus from '@/components/cinematic/AlertAipKnowledgeNexus';
 import TaskScenarioKnowledgeOpsNexus from '@/components/cinematic/TaskScenarioKnowledgeOpsNexus';
 import RiskSignalDatasetIntelReportCoverage from '@/components/cinematic/RiskSignalDatasetIntelReportCoverage';
+import ContactGraphOpsDatasetNexus from '@/components/cinematic/ContactGraphOpsDatasetNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1615,6 +1616,8 @@ function App() {
             <TaskScenarioKnowledgeOpsNexus />
             {/* F284 (overnight 2026-10-04): RiskSignal × Dataset × IntelProfile × Report Strategic Intelligence Coverage — RDIRICOV button; /entities/RiskSignal × /v1/datasets × /entities/IntelProfile × /v1/reports */}
             <RiskSignalDatasetIntelReportCoverage />
+            {/* F285 (overnight 2026-10-04): Contact × Graph Centrality × Ops Event × Dataset Personnel Network Coverage — PNETCOV button; /entities/Contact × /v1/graph/centrality × /v1/ops/events × /v1/datasets */}
+            <ContactGraphOpsDatasetNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
