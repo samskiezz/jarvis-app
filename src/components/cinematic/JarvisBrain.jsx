@@ -357,6 +357,7 @@ import { isCpricoverQuery, buildCpricoverScript } from "./ContactPersonnelIntelC
 import { isIgasnicQuery, buildIgasnicScript } from "./InvestigationGraphSkillRiskNexus";
 import { isGstarmexQuery, buildGstarmexScript } from "./GraphSubgraphTaskSkillReportNexus";
 import { isRsrtreadQuery, buildRsrtreadScript } from "./RiskScenarioTaskReadiness";
+import { isIsrmapQuery, buildIsrmapScript } from "./InvestmentSkillScenarioMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3431,6 +3432,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:rsrtread-toggle"));
       let script = "";
       try { script = buildRsrtreadScript(); } catch { script = "RSRTREAD online. Opening Risk Signal Strategic Response Readiness Nexus."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIsrmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:isrmap-toggle"));
+      let script = "";
+      try { script = buildIsrmapScript(); } catch { script = "ISRMAP online. Opening Investment Skill Scenario Financial Risk Readiness Map."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

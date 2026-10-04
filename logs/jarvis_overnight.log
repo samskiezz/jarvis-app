@@ -284,3 +284,4 @@
 2026-10-04 F289 GSTARMEX — Graph Subgraph × Task × AIP Skill × Report Operational Mapping Nexus: GraphSubgraphTaskSkillReportNexus.jsx created, imported+mounted in App.jsx, isGstarmexQuery+buildGstarmexScript wired in JarvisBrain.jsx, build exit 0
 2026-10-04 | overnight-run | backlog F01-F289 all done; implementing F290 next
 2026-10-04 F290 RSRTREAD — RiskScenarioTaskReadiness.jsx created; /entities/RiskSignal × /v1/scenario/list × /entities/Task; FULLY_PLANNED/SCENARIO_ONLY/TASK_ONLY/UNPLANNED classification; wired App.jsx + JarvisBrain.jsx; build exit 0
+[2026-10-04] F291 ISRMAP — Investment × AIP Skill × Scenario Financial Risk Readiness Map: new InvestmentSkillScenarioMap.jsx; FULLY_COVERED/SKILL_COVERED/SCENARIO_COVERED/UNPROTECTED classification; /entities/Investment × /v1/aip/skill × /v1/scenario/list; mounted in App.jsx; isIsrmapQuery+buildIsrmapScript wired in JarvisBrain.jsx; build exit 0

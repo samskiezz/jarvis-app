@@ -514,6 +514,7 @@ import ContactPersonnelIntelCoverage from '@/components/cinematic/ContactPersonn
 import InvestigationGraphSkillRiskNexus from '@/components/cinematic/InvestigationGraphSkillRiskNexus';
 import GraphSubgraphTaskSkillReportNexus from '@/components/cinematic/GraphSubgraphTaskSkillReportNexus';
 import RiskScenarioTaskReadiness from '@/components/cinematic/RiskScenarioTaskReadiness';
+import InvestmentSkillScenarioMap from '@/components/cinematic/InvestmentSkillScenarioMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1633,6 +1634,8 @@ function App() {
             <GraphSubgraphTaskSkillReportNexus />
             {/* F290 (overnight 2026-10-04): Risk Signal × Scenario × Task Strategic Response Readiness Nexus — RSRTREAD button; /entities/RiskSignal × /v1/scenario/list × /entities/Task; classifies FULLY_PLANNED/SCENARIO_ONLY/TASK_ONLY/UNPLANNED */}
             <RiskScenarioTaskReadiness />
+            {/* F291 (overnight 2026-10-04): Investment × AIP Skill × Scenario Financial Risk Readiness Map — ISRMAP button; /entities/Investment × /v1/aip/skill × /v1/scenario/list; classifies FULLY_COVERED/SKILL_COVERED/SCENARIO_COVERED/UNPROTECTED */}
+            <InvestmentSkillScenarioMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
