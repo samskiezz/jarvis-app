@@ -354,6 +354,7 @@ import { isRdiricovQuery, buildRdiricovScript } from "./RiskSignalDatasetIntelRe
 import { isPnetcovQuery, buildPnetcovScript } from "./ContactGraphOpsDatasetNexus";
 import { isSoarnexQuery, buildSoarnexScript } from "./SwarmJobAipSkillAlertNexus";
 import { isCpricoverQuery, buildCpricoverScript } from "./ContactPersonnelIntelCoverage";
+import { isIgasnicQuery, buildIgasnicScript } from "./InvestigationGraphSkillRiskNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3404,6 +3405,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:cpricover-toggle"));
       let script = "";
       try { script = buildCpricoverScript(); } catch { script = "CPRICOVER online. Opening Contact Personnel Intelligence Coverage."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIgasnicQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:igasnic-toggle"));
+      let script = "";
+      try { script = buildIgasnicScript(); } catch { script = "IGASNIC online. Opening Investigation Graph Skill Risk Nexus."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

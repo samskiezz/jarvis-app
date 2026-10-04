@@ -511,6 +511,7 @@ import RiskSignalDatasetIntelReportCoverage from '@/components/cinematic/RiskSig
 import ContactGraphOpsDatasetNexus from '@/components/cinematic/ContactGraphOpsDatasetNexus';
 import SwarmJobAipSkillAlertNexus from '@/components/cinematic/SwarmJobAipSkillAlertNexus';
 import ContactPersonnelIntelCoverage from '@/components/cinematic/ContactPersonnelIntelCoverage';
+import InvestigationGraphSkillRiskNexus from '@/components/cinematic/InvestigationGraphSkillRiskNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1624,6 +1625,8 @@ function App() {
             <SwarmJobAipSkillAlertNexus />
             {/* F287 (overnight 2026-10-04): Contact × Knowledge × Report × Ops Event Full Personnel Intel Coverage — CPRICOVER button; /entities/Contact × /knowledge/ × /v1/reports × /v1/ops/events */}
             <ContactPersonnelIntelCoverage />
+            {/* F288 (overnight 2026-10-04): Investigation × Graph Community × AIP Skill × Risk Signal Network Intelligence Nexus — IGASNIC button; /v1/investigations × /v1/graph/communities × /v1/aip/skill × /entities/RiskSignal */}
+            <InvestigationGraphSkillRiskNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
