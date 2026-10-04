@@ -1,0 +1,1 @@
+2026-10-04 | F01 | ⌘K command palette | DONE | CommandPalette.jsx: Ctrl+K/⌘K opens searchable overlay listing all JARVIS pages (from pageRegistry) + 10 cinematic scenes; arrow-key nav, Enter navigates, Esc closes; mounted in App.jsx; build passes (vite exit 0)
