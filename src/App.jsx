@@ -13,7 +13,7 @@ import { COLORS as C } from '@/domain/colors';
 import { lazy } from 'react';
 import FirstRunSetup from '@/components/FirstRunSetup';
 import JarvisBrain from '@/components/cinematic/JarvisBrain';
-import CommandPalette from '@/components/cinematic/CommandPalette';
+import JarvisCommandPalette from '@/components/cinematic/JarvisCommandPalette';
 import HeyJarvisListener from '@/components/cinematic/HeyJarvisListener';
 import SceneKeyboardNav from '@/components/cinematic/SceneKeyboardNav';
 import WorldIncidentFeed from '@/components/cinematic/WorldIncidentFeed';
@@ -28,6 +28,7 @@ import JarvisBootSequence from '@/components/cinematic/JarvisBootSequence';
 import LiveClockUptime from '@/components/cinematic/LiveClockUptime';
 import BrainGrowthSparkline from '@/components/cinematic/BrainGrowthSparkline';
 import MultiVoiceToggle from '@/components/cinematic/MultiVoiceToggle';
+import DataFeedFreshnessMonitor from '@/components/cinematic/DataFeedFreshnessMonitor';
 import ServiceDiagnostics from '@/components/cinematic/ServiceDiagnostics';
 import ScenarioLauncher from '@/components/cinematic/ScenarioLauncher';
 import DocumentSearch from '@/components/cinematic/DocumentSearch';
@@ -56,6 +57,7 @@ import OvernightPanels from '@/components/overnight/OvernightPanels';
 import InvestmentWidget from '@/components/cinematic/InvestmentWidget';
 import ContactsDirectory from '@/components/cinematic/ContactsDirectory';
 import SwarmJobsMonitor from '@/components/cinematic/SwarmJobsMonitor';
+import EntityCountPulse from '@/components/cinematic/EntityCountPulse';
 import GraphCentralityView from '@/components/cinematic/GraphCentralityView';
 import KnowledgeBrowser from '@/components/cinematic/KnowledgeBrowser';
 import IntelProfileDirectory from '@/components/cinematic/IntelProfileDirectory';
@@ -63,6 +65,10 @@ import GraphCommunitiesView from '@/components/cinematic/GraphCommunitiesView';
 import IntelDigest from '@/components/cinematic/IntelDigest';
 import OpsCasesPanel from '@/components/cinematic/OpsCasesPanel';
 import CrisisEarlyWarning from '@/components/cinematic/CrisisEarlyWarning';
+import SceneRiskPresence from '@/components/cinematic/SceneRiskPresence';
+import BrainRiskMonitor from '@/components/cinematic/BrainRiskMonitor';
+import AgentToolScenarioCoverage from '@/components/cinematic/AgentToolScenarioCoverage';
+import BrainTaskProgressMonitor from '@/components/cinematic/BrainTaskProgressMonitor';
 import EntityWatchlist from '@/components/cinematic/EntityWatchlist';
 import MissionReadinessIndex from '@/components/cinematic/MissionReadinessIndex';
 import DatasetGrowthTracker from '@/components/cinematic/DatasetGrowthTracker';
@@ -70,6 +76,7 @@ import LiveScenarioMonitor from '@/components/cinematic/LiveScenarioMonitor';
 import OpsHealthBanner from '@/components/cinematic/OpsHealthBanner';
 import PriorityActionQueue from '@/components/cinematic/PriorityActionQueue';
 import ThreatVelocityMonitor from '@/components/cinematic/ThreatVelocityMonitor';
+import OpsVelocityMonitor from '@/components/cinematic/OpsVelocityMonitor';
 import GraphTopologyHealth from '@/components/cinematic/GraphTopologyHealth';
 import AdaptiveThreatReport from '@/components/cinematic/AdaptiveThreatReport';
 import GeoSeismicAnalyst from '@/components/cinematic/GeoSeismicAnalyst';
@@ -144,6 +151,8 @@ import IntelProfileTaskLinker from '@/components/cinematic/IntelProfileTaskLinke
 import InvestmentContactMapper from '@/components/cinematic/InvestmentContactMapper';
 import ScenarioInvestmentExposure from '@/components/cinematic/ScenarioInvestmentExposure';
 import TaskScenarioCoverage from '@/components/cinematic/TaskScenarioCoverage';
+import SwarmInvestigationBridge from '@/components/cinematic/SwarmInvestigationBridge';
+import InvestmentContactMap from '@/components/cinematic/InvestmentContactMap';
 import SwarmContactLinker from '@/components/cinematic/SwarmContactLinker';
 import SwarmInvestigationCoverage from '@/components/cinematic/SwarmInvestigationCoverage';
 import InvestmentSwarmCoverage from '@/components/cinematic/InvestmentSwarmCoverage';
@@ -163,6 +172,8 @@ import SkillKnowledgeCoverage from '@/components/cinematic/SkillKnowledgeCoverag
 import DecisionDatasetTracker from '@/components/cinematic/DecisionDatasetTracker';
 import OpsKnowledgeCorrelator from '@/components/cinematic/OpsKnowledgeCorrelator';
 import ContactReportCoverage from '@/components/cinematic/ContactReportCoverage';
+import SwarmJobAipSkillCoverage from '@/components/cinematic/SwarmJobAipSkillCoverage';
+import ScenarioReportIntelligence from '@/components/cinematic/ScenarioReportIntelligence';
 import SwarmReportCoverage from '@/components/cinematic/SwarmReportCoverage';
 import InvestmentDatasetCorrelator from '@/components/cinematic/InvestmentDatasetCorrelator';
 import SwarmDatasetCoverage from '@/components/cinematic/SwarmDatasetCoverage';
@@ -191,6 +202,318 @@ import SwarmGraphConvergence from '@/components/cinematic/SwarmGraphConvergence'
 import SnapshotTracker from '@/components/cinematic/SnapshotTracker';
 import InvestigationCloseRate from '@/components/cinematic/InvestigationCloseRate';
 import GraphNodeTaskCoverage from '@/components/cinematic/GraphNodeTaskCoverage';
+import OpsTaskCoverageChecker from '@/components/cinematic/OpsTaskCoverageChecker';
+import InvestigationScenarioLinker from '@/components/cinematic/InvestigationScenarioLinker';
+import DatasetInvestigationGap from '@/components/cinematic/DatasetInvestigationGap';
+import InvestigationScenarioTaskPipeline from '@/components/cinematic/InvestigationScenarioTaskPipeline';
+import RiskInvestigationMatrix from '@/components/cinematic/RiskInvestigationMatrix';
+import OperationalPulseRing from '@/components/cinematic/OperationalPulseRing';
+import SkillProgressionTracker from '@/components/cinematic/SkillProgressionTracker';
+import AipSkillScenarioCoverage from '@/components/cinematic/AipSkillScenarioCoverage';
+import AgentToolRegistry from '@/components/cinematic/AgentToolRegistry';
+import BrainSystemStatusFusion from '@/components/cinematic/BrainSystemStatusFusion';
+import KnowledgeBaseExplorer from '@/components/cinematic/KnowledgeBaseExplorer';
+import ContactInvestmentLinker from '@/components/cinematic/ContactInvestmentLinker';
+import OpsEventKnowledgeGap from '@/components/cinematic/OpsEventKnowledgeGap';
+import AipSkillInvestigationCoverage from '@/components/cinematic/AipSkillInvestigationCoverage';
+import TaskRiskCorrelation from '@/components/cinematic/TaskRiskCorrelation';
+import SwarmDatasetProvenance from '@/components/cinematic/SwarmDatasetProvenance';
+import LiveIntelTaskActivator from '@/components/cinematic/LiveIntelTaskActivator';
+import IntelProfileDatasetEvidence from '@/components/cinematic/IntelProfileDatasetEvidence';
+import ReportInvestigationCoverage from '@/components/cinematic/ReportInvestigationCoverage';
+import ScenarioKnowledgeReadiness from '@/components/cinematic/ScenarioKnowledgeReadiness';
+import OpsReportCoverage from '@/components/cinematic/OpsReportCoverage';
+import SwarmContactOwnership from '@/components/cinematic/SwarmContactOwnership';
+import InvestmentScenarioRisk from '@/components/cinematic/InvestmentScenarioRisk';
+import IntelProfileScenarioThreat from '@/components/cinematic/IntelProfileScenarioThreat';
+import TaskReportCoverage from '@/components/cinematic/TaskReportCoverage';
+import SceneKnowledgeCoverage from '@/components/cinematic/SceneKnowledgeCoverage';
+import AipSkillKnowledgeGrounding from '@/components/cinematic/AipSkillKnowledgeGrounding';
+import InvestigationKnowledgeGrounding from '@/components/cinematic/InvestigationKnowledgeGrounding';
+import OpsEventIntelCorrelation from '@/components/cinematic/OpsEventIntelCorrelation';
+import ContactScenarioMapper from '@/components/cinematic/ContactScenarioMapper';
+import RiskSignalReportCoverage from '@/components/cinematic/RiskSignalReportCoverage';
+import ContactInvestigationInvolvement from '@/components/cinematic/ContactInvestigationInvolvement';
+import AipSkillReportsCoverage from '@/components/cinematic/AipSkillReportsCoverage';
+import DatasetTaskConsumption from '@/components/cinematic/DatasetTaskConsumption';
+import SwarmJobRiskCorrelation from '@/components/cinematic/SwarmJobRiskCorrelation';
+import IntelProfileTasking from '@/components/cinematic/IntelProfileTasking';
+import InvestmentInvestigationCoverage from '@/components/cinematic/InvestmentInvestigationCoverage';
+import ScenarioDatasetCoverage from '@/components/cinematic/ScenarioDatasetCoverage';
+import RiskSignalIntelAttribution from '@/components/cinematic/RiskSignalIntelAttribution';
+import ReportDatasetLineage from '@/components/cinematic/ReportDatasetLineage';
+import InvestmentReportCoverage from '@/components/cinematic/InvestmentReportCoverage';
+import SwarmJobInvestigationCoverage from '@/components/cinematic/SwarmJobInvestigationCoverage';
+import SwarmJobKnowledgeGrounding from '@/components/cinematic/SwarmJobKnowledgeGrounding';
+import ContactTaskAssignment from '@/components/cinematic/ContactTaskAssignment';
+import OpsContactOwnership from '@/components/cinematic/OpsContactOwnership';
+import GraphCentralityRiskConvergence from '@/components/cinematic/GraphCentralityRiskConvergence';
+import TaskKnowledgeGrounding from '@/components/cinematic/TaskKnowledgeGrounding';
+import DatasetKnowledgeCoverage from '@/components/cinematic/DatasetKnowledgeCoverage';
+import IntelProfileOpsActivation from '@/components/cinematic/IntelProfileOpsActivation';
+import ReportKnowledgeCoverage from '@/components/cinematic/ReportKnowledgeCoverage';
+import OpsAipSkillCoverage from '@/components/cinematic/OpsAipSkillCoverage';
+import InvestigationDatasetEvidence from '@/components/cinematic/InvestigationDatasetEvidence';
+import GraphCentralityKnowledge from '@/components/cinematic/GraphCentralityKnowledge';
+import InvestmentKnowledgeCoverage from '@/components/cinematic/InvestmentKnowledgeCoverage';
+import OpsTempoIndex from '@/components/cinematic/OpsTempoIndex';
+import IntelProfileKnowledgeCoverage from '@/components/cinematic/IntelProfileKnowledgeCoverage';
+import ContactDatasetExposure from '@/components/cinematic/ContactDatasetExposure';
+import LiveIntelReportCoverage from '@/components/cinematic/LiveIntelReportCoverage';
+import LiveIntelScenarioCoverage from '@/components/cinematic/LiveIntelScenarioCoverage';
+import GraphCentralityInvestigations from '@/components/cinematic/GraphCentralityInvestigations';
+import GraphCentralitySwarmJobs from '@/components/cinematic/GraphCentralitySwarmJobs';
+import GraphCentralityAipSkill from '@/components/cinematic/GraphCentralityAipSkill';
+import LiveIntelKnowledgeCoverage from '@/components/cinematic/LiveIntelKnowledgeCoverage';
+import LiveIntelContactExposure from '@/components/cinematic/LiveIntelContactExposure';
+import LiveIntelTaskActivation from '@/components/cinematic/LiveIntelTaskActivation';
+import KnowledgeFreshnessMonitor from '@/components/cinematic/KnowledgeFreshnessMonitor';
+import AgentToolsRunner from '@/components/cinematic/AgentToolsRunner';
+import ScenarioImpactMatrix from '@/components/cinematic/ScenarioImpactMatrix';
+import ReportViewer from '@/components/cinematic/ReportViewer';
+import ExecutiveBriefing from '@/components/cinematic/ExecutiveBriefing';
+import DatasetInvestigationLinker from '@/components/cinematic/DatasetInvestigationLinker';
+import AipSkillContactTaskMesh from '@/components/cinematic/AipSkillContactTaskMesh';
+import AipSkillContactScenarioMap from '@/components/cinematic/AipSkillContactScenarioMap';
+import BrainNodeVelocityMonitor from '@/components/cinematic/BrainNodeVelocityMonitor';
+import LiveBrainPulse from '@/components/cinematic/LiveBrainPulse';
+import SwarmDatasetTracker from '@/components/cinematic/SwarmDatasetTracker';
+import AipSkillSwarmScenarioMatrix from '@/components/cinematic/AipSkillSwarmScenarioMatrix';
+import InvestigationRiskCorrelator from '@/components/cinematic/InvestigationRiskCorrelator';
+import TaskPriorityQuadrant from '@/components/cinematic/TaskPriorityQuadrant';
+import SystemStatusAipSkillCoverage from '@/components/cinematic/SystemStatusAipSkillCoverage';
+import ContactRiskExposureMatrix from '@/components/cinematic/ContactRiskExposureMatrix';
+import LiveIntelInvestigationCorrelator from '@/components/cinematic/LiveIntelInvestigationCorrelator';
+import ReportRiskSignalCoverage from '@/components/cinematic/ReportRiskSignalCoverage';
+import ScenarioDatasetDependencyMap from '@/components/cinematic/ScenarioDatasetDependencyMap';
+import OpsEventScenarioGap from '@/components/cinematic/OpsEventScenarioGap';
+import KnowledgeInvestigationMapper from '@/components/cinematic/KnowledgeInvestigationMapper';
+import ContactIntelProfileCrossRef from '@/components/cinematic/ContactIntelProfileCrossRef';
+import UnifiedIntelTimeline from '@/components/cinematic/UnifiedIntelTimeline';
+import AipSkillKnowledgeRiskTriple from '@/components/cinematic/AipSkillKnowledgeRiskTriple';
+import SceneGraphNodeCoverage from '@/components/cinematic/SceneGraphNodeCoverage';
+import AipSkillLiveAnnotationTriple from '@/components/cinematic/AipSkillLiveAnnotationTriple';
+import IntelProfileReportLinkage from '@/components/cinematic/IntelProfileReportLinkage';
+import ScenarioContactReadinessMatrix from '@/components/cinematic/ScenarioContactReadinessMatrix';
+import TaskSwarmDatasetTriple from '@/components/cinematic/TaskSwarmDatasetTriple';
+import PortfolioThreatExposure from '@/components/cinematic/PortfolioThreatExposure';
+import AipSkillInvestigationDatasetTriple from '@/components/cinematic/AipSkillInvestigationDatasetTriple';
+import KnowledgeOpsRiskTriple from '@/components/cinematic/KnowledgeOpsRiskTriple';
+import SwarmRiskScenarioMatrix from '@/components/cinematic/SwarmRiskScenarioMatrix';
+import OpsEventContactCoverage from '@/components/cinematic/OpsEventContactCoverage';
+import ContactTaskInvestigationTriple from '@/components/cinematic/ContactTaskInvestigationTriple';
+import InvestigationOpsRiskDashboard from '@/components/cinematic/InvestigationOpsRiskDashboard';
+import ReportKnowledgeOpsGap from '@/components/cinematic/ReportKnowledgeOpsGap';
+import InvestmentScenarioContactMap from '@/components/cinematic/InvestmentScenarioContactMap';
+import ContactKnowledgeScenarioReadiness from '@/components/cinematic/ContactKnowledgeScenarioReadiness';
+import IntelActorDeploymentMatrix from '@/components/cinematic/IntelActorDeploymentMatrix';
+import ContactInvestmentRiskNexus from '@/components/cinematic/ContactInvestmentRiskNexus';
+import SwarmKnowledgeReportNexus from '@/components/cinematic/SwarmKnowledgeReportNexus';
+import ScenarioKnowledgeOpsReadiness from '@/components/cinematic/ScenarioKnowledgeOpsReadiness';
+import GraphCentralityThreatNexus from '@/components/cinematic/GraphCentralityThreatNexus';
+import LiveIntelGroundTruthPulse from '@/components/cinematic/LiveIntelGroundTruthPulse';
+import TaskIntelOpsResponse from '@/components/cinematic/TaskIntelOpsResponse';
+import DatasetTaskKnowledgeHealth from '@/components/cinematic/DatasetTaskKnowledgeHealth';
+import InvestmentSwarmScenarioCoverage from '@/components/cinematic/InvestmentSwarmScenarioCoverage';
+import ReportScenarioDatasetTriad from '@/components/cinematic/ReportScenarioDatasetTriad';
+import ScenarioIntelReportCoverage from '@/components/cinematic/ScenarioIntelReportCoverage';
+import TaskRiskReportCoverage from '@/components/cinematic/TaskRiskReportCoverage';
+import SwarmRiskKnowledgeReadiness from '@/components/cinematic/SwarmRiskKnowledgeReadiness';
+import ContactGraphInfluenceExposure from '@/components/cinematic/ContactGraphInfluenceExposure';
+import DatasetIntelSwarmNexus from '@/components/cinematic/DatasetIntelSwarmNexus';
+import ReportInvestigationContactNexus from '@/components/cinematic/ReportInvestigationContactNexus';
+import InvestmentKnowledgeOpsFirm from '@/components/cinematic/InvestmentKnowledgeOpsFirm';
+import FullSpectrumThreatCoverage from '@/components/cinematic/FullSpectrumThreatCoverage';
+import GraphCommunityNetworkThreatIndex from '@/components/cinematic/GraphCommunityNetworkThreatIndex';
+import KnowledgeThreatAwarenessCoverage from '@/components/cinematic/KnowledgeThreatAwarenessCoverage';
+import GraphNodeOperationalMesh from '@/components/cinematic/GraphNodeOperationalMesh';
+import IntelActorResponseCoverage from '@/components/cinematic/IntelActorResponseCoverage';
+import ScenarioSwarmContactTriangle from '@/components/cinematic/ScenarioSwarmContactTriangle';
+import TaskGraphKnowledgePulse from '@/components/cinematic/TaskGraphKnowledgePulse';
+import OpsDatasetContactCoverage from '@/components/cinematic/OpsDatasetContactCoverage';
+import KnowledgeContactOpsPulse from '@/components/cinematic/KnowledgeContactOpsPulse';
+import IntelProfileDatasetKnowledgeCoverage from '@/components/cinematic/IntelProfileDatasetKnowledgeCoverage';
+import ScenarioRiskContactResponse from '@/components/cinematic/ScenarioRiskContactResponse';
+import InvestmentOpsKnowledgePulse from '@/components/cinematic/InvestmentOpsKnowledgePulse';
+import OpsEventIntelContactTracker from '@/components/cinematic/OpsEventIntelContactTracker';
+import GraphAnnotationKnowledgeMap from '@/components/cinematic/GraphAnnotationKnowledgeMap';
+import SystemWideAlertEscalator from '@/components/cinematic/SystemWideAlertEscalator';
+import { RiskDataOpsTriad } from '@/components/cinematic/RiskDataOpsTriad';
+import { InvestigationDatasetKnowledgePulse } from '@/components/cinematic/InvestigationDatasetKnowledgePulse';
+import { ContactDatasetReportMatrix } from '@/components/cinematic/ContactDatasetReportMatrix';
+import { InvestmentGraphReportNexus } from '@/components/cinematic/InvestmentGraphReportNexus';
+import { SwarmIntelReportCoverage } from '@/components/cinematic/SwarmIntelReportCoverage';
+import { TaskReportScenarioCoverage } from '@/components/cinematic/TaskReportScenarioCoverage';
+import OperationalReadinessScore from '@/components/cinematic/OperationalReadinessScore';
+import LiveIntelStreamHealth from '@/components/cinematic/LiveIntelStreamHealth';
+import GraphCommunityIntelScenarioMap from '@/components/cinematic/GraphCommunityIntelScenarioMap';
+import GraphAnnotationOpsSwarmCoverage from '@/components/cinematic/GraphAnnotationOpsSwarmCoverage';
+import SceneTaskReportGrounding from '@/components/cinematic/SceneTaskReportGrounding';
+import SwarmJobInvestmentContactMap from '@/components/cinematic/SwarmJobInvestmentContactMap';
+import IntelActorImpactNexus from '@/components/cinematic/IntelActorImpactNexus';
+import OpsIncidentIntelMesh from '@/components/cinematic/OpsIncidentIntelMesh';
+import DatasetGraphOpsKnowledgeNexus from '@/components/cinematic/DatasetGraphOpsKnowledgeNexus';
+import SwarmScenarioReportKnowledgeDoc from '@/components/cinematic/SwarmScenarioReportKnowledgeDoc';
+import ContactOpsGraphAttributionNetwork from '@/components/cinematic/ContactOpsGraphAttributionNetwork';
+import IntelActorFullMissionCoverage from '@/components/cinematic/IntelActorFullMissionCoverage';
+import RiskSignalEvidenceMatrix from '@/components/cinematic/RiskSignalEvidenceMatrix';
+import InvestmentRiskIntelDashboard from '@/components/cinematic/InvestmentRiskIntelDashboard';
+import LiveIntelMarketExposureTracker from '@/components/cinematic/LiveIntelMarketExposureTracker';
+import ContactScenarioReportReadiness from '@/components/cinematic/ContactScenarioReportReadiness';
+import TaskGraphOpsKnowledgeNexus from '@/components/cinematic/TaskGraphOpsKnowledgeNexus';
+import AipSkillFullOpsCoverage from '@/components/cinematic/AipSkillFullOpsCoverage';
+import ScenarioRiskSwarmContainment from '@/components/cinematic/ScenarioRiskSwarmContainment';
+import SceneAipRiskCoverageMap from '@/components/cinematic/SceneAipRiskCoverageMap';
+import ScenarioCommOpsDataSaturation from '@/components/cinematic/ScenarioCommOpsDataSaturation';
+import GraphCommunityKnowledgeIntelCoverage from '@/components/cinematic/GraphCommunityKnowledgeIntelCoverage';
+import TaskIntelDatasetKnowledgeCoverage from '@/components/cinematic/TaskIntelDatasetKnowledgeCoverage';
+import ContactScenarioOpsRiskMatrix from '@/components/cinematic/ContactScenarioOpsRiskMatrix';
+import SwarmOpsCapacityMap from '@/components/cinematic/SwarmOpsCapacityMap';
+import InvestigationFullCoverage from '@/components/cinematic/InvestigationFullCoverage';
+import DatasetGraphOpsRiskSituationalMap from '@/components/cinematic/DatasetGraphOpsRiskSituationalMap';
+import AipSkillNetworkDefenseAtlas from '@/components/cinematic/AipSkillNetworkDefenseAtlas';
+import IntelActorNetworkExposure from '@/components/cinematic/IntelActorNetworkExposure';
+import SwarmMissionCommandCoverage from '@/components/cinematic/SwarmMissionCommandCoverage';
+import InvestmentOpsRiskNexus from '@/components/cinematic/InvestmentOpsRiskNexus';
+import BrainAipSkillRatio from '@/components/cinematic/BrainAipSkillRatio';
+import OpsEventIntelCoverage from '@/components/cinematic/OpsEventIntelCoverage';
+import SwarmMissionReadinessPulse from '@/components/cinematic/SwarmMissionReadinessPulse';
+import ContactGraphIntelAlignmentMap from '@/components/cinematic/ContactGraphIntelAlignmentMap';
+import InvestmentContactKnowledgeNexus from '@/components/cinematic/InvestmentContactKnowledgeNexus';
+import TaskRiskIntelCoverageMatrix from '@/components/cinematic/TaskRiskIntelCoverageMatrix';
+import SwarmScenarioDataTriad from '@/components/cinematic/SwarmScenarioDataTriad';
+import LiveIntelInvestmentRisk from '@/components/cinematic/LiveIntelInvestmentRisk';
+import ScenarioTaskContactKnowledgeGrid from '@/components/cinematic/ScenarioTaskContactKnowledgeGrid';
+import RiskTaskInvestigationCoverage from '@/components/cinematic/RiskTaskInvestigationCoverage';
+import OpsContactTaskMap from '@/components/cinematic/OpsContactTaskMap';
+import KnowledgeOpsCommunitySyncMap from '@/components/cinematic/KnowledgeOpsCommunitySyncMap';
+import InvestigationReadinessMatrix from '@/components/cinematic/InvestigationReadinessMatrix';
+import AipSkillGraphOpsSignalMesh from '@/components/cinematic/AipSkillGraphOpsSignalMesh';
+import CommunityIntelDocMap from '@/components/cinematic/CommunityIntelDocMap';
+import PersonnelResponseCoverage from '@/components/cinematic/PersonnelResponseCoverage';
+import DataScienceNexus from '@/components/cinematic/DataScienceNexus';
+import InvestmentScenarioKnowledgeNexus from '@/components/cinematic/InvestmentScenarioKnowledgeNexus';
+import IntelActorScenarioRiskNexus from '@/components/cinematic/IntelActorScenarioRiskNexus';
+import SwarmMissionIntelNet from '@/components/cinematic/SwarmMissionIntelNet';
+import TaskKnowledgeCommunityMap from '@/components/cinematic/TaskKnowledgeCommunityMap';
+import OpsReadinessIndex from '@/components/cinematic/OpsReadinessIndex';
+import InvestigationFullStackCoverage from '@/components/cinematic/InvestigationFullStackCoverage';
+import ScenarioMissionIntelGrid from '@/components/cinematic/ScenarioMissionIntelGrid';
+import JarvisIntelNexusScore from '@/components/cinematic/JarvisIntelNexusScore';
+import AipSkillReportInvestigationPulse from '@/components/cinematic/AipSkillReportInvestigationPulse';
+import ActorIntelPreparednessMap from '@/components/cinematic/ActorIntelPreparednessMap';
+import InvestmentKnowledgeRiskMap from '@/components/cinematic/InvestmentKnowledgeRiskMap';
+import SwarmReportIntelMap from '@/components/cinematic/SwarmReportIntelMap';
+import ContactOpsSwarmInvestigationMatrix from '@/components/cinematic/ContactOpsSwarmInvestigationMatrix';
+import TaskIntelScenarioKnowledgeIndex from '@/components/cinematic/TaskIntelScenarioKnowledgeIndex';
+import DatasetOpsRiskExposureMap from '@/components/cinematic/DatasetOpsRiskExposureMap';
+import ThreatContextReadinessMap from '@/components/cinematic/ThreatContextReadinessMap';
+import RiskSignalDatasetInvestigationTriage from '@/components/cinematic/RiskSignalDatasetInvestigationTriage';
+import ThreatScenarioReadinessMap from '@/components/cinematic/ThreatScenarioReadinessMap';
+import SwarmScenarioKnowledgeCoverage from '@/components/cinematic/SwarmScenarioKnowledgeCoverage';
+import TaskDatasetIntelProfileMap from '@/components/cinematic/TaskDatasetIntelProfileMap';
+import ContactPersonnelReadinessMap from '@/components/cinematic/ContactPersonnelReadinessMap';
+import GraphDatasetInvestigationNexus from '@/components/cinematic/GraphDatasetInvestigationNexus';
+import InvestmentScenarioRiskMap from '@/components/cinematic/InvestmentScenarioRiskMap';
+import WorldThreatClusterMap from '@/components/cinematic/WorldThreatClusterMap';
+import GraphCommunityMissionDensity from '@/components/cinematic/GraphCommunityMissionDensity';
+import WorkforceActivityMatrix from '@/components/cinematic/WorkforceActivityMatrix';
+import MissionBriefingCoverage from '@/components/cinematic/MissionBriefingCoverage';
+import KnowledgeOpsEventContextPulse from '@/components/cinematic/KnowledgeOpsEventContextPulse';
+import GraphAnnotationDataEvidenceAtlas from '@/components/cinematic/GraphAnnotationDataEvidenceAtlas';
+import OpsEventContactTaskMatrix from '@/components/cinematic/OpsEventContactTaskMatrix';
+import IntelProfileDatasetOpsNexus from '@/components/cinematic/IntelProfileDatasetOpsNexus';
+import RiskSwarmKnowledgeResponseMap from '@/components/cinematic/RiskSwarmKnowledgeResponseMap';
+import GraphAnnotationScenarioContactNexus from '@/components/cinematic/GraphAnnotationScenarioContactNexus';
+import PortfolioIntelCoverageMap from '@/components/cinematic/PortfolioIntelCoverageMap';
+import OpsEventAipSkillReportMap from '@/components/cinematic/OpsEventAipSkillReportMap';
+import ContactDatasetOpsNetwork from '@/components/cinematic/ContactDatasetOpsNetwork';
+import ContactReportScenarioKnowledgeMap from '@/components/cinematic/ContactReportScenarioKnowledgeMap';
+import ThreatActorResponseGrid from '@/components/cinematic/ThreatActorResponseGrid';
+import DefensivePlaybookCoverageIndex from '@/components/cinematic/DefensivePlaybookCoverageIndex';
+import LiveIntelAipScenarioReadiness from '@/components/cinematic/LiveIntelAipScenarioReadiness';
+import SwarmJobRiskSignalReportOrchestrator from '@/components/cinematic/SwarmJobRiskSignalReportOrchestrator';
+import TaskInvestmentRiskAlignmentMap from '@/components/cinematic/TaskInvestmentRiskAlignmentMap';
+import DatasetContactIntelProfileNexus from '@/components/cinematic/DatasetContactIntelProfileNexus';
+import StrategicIntelCoverageNexus from '@/components/cinematic/StrategicIntelCoverageNexus';
+import ScenarioIntelReportDossier from '@/components/cinematic/ScenarioIntelReportDossier';
+import ThreatFinanceNexus from '@/components/cinematic/ThreatFinanceNexus';
+import AutonomousIntelOpsMap from '@/components/cinematic/AutonomousIntelOpsMap';
+import GraphAnnotationRiskIntelNexus from '@/components/cinematic/GraphAnnotationRiskIntelNexus';
+import TaskReportKnowledgeReadiness from '@/components/cinematic/TaskReportKnowledgeReadiness';
+import InvestigationNetworkCoverageMap from '@/components/cinematic/InvestigationNetworkCoverageMap';
+import ContactOpsDataRiskNexus from '@/components/cinematic/ContactOpsDataRiskNexus';
+import InvestmentKnowledgeTaskSwarmMap from '@/components/cinematic/InvestmentKnowledgeTaskSwarmMap';
+import ScenarioReportTaskMissionMap from '@/components/cinematic/ScenarioReportTaskMissionMap';
+import ThreatActorActivityMonitor from '@/components/cinematic/ThreatActorActivityMonitor';
+import ContactGraphIntelMap from '@/components/cinematic/ContactGraphIntelMap';
+import AipSkillReportKnowledgeReadiness from '@/components/cinematic/AipSkillReportKnowledgeReadiness';
+import OpsEventIntegratedResponseMap from '@/components/cinematic/OpsEventIntegratedResponseMap';
+import KnowledgeRiskScenarioDefMap from '@/components/cinematic/KnowledgeRiskScenarioDefMap';
+import OperationalMeshCoverageMap from '@/components/cinematic/OperationalMeshCoverageMap';
+import DatasetGraphIntelMap from '@/components/cinematic/DatasetGraphIntelMap';
+import OpsEventContactKnowledgeMap from '@/components/cinematic/OpsEventContactKnowledgeMap';
+import WorldEventThreatMatrix from '@/components/cinematic/WorldEventThreatMatrix';
+import DatasetSkillReportNexus from '@/components/cinematic/DatasetSkillReportNexus';
+import ContactKnowledgeOpsAwarenessBridge from '@/components/cinematic/ContactKnowledgeOpsAwarenessBridge';
+import IntelProfileTaskInvestigationMatrix from '@/components/cinematic/IntelProfileTaskInvestigationMatrix';
+import TaskKnowledgeSkillNexus from '@/components/cinematic/TaskKnowledgeSkillNexus';
+import IntelProfileDataScenarioMap from '@/components/cinematic/IntelProfileDataScenarioMap';
+import SwarmReportScenarioNexus from '@/components/cinematic/SwarmReportScenarioNexus';
+import GraphAnnotationSkillContactBridge from '@/components/cinematic/GraphAnnotationSkillContactBridge';
+import IntelProfileResponseNexus from '@/components/cinematic/IntelProfileResponseNexus';
+import RiskSignalMitigationNexus from '@/components/cinematic/RiskSignalMitigationNexus';
+import TaskSwarmInvestmentResourceNexus from '@/components/cinematic/TaskSwarmInvestmentResourceNexus';
+import OpsSkillContactAlignment from '@/components/cinematic/OpsSkillContactAlignment';
+import SwarmIntelReportNexus from '@/components/cinematic/SwarmIntelReportNexus';
+import InvestigationScenarioKnowledgeNexus from '@/components/cinematic/InvestigationScenarioKnowledgeNexus';
+import ThreatResponseMesh from '@/components/cinematic/ThreatResponseMesh';
+import DatasetReportSkillRiskCoverage from '@/components/cinematic/DatasetReportSkillRiskCoverage';
+import IntelProfileOpsThreatTracker from '@/components/cinematic/IntelProfileOpsThreatTracker';
+import TaskReportInvestigationClosure from '@/components/cinematic/TaskReportInvestigationClosure';
+import OpsAlertCommunityInvestmentMap from '@/components/cinematic/OpsAlertCommunityInvestmentMap';
+import KnowledgeOpsAlertSkillCoverage from '@/components/cinematic/KnowledgeOpsAlertSkillCoverage';
+import RiskSignalSkillInvestigationIndex from '@/components/cinematic/RiskSignalSkillInvestigationIndex';
+import ContactScenarioDatasetCoverage from '@/components/cinematic/ContactScenarioDatasetCoverage';
+import SwarmContactKnowledgeNexus from '@/components/cinematic/SwarmContactKnowledgeNexus';
+import InvestmentScenarioIntelCoverage from '@/components/cinematic/InvestmentScenarioIntelCoverage';
+import OpsEventKnowledgeScenarioReadiness from '@/components/cinematic/OpsEventKnowledgeScenarioReadiness';
+import AipSkillGraphDatasetSaturation from '@/components/cinematic/AipSkillGraphDatasetSaturation';
+import GraphCommunityInvestmentOpsNexus from '@/components/cinematic/GraphCommunityInvestmentOpsNexus';
+import TaskIntelReportClosure from '@/components/cinematic/TaskIntelReportClosure';
+import SwarmRiskKnowledgeThreatReview from '@/components/cinematic/SwarmRiskKnowledgeThreatReview';
+import GraphNodeOperationalCoverage from '@/components/cinematic/GraphNodeOperationalCoverage';
+import RiskSignalAutomatedResponseCoverage from '@/components/cinematic/RiskSignalAutomatedResponseCoverage';
+import FullPersonnelAlertCoverage from '@/components/cinematic/FullPersonnelAlertCoverage';
+import InvestmentDatasetRiskNexus from '@/components/cinematic/InvestmentDatasetRiskNexus';
+import AipSkillContactRiskCoverage from '@/components/cinematic/AipSkillContactRiskCoverage';
+import ReportContactSwarmNexus from '@/components/cinematic/ReportContactSwarmNexus';
+import ScenarioKnowledgeDatasetContactNexus from '@/components/cinematic/ScenarioKnowledgeDatasetContactNexus';
+import SwarmReportOpsKnowledgeBridge from '@/components/cinematic/SwarmReportOpsKnowledgeBridge';
+import IntelProfileThreatActorResolution from '@/components/cinematic/IntelProfileThreatActorResolution';
+import TaskDatasetOpsAlertCoverage from '@/components/cinematic/TaskDatasetOpsAlertCoverage';
+import IntelProfileInvestmentAlertNexus from '@/components/cinematic/IntelProfileInvestmentAlertNexus';
+import ContactScenarioKnowledgeRiskBridge from '@/components/cinematic/ContactScenarioKnowledgeRiskBridge';
+import SwarmJobInvestigationDatasetCoverage from '@/components/cinematic/SwarmJobInvestigationDatasetCoverage';
+import ReportOpsAnnotationNexus from '@/components/cinematic/ReportOpsAnnotationNexus';
+import AipSkillContactAlertReadiness from '@/components/cinematic/AipSkillContactAlertReadiness';
+import TaskRiskKnowledgeSkillNexus from '@/components/cinematic/TaskRiskKnowledgeSkillNexus';
+import SwarmSkillAlertNexus from '@/components/cinematic/SwarmSkillAlertNexus';
+import IntelProfileRiskInvestigationDatasetMatrix from '@/components/cinematic/IntelProfileRiskInvestigationDatasetMatrix';
+import ContactDatasetAlertCoverage from '@/components/cinematic/ContactDatasetAlertCoverage';
+import InvestigationSkillKnowledgeCoverage from '@/components/cinematic/InvestigationSkillKnowledgeCoverage';
+import OpsAlertRiskSignalContactCoverage from '@/components/cinematic/OpsAlertRiskSignalContactCoverage';
+import SwarmContactOpsEventNexus from '@/components/cinematic/SwarmContactOpsEventNexus';
+import InvestmentIntelScenarioCoverage from '@/components/cinematic/InvestmentIntelScenarioCoverage';
+import AlertAipKnowledgeNexus from '@/components/cinematic/AlertAipKnowledgeNexus';
+import TaskScenarioKnowledgeOpsNexus from '@/components/cinematic/TaskScenarioKnowledgeOpsNexus';
+import RiskSignalDatasetIntelReportCoverage from '@/components/cinematic/RiskSignalDatasetIntelReportCoverage';
+import ContactGraphOpsDatasetNexus from '@/components/cinematic/ContactGraphOpsDatasetNexus';
+import SwarmJobAipSkillAlertNexus from '@/components/cinematic/SwarmJobAipSkillAlertNexus';
+import ContactPersonnelIntelCoverage from '@/components/cinematic/ContactPersonnelIntelCoverage';
+import InvestigationGraphSkillRiskNexus from '@/components/cinematic/InvestigationGraphSkillRiskNexus';
+import GraphSubgraphTaskSkillReportNexus from '@/components/cinematic/GraphSubgraphTaskSkillReportNexus';
+import RiskScenarioTaskReadiness from '@/components/cinematic/RiskScenarioTaskReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -212,7 +535,8 @@ function App() {
                 so a fresh deploy initialises before you even pick a destination. */}
             <FirstRunSetup />
             <JarvisBrain />
-            <CommandPalette />
+            {/* F01: ⌘K command palette — scenes + 30 JARVIS panel commands + free-text Ask fallback */}
+            <JarvisCommandPalette />
             {/* F02: "Hey JARVIS" always-listening wake word toggle */}
             <HeyJarvisListener />
             {/* F04: keyboard scene-jump (1–0 → scenes; Esc → home) */}
@@ -241,6 +565,7 @@ function App() {
             <BrainGrowthSparkline />
             {/* F30: multi-voice TTS toggle — ◈ VOICE button at bottom; picks ash/fable/onyx; persists to localStorage; feeds voice param on every /v1/voice/tts POST */}
             <MultiVoiceToggle />
+            <DataFeedFreshnessMonitor />
             {/* F35: service diagnostics — ⬡ DIAG button; polls /v1/jarvis/system/status every 30 s; per-service health board + CPU/MEM/LOAD tiles; "JARVIS, service health" voice trigger */}
             <ServiceDiagnostics />
             {/* F37: scenario launcher — SIM button bottom strip; /v1/scenario/list + POST /v1/scenario/run; filter + run + outcome; "JARVIS, scenarios" voice trigger */}
@@ -297,6 +622,8 @@ function App() {
             <SwarmJobsMonitor />
             {/* F26: graph centrality view — ◈ GRAPH button (left:1428); polls /v1/graph/centrality every 60 s; top-node highlight + influence bars + type-filter tabs + search; "JARVIS, centrality" / "who has most influence" voice trigger (isCentralityQuery+buildCentralityScript wired in JarvisBrain) */}
             <GraphCentralityView />
+            {/* F31: entity count pulse — ◈ PULSE button (left:540); polls all 6 /entities/ endpoints in parallel every 60s; live counts with ↑/↓ delta badges; "entity pulse"/"entity counts"/"how many entities" voice trigger (self-wires via jarvis:ask) */}
+            <EntityCountPulse />
             {/* F131: overnight panels launcher — ◈ button at left:340 bottom:18; searchable category-grouped grid of all cinematic panels (panelRegistry.generated.js); lazy-mounts one panel at a time behind PanelErrorBoundary; gives on-demand access to the full panel library without 100+ floating buttons */}
             <OvernightPanels />
             {/* F31: knowledge browser — ◈ KNOW button (left:2260); fetches /knowledge/ → article list with search; click → /v1/jarvis/agent/chat AI summary + /v1/voice/tts spoken; "JARVIS, knowledge" voice trigger (isKnowledgeQuery+buildKnowledgeScript already wired in JarvisBrain) */}
@@ -311,6 +638,13 @@ function App() {
             <OpsCasesPanel />
             {/* F36: crisis early warning system — ⚠ CRISIS button (left:6940); parallel-fetches /entities/RiskSignal + /functions/getLiveIntel + /v1/ops/events every 90 s; DEFCON 1–5 composite threat level ring; announces level change via TTS; "JARVIS, crisis level"/"defcon"/"threat level"/"early warning" voice trigger (isCrisisWarningQuery+buildCrisisWarningScript wired in JarvisBrain) */}
             <CrisisEarlyWarning />
+            <SceneRiskPresence />
+            {/* F53: brain × risk monitor — ◉ BRSM button (left:1200, bottom:18, zIndex:68); parallel-polls /v1/cinematic/brain + /entities/RiskSignal; brain:risk ratio (nodes-per-risk); AHEAD/MATCHED/BEHIND status; ▶ ASSESS → agent + TTS; "brain risk"/"brsm"/"brain vs risk"/"risk brain" voice trigger */}
+            <BrainRiskMonitor />
+            {/* F167 (overnight 2026-09-19): Agent Tool × Scenario Coverage — ◈ ATSCEN button (left:1760, bottom:18, zIndex:68); parallel-fetches /v1/jarvis/agent/tools + /v1/scenario/list; keyword-correlates each available JARVIS tool against scenario descriptions to surface EXERCISED (scenario references this tool) vs IDLE (no scenario — capability gap); stat tiles (tools/scenarios/exercised/idle); amber badge on idle count; filter tabs ALL/EXERCISED/IDLE + text search; expand tool → matched scenario cards with type badge + status + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capability-gap brief + TTS via jarvis:speak-dossier; isAtscenQuery+buildAtscenScript wired in JarvisBrain; "tool scenario"/"tool coverage"/"idle tools"/"capability gap"/"atscen"/"unused tools"/"tool gap"/"tool exercise" voice trigger; jarvis:atscen-toggle event; 90-s auto-refresh */}
+            <AgentToolScenarioCoverage />
+            {/* F55 Brain × Task Progress Monitor — ◈ BSTP button; parallel-fetches /v1/cinematic/brain + /entities/Task; computes SYNCED/GROWING/LAGGING/CRITICAL status from brain nodes vs task completion ratio; "brain task"/"bstp"/"brain progress"/"task progress"/"brain sync"/"task coherence" voice trigger; isBstpQuery+buildBstpScript wired in JarvisBrain; 60-s auto-refresh */}
+            <BrainTaskProgressMonitor />
             {/* F37: entity watchlist — ⬡ WATCH button (left:4444); stores pinned entities in localStorage; live-fetches /entities/{Task,RiskSignal,IntelProfile,SwarmJob,Investment,Contact} for each saved item; click → AI assessment via /v1/jarvis/agent/chat + TTS; other panels pin via jarvis:watchlist-add CustomEvent; "JARVIS, watchlist"/"my watchlist"/"watched items" voice trigger (isWatchlistQuery+buildWatchlistScript wired in JarvisBrain) */}
             <EntityWatchlist />
             {/* F38: mission readiness index — ◎ READY button (left:5692); parallel-fetches /entities/Task (25%) + /v1/aip/skill (30%) + /entities/SwarmJob (20%) + /v1/jarvis/system/status (25%); composite 0-100 MRI score ring gauge + 4 sub-score bars + detail text; ▶ JARVIS ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence AI assessment + TTS; 45-s auto-refresh; live score badge on button; "mission ready"/"readiness"/"ready index"/"operational ready" voice trigger (isMissionReadyQuery+buildMissionReadyScript already wired in JarvisBrain) */}
@@ -323,6 +657,8 @@ function App() {
             <OpsHealthBanner />
             {/* F42: priority action queue — ⚡ QUEUE button (left:3404); parallel-fetches /entities/Task + /entities/RiskSignal + /v1/investigations; urgency-scores all items; unified ranked "what needs attention now" list; click → /v1/jarvis/agent/chat AI recommendation spoken via jarvis:speak-dossier; 45-s auto-refresh; "priority queue"/"what needs attention"/"urgent items"/"action items" voice trigger (isPriorityQueueQuery+buildPriorityQueueScript already wired in JarvisBrain) */}
             <PriorityActionQueue />
+            {/* F93 (overnight 2026-09-21): ops velocity monitor — ◈ OPSVL button (left:5060); polls /v1/ops/events every 30 s; rolling 10-sample window; evt/min velocity gauge; SURGE/ELEVATED/NOMINAL badge + sparkline; announces SURGE ≥5/min via jarvis:speak-dossier; isOpsVelocityQuery+buildOpsVelocityScript; "ops velocity"/"event rate"/"opsvl" voice trigger */}
+            <OpsVelocityMonitor />
             {/* F43: threat velocity monitor — ⚡ VEL button (left:4860); polls /entities/RiskSignal every 30 s; rolling 10-sample window computes thr/min rate; SURGE/ELEVATED/NOMINAL badge + sparkline + big velocity number; auto-announces SURGE ≥3/min via jarvis:speak-dossier; isThreatVelocityQuery+buildThreatVelocityScript wired in JarvisBrain; "threat velocity"/"threat rate"/"threat surge" voice trigger */}
             <ThreatVelocityMonitor />
             {/* F44: graph topology health — ⬡ GTOPO button (left:9340); parallel-polls /v1/graph/centrality + /v1/graph/communities every 90 s; composite 0-100 topology health score (concentration penalty + community diversity bonus); score ring + stat tiles + sparkline history (localStorage) + AI assessment via /v1/jarvis/agent/chat + TTS; isGtopoQuery+buildGtopoScript wired in JarvisBrain; "graph topology"/"network topology"/"topology health"/"gtopo" voice trigger */}
@@ -566,6 +902,738 @@ function App() {
             <InvestigationCloseRate />
             {/* F165 (overnight 2026-07-05): graph node × task coverage — ◈ GNTASK button (left:54520, bottom:8, zIndex:107); parallel-fetches /v1/graph/centrality + /entities/Task; keyword-correlates each top-influence node against the task catalog to surface TASKED (active task coverage) vs UNMANAGED (no operational task — priority gap); violet badge on unmanaged count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence influence-coverage brief + TTS; "graph node task"/"node task coverage"/"high influence task"/"gntask" voice trigger; jarvis:gntask-toggle event; 90-s auto-refresh */}
             <GraphNodeTaskCoverage />
+            {/* F31 (2026-09-18): investigation × scenario linker — ◈ INVSL button (left:7876, bottom:8, zIndex:65); parallel-fetches /v1/investigations × /v1/scenario/list; keyword-correlates open cases against scenarios; COVERED/UNCOVERED filter; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; "investigation scenario link" voice trigger */}
+            <InvestigationScenarioLinker />
+            {/* F32 (overnight 2026-09-18): ops-task coverage checker — ◎ OPSCOV button (left:6732, bottom:6, zIndex:65); parallel-fetches /v1/ops/events + /entities/Task; keyword-correlates significant (sev≥70) events against open tasks; COVERED vs UNCOVERED stat tiles + filter tabs; red badge on uncovered count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence remediation + TTS; 30-s auto-refresh; "ops coverage"/"opscov"/"ops gaps" voice trigger */}
+            <OpsTaskCoverageChecker />
+            {/* F33 (overnight 2026-09-18): dataset-investigation gap — ◈ DATAGAP button (left:9000, bottom:8, zIndex:65); parallel-fetches /v1/datasets + /v1/investigations; keyword-correlates each open investigation against dataset catalog to surface SOURCED vs UNSOURCED (data gap); stat tiles + filter tabs; amber badge on unsourced count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-gap recommendation + TTS; 60-s auto-refresh; "data gap"/"datagap"/"dataset investigation gap"/"unsourced investigations" voice trigger */}
+            <DatasetInvestigationGap />
+            {/* F34 (overnight 2026-09-18): investigation → scenario → task pipeline — ◈ INVPIPE button (left:9560, bottom:8, zIndex:65); parallel-fetches /v1/investigations + /v1/scenario/list + /entities/Task; 3-hop resolution chain: open case → best-fit scenario → candidate tasks; FULL_CHAIN/PLANNED/NO_PLAN filter tabs; amber badge on cases with no scenario plan; ▶ ASSESS RESOLUTION PATH → /v1/jarvis/agent/chat 2-sentence resolution brief + TTS via jarvis:speak-dossier; isInvPipeQuery+buildInvPipeScript wired in JarvisBrain; 90-s auto-refresh; "investigation pipeline"/"case pipeline"/"case resolution"/"invpipe" voice trigger */}
+            <InvestigationScenarioTaskPipeline />
+            {/* F35 (overnight 2026-09-18): risk-investigation coverage matrix — ◈ RISGAP button (left:10120, bottom:8, zIndex:66); parallel-fetches /entities/RiskSignal + /v1/investigations; keyword-correlates active risks against open investigation cases to surface COVERED vs UNCOVERED; stat tiles: risks/covered/uncovered/critical-gap; filter tabs: ALL/COVERED/UNCOVERED/CRITICAL; red badge on uncovered count; ▶ ASSESS per risk → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; isRisGapQuery+buildRisGapScript wired in JarvisBrain; 60-s auto-refresh; "risk coverage"/"risk gap"/"risgap"/"uncovered risks" voice trigger */}
+            <RiskInvestigationMatrix />
+            {/* F166 (overnight 2026-09-18): operational pulse ring — ambient 56×56 SVG health ring fixed at bottom-right; outer arc = system health from /v1/jarvis/system/status cpu_percent; inner arc = risk health from /entities/RiskSignal critical/high count; overall score = mean of both; green ≥75 / amber 40–74 / red <40; 45-s auto-refresh; dismissed via localStorage; isPulseQuery+buildPulseScript wired in JarvisBrain; "pulse ring"/"health ring"/"operational ring" voice trigger */}
+            <OperationalPulseRing />
+            {/* F37 (overnight 2026-09-18): skill progression tracker — ⬡ SKILLP button (left:55080, bottom:8, zIndex:67); polls /v1/aip/skill every 2 min; stores up to 24 readings in localStorage; per-skill sparkline + delta badge + current score; "skill progress"/"skill trend"/"aip progress"/"skillp" voice trigger; jarvis:skillp-toggle event */}
+            <SkillProgressionTracker />
+            {/* F38 (overnight 2026-09-18): AIP skill × scenario coverage — ⬡ SKAS button (left:960, bottom:18, zIndex:68); parallel-fetches /v1/aip/skill + /v1/scenario/list every 90 s; keyword-correlates each skill against scenarios to classify EXERCISED vs UNUSED; filter tabs ALL/EXERCISED/UNUSED + text search; expand row → matched scenario cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isSkasQuery+buildSkasScript wired in JarvisBrain; "skill coverage"/"skill scenario"/"unused skills"/"skas"/"skill gap" voice trigger */}
+            <AipSkillScenarioCoverage />
+            {/* F39 (overnight 2026-09-18): Agent tool registry — ◈ ATR button; polls /v1/jarvis/agent/tools every 60 s; category filter + text search; ▶ QUERY → agent chat; "tool registry"/"agent tools"/"what tools"/"jarvis capabilities" voice trigger */}
+            <AgentToolRegistry />
+            {/* F40 (overnight 2026-09-18): Brain × System Status Fusion — ◈ BSSF button; parallel-polls /v1/cinematic/brain (nodes/synapses) + /v1/jarvis/system/status (cpu/mem/load/provider); fused operational score (0-100); history sparkline; ▶ ASSESS → agent + TTS; "bssf"/"brain status"/"brain health"/"brain fusion"/"operational score"/"health fusion" voice trigger; jarvis:bssf-toggle event */}
+            <BrainSystemStatusFusion />
+            {/* F41 (overnight 2026-09-19): Knowledge Base Explorer — ⬡ KBE button (left:992860, bottom:8, zIndex:115); fetches /knowledge/ endpoint; search/filter by category + text; click article → expand summary; ▶ SUMMARISE → /v1/jarvis/agent/chat + TTS; "knowledge base"/"knowledge"/"search knowledge"/"kbe"/"show knowledge" voice trigger; jarvis:kbe-toggle event */}
+            <KnowledgeBaseExplorer />
+            {/* F42 (overnight 2026-09-19): Contact × Investment Linker — ◈ CIL button (left:10680, bottom:8, zIndex:66); parallel-fetches /entities/Contact + /entities/Investment; keyword-correlates contacts to portfolio positions; LINKED/UNLINKED stat tiles + filter tabs; expand contact → matched investment cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCilQuery+buildCilScript wired in JarvisBrain; "contact investment"/"portfolio contacts"/"cil"/"who holds what"/"investment contacts" voice trigger; 90-s auto-refresh */}
+            <ContactInvestmentLinker />
+            {/* F44 (overnight 2026-09-19): ops events × knowledge gap — ◈ OPKNOW button (left:11240, bottom:8, zIndex:67); parallel-fetches /v1/ops/events (sev≥50) + /knowledge/; keyword-correlates each significant ops event against KB articles to surface DOCUMENTED vs UNDOCUMENTED; stat tiles: events/articles/documented/undocumented; amber badge on undocumented count; filter tabs ALL/DOCUMENTED/UNDOCUMENTED; expand event → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS via jarvis:speak-dossier; isOpsKnowQuery+buildOpsKnowScript wired in JarvisBrain; "ops knowledge"/"event docs"/"opknow"/"event knowledge gap"/"ops documentation gap" voice trigger; jarvis:opknow-toggle event; 90-s auto-refresh */}
+            <OpsEventKnowledgeGap />
+            {/* F45 (overnight 2026-09-19): AIP Skill × Investigation Coverage — ◈ ASIC button (left:7140, bottom:18, zIndex:68); parallel-fetches /v1/aip/skill + /v1/investigations; keyword-correlates each JARVIS skill against active investigations (DRIVEN vs AUTONOMOUS); stat tiles + filter tabs + expand row; ▶ ASSESS → agent + TTS; isAsicQuery+buildAsicScript wired in JarvisBrain; "asic"/"aip investigation"/"skill investigation"/"driven skills"/"autonomous skills" voice trigger; jarvis:asic-toggle event; 90-s auto-refresh */}
+            <AipSkillInvestigationCoverage />
+            {/* F46: Task × Risk Signal correlation — /entities/Task × /entities/RiskSignal */}
+            <TaskRiskCorrelation />
+            {/* F47: swarm-dataset provenance — ◈ SJDP button (left:937260); parallel-fetches /entities/SwarmJob + /v1/datasets; keyword-correlates jobs against backing datasets to classify SOURCED/PARTIAL/UNSOURCED; red badge on unsourced count; expand job → matched dataset cards with row counts; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwdpQuery+buildSwdpScript wired in JarvisBrain; "swarm dataset"/"sjdp"/"job provenance"/"swarm source" voice trigger; 90-s auto-refresh */}
+            <SwarmDatasetProvenance />
+            {/* F48 (overnight 2026-09-19): Live Intel × Task Activator — ◈ LITA button (left:530240, bottom:8, zIndex:130); parallel-fetches /functions/getLiveIntel (seismic/crypto/FX) + /entities/Task; keyword-correlates live world events against open tasks to surface TRIGGERED vs DORMANT; stat tiles + filter tabs; expand task → matched event cards with type badge + relevance score; red badge on triggered count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence activation brief + TTS; isLitaQuery+buildLitaScript wired in JarvisBrain; "live intel task"/"world task"/"task trigger"/"lita"/"triggered tasks" voice trigger; 60-s auto-refresh */}
+            <LiveIntelTaskActivator />
+            {/* F49 (overnight 2026-09-19): IntelProfile × Dataset Evidence Coverage — ◈ IDEPC button (left:11800, bottom:8, zIndex:131); parallel-fetches /entities/IntelProfile + /v1/datasets; keyword-correlates each threat profile against dataset catalogue to classify EVIDENCED vs UNSUPPORTED; stat tiles; amber badge on unsupported count; filter tabs ALL/EVIDENCED/UNSUPPORTED; expand profile → matched dataset cards with row counts; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence evidence brief + TTS via jarvis:speak-dossier; isIdepcQuery+buildIdepcScript wired in JarvisBrain; "intel evidence"/"profile dataset"/"threat data"/"idepc"/"unsupported profiles"/"intel data coverage" voice trigger; jarvis:idepc-toggle event; 90-s auto-refresh */}
+            <IntelProfileDatasetEvidence />
+            {/* F50 (overnight 2026-09-19): Report × Investigation Coverage — ◈ REPINV button (left:12360, bottom:8, zIndex:132); parallel-fetches /v1/reports + /v1/investigations; keyword-correlates each open investigation against reports catalogue to classify BACKED vs UNBACKED (documentation gap); stat tiles: investigations/reports/backed/unbacked; amber badge on unbacked count; filter tabs ALL/BACKED/UNBACKED; expand investigation → matched report cards with type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence documentation brief + TTS via jarvis:speak-dossier; isRepInvQuery+buildRepInvScript wired in JarvisBrain; "report investigation"/"investigation reports"/"repinv"/"unbacked investigations"/"investigation documentation" voice trigger; jarvis:repinv-toggle event; 90-s auto-refresh */}
+            <ReportInvestigationCoverage />
+            {/* F57 (overnight 2026-09-19): Scenario × Knowledge Readiness — ◈ SKR button (left:12920, bottom:8, zIndex:66); parallel-fetches /v1/scenario/list + /knowledge/; keyword-correlates each scenario against KB articles to classify READY (≥2 articles)/PARTIAL (1)/DARK (0); stat tiles: total/ready/partial/dark; filter tabs ALL/READY/PARTIAL/DARK + text search; expand scenario → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence readiness brief + TTS; isSkrQuery+buildSkrScript wired in JarvisBrain; "scenario knowledge"/"sknow"/"scenario readiness"/"how ready are we"/"knowledge readiness" voice trigger; jarvis:skr-toggle event; 90-s auto-refresh */}
+            <ScenarioKnowledgeReadiness />
+            {/* F58 (overnight 2026-09-19): Ops Events × Report Coverage — ◈ OPRES button (left:13480, bottom:8, zIndex:67); parallel-fetches /v1/ops/events + /v1/reports; keyword-correlates significant ops events against the reports catalogue to classify REPORTED vs UNREPORTED; stat tiles: events/reported/unreported/report-links; amber badge on unreported count; filter tabs ALL/REPORTED/UNREPORTED + text search; expand event → matched report cards with type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isOpresQuery+buildOpresScript wired in JarvisBrain; "ops reports"/"opres"/"unreported events"/"event reports"/"ops report coverage" voice trigger; jarvis:opres-toggle event; 90-s auto-refresh */}
+            <OpsReportCoverage />
+            {/* F59 (overnight 2026-09-19): SwarmJob × Contact Ownership — ◈ SCOWN button (left:14040, bottom:8, zIndex:68); parallel-fetches /entities/SwarmJob + /entities/Contact; keyword-correlates running swarm jobs against contacts to surface OWNED vs UNOWNED; stat tiles: jobs/owned/unowned; amber badge on unowned count; filter tabs ALL/OWNED/UNOWNED + text search; expand job → matched contact cards with role; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence ownership brief + TTS; isScownQuery+buildScownScript wired in JarvisBrain; "swarm contact"/"job owner"/"scown"/"swarm ownership"/"who runs"/"contact swarm" voice trigger; jarvis:scown-toggle event; 90-s auto-refresh */}
+            <SwarmContactOwnership />
+            {/* F60 (overnight 2026-09-19): Investment × Scenario Risk — ◈ ISEXP button (left:14600, bottom:8, zIndex:69); parallel-fetches /entities/Investment + /v1/scenario/list; keyword-correlates portfolio positions against threat scenarios to classify EXPOSED vs SAFE; stat tiles: positions/exposed/safe; amber badge on exposed count; filter tabs ALL/EXPOSED/SAFE + text search; expand investment → matched scenario cards with description; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence portfolio risk brief + TTS; isIsexpQuery+buildIsexpScript wired in JarvisBrain; "investment scenario"/"portfolio scenario"/"isexp"/"portfolio threat"/"investment risk scenario" voice trigger; jarvis:isexp-toggle event; 90-s auto-refresh */}
+            <InvestmentScenarioRisk />
+            {/* F61 (overnight 2026-09-19): IntelProfile × Scenario Threat Match — ◈ ITSM button (left:15160, bottom:8, zIndex:70); parallel-fetches /entities/IntelProfile + /v1/scenario/list; keyword-correlates active threat intel profiles against scenarios to classify ADDRESSED vs UNADDRESSED; stat tiles: profiles/addressed/unaddressed; amber badge on unaddressed count; filter tabs ALL/ADDRESSED/UNADDRESSED + text search; expand profile → matched scenario cards with description; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat readiness brief + TTS; isItsmQuery+buildItsmScript wired in JarvisBrain; "intel scenario"/"threat scenario"/"itsm"/"unaddressed threats"/"intel profile scenario"/"threat matching" voice trigger; jarvis:itsm-toggle event; 90-s auto-refresh */}
+            <IntelProfileScenarioThreat />
+            <TaskReportCoverage />
+            {/* F63 (overnight 2026-09-20): Scene × Knowledge Article Coverage — ◈ SCKN button (left:16280, bottom:8, zIndex:71); fetches all 10 /v1/cinematic/scene/{id} + /knowledge/; keyword-correlates each scene's anchors against KB articles; DOCUMENTED (≥2)/PARTIAL (1)/DARK (0) status; stat tiles total/documented/partial/dark; filter tabs + text search; expand scene → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scene knowledge brief + TTS; isScknQuery+buildScknScript wired in JarvisBrain; "scene knowledge"/"sckn"/"scene articles"/"cinematic coverage"/"which scenes have knowledge" voice trigger; jarvis:sckn-toggle event; 90-s auto-refresh */}
+            <SceneKnowledgeCoverage />
+            {/* F64 (overnight 2026-09-20): AIP Skill × Knowledge Grounding — ◈ SKKG button (left:16840, bottom:8, zIndex:72); parallel-fetches /v1/aip/skill + /knowledge/; keyword-correlates each JARVIS AI skill against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0); stat tiles skills/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand skill → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge gap brief + TTS; isSkkgQuery+buildSkkgScript wired in JarvisBrain; "skill knowledge"/"skill kb"/"skkg"/"skill grounding"/"knowledge backing"/"grounded skills"/"ungrounded skills" voice trigger; jarvis:skkg-toggle event; 90-s auto-refresh */}
+            <AipSkillKnowledgeGrounding />
+            {/* F65 (overnight 2026-09-20): Investigation × Knowledge Grounding — ◈ INVKG button (left:17400, bottom:8, zIndex:73); parallel-fetches /v1/investigations + /knowledge/; keyword-correlates each open investigation against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0); stat tiles cases/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand case → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge gap brief + TTS; isInvkgQuery+buildInvkgScript wired in JarvisBrain; "investigation knowledge"/"invkg"/"case knowledge"/"knowledge gap cases"/"ungrounded cases" voice trigger; jarvis:invkg-toggle event; 90-s auto-refresh */}
+            <InvestigationKnowledgeGrounding />
+            {/* F66 (overnight 2026-09-20): Ops Events × Intel Threat Correlation — ◈ OPEIC button (left:17960, bottom:8, zIndex:74); parallel-fetches /v1/ops/events + /entities/IntelProfile; keyword-correlates significant ops events against active intel threat profiles; TRACKED (matching profile) vs UNTRACKED (blind spot); stat tiles events/tracked/untracked; amber badge on untracked count; filter tabs ALL/TRACKED/UNTRACKED + text search; expand event → matched intel profile cards with threat type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat correlation brief + TTS; isOpeicQuery+buildOpeicScript wired in JarvisBrain; "ops intel"/"event intel"/"opeic"/"blind ops"/"tracked events"/"event threat match" voice trigger; jarvis:opeic-toggle event; 90-s auto-refresh */}
+            <OpsEventIntelCorrelation />
+            {/* F67 (overnight 2026-09-20): Contact × Scenario Engagement Mapper — ◈ CSEM button (left:18520, bottom:8, zIndex:75); parallel-fetches /entities/Contact + /v1/scenario/list; keyword-correlates contacts against threat scenarios to surface ENGAGED vs CLEAR; stat tiles contacts/engaged/clear; filter tabs ALL/ENGAGED/CLEAR + text search; expand contact → matched scenario cards with type; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCsemQuery+buildCsemScript wired in JarvisBrain; "contact scenario"/"csem"/"who handles"/"scenario contacts"/"contact engagement" voice trigger; jarvis:csem-toggle event; 90-s auto-refresh */}
+            <ContactScenarioMapper />
+            {/* F69 (overnight 2026-09-20): Risk Signal × Report Coverage — ◈ RSRPT button; parallel-fetches /entities/RiskSignal + /v1/reports; keyword-correlates risk signals against report documentation; DOCUMENTED vs UNDOCUMENTED classification; isRsrptQuery+buildRsrptScript wired in JarvisBrain; jarvis:rsrpt-toggle event */}
+            <RiskSignalReportCoverage />
+            {/* F70 (overnight 2026-09-20): Contact × Investigation Involvement — ◈ CINV button; parallel-fetches /entities/Contact + /v1/investigations; keyword-correlates contacts against open investigations; INVOLVED vs CLEAR; stat tiles contacts/investigations/involved/clear; amber badge on involved count; filter tabs ALL/INVOLVED/CLEAR + text search; expand contact → matched investigation cards; ▶ ASSESS INVOLVEMENT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCinvQuery+buildCinvScript wired in JarvisBrain; "contact investigation"/"cinv"/"who is involved"/"contact cases" voice trigger; jarvis:cinv-toggle event; 90-s auto-refresh */}
+            <ContactInvestigationInvolvement />
+            {/* F71 (overnight 2026-09-20): AIP Skill × Reports Coverage — ◈ ASRC button; parallel-fetches /v1/aip/skill + /v1/reports; keyword-correlates each JARVIS skill against report catalog; REPORTED vs UNDOCUMENTED classification; isAsrcQuery+buildAsrcScript wired in JarvisBrain; jarvis:asrc-toggle event */}
+            <AipSkillReportsCoverage />
+            {/* F72 (overnight 2026-09-20): Dataset × Task Data Consumption — ◈ DTCON button (left:19640, bottom:18, zIndex:76); parallel-fetches /v1/datasets + /entities/Task; keyword-correlates datasets against tasks to surface CONSUMING vs IDLE; stat tiles datasets/tasks/consuming/idle; amber badge on idle count; filter tabs ALL/CONSUMING/IDLE + text search; expand dataset → matched task cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isDtconQuery+buildDtconScript wired in JarvisBrain; "dataset task"/"dtcon"/"idle datasets"/"data utilization" voice trigger; jarvis:dtcon-toggle event; 90-s auto-refresh */}
+            <DatasetTaskConsumption />
+            {/* F73 (overnight 2026-09-20): SwarmJob × Risk Signal Threat Correlation — ◈ SWRISK button (left:20200, bottom:8, zIndex:77); parallel-fetches /entities/SwarmJob + /entities/RiskSignal; keyword-correlates swarm jobs against active risks; THREATENED vs SECURE classification; stat tiles jobs/risks/threatened/secure; red badge on threatened count; filter tabs ALL/THREATENED/SECURE + text search; expand job → matched risk signal cards with severity; ▶ ASSESS RISK → /v1/jarvis/agent/chat 2-sentence threat brief + TTS; isSwriskQuery+buildSwriskScript wired in JarvisBrain; "swarm risk"/"swrisk"/"threatened jobs"/"swarm threat"/"job risk" voice trigger; jarvis:swrisk-toggle event; 90-s auto-refresh */}
+            <SwarmJobRiskCorrelation />
+            {/* F74 (overnight 2026-09-20): IntelProfile × Task — Threat Actor Tasking — ◈ IPTASK button (left:20760, bottom:8, zIndex:78); parallel-fetches /entities/IntelProfile + /entities/Task; keyword-correlates each intel profile against open tasks to surface TASKED (driven by threat actor) vs AUTONOMOUS; stat tiles profiles/tasks/tasked/autonomous; amber badge on tasked count; filter tabs ALL/TASKED/AUTONOMOUS + text search; expand profile → matched task cards with status badge + relevance score; ▶ ASSESS TASKING → /v1/jarvis/agent/chat 2-sentence threat-tasking brief + TTS; isIptaskQuery+buildIptaskScript wired in JarvisBrain; "intel task"/"iptask"/"threat actor tasks"/"tasked threats"/"threat tasking" voice trigger; jarvis:iptask-toggle event; 90-s auto-refresh */}
+            <IntelProfileTasking />
+            {/* F76 (overnight 2026-09-20): Investment × Investigation Coverage — ◈ INVCASE button (left:21320, bottom:8, zIndex:79); parallel-fetches /entities/Investment + /v1/investigations; keyword-correlates portfolio positions against open cases to surface UNDER_INVESTIGATION vs CLEAN; stat tiles positions/cases/investigated/clean; amber badge on investigated count; filter tabs ALL/UNDER_INVESTIGATION/CLEAN + text search; expand position → matched investigation cards with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence portfolio risk brief + TTS; isInvcaseQuery+buildInvcaseScript wired in JarvisBrain; "investment investigation"/"portfolio case"/"invcase"/"under investigation" voice trigger; jarvis:invcase-toggle event; 90-s auto-refresh */}
+            <InvestmentInvestigationCoverage />
+            {/* F78 (overnight 2026-09-20): Scenario × Dataset Coverage — ◈ SCDSET button (left:21880, bottom:8, zIndex:80); parallel-fetches /v1/scenario/list + /v1/datasets; keyword-correlates scenarios against dataset catalog; DATA_BACKED/PARTIAL/DATA_DARK classification; stat tiles scenarios/datasets/backed/dark; amber badge on dark count; filter tabs ALL/DATA_BACKED/PARTIAL/DATA_DARK + text search; expand scenario → matched dataset cards with row counts + relevance score bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence data-coverage brief + TTS; isScdsetQuery+buildScdsetScript wired in JarvisBrain; "scenario dataset"/"scenario data"/"scdset"/"scenario data coverage"/"backed scenarios"/"data dark scenarios" voice trigger; jarvis:scdset-toggle event; 90-s auto-refresh */}
+            <ScenarioDatasetCoverage />
+            {/* F79 (overnight 2026-09-20): RiskSignal × IntelProfile Threat Attribution — ◈ RATTR button (left:22440, bottom:8, zIndex:81); parallel-fetches /entities/RiskSignal + /entities/IntelProfile; keyword-correlates active risk signals against intel threat profiles to surface ATTRIBUTED (known threat actor) vs UNATTRIBUTED (blind-spot risk); stat tiles signals/intel-profiles/attributed/unattributed; amber badge on unattributed count; filter tabs ALL/ATTRIBUTED/UNATTRIBUTED + text search; expand signal → matched intel profile cards with threat type + relevance score bar; ▶ ASSESS ATTRIBUTION → /v1/jarvis/agent/chat 2-sentence threat-attribution brief + TTS; isRattrQuery+buildRattrScript wired in JarvisBrain; "risk attribution"/"rattr"/"attributed risks"/"unattributed risks"/"threat attribution"/"who is behind"/"risk actor"/"blind risk" voice trigger; jarvis:rattr-toggle event; 90-s auto-refresh */}
+            <RiskSignalIntelAttribution />
+            {/* F80 (overnight 2026-09-20): Report × Dataset Lineage — ◈ RDLIN button (left:23000, bottom:8, zIndex:82); parallel-fetches /v1/reports + /v1/datasets; keyword-correlates each report against dataset catalog to surface SOURCED (≥1 dataset match) vs UNSOURCED (data lineage gap); stat tiles: reports/datasets/sourced/unsourced; amber badge on unsourced count; filter tabs ALL/SOURCED/UNSOURCED + text search; expand report → matched dataset cards with row counts + relevance score bar; ▶ ASSESS LINEAGE → /v1/jarvis/agent/chat 2-sentence data governance brief + TTS; isRdlinQuery+buildRdlinScript wired in JarvisBrain; "rdlin"/"report dataset"/"dataset report"/"report lineage"/"data lineage"/"sourced reports"/"unsourced reports"/"report provenance"/"report data coverage" voice trigger; jarvis:rdlin-toggle event; 90-s auto-refresh */}
+            <ReportDatasetLineage />
+            {/* F81 (overnight 2026-09-20): Investment × Report Coverage — ◈ IREP button (left:23560, bottom:8, zIndex:83); parallel-fetches /entities/Investment + /v1/reports; keyword-correlates each portfolio position against reports to surface COVERED (≥1 report match) vs DARK (no intelligence coverage); stat tiles: positions/reports/covered/dark; amber badge on dark count; filter tabs ALL/COVERED/DARK + text search; expand position → matched report cards with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence investment intelligence brief + TTS; isIrepQuery+buildIrepScript wired in JarvisBrain; "investment report"/"irep"/"portfolio coverage"/"portfolio reports"/"dark investments" voice trigger; jarvis:irep-toggle event; 90-s auto-refresh */}
+            <InvestmentReportCoverage />
+            {/* F82 (overnight 2026-09-20): SwarmJob × Investigation Coverage — ◈ SJINV button (left:24120, bottom:8, zIndex:84); parallel-fetches /entities/SwarmJob + /v1/investigations; keyword-correlates each running swarm job against open investigations to surface ASSIGNED (case-grounded) vs AUTONOMOUS (orphan job, operational blind-spot); stat tiles jobs/cases/assigned/autonomous; amber badge on autonomous count; filter tabs ALL/ASSIGNED/AUTONOMOUS + text search; expand job → matched investigation cards with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm grounding brief + TTS; isSjinvQuery+buildSjinvScript wired in JarvisBrain; "swarm investigation"/"sjinv"/"job case"/"orphan jobs"/"autonomous jobs" voice trigger; jarvis:sjinv-toggle event; 90-s auto-refresh */}
+            <SwarmJobInvestigationCoverage />
+            {/* F83 (overnight 2026-09-20): SwarmJob × Knowledge Grounding — ◈ SJKG button (left:24680, bottom:8, zIndex:85); parallel-fetches /entities/SwarmJob + /knowledge/; keyword-correlates each running swarm job against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0); stat tiles jobs/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand job → matched article cards; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence knowledge brief + TTS; isSjkgQuery+buildSjkgScript wired in JarvisBrain; "swarm knowledge"/"sjkg"/"bare jobs"/"job kb"/"swarm kb"/"ungrounded swarm" voice trigger; jarvis:sjkg-toggle event; 90-s auto-refresh */}
+            <SwarmJobKnowledgeGrounding />
+            {/* F84 (overnight 2026-09-20): Contact × Task Assignment — ◈ CTASK button (left:25240, bottom:8, zIndex:86); parallel-fetches /entities/Contact + /entities/Task; keyword-correlates each contact against tasks to surface ASSIGNED (≥1 task match) vs UNASSIGNED; stat tiles contacts/task-links/assigned/unassigned; amber badge on unassigned count; filter tabs ALL/ASSIGNED/UNASSIGNED + text search; expand contact → matched task cards with status badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence people-task brief + TTS; isCtaskQuery+buildCtaskScript wired in JarvisBrain; "contact task"/"ctask"/"people tasks"/"assigned contacts"/"task owners"/"who has tasks"/"contact assignment" voice trigger; jarvis:ctask-toggle event; 90-s auto-refresh */}
+            <ContactTaskAssignment />
+            {/* F85 (overnight 2026-09-20): Ops Events × Contact Ownership — ◈ OPECON button (left:25800, bottom:8, zIndex:87); parallel-fetches /v1/ops/events + /entities/Contact; keyword-correlates significant ops events against contacts to surface OWNED (≥1 contact match) vs ORPHANED; stat tiles events/contacts/owned/orphaned; amber badge on orphaned count; filter tabs ALL/OWNED/ORPHANED + text search; expand event → matched contact cards with role + relevance score bar; ▶ ASSESS OWNERSHIP → /v1/jarvis/agent/chat 2-sentence ops-ownership brief + TTS; isOpeconQuery+buildOpeconScript wired in JarvisBrain; "ops contact"/"event owner"/"opecon"/"orphaned events"/"who owns this event" voice trigger; jarvis:opecon-toggle event; 90-s auto-refresh */}
+            <OpsContactOwnership />
+            {/* F87 (overnight 2026-09-21): SwarmJob × AIP Skill Coverage — ◈ SJASK button (left:26360, bottom:8, zIndex:88); parallel-fetches /entities/SwarmJob + /v1/aip/skill; keyword-correlates each running swarm job against JARVIS AI skills to surface SKILLED (≥1 skill match) vs UNSKILLED (no AI capability — operational blind-spot); stat tiles jobs/skills/skilled/unskilled; amber badge on unskilled count; filter tabs ALL/SKILLED/UNSKILLED + text search; expand job → matched AI skill cards with type badge + score + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence swarm capability brief + TTS; isSjaskQuery+buildSjaskScript wired in JarvisBrain; "swarm skill"/"sjask"/"skilled jobs"/"unskilled jobs"/"ai skill job"/"job capability"/"swarm capability"/"capability gap swarm" voice trigger; jarvis:sjask-toggle event; 90-s auto-refresh */}
+            <SwarmJobAipSkillCoverage />
+            {/* F88 (overnight 2026-09-21): Scenario × Report Intelligence Coverage — ◈ SCREP button (left:26920, bottom:8, zIndex:89); parallel-fetches /v1/scenario/list + /v1/reports; keyword-correlates each scenario against intelligence reports to surface REPORTED (≥1 report match) vs DARK (intelligence gap); stat tiles scenarios/reports/reported/dark; amber badge on dark count; filter tabs ALL/REPORTED/DARK + text search; expand scenario → matched report cards with type badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence scenario intelligence brief + TTS; isScrepQuery+buildScrepScript wired in JarvisBrain; "screp"/"scenario report"/"scenario intelligence"/"dark scenarios"/"reported scenarios" voice trigger; jarvis:screp-toggle event; 90-s auto-refresh */}
+            <ScenarioReportIntelligence />
+            {/* F89 (overnight 2026-09-21): Graph Centrality × Risk Signal Convergence — ◈ CNTRKRSK button (left:27480, bottom:8, zIndex:90); parallel-fetches /v1/graph/centrality + /entities/RiskSignal; keyword-correlates each high-centrality graph node against live risk signals to surface AT_RISK (≥1 signal match) vs SECURE; stat tiles nodes/signals/at_risk/secure; red badge on at-risk count; filter tabs ALL/AT_RISK/SECURE + text search; expand node → matched risk signal cards with SevBar + RelevanceBar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence centrality-risk convergence brief + TTS; isCntrkrskQuery+buildCntrkrskScript wired in JarvisBrain; "cntrkrsk"/"centrality risk"/"graph risk"/"risky nodes"/"at risk nodes" voice trigger; jarvis:cntrkrsk-toggle event; 90-s auto-refresh */}
+            <GraphCentralityRiskConvergence />
+            {/* F90 (overnight 2026-09-21): Task × Knowledge Grounding — ◈ TASKKG button (left:28040, bottom:8, zIndex:91); parallel-fetches /entities/Task + /knowledge/; keyword-correlates each open task against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0); stat tiles tasks/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand task → matched KB article cards with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence task knowledge coverage brief + TTS; isTaskkgQuery+buildTaskkgScript wired in JarvisBrain; "taskkg"/"task knowledge"/"task kb"/"bare tasks"/"task grounding"/"ungrounded tasks"/"task knowledge gap" voice trigger; jarvis:taskkg-toggle event; 90-s auto-refresh */}
+            <TaskKnowledgeGrounding />
+
+            {/* F91 (overnight 2026-09-21): IntelProfile × Ops Events Activation — ◈ IPOPS button (left:28600, bottom:8, zIndex:92); parallel-fetches /entities/IntelProfile + /v1/ops/events; keyword-correlates each active intel threat profile against significant ops events to surface ACTIVATED (live event matches threat actor keywords) vs DORMANT; stat tiles profiles/events/activated/dormant; amber badge on activated count; filter tabs ALL/ACTIVATED/DORMANT + text search; expand profile → matched ops event cards with severity badge + relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence threat activation brief + TTS; isIpopsQuery+buildIpopsScript wired in JarvisBrain; "intel ops"/"ipops"/"activated threats"/"threat in ops"/"intel activation"/"ops threat match"/"threat operations" voice trigger; jarvis:ipops-toggle event; 90-s auto-refresh */}
+            <IntelProfileOpsActivation />
+
+            {/* F166 (overnight 2026-09-21): dataset × knowledge coverage — ◈ DSKNOW button (left:30120, bottom:8, zIndex:60); parallel-fetches /v1/datasets + /knowledge/; keyword-correlates each dataset against knowledge articles to surface DOCUMENTED vs DARK (no backing docs — knowledge gap); amber badge on dark count; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence data-documentation brief + TTS via jarvis:speak-dossier; 120-s auto-refresh; "dataset knowledge"/"dataset docs"/"undocumented datasets"/"data documentation gap"/"dsknow" voice trigger; jarvis:dsknow-toggle event */}
+            <DatasetKnowledgeCoverage />
+
+            {/* F92 (overnight 2026-09-21): Report × Knowledge Coverage — ◈ RPTKB button (left:29160, bottom:8, zIndex:93); parallel-fetches /v1/reports + /knowledge/; keyword-correlates each intelligence report against KB articles; GROUNDED/PARTIAL/BARE classification; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand report → matched KB article cards with relevance score bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRptkbQuery+buildRptkbScript wired in JarvisBrain; "rptkb"/"report knowledge"/"report kb"/"bare reports"/"report knowledge gap" voice trigger; jarvis:rptkb-toggle event; 90-s auto-refresh */}
+            <ReportKnowledgeCoverage />
+
+            {/* F94 (overnight 2026-09-21): Ops Events × AIP Skill Response Coverage — ◈ OPASK button (left:29720, bottom:8, zIndex:94); parallel-fetches /v1/ops/events + /v1/aip/skill; keyword-correlates significant ops events (sev≥50) against JARVIS AI skills; SKILLED (≥1 skill match) vs UNSUPPORTED (AI capability blind-spot); stat tiles events/skills/skilled/unsupported; amber badge on unsupported count; filter tabs ALL/SKILLED/UNSUPPORTED + text search; expand event → matched AI skill cards with type badge + relevance score bar; ▶ ASSESS AI GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOpaskQuery+buildOpaskScript wired in JarvisBrain; "opask"/"ops skill"/"ai skill gap"/"unsupported events"/"ops ai coverage" voice trigger; jarvis:opask-toggle event; 60-s auto-refresh */}
+            <OpsAipSkillCoverage />
+
+            {/* F95 (overnight 2026-09-21): investigation × dataset evidence — ◈ INVDSET button (left:30680, bottom:8, zIndex:95); parallel-fetches /v1/investigations + /v1/datasets; keyword-correlates each open investigation against dataset catalog to surface DATA_BACKED (≥1 dataset match) vs DATA_DARK (no dataset support — investigation has no data foundation); amber badge on dark count; filter tabs ALL/DATA_BACKED/DATA_DARK; expand case → matched dataset cards with row counts + relevance bar; ▶ ASSESS EVIDENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isInvdsetQuery+buildInvdsetScript wired in JarvisBrain; "investigation dataset"/"invdset"/"case data"/"unbacked investigations"/"investigation evidence"/"data dark cases"/"case dataset" voice trigger; jarvis:invdset-toggle event; 90-s auto-refresh */}
+            <InvestigationDatasetEvidence />
+
+            {/* F96 (overnight 2026-09-21): graph centrality × knowledge coverage — ◈ GCNK button (left:31240, bottom:8, zIndex:96); parallel-fetches /v1/graph/centrality + /knowledge/; keyword-correlates high-centrality graph nodes against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0 — knowledge gap for influential nodes); stat tiles nodes/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand node → matched KB article cards with relevance score bar; ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcknQuery+buildGcknScript wired in JarvisBrain; "graph knowledge"/"gcnk"/"node knowledge"/"centrality knowledge"/"bare nodes"/"graph kb" voice trigger; jarvis:gcnk-toggle event; 90-s auto-refresh */}
+            <GraphCentralityKnowledge />
+            {/* F97 (overnight 2026-09-21): investment × knowledge coverage — ◈ INVKB button (left:31800, bottom:8, zIndex:97); parallel-fetches /entities/Investment + /knowledge/; keyword-correlates portfolio positions against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/DARK (0 — no KB backing); stat tiles positions/articles/grounded/partial/dark; amber badge on dark count; filter tabs ALL/GROUNDED/PARTIAL/DARK + text search; expand position → matched KB article cards with relevance score bar; ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isInvkbQuery+buildInvkbScript wired in JarvisBrain; "investment knowledge"/"invkb"/"portfolio kb"/"dark investments" voice trigger; jarvis:invkb-toggle event; 90-s auto-refresh */}
+            <InvestmentKnowledgeCoverage />
+            {/* F98 (overnight 2026-09-21): Ops Tempo Index — ◈ TEMPO button (left:32920, bottom:8, zIndex:98); polls /v1/ops/events + /entities/RiskSignal + /entities/SwarmJob every 45 s; composite 0-100 tempo score (ops 40% + risk 35% + swarm 25%, normalised vs rolling max); SURGE/ELEVATED/NOMINAL/QUIET badge; arc gauge + sub-metric bars + sparkline history (localStorage max 20 readings); auto-announces SURGE ≥75 via jarvis:speak-dossier; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOpsTempoQuery+buildOpsTempoScript exported for JarvisBrain wiring; "ops tempo"/"activity tempo"/"operational tempo"/"opstempo" voice trigger; jarvis:ops-tempo-toggle event */}
+            <OpsTempoIndex />
+
+            {/* F99 (overnight 2026-09-21): IntelProfile × Knowledge Coverage — ◈ IPKB button (left:33480, bottom:8, zIndex:99); parallel-fetches /entities/IntelProfile + /knowledge/; keyword-correlates each threat intel profile against KB articles to surface GROUNDED (≥2)/PARTIAL (1)/BARE (0 — threat profile with zero KB backing); stat tiles profiles/articles/grounded/partial/bare; amber badge on bare count; filter tabs ALL/GROUNDED/PARTIAL/BARE + text search; expand profile → matched KB article cards with relevance score bar; ▶ ASSESS KNOWLEDGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIpkbQuery+buildIpkbScript wired in JarvisBrain; "intel knowledge"/"ipkb"/"threat knowledge"/"intel kb"/"profile knowledge"/"bare profiles"/"ungrounded intel"/"intel knowledge gap" voice trigger; jarvis:ipkb-toggle event; 90-s auto-refresh */}
+            <IntelProfileKnowledgeCoverage />
+
+            {/* F200 (overnight 2026-09-21): Contact × Dataset Exposure — ◈ CTDSET button (left:34040, bottom:8, zIndex:100); parallel-fetches /entities/Contact + /v1/datasets; keyword-correlates contact name/role/org/tags against dataset catalog metadata to surface DOCUMENTED (≥1 dataset match) vs INVISIBLE (no data trail — contact absent from all datasets); stat tiles contacts/datasets/documented/invisible; amber badge on invisible count; filter tabs ALL/DOCUMENTED/INVISIBLE + text search; expand contact → matched dataset cards with row count + relevance score bar; ▶ ASSESS DATA TRAILS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCtdsetQuery+buildCtdsetScript wired in JarvisBrain; "contact dataset"/"ctdset"/"data trail"/"invisible contacts"/"contact data exposure" voice trigger; jarvis:ctdset-toggle event; 90-s auto-refresh */}
+            <ContactDatasetExposure />
+
+            {/* F201 (overnight 2026-09-21): Live Intel × Reports Coverage — ◈ LIRPT button (left:34600, bottom:8, zIndex:101); parallel-fetches /functions/getLiveIntel (earthquakes/crypto/FX) + /v1/reports; keyword-correlates each live event against reports catalogue to surface REPORTED (≥1 match) vs UNREPORTED (blind spot — zero report coverage); stat tiles events/reports/reported/unreported; amber badge on unreported count; filter tabs ALL/REPORTED/UNREPORTED + text search; expand event → matched report cards with relevance score bar; ▶ ASSESS COVERAGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLirptQuery+buildLirptScript wired in JarvisBrain; "lirpt"/"live intel report"/"intel report gap"/"unreported intel"/"live event coverage"/"live reports"/"report coverage" voice trigger; jarvis:lirpt-toggle event; 60-s auto-refresh */}
+            <LiveIntelReportCoverage />
+
+            {/* F202 (overnight 2026-09-21): Live Intel × Scenario Coverage — ◈ LISCEN button (left:35160, bottom:8, zIndex:102); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /v1/scenario/list; keyword-correlates live world events against threat scenarios to surface TRIGGERED (≥1 scenario match) vs DORMANT; amber badge on triggered count; filter tabs ALL/TRIGGERED/DORMANT; expand event → matched scenario cards with relevance bar; ▶ ASSESS TRIGGERS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLiscenQuery+buildLiscenScript wired in JarvisBrain; "liscen"/"live intel scenario"/"scenario trigger"/"triggered scenarios"/"live scenario"/"world scenario"/"event scenario" voice trigger; jarvis:liscen-toggle event; 60-s auto-refresh */}
+            <LiveIntelScenarioCoverage />
+            {/* F203 (overnight 2026-09-21): Graph Centrality × Investigations Coverage — ◈ GCIN button (left:35720, bottom:8, zIndex:103); parallel-fetches /v1/graph/centrality + /v1/investigations; keyword-correlates high-centrality graph nodes against open investigations to surface INVOLVED (≥1 match) vs CLEAR; amber badge on involved count; filter tabs ALL/INVOLVED/CLEAR; expand node → matched investigation cards with centrality bar + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcinQuery+buildGcinScript wired in JarvisBrain; "gcin"/"graph centrality investigation"/"investigated nodes"/"node investigation" voice trigger; jarvis:gcin-toggle event; 90-s auto-refresh */}
+            <GraphCentralityInvestigations />
+
+            {/* F204 (overnight 2026-09-21): Live Intel × Knowledge Coverage — ◈ LIKNOW button (left:36280, bottom:8, zIndex:104); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /knowledge/; keyword-correlates live world events against KB articles to surface DOCUMENTED (≥1 KB match) vs UNDOCUMENTED (knowledge gap); amber badge on undocumented count; filter tabs ALL/DOCUMENTED/UNDOCUMENTED + text search; expand event → matched KB article cards with relevance bar; ▶ ASSESS COVERAGE GAPS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLiknowQuery+buildLiknowScript wired in JarvisBrain; "liknow"/"live intel knowledge"/"world knowledge"/"event knowledge"/"undocumented events" voice trigger; jarvis:liknow-toggle event; 60-s auto-refresh */}
+            <LiveIntelKnowledgeCoverage />
+
+            {/* F205 (overnight 2026-09-21): Live Intel × Contact Exposure — ◈ LICONTACT button (left:36840, bottom:8, zIndex:105); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /entities/Contact; keyword-correlates contact name/role/org/dept/tags against live world events to surface EXPOSED (≥1 event match) vs SAFE; stat tiles events/contacts/exposed/safe; amber badge on exposed count; filter tabs ALL/EXPOSED/SAFE + text search; expand contact → matched live event cards with type badge (SEISMIC/CRYPTO/FX) + relevance bar; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLicontactQuery+buildLicontactScript wired in JarvisBrain; "licontact"/"contact exposure"/"exposed contacts"/"who is exposed"/"live contact" voice trigger; jarvis:licontact-toggle event; 90-s auto-refresh */}
+            <LiveIntelContactExposure />
+
+            {/* F206 (overnight 2026-09-21): Graph Centrality × SwarmJob Tasking — ◈ GCNJOB button (left:37400, bottom:8, zIndex:106); parallel-fetches /v1/graph/centrality + /entities/SwarmJob; keyword-correlates high-centrality graph nodes against running swarm jobs to surface TASKED (≥1 job match) vs DORMANT; amber badge on tasked count; filter tabs ALL/TASKED/DORMANT + text search; expand node → matched SwarmJob cards with status badge + relevance bar; ▶ ASSESS TASKING → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcnjobQuery+buildGcnjobScript wired in JarvisBrain; "gcnjob"/"centrality swarm"/"node jobs"/"swarm centrality"/"swarm nodes"/"central jobs" voice trigger; jarvis:gcnjob-toggle event; 90-s auto-refresh */}
+            <GraphCentralitySwarmJobs />
+
+            {/* F208 (overnight 2026-09-21): Graph Centrality × AIP Skill Coverage — ◈ GCASK button (left:38520, bottom:8, zIndex:108); parallel-fetches /v1/graph/centrality + /v1/aip/skill; keyword-correlates high-centrality graph nodes against JARVIS AI skills to surface SKILLED (≥1 skill match) vs UNSKILLED; stat tiles nodes/skills/skilled/unskilled; amber badge on unskilled count; filter tabs ALL/SKILLED/UNSKILLED + text search; expand node → matched AIP skill cards with type badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcaskQuery+buildGcaskScript wired in JarvisBrain; "gcask"/"centrality skill"/"node skill"/"influential skills"/"skill centrality"/"graph skill coverage"/"node ai coverage" voice trigger; jarvis:gcask-toggle event; 90-s auto-refresh */}
+            <GraphCentralityAipSkill />
+
+            {/* F207 (overnight 2026-09-21): Live Intel × Task Activation — ◈ LITASK button (left:37960, bottom:8, zIndex:107); parallel-fetches /functions/getLiveIntel (quakes/crypto/FX) + /entities/Task; keyword-correlates task name/description/type/status against live world events to surface TRIGGERED (≥1 event match) vs INACTIVE; stat tiles events/tasks/triggered/inactive; violet badge on triggered count; filter tabs ALL/TRIGGERED/INACTIVE + text search; expand task → matched live event cards with type badge (SEISMIC/CRYPTO/FX) + relevance bar; ▶ ASSESS ACTIVATION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLitaskQuery+buildLitaskScript wired in JarvisBrain; "litask"/"live intel task"/"task activation"/"triggered tasks"/"live task"/"world event task" voice trigger; jarvis:litask-toggle event; 90-s auto-refresh */}
+            <LiveIntelTaskActivation />
+
+            {/* F32 (overnight 2026-09-23): Knowledge Freshness Monitor — ⬡ KFM button (left:8580, bottom:8, zIndex:68); polls /knowledge/ every 120 s; classifies articles FRESH (<24h) / CURRENT (1–7d) / STALE (>7d); stat tiles total/fresh/current/stale; amber warning badge on stale count; filter tabs ALL/FRESH/CURRENT/STALE + age bar per article; isKfmQuery+buildKfmScript wired in JarvisBrain; "knowledge freshness"/"stale knowledge"/"knowledge age"/"kfm" voice trigger; jarvis:kfm-toggle event; 120-s auto-refresh */}
+            <KnowledgeFreshnessMonitor />
+
+            {/* F33 (overnight 2026-09-23): Agent Tools Runner — ⌘⇧T opens a live palette; fetches real tool catalogue from /v1/jarvis/agent/tools; select + Enter fires /v1/jarvis/agent/chat with a one-shot tool-run prompt and shows the agent response inline; keyboard nav ↑↓↵ + text search; isAgentToolsRunnerQuery+buildAgentToolsRunnerScript wired in JarvisBrain; "agent tools"/"run tool"/"tool runner"/"tool palette"/"jarvis tools"/"atr"/"list tools"/"show tools" voice trigger; jarvis:atr-toggle event */}
+            <AgentToolsRunner />
+
+            {/* F35 (overnight 2026-09-23): scenario impact matrix — ◫ MATRIX button (left:3924, bottom:6, zIndex:60); fetches /v1/scenario/list; plots every scenario on a 3×3 impact×probability risk matrix; quadrant colours: LOW(green)/MEDIUM(amber)/HIGH(orange)/CRITICAL(red); hover shows scenario name; click → /v1/jarvis/agent/chat AI risk assessment + jarvis:speak-dossier TTS; critical-count badge; filter input; 60-s auto-refresh; "impact matrix"/"scenario matrix"/"risk matrix"/"scenario risk" voice trigger (jarvis:matrix-toggle event) */}
+            <ScenarioImpactMatrix />
+            {/* F36: report viewer — ◈ RVIEW button (left:10920, bottom:8, zIndex:71); fetches /v1/reports every 2 min; browsable report cards with type/date/author/tags; filter tabs ALL/THREAT/INTEL/OPS/KNOWLEDGE/OTHER; isReportViewerQuery+buildReportViewerScript wired in JarvisBrain; "report viewer/show reports/intelligence reports/rview" voice trigger; jarvis:report-viewer-toggle event */}
+            <ReportViewer />
+
+            {/* F38 (overnight 2026-09-23): Executive Intel Briefing — ◈ BRIEF button (left:55640, bottom:8, zIndex:110); aggregates /v1/jarvis/system/status + /entities/RiskSignal + /v1/cinematic/brain; sends snapshot to /v1/jarvis/agent/chat for AI 3-sentence executive brief; speaks via /v1/voice/tts; auto-refresh 10 min; isExecBriefQuery+buildExecBriefScript wired in JarvisBrain; "exec brief/executive briefing/brief me/sitrep/situation report" voice trigger; jarvis:exec-brief-toggle event */}
+            <ExecutiveBriefing />
+
+            {/* F39 (overnight 2026-09-23): Dataset × Investigation Linker — ◈ DINV button (left:56200, bottom:8, zIndex:111); parallel-fetches /v1/datasets + /v1/investigations; keyword-correlates dataset names/types against investigation titles to surface CITED (≥1 match) vs UNCITED; amber badge on uncited count; filter tabs ALL/CITED/UNCITED + text search; expand dataset → matched investigation cards with relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isDinvQuery+buildDinvScript wired in JarvisBrain; "dataset investigation/data link/dinv/uncited datasets/investigation data" voice trigger; jarvis:dinv-toggle event; 90-s auto-refresh */}
+            <DatasetInvestigationLinker />
+
+            {/* F43 (overnight 2026-09-23): AIP Skill × Contact × Task Mesh — ◈ SCTM button (left:6120, bottom:18, zIndex:68); parallel-fetches /v1/aip/skill + /entities/Contact + /entities/Task; keyword-scores each skill against contacts (STAFFED) and tasks (TASKED) to classify: STAFFED_AND_TASKED/STAFFED_ONLY/TASKED_ONLY/ORPHANED; amber badge on orphaned count; filter tabs ALL/STAFFED_AND_TASKED/STAFFED_ONLY/TASKED_ONLY/ORPHANED + text search; expand skill → matched contacts with role badge + relevance bar + matched tasks with priority/status badge; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSctmQuery+buildSctmScript wired in JarvisBrain; "skill contact task/sctm/orphaned skills/staffed skills/skill task mesh/aip skill mesh" voice trigger; jarvis:sctm-toggle event; 90-s auto-refresh */}
+            <AipSkillContactTaskMesh />
+            {/* F44 (overnight 2026-09-23): AIP Skill × Contact × Scenario Operator Capability Map — ◈ OPMAP button; parallel-fetches /v1/aip/skill + /entities/Contact + /v1/scenario/list; keyword-correlates skills against contacts (STAFFED) and scenarios (CONTEXTED) to classify FULLY_MAPPED/CONTACT_MAPPED/SCENARIO_MAPPED/UNMAPPED; amber badge on unmapped; filter tabs + search; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence capability brief + TTS; isOpmapQuery+buildOpmapScript wired in JarvisBrain; "opmap/operator capability/skill contact scenario/unmapped skill/capability mapping" voice trigger; jarvis:opmap-toggle event; 90-s auto-refresh */}
+            <AipSkillContactScenarioMap />
+            {/* F46 (overnight 2026-09-23): Brain Node Velocity Monitor — ◈ BNVM button (left:2580, bottom:18); polls /v1/cinematic/brain every 30 s; computes Δnodes/Δsynapses per minute; ACCELERATING/STEADY/DECELERATING trend via linear regression over 20 localStorage readings; velocity sparklines; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence growth-velocity brief + TTS; isBnvmQuery+buildBnvmScript wired in JarvisBrain; "brain velocity/node velocity/brain acceleration/bnvm/growth velocity/brain growth rate" voice trigger; jarvis:bnvm-toggle event */}
+            <BrainNodeVelocityMonitor />
+            {/* F47 (overnight 2026-09-23): Live Brain Pulse — always-on ambient orb (bottom-right) pulsing at a rate derived from Δnodes+Δsynapses every 30 s from /v1/cinematic/brain; click → /v1/jarvis/agent/chat 2-sentence health brief + TTS; isBrainPulseQuery wired in JarvisBrain; "brain pulse/neural activity/live brain" voice trigger; jarvis:brain-pulse-toggle event */}
+            <LiveBrainPulse />
+            {/* F48: Swarm-Dataset Ingestion Tracker — ⬡ SDTRK button (left:7564); cross-refs /entities/SwarmJob against /v1/datasets; AUTOMATED vs MANUAL classification; amber badge on manual count; filter tabs; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; "swarm dataset/dataset ingestion/data automation/pipeline coverage/sdtrk" voice trigger */}
+            <SwarmDatasetTracker />
+            {/* F49 (overnight 2026-09-23): AIP Skill × Swarm × Scenario Execution Capability Matrix — ◈ SSXCAP button (left:975960, bottom:8, zIndex:121); cross-refs /v1/aip/skill against /v1/scenario/list + /entities/SwarmJob; FULLY_DEPLOYED/SCENARIO_ONLY/SWARM_ONLY/IDLE classification; red pulse on IDLE; filter tabs + text search; expand skill → matched scenarios (amber) + swarm jobs (cyan); ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence gap brief + TTS; "ssxcap/idle skills/skill deployment/skill execution/underused skills/capability deployment" voice trigger; jarvis:ssxcap-toggle event; 90-s auto-refresh */}
+            <AipSkillSwarmScenarioMatrix />
+            {/* F50 (overnight 2026-09-23): Investigation × Risk Signal Correlator — ◈ IRSIG button (left:976520, bottom:8, zIndex:122); parallel-fetches /v1/investigations + /entities/RiskSignal; keyword-correlates each investigation against active risk signals to classify CORROBORATED (≥1 signal match) vs UNCONFIRMED; stat tiles investigations/signals/corroborated/unconfirmed; amber badge on unconfirmed count; filter tabs ALL/CORROBORATED/UNCONFIRMED + text search; expand investigation → matched risk signal cards with severity badge + relevance bar; ▶ ASSESS CORROBORATION → /v1/jarvis/agent/chat 2-sentence prioritisation brief + TTS; isIrsigQuery+buildIrsigScript wired in JarvisBrain; "investigation risk/inv risk/irsig/unconfirmed investigations/risk signal link/corroborated investigations" voice trigger; jarvis:irsig-toggle event; 90-s auto-refresh */}
+            <InvestigationRiskCorrelator />
+            {/* F51 (overnight 2026-09-23): Task Priority Quadrant — ◈ TSKQUAD button (left:937260, bottom:8, zIndex:634); polls /entities/Task every 90 s; classifies tasks into Eisenhower 2×2 (DO FIRST/PLAN/DELEGATE/SKIP) by priority+urgency; stat tiles TOTAL/DO FIRST/PLAN/DELEGATE; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTskquadQuery+buildTskquadScript wired in JarvisBrain; "task quadrant/priority quadrant/eisenhower/tskquad/urgent tasks" voice trigger; jarvis:tskquad-toggle event */}
+            <TaskPriorityQuadrant />
+            {/* F52 (overnight 2026-09-23): System Status × AIP Skill Coverage — ◈ SSAIP button (left:978200, bottom:8, zIndex:124); parallel-fetches /v1/jarvis/system/status + /v1/aip/skill; keyword-correlates detected services against JARVIS AIP skills to classify SKILLED (≥1 skill match) vs UNSKILLED (automation gap); stat tiles SERVICES/AIP SKILLS/SKILLED/UNSKILLED; amber badge on unskilled count; filter tabs ALL/SKILLED/UNSKILLED + text search; expand service → matched AIP skill cards with type badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSsaipQuery+buildSsaipScript wired in JarvisBrain; "ssaip/service skill coverage/system skill/unskilled service/service coverage/skill gap service" voice trigger; jarvis:ssaip-toggle event; 90-s auto-refresh */}
+            <SystemStatusAipSkillCoverage />
+
+            {/* F53 (overnight 2026-09-23): Contact × Risk Signal Exposure Matrix — ◈ CRSE button (left:978760, bottom:8, zIndex:125); parallel-fetches /entities/Contact + /entities/RiskSignal; keyword-correlates contact name/role/org/dept/tags against risk signal titles/descriptions/categories to surface AT_RISK (≥1 match) vs CLEAR; stat tiles CONTACTS/SIGNALS/AT_RISK/CLEAR; red pulse on AT_RISK count; filter tabs ALL/AT_RISK/CLEAR + text search; expand contact → matched risk signal cards with severity badge + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence personnel risk brief + TTS; isCrseQuery+buildCrseScript wired in JarvisBrain; "crse/contact risk/personnel risk/at risk contacts/exposed personnel/who is at risk" voice trigger; jarvis:crse-toggle event; 90-s auto-refresh */}
+            <ContactRiskExposureMatrix />
+
+            {/* F55 (overnight 2026-09-24): Live Intel × Investigation Correlator (LIIC) — ⊕ LIIC button (left:215040, bottom:8, zIndex:140); parallel-fetches /functions/getLiveIntel + /v1/investigations; keyword-correlates live quake place names, crypto tickers, and FX pairs against investigation titles/descriptions to surface FLAGGED (≥1 match) vs CLEAR; 5-min auto-refresh; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence correlation brief + TTS; isLiicQuery+buildLiicScript wired in JarvisBrain; "live intel correlator/liic/investigation alert/world events investigations/flagged investigations" voice trigger; jarvis:liic-toggle event */}
+            <LiveIntelInvestigationCorrelator />
+
+            {/* F56 (overnight 2026-09-24): Report × Risk Signal Coverage (RRSIG) — ◈ RRSIG button (left:979320, bottom:8, zIndex:126); parallel-fetches /v1/reports + /entities/RiskSignal; keyword-correlates report titles/descriptions/tags against risk signal titles/descriptions to classify THREAT_COVERED (≥1 match) vs UNCOVERED; stat tiles REPORTS/RISK SIGNALS/THREAT COVERED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/THREAT_COVERED/UNCOVERED + text search; expand report → matched risk signal cards with severity badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence intelligence gap brief + TTS; isRrsigQuery+buildRrsigScript wired in JarvisBrain; "rrsig/report risk coverage/risk covered reports/threat coverage reports/intelligence gap" voice trigger; jarvis:rrsig-toggle event; 90-s auto-refresh */}
+            <ReportRiskSignalCoverage />
+
+            {/* F57 (overnight 2026-09-24): Scenario × Dataset Dependency Map (SDDEP) — ◈ SDDEP button (left:979880, bottom:8, zIndex:127); parallel-fetches /v1/scenario/list + /v1/datasets; keyword-correlates scenario names/descriptions against dataset names/descriptions to classify SOURCED (≥1 match) vs UNSOURCED; stat tiles SCENARIOS/DATASETS/SOURCED/UNSOURCED; amber badge on unsourced count; filter tabs ALL/SOURCED/UNSOURCED + text search; expand scenario → matched dataset cards with relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence data-grounding brief + TTS; isSddepQuery+buildSddepScript wired in JarvisBrain; "sddep/scenario dataset/unsourced scenarios/scenario data dependency/dataset coverage scenario" voice trigger; jarvis:sddep-toggle event; 90-s auto-refresh */}
+            <ScenarioDatasetDependencyMap />
+
+            {/* F58 (overnight 2026-09-24): Ops Event × Scenario Gap Analysis (OESGA) — ◈ OESGA button (left:980440, bottom:8, zIndex:128); parallel-fetches /v1/ops/events + /v1/scenario/list; keyword-correlates each ops event against scenarios to classify COVERED (≥1 playbook match) vs UNCOVERED (no playbook exists); stat tiles EVENTS/SCENARIOS/COVERED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/COVERED/UNCOVERED + text search; expand event → matched scenario cards with relevance bar; ▶ ASSESS GAP → /v1/jarvis/agent/chat 2-sentence coverage gap brief + TTS; isOesgaQuery+buildOesgaScript wired in JarvisBrain; "oesga/ops scenario gap/event coverage/uncovered events/scenario gap/playbook gap" voice trigger; jarvis:oesga-toggle event; 90-s auto-refresh */}
+            <OpsEventScenarioGap />
+
+            {/* F59 (overnight 2026-09-24): Knowledge × Investigation Coverage Mapper (KIMAP) — ◈ KIMAP button (left:981000, bottom:8, zIndex:129); parallel-fetches /knowledge/ + /v1/investigations; keyword-correlates article titles/content/tags against investigation titles/descriptions to classify SUPPORTING (≥1 match) vs ORPHANED; stat tiles ARTICLES/INVESTIGATIONS/SUPPORTING/ORPHANED; amber badge on orphaned count; filter tabs ALL/SUPPORTING/ORPHANED + text search; expand article → matched investigation cards with relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isKimapQuery+buildKimapScript wired in JarvisBrain; "kimap/knowledge investigation/orphaned knowledge/knowledge coverage/knowledge map/knowledge support" voice trigger; jarvis:kimap-toggle event; 90-s auto-refresh */}
+            <KnowledgeInvestigationMapper />
+
+            {/* F60 (overnight 2026-09-24): Contact × IntelProfile Cross-Reference (CIPR) — ◈ CIPR button (left:1740, bottom:18, zIndex:68); parallel-fetches /entities/Contact + /entities/IntelProfile; keyword-correlates contact name/org/email/tags against profile name/aliases/org/role/tags to classify PROFILED (≥1 match) vs UNKNOWN (intel gap); stat tiles CONTACTS/PROFILES/PROFILED/UNKNOWN; amber badge on unknown count; filter tabs ALL/PROFILED/UNKNOWN + text search; expand contact → matched intel profile cards with role badge + relevance bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS; isCiprQuery+buildCiprScript wired in JarvisBrain; "contact profile/intel contact/cipr/profiled contacts/contact intel match/who is profiled/contact intelligence match/contact cross reference/unknown contacts/intel coverage" voice trigger; jarvis:cipr-toggle event; 90-s auto-refresh */}
+            <ContactIntelProfileCrossRef />
+
+            {/* F62 (overnight 2026-09-24): Swarm × Investigation Mission Bridge (SWIMB) — ◈ SWIMB button (left:981560, bottom:8, zIndex:130); parallel-fetches /entities/SwarmJob + /v1/investigations; keyword-correlates each swarm job (name/description/type/status) against investigation titles/descriptions to classify MISSION_ALIGNED (≥1 match) vs UNALIGNED (no backing investigation); stat tiles JOBS/INVESTIGATIONS/ALIGNED/UNALIGNED; amber badge on unaligned count; filter tabs ALL/MISSION_ALIGNED/UNALIGNED + text search; expand job → matched investigation cards with priority badge + relevance bar; ▶ ASSESS ALIGNMENT → /v1/jarvis/agent/chat 2-sentence mission coverage brief + TTS; isSwimbQuery+buildSwimbScript wired in JarvisBrain; "swimb/swarm investigation/mission aligned/swarm mission/unaligned swarm/swarm coverage" voice trigger; jarvis:swimb-toggle event; 90-s auto-refresh */}
+            <SwarmInvestigationBridge />
+            {/* F63 (overnight 2026-09-24): Investment × Contact Portfolio Intelligence Map (ICPIM) — ◈ ICPIM button (left:982120, bottom:8, zIndex:131); parallel-fetches /entities/Investment + /entities/Contact; keyword-correlates investment name/type/sector/description against contact name/role/org/tags to classify MANAGED (≥1 match) vs UNMANAGED (coverage gap); stat tiles INVESTMENTS/CONTACTS/MANAGED/UNMANAGED; amber badge on unmanaged count; filter tabs ALL/MANAGED/UNMANAGED + text search; expand investment → matched contact cards with role badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence portfolio coverage brief + TTS; isIcpimQuery+buildIcpimScript wired in JarvisBrain; "icpim/investment contact/portfolio contact/managed investments/unmanaged portfolio/portfolio coverage" voice trigger; jarvis:icpim-toggle event; 90-s auto-refresh */}
+            <InvestmentContactMap />
+
+            {/* F64 (overnight 2026-09-24): Unified Intelligence Timeline (UITL) — ◈ UITL button (left:982680, bottom:8, zIndex:132); parallel-fetches /v1/ops/events + /entities/RiskSignal + /knowledge/; merges into a single chronological stream sorted newest-first; source type badges OPS/RISK/KNOWLEDGE with distinct colours; filter tabs ALL/OPS/RISK/KNOWLEDGE + text search; red badge on risk count; ▶ ASSESS SITUATION → /v1/jarvis/agent/chat 2-sentence unified situation brief + TTS; isUitlQuery+buildUitlScript wired in JarvisBrain; "uitl/intel timeline/unified timeline/event timeline/unified event stream/what is happening/all events" voice trigger; jarvis:uitl-toggle event; 5-min auto-refresh */}
+            <UnifiedIntelTimeline />
+
+            {/* F65 (overnight 2026-09-24): AIP Skill × Knowledge × Risk Triple (AIPKRSTRI) — ◈ AIPKRSTRI button (left:983240, bottom:8, zIndex:133); parallel-fetches /v1/aip/skill + /knowledge/ + /entities/RiskSignal; classifies each skill as FULLY ARMED (KB + risk), KB-BACKED (KB only), RISK-LINKED (risk only), or DORMANT (neither); stat tiles SKILLS/KB ARTICLES/RISK SIGNALS/FULLY ARMED/KB-BACKED/RISK-LINKED/DORMANT; dormant badge; coverage bar; filter tabs ALL/FULLY ARMED/KB-BACKED/RISK-LINKED/DORMANT + search; expand skill → matched KB articles + matched risk signals with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS via jarvis:speak-dossier; isAipkrstriQuery+buildAipkrstriScript wired in JarvisBrain; "aipkrstri/aip skill knowledge risk/dormant skill/fully armed skill/skill triple coverage/skill kb risk/capability risk coverage" voice trigger; jarvis:aipkrstri-toggle event; 90-s auto-refresh */}
+            <AipSkillKnowledgeRiskTriple />
+
+            {/* F67 (overnight 2026-09-24): Scene × Graph Node Coverage (SCGN) — ◈ SCGN button (left:35720, bottom:8, zIndex:103); parallel-fetches /v1/cinematic/scene/{id} (all 10 scenes) + /v1/graph/centrality; keyword-correlates each scene's anchor text against top-influence graph nodes to surface NETWORK-BACKED (≥1 centrality node match) vs DISCONNECTED (no graph coverage); stat tiles SCENES/NODES/NETWORK-BACKED/DISCONNECTED; amber badge on disconnected count; filter tabs ALL/NETWORK-BACKED/DISCONNECTED + text search; expand scene → matched graph node cards with centrality score bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isScgnQuery+buildScgnScript wired in JarvisBrain; "scgn/scene graph node/network backed scene/disconnected scene/scene centrality/scene network/scene influence" voice trigger; jarvis:scgn-toggle event; 90-s auto-refresh */}
+            <SceneGraphNodeCoverage />
+
+            {/* F69 (overnight 2026-09-24): AIP Skill × Live Intel × Graph Annotation Triple (ASLIANN) — ◈ ASLIANN button (left:840880, bottom:8, zIndex:530); parallel-fetches /v1/aip/skill + /functions/getLiveIntel + /v1/graph/annotations; classifies each skill as FULLY_PRIMED (live intel + graph annotation), WORLD_TRIGGERED (live intel only), GRAPH_TAGGED (annotation only), or DORMANT (neither); stat tiles SKILLS/FULLY_PRIMED/WORLD_TRIGGERED/GRAPH_TAGGED/DORMANT; filter tabs ALL/FULLY_PRIMED/WORLD_TRIGGERED/GRAPH_TAGGED/DORMANT + text search; expand skill → matched live intel events + graph annotation cards with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isAsliannQuery+buildAsliannScript wired in JarvisBrain; "asliann/skill live annotation/primed skill/dormant skill live/skill world annotation/aip skill live annotation" voice trigger; jarvis:asliann-toggle event; 60-s auto-refresh */}
+            <AipSkillLiveAnnotationTriple />
+
+            {/* F70 (overnight 2026-09-24): IntelProfile × Report Linkage (IPRLINK) — ◈ IPRLINK button (left:983800, bottom:8, zIndex:134); parallel-fetches /entities/IntelProfile + /v1/reports; keyword-correlates each threat actor profile (name/aliases/org/role/tags) against report titles/descriptions/tags/type to classify DOCUMENTED (≥1 report match) vs UNREPORTED (intelligence gap); stat tiles PROFILES/REPORTS/DOCUMENTED/UNREPORTED; coverage bar; amber badge on unreported count; filter tabs ALL/DOCUMENTED/UNREPORTED + text search; expand profile → matched report cards with type badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence threat-actor coverage brief + TTS; isIprlinkQuery+buildIprlinkScript wired in JarvisBrain; "iprlink/intel profile report/threat actor report/documented actor/unreported actor/actor coverage/threat coverage report" voice trigger; jarvis:iprlink-toggle event; 90-s auto-refresh */}
+            <IntelProfileReportLinkage />
+
+            {/* F71 (overnight 2026-09-24): Scenario × Contact Readiness Matrix (SCRMX) — ◈ SCRMX button (left:984360, bottom:8, zIndex:135); parallel-fetches /v1/scenario/list + /entities/Contact; keyword-correlates each scenario name/description against contact name/role/org/tags to classify CONTACT_ASSIGNED (≥1 match) vs UNASSIGNED; amber badge on unassigned count; filter tabs ALL/CONTACT_ASSIGNED/UNASSIGNED + text search; expand scenario → matched contact cards with role badge + relevance bar; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isScrmxQuery+buildScrmxScript wired in JarvisBrain; "scrmx/scenario contact/contact readiness/unassigned scenario/scenario staffing/readiness matrix" voice trigger; jarvis:scrmx-toggle event; 90-s auto-refresh */}
+            <ScenarioContactReadinessMatrix />
+
+            {/* F72 (overnight 2026-09-24): Task × SwarmJob × Dataset Triple Coverage (TSDTRI) — ◈ TSDTRI button (left:984920, bottom:8, zIndex:136); parallel-fetches /entities/Task + /entities/SwarmJob + /v1/datasets; keyword-correlates each task against swarm jobs AND datasets to classify FULLY_RESOURCED/SWARM_ONLY/DATA_ONLY/BARE; amber badge on bare count; filter tabs ALL/FULLY_RESOURCED/SWARM_ONLY/DATA_ONLY/BARE + text search; expand task → matched swarm job cards (cyan) + dataset cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isTsdtriQuery+buildTsdtriScript wired in JarvisBrain; "tsdtri/task resources/bare tasks/task triple/task resource gap" voice trigger; jarvis:tsdtri-toggle event; 90-s auto-refresh */}
+            <TaskSwarmDatasetTriple />
+
+            {/* F73 (overnight 2026-09-24): Investment × RiskSignal × IntelProfile Portfolio Threat Exposure (PTEXP) — ◈ PTEXP button (left:985480, bottom:8, zIndex:137); parallel-fetches /entities/Investment + /entities/RiskSignal + /entities/IntelProfile every 90 s; keyword-correlates each investment against risk signals AND intel profiles to classify FULLY_EXPOSED/RISK_EXPOSED/ACTOR_LINKED/CLEAR; amber badge on threatened count; filter tabs ALL/FULLY_EXPOSED/RISK_EXPOSED/ACTOR_LINKED/CLEAR + text search; expand investment → matched risk signal cards (red) + intel profile cards (orange) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isPtexpQuery+buildPtexpScript wired in JarvisBrain; "ptexp/portfolio threat/investment threat/asset exposure/portfolio exposure" voice trigger; jarvis:ptexp-toggle event; 90-s auto-refresh */}
+            <PortfolioThreatExposure />
+
+            {/* F74 (overnight 2026-09-24): AipSkill × Investigation × Dataset Triple Nexus (ASIDTRI) — pre-existing component mounted; parallel-fetches /v1/aip/skill + /v1/investigations + /v1/datasets; FULLY_EQUIPPED/INV_ONLY/DATASET_ONLY/DARK classification; amber badge on dark count; filter tabs ALL/FULLY_EQUIPPED/INV_ONLY/DATASET_ONLY/DARK + text search; expand skill → matched investigations + datasets; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isAsidtriQuery+buildAsidtriScript wired in JarvisBrain; "asidtri/skill investigation dataset/investigation dataset skill/equipped skills/dark skills" voice trigger; jarvis:asidtri-toggle event; 90-s auto-refresh */}
+            <AipSkillInvestigationDatasetTriple />
+
+            {/* F75 (overnight 2026-09-24): Knowledge × Ops Event × Risk Triple Coverage (KORSTRI) — ◈ KORSTRI button (left:985480, bottom:8, zIndex:138); parallel-fetches /knowledge/ + /v1/ops/events + /entities/RiskSignal; keyword-correlates each knowledge article against ops events AND risk signals to classify FULLY_GROUNDED/OPS_BACKED/RISK_FLAGGED/ISOLATED; stat tiles ARTICLES/OPS EVENTS/RISK SIGNALS + classification counts; amber badge on isolated count; filter tabs ALL/FULLY_GROUNDED/OPS_BACKED/RISK_FLAGGED/ISOLATED + text search; expand article → matched ops event cards (blue) + matched risk signal cards (red) with relevance bars; ▶ ASSESS KNOWLEDGE COVERAGE → /v1/jarvis/agent/chat + TTS; isKorstriQuery+buildKorstriScript wired in JarvisBrain; "korstri/knowledge ops risk/grounded knowledge/isolated knowledge/knowledge triple" voice trigger; jarvis:korstri-toggle event; 90-s auto-refresh */}
+            <KnowledgeOpsRiskTriple />
+
+            {/* F76 (overnight 2026-09-24): Swarm × Risk Signal × Scenario Mission Risk Matrix (SRSM) — ◈ SRSM button (left:986040, bottom:8, zIndex:139); parallel-fetches /entities/SwarmJob × /entities/RiskSignal × /v1/scenario/list; classifies each swarm job as EXPOSED (risk active, no scenario cover) / RISK_MANAGED (risk + scenario) / MONITORED (scenario only) / CLEAR (neither); red badge on exposed count; filter tabs ALL/EXPOSED/RISK_MANAGED/MONITORED/CLEAR + text search; expand job → matched risk signal cards (red/severity) + scenario cards (green) with relevance bars; ▶ ASSESS RISK → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSrsmQuery+buildSrsmScript wired in JarvisBrain; "srsm/swarm risk scenario/mission risk matrix/exposed swarm/unmitigated swarm" voice trigger; jarvis:srsm-toggle event; 90-s auto-refresh */}
+            <SwarmRiskScenarioMatrix />
+
+            {/* F77 (overnight 2026-09-24): Ops Event × Contact Response Coverage (OECRC) — ◈ OECRC button (left:986600, bottom:8, zIndex:140); parallel-fetches /v1/ops/events × /entities/Contact; keyword-correlates each ops event against contact names/roles/orgs/tags to surface RESPONSE_ASSIGNED (≥1 match) vs UNASSIGNED (response gap); amber badge on unassigned count; filter tabs ALL/RESPONSE_ASSIGNED/UNASSIGNED + text search; expand event → matched contact cards with role badge + relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOecrcQuery+buildOecrcScript wired in JarvisBrain; "oecrc/ops contact coverage/event response/ops assigned/unassigned events" voice trigger; jarvis:oecrc-toggle event; 90-s auto-refresh */}
+            <OpsEventContactCoverage />
+
+            {/* F78 (overnight 2026-09-24): Contact × Task × Investigation Engagement Triple (CTINV) — ◈ CTINV button (left:987160, bottom:8, zIndex:141); parallel-fetches /entities/Contact × /entities/Task × /v1/investigations; keyword-correlates each contact against tasks AND investigations to classify FULLY_ENGAGED/TASK_ACTIVE/INV_LINKED/AVAILABLE; amber badge on available (idle) count; filter tabs ALL/FULLY_ENGAGED/TASK_ACTIVE/INV_LINKED/AVAILABLE + text search; expand contact → matched task cards (cyan) + matched investigation cards (purple) with relevance bars; ▶ ASSESS ENGAGEMENT → /v1/jarvis/agent/chat + TTS; isCtinvQuery+buildCtinvScript wired in JarvisBrain; "ctinv/contact engagement/idle contacts/contact task investigation" voice trigger; jarvis:ctinv-toggle event; 90-s auto-refresh */}
+            <ContactTaskInvestigationTriple />
+
+            {/* F79 (overnight 2026-09-25): Investigation × Ops Event × Risk Signal Active Threat Dashboard (IORSTD) — ◈ IORSTD button (left:987720, bottom:8, zIndex:142); parallel-fetches /v1/investigations × /v1/ops/events × /entities/RiskSignal; keyword-correlates each investigation against ops events AND risk signals to classify TRIPLE_ACTIVE/OPS_FLAGGED/RISK_BACKED/DORMANT; red badge on triple-active count; filter tabs + text search; expand investigation → matched ops event cards (blue) + risk signal cards (red/severity) with relevance bars; ▶ ASSESS THREAT STATUS → /v1/jarvis/agent/chat + TTS; isIorstdQuery+buildIorstdScript wired in JarvisBrain; "iorstd/investigation threat/active investigation/live threat/ops risk investigation" voice trigger; jarvis:iorstd-toggle event; 90-s auto-refresh */}
+            <InvestigationOpsRiskDashboard />
+
+            {/* F80 (overnight 2026-09-25): Report × Knowledge × Ops Event Intelligence Gap Triad (RKOGAP) — ◈ RKOGAP button (left:988280, bottom:8, zIndex:143); parallel-fetches /v1/reports + /knowledge/ + /v1/ops/events; keyword-correlates each report against KB articles AND ops events to classify FULLY_GROUNDED/KB_ONLY/OPS_ONLY/UNANCHORED; amber badge on unanchored count; filter tabs; expand report → matched KB article cards (green) + ops event cards (amber) with relevance bars; ▶ ASSESS INTEL GAPS → /v1/jarvis/agent/chat + TTS; isRkogapQuery+buildRkogapScript wired in JarvisBrain; "rkogap/report knowledge gap/intel grounding/unanchored reports/report ops gap" voice trigger; jarvis:rkogap-toggle event; 90-s auto-refresh */}
+            <ReportKnowledgeOpsGap />
+
+            {/* F81 (overnight 2026-09-25): Investment × Scenario × Contact Execution Readiness Map (IEXRM) — ◈ IEXRM button (left:988840, bottom:8, zIndex:144); parallel-fetches /entities/Investment + /v1/scenario/list + /entities/Contact; keyword-correlates each investment against scenarios AND contacts to classify FULLY_MAPPED/SCENARIO_BACKED/CONTACT_COVERED/EXPOSED; amber badge on exposed count; filter tabs ALL/FULLY_MAPPED/SCENARIO_BACKED/CONTACT_COVERED/EXPOSED + text search; expand investment → matched scenario cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isIexrmQuery+buildIexrmScript wired in JarvisBrain; "iexrm/investment scenario/execution readiness/asset readiness/portfolio readiness" voice trigger; jarvis:iexrm-toggle event; 90-s auto-refresh */}
+            <InvestmentScenarioContactMap />
+
+            {/* F82 (overnight 2026-09-25): Contact × Knowledge × Scenario Intelligence Readiness Index (CKIRI) — ◈ CKIRI button (left:989400, bottom:8, zIndex:145); parallel-fetches /entities/Contact + /knowledge/ + /v1/scenario/list; keyword-correlates each contact against KB articles AND scenarios to classify FULLY_BRIEFED/KB_INFORMED/SCENARIO_PLACED/UNINFORMED; amber badge on uninformed count; filter tabs ALL/FULLY_BRIEFED/KB_INFORMED/SCENARIO_PLACED/UNINFORMED + text search; expand contact → matched KB article cards (green) + scenario cards (purple) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isCkiriQuery+buildCkiriScript wired in JarvisBrain; "ckiri/contact intelligence/contact briefing/contact readiness/personnel readiness" voice trigger; jarvis:ckiri-toggle event; 90-s auto-refresh */}
+            <ContactKnowledgeScenarioReadiness />
+
+            {/* F83 (overnight 2026-09-25): IntelProfile × SwarmJob × Scenario Actor Deployment Status (IASAD) — ◈ IASAD button (left:989960, bottom:8, zIndex:146); parallel-fetches /entities/IntelProfile + /entities/SwarmJob + /v1/scenario/list; keyword-correlates each threat actor profile against swarm operations AND scenario playbooks to classify FULLY_COUNTERED/SWARM_TARGETED/SCENARIO_PLANNED/UNMITIGATED; red badge + red pulse on unmitigated count; filter tabs ALL/FULLY_COUNTERED/SWARM_TARGETED/SCENARIO_PLANNED/UNMITIGATED + text search; expand actor → matched swarm job cards (cyan) + scenario cards (orange) with relevance bars; ▶ ASSESS DEPLOYMENT → /v1/jarvis/agent/chat 2-sentence countermeasure gap brief + TTS; isIasadQuery+buildIasadScript wired in JarvisBrain; "iasad/intel actor deployment/threat actor swarm/unmitigated actor/actor counter/threat countermeasure" voice trigger; jarvis:iasad-toggle event; 90-s auto-refresh */}
+            <IntelActorDeploymentMatrix />
+            {/* F84 (overnight 2026-09-25): Contact × Investment × RiskSignal Financial Exposure Nexus (CIFINEX) — ◈ CIFINEX button (left:960480, bottom:8, zIndex:661); parallel-fetches /entities/Contact × /entities/Investment × /entities/RiskSignal; keyword-correlates each contact against investments AND risk signals to classify FULLY_MONITORED/INVEST_ONLY/RISK_ONLY/UNMONITORED; amber badge on unmonitored count; filter tabs ALL/FULLY_MONITORED/INVEST_ONLY/RISK_ONLY/UNMONITORED + text search; expand contact → matched investment cards (gold) + risk signal cards (red) with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCifinexQuery+buildCifinexScript wired in JarvisBrain; "cifinex/contact financial/financial exposure/contact investment/financial monitoring/unmonitored contact" voice trigger; jarvis:cifinex-toggle event; 90-s auto-refresh */}
+            <ContactInvestmentRiskNexus />
+            {/* F85 (overnight 2026-09-25): Swarm Job × Knowledge Base × Report Documentation Nexus (SJKBREP) — ◈ SJKBREP button (left:990520, bottom:8, zIndex:147); parallel-fetches /entities/SwarmJob + /knowledge/ + /v1/reports; keyword-correlates each swarm job against KB articles AND reports to classify FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED; amber badge on undocumented count; filter tabs ALL/FULLY_DOCUMENTED/KB_ONLY/REPORT_ONLY/UNDOCUMENTED + text search; expand job → matched KB article cards (cyan) + report cards (purple) with relevance bars; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSjkbrepQuery+buildSjkbrepScript wired in JarvisBrain; "sjkbrep/swarm job knowledge/swarm documentation/undocumented swarm/swarm report coverage/job documentation" voice trigger; jarvis:sjkbrep-toggle event; 90-s auto-refresh */}
+            <SwarmKnowledgeReportNexus />
+            {/* F86 (overnight 2026-09-25): Scenario × Knowledge × Ops Event Mission Readiness Index (SKOPRI) — ◈ SKOPRI button (left:991080, bottom:8, zIndex:148); parallel-fetches /v1/scenario/list + /knowledge/ + /v1/ops/events; keyword-correlates each scenario against KB articles AND ops events to classify FULLY_PRIMED/KB_BACKED/OPS_LINKED/UNPRIMED; amber badge on unprimed count; filter tabs + text search; expand scenario → matched KB article cards (green) + ops event cards (blue) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isSkopriQuery+buildSkopriScript wired in JarvisBrain; "skopri/scenario knowledge ops/mission readiness/unprimed scenarios/scenario readiness index" voice trigger; jarvis:skopri-toggle event; 90-s auto-refresh */}
+            <ScenarioKnowledgeOpsReadiness />
+            {/* F87 (overnight 2026-09-25): Graph Centrality × RiskSignal × IntelProfile Threat Influence Nexus (GCRTHIN) — ◈ GCRTHIN button (left:991640, bottom:8, zIndex:149); parallel-fetches /v1/graph/centrality + /entities/RiskSignal + /entities/IntelProfile; keyword-correlates each high-centrality node against risk signals AND intel profiles to classify THREAT_HUB/RISK_NEXUS/ACTOR_LINKED/NEUTRAL; red pulse + badge on threatened count; filter tabs + text search; expand node → matched risk signal cards (red) + intel actor cards (orange) with severity badge + relevance bars; ▶ ASSESS THREAT → /v1/jarvis/agent/chat + TTS; isGcrthinQuery+buildGcrthinScript wired in JarvisBrain; "gcrthin/graph centrality threat/threat hub/influence nexus/centrality threat" voice trigger; jarvis:gcrthin-toggle event; 90-s auto-refresh */}
+            <GraphCentralityThreatNexus />
+            {/* F88 (overnight 2026-09-25): Live Intel × Knowledge × Risk Signal Ground Truth Pulse (LKRPULSE) — ◈ LKRPULSE button (left:992200, bottom:8, zIndex:150); parallel-fetches /functions/getLiveIntel + /knowledge/ + /entities/RiskSignal; keyword-correlates each live world event (quake/crypto/FX) against KB articles AND risk signals to classify CONFIRMED/MONITORED/DOCUMENTED/UNTRACKED; amber badge on untracked count; filter tabs ALL/CONFIRMED/MONITORED/DOCUMENTED/UNTRACKED + text search; expand event → matched KB article cards (blue) + risk signal cards (red) with relevance bars; ▶ ASSESS GROUND TRUTH → /v1/jarvis/agent/chat + TTS; isLkrpulseQuery+buildLkrpulseScript wired in JarvisBrain; "lkrpulse/live intel ground truth/live event coverage/intel classification/world event status/ground truth pulse" voice trigger; jarvis:lkrpulse-toggle event; 5-min auto-refresh */}
+            <LiveIntelGroundTruthPulse />
+            {/* F89 (overnight 2026-09-25): Task × IntelProfile × Ops Event Active Response Coverage (TIORCOV) — ◈ TIORCOV button (left:992760, bottom:8, zIndex:151); parallel-fetches /entities/Task + /entities/IntelProfile + /v1/ops/events; keyword-correlates each task against intel profiles AND ops events; ACTIVE_RESPONSE/THREAT_TASKED/OPS_DRIVEN/BACKGROUND; red badge on active-response count; filter tabs + search; expand task → matched intel profiles (orange) + matched ops events (blue) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isTiorcovQuery+buildTiorcovScript wired in JarvisBrain; "tiorcov/task intel ops/active response task/threat tasked task/ops driven task" voice trigger; jarvis:tiorcov-toggle event; 90-s auto-refresh */}
+            <TaskIntelOpsResponse />
+            {/* F90 (overnight 2026-09-25): Dataset × Task × Knowledge Coverage Health Report (DTKHEALTH) — ◈ DTKHEALTH button (left:993320, bottom:8, zIndex:152); parallel-fetches /v1/datasets + /entities/Task + /knowledge/; keyword-correlates each dataset against tasks AND KB articles to classify FULLY_GROUNDED/TASK_LINKED/KB_NOTED/ORPHANED; amber badge on orphaned count; filter tabs + search; expand dataset → matched task cards (teal) + KB article cards (purple) with relevance bars; ▶ ASSESS HEALTH → /v1/jarvis/agent/chat + TTS; isDtkhealthQuery+buildDtkhealthScript wired in JarvisBrain; "dtkhealth/dataset task knowledge/dataset coverage/orphaned datasets/dataset health" voice trigger; jarvis:dtkhealth-toggle event; 90-s auto-refresh */}
+            <DatasetTaskKnowledgeHealth />
+            {/* F91 (overnight 2026-09-25): Investment × Swarm × Scenario Coverage (ISSMAP) — ◈ ISSMAP button (left:993880, bottom:8, zIndex:153); parallel-fetches /entities/Investment + /entities/SwarmJob + /v1/scenario/list; keyword-correlates each investment against swarm jobs AND scenarios to classify FULLY_DEPLOYED/SWARM_ACTIVE/SCENARIO_PLANNED/UNPROTECTED; red pulse badge on unprotected count; filter tabs ALL/FULLY_DEPLOYED/SWARM_ACTIVE/SCENARIO_PLANNED/UNPROTECTED + text search; expand investment → matched swarm job cards (cyan) + scenario cards (purple) with relevance bars; isIssmapQuery+buildIssmapScript wired in JarvisBrain; "issmap/investment swarm/portfolio deployment/asset protection/unprotected investments" voice trigger; jarvis:issmap-toggle event; 90-s auto-refresh */}
+            <InvestmentSwarmScenarioCoverage />
+            {/* F92 (overnight 2026-09-25): Report × Scenario × Dataset Coverage Triad (RSDAT) — ◈ RSDAT button (left:994440, bottom:8, zIndex:154); parallel-fetches /v1/reports + /v1/scenario/list + /v1/datasets; keyword-correlates each report against scenarios AND datasets to classify FULLY_GROUNDED/SCENARIO_BACKED/DATASET_LINKED/UNANCHORED; amber badge on unanchored count; filter tabs + text search; expand report → matched scenario cards (cyan) + dataset cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRsdatQuery+buildRsdatScript wired in JarvisBrain; "rsdat/report scenario dataset/unanchored reports/report coverage triad" voice trigger; jarvis:rsdat-toggle event; 90-s auto-refresh */}
+            <ReportScenarioDatasetTriad />
+            {/* F93 (overnight 2026-09-25): Scenario × IntelProfile × Report Intelligence Coverage (SIPWCOV) — ◈ SIPWCOV button (left:995000, bottom:8, zIndex:155); parallel-fetches /v1/scenario/list + /entities/IntelProfile + /v1/reports; keyword-correlates each scenario against intel actor profiles AND reports to classify FULLY_ARMED/ACTOR_PLANNED/REPORT_BACKED/BLIND; red pulse badge on blind count; filter tabs ALL/FULLY_ARMED/ACTOR_PLANNED/REPORT_BACKED/BLIND + text search; expand scenario → matched intel profile cards (orange) + report cards (purple) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isSipwcovQuery+buildSipwcovScript wired in JarvisBrain; "sipwcov/scenario intel report/weapon coverage/armed scenario/blind scenario" voice trigger; jarvis:sipwcov-toggle event; 90-s auto-refresh */}
+            <ScenarioIntelReportCoverage />
+            {/* F94 (overnight 2026-09-25): Task × RiskSignal × Report Operational Threat Coverage (TORTCOV) — ◈ TORTCOV button (left:995560, bottom:8, zIndex:156); parallel-fetches /entities/Task + /entities/RiskSignal + /v1/reports; keyword-correlates each task against risk signals AND reports to classify FULLY_COVERED/RISK_FLAGGED/REPORT_BACKED/UNMONITORED; amber badge on unmonitored count; filter tabs + search; expand task → matched risk signal cards (red) + report cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isTortcovQuery+buildTortcovScript wired in JarvisBrain; "tortcov/task risk report/operational threat coverage/unmonitored task" voice trigger; jarvis:tortcov-toggle event; 90-s auto-refresh */}
+            <TaskRiskReportCoverage />
+            {/* F95 (overnight 2026-09-25): SwarmJob × RiskSignal × Knowledge Response Readiness (SRKRR) — ◈ SRKRR button (left:996120, bottom:8, zIndex:157); parallel-fetches /entities/SwarmJob + /entities/RiskSignal + /knowledge/; keyword-correlates each swarm job against risk signals AND KB articles to classify FULLY_PREPARED/RISK_AWARE/KB_BACKED/UNPREPARED; amber badge on unprepared count; filter tabs + search; expand job → matched risk signal cards (red) + KB article cards (teal) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isSrkrrQuery+buildSrkrrScript wired in JarvisBrain; "srkrr/swarm readiness/swarm knowledge risk/unprepared swarm" voice trigger; jarvis:srkrr-toggle event; 90-s auto-refresh */}
+            <SwarmRiskKnowledgeReadiness />
+            {/* F96 (overnight 2026-09-25): Contact × Graph Centrality × IntelProfile Influence Exposure Index (CGINFEX) — ◈ CGINFEX button (left:996680, bottom:8, zIndex:158); parallel-fetches /entities/Contact + /v1/graph/centrality + /entities/IntelProfile; keyword-correlates each contact against high-centrality graph nodes AND known threat actor profiles to classify FULLY_EXPOSED/GRAPH_LINKED/ACTOR_LINKED/CLEAR; red pulse badge on fully-exposed count; filter tabs + search; expand contact → matched graph node cards (cyan) + intel actor cards (orange) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isCginfexQuery+buildCginfexScript wired in JarvisBrain; "cginfex/contact graph/contact centrality/contact influence/graph exposure/actor exposure/influence exposure index" voice trigger; jarvis:cginfex-toggle event; 90-s auto-refresh */}
+            <ContactGraphInfluenceExposure />
+            {/* F97 (overnight 2026-09-25): Dataset × IntelProfile × SwarmJob Intelligence Automation Nexus (DIASWAN) — ◈ DIASWAN button (left:997240, bottom:8, zIndex:159); parallel-fetches /v1/datasets + /entities/IntelProfile + /entities/SwarmJob; keyword-correlates each dataset against intel actor profiles AND swarm jobs to classify FULLY_ARMED/ACTOR_LINKED/SWARM_ACTIVE/UNLINKED; amber badge on unlinked count; filter tabs + search; expand dataset → matched intel actor cards (orange) + swarm job cards (cyan) with relevance bars; ▶ ASSESS NEXUS → /v1/jarvis/agent/chat + TTS; isDiaswanQuery+buildDiaswanScript wired in JarvisBrain; "diaswan/dataset intel swarm/intel dataset/swarm dataset/armed dataset" voice trigger; jarvis:diaswan-toggle event; 90-s auto-refresh */}
+            <DatasetIntelSwarmNexus />
+            {/* F98 (overnight 2026-09-25): Report × Investigation × Contact Insight Coverage Nexus (RICCOV) — ◈ RICCOV button (left:997800, bottom:8, zIndex:160); parallel-fetches /v1/reports + /v1/investigations + /entities/Contact; keyword-correlates each report against investigations AND contacts to classify FULLY_LINKED/INV_TRACKED/CONTACT_ASSIGNED/UNASSIGNED; amber badge on unassigned count; filter tabs + search; expand report → matched investigation cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isRiccovQuery+buildRiccovScript wired in JarvisBrain; "riccov/report investigation contact/unassigned reports/report coverage/insight coverage" voice trigger; jarvis:riccov-toggle event; 90-s auto-refresh */}
+            <ReportInvestigationContactNexus />
+            {/* F99 (overnight 2026-09-25): Investment × Knowledge × Ops Event Financial Intelligence Readiness Monitor (IKOFIRM) — ◈ IKOFIRM button (left:998360, bottom:8, zIndex:161); parallel-fetches /entities/Investment + /knowledge/ + /v1/ops/events; keyword-correlates each investment against KB articles AND ops events to classify FULLY_INFORMED/OPS_TRACKED/KB_RESEARCHED/BLIND; red badge on blind count; filter tabs + search; expand investment → matched KB article cards (green) + ops event cards (blue) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat + TTS; isIkofirmQuery+buildIkofirmScript wired in JarvisBrain; "ikofirm/investment knowledge ops/financial intelligence readiness/blind investments" voice trigger; jarvis:ikofirm-toggle event; 90-s auto-refresh */}
+            <InvestmentKnowledgeOpsFirm />
+            {/* F100 (overnight 2026-09-25): AIP Skill × IntelProfile × Ops Event × RiskSignal Full-Spectrum Threat Response Coverage (FSTRC) — ◈ FSTRC button (left:998920, bottom:8, zIndex:162); parallel-fetches /v1/aip/skill + /entities/IntelProfile + /v1/ops/events + /entities/RiskSignal; keyword-correlates each skill against all three threat sources to classify FULLY_COUNTERED/ACTOR_OPS/ACTOR_RISK/OPS_RISK/PARTIAL/DORMANT; red pulse badge on dormant count; coverage bar; filter tabs ALL/FULLY_COUNTERED/ACTOR_OPS/ACTOR_RISK/OPS_RISK/PARTIAL/DORMANT + text search; expand skill → matched intel profile cards (orange) + ops event cards (blue) + risk signal cards (red/severity) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isFstrcQuery+buildFstrcScript wired in JarvisBrain; "fstrc/full spectrum threat/threat response coverage/dormant skills threat/skill threat coverage/four source coverage" voice trigger; jarvis:fstrc-toggle event; 90-s auto-refresh */}
+            <FullSpectrumThreatCoverage />
+            {/* F101 (overnight 2026-09-25): Graph Community × Investigation × RiskSignal Network Threat Index (GCNITX) — ◈ GCNITX button (left:999480, bottom:8, zIndex:163); parallel-fetches /v1/graph/communities + /v1/investigations + /entities/RiskSignal; keyword-correlates each graph community cluster against open investigations AND active risk signals to classify TRIPLE_THREAT/INVESTIGATION_LINKED/RISK_FLAGGED/CLEAR; red pulse badge on triple-threat count; stat tiles + filter tabs ALL/TRIPLE_THREAT/INVESTIGATION_LINKED/RISK_FLAGGED/CLEAR + text search; expand community → matched investigation cards (blue) + risk signal cards (red/severity) with relevance bars; ▶ ASSESS NETWORK THREAT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcnitxQuery+buildGcnitxScript wired in JarvisBrain; "gcnitx/graph community threat/network threat index/community investigation/community risk" voice trigger; jarvis:gcnitx-toggle event; 90-s auto-refresh */}
+            <GraphCommunityNetworkThreatIndex />
+            {/* F102 (overnight 2026-09-25): Knowledge × IntelProfile × SwarmJob Threat Awareness Coverage (KIPSWTA) — ◈ KIPSWTA button (left:1000040, bottom:8, zIndex:164); parallel-fetches /knowledge/ + /entities/IntelProfile + /entities/SwarmJob; keyword-correlates each KB article against intel actor profiles AND swarm operations to classify FULLY_CONTEXTUALIZED/ACTOR_AWARE/SWARM_SUPPORTED/ISOLATED; amber badge on isolated count; filter tabs + search; expand article → matched intel actor cards (orange) + swarm job cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isKipswatQuery+buildKipswatScript wired in JarvisBrain; "kipswta/knowledge threat awareness/knowledge intel swarm/isolated knowledge" voice trigger; jarvis:kipswta-toggle event; 90-s auto-refresh */}
+            <KnowledgeThreatAwarenessCoverage />
+            {/* F103 (overnight 2026-09-26): Graph Node × Task × Investigation Operational Mesh (GNTIOP) — ◈ GNTIOP button (left:1000600, bottom:8, zIndex:165); parallel-fetches /v1/graph/centrality + /entities/Task + /v1/investigations; keyword-correlates each high-centrality node against active tasks AND open investigations to classify FULLY_ACTIVE/TASK_DRIVEN/INVESTIGATION_LINKED/DORMANT; red pulse badge on fully-active count; stat tiles NODES/TASKS/INV + class counts + MESH COVER%; filter tabs ALL/FULLY_ACTIVE/TASK_DRIVEN/INVESTIGATION_LINKED/DORMANT + text search; expand node → matched task cards (teal) + investigation cards (blue) with relevance bars; ▶ ASSESS MESH → /v1/jarvis/agent/chat + TTS; isGntiopQuery+buildGntiopScript wired in JarvisBrain; "gntiop/graph node task/graph node investigation/operational mesh/node operational/graph operational mesh/graph active nodes" voice trigger; jarvis:gntiop-toggle event; 90-s auto-refresh */}
+            <GraphNodeOperationalMesh />
+
+            {/* F104 (overnight 2026-09-26): IntelProfile × Contact × Task Actor Response Coverage (ICTARC) — ◈ ICTARC button (left:1001160, bottom:8, zIndex:166); parallel-fetches /entities/IntelProfile + /entities/Contact + /entities/Task; keyword-correlates each threat actor profile against contacts AND tasks to classify FULLY_RESPONDED/CONTACT_ENGAGED/TASK_ACTIVE/UNRESPONDED; red pulse badge on unresponded count; stat tiles ACTORS/CONTACTS/TASKS + all four class counts + RESPONSE%; filter tabs ALL/FULLY_RESPONDED/CONTACT_ENGAGED/TASK_ACTIVE/UNRESPONDED + text search; expand actor → matched contact cards (orange) + task cards (teal) with relevance bars; ▶ ASSESS RESPONSE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIctarcQuery+buildIctarcScript wired in JarvisBrain; "ictarc/actor response/intel response/threat actor contact/unresponded actors/actor coverage/threat response coverage" voice trigger; jarvis:ictarc-toggle event; 90-s auto-refresh */}
+            <IntelActorResponseCoverage />
+
+            {/* F105 (overnight 2026-09-26): Scenario × SwarmJob × Contact Execution Triangle (SSCEXE) — ◈ SSCEXE button (left:1001720, bottom:8, zIndex:167); parallel-fetches /v1/scenario/list + /entities/SwarmJob + /entities/Contact; keyword-correlates each scenario against swarm jobs AND contacts to classify FULLY_EXECUTABLE/SWARM_DEPLOYED/CONTACT_READY/INCOMPLETE; amber badge on incomplete count; stat tiles SCENARIOS/SWARM JOBS/CONTACTS + all four class counts + EXEC%; filter tabs ALL/FULLY_EXECUTABLE/SWARM_DEPLOYED/CONTACT_READY/INCOMPLETE + text search; expand scenario → matched swarm job cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS EXECUTION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSscexeQuery+buildSscexeScript wired in JarvisBrain; "sscexe/scenario execution/swarm contact/incomplete scenario/execution triangle" voice trigger; jarvis:sscexe-toggle event; 90-s auto-refresh */}
+            <ScenarioSwarmContactTriangle />
+
+            {/* F106 (overnight 2026-09-26): Task × Graph Centrality × Knowledge Operational Intelligence Pulse (TGKPULSE) — ◈ TGKPULSE button (left:1002280, bottom:8, zIndex:168); parallel-fetches /entities/Task + /v1/graph/centrality + /knowledge/; keyword-correlates each task against high-centrality graph nodes AND KB articles to classify FULLY_INFORMED/GRAPH_LINKED/KB_BACKED/UNINFORMED; amber badge on uninformed count; stat tiles TASKS/GRAPH NODES/KB ARTICLES + all four class counts + INTEL%; filter tabs ALL/FULLY_INFORMED/GRAPH_LINKED/KB_BACKED/UNINFORMED + text search; expand task → matched graph node cards (cyan) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTgkpulseQuery+buildTgkpulseScript wired in JarvisBrain; "tgkpulse/task graph knowledge/task intelligence pulse/uninformed tasks/task knowledge graph/operational intelligence pulse" voice trigger; jarvis:tgkpulse-toggle event; 90-s auto-refresh */}
+            <TaskGraphKnowledgePulse />
+            {/* F107 (overnight 2026-09-26): Ops Event × Dataset × Contact Situational Response Coverage (ODCSRC) */}
+            <OpsDatasetContactCoverage />
+
+            {/* F108 (overnight 2026-09-26): Knowledge × Contact × Ops Event Personnel Intelligence Pulse (KCOPPULS) — ◈ KCOPPULS button (left:1003400, bottom:8, zIndex:170); parallel-fetches /knowledge/ + /entities/Contact + /v1/ops/events; keyword-correlates each contact against KB articles AND ops events to classify FULLY_BRIEFED/KB_INFORMED/OPS_EXPOSED/UNINFORMED; amber badge on uninformed count; stat tiles CONTACTS/KB ARTICLES/OPS EVENTS + all four class counts + INTEL%; filter tabs + search; expand contact → matched KB article cards (cyan) + ops event cards (blue) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat + TTS; isKcoppulsQuery+buildKcoppulsScript wired in JarvisBrain; "kcoppuls/contact intel pulse/personnel intelligence/briefed contacts ops/uninformed personnel/contact knowledge ops" voice trigger; jarvis:kcoppuls-toggle event; 90-s auto-refresh */}
+            <KnowledgeContactOpsPulse />
+
+            {/* F109 (overnight 2026-09-26): IntelProfile × Dataset × Knowledge Threat Intelligence Repository Coverage (IDKTREP) — ◈ IDKTREP button (left:1003960, bottom:8, zIndex:171); parallel-fetches /entities/IntelProfile + /v1/datasets + /knowledge/; keyword-correlates each threat actor profile against datasets AND KB articles to classify FULLY_DOCUMENTED/DATA_LINKED/KB_NOTED/UNDOCUMENTED; amber badge on undocumented count; stat tiles + coverage bar; filter tabs ALL/FULLY_DOCUMENTED/DATA_LINKED/KB_NOTED/UNDOCUMENTED + search; expand profile → matched dataset cards (purple) + KB article cards (teal) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence intel-repository brief + TTS; isIdktrepQuery+buildIdktrepScript wired in JarvisBrain; "idktrep/intel profile dataset/threat actor documentation/undocumented actors/intel repository/actor knowledge coverage" voice trigger; jarvis:idktrep-toggle event; 90-s auto-refresh */}
+            <IntelProfileDatasetKnowledgeCoverage />
+
+            {/* F110 (overnight 2026-09-26): Scenario × RiskSignal × Contact Rapid Response Plan (SCRRP) — ◈ SCRRP button (left:1004520, bottom:8, zIndex:172); parallel-fetches /v1/scenario/list + /entities/RiskSignal + /entities/Contact; keyword-correlates each risk signal against scenario playbooks AND contacts to classify RESPONSE_READY/SCENARIO_ONLY/CONTACT_ONLY/EXPOSED; red pulse badge on exposed count; stat tiles RISK SIGNALS/SCENARIOS/CONTACTS + all four class counts + READINESS%; filter tabs ALL/RESPONSE_READY/SCENARIO_ONLY/CONTACT_ONLY/EXPOSED + text search; expand signal → matched scenario cards (cyan) + contact cards (orange) with relevance bars; ▶ ASSESS RESPONSE PLAN → /v1/jarvis/agent/chat 2-sentence brief + TTS; isScrrpQuery+buildScrrpScript wired in JarvisBrain; "scrrp/scenario risk contact/rapid response plan/response ready/exposed risks/risk response coverage" voice trigger; jarvis:scrrp-toggle event; 90-s auto-refresh */}
+            <ScenarioRiskContactResponse />
+
+            {/* F111 (overnight 2026-09-26): Investment × Ops Event × Knowledge Financial Intelligence Pulse (IOEFIP) — ◈ IOEFIP button (left:1005080, bottom:8, zIndex:173); parallel-fetches /entities/Investment + /v1/ops/events + /knowledge/; keyword-correlates each investment against ops events AND KB articles to classify FULLY_MONITORED/OPS_TRACKED/KB_RESEARCHED/UNMONITORED; amber badge on unmonitored count; stat tiles INVESTMENTS/OPS EVENTS/KB ARTICLES + all four class counts + COVERAGE%; filter tabs ALL/FULLY_MONITORED/OPS_TRACKED/KB_RESEARCHED/UNMONITORED + text search; expand investment → matched ops event cards (blue) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIoefipQuery+buildIoefipScript wired in JarvisBrain; "ioefip/investment ops knowledge/financial intel pulse/unmonitored investments/financial intelligence" voice trigger; jarvis:ioefip-toggle event; 90-s auto-refresh */}
+            <InvestmentOpsKnowledgePulse />
+
+            {/* F112 (overnight 2026-09-26): Ops Event × IntelProfile × Contact Threat Response Tracker (OICTRC) — ◈ OICTRC button (left:1005640, bottom:8, zIndex:174); parallel-fetches /v1/ops/events + /entities/IntelProfile + /entities/Contact; keyword-correlates each ops event against intel actor profiles AND contacts to classify RESPONSE_COORDINATED/ACTOR_TRACKED/CONTACT_NOTIFIED/UNHANDLED; red pulse badge on unhandled count; stat tiles OPS EVENTS/INTEL PROFILES/CONTACTS + all four class counts + RESPONSE%; filter tabs ALL/RESPONSE_COORDINATED/ACTOR_TRACKED/CONTACT_NOTIFIED/UNHANDLED + text search; expand event → matched intel profile cards (orange) + contact cards (teal) with relevance bars; ▶ ASSESS RESPONSE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOictrcQuery+buildOictrcScript wired in JarvisBrain; "oictrc/ops intel contact/threat response tracker/unhandled events/event response tracker" voice trigger; jarvis:oictrc-toggle event; 90-s auto-refresh */}
+            <OpsEventIntelContactTracker />
+
+            {/* F113 (overnight 2026-09-26): Graph Annotation × Knowledge × IntelProfile Contextual Intelligence Map (GAKCIMAP) — ◈ GAKCIMAP button (left:1006200, bottom:8, zIndex:175); parallel-fetches /v1/graph/annotations + /knowledge/ + /entities/IntelProfile; keyword-correlates each annotation against KB articles AND intel actor profiles to classify FULLY_CONTEXTUALIZED/KB_BACKED/ACTOR_TAGGED/UNCONTEXTUALIZED; amber badge on uncontextualized count; filter tabs ALL/FULLY_CONTEXTUALIZED/KB_BACKED/ACTOR_TAGGED/UNCONTEXTUALIZED + text search; expand annotation → matched KB article cards (teal) + intel profile cards (orange) with relevance bars; ▶ ASSESS CONTEXT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGakcimapQuery+buildGakcimapScript wired in JarvisBrain; "gakcimap/graph annotation/annotation context/annotation knowledge/actor annotation/uncontextualized annotation" voice trigger; jarvis:gakcimap-toggle event; 90-s auto-refresh */}
+            <GraphAnnotationKnowledgeMap />
+
+            {/* F114 (overnight 2026-09-26): System-Wide Alert Escalation Queue (ALESCQ) — ◈ ALESCQ button (left:1006760, bottom:8, zIndex:176); parallel-fetches /v1/jarvis/system/status + /entities/RiskSignal + /v1/ops/events + /v1/investigations; merges into severity-sorted escalation queue CRITICAL/HIGH/MEDIUM/INFO; source badges SYSTEM/RISK/OPS/CASE; per-row ▶ ESC → /v1/jarvis/agent/chat triage + TTS; ▶ ASSESS ALL → 2-sentence brief + TTS; red pulse badge on critical+high count; filter tabs ALL/SYSTEM/RISK/OPS/CASE; 60-s auto-refresh; isAlescqQuery+buildAlescqScript wired in JarvisBrain; "alescq/escalation queue/alert queue/escalate/all alerts/critical escalation" voice trigger */}
+            <SystemWideAlertEscalator />
+
+            {/* F115 (overnight 2026-09-26): Risk Signal × Dataset × Ops Event Data Coverage Triad (RDOETRI) — ◈ RDOETRI button (left:1007320, bottom:8, zIndex:177); parallel-fetches /entities/RiskSignal + /v1/datasets + /v1/ops/events; keyword-correlates each risk signal against datasets AND ops events to classify FULLY_GROUNDED/DATA_LINKED/OPS_LINKED/UNGROUNDED; amber badge on ungrounded count; stat tiles + coverage bar; filter tabs ALL/FULLY_GROUNDED/DATA_LINKED/OPS_LINKED/UNGROUNDED + search; expand signal → dataset cards (purple) + ops event cards (blue) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRdoetriQuery+buildRdoetriScript wired in JarvisBrain; "rdoetri/risk data ops/risk signal data/grounded risk/ungrounded risk/risk event coverage" voice trigger; jarvis:rdoetri-toggle event; 90-s auto-refresh */}
+            <RiskDataOpsTriad />
+
+            {/* F116 (overnight 2026-09-26): Investigation × Dataset × Knowledge Intelligence Pulse (IDKPULS) — ◈ IDKPULS button (left:1007880, bottom:8, zIndex:178); parallel-fetches /v1/investigations + /v1/datasets + /knowledge/; keyword-correlates each investigation against available datasets AND KB articles to classify FULLY_RESOURCED/DATA_BACKED/KB_BACKED/BARE; amber badge on bare count; stat tiles INVESTIGATIONS/DATASETS/KB ARTICLES + all four class counts + INTEL%; filter tabs ALL/FULLY_RESOURCED/DATA_BACKED/KB_BACKED/BARE + text search; expand investigation → matched dataset cards (purple) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIdkpulsQuery+buildIdkpulsScript wired in JarvisBrain; "idkpuls/investigation dataset knowledge/data backed investigation/investigation intelligence/bare investigations/investigation resource coverage" voice trigger; jarvis:idkpuls-toggle event; 90-s auto-refresh */}
+            <InvestigationDatasetKnowledgePulse />
+
+            {/* F117 (overnight 2026-09-26): Contact × Dataset × Report Intelligence Coverage Matrix (CDIRMAT) — ◈ CDIRMAT button (left:1008440, bottom:8, zIndex:179); parallel-fetches /entities/Contact + /v1/datasets + /v1/reports; keyword-correlates each contact against datasets AND reports to classify FULLY_DOCUMENTED/DATA_LINKED/REPORT_BACKED/UNDOCUMENTED; amber badge on undocumented count; stat tiles CONTACTS/DATASETS/REPORTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_DOCUMENTED/DATA_LINKED/REPORT_BACKED/UNDOCUMENTED + text search; expand contact → matched dataset cards (purple) + report cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCdirmatQuery+buildCdirmatScript wired in JarvisBrain; "cdirmat/contact data report/contact documentation/undocumented contacts/contact coverage matrix" voice trigger; jarvis:cdirmat-toggle event; 90-s auto-refresh */}
+            <ContactDatasetReportMatrix />
+
+            {/* F118 (overnight 2026-09-26): Investment × Graph Centrality × Report Portfolio Intelligence Nexus (IGRNEX) — ◈ IGRNEX button (left:1009000, bottom:8, zIndex:180); parallel-fetches /entities/Investment + /v1/graph/centrality + /v1/reports; keyword-correlates each investment against high-centrality graph nodes AND reports to classify FULLY_TRACKED/GRAPH_LINKED/REPORT_BACKED/BLIND; amber badge on blind count; stat tiles INVESTMENTS/GRAPH NODES/REPORTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_TRACKED/GRAPH_LINKED/REPORT_BACKED/BLIND + text search; expand investment → matched graph node cards (cyan, centrality score) + report cards (purple, type badge) with relevance bars; ▶ ASSESS NEXUS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIgrnexQuery+buildIgrnexScript wired in JarvisBrain; "igrnex/investment graph/investment report/portfolio nexus/investment intelligence network/graph investment report" voice trigger; jarvis:igrnex-toggle event; 90-s auto-refresh */}
+            <InvestmentGraphReportNexus />
+
+            {/* F119 (overnight 2026-09-26): SwarmJob × IntelProfile × Report Counter-Intelligence Coverage (SJIRCIC) — ◈ SJIRCIC button (left:1009560, bottom:8, zIndex:181); parallel-fetches /entities/SwarmJob + /entities/IntelProfile + /v1/reports; keyword-correlates each swarm job against intel actor profiles AND reports to classify FULLY_COVERED/INTEL_MATCHED/REPORT_BACKED/UNTRACKED; amber badge on untracked count; stat tiles SWARM JOBS/INTEL PROFILES/REPORTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_COVERED/INTEL_MATCHED/REPORT_BACKED/UNTRACKED + text search; expand job → matched intel profile cards (orange) + report cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence counter-intel brief + TTS; isSjircicQuery+buildSjircicScript wired in JarvisBrain; "sjircic/swarm intel report/counter intelligence coverage/swarm counter intel/swarm actor report" voice trigger; jarvis:sjircic-toggle event; 90-s auto-refresh */}
+            <SwarmIntelReportCoverage />
+
+            {/* F120 (overnight 2026-09-26): Task × Report × Scenario Operational Coverage Nexus (TRSCON) — ◈ TRSCON button (left:1010120, bottom:8, zIndex:182); parallel-fetches /entities/Task + /v1/reports + /v1/scenario/list; keyword-correlates each task against intelligence reports AND scenario playbooks to classify FULLY_DOCUMENTED/REPORT_BACKED/SCENARIO_PLANNED/UNCOORDINATED; amber badge on uncoordinated count; isTrsconQuery+buildTrsconScript wired in JarvisBrain; "trscon/task report scenario/task coordination/uncoordinated tasks/task coverage nexus" voice trigger; jarvis:trscon-toggle event; 90-s auto-refresh */}
+            <TaskReportScenarioCoverage />
+
+            {/* F121 (overnight 2026-09-26): Operational Readiness Score Dashboard (ORSCORE) — ◈ ORSCORE button (left:1010680, bottom:8, zIndex:183); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /entities/SwarmJob + /entities/Task + /entities/RiskSignal; computes five sub-scores (system health, intelligence density, automation coverage, task velocity, threat clear) into a composite 0–100 readiness score; central ring + radar pentagon + stat tiles; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOrscoreQuery+buildOrscoreScript wired in JarvisBrain; "orscore/operational readiness/readiness score/ops score/jarvis readiness" voice trigger; jarvis:orscore-toggle event; 60-s auto-refresh */}
+            <OperationalReadinessScore />
+
+            {/* F122 (overnight 2026-09-26): Live Intel Stream Health Monitor (LISHM) — ◈ LISHM button (left:1011240, bottom:8, zIndex:184); parallel-fetches /functions/getLiveIntel + /v1/jarvis/system/status + /v1/cinematic/brain; computes per-stream freshness (LIVE/STALE/OFFLINE) for quakes/crypto/FX + composite Stream Health Index 0–100; 3-column source grid with status badges + item counts + last-seen age; red badge on degraded count; ▶ ASSESS STREAM HEALTH → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLishmQuery+buildLishmScript wired in JarvisBrain; "lishm/live intel health/stream health/data freshness/intel stream status" voice trigger; jarvis:lishm-toggle event; 60-s auto-refresh */}
+            <LiveIntelStreamHealth />
+
+            {/* F123 (overnight 2026-09-26): Graph Community × IntelProfile × Scenario Threat Cluster Map (IPTCMAP) — ◈ IPTCMAP button (left:1011800, bottom:8, zIndex:185); parallel-fetches /v1/graph/communities + /entities/IntelProfile + /v1/scenario/list; keyword-correlates each community against intel actor profiles AND scenario playbooks to classify THREAT_CLUSTER/INTEL_EXPOSED/SCENARIO_COVERED/NEUTRAL; red badge on threat cluster count; stat tiles COMMUNITIES/INTEL PROFILES/SCENARIOS + all four class counts + COVERAGE%; filter tabs + search; expand community → matched intel profile cards (orange) + matched scenario cards (green) with relevance bars; ▶ ASSESS CLUSTERS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIptcmapQuery+buildIptcmapScript wired in JarvisBrain; "iptcmap/threat cluster/intel cluster/community threat/graph community scenario/threat community map/community intel scenario" voice trigger; jarvis:iptcmap-toggle event; 90-s auto-refresh */}
+            <GraphCommunityIntelScenarioMap />
+
+            {/* F124 (overnight 2026-09-26): Graph Annotation × Ops Event × SwarmJob Operational Annotation Coverage (GAOSCOV) — ◈ GAOSCOV button (left:1012360, bottom:8, zIndex:186); parallel-fetches /v1/graph/annotations + /v1/ops/events + /entities/SwarmJob; keyword-correlates each graph annotation against ops events AND swarm jobs to classify FULLY_OPERATIONAL/OPS_LINKED/SWARM_ACTIVE/DORMANT; amber badge on dormant count; stat tiles ANNOTATIONS/OPS EVENTS/SWARM JOBS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_OPERATIONAL/OPS_LINKED/SWARM_ACTIVE/DORMANT + text search; expand annotation → matched ops event cards (blue) + swarm job cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGaoscovQuery+buildGaoscovScript wired in JarvisBrain; "gaoscov/graph annotation ops/annotation coverage/annotation swarm/operational annotation/dormant annotation" voice trigger; jarvis:gaoscov-toggle event; 90-s auto-refresh */}
+            <GraphAnnotationOpsSwarmCoverage />
+            {/* F125 (overnight 2026-09-26): Cinematic Scene × Task × Report Operational Reality Check (SCTROC) — ◈ SCTROC button (left:1012920, bottom:8, zIndex:187); parallel-fetches /v1/cinematic/scene/01..10 + /entities/Task + /v1/reports; keyword-correlates each scene's anchor/description text against tasks AND reports to classify FULLY_GROUNDED/TASK_ACTIVE/REPORT_BACKED/SPECULATIVE; amber badge on speculative count; stat tiles SCENES/TASKS/REPORTS + all four class counts + GROUNDING%; filter tabs ALL/FULLY_GROUNDED/TASK_ACTIVE/REPORT_BACKED/SPECULATIVE + text search; expand scene → matched task cards (cyan) + report cards (purple) with relevance bars; ▶ ASSESS GROUNDING → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSctrocQuery+buildSctrocScript wired in JarvisBrain; "sctroc/scene reality check/speculative scenes/cinematic tasks/scene grounding/scene report" voice trigger; jarvis:sctroc-toggle event; 90-s auto-refresh */}
+            <SceneTaskReportGrounding />
+            {/* F126 (overnight 2026-09-26): SwarmJob × Investment × Contact Operational Finance Coverage (SVINMAP) — ◈ SVINMAP button (left:1013480, bottom:8, zIndex:188); parallel-fetches /entities/SwarmJob + /entities/Investment + /entities/Contact; keyword-correlates each swarm job against investments AND contacts to classify FULLY_COORDINATED/INVESTMENT_LINKED/CONTACT_ASSIGNED/UNCOORDINATED; amber badge on uncoordinated count; stat tiles SWARM JOBS/INVESTMENTS/CONTACTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_COORDINATED/INVESTMENT_LINKED/CONTACT_ASSIGNED/UNCOORDINATED + text search; expand job → matched investment cards (gold) + contact cards (orange) with relevance bars; ▶ ASSESS COORDINATION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSvimapQuery+buildSvimapScript wired in JarvisBrain; "svinmap/swarm investment/swarm finance/coordinated swarm/uncoordinated swarm/swarm investment coverage" voice trigger; jarvis:svinmap-toggle event; 90-s auto-refresh */}
+            <SwarmJobInvestmentContactMap />
+            {/* F127 (overnight 2026-09-27): IntelProfile × Task × Investment × Knowledge Actor Impact Nexus (AIKIN) — ◈ AIKIN button (left:1014040, bottom:8, zIndex:189); parallel-fetches /entities/IntelProfile + /entities/Task + /entities/Investment + /knowledge/; keyword-correlates each threat actor profile against tasks AND investments AND KB articles to classify FULL_IMPACT/HIGH_IMPACT/TRACKED/UNTRACKED; red pulse badge on full-impact count; stat tiles ACTORS/TASKS/INVESTMENTS/KB ARTICLES + all four class counts + COVERAGE%; filter tabs ALL/FULL_IMPACT/HIGH_IMPACT/TRACKED/UNTRACKED + text search; expand actor → matched task cards (teal) + investment cards (gold) + KB article cards (green) with relevance bars; ▶ ASSESS IMPACT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isAikinQuery+buildAikinScript wired in JarvisBrain; "aikin/actor impact/intel actor impact/threat actor nexus/full impact actor/untracked actors/actor exposure nexus" voice trigger; jarvis:aikin-toggle event; 90-s auto-refresh */}
+            <IntelActorImpactNexus />
+            {/* F128 (overnight 2026-09-27): Ops Event × Graph Centrality × Knowledge × Contact Incident Intelligence Mesh (OINCM) — ◈ OINCM button (left:1014600, bottom:8, zIndex:190); parallel-fetches /v1/ops/events + /v1/graph/centrality + /knowledge/ + /entities/Contact; keyword-correlates each ops event against graph nodes AND KB articles AND contacts to classify FULLY_MESHED/INTEL_LINKED/PARTIAL/ISOLATED; amber badge on isolated count; stat tiles OPS EVENTS/GRAPH NODES/KB ARTICLES/CONTACTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_MESHED/INTEL_LINKED/PARTIAL/ISOLATED + text search; expand event → matched graph node cards (cyan) + KB article cards (green) + contact cards (orange) with relevance bars; ▶ ASSESS MESH → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOincmQuery+buildOincmScript wired in JarvisBrain; "oincm/ops incident mesh/incident intelligence/isolated events/event intelligence coverage/ops knowledge mesh" voice trigger; jarvis:oincm-toggle event; 90-s auto-refresh */}
+            <OpsIncidentIntelMesh />
+            {/* F129 (overnight 2026-09-27): Dataset × Graph Annotation × Ops Event × Knowledge Intelligence Grounding Nexus (DGOKGND) — ◈ DGOKGND button (left:1015160, bottom:8, zIndex:191); parallel-fetches /v1/datasets + /v1/graph/annotations + /v1/ops/events + /knowledge/; keyword-correlates each dataset against graph annotations AND ops events AND KB articles to classify FULLY_GROUNDED/DUAL_LINKED/SINGLE_LINKED/UNGROUNDED; amber badge on ungrounded count; filter tabs ALL/FULLY_GROUNDED/DUAL_LINKED/SINGLE_LINKED/UNGROUNDED + text search; expand dataset → matched annotation cards (purple) + ops event cards (orange) + KB article cards (green) with relevance bars; ▶ ASSESS GROUNDING → /v1/jarvis/agent/chat 2-sentence brief + TTS; isDgokgndQuery+buildDgokgndScript wired in JarvisBrain; "dgokgnd/dataset grounding nexus/grounded dataset/ungrounded dataset/dataset annotation/dataset ops knowledge" voice trigger; jarvis:dgokgnd-toggle event; 90-s auto-refresh */}
+            <DatasetGraphOpsKnowledgeNexus />
+            {/* F130 (overnight 2026-09-27): SwarmJob × Scenario × Report × Knowledge Mission Documentation Coverage (SSRKMDOC) — ◈ SSRKMDOC button (left:1015720, bottom:8, zIndex:192); parallel-fetches /entities/SwarmJob + /v1/scenario/list + /v1/reports + /knowledge/; keyword-correlates each swarm job against scenarios AND reports AND KB articles to classify FULLY_DOCUMENTED/DUAL_BACKED/SINGLE_BACKED/UNDOCUMENTED; amber badge on undocumented count; filter tabs ALL/FULLY_DOCUMENTED/DUAL_BACKED/SINGLE_BACKED/UNDOCUMENTED + text search; expand job → matched scenario cards (green) + report cards (purple) + KB article cards (teal) with relevance bars; ▶ ASSESS DOCUMENTATION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSsrkmdocQuery+buildSsrkmdocScript wired in JarvisBrain; "ssrkmdoc/swarm documentation/swarm scenario report/undocumented swarm/mission documentation/swarm knowledge coverage" voice trigger; jarvis:ssrkmdoc-toggle event; 90-s auto-refresh */}
+            <SwarmScenarioReportKnowledgeDoc />
+            {/* F131 (overnight 2026-09-27): Contact × Ops Event × Graph Annotation Incident Attribution Network (COEGAN) — ◈ COEGAN button (left:1016280, bottom:8, zIndex:193); parallel-fetches /entities/Contact + /v1/ops/events + /v1/graph/annotations; keyword-correlates each contact against ops events AND graph annotations to classify FULLY_ATTRIBUTED/OPS_LINKED/GRAPH_TAGGED/UNATTRIBUTED; amber badge on unattributed count; filter tabs ALL/FULLY_ATTRIBUTED/OPS_LINKED/GRAPH_TAGGED/UNATTRIBUTED + text search; expand contact → matched ops event cards (blue) + graph annotation cards (purple) with relevance bars; ▶ ASSESS ATTRIBUTION → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCoeganQuery+buildCoeganScript wired in JarvisBrain; "coegan/contact attribution/incident attribution/contact ops graph/unattributed contacts/contact event attribution" voice trigger; jarvis:coegan-toggle event; 90-s auto-refresh */}
+            <ContactOpsGraphAttributionNetwork />
+            {/* F132 (overnight 2026-09-27): IntelProfile × Task × Knowledge × Scenario Full Actor Mission Intelligence Coverage (FAMICOV) — ◈ FAMICOV button (left:1016840, bottom:8, zIndex:194); parallel-fetches /entities/IntelProfile + /entities/Task + /knowledge/ + /v1/scenario/list; keyword-correlates each intel actor against tasks AND KB articles AND scenarios to classify FULLY_TRACKED/DUAL_COVERED/SINGLE_TRACKED/UNTRACKED; red badge on untracked count; filter tabs ALL/FULLY_TRACKED/DUAL_COVERED/SINGLE_TRACKED/UNTRACKED + text search; expand actor → matched task cards (teal) + KB article cards (green) + scenario cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isFamicovQuery+buildFamicovScript wired in JarvisBrain; "famicov/full actor coverage/actor mission intel/intel actor mission/tracked actors/untracked actors" voice trigger; jarvis:famicov-toggle event; 90-s auto-refresh */}
+            <IntelActorFullMissionCoverage />
+            {/* F133 (overnight 2026-09-27): Risk Signal × Knowledge × Ops Event × IntelProfile Comprehensive Threat Evidence Matrix (RKOITHEM) — ◈ RKOITHEM button (left:1017400, bottom:8, zIndex:195); parallel-fetches /entities/RiskSignal + /knowledge/ + /v1/ops/events + /entities/IntelProfile; keyword-correlates each risk signal against KB articles AND ops events AND intel profiles to classify FULLY_EVIDENCED/DUAL_EVIDENCED/SINGLE_EVIDENCED/UNEVIDENCED; red pulse badge on unevidenced count; stat tiles RISK SIGS/KB ARTICLES/OPS EVENTS/INTEL PROFILES + all four class counts + EVIDENCE%; filter tabs ALL/FULLY_EVIDENCED/DUAL_EVIDENCED/SINGLE_EVIDENCED/UNEVIDENCED + text search; expand signal → matched KB article cards (green) + ops event cards (blue) + intel profile cards (orange) with relevance bars; ▶ ASSESS EVIDENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isRkoithemQuery+buildRkoithemScript wired in JarvisBrain; "rkoithem/threat evidence/risk evidence/evidenced risk/unevidenced risk/comprehensive threat evidence" voice trigger; jarvis:rkoithem-toggle event; 90-s auto-refresh */}
+            <RiskSignalEvidenceMatrix />
+            {/* F134 (overnight 2026-09-27): Investment × Report × Ops Event × RiskSignal Financial Risk Intelligence Dashboard (IRORFD) — ◈ IRORFD button (left:1017960, bottom:8, zIndex:196); parallel-fetches /entities/Investment + /v1/reports + /v1/ops/events + /entities/RiskSignal; keyword-correlates each investment against reports AND ops events AND risk signals to classify FULLY_TRACKED/DUAL_TRACKED/PARTIAL/UNTRACKED; amber badge on untracked count; stat tiles INVESTMENTS/REPORTS/OPS EVENTS/RISK SIGS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_TRACKED/DUAL_TRACKED/PARTIAL/UNTRACKED + text search; expand investment → matched report cards (purple, type badge) + ops event cards (blue) + risk signal cards (red, severity badge) with relevance bars; ▶ ASSESS RISK INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIrorfdQuery+buildIrorfdScript wired in JarvisBrain; "irorfd/investment risk intelligence/financial risk dashboard/untracked investments/investment intel dashboard/financial intelligence coverage" voice trigger; jarvis:irorfd-toggle event; 90-s auto-refresh */}
+            <InvestmentRiskIntelDashboard />
+            {/* F135 (overnight 2026-09-27): Live Intel × Contact × Investment Market Exposure Tracker (LICIMEX) — ◈ LICIMEX button (left:1018520, bottom:8, zIndex:197); parallel-fetches /functions/getLiveIntel + /entities/Contact + /entities/Investment; keyword-correlates each live world event (quakes/crypto/FX) against contacts AND investments to classify BOTH_EXPOSED/CONTACT_ONLY/INVESTMENT_ONLY/CLEAR; amber badge on both-exposed count; filter tabs ALL/BOTH_EXPOSED/CONTACT_ONLY/INVESTMENT_ONLY/CLEAR + text search; expand event → matched contact cards (orange) + investment cards (gold) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isLicimexQuery+buildLicimexScript wired in JarvisBrain; "licimex/live intel market/live market exposure/intel exposure/world event portfolio/event exposure" voice trigger; jarvis:licimex-toggle event; 5-min auto-refresh */}
+            <LiveIntelMarketExposureTracker />
+            {/* F136 (overnight 2026-09-27): Contact × Scenario × Report × Knowledge Personnel Readiness Index (CSRPRI) — ◈ CSRPRI button (left:1019080, bottom:8, zIndex:198); parallel-fetches /entities/Contact + /v1/scenario/list + /v1/reports + /knowledge/; keyword-correlates each contact against scenarios AND reports AND KB articles to classify FULLY_EQUIPPED/DUAL_COVERED/SINGLE_TRACKED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/FULLY_EQUIPPED/DUAL_COVERED/SINGLE_TRACKED/UNCOVERED + text search; expand contact → matched scenario cards (teal) + report cards (purple) + KB article cards (green) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCsrpriQuery+buildCsrpriScript wired in JarvisBrain; "csrpri/contact readiness/personnel readiness index/contact equipped/uncovered contacts/personnel readiness" voice trigger; jarvis:csrpri-toggle event; 90-s auto-refresh */}
+            <ContactScenarioReportReadiness />
+            {/* F137 (overnight 2026-09-27): Task × Graph Annotations × Ops Event × Knowledge Operational Intelligence Nexus (TGOKNEX) — ◈ TGOKNEX button (left:1019640, bottom:8, zIndex:199); parallel-fetches /entities/Task + /v1/graph/annotations + /v1/ops/events + /knowledge/; keyword-correlates each task against graph annotations AND ops events AND KB articles to classify FULLY_GROUNDED/DUAL_GROUNDED/SINGLE_LINKED/BARE; amber badge on bare count; filter tabs ALL/FULLY_GROUNDED/DUAL_GROUNDED/SINGLE_LINKED/BARE + text search; expand task → annotation cards (purple) + ops event cards (blue) + KB article cards (green) with relevance bars; ▶ ASSESS NEXUS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTgoknexQuery+buildTgoknexScript wired in JarvisBrain; "tgoknex/task graph ops knowledge/task operational nexus/bare tasks/task annotation ops/task knowledge ops" voice trigger; jarvis:tgoknex-toggle event; 90-s auto-refresh */}
+            <TaskGraphOpsKnowledgeNexus />
+            {/* F138 (overnight 2026-09-27): AIP Skill × Contact × Report × Ops Event Full Operational Coverage Hub (FOCOH) — ◈ FOCOH button (left:1020200, bottom:8, zIndex:200); parallel-fetches /v1/aip/skill + /entities/Contact + /v1/reports + /v1/ops/events; keyword-correlates each AIP skill against contacts AND reports AND ops events to classify FULLY_ACTIVE/DUAL_ACTIVE/SINGLE_ACTIVE/DORMANT; amber badge on dormant count; stat tiles AIP SKILLS/CONTACTS/REPORTS/OPS EVENTS + all four class counts + COVERAGE%; filter tabs ALL/FULLY_ACTIVE/DUAL_ACTIVE/SINGLE_ACTIVE/DORMANT + text search; expand skill → matched contact cards (orange) + report cards (purple) + ops event cards (blue) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isFocohQuery+buildFocohScript wired in JarvisBrain; "focoh/full operational coverage/skill activation/operational hub/active skills coverage" voice trigger; jarvis:focoh-toggle event; 90-s auto-refresh */}
+            <AipSkillFullOpsCoverage />
+            {/* F139 (overnight 2026-09-27): Scenario × RiskSignal × SwarmJob × IntelProfile Threat Containment Index (STCIX) — ◈ STCIX button (left:1020760, bottom:8, zIndex:201); parallel-fetches /v1/scenario/list + /entities/RiskSignal + /entities/SwarmJob + /entities/IntelProfile; keyword-correlates each scenario against risk signals AND swarm jobs AND intel profiles to classify FULLY_CONTAINED/DUAL_COVERED/PARTIALLY_COVERED/UNCONTAINED; red pulse badge on uncontained count; stat tiles SCENARIOS/RISK SIGS/SWARM JOBS/INTEL PROFILES + all four class counts + COVERAGE%; filter tabs ALL/FULLY_CONTAINED/DUAL_COVERED/PARTIALLY_COVERED/UNCONTAINED + text search; expand scenario → matched risk signal cards (red, severity) + swarm job cards (cyan, status) + intel profile cards (orange, role) with relevance bars; ▶ ASSESS CONTAINMENT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isStcixQuery+buildStcixScript wired in JarvisBrain; "stcix/threat containment/scenario containment/uncontained scenario/risk containment/containment index" voice trigger; jarvis:stcix-toggle event; 90-s auto-refresh */}
+            <ScenarioRiskSwarmContainment />
+            {/* F140 (overnight 2026-09-27): Cinematic Scene × AIP Skill × RiskSignal Intelligence Coverage Map (SCIAIP) — ◈ SCIAIP button (left:1021320, bottom:8, zIndex:202); parallel-fetches /v1/cinematic/scene/01..10 + /v1/aip/skill + /entities/RiskSignal; keyword-correlates each scene's anchor/description text against AIP skills AND risk signals to classify FULLY_ARMED/SKILL_BACKED/RISK_FLAGGED/UNMONITORED; amber badge on unmonitored count; filter tabs ALL/FULLY_ARMED/SKILL_BACKED/RISK_FLAGGED/UNMONITORED + text search; expand scene → AIP skill cards (cyan) + risk signal cards (red) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isSciaipQuery+buildSciaipScript wired in JarvisBrain; "sciaip/scene intelligence/scene skill/scene risk/armed scenes/unmonitored scenes/scene coverage map" voice trigger; jarvis:sciaip-toggle event; 90-s auto-refresh */}
+            <SceneAipRiskCoverageMap />
+            {/* F141 (overnight 2026-09-27): Scenario × Graph Community × Ops Event × Dataset Intelligence Saturation Map (SGODSAT) — ◈ SGODSAT button (left:1021880, bottom:8, zIndex:203); parallel-fetches /v1/scenario/list + /v1/graph/communities + /v1/ops/events + /v1/datasets; keyword-correlates each scenario against communities AND ops events AND datasets to classify FULLY_SATURATED/DUAL_LINKED/SINGLE_LINKED/UNSATURATED; amber badge on unsaturated count; filter tabs + text search; expand scenario → community cards (purple) + ops event cards (blue) + dataset cards (green) with relevance bars; ▶ ASSESS SATURATION → /v1/jarvis/agent/chat + TTS; "sgodsat/scenario saturation/community scenario/unsaturated scenario/scenario intelligence saturation" voice trigger; jarvis:sgodsat-toggle event; 90-s auto-refresh */}
+            <ScenarioCommOpsDataSaturation />
+            {/* F142 (overnight 2026-09-27): Graph Community × Knowledge × IntelProfile Network Intelligence Coverage (GCKNIP) — ◈ GCKNIP button (left:1022440, bottom:8, zIndex:204); parallel-fetches /v1/graph/communities + /knowledge/ + /entities/IntelProfile; keyword-correlates each network community against KB articles AND intel actor profiles to classify FULLY_MAPPED/KB_BACKED/ACTOR_LINKED/UNMAPPED; amber badge on unmapped count; filter tabs ALL/FULLY_MAPPED/KB_BACKED/ACTOR_LINKED/UNMAPPED + text search; expand community → KB article cards (green) + intel profile cards (orange) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isGcknipQuery+buildGcknipScript wired in JarvisBrain; "gcknip/graph community knowledge/network intel coverage/unmapped community/community knowledge/community actor" voice trigger; jarvis:gcknip-toggle event; 90-s auto-refresh */}
+            <GraphCommunityKnowledgeIntelCoverage />
+            {/* F143 (overnight 2026-09-27): Task × IntelProfile × Dataset × Knowledge Operational Intelligence Coverage (TIKDOI) — ◈ TIKDOI button (left:1023000, bottom:8, zIndex:205); parallel-fetches /entities/Task + /entities/IntelProfile + /v1/datasets + /knowledge/; keyword-correlates each task against intel profiles AND datasets AND KB articles to classify FULLY_COVERED/DUAL_COVERED/SINGLE_COVERED/UNCOVERED; amber badge on uncovered count; filter tabs ALL/FULLY_COVERED/DUAL_COVERED/SINGLE_COVERED/UNCOVERED + text search; expand task → intel profile cards (orange) + dataset cards (purple) + KB article cards (green) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTikdoiQuery+buildTikdoiScript wired in JarvisBrain; "tikdoi/task intelligence coverage/uncovered tasks/task intel data/task full coverage" voice trigger; jarvis:tikdoi-toggle event; 90-s auto-refresh */}
+            <TaskIntelDatasetKnowledgeCoverage />
+            {/* F144 (overnight 2026-09-27): Contact × Scenario × Ops Event × RiskSignal Personnel Threat Activation Matrix (CSOERM) — ◈ CSOERM button (left:1023560, bottom:8, zIndex:206); parallel-fetches /entities/Contact + /v1/scenario/list + /v1/ops/events + /entities/RiskSignal; keyword-correlates each contact against scenario playbooks AND ops events AND risk signals to classify FULLY_ACTIVATED/DUAL_ACTIVATED/SINGLE_LINKED/PASSIVE; red pulse badge on fully-activated count; filter tabs + text search; expand contact → scenario cards (green) + ops event cards (blue) + risk signal cards (red, severity) with relevance bars; ▶ ASSESS ACTIVATION → /v1/jarvis/agent/chat + TTS; isCsoermQuery+buildCsoermScript wired in JarvisBrain; "csoerm/contact activation/personnel activation/activated contacts/scenario contact risk/contact threat activation" voice trigger; jarvis:csoerm-toggle event; 90-s auto-refresh */}
+            <ContactScenarioOpsRiskMatrix />
+            {/* F145 (overnight 2026-09-27): SwarmJob × AIP Skill × Contact × Dataset Operational Capacity Map (SOCDMAP) — ◈ SOCDMAP button (left:1024120, bottom:8, zIndex:207); parallel-fetches /entities/SwarmJob + /v1/aip/skill + /entities/Contact + /v1/datasets; keyword-correlates each swarm job against AIP skills AND contacts AND datasets to classify FULLY_STAFFED/DUAL_STAFFED/SINGLE_LINKED/UNSUPPORTED; amber badge on unsupported count; filter tabs + text search; expand job → skill cards (cyan) + contact cards (orange) + dataset cards (purple) with relevance bars; ▶ ASSESS CAPACITY → /v1/jarvis/agent/chat + TTS; isSocdmapQuery+buildSocdmapScript wired in JarvisBrain; "socdmap/swarm capacity/swarm staffed/unsupported swarm" voice trigger; jarvis:socdmap-toggle event; 90-s auto-refresh */}
+            <SwarmOpsCapacityMap />
+            {/* F146 (overnight 2026-09-27): Investigation × AIP Skill × Contact × Knowledge Full-Spectrum Investigation Coverage (ISKFULL) — ◈ ISKFULL button (left:1024680, bottom:8, zIndex:208); parallel-fetches /v1/investigations + /v1/aip/skill + /entities/Contact + /knowledge/; keyword-correlates each investigation against AIP skills AND contacts AND KB articles to classify FULLY_COVERED/DUAL_COVERED/SINGLE_LINKED/BARE; amber badge on bare count; filter tabs + text search; expand investigation → skill cards (cyan) + contact cards (orange) + KB article cards (green) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isIskfullQuery+buildIskfullScript wired in JarvisBrain; "iskfull/investigation coverage/bare investigations" voice trigger; jarvis:iskfull-toggle event; 90-s auto-refresh */}
+            <InvestigationFullCoverage />
+            {/* F147 (overnight 2026-09-27): Dataset × Graph Community × Ops Event × RiskSignal Situational Intelligence Map (DGORSIM) — ◈ DGORSIM button (left:1025240, bottom:8, zIndex:209); parallel-fetches /v1/datasets + /v1/graph/communities + /v1/ops/events + /entities/RiskSignal; keyword-correlates each dataset against community clusters AND ops events AND risk signals to classify FULLY_GROUNDED/DUAL_LINKED/SINGLE_LINKED/ORPHANED; amber badge on orphaned count; filter tabs + text search; expand dataset → community cards (purple) + ops event cards (blue) + risk signal cards (red, severity) with relevance bars; ▶ ASSESS SITUATION → /v1/jarvis/agent/chat + TTS; isDgorsimQuery+buildDgorsimScript wired in JarvisBrain; "dgorsim/dataset situation/situational dataset/orphaned dataset situation/dataset threat context" voice trigger; jarvis:dgorsim-toggle event; 90-s auto-refresh */}
+            <DatasetGraphOpsRiskSituationalMap />
+            {/* F148 (overnight 2026-09-27): AIP Skill × Graph Community × Knowledge × RiskSignal Network Defense Readiness Atlas (NDRATLAS) — ◈ NDRATLAS button (left:1025800, bottom:8, zIndex:210); parallel-fetches /v1/aip/skill + /v1/graph/communities + /knowledge/ + /entities/RiskSignal; keyword-correlates each skill against community clusters AND KB articles AND risk signals to classify FULLY_NETWORKED/DUAL_NETWORKED/SINGLE_LINKED/ISOLATED; amber badge on isolated count; filter tabs + text search; expand skill → community cards (purple) + KB article cards (green) + risk signal cards (red, severity) with relevance bars; ▶ ASSESS DEFENSE READINESS → /v1/jarvis/agent/chat + TTS; isNdratlasQuery+buildNdratlasScript wired in JarvisBrain; "ndratlas/network defense/skill network/community skill coverage/network ready skills/networked skill" voice trigger; jarvis:ndratlas-toggle event; 90-s auto-refresh */}
+            <AipSkillNetworkDefenseAtlas />
+            {/* F149 (overnight 2026-09-27): IntelProfile × Graph Community × Report × Ops Event Actor Network Exposure Quadrant (ANEQUAD) — ◈ ANEQUAD button (left:1026360, bottom:8, zIndex:211); parallel-fetches /entities/IntelProfile + /v1/graph/communities + /v1/reports + /v1/ops/events; keyword-correlates each intel actor profile against network communities AND reports AND ops events to classify FULLY_EXPOSED/DUAL_EXPOSED/SINGLE_LINKED/CONTAINED; red pulse badge on fully-exposed count; filter tabs ALL/FULLY_EXPOSED/DUAL_EXPOSED/SINGLE_LINKED/CONTAINED + text search; expand actor → community cards (purple) + report cards (blue, type badge) + ops event cards (amber) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isAnequadQuery+buildAnequadScript wired in JarvisBrain; "anequad/actor network/intel network exposure/exposed actor/network exposure quadrant/actor graph report" voice trigger; jarvis:anequad-toggle event; 90-s auto-refresh */}
+            <IntelActorNetworkExposure />
+            {/* F150 (overnight 2026-09-28): SwarmJob × Investigation × RiskSignal × Contact Mission Command Coverage (MCOCOV) — ◈ MCOCOV button (left:1026920, bottom:8, zIndex:212); parallel-fetches /entities/SwarmJob + /v1/investigations + /entities/RiskSignal + /entities/Contact; keyword-correlates each swarm job against investigations AND risk signals AND contacts to classify FULLY_COMMANDED/DUAL_COMMANDED/SINGLE_LINKED/AUTONOMOUS; red pulse badge on autonomous count; stat tiles SWARM JOBS/INVESTIGATIONS/RISK SIGS/CONTACTS + all four class counts + COMMAND%; filter tabs ALL/FULLY_COMMANDED/DUAL_COMMANDED/SINGLE_LINKED/AUTONOMOUS + text search; expand job → investigation cards (blue) + risk signal cards (red, severity badge) + contact cards (orange, role badge) with relevance bars; ▶ ASSESS COMMAND COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isMcocovQuery+buildMcocovScript wired in JarvisBrain; "mcocov/mission command/swarm command coverage/autonomous swarm/command coverage" voice trigger; jarvis:mcocov-toggle event; 90-s auto-refresh */}
+            <SwarmMissionCommandCoverage />
+            {/* F150 (overnight 2026-09-27): Investment × SwarmJob × Scenario × RiskSignal Financial Operations Risk Nexus (FORKN) — ◈ FORKN button (left:1026920, bottom:8, zIndex:212); parallel-fetches /entities/Investment + /entities/SwarmJob + /v1/scenario/list + /entities/RiskSignal; keyword-correlates each investment against swarm jobs AND scenarios AND risk signals to classify FULLY_MANAGED/DUAL_MANAGED/SINGLE_LINKED/UNMANAGED; amber badge on unmanaged count; filter tabs + text search; expand investment → swarm job cards (cyan) + scenario cards (green) + risk signal cards (red, severity badge) with relevance bars; ▶ ASSESS RISK NEXUS → /v1/jarvis/agent/chat + TTS; isForknQuery+buildForknScript wired in JarvisBrain; "forkn/investment risk nexus/financial operations/unmanaged investment" voice trigger; jarvis:forkn-toggle event; 90-s auto-refresh */}
+            <InvestmentOpsRiskNexus />
+            {/* F151 (overnight 2026-09-28): Brain × AIP Skill Intelligence Ratio (BASIR) — ◈ BASIR button (left:1980, bottom:18, zIndex:68); parallel-fetches /v1/cinematic/brain + /v1/aip/skill; computes B:S ratio (nodes÷skills) → SURPLUS/BALANCED/STRAINED/OVERLOADED; stat tiles NODES/SYNAPSES/SKILLS/RATIO; each skill row shows node allocation bar; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence cognitive capacity brief + TTS; isBasirQuery+buildBasirScript wired in JarvisBrain; "basir/brain skill/skill brain/brain capacity/skill ratio/cognitive skill ratio" voice trigger; jarvis:basir-toggle event; 60-s auto-refresh */}
+            <BrainAipSkillRatio />
+            {/* F152 (overnight 2026-09-28): Ops Event × Knowledge × Report Real-Time Intelligence Coverage (OKRTRIC) — ◈ OKRTRIC button (left:1027480, bottom:8, zIndex:213); parallel-fetches /v1/ops/events + /knowledge/ + /v1/reports; keyword-correlates each ops event against KB articles AND intelligence reports to classify FULLY_DOCUMENTED/KB_BACKED/REPORT_COVERED/UNDOCUMENTED; amber/red badge on undocumented count; filter tabs ALL/FULLY_DOCUMENTED/KB_BACKED/REPORT_COVERED/UNDOCUMENTED + text search; coverage bar; expand event → matched KB article cards (green) + report cards (purple) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence intelligence gap brief + TTS; isOkrtricQuery+buildOkrtricScript wired in JarvisBrain; "okrtric/ops coverage/ops documentation/undocumented events/event knowledge report/ops intelligence coverage/intel gap ops/ops intel coverage" voice trigger; jarvis:okrtric-toggle event; 90-s auto-refresh */}
+            <OpsEventIntelCoverage />
+            {/* F153 (overnight 2026-09-28): SwarmJob × Knowledge × Task × IntelProfile Mission Readiness Pulse (SKTIMP) — ◈ SKTIMP button (left:1028040, bottom:8, zIndex:214); parallel-fetches /entities/SwarmJob + /knowledge/ + /entities/Task + /entities/IntelProfile; keyword-correlates each swarm job against KB articles AND tasks AND intel profiles to classify FULLY_READY/DUAL_READY/SINGLE_LINKED/DARK; amber badge on dark count; readiness coverage bar; filter tabs ALL/FULLY_READY/DUAL_READY/SINGLE_LINKED/DARK + text search; expand job → matched KB article cards (green) + task cards (teal) + intel profile cards (orange) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence readiness brief + TTS; isSktimpQuery+buildSktimpScript wired in JarvisBrain; "sktimp/swarm readiness/mission readiness pulse/dark swarm/swarm mission ready/swarm knowledge task/swarm intel readiness" voice trigger; jarvis:sktimp-toggle event; 90-s auto-refresh */}
+            <SwarmMissionReadinessPulse />
+            {/* F154 (overnight 2026-09-28): Contact × Graph Community × IntelProfile Network Alignment Map (CGNIMAP) — ◈ CGNIMAP button (left:1028600, bottom:8, zIndex:215); parallel-fetches /entities/Contact + /v1/graph/communities + /entities/IntelProfile; keyword-correlates each contact against community clusters AND intel profiles to classify FULLY_ALIGNED/COMMUNITY_LINKED/PROFILED_ONLY/ISOLATED; amber badge on isolated count; filter tabs ALL/FULLY_ALIGNED/COMMUNITY_LINKED/PROFILED_ONLY/ISOLATED + text search; alignment coverage bar; expand contact → matched community cards (purple) + intel profile cards (orange) with relevance bars; ▶ ASSESS ALIGNMENT → /v1/jarvis/agent/chat 2-sentence brief + TTS; isCgnimapQuery+buildCgnimapScript wired in JarvisBrain; "cgnimap/contact network/contact community/contact alignment/isolated contacts/contact graph alignment/network contact intel" voice trigger; jarvis:cgnimap-toggle event; 90-s auto-refresh */}
+            <ContactGraphIntelAlignmentMap />
+            {/* F155 (overnight 2026-09-28): Investment × Contact × Knowledge Opportunity Intelligence Nexus (ICKNEX) — ◈ ICKNEX button (left:1029160, bottom:8, zIndex:216); parallel-fetches /entities/Investment + /entities/Contact + /knowledge/; keyword-correlates each investment against contacts AND KB articles to classify FULLY_INFORMED/CONTACT_MANAGED/KB_RESEARCHED/BLIND; amber badge on blind count; filter tabs ALL/FULLY_INFORMED/CONTACT_MANAGED/KB_RESEARCHED/BLIND + text search; intel coverage bar; expand investment → matched contact cards (orange, role badge) + KB article cards (green) with relevance bars; ▶ ASSESS INTELLIGENCE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIcknexQuery+buildIcknexScript wired in JarvisBrain; "icknex/investment contact knowledge/opportunity intelligence/blind investments/investment intel coverage/investment intelligence nexus" voice trigger; jarvis:icknex-toggle event; 90-s auto-refresh */}
+            <InvestmentContactKnowledgeNexus />
+            {/* F156 (overnight 2026-09-28): Task × Risk Signal × IntelProfile Threat Coverage Matrix (TRICM) — ◈ TRICM button (left:1029720, bottom:8, zIndex:217); parallel-fetches /entities/Task + /entities/RiskSignal + /entities/IntelProfile; keyword-correlates each task against risk signals AND intel profiles to classify THREAT_MONITORED/RISK_FLAGGED/ACTOR_TRACKED/EXPOSED; red badge on exposed count; filter tabs ALL/THREAT_MONITORED/RISK_FLAGGED/ACTOR_TRACKED/EXPOSED + text search; expand task → matched risk signal cards (red, severity badge) + intel profile cards (orange, role badge) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isTricmQuery+buildTricmScript wired in JarvisBrain; "tricm/task risk intel/task threat coverage/exposed tasks/task actor/task threat monitoring/threat coverage matrix" voice trigger; jarvis:tricm-toggle event; 90-s auto-refresh */}
+            <TaskRiskIntelCoverageMatrix />
+            {/* F157 (overnight 2026-09-28): SwarmJob × Scenario × Dataset Operational Execution Triad (SWEDAT) — ◈ SWEDAT button (left:1030280, bottom:8, zIndex:218); parallel-fetches /entities/SwarmJob + /v1/scenario/list + /v1/datasets; keyword-correlates each swarm job against scenario playbooks AND datasets to classify FULLY_SUPPORTED/SCENARIO_DRIVEN/DATA_BACKED/UNSUPPORTED; amber badge on unsupported count; support coverage bar; filter tabs ALL/FULLY_SUPPORTED/SCENARIO_DRIVEN/DATA_BACKED/UNSUPPORTED + text search; expand job → matched scenario cards (purple, type badge) + dataset cards (teal) with relevance bars; ▶ ASSESS EXECUTION → /v1/jarvis/agent/chat + TTS; isSwedatQuery+buildSwedatScript wired in JarvisBrain; "swedat/swarm execution/swarm scenario/swarm dataset/unsupported swarm/operational execution triad" voice trigger; jarvis:swedat-toggle event; 90-s auto-refresh */}
+            <SwarmScenarioDataTriad />
+            {/* F158 (overnight 2026-09-28): Live Intel × Investment × Risk Signal Financial Threat Pulse (LIFRISK) — ◈ LIFRISK button (left:1030840, bottom:8, zIndex:219); parallel-fetches /functions/getLiveIntel + /entities/Investment + /entities/RiskSignal; keyword-correlates crypto/FX live events against portfolio investments AND risk signals to classify THREAT_FLAGGED/MARKET_VOLATILE/RISK_MONITORED/STABLE; red badge on threat-flagged count; threat exposure bar; filter tabs ALL/THREAT_FLAGGED/MARKET_VOLATILE/RISK_MONITORED/STABLE + text search; expand investment → matched live intel event cards (orange) + risk signal cards (red, severity badge) with relevance bars; ▶ ASSESS EXPOSURE → /v1/jarvis/agent/chat + TTS; isLifriskQuery+buildLifriskScript wired in JarvisBrain; "lifrisk/financial threat/live investment threat/market risk pulse/investment market risk/crypto investment risk" voice trigger; jarvis:lifrisk-toggle event; 5-min auto-refresh */}
+            <LiveIntelInvestmentRisk />
+            {/* F159 (overnight 2026-09-28): Scenario × Task × Contact × Knowledge Operational Readiness Grid (STCKORG) — ◈ STCKORG button (left:1031400, bottom:8, zIndex:220); parallel-fetches /v1/scenario/list + /entities/Task + /entities/Contact + /knowledge/; keyword-correlates each scenario against tasks AND contacts AND KB articles to classify FULLY_RESOURCED/DUAL_RESOURCED/SINGLE_LINKED/UNRESOURCED; amber badge on unresourced count; coverage bar; filter tabs ALL/FULLY_RESOURCED/DUAL_RESOURCED/SINGLE_LINKED/UNRESOURCED + text search; expand scenario → matched task cards (teal, status badge) + contact cards (amber, role badge) + KB article cards (green, category badge) with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isStckorgQuery+buildStckorgScript wired in JarvisBrain; "stckorg/scenario readiness/operational readiness grid/unresourced scenario/scenario staffing knowledge/scenario task contact" voice trigger; jarvis:stckorg-toggle event; 90-s auto-refresh */}
+            <ScenarioTaskContactKnowledgeGrid />
+            {/* F160 (overnight 2026-09-28): Risk Signal × Task × Investigation Management Coverage (RTSICM) — ◈ RTSICM button (left:1031960, bottom:8, zIndex:221); parallel-fetches /entities/RiskSignal + /entities/Task + /v1/investigations; keyword-correlates each risk signal against tasks AND investigations to classify FULLY_MANAGED/TASK_ONLY/INVESTIGATED/UNMITIGATED; red badge on unmitigated count; coverage bar; filter tabs ALL/FULLY_MANAGED/TASK_ONLY/INVESTIGATED/UNMITIGATED + text search; expand signal → matched task cards (teal) + investigation cards (cyan) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isRtsicmQuery+buildRtsicmScript wired in JarvisBrain; "rtsicm/risk task coverage/unmitigated risk/risk management coverage/managed risk/risk investigation" voice trigger; jarvis:rtsicm-toggle event; 90-s auto-refresh */}
+            <RiskTaskInvestigationCoverage />
+
+            {/* F161 (overnight 2026-09-28): Ops Events × Contact × Task Command Responsibility Map (OTCCM) — ◈ OTCCM button (left:1032520, bottom:8, zIndex:222); parallel-fetches /v1/ops/events + /entities/Contact + /entities/Task; keyword-correlates each ops event against contacts AND tasks to classify FULLY_ACCOUNTABLE/TASKED_ONLY/CONTACT_ASSIGNED/UNRESPONDED; red badge on unresponded count; accountability coverage bar; filter tabs ALL/FULLY_ACCOUNTABLE/TASKED_ONLY/CONTACT_ASSIGNED/UNRESPONDED + text search; expand event → matched contact cards (orange, role badge) + task cards (teal, status badge) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isOtccmQuery+buildOtccmScript wired in JarvisBrain; "otccm/ops contact task/unresponded events/command responsibility/ops accountability/event accountability" voice trigger; jarvis:otccm-toggle event; 90-s auto-refresh */}
+            <OpsContactTaskMap />
+            {/* F162 (overnight 2026-09-28): Knowledge × Ops Event × Graph Community Intelligence Synchrony Map (KOGSYNC) — ◈ KOGSYNC button (left:1033080, bottom:8, zIndex:223); parallel-fetches /knowledge/ + /v1/ops/events + /v1/graph/communities; keyword-correlates each KB article against ops events AND community clusters to classify FULLY_SYNCHRONIZED/OPS_TRACKED/COMMUNITY_MAPPED/ISOLATED; amber badge on isolated count; synchrony coverage bar; filter tabs + text search; expand article → matched ops event cards (blue) + community cards (purple) with relevance bars; ▶ ASSESS SYNCHRONY → /v1/jarvis/agent/chat 2-sentence brief + TTS; isKogsyncQuery+buildKogsyncScript wired in JarvisBrain; "kogsync/knowledge ops sync/knowledge synchrony/knowledge community/synchronized knowledge/knowledge isolation" voice trigger; jarvis:kogsync-toggle event; 90-s auto-refresh */}
+            <KnowledgeOpsCommunitySyncMap />
+            {/* F163 (overnight 2026-09-28): Investigation × Scenario × Contact × Dataset Full Intelligence Readiness Matrix (ISCDRIM) — ◈ ISCDRIM button (left:1033640, bottom:8, zIndex:224); parallel-fetches /v1/investigations + /v1/scenario/list + /entities/Contact + /v1/datasets; keyword-correlates each investigation against scenario playbooks AND contacts AND datasets to classify FULLY_EQUIPPED/DUAL_EQUIPPED/SINGLE_LINKED/BARE; amber badge on bare count; filter tabs + text search; expand → matched scenario (teal) + contact (orange) + dataset (purple) cards with relevance bars; ▶ ASSESS READINESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isIscdrimQuery+buildIscdrimScript wired in JarvisBrain; "iscdrim/investigation readiness/investigation equipped/bare investigations/investigation full coverage/investigation resources" voice trigger; jarvis:iscdrim-toggle event; 90-s auto-refresh */}
+            <InvestigationReadinessMatrix />
+            {/* F164 (overnight 2026-09-28): AIP Skill × Graph Centrality × Ops Event Operational Signal Mesh (OSIGSM) */}
+            <AipSkillGraphOpsSignalMesh />
+            {/* F165 (overnight 2026-09-28): Graph Community × Report × Investigation Intelligence Documentation Map (CGRIMAP) */}
+            <CommunityIntelDocMap />
+            {/* F166 (overnight 2026-09-28): Contact × Ops Event × RiskSignal Personnel Response Coverage (PERCOV) */}
+            <PersonnelResponseCoverage />
+            {/* F167 (overnight 2026-09-28): Dataset × AIP Skill × Investigation Data Science Nexus (DSINEX) */}
+            <DataScienceNexus />
+            {/* F168 (overnight 2026-09-28): Investment × Scenario × Knowledge Portfolio Intelligence Nexus (ISKPIN) */}
+            <InvestmentScenarioKnowledgeNexus />
+            {/* F169 (overnight 2026-09-28): IntelProfile × Scenario × RiskSignal Actor Threat Nexus (ATHNEX) */}
+            <IntelActorScenarioRiskNexus />
+            {/* F170 (overnight 2026-09-28): SwarmJob × Graph Community × Knowledge × Contact Mission Intelligence Network (SMICNET) */}
+            <SwarmMissionIntelNet />
+            {/* F171 (overnight 2026-09-29): Task × Knowledge × Graph Community Task Guidance Map (TKGM) */}
+            <TaskKnowledgeCommunityMap />
+            {/* F172 (overnight 2026-09-29): Ops Event × Knowledge × RiskSignal Operational Readiness Index (OPRIDX) */}
+            <OpsReadinessIndex />
+            {/* F173 (overnight 2026-09-29): Investigation × Contact × Dataset × RiskSignal Full-Stack Operations Coverage (FSOPS) */}
+            <InvestigationFullStackCoverage />
+            {/* F174 (overnight 2026-09-29): Scenario × Knowledge × Contact × SwarmJob Mission Intelligence Grid (MKCSIG) */}
+            <ScenarioMissionIntelGrid />
+            {/* F175 (overnight 2026-09-29): JARVIS Intelligence Nexus Score (JINSCORE) */}
+            <JarvisIntelNexusScore />
+            {/* F176 (overnight 2026-09-29): AIP Skill × Report × Investigation Coverage Pulse (ARICP) — ◈ ARICP button (left:1040920, bottom:8, zIndex:237); parallel-fetches /v1/aip/skill + /v1/reports + /v1/investigations; keyword-correlates each AIP skill against reports AND investigations to classify FULLY_COVERED/REPORT_ONLY/INVESTIGATED/UNCOVERED; red badge on uncovered count; filter tabs + text search; expand skill → matched report cards (purple, type badge) + investigation cards (cyan, status badge) with relevance bars; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat + TTS; isAricpQuery+buildAricpScript wired in JarvisBrain; "aricp/aip report coverage/skill report/skill investigation coverage/uncovered skills/capability report gap/skill intelligence coverage" voice trigger; jarvis:aricp-toggle event; 90-s auto-refresh */}
+            <AipSkillReportInvestigationPulse />
+            {/* F177 (overnight 2026-09-29): Scenario × IntelProfile × Knowledge Actor Intelligence Preparedness Map (AIPMAP) */}
+            <ActorIntelPreparednessMap />
+            {/* F178 (overnight 2026-09-29): Investment × Knowledge × RiskSignal Portfolio Risk Intelligence Map (IKRIMAP) */}
+            <InvestmentKnowledgeRiskMap />
+            {/* F179 (overnight 2026-09-29): Swarm × Report × IntelProfile Active Operations Intelligence Map (SRIMAP) */}
+            <SwarmReportIntelMap />
+            {/* F180 (overnight 2026-09-29): Contact × Ops Event × SwarmJob × Investigation Full Accountability Matrix (COSIA) */}
+            <ContactOpsSwarmInvestigationMatrix />
+            {/* F181 (overnight 2026-09-29): Task × IntelProfile × Scenario × Knowledge Mission Intelligence Completeness Index (TMICKI) */}
+            <TaskIntelScenarioKnowledgeIndex />
+            {/* F182 (overnight 2026-09-29): Dataset × Ops Event × RiskSignal Operational Data Risk Exposure Map (ODREM) */}
+            <DatasetOpsRiskExposureMap />
+            {/* F183 (overnight 2026-09-29): IntelProfile × Knowledge × Ops Event Threat Context Readiness Map (TCRMAP) */}
+            <ThreatContextReadinessMap />
+            {/* F184 (overnight 2026-09-29): RiskSignal × Dataset × Investigation Triage Map (RSDITRI) */}
+            <RiskSignalDatasetInvestigationTriage />
+            {/* F185 (overnight 2026-09-29): Scenario × IntelProfile × RiskSignal Threat Scenario Readiness Map (TSRMAP) */}
+            <ThreatScenarioReadinessMap />
+            {/* F186 (overnight 2026-09-29): SwarmJob × Scenario × Knowledge Autonomous Mission Coverage (AMCOV) */}
+            <SwarmScenarioKnowledgeCoverage />
+            {/* F187 (overnight 2026-09-29): Task × Dataset × IntelProfile Intelligence Task Coverage (TDIPMAP) */}
+            <TaskDatasetIntelProfileMap />
+            {/* F188 (overnight 2026-09-29): Contact × Knowledge × Scenario Personnel Readiness Map (CPRSMAP) */}
+            <ContactPersonnelReadinessMap />
+            {/* F189 (overnight 2026-09-29): Graph Community × Dataset × Investigation Data Intelligence Coverage Nexus (GDINEX) */}
+            <GraphDatasetInvestigationNexus />
+            {/* F190 (overnight 2026-09-29): Investment × Scenario × RiskSignal Portfolio Risk Strategy Map (PRSMAP) */}
+            <InvestmentScenarioRiskMap />
+            {/* F191 (overnight 2026-09-29): Live Intel × Graph Community × RiskSignal World Threat Cluster Map (WTCMAP) */}
+            <WorldThreatClusterMap />
+            {/* F192 (overnight 2026-09-29): Graph Community × Task × SwarmJob Mission Density Heatmap (MDHEAT) */}
+            <GraphCommunityMissionDensity />
+            {/* F193 (overnight 2026-09-29): Contact × SwarmJob × Task Workforce Activity Matrix (WFACT) */}
+            <WorkforceActivityMatrix />
+            {/* F194 (overnight 2026-09-29): IntelProfile × Task × Report Mission Briefing Coverage (MTRBCOV) */}
+            <MissionBriefingCoverage />
+            {/* F195 (overnight 2026-09-30): Knowledge × Ops Event × RiskSignal Intel Context Coverage Pulse (KOECP) */}
+            <KnowledgeOpsEventContextPulse />
+            {/* F196 (overnight 2026-09-30): Graph Annotation × Dataset × Investigation Data Evidence Atlas (GADEVA) */}
+            <GraphAnnotationDataEvidenceAtlas />
+            {/* F197 (overnight 2026-09-30): Ops Event × Contact × Task Operational Attribution Matrix (OCTATM) */}
+            <OpsEventContactTaskMatrix />
+            {/* F198 (overnight 2026-09-30): IntelProfile × Dataset × Ops Event Intelligence Evidence Nexus (IDENEX) */}
+            <IntelProfileDatasetOpsNexus />
+            {/* F199 (overnight 2026-09-30): RiskSignal × SwarmJob × Knowledge Autonomous Risk Response Map (ARSRMAP) */}
+            <RiskSwarmKnowledgeResponseMap />
+            {/* F200 (overnight 2026-09-30): Graph Annotation × Scenario × Contact Intelligence Readiness Nexus (GASCRIN) */}
+            <GraphAnnotationScenarioContactNexus />
+            {/* F201 (overnight 2026-09-30): Investment × Knowledge × Report Portfolio Intelligence Coverage Map (PIKMAP) */}
+            <PortfolioIntelCoverageMap />
+            {/* F202 (overnight 2026-09-30): Ops Event × AIP Skill × Report Operational Response Coverage (OASRMAP) */}
+            <OpsEventAipSkillReportMap />
+            {/* F203 (overnight 2026-09-30): Contact × Dataset × Ops Event Operational Intelligence Network (CODIN) */}
+            <ContactDatasetOpsNetwork />
+            {/* F204 (overnight 2026-09-30): Contact × Report × Scenario × Knowledge Personnel Operational Intelligence Map (CRSKPOI) */}
+            <ContactReportScenarioKnowledgeMap />
+            {/* F205 (overnight 2026-09-30): IntelProfile × Ops Event × Scenario Threat Actor Response Grid (TARG) */}
+            <ThreatActorResponseGrid />
+            {/* F206 (overnight 2026-09-30): Knowledge × Scenario × SwarmJob × RiskSignal Defensive Playbook Coverage Index (DPCI) */}
+            <DefensivePlaybookCoverageIndex />
+            {/* F207 (overnight 2026-09-30): Live Intel × AIP Skill × Scenario Operational Readiness Pulse (LTASORP) */}
+            <LiveIntelAipScenarioReadiness />
+            {/* F208 (overnight 2026-09-30): SwarmJob × RiskSignal × Report Automated Threat Response Orchestrator (ASTRO) */}
+            <SwarmJobRiskSignalReportOrchestrator />
+            {/* F209 (overnight 2026-09-30): Task × Investment × RiskSignal Strategic Priority Alignment Map (SPIAM) */}
+            <TaskInvestmentRiskAlignmentMap />
+            {/* F210 (overnight 2026-09-30): Dataset × Contact × IntelProfile Data Intelligence Coverage Nexus (DICNEX) */}
+            <DatasetContactIntelProfileNexus />
+            {/* F212 (overnight 2026-09-30): Knowledge × Task × Investment Strategic Intelligence Coverage Nexus (STICNEX) */}
+            <StrategicIntelCoverageNexus />
+            {/* F211 (overnight 2026-09-30): Scenario × IntelProfile × Report Mission Intelligence Dossier (MIDOSS) */}
+            <ScenarioIntelReportDossier />
+            {/* F213 (overnight 2026-09-30): Ops Event × Investment × IntelProfile Threat Finance Nexus (TFINEX) */}
+            <ThreatFinanceNexus />
+            {/* F214 (overnight 2026-09-30): SwarmJob × AIP Skill × IntelProfile Autonomous Intelligence Operations Map (AIOMAP) */}
+            <AutonomousIntelOpsMap />
+            {/* F215 (overnight 2026-09-30): Graph Annotation × RiskSignal × IntelProfile Risk Attribution Nexus (ARBNEX) */}
+            <GraphAnnotationRiskIntelNexus />
+            {/* F216 (overnight 2026-09-30): Task × Report × Knowledge Action Intelligence Readiness Map (TRKARM) */}
+            <TaskReportKnowledgeReadiness />
+            {/* F217 (overnight 2026-09-30): Investigation × Graph Community × AIP Skill Network Intelligence Coverage Map (IGCAIM) */}
+            <InvestigationNetworkCoverageMap />
+            {/* F218 (overnight 2026-09-30): Contact × Ops Event × Dataset × RiskSignal Operational Exposure Nexus (COEDRN) */}
+            <ContactOpsDataRiskNexus />
+            <InvestmentKnowledgeTaskSwarmMap />
+            {/* F220 (overnight 2026-10-01): Scenario × Report × Task Mission Execution Coverage Map (SRTMEC) */}
+            <ScenarioReportTaskMissionMap />
+
+            {/* F221 (overnight 2026-10-01): IntelProfile × Ops Event × Knowledge Threat Actor Activity Monitor (TAAM) */}
+            <ThreatActorActivityMonitor />
+
+            {/* F222 (overnight 2026-10-01): Contact × Graph Community × IntelProfile Network Actor Intelligence Map (NCAIM) */}
+            <ContactGraphIntelMap />
+
+            {/* F223 (overnight 2026-10-01): AIP Skill × Report × Knowledge Multi-Domain Intelligence Readiness (MDIRS) */}
+            <AipSkillReportKnowledgeReadiness />
+
+            {/* F224 (overnight 2026-10-01): Ops Event × Contact × Investment × Scenario Integrated Response Map (IRCMAP) */}
+            <OpsEventIntegratedResponseMap />
+
+            {/* F225 (overnight 2026-10-01): Knowledge × RiskSignal × Scenario Defensive Coverage Map (KRSDEF) */}
+            <KnowledgeRiskScenarioDefMap />
+
+            {/* F226 (overnight 2026-10-01): Task × Graph Community × SwarmJob Operational Mesh Coverage Map (OMCMAP) */}
+            <OperationalMeshCoverageMap />
+
+            {/* F227 (overnight 2026-10-01): Dataset × Graph Community × Knowledge × Investigation Coverage Intelligence Map (DGKIMAP) */}
+            <DatasetGraphIntelMap />
+
+            {/* F228 (overnight 2026-10-01): Ops Event × Contact × Knowledge Situational Awareness Map (OCASAM) */}
+            <OpsEventContactKnowledgeMap />
+
+            {/* F229 (overnight 2026-10-01): Live Intel × Scenario × RiskSignal World Event Threat Matrix (WETMAT) */}
+            <WorldEventThreatMatrix />
+
+            {/* F230 (overnight 2026-10-01): Dataset × AIP Skill × Report Intelligence Automation Nexus (DARINEX) */}
+            <DatasetSkillReportNexus />
+
+            {/* F231 (overnight 2026-10-01): Contact × Knowledge × Ops Event Situational Awareness Bridge (CKOEAB) */}
+            <ContactKnowledgeOpsAwarenessBridge />
+            {/* F232 (overnight 2026-10-01): IntelProfile × Task × Investigation Coverage Matrix (ITICMAP) */}
+            <IntelProfileTaskInvestigationMatrix />
+            {/* F233 (overnight 2026-10-01): Task × Knowledge × AIP Skill Operational Readiness Coverage Nexus (ORCNEX) */}
+            <TaskKnowledgeSkillNexus />
+
+            {/* F234 (overnight 2026-10-01): IntelProfile × Dataset × Scenario Threat Data Readiness Map (TDRMAP) */}
+            <IntelProfileDataScenarioMap />
+
+            {/* F235 (overnight 2026-10-01): SwarmJob × Report × Scenario Mission Coverage Nexus (SMRNEX) */}
+            <SwarmReportScenarioNexus />
+
+            {/* F236 (overnight 2026-10-01): Graph Annotation × AIP Skill × Contact Intelligence Coverage Bridge (GACCOV) */}
+            <GraphAnnotationSkillContactBridge />
+
+            {/* F237 (overnight 2026-10-01): Intel Profile × Contact × Investigation × Ops Event Response Nexus (IRCNEX) */}
+            <IntelProfileResponseNexus />
+
+            {/* F238 (overnight 2026-10-01): RiskSignal × Knowledge × Contact × Dataset Threat Mitigation Intelligence Nexus (TMINEX) */}
+            <RiskSignalMitigationNexus />
+
+            {/* F239 (overnight 2026-10-01): Task × SwarmJob × Investment Resource Priority Nexus (TRPIN) */}
+            <TaskSwarmInvestmentResourceNexus />
+
+            {/* F240 (overnight 2026-10-01): Ops Event × AIP Skill × Contact Operational Response Alignment (OASALIGN) */}
+            <OpsSkillContactAlignment />
+
+            {/* F241 (overnight 2026-10-01): SwarmJob × IntelProfile × Report Intelligence Production Assessment (IPASSESS) */}
+            <SwarmIntelReportNexus />
+
+            {/* F242: Investigation × Scenario × Knowledge Intelligence Response Nexus — ISKRNEX button; /v1/investigations × /v1/scenario/list × /knowledge/ */}
+            <InvestigationScenarioKnowledgeNexus />
+
+            {/* F243 (overnight 2026-10-02): RiskSignal × Contact × Scenario Threat Response Mesh — TRMESH button; /entities/RiskSignal × /entities/Contact × /v1/scenario/list */}
+            <ThreatResponseMesh />
+
+            {/* F244 (overnight 2026-10-02): Dataset × Report × AIP Skill × RiskSignal Intelligence Production Coverage — DRASCOV button; /v1/datasets × /v1/reports × /v1/aip/skill × /entities/RiskSignal */}
+            <DatasetReportSkillRiskCoverage />
+
+            {/* F245 (overnight 2026-10-02): IntelProfile × Ops Event × Scenario Active Threat Tracking — IPOESTR button; /entities/IntelProfile × /v1/ops/events × /v1/scenario/list */}
+            <IntelProfileOpsThreatTracker />
+
+            {/* F246 (overnight 2026-10-02): Task × Report × Investigation Operational Closure Assessment — TROCAS button; /entities/Task × /v1/reports × /v1/investigations */}
+            <TaskReportInvestigationClosure />
+            {/* F247 (overnight 2026-10-02): Ops Alert × Graph Community × Investment Financial Risk Alert Map — FRACMAP button; /v1/ops/alerts × /v1/graph/communities × /entities/Investment */}
+            <OpsAlertCommunityInvestmentMap />
+            {/* F248 (overnight 2026-10-02): Knowledge × Ops Alert × AIP Skill Threat-Response Automation Coverage — KOATRAC button; /knowledge/ × /v1/ops/alerts × /v1/aip/skill */}
+            <KnowledgeOpsAlertSkillCoverage />
+            {/* F249 (overnight 2026-10-02): RiskSignal × AIP Skill × Investigation Intelligence Response Index — RSIRIX button; /entities/RiskSignal × /v1/aip/skill × /v1/investigations */}
+            <RiskSignalSkillInvestigationIndex />
+            {/* F250 (overnight 2026-10-02): Contact × Scenario × Dataset Operational Intelligence Coverage — CSDCOV button; /entities/Contact × /v1/scenario/list × /v1/datasets */}
+            <ContactScenarioDatasetCoverage />
+            {/* F251 (overnight 2026-10-02): SwarmJob × Contact × Knowledge Capability Readiness Nexus — SCKNEX button; /entities/SwarmJob × /entities/Contact × /knowledge/ */}
+            <SwarmContactKnowledgeNexus />
+
+            {/* F252 (overnight 2026-10-02): Investment × Scenario × IntelProfile Threat-Funded Scenario Coverage — TFSCOV button; /entities/Investment × /v1/scenario/list × /entities/IntelProfile */}
+            <InvestmentScenarioIntelCoverage />
+
+            {/* F253 (overnight 2026-10-02): Ops Events × Knowledge × Scenario Response Readiness Index — OKRSRI button; /v1/ops/events × /knowledge/ × /v1/scenario/list */}
+            <OpsEventKnowledgeScenarioReadiness />
+
+            {/* F254 (overnight 2026-10-02): AIP Skill × Graph Community × Dataset Intelligence Saturation Index — AGDSIX button; /v1/aip/skill × /v1/graph/communities × /v1/datasets */}
+            <AipSkillGraphDatasetSaturation />
+
+            {/* F255 (overnight 2026-10-02): Graph Community × Investment × Ops Event Coverage Nexus — GIOCNEX button; /v1/graph/communities × /entities/Investment × /v1/ops/events */}
+            <GraphCommunityInvestmentOpsNexus />
+            {/* F256 (overnight 2026-10-02): Task × IntelProfile × Report Intelligence Closure Review — TIPREX button; /entities/Task × /entities/IntelProfile × /v1/reports */}
+            <TaskIntelReportClosure />
+
+            {/* F257 (overnight 2026-10-02): SwarmJob × RiskSignal × Knowledge Threat Execution Intelligence Review — TEIXREV button; /entities/SwarmJob × /entities/RiskSignal × /knowledge/ */}
+            <SwarmRiskKnowledgeThreatReview />
+
+            {/* F258 (overnight 2026-10-02): Graph Node × Contact × Task Operational Coverage — GNOCOV button; /v1/graph/centrality × /entities/Contact × /entities/Task */}
+            <GraphNodeOperationalCoverage />
+
+            {/* F259 (overnight 2026-10-02): RiskSignal × AIP Skill × Ops Event Automated Response Coverage — ARSCOV button; /entities/RiskSignal × /v1/aip/skill × /v1/ops/events */}
+            <RiskSignalAutomatedResponseCoverage />
+
+            {/* F260 (overnight 2026-10-02): Contact × RiskSignal × Knowledge × Ops Event Full Personnel Alert Coverage — FPACOV button; /entities/Contact × /entities/RiskSignal × /knowledge/ × /v1/ops/events */}
+            <FullPersonnelAlertCoverage />
+
+            {/* F261 (overnight 2026-10-02): Investment × Dataset × RiskSignal Cross-Coverage Nexus — IDRN button; /entities/Investment × /v1/datasets × /entities/RiskSignal */}
+            <InvestmentDatasetRiskNexus />
+            {/* F262 (overnight 2026-10-02): AIP Skill × Contact × RiskSignal Personnel Capability Risk Coverage — PCRCOV button; /v1/aip/skill × /entities/Contact × /entities/RiskSignal */}
+            <AipSkillContactRiskCoverage />
+            {/* F263 (overnight 2026-10-03): Report × Contact × SwarmJob Intelligence Action Nexus — RCSAN button; /v1/reports × /entities/Contact × /entities/SwarmJob */}
+            <ReportContactSwarmNexus />
+            {/* F264 (overnight 2026-10-03): Scenario × Knowledge × Dataset × Contact Full Readiness Nexus — SKDCRNEX button; /v1/scenario/list × /knowledge/ × /v1/datasets × /entities/Contact */}
+            <ScenarioKnowledgeDatasetContactNexus />
+            {/* F265 (overnight 2026-10-03): SwarmJob × Report × Ops Event × Knowledge Mission Context Bridge — SROCKB button; /entities/SwarmJob × /v1/reports × /v1/ops/events × /knowledge/ */}
+            <SwarmReportOpsKnowledgeBridge />
+            {/* F266 (overnight 2026-10-03): IntelProfile × Graph Centrality × Investigation × Ops Alert Threat Actor Resolution Coverage — TAREC button; /entities/IntelProfile × /v1/graph/centrality × /v1/investigations × /v1/ops/alerts */}
+            <IntelProfileThreatActorResolution />
+            {/* F267 (overnight 2026-10-03): Task × Dataset × Ops Alert Workflow Intelligence Coverage — TDOACOV button; /entities/Task × /v1/datasets × /v1/ops/alerts */}
+            <TaskDatasetOpsAlertCoverage />
+            {/* F268 (overnight 2026-10-03): IntelProfile × Investment × Ops Alert Financial Threat Nexus — FTNEX button; /entities/IntelProfile × /entities/Investment × /v1/ops/alerts */}
+            <IntelProfileInvestmentAlertNexus />
+            {/* F269 (overnight 2026-10-03): Contact × Scenario × Knowledge × RiskSignal Intelligence Bridge — CSKSRB button; /entities/Contact × /v1/scenario/list × /knowledge/ × /entities/RiskSignal */}
+            <ContactScenarioKnowledgeRiskBridge />
+            {/* F270 (overnight 2026-10-03): SwarmJob × Investigation × Dataset Intelligence Completion Coverage — SIDICOV button; /entities/SwarmJob × /v1/investigations × /v1/datasets */}
+            <SwarmJobInvestigationDatasetCoverage />
+            {/* F271 (overnight 2026-10-03): Report × Ops Event × Graph Annotation Intelligence Response Nexus — ROGANEX button; /v1/reports × /v1/ops/events × /v1/graph/annotations */}
+            <ReportOpsAnnotationNexus />
+            {/* F272 (overnight 2026-10-03): AIP Skill × Contact × Ops Alert Response Readiness Index — SCRARX button; /v1/aip/skill × /entities/Contact × /v1/ops/alerts */}
+            <AipSkillContactAlertReadiness />
+            {/* F274 (overnight 2026-10-03): Task × RiskSignal × Knowledge × AIP Skill Operational Intel Nexus — TIKSNEX button; /entities/Task × /entities/RiskSignal × /knowledge/ × /v1/aip/skill */}
+            <TaskRiskKnowledgeSkillNexus />
+            {/* F275 (overnight 2026-10-03): SwarmJob × AIP Skill × Ops Alert Automation Coverage Nexus — SAANEX button; /entities/SwarmJob × /v1/aip/skill × /v1/ops/alerts */}
+            <SwarmSkillAlertNexus />
+            {/* F276 (overnight 2026-10-03): IntelProfile × RiskSignal × Investigation × Dataset Risk Coverage Matrix — IRCMAT button; /entities/IntelProfile × /entities/RiskSignal × /v1/investigations × /v1/datasets */}
+            <IntelProfileRiskInvestigationDatasetMatrix />
+            {/* F277 (overnight 2026-10-03): Contact × Dataset × Ops Alert Response Coverage Matrix — CDOACOV button; /entities/Contact × /v1/datasets × /v1/ops/alerts */}
+            <ContactDatasetAlertCoverage />
+            {/* F278 (overnight 2026-10-03): Investigation × AIP Skill × Knowledge Coverage Assessment — IASKACOV button; /v1/investigations × /v1/aip/skill × /knowledge/ */}
+            <InvestigationSkillKnowledgeCoverage />
+            {/* F279 (overnight 2026-10-03): Ops Alert × RiskSignal × Contact Response Coverage — ARCOV button; /v1/ops/alerts × /entities/RiskSignal × /entities/Contact */}
+            <OpsAlertRiskSignalContactCoverage />
+            {/* F280 (overnight 2026-10-03): SwarmJob × Contact × Ops Event Mission Execution Nexus — SCOEMEX button; /entities/SwarmJob × /entities/Contact × /v1/ops/events */}
+            <SwarmContactOpsEventNexus />
+            {/* F281 (overnight 2026-10-03): Investment × IntelProfile × Scenario Strategic Coverage Nexus — IISCOVNEX button; /entities/Investment × /entities/IntelProfile × /v1/scenario/list */}
+            <InvestmentIntelScenarioCoverage />
+            {/* F282 (overnight 2026-10-04): Alert × AIP Skill × Knowledge Intelligence Nexus — AAKN button; /v1/alerts × /v1/aip/skill × /knowledge/ */}
+            <AlertAipKnowledgeNexus />
+            {/* F283 (overnight 2026-10-04): Task × Scenario × Knowledge × Ops Alert Mission Readiness Nexus — TSKMON button; /entities/Task × /v1/scenario/list × /knowledge/ × /v1/ops/alerts */}
+            <TaskScenarioKnowledgeOpsNexus />
+            {/* F284 (overnight 2026-10-04): RiskSignal × Dataset × IntelProfile × Report Strategic Intelligence Coverage — RDIRICOV button; /entities/RiskSignal × /v1/datasets × /entities/IntelProfile × /v1/reports */}
+            <RiskSignalDatasetIntelReportCoverage />
+            {/* F285 (overnight 2026-10-04): Contact × Graph Centrality × Ops Event × Dataset Personnel Network Coverage — PNETCOV button; /entities/Contact × /v1/graph/centrality × /v1/ops/events × /v1/datasets */}
+            <ContactGraphOpsDatasetNexus />
+            {/* F286 (overnight 2026-10-04): SwarmJob × AIP Skill × Ops Alert Response Automation Nexus — SOARNEX button; /entities/SwarmJob × /v1/aip/skill × /v1/ops/alerts */}
+            <SwarmJobAipSkillAlertNexus />
+            {/* F287 (overnight 2026-10-04): Contact × Knowledge × Report × Ops Event Full Personnel Intel Coverage — CPRICOVER button; /entities/Contact × /knowledge/ × /v1/reports × /v1/ops/events */}
+            <ContactPersonnelIntelCoverage />
+            {/* F288 (overnight 2026-10-04): Investigation × Graph Community × AIP Skill × Risk Signal Network Intelligence Nexus — IGASNIC button; /v1/investigations × /v1/graph/communities × /v1/aip/skill × /entities/RiskSignal */}
+            <InvestigationGraphSkillRiskNexus />
+            {/* F289 (overnight 2026-10-04): Graph Subgraph × Task × AIP Skill × Report Operational Mapping Nexus — GSTARMEX button; /v1/graph/subgraph × /entities/Task × /v1/aip/skill × /v1/reports */}
+            <GraphSubgraphTaskSkillReportNexus />
+            {/* F290 (overnight 2026-10-04): Risk Signal × Scenario × Task Strategic Response Readiness Nexus — RSRTREAD button; /entities/RiskSignal × /v1/scenario/list × /entities/Task; classifies FULLY_PLANNED/SCENARIO_ONLY/TASK_ONLY/UNPLANNED */}
+            <RiskScenarioTaskReadiness />
+
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
