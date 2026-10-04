@@ -358,6 +358,7 @@ import { isIgasnicQuery, buildIgasnicScript } from "./InvestigationGraphSkillRis
 import { isGstarmexQuery, buildGstarmexScript } from "./GraphSubgraphTaskSkillReportNexus";
 import { isRsrtreadQuery, buildRsrtreadScript } from "./RiskScenarioTaskReadiness";
 import { isIsrmapQuery, buildIsrmapScript } from "./InvestmentSkillScenarioMap";
+import { isIahmonQuery, buildIahmonScript } from "./OpsAlertHorizonMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3440,6 +3441,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:isrmap-toggle"));
       let script = "";
       try { script = buildIsrmapScript(); } catch { script = "ISRMAP online. Opening Investment Skill Scenario Financial Risk Readiness Map."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isIahmonQuery(q)) {
+      document.dispatchEvent(new CustomEvent("jarvis:iahmon-toggle"));
+      let script = "";
+      try { script = buildIahmonScript(); } catch { script = "IAHMON online. Opening Intelligence Horizon Monitor."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

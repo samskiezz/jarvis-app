@@ -515,6 +515,7 @@ import InvestigationGraphSkillRiskNexus from '@/components/cinematic/Investigati
 import GraphSubgraphTaskSkillReportNexus from '@/components/cinematic/GraphSubgraphTaskSkillReportNexus';
 import RiskScenarioTaskReadiness from '@/components/cinematic/RiskScenarioTaskReadiness';
 import InvestmentSkillScenarioMap from '@/components/cinematic/InvestmentSkillScenarioMap';
+import OpsAlertHorizonMonitor from '@/components/cinematic/OpsAlertHorizonMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1636,6 +1637,8 @@ function App() {
             <RiskScenarioTaskReadiness />
             {/* F291 (overnight 2026-10-04): Investment × AIP Skill × Scenario Financial Risk Readiness Map — ISRMAP button; /entities/Investment × /v1/aip/skill × /v1/scenario/list; classifies FULLY_COVERED/SKILL_COVERED/SCENARIO_COVERED/UNPROTECTED */}
             <InvestmentSkillScenarioMap />
+            {/* F292 (overnight 2026-10-04): Ops Alert × Graph Annotation × Knowledge × Dataset Intelligence Horizon Monitor — IAHMON button; /v1/ops/alerts × /v1/graph/annotations × /knowledge/ × /v1/datasets */}
+            <OpsAlertHorizonMonitor />
 
             <Suspense fallback={<Loading />}>
               <Routes>
