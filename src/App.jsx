@@ -507,6 +507,7 @@ import SwarmContactOpsEventNexus from '@/components/cinematic/SwarmContactOpsEve
 import InvestmentIntelScenarioCoverage from '@/components/cinematic/InvestmentIntelScenarioCoverage';
 import AlertAipKnowledgeNexus from '@/components/cinematic/AlertAipKnowledgeNexus';
 import TaskScenarioKnowledgeOpsNexus from '@/components/cinematic/TaskScenarioKnowledgeOpsNexus';
+import RiskSignalDatasetIntelReportCoverage from '@/components/cinematic/RiskSignalDatasetIntelReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1612,6 +1613,8 @@ function App() {
             <AlertAipKnowledgeNexus />
             {/* F283 (overnight 2026-10-04): Task × Scenario × Knowledge × Ops Alert Mission Readiness Nexus — TSKMON button; /entities/Task × /v1/scenario/list × /knowledge/ × /v1/ops/alerts */}
             <TaskScenarioKnowledgeOpsNexus />
+            {/* F284 (overnight 2026-10-04): RiskSignal × Dataset × IntelProfile × Report Strategic Intelligence Coverage — RDIRICOV button; /entities/RiskSignal × /v1/datasets × /entities/IntelProfile × /v1/reports */}
+            <RiskSignalDatasetIntelReportCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

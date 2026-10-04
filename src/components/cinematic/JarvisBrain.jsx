@@ -350,6 +350,7 @@ import { isScoemexQuery, buildScoemexScript } from "./SwarmContactOpsEventNexus"
 import { isIiscovnexQuery, buildIiscovnexScript } from "./InvestmentIntelScenarioCoverage";
 import { isAaknQuery, buildAaknScript } from "./AlertAipKnowledgeNexus";
 import { isTskmonQuery, buildTskmonScript } from "./TaskScenarioKnowledgeOpsNexus";
+import { isRdiricovQuery, buildRdiricovScript } from "./RiskSignalDatasetIntelReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -3368,6 +3369,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:tskmon-toggle"));
       let script = "";
       try { script = buildTskmonScript(); } catch { script = "TSKMON online. Opening Task Mission Readiness Nexus — correlating tasks against scenarios, knowledge, and ops alerts."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    if (isRdiricovQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:rdiricov-toggle"));
+      let script = "";
+      try { script = buildRdiricovScript(); } catch { script = "RDIRICOV online. Opening RiskSignal Strategic Intelligence Coverage — correlating risk signals against datasets, intel profiles, and reports."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
