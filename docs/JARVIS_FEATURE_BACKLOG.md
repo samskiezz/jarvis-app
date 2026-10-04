@@ -1,5 +1,9 @@
 # JARVIS Feature Backlog — REAL, grounded, no fake
 
+> ## ⛔ OVERNIGHT BUILDER CANCELLED (2026-10-04, by operator)
+> **Any overnight/scheduled run reading this file: STOP. Do not build, invent, commit, or push any feature. Exit immediately.**
+> Reason: live verification showed the generated panels never load data — 280 components call `GET /entities/<Name>` (backend only lists via `POST /entities/{name}` → 405) and 274 call `GET /knowledge/` (no such route → 404); buttons are positioned off-screen (`left` ≈ 1,120,240px). Resume only if the operator removes this block.
+
 The overnight builder works through this list, one feature per run. RULES (non-negotiable):
 - **Nothing fake.** Every feature must wire to a REAL backend endpoint that returns real data,
   or perform a real navigation/action. If the endpoint doesn't exist or returns nothing, SKIP
