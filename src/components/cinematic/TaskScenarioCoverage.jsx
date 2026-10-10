@@ -1,473 +1,289 @@
 /**
- * F118 — Task × Scenario Coverage Mapper
- *
- * Parallel-fetches /entities/Task + /v1/scenario/list, then
- * keyword-correlates each task (title/description/priority/tags)
- * against every scenario (name/objective/type/description) to
- * surface SCENARIO-BACKED tasks (at least one scenario) vs
- * ORPHANED tasks (no scenario connection — operational gap).
- *
- * Stat tiles: tasks / scenarios / backed / orphaned.
- * Filter tabs: ALL | BACKED | ORPHANED.
- * Expand task → matched scenarios with status badge + relevance score.
- * Amber badge on orphaned-task count.
- * ▶ ASSESS: 2-sentence operational alignment brief via
- *   /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
- *
- * Toggle:  ◈ TASKSCEN  at bottom:8 left:34600, zIndex 73.
- * Voice:   "task scenario / scenario task / taskscen /
- *           which tasks have scenarios / orphaned tasks"
- * Event:   jarvis:taskscen-toggle
- * Refresh: 120 s auto-poll.
+ * TaskScenarioCoverage — F61
+ * ◈ TSCOV button (left:2300, bottom:18, zIndex:69)
+ * parallel-fetches /entities/Task + /v1/scenario/list
+ * keyword-correlates task names/descriptions against scenario names/descriptions
+ * classifies SCENARIO_BACKED (≥1 match) vs UNPLANNED (no playbook coverage)
+ * amber badge on unplanned count; filter tabs ALL/SCENARIO_BACKED/UNPLANNED
+ * expand task → matched scenario cards with relevance bar
+ * ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence coverage brief + TTS
+ * voice trigger: "tscov/task scenario/unplanned tasks/task coverage/playbook coverage/task playbook"
+ * jarvis:tscov-toggle event; 90-s auto-refresh
  */
-import { useCallback, useEffect, useRef, useState } from "react";
-import { COLORS as C, SHELL as S } from "@/domain/colors";
+import { useEffect, useState } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const BTN_LEFT = 34600;
-const POLL_MS  = 120_000;
-
+const CY = "#29E7FF";
+const AM = "#F59E0B";
+const GR = "#10B981";
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
 
-function apiBase() {
-  const env = typeof import.meta !== "undefined" ? import.meta.env : {};
-  if (env.VITE_API_BASE_URL) return env.VITE_API_BASE_URL;
-  if (typeof window !== "undefined" && window.location) {
-    const { protocol, hostname } = window.location;
-    return `${protocol}//${hostname}:${env.VITE_API_PORT || "8001"}`;
-  }
-  return "http://localhost:8001";
+const TSCOV_RE =
+  /\btscov\b|\btask.scenario\b|\bunplanned.task|\bscenario.coverage\b|\btask.playbook\b|\bplaybook.coverage\b|\btask.cover|\bcover.task/i;
+
+export function isTscovQuery(text) {
+  return TSCOV_RE.test(text || "");
 }
 
-// ── exported intent helpers ──────────────────────────────────────────────────
-
-const TASKSCEN_RE =
-  /\b(task\s+scenario|scenario\s+task|taskscen|which\s+tasks?\s+(have|match|touch)\s+scenarios?|orphaned\s+tasks?|tasks?\s+(backed|coverage|without\s+scenarios?))\b/i;
-
-export function isTaskScenQuery(q) { return TASKSCEN_RE.test(q); }
-
-export async function buildTaskScenScript() {
-  try {
-    const base = apiBase();
-    const hdr  = { Authorization: `Bearer ${API_KEY}` };
-    const [tRes, sRes] = await Promise.all([
-      fetch(`${base}/entities/Task`,       { headers: hdr }),
-      fetch(`${base}/v1/scenario/list`,    { headers: hdr }),
-    ]);
-    const tasks     = normaliseTasks(await tRes.json());
-    const scenarios = normaliseScenarios(await sRes.json());
-
-    const backedCount  = tasks.filter((t) =>
-      scenarios.some((sc) => relevance(t, sc) > 0)
-    ).length;
-    const orphanCount  = tasks.length - backedCount;
-
-    const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-      body: JSON.stringify({
-        message:
-          `JARVIS task-scenario alignment briefing: ${tasks.length} active tasks reviewed ` +
-          `against ${scenarios.length} operational scenarios. ${backedCount} tasks have scenario ` +
-          `backing (purpose documented), ${orphanCount} tasks are orphaned (no scenario ` +
-          `connection — potential operational drift). Give a 2-sentence alignment assessment — ` +
-          `formal British butler tone, first person.`,
-      }),
-    });
-    const d = await r.json();
-    return (d.answer || "Task-scenario alignment analysis complete, sir.").trim();
-  } catch {
-    return "Task-scenario alignment analysis unavailable at this time, sir.";
-  }
-}
-
-// ── helpers ──────────────────────────────────────────────────────────────────
-
-function normaliseTasks(raw) {
-  const arr = Array.isArray(raw)           ? raw
-    : Array.isArray(raw?.data)            ? raw.data
-    : Array.isArray(raw?.items)           ? raw.items
-    : Array.isArray(raw?.results)         ? raw.results
-    : Array.isArray(raw?.tasks)           ? raw.tasks
-    : [];
-  return arr.map((t, i) => ({
-    id:          t.id          || String(i),
-    title:       t.title       || t.name        || `Task ${i + 1}`,
-    description: (t.description || t.notes      || t.body || "").toString().slice(0, 300),
-    priority:    t.priority    || t.urgency      || "normal",
-    status:      t.status      || t.state        || "unknown",
-    tags:        Array.isArray(t.tags) ? t.tags.join(" ") : (t.tags || ""),
-  }));
-}
-
-function normaliseScenarios(raw) {
-  const arr = Array.isArray(raw)              ? raw
-    : Array.isArray(raw?.data)               ? raw.data
-    : Array.isArray(raw?.items)              ? raw.items
-    : Array.isArray(raw?.results)            ? raw.results
-    : Array.isArray(raw?.scenarios)          ? raw.scenarios
-    : [];
-  return arr.map((s, i) => ({
-    id:        s.id        || String(i),
-    name:      s.name      || s.title       || `Scenario ${i + 1}`,
-    objective: (s.objective || s.description || s.goal || "").toString().slice(0, 300),
-    type:      s.type      || s.category    || "",
-    status:    s.status    || s.state       || "unknown",
-  }));
-}
-
-function keywords(str) {
-  return String(str || "")
+function tokenise(s) {
+  return (s || "")
     .toLowerCase()
-    .split(/[\s_\-.,/|:@()[\]]+/)
-    .filter((w) => w.length >= 3);
+    .replace(/[^a-z0-9 ]/g, " ")
+    .split(/\s+/)
+    .filter((t) => t.length > 2);
 }
 
-function relevance(task, scenario) {
-  const tw = keywords(`${task.title} ${task.description} ${task.tags}`);
-  const sw = keywords(`${scenario.name} ${scenario.objective} ${scenario.type}`);
-  return tw.filter((w) => sw.some((sv) => sv.includes(w) || w.includes(sv))).length;
+function relevance(taskTokens, scenario) {
+  const haystack = tokenise(
+    `${scenario.name || ""} ${scenario.description || ""} ${scenario.objective || ""}`
+  );
+  let hits = 0;
+  for (const t of taskTokens) if (haystack.includes(t)) hits++;
+  return haystack.length ? Math.min(1, hits / Math.max(1, taskTokens.length)) : 0;
 }
 
-function buildMatrix(tasks, scenarios) {
-  return tasks.map((t) => {
-    const matched = scenarios
-      .map((sc) => ({ ...sc, score: relevance(t, sc) }))
-      .filter((sc) => sc.score > 0)
-      .sort((a, b) => b.score - a.score);
-    return { ...t, scenarios: matched, backed: matched.length > 0 };
-  });
+async function fetchData(base, headers) {
+  const [tr, sr] = await Promise.allSettled([
+    fetch(`${base}/entities/Task`, { headers }).then((r) => (r.ok ? r.json() : [])),
+    fetch(`${base}/v1/scenario/list`, { headers }).then((r) => (r.ok ? r.json() : [])),
+  ]);
+  const tasks = Array.isArray(tr.value) ? tr.value : tr.value?.items || [];
+  const scenarios = Array.isArray(sr.value) ? sr.value : sr.value?.scenarios || sr.value?.items || [];
+  return { tasks, scenarios };
 }
 
-function priorityColor(p) {
-  const u = (p || "").toUpperCase();
-  if (u === "CRITICAL" || u === "HIGH")   return C.red;
-  if (u === "MEDIUM")                     return C.gold;
-  if (u === "LOW")                        return C.neon;
-  return S.textMuted;
+export async function buildTscovScript() {
+  const base = apiBase();
+  const headers = { Authorization: `Bearer ${API_KEY}` };
+  const { tasks, scenarios } = await fetchData(base, headers);
+  let backed = 0;
+  for (const task of tasks) {
+    const tt = tokenise(`${task.title || task.name || ""} ${task.description || ""}`);
+    if (scenarios.some((s) => relevance(tt, s) >= 0.1)) backed++;
+  }
+  const unplanned = tasks.length - backed;
+  return `Task scenario coverage analysis complete, sir. ${backed} of ${tasks.length} tasks have matching scenario playbooks. ${unplanned > 0 ? `${unplanned} tasks remain unplanned — I recommend reviewing those for playbook gaps.` : "All tasks are scenario-backed. Operational coverage looks strong."}`;
 }
-
-function statusColor(st) {
-  const u = (st || "").toUpperCase();
-  if (u === "RUNNING" || u === "ACTIVE" || u === "IN_PROGRESS") return "#4ADE80";
-  if (u === "COMPLETED" || u === "DONE")                        return C.blue;
-  if (u === "FAILED")                                           return "#FF3030";
-  if (u === "PENDING" || u === "QUEUED")                        return "#FFD700";
-  return S.textMuted;
-}
-
-// ── component ────────────────────────────────────────────────────────────────
-
-const TABS = ["ALL", "BACKED", "ORPHANED"];
 
 export default function TaskScenarioCoverage() {
-  const [open,       setOpen]       = useState(false);
-  const [tasks,      setTasks]      = useState([]);
-  const [scenarios,  setScenarios]  = useState([]);
-  const [loading,    setLoading]    = useState(false);
-  const [filter,     setFilter]     = useState("ALL");
-  const [query,      setQuery]      = useState("");
-  const [expanded,   setExpanded]   = useState(null);
-  const [assessing,  setAssessing]  = useState(false);
-  const timerRef = useRef(null);
+  const [open, setOpen] = useState(false);
+  const [rows, setRows] = useState([]);
+  const [scenarios, setScenarios] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [tab, setTab] = useState("ALL");
+  const [search, setSearch] = useState("");
+  const [expanded, setExpanded] = useState(null);
+  const [assessing, setAssessing] = useState(false);
+  const [brief, setBrief] = useState("");
 
-  const load = useCallback(async () => {
+  async function refresh() {
     setLoading(true);
+    const base = apiBase();
+    const headers = { Authorization: `Bearer ${API_KEY}` };
     try {
-      const base = apiBase();
-      const hdr  = { Authorization: `Bearer ${API_KEY}` };
-      const [tRes, sRes] = await Promise.all([
-        fetch(`${base}/entities/Task`,      { headers: hdr }),
-        fetch(`${base}/v1/scenario/list`,   { headers: hdr }),
-      ]);
-      setTasks(normaliseTasks(await tRes.json()));
-      setScenarios(normaliseScenarios(await sRes.json()));
-    } catch { /* backend unreachable */ }
-    finally { setLoading(false); }
-  }, []);
+      const { tasks, scenarios: sc } = await fetchData(base, headers);
+      setScenarios(sc);
+      const enriched = tasks.map((task) => {
+        const tt = tokenise(`${task.title || task.name || ""} ${task.description || ""}`);
+        const matches = sc
+          .map((s) => ({ ...s, score: relevance(tt, s) }))
+          .filter((s) => s.score >= 0.1)
+          .sort((a, b) => b.score - a.score);
+        return {
+          ...task,
+          _label: task.title || task.name || task.id || "—",
+          _backed: matches.length > 0,
+          _matches: matches,
+        };
+      });
+      setRows(enriched);
+    } catch {}
+    setLoading(false);
+  }
 
   useEffect(() => {
-    load();
-    timerRef.current = setInterval(load, POLL_MS);
-    return () => clearInterval(timerRef.current);
-  }, [load]);
+    if (open) refresh();
+    const id = setInterval(() => { if (open) refresh(); }, 90_000);
+    return () => clearInterval(id);
+  }, [open]);
 
   useEffect(() => {
-    const onToggle = () => setOpen((v) => !v);
-    window.addEventListener("jarvis:taskscen-toggle", onToggle);
-    return () => window.removeEventListener("jarvis:taskscen-toggle", onToggle);
+    const toggle = () => setOpen((o) => !o);
+    window.addEventListener("jarvis:tscov-toggle", toggle);
+    return () => window.removeEventListener("jarvis:tscov-toggle", toggle);
   }, []);
-
-  useEffect(() => {
-    const onAsk = (e) => {
-      const q = (e.detail?.text || e.detail?.query || "").toLowerCase();
-      if (isTaskScenQuery(q)) setOpen(true);
-    };
-    window.addEventListener("jarvis:ask", onAsk);
-    return () => window.removeEventListener("jarvis:ask", onAsk);
-  }, []);
-
-  const matrix      = buildMatrix(tasks, scenarios);
-  const backedCount = matrix.filter((t) => t.backed).length;
-  const orphanCount = matrix.length - backedCount;
-
-  const visible = matrix.filter((t) => {
-    if (filter === "BACKED"   && !t.backed)  return false;
-    if (filter === "ORPHANED" &&  t.backed)  return false;
-    if (query) {
-      const q = query.toLowerCase();
-      return t.title.toLowerCase().includes(q) ||
-             t.description.toLowerCase().includes(q);
-    }
-    return true;
-  });
 
   async function assess() {
     setAssessing(true);
+    setBrief("");
+    const base = apiBase();
+    const headers = { Authorization: `Bearer ${API_KEY}`, "Content-Type": "application/json" };
+    const backed = rows.filter((r) => r._backed).length;
+    const unplanned = rows.length - backed;
     try {
-      const answer = await buildTaskScenScript();
-      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text: answer } }));
-    } finally {
-      setAssessing(false);
+      const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
+        method: "POST",
+        headers,
+        body: JSON.stringify({
+          message: `Task-to-scenario coverage: ${backed}/${rows.length} tasks are scenario-backed, ${unplanned} unplanned. Provide a 2-sentence operational coverage brief and top recommendation.`,
+        }),
+      });
+      const d = await r.json();
+      const text = (d.answer || "").replace(/<<ACTION:[^>]*>>/g, "").trim();
+      setBrief(text);
+      window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
+    } catch {
+      setBrief("Assessment unavailable — agent offline.");
     }
+    setAssessing(false);
   }
 
-  const STAT = {
-    color: C.textB, fontSize: 10, letterSpacing: 1, textAlign: "center",
-    fontFamily: "'JetBrains Mono',monospace",
-  };
-  const BADGE = (bg, count) => (
-    <span style={{
-      background: bg + "22", border: `1px solid ${bg}55`,
-      color: bg, borderRadius: 3, padding: "1px 6px",
-      fontSize: 9, letterSpacing: 1, fontFamily: "'JetBrains Mono',monospace",
-    }}>{count}</span>
+  const filtered = rows.filter((r) => {
+    if (tab === "SCENARIO_BACKED" && !r._backed) return false;
+    if (tab === "UNPLANNED" && r._backed) return false;
+    if (search && !r._label.toLowerCase().includes(search.toLowerCase())) return false;
+    return true;
+  });
+  const backedCount = rows.filter((r) => r._backed).length;
+  const unplanned = rows.length - backedCount;
+
+  const pill = (label, active) => ({
+    padding: "3px 10px", borderRadius: 10, fontSize: 10, letterSpacing: 1,
+    cursor: "pointer", fontFamily: "inherit",
+    background: active ? `${CY}22` : "transparent",
+    color: active ? CY : "#4E6070",
+    border: `1px solid ${active ? CY + "55" : "#1E2D3D"}`,
+  });
+
+  if (!open) return (
+    <button
+      onClick={() => setOpen(true)}
+      style={{
+        position: "fixed", left: 2300, bottom: 18, zIndex: 69,
+        background: "rgba(5,10,18,0.82)", border: `1px solid ${unplanned > 0 ? AM : CY}44`,
+        borderRadius: 8, padding: "4px 10px", cursor: "pointer",
+        color: unplanned > 0 ? AM : CY, fontSize: 10, letterSpacing: 1,
+        fontFamily: "'JetBrains Mono', monospace",
+      }}
+    >
+      ◈ TSCOV{unplanned > 0 && rows.length > 0 ? ` (${unplanned})` : ""}
+    </button>
   );
-
-  if (!open) {
-    return (
-      <button
-        onClick={() => setOpen(true)}
-        title="F118: Task × Scenario Coverage Mapper"
-        style={{
-          position: "fixed", bottom: 8, left: BTN_LEFT, zIndex: 73,
-          background: "rgba(5,8,13,0.82)", border: `1px solid ${orphanCount > 0 ? C.gold : C.border}`,
-          color: orphanCount > 0 ? C.gold : C.textB,
-          borderRadius: 4, padding: "4px 10px",
-          fontSize: 9, letterSpacing: 2, cursor: "pointer",
-          fontFamily: "'JetBrains Mono',monospace",
-          backdropFilter: "blur(6px)",
-          boxShadow: orphanCount > 0 ? `0 0 10px ${C.gold}44` : "none",
-        }}
-      >
-        ◈ TASKSCEN{orphanCount > 0 && ` [${orphanCount}]`}
-      </button>
-    );
-  }
 
   return (
     <div style={{
-      position: "fixed",
-      bottom: 36, left: Math.max(8, BTN_LEFT - 280),
-      zIndex: 73, width: "min(560px, 94vw)", maxHeight: "72vh",
-      background: "rgba(6,10,18,0.94)", border: `1px solid ${C.border}`,
-      borderRadius: 8, display: "flex", flexDirection: "column",
-      backdropFilter: "blur(12px)", boxShadow: `0 0 40px rgba(0,200,120,0.12)`,
-      fontFamily: "'JetBrains Mono',monospace",
+      position: "fixed", bottom: 60, left: "50%", transform: "translateX(-50%)",
+      width: "min(700px, 94vw)", zIndex: 300,
+      background: "rgba(5,10,18,0.97)", border: `1px solid ${CY}33`,
+      borderRadius: 14, fontFamily: "'JetBrains Mono', monospace",
+      boxShadow: `0 0 60px ${CY}14, 0 24px 48px rgba(0,0,0,0.8)`,
     }}>
       {/* Header */}
-      <div style={{
-        padding: "10px 14px 8px",
-        borderBottom: `1px solid ${C.borderB}`,
-        display: "flex", alignItems: "center", gap: 8,
-      }}>
-        <span style={{ color: C.neon, fontSize: 11, letterSpacing: 3, fontWeight: 700 }}>
-          TASK × SCENARIO COVERAGE
-        </span>
-        {loading && (
-          <span style={{ color: S.textMuted, fontSize: 9, letterSpacing: 1 }}>POLLING…</span>
-        )}
-        <div style={{ flex: 1 }} />
-        <button
-          onClick={assess}
-          disabled={assessing}
-          style={{
-            background: "none", border: `1px solid ${C.neon}55`, color: C.neon,
-            borderRadius: 3, padding: "3px 8px", fontSize: 9, letterSpacing: 1,
-            cursor: assessing ? "default" : "pointer", fontFamily: "inherit",
-            opacity: assessing ? 0.5 : 1,
-          }}
-        >
-          {assessing ? "ASSESSING…" : "▶ ASSESS"}
-        </button>
-        <button
-          onClick={() => setOpen(false)}
-          style={{
-            background: "none", border: "none", color: S.textMuted,
-            cursor: "pointer", fontSize: 13, padding: "0 4px",
-          }}
-        >
-          ×
-        </button>
+      <div style={{ display: "flex", alignItems: "center", padding: "12px 16px", borderBottom: `1px solid ${CY}22`, gap: 10 }}>
+        <span style={{ color: CY, fontSize: 12, letterSpacing: 2, flex: 1 }}>◈ TASK × SCENARIO COVERAGE</span>
+        <span style={{ fontSize: 10, color: "#4E6070" }}>{rows.length} tasks · {scenarios.length} scenarios</span>
+        <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", color: "#4E6070", cursor: "pointer", fontSize: 14 }}>✕</button>
       </div>
 
       {/* Stat tiles */}
-      <div style={{
-        display: "grid", gridTemplateColumns: "repeat(4,1fr)",
-        gap: 6, padding: "8px 14px",
-        borderBottom: `1px solid ${C.borderB}`,
-      }}>
+      <div style={{ display: "flex", gap: 10, padding: "10px 16px" }}>
         {[
-          { label: "TASKS",     val: tasks.length,     col: C.textB },
-          { label: "SCENARIOS", val: scenarios.length, col: C.blue  },
-          { label: "BACKED",    val: backedCount,       col: C.neon  },
-          { label: "ORPHANED",  val: orphanCount,       col: orphanCount > 0 ? C.gold : S.textMuted },
-        ].map(({ label, val, col }) => (
-          <div key={label} style={{
-            background: "rgba(0,0,0,0.3)", borderRadius: 4, padding: "5px 4px",
-            textAlign: "center", border: `1px solid ${C.borderB}`,
+          { label: "TASKS", val: rows.length, col: CY },
+          { label: "SCENARIOS", val: scenarios.length, col: "#A78BFA" },
+          { label: "BACKED", val: backedCount, col: GR },
+          { label: "UNPLANNED", val: unplanned, col: unplanned > 0 ? AM : "#4E6070" },
+        ].map((t) => (
+          <div key={t.label} style={{
+            flex: 1, background: "rgba(41,231,255,0.04)", border: `1px solid ${t.col}22`,
+            borderRadius: 8, padding: "8px 10px", textAlign: "center",
           }}>
-            <div style={{ ...STAT, color: col, fontSize: 16, fontWeight: 700 }}>{val}</div>
-            <div style={{ ...STAT, fontSize: 8, marginTop: 2 }}>{label}</div>
+            <div style={{ fontSize: 16, color: t.col, fontWeight: 700 }}>{loading ? "…" : t.val}</div>
+            <div style={{ fontSize: 9, color: "#4E6070", letterSpacing: 1, marginTop: 2 }}>{t.label}</div>
           </div>
         ))}
       </div>
 
-      {/* Filter tabs + search */}
-      <div style={{
-        display: "flex", alignItems: "center", gap: 4,
-        padding: "6px 14px", borderBottom: `1px solid ${C.borderB}`,
-        flexWrap: "wrap",
-      }}>
-        {TABS.map((t) => (
-          <button
-            key={t}
-            onClick={() => setFilter(t)}
-            style={{
-              background: filter === t ? C.neon + "22" : "none",
-              border: `1px solid ${filter === t ? C.neon : C.borderB}`,
-              color: filter === t ? C.neon : S.textMuted,
-              borderRadius: 3, padding: "3px 8px", fontSize: 9,
-              letterSpacing: 1, cursor: "pointer", fontFamily: "inherit",
-            }}
-          >
-            {t}
-          </button>
+      {/* Filters */}
+      <div style={{ display: "flex", gap: 6, padding: "0 16px 10px", flexWrap: "wrap" }}>
+        {["ALL", "SCENARIO_BACKED", "UNPLANNED"].map((t) => (
+          <button key={t} onClick={() => setTab(t)} style={pill(t, tab === t)}>{t.replace("_", " ")}</button>
         ))}
         <input
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          value={search} onChange={(e) => setSearch(e.target.value)}
           placeholder="search tasks…"
           style={{
-            flex: 1, minWidth: 80, background: "rgba(0,0,0,0.4)",
-            border: `1px solid ${C.borderB}`, color: C.textB,
-            borderRadius: 3, padding: "3px 8px", fontSize: 9,
-            fontFamily: "inherit", outline: "none",
+            marginLeft: "auto", background: "transparent", border: `1px solid ${CY}22`,
+            borderRadius: 6, padding: "3px 8px", color: "#DCEBF5", fontSize: 10,
+            outline: "none", fontFamily: "inherit",
           }}
         />
       </div>
 
-      {/* Task list */}
-      <div style={{ overflowY: "auto", flex: 1, padding: "6px 8px" }}>
-        {visible.length === 0 && (
-          <div style={{ color: S.textMuted, fontSize: 10, padding: "12px 6px", textAlign: "center" }}>
-            {loading ? "Loading…" : "No tasks match current filter."}
-          </div>
-        )}
-        {visible.map((t) => (
-          <div key={t.id} style={{ marginBottom: 4 }}>
-            {/* Task row */}
+      {/* List */}
+      <div style={{ maxHeight: "38vh", overflowY: "auto", padding: "0 16px 10px" }}>
+        {loading && <div style={{ color: "#4E6070", fontSize: 11, textAlign: "center", padding: 16 }}>Loading…</div>}
+        {!loading && filtered.length === 0 && <div style={{ color: "#4E6070", fontSize: 11, textAlign: "center", padding: 16 }}>No tasks found</div>}
+        {!loading && filtered.map((row) => (
+          <div key={row.id || row._label} style={{ marginBottom: 6 }}>
             <div
-              onClick={() => setExpanded(expanded === t.id ? null : t.id)}
+              onClick={() => setExpanded(expanded === row.id ? null : row.id)}
               style={{
-                display: "flex", alignItems: "center", gap: 6,
-                padding: "6px 8px", borderRadius: 4, cursor: "pointer",
-                background: expanded === t.id
-                  ? "rgba(0,200,120,0.06)"
-                  : "rgba(0,0,0,0.25)",
-                border: `1px solid ${t.backed ? C.borderB : C.gold + "44"}`,
-                transition: "background 0.15s",
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "7px 10px", borderRadius: 8, cursor: "pointer",
+                background: expanded === row.id ? `${CY}0A` : "rgba(255,255,255,0.02)",
+                border: `1px solid ${row._backed ? GR + "33" : AM + "33"}`,
               }}
             >
-              <span style={{
-                fontSize: 8, color: t.backed ? C.neon : C.gold,
-                width: 52, flexShrink: 0, letterSpacing: 1,
-              }}>
-                {t.backed ? "BACKED" : "ORPHANED"}
+              <span style={{ fontSize: 10, color: row._backed ? GR : AM, width: 80, flexShrink: 0 }}>
+                {row._backed ? "◉ BACKED" : "◌ UNPLANNED"}
               </span>
-              <span style={{
-                flex: 1, color: C.textB, fontSize: 10, letterSpacing: 0.5,
-                overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-              }}>
-                {t.title}
-              </span>
-              {BADGE(priorityColor(t.priority), t.priority || "—")}
-              {BADGE(statusColor(t.status), t.status || "—")}
-              {t.backed && (
-                <span style={{ color: S.textMuted, fontSize: 9 }}>
-                  {t.scenarios.length} sc
-                </span>
-              )}
-              <span style={{ color: S.textMuted, fontSize: 10 }}>
-                {expanded === t.id ? "▲" : "▼"}
-              </span>
+              <span style={{ fontSize: 11, color: "#DCEBF5", flex: 1 }}>{row._label}</span>
+              <span style={{ fontSize: 9, color: "#4E6070" }}>{row._matches.length} match{row._matches.length !== 1 ? "es" : ""}</span>
+              <span style={{ color: "#4E6070", fontSize: 10 }}>{expanded === row.id ? "▲" : "▼"}</span>
             </div>
-
-            {/* Expanded: matched scenarios */}
-            {expanded === t.id && (
-              <div style={{
-                padding: "6px 10px 6px 16px",
-                background: "rgba(0,0,0,0.15)",
-                borderLeft: `2px solid ${C.borderB}`,
-                marginTop: 2, borderRadius: "0 0 4px 4px",
-              }}>
-                {t.description && (
-                  <div style={{
-                    color: S.textMuted, fontSize: 9, letterSpacing: 0.5,
-                    marginBottom: 6, lineHeight: 1.5,
+            {expanded === row.id && row._matches.length > 0 && (
+              <div style={{ marginTop: 4, paddingLeft: 10 }}>
+                {row._matches.slice(0, 4).map((s) => (
+                  <div key={s.id || s.name} style={{
+                    display: "flex", alignItems: "center", gap: 8, padding: "4px 8px",
+                    borderLeft: `2px solid ${CY}33`, marginBottom: 3,
                   }}>
-                    {t.description.slice(0, 180)}
-                  </div>
-                )}
-                {t.scenarios.length === 0 ? (
-                  <div style={{ color: C.gold, fontSize: 9, letterSpacing: 1 }}>
-                    No matching scenarios — operational context undocumented.
-                  </div>
-                ) : (
-                  t.scenarios.map((sc, idx) => (
-                    <div key={idx} style={{
-                      display: "flex", alignItems: "center", gap: 6,
-                      padding: "4px 0", borderBottom: idx < t.scenarios.length - 1
-                        ? `1px solid ${C.borderB}` : "none",
-                    }}>
-                      <span style={{ color: C.blue, fontSize: 9, letterSpacing: 0.5, flex: 1 }}>
-                        {sc.name}
-                      </span>
-                      {BADGE(statusColor(sc.status), sc.status || "—")}
-                      <span style={{ color: S.textMuted, fontSize: 8, letterSpacing: 1 }}>
-                        score:{sc.score}
-                      </span>
+                    <span style={{ fontSize: 10, color: "#7A95AB", flex: 1 }}>{s.name || s.title || s.id}</span>
+                    <div style={{ width: 80, height: 4, background: "#1E2D3D", borderRadius: 2, overflow: "hidden" }}>
+                      <div style={{ width: `${Math.round(s.score * 100)}%`, height: "100%", background: CY, borderRadius: 2 }} />
                     </div>
-                  ))
-                )}
+                    <span style={{ fontSize: 9, color: "#4E6070", width: 28, textAlign: "right" }}>{Math.round(s.score * 100)}%</span>
+                  </div>
+                ))}
               </div>
             )}
           </div>
         ))}
       </div>
 
+      {/* Brief */}
+      {brief && (
+        <div style={{ margin: "0 16px 10px", padding: "8px 12px", background: `${CY}0A`, borderRadius: 8, border: `1px solid ${CY}22`, fontSize: 10, color: "#DCEBF5", lineHeight: 1.6 }}>
+          {brief}
+        </div>
+      )}
+
       {/* Footer */}
-      <div style={{
-        padding: "5px 14px",
-        borderTop: `1px solid ${C.borderB}`,
-        color: S.textMuted, fontSize: 8, letterSpacing: 1,
-        display: "flex", alignItems: "center", gap: 8,
-      }}>
-        <span>AUTO-POLL 120s</span>
-        <span>·</span>
-        <span>/entities/Task × /v1/scenario/list</span>
-        <div style={{ flex: 1 }} />
-        <span>{visible.length} of {matrix.length}</span>
+      <div style={{ padding: "8px 16px", borderTop: `1px solid ${CY}1A`, display: "flex", gap: 8, alignItems: "center" }}>
+        <button
+          onClick={assess}
+          disabled={assessing || rows.length === 0}
+          style={{
+            background: assessing ? "transparent" : `${CY}18`, border: `1px solid ${CY}44`,
+            borderRadius: 6, padding: "4px 12px", color: CY, fontSize: 10,
+            cursor: assessing ? "default" : "pointer", letterSpacing: 1, fontFamily: "inherit",
+          }}
+        >
+          {assessing ? "▸ ASSESSING…" : "▶ ASSESS COVERAGE"}
+        </button>
+        <button onClick={refresh} style={{ background: "none", border: `1px solid ${CY}22`, borderRadius: 6, padding: "4px 10px", color: "#4E6070", fontSize: 10, cursor: "pointer", fontFamily: "inherit" }}>↺ REFRESH</button>
+        <span style={{ marginLeft: "auto", fontSize: 9, color: "#2E4050" }}>auto-refresh 90 s · /entities/Task × /v1/scenario/list</span>
       </div>
     </div>
   );

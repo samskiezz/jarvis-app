@@ -179,8 +179,13 @@ export default function BrainGrowthSparkline() {
       const q = e?.detail?.text || e?.detail?.query || "";
       if (BRAIN_RE.test(q)) setOpen(true);
     };
+    const onToggle = () => setOpen((o) => !o);
     window.addEventListener("jarvis:ask", onAsk);
-    return () => window.removeEventListener("jarvis:ask", onAsk);
+    window.addEventListener("jarvis:brain-growth-toggle", onToggle);
+    return () => {
+      window.removeEventListener("jarvis:ask", onAsk);
+      window.removeEventListener("jarvis:brain-growth-toggle", onToggle);
+    };
   }, []);
 
   const latest   = history[history.length - 1];

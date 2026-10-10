@@ -1,0 +1,515 @@
+/**
+ * F99 — IntelProfile × Ops Events Correlator (IPOEC)
+ *
+ * Answers: "Which intel profiles in the system correlate to live operational
+ *           events, and which profiles have no current ops footprint?"
+ *
+ * Data sources (confirmed real endpoints):
+ *   GET /entities/IntelProfile  → intel profiles (name/description/aliases/tags/role/org)
+ *   GET /v1/ops/events          → live ops events (type/resource/description/service/severity)
+ *
+ * Each intel profile's name/description/aliases/tags/role/organization is
+ * keyword-matched against each ops event's type/resource/description/service
+ * to produce:
+ *   ACTIVE  — at least one ops event correlates to this profile
+ *   PASSIVE — no ops event links to this profile
+ *
+ * Stat tiles:  profiles / events / active / passive
+ * Amber badge: active count on button.
+ * Expand row:  matched ops events with severity badge + relevance score bar.
+ * ▶ ASSESS:   2-sentence AI brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
+ *
+ * Toggle:  ◈ IPOEC  at left:3240 bottom:18, zIndex:68.
+ * Event:   jarvis:ipoec-toggle
+ * Voice:   "intel ops / ops intel profile / ipoec / active intel profiles /
+ *           intel operational / profile ops / which profiles have ops events /
+ *           intel profile ops activity / intel ops correlator"
+ * Refresh: 90 s auto-poll.
+ */
+import { useCallback, useEffect, useRef, useState } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
+
+const CY    = "#29E7FF";
+const AMBER = "#F5A623";
+const GREEN = "#00c878";
+const RED   = "#FF3B6B";
+const MUTED = "#6E8AA0";
+const BG    = "rgba(4,7,14,0.96)";
+const MONO  = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
+
+const BTN_LEFT   = 3240;
+const REFRESH_MS = 90_000;
+const API_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||
+  "dev-key";
+
+const SEV_COLOR = {
+  critical: RED,
+  error:    RED,
+  warning:  AMBER,
+  warn:     AMBER,
+  info:     CY,
+  ok:       GREEN,
+};
+
+// ─── helpers ─────────────────────────────────────────────────────────────────
+
+function normArr(raw) {
+  if (Array.isArray(raw))                return raw;
+  if (raw && Array.isArray(raw.items))   return raw.items;
+  if (raw && Array.isArray(raw.data))    return raw.data;
+  if (raw && Array.isArray(raw.results)) return raw.results;
+  return [];
+}
+
+function tokens(str) {
+  return String(str || "").toLowerCase().split(/\W+/).filter(t => t.length > 2);
+}
+
+function profileText(p) {
+  return [
+    p.name, p.description, p.summary,
+    Array.isArray(p.aliases) ? p.aliases.join(" ") : p.aliases,
+    p.role, p.title, p.organization, p.org,
+    Array.isArray(p.tags) ? p.tags.join(" ") : p.tags,
+  ].join(" ");
+}
+
+function eventText(ev) {
+  return [
+    ev.type, ev.event_type, ev.resource, ev.service,
+    ev.description, ev.message, ev.summary,
+    Array.isArray(ev.tags) ? ev.tags.join(" ") : ev.tags,
+  ].join(" ");
+}
+
+function scoreMatch(profile, ev) {
+  const pTok = new Set(tokens(profileText(profile)));
+  const eTok = tokens(eventText(ev));
+  return eTok.filter(t => pTok.has(t)).length;
+}
+
+function sevColor(ev) {
+  const s = String(ev.severity || ev.level || ev.status || "info").toLowerCase();
+  return SEV_COLOR[s] || MUTED;
+}
+
+// ─── fetch ───────────────────────────────────────────────────────────────────
+
+async function fetchAll() {
+  const base    = apiBase();
+  const headers = { Authorization: `Bearer ${API_KEY}` };
+  const [pr, er] = await Promise.all([
+    fetch(`${base}/entities/IntelProfile`, { headers }).then(r => r.json()).catch(() => []),
+    fetch(`${base}/v1/ops/events`,         { headers }).then(r => r.json()).catch(() => []),
+  ]);
+  const profiles = normArr(pr);
+  const events   = normArr(er);
+  const correlated = profiles.map(profile => {
+    const matches = events
+      .map(ev => ({ ev, sc: scoreMatch(profile, ev) }))
+      .filter(x => x.sc > 0)
+      .sort((a, b) => b.sc - a.sc);
+    return {
+      profile,
+      classification: matches.length > 0 ? "ACTIVE" : "PASSIVE",
+      matches,
+    };
+  });
+  return {
+    correlated,
+    profileCount: profiles.length,
+    eventCount:   events.length,
+  };
+}
+
+// ─── exported helpers for JarvisBrain ────────────────────────────────────────
+
+export function isIpoecQuery(q) {
+  const t = q.toLowerCase();
+  return (
+    t.includes("intel ops") || t.includes("ops intel profile") ||
+    t.includes("ipoec") || t.includes("active intel profile") ||
+    t.includes("intel operational") || t.includes("profile ops") ||
+    t.includes("which profiles have ops") || t.includes("intel profile ops") ||
+    t.includes("intel ops correlator") || t.includes("profile operational")
+  );
+}
+
+export async function buildIpoecScript() {
+  try {
+    const base    = apiBase();
+    const headers = { Authorization: `Bearer ${API_KEY}` };
+    const [pr, er] = await Promise.all([
+      fetch(`${base}/entities/IntelProfile`, { headers }).then(r => r.json()).catch(() => []),
+      fetch(`${base}/v1/ops/events`,         { headers }).then(r => r.json()).catch(() => []),
+    ]);
+    const profiles = normArr(pr);
+    const events   = normArr(er);
+    const active = profiles.filter(p =>
+      events.some(ev => scoreMatch(p, ev) > 0)
+    ).length;
+    const passive = profiles.length - active;
+    const topActive = profiles
+      .filter(p => events.some(ev => scoreMatch(p, ev) > 0))
+      .slice(0, 2)
+      .map(p => p.name || p.id || "?")
+      .join(", ");
+    return (
+      `IntelProfile × Ops Events Correlator: ${profiles.length} profiles, ` +
+      `${events.length} live ops events. ` +
+      `${active} profiles are ACTIVE with ops event matches` +
+      (topActive ? ` (including ${topActive})` : "") +
+      `. ${passive} profiles are PASSIVE with no current ops footprint.`
+    );
+  } catch (e) {
+    return `Intel profile ops check failed: ${e.message}`;
+  }
+}
+
+// ─── assess ──────────────────────────────────────────────────────────────────
+
+async function runAssess(correlated, setText, speak) {
+  const active  = correlated.filter(c => c.classification === "ACTIVE").length;
+  const passive = correlated.filter(c => c.classification === "PASSIVE").length;
+  const topActive = correlated
+    .filter(c => c.classification === "ACTIVE")
+    .slice(0, 2)
+    .map(c => c.profile?.name || c.profile?.id || "?")
+    .join(", ");
+  const prompt =
+    `You are JARVIS. In 2 sentences, brief the operator on IntelProfile × Ops Event correlation: ` +
+    `${active} intel profiles have active ops event correlations` +
+    (topActive ? ` (including ${topActive})` : "") +
+    `, ${passive} profiles have no ops footprint. ` +
+    `Conclude with the most urgent operational recommendation.`;
+  const base    = apiBase();
+  const headers = { Authorization: `Bearer ${API_KEY}`, "Content-Type": "application/json" };
+  try {
+    const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
+      method: "POST", headers, body: JSON.stringify({ message: prompt }),
+    });
+    const j    = await r.json();
+    const text = j.response || j.reply || j.message || JSON.stringify(j);
+    setText(text);
+    window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
+    speak(text);
+  } catch (e) {
+    setText(`ASSESS error: ${e.message}`);
+  }
+}
+
+// ─── component ───────────────────────────────────────────────────────────────
+
+export default function IntelProfileOpsCorrelator() {
+  const [open, setOpen]             = useState(false);
+  const [data, setData]             = useState(null);
+  const [loading, setLoading]       = useState(false);
+  const [err, setErr]               = useState(null);
+  const [filter, setFilter]         = useState("ALL");
+  const [search, setSearch]         = useState("");
+  const [expanded, setExpanded]     = useState(null);
+  const [assessing, setAssessing]   = useState(false);
+  const [assessText, setAssessText] = useState("");
+  const timerRef = useRef(null);
+
+  const load = useCallback(async () => {
+    setLoading(true); setErr(null);
+    try {
+      const result = await fetchAll();
+      setData(result);
+    } catch (e) {
+      setErr(e.message);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const handler = () => setOpen(o => !o);
+    window.addEventListener("jarvis:ipoec-toggle", handler);
+    return () => window.removeEventListener("jarvis:ipoec-toggle", handler);
+  }, []);
+
+  useEffect(() => {
+    if (!open) return;
+    load();
+    timerRef.current = setInterval(load, REFRESH_MS);
+    return () => clearInterval(timerRef.current);
+  }, [open, load]);
+
+  const speak = useCallback((text) => {
+    const base = apiBase();
+    fetch(`${base}/v1/voice/tts`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({ text, voice: localStorage.getItem("jarvis_voice") || "ash" }),
+    }).then(r => r.blob()).then(b => {
+      const url = URL.createObjectURL(b);
+      new Audio(url).play().catch(() => {});
+    }).catch(() => {});
+  }, []);
+
+  if (!open) {
+    const activeCount =
+      data?.correlated?.filter(c => c.classification === "ACTIVE").length ?? 0;
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        title="IntelProfile × Ops Events Correlator (IPOEC)"
+        style={{
+          position: "fixed", left: BTN_LEFT, bottom: 18, zIndex: 68,
+          background: "rgba(4,7,14,0.82)", border: `1px solid ${AMBER}44`,
+          color: AMBER, fontFamily: MONO, fontSize: 10, letterSpacing: 1,
+          padding: "3px 8px", borderRadius: 3, cursor: "pointer",
+          display: "flex", alignItems: "center", gap: 5,
+        }}
+      >
+        ◈ IPOEC
+        {activeCount > 0 && (
+          <span style={{
+            background: AMBER, color: "#000", borderRadius: 8,
+            padding: "0 5px", fontSize: 9, fontWeight: 700,
+          }}>{activeCount}</span>
+        )}
+      </button>
+    );
+  }
+
+  const { correlated = [], profileCount = 0, eventCount = 0 } = data || {};
+  const active  = correlated.filter(c => c.classification === "ACTIVE").length;
+  const passive = correlated.filter(c => c.classification === "PASSIVE").length;
+
+  const visible = correlated.filter(c => {
+    if (filter === "ACTIVE"  && c.classification !== "ACTIVE")  return false;
+    if (filter === "PASSIVE" && c.classification !== "PASSIVE") return false;
+    if (search) {
+      const q    = search.toLowerCase();
+      const name = String(c.profile?.name || "").toLowerCase();
+      const org  = String(c.profile?.organization || c.profile?.org || "").toLowerCase();
+      const role = String(c.profile?.role || "").toLowerCase();
+      if (!name.includes(q) && !org.includes(q) && !role.includes(q)) return false;
+    }
+    return true;
+  });
+
+  const TAB_STYLE = (active, col = AMBER) => ({
+    background: active ? col : "transparent",
+    color: active ? "#000" : MUTED,
+    border: `1px solid ${active ? col : MUTED}44`,
+    borderRadius: 3, padding: "2px 8px", fontSize: 9,
+    fontFamily: MONO, cursor: "pointer", letterSpacing: 1,
+  });
+
+  return (
+    <div style={{
+      position: "fixed", right: 18, top: 60, width: 520, maxHeight: "80vh",
+      background: BG, border: `1px solid ${AMBER}55`, borderRadius: 6,
+      fontFamily: MONO, fontSize: 11, color: CY, zIndex: 160,
+      display: "flex", flexDirection: "column", overflow: "hidden",
+    }}>
+      {/* header */}
+      <div style={{
+        display: "flex", alignItems: "center", justifyContent: "space-between",
+        padding: "8px 12px", borderBottom: `1px solid ${AMBER}33`,
+        flexShrink: 0,
+      }}>
+        <span style={{ color: AMBER, fontWeight: 700, letterSpacing: 2 }}>
+          ◈ INTEL PROFILE × OPS EVENTS
+        </span>
+        <button onClick={() => setOpen(false)} style={{
+          background: "none", border: "none", color: MUTED,
+          cursor: "pointer", fontSize: 14, lineHeight: 1,
+        }}>✕</button>
+      </div>
+
+      {/* stat tiles */}
+      <div style={{
+        display: "grid", gridTemplateColumns: "repeat(4,1fr)",
+        gap: 6, padding: "8px 12px", flexShrink: 0,
+      }}>
+        {[
+          ["PROFILES", profileCount, CY],
+          ["OPS EVTS", eventCount,   CY],
+          ["ACTIVE",   active,       AMBER],
+          ["PASSIVE",  passive,      GREEN],
+        ].map(([label, val, col]) => (
+          <div key={label} style={{
+            background: "rgba(255,255,255,0.03)", border: `1px solid ${col}33`,
+            borderRadius: 4, padding: "5px 8px", textAlign: "center",
+          }}>
+            <div style={{ color: col, fontSize: 13, fontWeight: 700 }}>{loading ? "…" : val}</div>
+            <div style={{ color: MUTED, fontSize: 9, letterSpacing: 1 }}>{label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* filter tabs + search */}
+      <div style={{
+        display: "flex", alignItems: "center", gap: 6,
+        padding: "0 12px 6px", flexShrink: 0, flexWrap: "wrap",
+      }}>
+        {["ALL", "ACTIVE", "PASSIVE"].map(f => (
+          <button key={f} onClick={() => setFilter(f)} style={TAB_STYLE(filter === f)}>
+            {f}
+          </button>
+        ))}
+        <input
+          value={search}
+          onChange={e => setSearch(e.target.value)}
+          placeholder="search profiles…"
+          style={{
+            background: "rgba(255,255,255,0.04)", border: `1px solid ${MUTED}44`,
+            color: CY, fontFamily: MONO, fontSize: 10, borderRadius: 3,
+            padding: "2px 8px", outline: "none", flex: 1, minWidth: 100,
+          }}
+        />
+        <button
+          onClick={async () => {
+            if (assessing) return;
+            setAssessing(true); setAssessText("");
+            await runAssess(correlated, setAssessText, speak);
+            setAssessing(false);
+          }}
+          style={TAB_STYLE(false, CY)}
+        >
+          {assessing ? "…" : "▶ ASSESS"}
+        </button>
+      </div>
+
+      {assessText && (
+        <div style={{
+          margin: "0 12px 6px", padding: "6px 10px",
+          background: "rgba(41,231,255,0.06)", border: `1px solid ${CY}33`,
+          borderRadius: 4, color: CY, fontSize: 10, lineHeight: 1.5,
+          flexShrink: 0,
+        }}>
+          {assessText}
+        </div>
+      )}
+
+      {err && (
+        <div style={{ margin: "0 12px 6px", color: RED, fontSize: 10, flexShrink: 0 }}>
+          {err}
+        </div>
+      )}
+
+      {/* list */}
+      <div style={{ overflowY: "auto", flex: 1 }}>
+        {visible.length === 0 && !loading && (
+          <div style={{ color: MUTED, textAlign: "center", padding: 18, fontSize: 10 }}>
+            No profiles match filter.
+          </div>
+        )}
+        {visible.map((c, i) => {
+          const profile = c.profile || {};
+          const isEx    = expanded === i;
+          const col     = c.classification === "ACTIVE" ? AMBER : GREEN;
+          return (
+            <div key={i} style={{
+              borderBottom: `1px solid ${CY}0D`,
+              cursor: "pointer",
+            }} onClick={() => setExpanded(isEx ? null : i)}>
+              <div style={{
+                display: "flex", alignItems: "center", gap: 8,
+                padding: "7px 12px",
+              }}>
+                <span style={{
+                  background: c.classification === "ACTIVE" ? AMBER : col + "33",
+                  color: c.classification === "ACTIVE" ? "#000" : GREEN,
+                  borderRadius: 3, padding: "1px 6px",
+                  fontSize: 8, fontWeight: 700, flexShrink: 0,
+                }}>
+                  {c.classification}
+                </span>
+                <span style={{ color: CY, flex: 1, fontSize: 11 }}>
+                  {profile.name || profile.id || "Unknown Profile"}
+                </span>
+                {(profile.organization || profile.org) ? (
+                  <span style={{
+                    color: MUTED, fontSize: 9,
+                    maxWidth: 100, overflow: "hidden", textOverflow: "ellipsis",
+                    whiteSpace: "nowrap",
+                  }}>
+                    {profile.organization || profile.org}
+                  </span>
+                ) : null}
+                <span style={{ color: MUTED, fontSize: 9 }}>
+                  {c.matches.length} event{c.matches.length !== 1 ? "s" : ""}
+                </span>
+                <span style={{ color: MUTED, fontSize: 9 }}>{isEx ? "▲" : "▼"}</span>
+              </div>
+
+              {isEx && (
+                <div style={{
+                  padding: "0 12px 8px 12px",
+                  background: "rgba(255,255,255,0.02)",
+                }}>
+                  {profile.role && (
+                    <div style={{ color: MUTED, fontSize: 9, marginBottom: 4 }}>
+                      Role: {profile.role}
+                      {profile.organization || profile.org
+                        ? ` · ${profile.organization || profile.org}`
+                        : ""}
+                    </div>
+                  )}
+                  {c.matches.length === 0 ? (
+                    <div style={{ color: GREEN, fontSize: 9 }}>
+                      No ops events linked to this intel profile.
+                    </div>
+                  ) : (
+                    c.matches.slice(0, 5).map((m, mi) => {
+                      const ev    = m.ev || {};
+                      const maxSc = c.matches[0]?.sc || 1;
+                      const pct   = Math.round((m.sc / maxSc) * 100);
+                      const sc    = sevColor(ev);
+                      const sev   = String(
+                        ev.severity || ev.level || ev.status || "info"
+                      ).toUpperCase();
+                      return (
+                        <div key={mi} style={{ marginBottom: 4 }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                            <span style={{
+                              background: sc + "33", color: sc,
+                              borderRadius: 3, padding: "1px 5px",
+                              fontSize: 8, flexShrink: 0,
+                            }}>
+                              {sev}
+                            </span>
+                            <span style={{ color: CY, fontSize: 10, flex: 1 }}>
+                              {ev.type || ev.event_type || ev.resource || ev.description || ev.id || "Ops Event"}
+                            </span>
+                            <span style={{ color: MUTED, fontSize: 8 }}>{m.sc}pt</span>
+                          </div>
+                          <div style={{
+                            height: 2, background: `${AMBER}22`,
+                            borderRadius: 1, margin: "2px 0 0",
+                          }}>
+                            <div style={{
+                              height: 2, width: `${pct}%`,
+                              background: AMBER, borderRadius: 1,
+                            }} />
+                          </div>
+                        </div>
+                      );
+                    })
+                  )}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* footer */}
+      <div style={{
+        borderTop: `1px solid ${AMBER}22`, padding: "5px 12px",
+        color: MUTED, fontSize: 9, letterSpacing: 1, flexShrink: 0,
+        display: "flex", justifyContent: "space-between",
+      }}>
+        <span>INTEL × OPS — {visible.length}/{correlated.length} profiles</span>
+        <span>auto-refresh 90s</span>
+      </div>
+    </div>
+  );
+}

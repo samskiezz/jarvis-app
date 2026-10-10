@@ -1,386 +1,371 @@
 /**
- * F70 — Ops-Scenario Gap Analyzer
- *
- * Parallel-fetches /v1/ops/events + /v1/scenario/list, then keyword-correlates
- * each live ops event against the scenario catalog to surface whether an event
- * has a PLAYBOOK (at least one matching scenario) or is SCENARIO-DARK (no
- * actionable playbook exists for the incident type).
- *
- * Stat tiles: events / scenarios / covered / dark.
- * Filter tabs: ALL | COVERED | DARK.
- * Expand any event → matched scenarios with relevance score + status.
- * ▶ ASSESS: sends a 2-sentence AI operational-readiness brief via
- *   /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
- *
- * Toggle:  ◈ OPSCEN  at bottom:8 left:9124, zIndex 69.
- * Voice:   "ops scenario / ops playbook / scenario coverage ops / opscen / playbook gap"
- * Event:   jarvis:opscen-toggle
- * Refresh: 90 s auto-poll.
+ * OpsScenarioGap — F68
+ * /v1/ops/events × /v1/scenario/list → keyword-correlates significant ops events against
+ * scenarios to surface COVERED (has a matching plan) vs UNCOVERED (planning blind spot).
+ * Voice trigger: "ops scenario"/"opscen"/"uncovered ops"/"scenario gap"/"ops plan gap"/"event scenario".
+ * Additive only — mounted via App.jsx; intents exported for JarvisBrain.
  */
-import { useCallback, useEffect, useRef, useState } from "react";
-import { COLORS as C, SHELL as S } from "@/domain/colors";
+import { useEffect, useState, useCallback } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
+import { getActiveVoice } from "@/components/cinematic/MultiVoiceToggle";
 
-const BTN_LEFT = 9124;
-const POLL_MS  = 90_000;
+const CY  = "#29E7FF";
+const GRN = "#4ADE80";
+const AMB = "#FFBB33";
+const RED = "#FF4455";
 
-const API_KEY = (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
-
-function apiBase() {
-  const env = typeof import.meta !== "undefined" ? import.meta.env : {};
-  if (env.VITE_API_BASE_URL) return env.VITE_API_BASE_URL;
-  if (typeof window !== "undefined" && window.location) {
-    const { protocol, hostname } = window.location;
-    return `${protocol}//${hostname}:${env.VITE_API_PORT || "8001"}`;
-  }
-  return "http://localhost:8001";
-}
-
-// ── exported intent helpers ───────────────────────────────────────────────────
+const API_KEY =
+  (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";
 
 const OPSCEN_RE =
-  /\b(ops\s+scenario|ops\s+playbook|playbook\s+gap|scenario[\s-]coverage\s+ops|opscen|incident\s+playbook|ops\s+coverage)\b/i;
+  /\bops?\s*scen(?:ario)?s?\b|\bopscen\b|\buncovered\s*ops?\b|\bscenario\s*gap\b|\bops?\s*plan\s*gap\b|\bevent\s*scen(?:ario)?s?\b|\bscen(?:ario)?\s*ops?\s*gap\b/i;
 
-export function isOpsScenGapQuery(q) { return OPSCEN_RE.test(q); }
-
-export async function buildOpsScenGapScript() {
-  try {
-    const base = apiBase();
-    const hdr  = { Authorization: `Bearer ${API_KEY}` };
-    const [evRes, scRes] = await Promise.all([
-      fetch(`${base}/v1/ops/events`,      { headers: hdr }),
-      fetch(`${base}/v1/scenario/list`,   { headers: hdr }),
-    ]);
-    const evRaw = await evRes.json();
-    const scRaw = await scRes.json();
-    const events    = normaliseEvents(evRaw);
-    const scenarios = normaliseScenarios(scRaw);
-
-    const covered = events.filter((ev) => scenarios.some((sc) => relevance(ev, sc) > 0)).length;
-    const dark    = events.length - covered;
-
-    const r = await fetch(`${base}/v1/jarvis/agent/chat`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
-      body: JSON.stringify({
-        message:
-          `JARVIS ops-scenario coverage: ${events.length} live ops events, ` +
-          `${scenarios.length} scenarios available, ${covered} events have a matching playbook, ` +
-          `${dark} events are scenario-dark with no actionable scenario. ` +
-          `Give a 2-sentence operational-readiness brief — formal British butler tone, first person.`,
-      }),
-    });
-    const d = await r.json();
-    return (d.answer || "Ops-scenario analysis complete, sir.").trim();
-  } catch {
-    return "Ops-scenario analysis unavailable at this time, sir.";
-  }
+export function isOpscenQuery(text) {
+  return OPSCEN_RE.test(text || "");
 }
 
-// ── normalise helpers ─────────────────────────────────────────────────────────
-
-function normaliseEvents(raw) {
-  const arr = Array.isArray(raw)          ? raw
-    : Array.isArray(raw?.data)            ? raw.data
-    : Array.isArray(raw?.events)          ? raw.events
-    : Array.isArray(raw?.items)           ? raw.items
-    : Array.isArray(raw?.results)         ? raw.results
+async function fetchOpsEvents() {
+  const r = await fetch(`${apiBase()}/v1/ops/events`, {
+    headers: { Authorization: `Bearer ${API_KEY}` },
+  });
+  const d = await r.json();
+  const rows =
+    Array.isArray(d)            ? d
+    : Array.isArray(d?.events)  ? d.events
+    : Array.isArray(d?.data)    ? d.data
+    : Array.isArray(d?.items)   ? d.items
+    : Array.isArray(d?.results) ? d.results
     : [];
-  return arr.map((ev, i) => ({
-    id:       ev.id        || String(i),
-    title:    ev.title     || ev.name     || ev.event_type || ev.type || `Event ${i + 1}`,
-    desc:     (ev.description || ev.message || ev.summary || ev.tags || "").toString(),
-    severity: (ev.severity || ev.level || "").toLowerCase(),
-    source:   ev.source    || ev.service  || "",
-  }));
+  return rows.filter(e => !e.severity || e.severity >= 30);
 }
 
-function normaliseScenarios(raw) {
-  const arr = Array.isArray(raw)           ? raw
-    : Array.isArray(raw?.data)             ? raw.data
-    : Array.isArray(raw?.scenarios)        ? raw.scenarios
-    : Array.isArray(raw?.items)            ? raw.items
-    : Array.isArray(raw?.results)          ? raw.results
+async function fetchScenarios() {
+  const r = await fetch(`${apiBase()}/v1/scenario/list`, {
+    headers: { Authorization: `Bearer ${API_KEY}` },
+  });
+  const d = await r.json();
+  return Array.isArray(d)               ? d
+    : Array.isArray(d?.scenarios)       ? d.scenarios
+    : Array.isArray(d?.data)            ? d.data
+    : Array.isArray(d?.items)           ? d.items
+    : Array.isArray(d?.results)         ? d.results
     : [];
-  return arr.map((sc, i) => ({
-    id:     sc.id      || String(i),
-    title:  sc.title   || sc.name   || sc.scenario_name || `Scenario ${i + 1}`,
-    desc:   (sc.description || sc.summary || sc.tags || "").toString(),
-    status: (sc.status || "").toLowerCase(),
-  }));
 }
 
-function keywords(str) {
-  return String(str || "")
+function keywords(obj) {
+  return [
+    obj?.name, obj?.title, obj?.description, obj?.message,
+    obj?.type, obj?.category, obj?.subject, obj?.summary,
+    obj?.event_type, obj?.source, obj?.scenario_type,
+  ]
+    .filter(Boolean)
+    .join(" ")
     .toLowerCase()
-    .split(/[\s_\-.,/|:@]+/)
-    .filter((w) => w.length >= 3);
+    .split(/\W+/)
+    .filter(w => w.length > 3);
 }
 
-function relevance(event, scenario) {
-  const ew = keywords(`${event.title} ${event.desc} ${event.source}`);
-  const sw = keywords(`${scenario.title} ${scenario.desc}`);
-  return ew.filter((w) => sw.some((s) => s.includes(w) || w.includes(s))).length;
-}
-
-function buildCorrelated(events, scenarios) {
-  return events.map((ev) => {
-    const matched = scenarios
-      .map((sc) => ({ ...sc, score: relevance(ev, sc) }))
-      .filter((sc) => sc.score > 0)
-      .sort((a, b) => b.score - a.score);
-    return { ...ev, scenarios: matched, covered: matched.length > 0 };
+function correlate(events, scenarios) {
+  return events.map(ev => {
+    const evWords = new Set(keywords(ev));
+    const matched = scenarios.filter(sc => {
+      const scWords = keywords(sc);
+      return scWords.some(w => evWords.has(w));
+    });
+    const status = matched.length > 0 ? "COVERED" : "UNCOVERED";
+    return { event: ev, scenarios: matched, status };
   });
 }
 
-// ── severity colour helper ────────────────────────────────────────────────────
-
-function sevColor(sev) {
-  if (sev === "critical") return "#EF4444";
-  if (sev === "high")     return "#F97316";
-  if (sev === "medium")   return "#F59E0B";
-  return C.blue;
+export async function buildOpscenScript() {
+  const [evRes, scRes] = await Promise.allSettled([fetchOpsEvents(), fetchScenarios()]);
+  const events    = evRes.status === "fulfilled" ? evRes.value : [];
+  const scenarios = scRes.status === "fulfilled" ? scRes.value : [];
+  if (!events.length) return "No significant ops events available to assess scenario coverage, sir.";
+  const rows      = correlate(events, scenarios);
+  const covered   = rows.filter(r => r.status === "COVERED").length;
+  const uncovered = rows.filter(r => r.status === "UNCOVERED").length;
+  return (
+    `Ops scenario gap: ${rows.length} event${rows.length !== 1 ? "s" : ""} assessed against ` +
+    `${scenarios.length} scenario${scenarios.length !== 1 ? "s" : ""}. ` +
+    `${covered} COVERED by a scenario plan, ${uncovered} UNCOVERED — no matching scenario exists.`
+  );
 }
 
-// ── component ─────────────────────────────────────────────────────────────────
-
-const TABS = ["ALL", "COVERED", "DARK"];
+const TABS = ["ALL", "COVERED", "UNCOVERED"];
 
 export default function OpsScenarioGap() {
-  const [open,      setOpen]      = useState(false);
-  const [events,    setEvents]    = useState([]);
-  const [scenarios, setScenarios] = useState([]);
-  const [loading,   setLoading]   = useState(false);
-  const [filter,    setFilter]    = useState("ALL");
-  const [expanded,  setExpanded]  = useState(null);
-  const [assessing, setAssessing] = useState(false);
-  const [lastFetch, setLastFetch] = useState(null);
-  const timerRef = useRef(null);
+  const [open, setOpen]           = useState(false);
+  const [rows, setRows]           = useState([]);
+  const [loading, setLoading]     = useState(false);
+  const [error, setError]         = useState(null);
+  const [tab, setTab]             = useState("ALL");
+  const [q, setQ]                 = useState("");
+  const [expanded, setExpanded]   = useState(null);
+  const [assessing, setAssessing] = useState(null);
+  const [verdict, setVerdict]     = useState({});
 
   const load = useCallback(async () => {
-    setLoading(true);
+    setLoading(true); setError(null);
     try {
-      const base = apiBase();
-      const hdr  = { Authorization: `Bearer ${API_KEY}` };
-      const [evRes, scRes] = await Promise.all([
-        fetch(`${base}/v1/ops/events`,     { headers: hdr }),
-        fetch(`${base}/v1/scenario/list`,  { headers: hdr }),
-      ]);
-      setEvents(normaliseEvents(await evRes.json()));
-      setScenarios(normaliseScenarios(await scRes.json()));
-      setLastFetch(new Date());
-    } catch { /* backend unreachable */ }
-    finally { setLoading(false); }
+      const [events, scenarios] = await Promise.all([fetchOpsEvents(), fetchScenarios()]);
+      setRows(correlate(events, scenarios));
+    } catch (e) {
+      setError(e.message || "Fetch error");
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
   useEffect(() => {
-    load();
-    timerRef.current = setInterval(load, POLL_MS);
-    return () => clearInterval(timerRef.current);
+    const toggle = () => { setOpen(o => { if (!o) load(); return !o; }); };
+    window.addEventListener("jarvis:opscen-toggle", toggle);
+    return () => window.removeEventListener("jarvis:opscen-toggle", toggle);
   }, [load]);
 
   useEffect(() => {
-    const onToggle = () => setOpen((v) => !v);
-    window.addEventListener("jarvis:opscen-toggle", onToggle);
-    return () => window.removeEventListener("jarvis:opscen-toggle", onToggle);
-  }, []);
+    if (!open) return;
+    const id = setInterval(load, 90000);
+    return () => clearInterval(id);
+  }, [open, load]);
 
-  useEffect(() => {
-    const onAsk = (e) => {
-      const q = (e.detail?.text || e.detail?.query || "").toLowerCase();
-      if (isOpsScenGapQuery(q)) setOpen(true);
-    };
-    window.addEventListener("jarvis:ask", onAsk);
-    return () => window.removeEventListener("jarvis:ask", onAsk);
-  }, []);
+  async function assess(row, idx) {
+    setAssessing(idx);
+    const evName  = row.event?.title || row.event?.name || row.event?.message || row.event?.type || "this event";
+    const scList  = row.scenarios.slice(0, 3).map(s => s.title || s.name || "scenario").join(", ");
+    const prompt  = row.scenarios.length
+      ? `Briefly assess scenario coverage for the ops event "${evName}". Matching scenarios: ${scList}. Two sentences max.`
+      : `The ops event "${evName}" has NO matching scenario plan. What planning gap does this represent? Two sentences max.`;
+    try {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${API_KEY}` },
+        body: JSON.stringify({ message: prompt }),
+      });
+      const d   = await r.json();
+      const ans = (d.answer || "No assessment available.").replace(/<<ACTION:[^>]*>>/g, "").trim();
+      setVerdict(v => ({ ...v, [idx]: ans }));
+      const voice = getActiveVoice?.() || "ash";
+      await fetch(`${apiBase()}/v1/voice/tts`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ text: ans, voice }),
+      }).then(async res => {
+        if (!res.ok) return;
+        const url = URL.createObjectURL(await res.blob());
+        const a   = new Audio(url); a.onended = () => URL.revokeObjectURL(url); a.play().catch(() => {});
+      }).catch(() => {});
+    } catch (_) {
+      setVerdict(v => ({ ...v, [idx]: "Assessment unavailable." }));
+    } finally {
+      setAssessing(null);
+    }
+  }
 
-  const correlated = buildCorrelated(events, scenarios);
-  const covered    = correlated.filter((ev) => ev.covered).length;
-  const dark       = correlated.filter((ev) => !ev.covered).length;
+  if (!open) {
+    const uncovered = rows.filter(r => r.status === "UNCOVERED").length;
+    return (
+      <button
+        onClick={() => { setOpen(true); load(); }}
+        style={{
+          position: "fixed", bottom: 8, left: 19080, zIndex: 76,
+          background: "rgba(5,8,13,0.7)", border: `1px solid ${uncovered > 0 ? AMB : CY}44`,
+          color: uncovered > 0 ? AMB : CY, fontSize: 10, letterSpacing: 1, padding: "3px 8px",
+          borderRadius: 4, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",
+          whiteSpace: "nowrap",
+        }}
+        title="Ops Events × Scenario Gap"
+      >
+        ◈ OPSCEN{uncovered > 0 ? ` ${uncovered}` : ""}
+      </button>
+    );
+  }
 
-  const visible = correlated.filter((ev) => {
-    if (filter === "COVERED") return ev.covered;
-    if (filter === "DARK")    return !ev.covered;
+  const covered   = rows.filter(r => r.status === "COVERED").length;
+  const uncovered = rows.filter(r => r.status === "UNCOVERED").length;
+
+  const visible = rows.filter(r => {
+    if (tab !== "ALL" && r.status !== tab) return false;
+    if (q) {
+      const n = (
+        r.event?.title || r.event?.name || r.event?.message || r.event?.type || ""
+      ).toLowerCase();
+      return n.includes(q.toLowerCase());
+    }
     return true;
   });
 
-  async function assess() {
-    setAssessing(true);
-    const text = await buildOpsScenGapScript();
-    setAssessing(false);
-    window.dispatchEvent(new CustomEvent("jarvis:speak-dossier", { detail: { text } }));
-  }
+  const statusColor = s => s === "COVERED" ? GRN : RED;
 
   return (
-    <>
-      {/* Toggle button */}
-      <button
-        onClick={() => setOpen((v) => !v)}
-        title="Ops-Scenario Gap Analyzer (◈ OPSCEN)"
-        style={{
-          position: "fixed", bottom: 8, left: BTN_LEFT, zIndex: 69,
-          background: open ? "rgba(0,200,120,0.18)" : "rgba(2,6,10,0.82)",
-          border: `1px solid ${open ? C.neon : S.border}`,
-          borderRadius: S.radius, color: open ? C.neon : S.textHi,
-          fontFamily: S.mono, fontSize: S.fs.xxs, letterSpacing: 1,
-          padding: "3px 7px", cursor: "pointer",
-          boxShadow: open ? `0 0 8px ${C.neon}44` : "none",
-          transition: "all 0.15s",
-        }}
-      >
-        ◈ OPSCEN{dark > 0 && (
-          <span style={{
-            marginLeft: 4, background: "#EF4444", color: "#fff",
-            borderRadius: 8, padding: "0 4px", fontSize: 9,
-          }}>{dark}</span>
+    <div style={{
+      position: "fixed", top: 60, right: 18, zIndex: 200, width: "min(480px,92vw)",
+      background: "rgba(6,10,16,0.96)", border: `1px solid ${CY}33`, borderRadius: 12,
+      fontFamily: "'JetBrains Mono',monospace", color: "#DCEBF5",
+      boxShadow: `0 0 40px ${CY}18`, display: "flex", flexDirection: "column", maxHeight: "84vh",
+    }}>
+      {/* Header */}
+      <div style={{ padding: "12px 16px", borderBottom: `1px solid ${CY}22`, display: "flex", alignItems: "center", gap: 10 }}>
+        <span style={{ color: CY, fontSize: 11, letterSpacing: 2, fontWeight: 700 }}>◈ OPS EVENTS × SCENARIOS</span>
+        <span style={{ marginLeft: "auto", fontSize: 10, color: "#4A6070" }}>SCENARIO GAP</span>
+        <button onClick={() => setOpen(false)} style={{ background: "none", border: "none", color: "#4A6070", cursor: "pointer", fontSize: 14 }}>✕</button>
+      </div>
+
+      {/* Stat tiles */}
+      <div style={{ display: "flex", gap: 8, padding: "10px 16px", borderBottom: `1px solid ${CY}11` }}>
+        {[
+          { label: "EVENTS",    val: rows.length,                                             col: CY },
+          { label: "COVERED",   val: covered,                                                 col: GRN },
+          { label: "UNCOVERED", val: uncovered,                                               col: RED },
+          { label: "SCENARIOS", val: rows.reduce((n, r) => n + r.scenarios.length, 0),        col: AMB },
+        ].map(t => (
+          <div key={t.label} style={{
+            flex: 1, textAlign: "center", background: `${t.col}09`,
+            border: `1px solid ${t.col}22`, borderRadius: 6, padding: "6px 0",
+          }}>
+            <div style={{ fontSize: 16, fontWeight: 700, color: t.col }}>{t.val}</div>
+            <div style={{ fontSize: 9, color: "#4A6070", letterSpacing: 1 }}>{t.label}</div>
+          </div>
+        ))}
+      </div>
+
+      {/* Tabs + search */}
+      <div style={{ display: "flex", gap: 4, padding: "8px 16px 4px", borderBottom: `1px solid ${CY}11`, flexWrap: "wrap" }}>
+        {TABS.map(t => (
+          <button key={t} onClick={() => setTab(t)} style={{
+            background: tab === t ? `${CY}22` : "none", border: `1px solid ${tab === t ? CY : CY + "22"}`,
+            color: tab === t ? CY : "#4A6070", fontSize: 9, letterSpacing: 1, padding: "2px 8px",
+            borderRadius: 3, cursor: "pointer",
+          }}>{t}</button>
+        ))}
+        <input
+          value={q} onChange={e => setQ(e.target.value)}
+          placeholder="search events…"
+          style={{
+            marginLeft: "auto", background: "transparent", border: `1px solid ${CY}22`,
+            color: "#DCEBF5", fontSize: 10, padding: "2px 8px", borderRadius: 3, outline: "none", width: 140,
+          }}
+        />
+      </div>
+
+      {/* List */}
+      <div style={{ overflowY: "auto", flex: 1, padding: "6px 0" }}>
+        {loading && (
+          <div style={{ padding: "20px", textAlign: "center", color: "#4A6070", fontSize: 11 }}>
+            loading…
+          </div>
         )}
-      </button>
-
-      {/* Panel */}
-      {open && (
-        <div style={{
-          position: "fixed", zIndex: 68,
-          bottom: 36, left: Math.max(8, BTN_LEFT - 260),
-          width: 340,
-          background: S.glass, backdropFilter: S.blur, WebkitBackdropFilter: S.blur,
-          border: `1px solid ${S.border}`, borderTop: `2px solid ${C.neon}`,
-          borderRadius: S.radius,
-          boxShadow: "0 4px 28px rgba(0,0,0,0.55)",
-          fontFamily: S.mono, fontSize: S.fs.xs,
-          display: "flex", flexDirection: "column",
-          maxHeight: "68vh", overflow: "hidden",
-        }}>
-          {/* Header */}
-          <div style={{
-            display: "flex", alignItems: "center", justifyContent: "space-between",
-            padding: "8px 12px", borderBottom: `1px solid ${S.border}`,
-          }}>
-            <span style={{ color: C.neon, letterSpacing: 2, fontWeight: 700 }}>
-              OPS–SCENARIO GAP
-            </span>
-            <button
-              onClick={assess}
-              disabled={assessing || events.length === 0}
-              style={{
-                background: "transparent", border: `1px solid ${C.blue}`,
-                color: C.blue, borderRadius: S.radius, padding: "2px 8px",
-                fontFamily: S.mono, fontSize: S.fs.xxs, cursor: "pointer",
-                opacity: (assessing || events.length === 0) ? 0.4 : 1,
-              }}
-            >
-              {assessing ? "…" : "▶ ASSESS"}
-            </button>
+        {error && (
+          <div style={{ padding: "12px 16px", color: RED, fontSize: 11 }}>⚠ {error}</div>
+        )}
+        {!loading && !error && visible.length === 0 && (
+          <div style={{ padding: "20px", textAlign: "center", color: "#4A6070", fontSize: 11 }}>
+            no events match
           </div>
-
-          {/* Stat tiles */}
-          <div style={{
-            display: "grid", gridTemplateColumns: "repeat(4,1fr)",
-            gap: 6, padding: "8px 12px",
-          }}>
-            {[
-              { label: "EVENTS",    val: events.length,    color: C.blue    },
-              { label: "SCENARIOS", val: scenarios.length,  color: C.neon    },
-              { label: "COVERED",   val: covered,           color: "#4ADE80" },
-              { label: "DARK",      val: dark,              color: "#EF4444" },
-            ].map(({ label, val, color }) => (
-              <div key={label} style={{
-                background: "rgba(0,0,0,0.3)", borderRadius: 6,
-                padding: "5px 4px", textAlign: "center",
-              }}>
-                <div style={{ color, fontSize: S.fs.lg, fontWeight: 700 }}>{val}</div>
-                <div style={{ color: S.text, fontSize: "8px", letterSpacing: 1 }}>{label}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Filter tabs */}
-          <div style={{ display: "flex", gap: 4, padding: "0 12px 6px" }}>
-            {TABS.map((t) => (
-              <button key={t} onClick={() => setFilter(t)} style={{
-                flex: 1, background: filter === t ? `${C.neon}22` : "transparent",
-                border: `1px solid ${filter === t ? C.neon : S.border}`,
-                color: filter === t ? C.neon : S.text,
-                borderRadius: S.radius, padding: "2px 0",
-                fontFamily: S.mono, fontSize: "8px", letterSpacing: 1, cursor: "pointer",
-              }}>{t}</button>
-            ))}
-          </div>
-
-          {/* Event list */}
-          <div style={{ overflowY: "auto", flex: 1, padding: "0 12px 10px" }}>
-            {loading && events.length === 0 ? (
-              <div style={{ color: S.text, padding: "12px 0" }}>Loading…</div>
-            ) : visible.length === 0 ? (
-              <div style={{ color: S.text, padding: "12px 0" }}>No events match.</div>
-            ) : visible.map((ev) => (
-              <div key={ev.id} style={{ marginBottom: 6 }}>
-                <div
-                  onClick={() => setExpanded(expanded === ev.id ? null : ev.id)}
-                  style={{
-                    display: "flex", alignItems: "center", gap: 8,
-                    padding: "5px 8px", borderRadius: 6, cursor: "pointer",
-                    background: "rgba(0,0,0,0.25)",
-                    borderLeft: `3px solid ${ev.covered ? "#4ADE80" : "#EF4444"}`,
-                  }}
-                >
-                  <span style={{ color: ev.covered ? "#4ADE80" : "#EF4444", fontSize: 10, width: 10 }}>
-                    {ev.covered ? "●" : "○"}
+        )}
+        {visible.map((row, idx) => {
+          const evName = row.event?.title || row.event?.name || row.event?.message || row.event?.type || `Event ${idx + 1}`;
+          const sev    = row.event?.severity;
+          const isExp  = expanded === idx;
+          const sc     = statusColor(row.status);
+          return (
+            <div key={idx} style={{ borderBottom: `1px solid ${CY}0D` }}>
+              <div
+                onClick={() => setExpanded(isExp ? null : idx)}
+                style={{
+                  display: "flex", alignItems: "center", gap: 8,
+                  padding: "7px 16px", cursor: "pointer",
+                  background: isExp ? `${CY}08` : "transparent",
+                }}
+              >
+                <span style={{
+                  width: 72, textAlign: "center", fontSize: 9, letterSpacing: 1,
+                  color: sc, border: `1px solid ${sc}44`, borderRadius: 3, padding: "1px 4px",
+                  flexShrink: 0,
+                }}>{row.status}</span>
+                <span style={{ fontSize: 11, flex: 1, color: "#DCEBF5", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
+                  {evName}
+                </span>
+                {sev != null && (
+                  <span style={{ fontSize: 9, color: sev >= 80 ? RED : sev >= 50 ? AMB : "#4A6070", flexShrink: 0 }}>
+                    sev {sev}
                   </span>
-                  <span style={{ flex: 1, color: S.textHi, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                    {ev.title}
-                  </span>
-                  {ev.severity && (
-                    <span style={{
-                      fontSize: "8px", padding: "1px 4px", borderRadius: 4,
-                      background: `${sevColor(ev.severity)}22`, color: sevColor(ev.severity),
-                      border: `1px solid ${sevColor(ev.severity)}44`,
-                    }}>
-                      {ev.severity}
-                    </span>
-                  )}
-                  <span style={{ color: ev.covered ? "#4ADE80" : "#EF4444", fontSize: "9px", minWidth: 46, textAlign: "right" }}>
-                    {ev.covered ? `${ev.scenarios.length} SC` : "DARK"}
-                  </span>
-                  <span style={{ color: S.text, fontSize: 9 }}>{expanded === ev.id ? "▴" : "▾"}</span>
-                </div>
-
-                {expanded === ev.id && (
-                  <div style={{
-                    margin: "2px 0 2px 18px",
-                    background: "rgba(0,0,0,0.18)", borderRadius: 4,
-                    padding: "5px 8px",
-                  }}>
-                    {ev.covered ? ev.scenarios.map((sc) => (
-                      <div key={sc.id} style={{
-                        display: "flex", justifyContent: "space-between", alignItems: "center",
-                        padding: "2px 0", borderBottom: `1px solid ${S.border}33`,
-                      }}>
-                        <span style={{ color: S.textHi, fontSize: "9px", flex: 1, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>
-                          {sc.title}
-                        </span>
-                        <span style={{ fontSize: "9px", marginLeft: 6, whiteSpace: "nowrap", color: S.text }}>
-                          rel:{sc.score}{sc.status ? ` · ${sc.status}` : ""}
-                        </span>
-                      </div>
-                    )) : (
-                      <div style={{ color: S.text, fontSize: "9px", padding: "2px 0" }}>
-                        No matching scenarios for this ops event.
-                      </div>
-                    )}
-                  </div>
                 )}
+                <span style={{ fontSize: 9, color: "#4A6070", flexShrink: 0 }}>
+                  {row.scenarios.length} plan{row.scenarios.length !== 1 ? "s" : ""}
+                </span>
+                <span style={{ fontSize: 10, color: "#2E4050" }}>{isExp ? "▲" : "▼"}</span>
               </div>
-            ))}
-          </div>
 
-          {/* Footer */}
-          <div style={{
-            padding: "4px 12px", borderTop: `1px solid ${S.border}`,
-            color: S.text, fontSize: "8px", letterSpacing: 0.5,
-          }}>
-            /v1/ops/events · /v1/scenario/list · {lastFetch ? lastFetch.toLocaleTimeString("en-GB") : "—"}
-          </div>
-        </div>
-      )}
-    </>
+              {isExp && (
+                <div style={{ padding: "6px 16px 10px 24px" }}>
+                  {row.scenarios.length > 0 ? (
+                    <div style={{ marginBottom: 8 }}>
+                      {row.scenarios.slice(0, 5).map((sc, si) => (
+                        <div key={si} style={{
+                          padding: "4px 8px", marginBottom: 3, borderRadius: 4,
+                          background: `${GRN}09`, border: `1px solid ${GRN}22`,
+                        }}>
+                          <span style={{ fontSize: 10, color: GRN }}>
+                            {sc.title || sc.name || sc.id || "Untitled scenario"}
+                          </span>
+                          {sc.scenario_type && (
+                            <span style={{ marginLeft: 8, fontSize: 9, color: "#4A6070" }}>{sc.scenario_type}</span>
+                          )}
+                          {sc.description && (
+                            <div style={{ fontSize: 9, color: "#4A6070", marginTop: 2 }}>
+                              {String(sc.description).slice(0, 100)}{sc.description.length > 100 ? "…" : ""}
+                            </div>
+                          )}
+                        </div>
+                      ))}
+                      {row.scenarios.length > 5 && (
+                        <div style={{ fontSize: 9, color: "#4A6070", padding: "2px 8px" }}>
+                          +{row.scenarios.length - 5} more scenarios
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div style={{ fontSize: 10, color: RED, marginBottom: 8, padding: "4px 8px" }}>
+                      No scenario covers this ops event — planning blind spot.
+                    </div>
+                  )}
+
+                  {verdict[idx] && (
+                    <div style={{
+                      padding: "6px 8px", borderRadius: 4, background: `${CY}09`,
+                      border: `1px solid ${CY}22`, fontSize: 10, color: "#DCEBF5", marginBottom: 6,
+                    }}>
+                      {verdict[idx]}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => assess(row, idx)}
+                    disabled={assessing === idx}
+                    style={{
+                      background: assessing === idx ? `${CY}11` : `${CY}18`,
+                      border: `1px solid ${CY}44`, color: CY, fontSize: 9, letterSpacing: 1,
+                      padding: "3px 10px", borderRadius: 3, cursor: assessing === idx ? "default" : "pointer",
+                    }}
+                  >
+                    {assessing === idx ? "…assessing" : "▶ ASSESS GAP"}
+                  </button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Footer */}
+      <div style={{
+        padding: "6px 16px", borderTop: `1px solid ${CY}11`,
+        fontSize: 9, color: "#2E4050", display: "flex", gap: 12,
+      }}>
+        <span>{rows.length} events · {rows.reduce((n, r) => n + r.scenarios.length, 0)} scenario links</span>
+        <button onClick={load} style={{ marginLeft: "auto", background: "none", border: "none", color: `${CY}66`, cursor: "pointer", fontSize: 9 }}>↺ refresh</button>
+      </div>
+    </div>
   );
 }

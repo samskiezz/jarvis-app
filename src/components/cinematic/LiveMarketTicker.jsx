@@ -3,12 +3,39 @@
  *
  * Data source: POST /functions/getLiveIntel (no auth required).
  * Polls every 60 s. Renders nothing on error so it never breaks the host page.
+ *
+ * F225: Voice intents — "live ticker / market strip / price ticker / lticker /
+ *        show ticker / live prices / bottom ticker / market prices"
+ * Custom event: jarvis:lticker-toggle (not used — ticker is always visible when data is live)
  */
 import { useState, useEffect, useCallback } from "react";
 import { COLORS as C } from "@/domain/colors";
 import { getLiveIntel } from "@/api/backendFunctions";
 
 const POLL_MS = 60_000;
+
+const LTICKER_RE = /\b(live.ticker|market.strip|price.ticker|lticker|show.ticker|live.prices|bottom.ticker|market.prices|live.market.ticker)\b/i;
+export function isLiveTickerQuery(t) { return LTICKER_RE.test(t || ""); }
+
+export async function buildLiveTickerScript() {
+  try {
+    const intel = await getLiveIntel({ type: "all" });
+    const markets = intel?.markets || [];
+    const earthquakes = intel?.earthquakes || [];
+    const topMovers = markets
+      .filter(m => typeof m.change_pct === "number")
+      .sort((a, b) => Math.abs(b.change_pct) - Math.abs(a.change_pct))
+      .slice(0, 3);
+    const moverStr = topMovers.length
+      ? topMovers.map(m => `${m.sym} ${m.change_pct >= 0 ? "▲" : "▼"}${Math.abs(m.change_pct).toFixed(2)}%`).join(", ")
+      : "no data";
+    const latestEq = earthquakes[0];
+    const eqStr = latestEq ? ` Latest seismic event: M${latestEq.mag} near ${latestEq.place}.` : "";
+    return `Live market ticker active with ${markets.length} instruments, sir. Top movers: ${moverStr}.${eqStr}`;
+  } catch {
+    return "Live market ticker is active at the bottom of the screen, sir. Data will refresh momentarily.";
+  }
+}
 
 function TickerItem({ sym, price, change_pct }) {
   const positive = typeof change_pct === "number" ? change_pct >= 0 : true;

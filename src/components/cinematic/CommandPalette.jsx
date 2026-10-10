@@ -1,11 +1,12 @@
 /**
  * CommandPalette — ⌘K / Ctrl+K global command search.
- * Lists every JARVIS command: cinematic scenes, all pages, and all floating panels.
- * Panel commands dispatch jarvis:ask events; navigation commands use react-router.
+ * Lists every JARVIS page (from pageRegistry) + the 10 cinematic scenes
+ * + every JARVIS action command (dispatches jarvis:ask events).
  * Additive-only; mounted in App.jsx next to JarvisBrain.
+ * Restricted to /apex routes — cinematic routes use JarvisCommandPalette instead.
  */
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { PAGES } from "@/lib/pageRegistry";
 import { createPageUrl } from "@/utils";
 
@@ -24,61 +25,59 @@ const CINEMATIC_SCENES = [
   { id: "10_system_security_core",    label: "System Security Core",   icon: "◈" },
 ];
 
-/** Panels opened by dispatching jarvis:ask with a trigger text. */
-const PANEL_COMMANDS = [
-  { id: "panel:risks",          label: "Open Risk Board",             icon: "⚠",  trigger: "risks",              keywords: "risk signal critical threat hazard" },
-  { id: "panel:tasks",          label: "Open Task Board",             icon: "◎",  trigger: "tasks",              keywords: "task mission todo objective assignment" },
-  { id: "panel:markets",        label: "Open Markets Ticker",         icon: "◆",  trigger: "markets",            keywords: "markets crypto bitcoin forex fx trading" },
-  { id: "panel:investigations", label: "Open Investigations",         icon: "◈",  trigger: "investigations",     keywords: "investigations cases intel case operation" },
-  { id: "panel:datasets",       label: "Open Datasets Browser",       icon: "⬡",  trigger: "datasets",           keywords: "datasets catalog ingest pipeline" },
-  { id: "panel:knowledge",      label: "Open Knowledge Browser",      icon: "◈",  trigger: "knowledge",          keywords: "knowledge articles wiki entries browse" },
-  { id: "panel:contacts",       label: "Open Contacts Directory",     icon: "◈",  trigger: "contacts",           keywords: "contacts people directory personnel staff" },
-  { id: "panel:swarm",          label: "Open Swarm Jobs Monitor",     icon: "⬡",  trigger: "swarm jobs",         keywords: "swarm agent job fleet autonomous" },
-  { id: "panel:centrality",     label: "Open Graph Centrality",       icon: "◈",  trigger: "centrality",         keywords: "centrality influence hub nodes graph rank" },
-  { id: "panel:investments",    label: "Open Investment Widget",      icon: "◆",  trigger: "investments",        keywords: "investments portfolio wealth holdings assets" },
-  { id: "panel:skills",         label: "Open Skill Scorecard",        icon: "◈",  trigger: "skills",             keywords: "skills scorecard aip capability" },
-  { id: "panel:scenarios",      label: "Open Scenario Launcher",      icon: "▶",  trigger: "scenarios",          keywords: "scenarios simulation forecast playbook" },
-  { id: "panel:documents",      label: "Open Document Search",        icon: "◈",  trigger: "documents",          keywords: "documents reports dossier papers files" },
-  { id: "panel:ops",            label: "Open Ops Event Stream",       icon: "⬡",  trigger: "ops events",         keywords: "ops operations events stream log" },
-  { id: "panel:graph-network",  label: "Open Graph Network Explorer", icon: "◈",  trigger: "graph network",      keywords: "graph network explorer nodes edges" },
-  { id: "panel:anchors",        label: "Open Scene Anchor Drill-down",icon: "⚓", trigger: "anchors",            keywords: "anchors scene anchor drilldown detail" },
-  { id: "panel:tour",           label: "Start Scene Auto-Tour",       icon: "⟳",  trigger: "start tour",         keywords: "tour auto-tour scene cycle narration" },
-  { id: "panel:history",        label: "Open Command History",        icon: "◷",  trigger: "history",            keywords: "history commands recent replay" },
-  { id: "panel:sitrep",         label: "Open Situation Room",         icon: "⊕",  trigger: "sitrep",             keywords: "sitrep situation room ops centre" },
-  { id: "panel:path",           label: "Open Graph Path Explorer",    icon: "⤢",  trigger: "path",               keywords: "path graph connect link chain traverse" },
-  { id: "panel:briefing",       label: "Morning Briefing",            icon: "◈",  trigger: "brief me",           keywords: "brief briefing morning daily debrief" },
-  { id: "panel:health-score",   label: "Open System Health Scorecard",icon: "⊕",  trigger: "health score",       keywords: "health score system scorecard composite" },
-  { id: "panel:entity-chrono",  label: "Open Entity Chronology",      icon: "⊕",  trigger: "entity chronology",  keywords: "entity chronology timeline entities recent" },
-  { id: "panel:telemetry",      label: "Open Telemetry Recorder",     icon: "⟁",  trigger: "telemetry chart",    keywords: "telemetry cpu memory load sparkline" },
-  { id: "panel:threat-actors",  label: "Open Threat Actor Network",   icon: "◈",  trigger: "threat actors",      keywords: "threat actor network danger profile" },
-  { id: "panel:correlations",   label: "Open Threat Correlations",    icon: "⚡", trigger: "correlate threats",  keywords: "correlate threats risk correlation engine" },
-  { id: "panel:intel-pulse",    label: "Open Intel Pulse",            icon: "⚡", trigger: "intel pulse",        keywords: "intel pulse global activity seismic score" },
-  { id: "panel:scene-health",   label: "Open Scene Health Heatmap",   icon: "⬡",  trigger: "scene health",       keywords: "scene health heatmap anchor status" },
-  { id: "panel:daily-plan",     label: "Open Daily Objectives",       icon: "◎",  trigger: "daily objectives",   keywords: "daily objectives plan today urgent" },
-  { id: "panel:brain-growth",   label: "Open Brain Growth Sparkline", icon: "◈",  trigger: "brain growth",       keywords: "brain growth nodes synapses sparkline" },
-  { id: "panel:vitals",         label: "Open Biometric Vitals",       icon: "◈",  trigger: "vitals",             keywords: "vitals biometrics health heart rate hrv" },
-  { id: "panel:chat",           label: "Open Agent Chat",             icon: "◉",  trigger: "open chat",          keywords: "chat panel agent conversation transcript" },
-  { id: "panel:intel-profiles", label: "Open Intel Profile Directory",icon: "◈",  trigger: "intel profiles",     keywords: "intel profile subjects persons of interest" },
-  { id: "panel:communities",    label: "Open Graph Communities",      icon: "◍",  trigger: "communities",        keywords: "communities graph clusters groups" },
-  { id: "panel:intel-digest",   label: "Open Intel Digest",           icon: "◈",  trigger: "intel digest",       keywords: "intel digest live news briefing" },
-  { id: "panel:cases",          label: "Open Ops Cases Panel",        icon: "◈",  trigger: "cases",              keywords: "cases ops case files open closed" },
-  { id: "panel:crisis",         label: "Open Crisis Early Warning",   icon: "⚠",  trigger: "crisis level",       keywords: "crisis defcon threat level early warning" },
-  { id: "panel:watchlist",      label: "Open Entity Watchlist",       icon: "⬡",  trigger: "watchlist",          keywords: "watchlist watched entities pinned" },
-  { id: "panel:readiness",      label: "Open Mission Readiness Index",icon: "◎",  trigger: "mission readiness",  keywords: "readiness mission ready index score" },
-  { id: "panel:dataset-growth", label: "Open Dataset Growth Tracker", icon: "⟁",  trigger: "dataset growth",     keywords: "dataset growth tracker fastest growing" },
-  { id: "panel:scenario-mon",   label: "Open Scenario Monitor",       icon: "▶",  trigger: "scenario monitor",   keywords: "scenario monitor running simulations status" },
-  { id: "panel:priority-queue", label: "Open Priority Action Queue",  icon: "⚡", trigger: "priority queue",     keywords: "priority queue urgent items action" },
-  { id: "panel:threat-velocity",label: "Open Threat Velocity Monitor",icon: "⚡", trigger: "threat velocity",    keywords: "threat velocity rate surge monitor" },
-  { id: "panel:report-summ",    label: "Open Report Summariser",      icon: "◎",  trigger: "summarize report",   keywords: "report summarise summary executive" },
-  { id: "panel:geo-seismic",    label: "Open Geo-Seismic Analyst",    icon: "◎",  trigger: "geo seismic",        keywords: "geo seismic earthquake regions analyst" },
-  { id: "panel:entity-activity",label: "Open Entity Activity Heatmap",icon: "◈",  trigger: "entity activity",    keywords: "entity activity heatmap domain" },
-  { id: "panel:graph-anomaly",  label: "Open Graph Anomaly Detector", icon: "◈",  trigger: "graph anomaly",      keywords: "graph anomaly detector outlier unusual" },
-  { id: "panel:ops-timeline",   label: "Open Ops Event Timeline",     icon: "◈",  trigger: "ops events",         keywords: "ops event timeline log history" },
-  { id: "panel:threat-timeline",label: "Open Threat Timeline",        icon: "◈",  trigger: "threat timeline",    keywords: "threat timeline unified feed intel" },
-  { id: "panel:decision-ledger",label: "Open Decision Ledger",        icon: "◈",  trigger: "decision ledger",    keywords: "decision ledger log strategic choices" },
-  { id: "panel:resource-press", label: "Open Resource Pressure",      icon: "⊡",  trigger: "resource pressure",  keywords: "resource pressure load cpu memory" },
-  { id: "panel:scene-narrator", label: "Narrate Current Scene",       icon: "◎",  trigger: "narrate scene",      keywords: "narrate scene describe story narrator" },
-  { id: "panel:ambient",        label: "Toggle Ambient Reactor Hum",  icon: "◇",  trigger: "ambient",            keywords: "ambient reactor hum toggle audio" },
+// Every named JARVIS voice action — dispatches jarvis:ask so the real agent handles it.
+const JARVIS_ACTIONS = [
+  { label: "Status Report",        query: "JARVIS, status",                icon: "⊕", keywords: "status report system health" },
+  { label: "Morning Briefing",     query: "JARVIS, brief me",              icon: "◎", keywords: "morning brief briefing summary" },
+  { label: "Situation Report",     query: "JARVIS, sitrep",                icon: "⊕", keywords: "sitrep situation room ops overview" },
+  { label: "Risk Board",           query: "show risks",                    icon: "⚠", keywords: "risks risk board signals threats" },
+  { label: "Task Board",           query: "JARVIS, tasks",                 icon: "◎", keywords: "tasks missions task board" },
+  { label: "Investigations",       query: "JARVIS, investigations",        icon: "◈", keywords: "investigations cases intel" },
+  { label: "Datasets Browser",     query: "JARVIS, datasets",              icon: "⬡", keywords: "datasets data catalog sources" },
+  { label: "Contacts Directory",   query: "JARVIS, contacts",              icon: "◈", keywords: "contacts people directory" },
+  { label: "Markets Ticker",       query: "JARVIS, markets",               icon: "◆", keywords: "markets crypto forex fx ticker" },
+  { label: "World Incidents",      query: "JARVIS, world incidents",       icon: "◈", keywords: "world earthquakes incidents globe" },
+  { label: "Brain Growth",         query: "JARVIS, brain growth",          icon: "◈", keywords: "brain nodes synapses growth sparkline" },
+  { label: "Service Diagnostics",  query: "JARVIS, service health",        icon: "⬡", keywords: "diagnostics services health check" },
+  { label: "Swarm Jobs",           query: "JARVIS, swarm",                 icon: "⬡", keywords: "swarm jobs monitor running" },
+  { label: "Graph Centrality",     query: "JARVIS, centrality",            icon: "◈", keywords: "graph centrality influence network" },
+  { label: "Graph Communities",    query: "JARVIS, communities",           icon: "◍", keywords: "graph communities clusters" },
+  { label: "Knowledge Browser",    query: "JARVIS, knowledge",             icon: "◈", keywords: "knowledge articles documents" },
+  { label: "Intel Profiles",       query: "JARVIS, intel profiles",        icon: "◈", keywords: "intel profiles threat actors" },
+  { label: "Intel Digest",         query: "JARVIS, intel digest",          icon: "◈", keywords: "intel digest live news" },
+  { label: "Skill Scorecard",      query: "JARVIS, skills",                icon: "◈", keywords: "skills scorecard aip self-improvement" },
+  { label: "Investment Portfolio",  query: "JARVIS, investments",          icon: "◆", keywords: "investments wealth portfolio" },
+  { label: "Scenario Launcher",    query: "JARVIS, scenarios",             icon: "▶", keywords: "scenarios simulations run launch" },
+  { label: "Document Search",      query: "JARVIS, documents",             icon: "◈", keywords: "documents reports knowledge search" },
+  { label: "Entity Quick Search",  query: "JARVIS, find",                  icon: "◈", keywords: "entity search graph intel find" },
+  { label: "Priority Action Queue",query: "what needs attention now",      icon: "⚡", keywords: "priority queue urgent action items" },
+  { label: "Mission Readiness",    query: "JARVIS, readiness",             icon: "◎", keywords: "mission readiness operational index" },
+  { label: "Crisis Level",         query: "JARVIS, crisis level",          icon: "⚠", keywords: "crisis defcon threat level warning" },
+  { label: "Threat Timeline",      query: "threat timeline",               icon: "◈", keywords: "threat timeline unified feed intel" },
+  { label: "Scene Health Heatmap", query: "scene health",                  icon: "⬡", keywords: "scene health heatmap anchors" },
+  { label: "Health Score",         query: "JARVIS, health score",          icon: "⊕", keywords: "health score system scorecard" },
+  { label: "Resource Pressure",    query: "resource pressure",             icon: "⊡", keywords: "resource pressure cpu memory load" },
+  { label: "Ops Event Timeline",   query: "ops events",                    icon: "◈", keywords: "ops events timeline log" },
+  { label: "Threat Report",        query: "generate threat report",        icon: "◎", keywords: "threat report intelligence adaptive" },
+  { label: "Geo-Seismic Analysis", query: "geo seismic",                   icon: "◎", keywords: "geo seismic earthquake regions" },
+  { label: "Graph Anomaly Detect", query: "graph anomaly",                 icon: "◈", keywords: "graph anomaly outlier unusual node" },
+  { label: "Entity Chronology",    query: "JARVIS, entity chronology",     icon: "⊕", keywords: "entity chronology all entities timeline" },
+  { label: "Entity Watchlist",     query: "JARVIS, watchlist",             icon: "⬡", keywords: "watchlist watched entities" },
+  { label: "Ops Cases Panel",      query: "JARVIS, cases",                 icon: "◈", keywords: "ops cases case files" },
+  { label: "Graph Network",        query: "JARVIS, graph network",         icon: "◈", keywords: "graph network explorer map" },
+  { label: "Daily Objectives",     query: "what should I do today",        icon: "◎", keywords: "daily objectives plan today" },
+  { label: "Threat Actor Network", query: "threat actor network",          icon: "◈", keywords: "threat actor network tan danger" },
+  { label: "Threat Correlation",   query: "correlate threats",             icon: "⚡", keywords: "correlate threats correlation" },
+  { label: "World Risk Correlator",query: "world risk",                    icon: "◈", keywords: "world risk quake geo correlate" },
+  { label: "Intel Pulse",          query: "intel pulse",                   icon: "⚡", keywords: "intel pulse global activity score" },
+  { label: "Scene Auto-Tour",      query: "JARVIS, start tour",            icon: "⟳", keywords: "tour auto tour cycle scenes" },
+  { label: "Narrate Scene",        query: "narrate scene",                 icon: "◎", keywords: "narrate scene describe story" },
+  { label: "Path from X to Y",     query: "JARVIS, show path",             icon: "⤢", keywords: "path graph explore hop" },
+  { label: "Ambient Hum Toggle",   query: "JARVIS, ambient",               icon: "◇", keywords: "ambient hum reactor toggle" },
+  { label: "Command History",      query: "JARVIS, history",               icon: "◷", keywords: "command history replay" },
+  { label: "Report Summariser",    query: "summarize report",              icon: "◎", keywords: "report summary summarise" },
+  { label: "Swarm-Task Convergence", query: "swarm task convergence",      icon: "◈", keywords: "swarm task convergence alignment" },
+  { label: "Agent Chat Panel",     query: "JARVIS, open chat",             icon: "◉", keywords: "chat agent conversation panel" },
 ];
 
 function buildCommands() {
@@ -87,16 +86,19 @@ function buildCommands() {
     label: s.label,
     icon: s.icon,
     group: "CINEMATIC",
-    type: "navigate",
     path: `/cinematic/${s.id}`,
+    action: null,
     keywords: `cinematic scene ${s.label}`.toLowerCase(),
   }));
 
-  const panelCommands = PANEL_COMMANDS.map((p) => ({
-    ...p,
-    group: "PANEL",
-    type: "panel",
-    keywords: `${p.label} ${p.keywords}`.toLowerCase(),
+  const actionCommands = JARVIS_ACTIONS.map((a) => ({
+    id: `action:${a.label.toLowerCase().replace(/\s+/g, "-")}`,
+    label: a.label,
+    icon: a.icon,
+    group: "JARVIS",
+    path: null,
+    action: a.query,
+    keywords: `${a.label} ${a.keywords}`.toLowerCase(),
   }));
 
   const pageCommands = PAGES
@@ -106,12 +108,12 @@ function buildCommands() {
       label: p.label,
       icon: p.icon || "◆",
       group: (p.group || "apex").toUpperCase(),
-      type: "navigate",
       path: `/apex${createPageUrl(p.name)}`,
+      action: null,
       keywords: [p.label, p.name, ...(p.aliases || [])].join(" ").toLowerCase(),
     }));
 
-  return [...sceneCommands, ...panelCommands, ...pageCommands];
+  return [...sceneCommands, ...actionCommands, ...pageCommands];
 }
 
 const ALL_COMMANDS = buildCommands();
@@ -121,8 +123,14 @@ export default function CommandPalette() {
   const [query, setQuery] = useState("");
   const [selected, setSelected] = useState(0);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
   const inputRef = useRef(null);
   const listRef = useRef(null);
+  // Only active on /apex routes — cinematic routes use JarvisCommandPalette
+  const isApex = pathname.startsWith("/apex");
+
+  // Restrict to /apex routes — cinematic routes use JarvisCommandPalette instead.
+  if (!pathname.startsWith("/apex")) return null;
 
   const filtered = query.trim()
     ? ALL_COMMANDS.filter(
@@ -140,11 +148,9 @@ export default function CommandPalette() {
 
   const run = useCallback(
     (cmd) => {
-      if (cmd.type === "panel") {
-        window.dispatchEvent(
-          new CustomEvent("jarvis:ask", { detail: { text: cmd.trigger, query: cmd.trigger } })
-        );
-      } else {
+      if (cmd.action) {
+        window.dispatchEvent(new CustomEvent("jarvis:ask", { detail: { text: cmd.action } }));
+      } else if (cmd.path) {
         navigate(cmd.path);
       }
       close();
@@ -153,6 +159,7 @@ export default function CommandPalette() {
   );
 
   useEffect(() => {
+    if (!isApex) return;
     const onKey = (e) => {
       const isModifier = e.metaKey || e.ctrlKey;
       if (isModifier && e.key === "k") {
@@ -165,7 +172,7 @@ export default function CommandPalette() {
     };
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
-  }, []);
+  }, [isApex]);
 
   useEffect(() => {
     if (open) {
@@ -301,9 +308,7 @@ export default function CommandPalette() {
               </span>
               <span
                 style={{
-                  color: i === selected
-                    ? (cmd.type === "panel" ? "#FFD700AA" : `${CY}AA`)
-                    : "#2E4050",
+                  color: i === selected ? `${CY}AA` : "#2E4050",
                   fontSize: 10, letterSpacing: 2, flexShrink: 0,
                 }}
               >
@@ -323,7 +328,7 @@ export default function CommandPalette() {
           }}
         >
           <span>↑↓ navigate</span>
-          <span>↵ open</span>
+          <span>↵ run</span>
           <span>ESC close</span>
           <span style={{ marginLeft: "auto" }}>
             {filtered.length} command{filtered.length !== 1 ? "s" : ""}
