@@ -11,3 +11,4 @@
 [2026-10-17] F11 DONE — DatasetsBrowser.jsx: /v1/datasets catalog panel (filter, row counts, 120-s refresh) + JarvisBrain voice hook; build exit 0
 [2026-10-17] F12 DONE — InvestigationsList.jsx: status-sorted open-cases panel (filter, 120-s auto-refresh) from /v1/investigations; isInvestigationsQuery+buildInvestigationsScript wired in JarvisBrain.jsx; ⌖ INTEL toggle button; mounted App.jsx:561. Build verified (exit 0).
 [2026-10-17] F13 ScenarioLauncher: /v1/scenario/list panel + /v1/scenario/{id}/run POSTs + voice intent; mounted App.jsx + JarvisBrain; build exit 0
+[2026-10-17] F14 DocumentSearch — /v1/reports+/knowledge/ vault panel, filter+source tabs, click-to-speak, voice intent in JarvisBrain, mounted App.jsx — build exit 0
