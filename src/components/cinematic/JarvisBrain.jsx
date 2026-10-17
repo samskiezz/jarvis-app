@@ -102,6 +102,7 @@ import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
 import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isLatencyQuery, buildLatencyScript } from "./EndpointLatencyMonitor";
+import { isOpsEventsQuery, buildOpsEventsScript } from "./OpsEventsTimeline";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -617,6 +618,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:latency-toggle"));
       let script = "";
       try { script = await buildLatencyScript(); } catch { script = "Endpoint latency data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F296: ops events timeline — open panel and speak a summary of recent /v1/ops/events.
+    if (isOpsEventsQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:ops-events-toggle"));
+      let script = "";
+      try { script = await buildOpsEventsScript(); } catch { script = "Operational events data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;

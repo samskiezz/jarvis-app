@@ -519,6 +519,7 @@ import OpsAlertHorizonMonitor from '@/components/cinematic/OpsAlertHorizonMonito
 import TaskInvestmentSkillContactCoverage from '@/components/cinematic/TaskInvestmentSkillContactCoverage';
 import SwarmMissionIntelCoverage from '@/components/cinematic/SwarmMissionIntelCoverage';
 import EndpointLatencyMonitor from '@/components/cinematic/EndpointLatencyMonitor';
+import OpsEventsTimeline from '@/components/cinematic/OpsEventsTimeline';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1648,6 +1649,8 @@ function App() {
             <SwarmMissionIntelCoverage />
             {/* F295 (overnight 2026-10-17): Endpoint Latency Monitor — ◈ LATENCY button (left:55640, bottom:8, zIndex:108); directly probes 8 confirmed-real JARVIS endpoints from the browser; measures round-trip latency in ms; color-coded (green<200ms/amber<1000ms/red); trend badge (↑↓→) from localStorage rolling history (last 5 readings); ▶ REFRESH on demand; isLatencyQuery+buildLatencyScript exported for JarvisBrain; "latency"/"api health"/"endpoint health"/"api speed"/"api ping"/"response time" voice trigger; jarvis:latency-toggle event; 60-s auto-probe */}
             <EndpointLatencyMonitor />
+            {/* F296 (overnight 2026-10-17): Ops Events Timeline — ⊙ OPS-EVT button (left:56200, bottom:8, zIndex:109); polls /v1/ops/events every 45 s; chronological timeline with severity pills (CRITICAL=red/HIGH=amber/MEDIUM=cyan/LOW=green), type badges, relative timestamps; text search + type filter chips; isOpsEventsQuery+buildOpsEventsScript exported for JarvisBrain; "ops events"/"operations log"/"event log"/"ops feed" voice trigger; jarvis:ops-events-toggle event */}
+            <OpsEventsTimeline />
 
             <Suspense fallback={<Loading />}>
               <Routes>

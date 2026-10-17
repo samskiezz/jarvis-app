@@ -13,3 +13,4 @@
 [2026-10-17] F13 ScenarioLauncher: /v1/scenario/list panel + /v1/scenario/{id}/run POSTs + voice intent; mounted App.jsx + JarvisBrain; build exit 0
 [2026-10-17] F14 DocumentSearch — /v1/reports+/knowledge/ vault panel, filter+source tabs, click-to-speak, voice intent in JarvisBrain, mounted App.jsx — build exit 0
 [2026-10-17] F295 DONE — EndpointLatencyMonitor.jsx: directly probes 8 JARVIS endpoints from browser; color-coded latency ms table + trend arrows; localStorage rolling history (5 readings per endpoint); isLatencyQuery+buildLatencyScript wired in JarvisBrain; ◈ LATENCY toggle mounted App.jsx. Build verified (exit 0).
+[2026-10-17] F296 DONE — OpsEventsTimeline.jsx: polls /v1/ops/events every 45 s; chronological feed with severity pills + type filter chips + text search; isOpsEventsQuery+buildOpsEventsScript wired in JarvisBrain; ⊙ OPS-EVT toggle mounted App.jsx. Build verified (exit 0).
