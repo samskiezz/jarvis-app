@@ -51,7 +51,6 @@ function SearchRow({ search, onRun, running, resultCount }) {
         display: "block",
         width: "100%",
         padding: "8px 14px",
-        borderBottom: `1px solid ${S.border}`,
         background: "transparent",
         border: "none",
         borderBottom: `1px solid ${S.border}`,

@@ -27,7 +27,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F07 Markets ticker — getLiveIntel crypto + FX → live ticker; "JARVIS, markets" speaks top movers. [2026-10-17] MarketsTicker.jsx: scrolling bottom strip from /functions/getLiveIntel markets; expanded grid on click or "JARVIS markets" voice intent; isMarketsQuery + buildMarketsScript in JarvisBrain; mounted App.jsx:551. Build verified (exit 0).
 - [x] F08 Entity quick-search — query /v1/graph + IntelProfile entities; JARVIS speaks a one-line dossier. [2026-10-17] EntityQuickSearch.jsx: Ctrl+Shift+E or "JARVIS find X" opens floating panel; queries /v1/graph/subgraph + /entities/IntelProfile with debounced search; clicking a result dispatches jarvis:speak-dossier; added jarvis:speak-dossier listener in JarvisBrain so TTS fires on result click; build verified (exit 0).
 - [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical. [2026-10-17] RiskBoard.jsx (already mounted in App.jsx) wired voice intent isRiskQuery+buildRiskScript into JarvisBrain.jsx; "JARVIS risks" now speaks severity summary and opens board; build verified (exit 0).
-- [ ] F10 Task board — /entities/Task → live mission cards with status.
+- [x] F10 Task board — /entities/Task → live mission cards with status. [2026-10-17] TaskBoard.jsx status-sorted mission cards (in_progress/pending/blocked/done) fetching /entities/Task; "JARVIS, tasks/missions" voice intent speaks live summary; mounted App.jsx; build verified (exit 0).
 - [ ] F11 Datasets browser — /v1/datasets → catalog list with row counts.
 - [ ] F12 Investigations list — /v1/investigations → open cases panel.
 - [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.

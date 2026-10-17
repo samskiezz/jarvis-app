@@ -83,7 +83,6 @@ export default function OpsCasesPanel() {
           position: "fixed",
           left: open ? DRAWER_W : 0,
           top: "60%",
-          transform: "translateY(-50%)",
           zIndex: 9000,
           writingMode: "vertical-rl",
           textOrientation: "mixed",
