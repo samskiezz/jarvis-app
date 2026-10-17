@@ -518,6 +518,7 @@ import InvestmentSkillScenarioMap from '@/components/cinematic/InvestmentSkillSc
 import OpsAlertHorizonMonitor from '@/components/cinematic/OpsAlertHorizonMonitor';
 import TaskInvestmentSkillContactCoverage from '@/components/cinematic/TaskInvestmentSkillContactCoverage';
 import SwarmMissionIntelCoverage from '@/components/cinematic/SwarmMissionIntelCoverage';
+import EndpointLatencyMonitor from '@/components/cinematic/EndpointLatencyMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1645,6 +1646,8 @@ function App() {
             <TaskInvestmentSkillContactCoverage />
             {/* F294 (overnight 2026-10-04): SwarmJob × Knowledge × Scenario × Contact Mission Intel Coverage — SMICOV button; /entities/SwarmJob × /knowledge/ × /v1/scenario/list × /entities/Contact */}
             <SwarmMissionIntelCoverage />
+            {/* F295 (overnight 2026-10-17): Endpoint Latency Monitor — ◈ LATENCY button (left:55640, bottom:8, zIndex:108); directly probes 8 confirmed-real JARVIS endpoints from the browser; measures round-trip latency in ms; color-coded (green<200ms/amber<1000ms/red); trend badge (↑↓→) from localStorage rolling history (last 5 readings); ▶ REFRESH on demand; isLatencyQuery+buildLatencyScript exported for JarvisBrain; "latency"/"api health"/"endpoint health"/"api speed"/"api ping"/"response time" voice trigger; jarvis:latency-toggle event; 60-s auto-probe */}
+            <EndpointLatencyMonitor />
 
             <Suspense fallback={<Loading />}>
               <Routes>

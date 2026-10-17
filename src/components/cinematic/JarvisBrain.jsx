@@ -101,6 +101,7 @@ import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
 import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
 import { isSkillQuery, buildSkillScript } from "./SkillScorecard";
 import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
+import { isLatencyQuery, buildLatencyScript } from "./EndpointLatencyMonitor";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -607,6 +608,15 @@ export default function JarvisBrain() {
     if (isCentralityQuery(q)) {
       let script = "";
       try { script = await buildCentralityScript(); } catch { script = "Graph centrality data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F295: endpoint latency — probe all confirmed endpoints from the browser and speak results.
+    if (isLatencyQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:latency-toggle"));
+      let script = "";
+      try { script = await buildLatencyScript(); } catch { script = "Endpoint latency data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
