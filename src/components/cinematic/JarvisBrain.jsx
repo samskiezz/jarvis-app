@@ -3506,6 +3506,19 @@ export default function JarvisBrain() {
     return () => window.removeEventListener("jarvis:ask", onAsk);
   }, []);
 
+  // F08: jarvis:speak-dossier — clicked entity results speak their one-line dossier via TTS.
+  useEffect(() => {
+    const onDossier = (e) => {
+      const text = e?.detail?.text;
+      if (!text) return;
+      setOpen(true); setThinking(false); typeOut(text); speak(text);
+      clearTimeout(hideT.current);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(6000, text.length * 65));
+    };
+    window.addEventListener("jarvis:speak-dossier", onDossier);
+    return () => window.removeEventListener("jarvis:speak-dossier", onDossier);
+  }, []);
+
   function mic() {
     const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
     if (!SR) { ask("are you online"); return; }
