@@ -1,1 +1,2 @@
 [2026-10-17] F01 DONE — ⌘K command palette (CommandPalette.jsx) wired in App.jsx: scenes + APEX pages, Enter runs, Esc closes. Build verified (exit 0).
+[2026-10-17] F02 DONE — HeyJarvisListener.jsx: always-listening wake word toggle using browser SpeechRecognition API; arms/disarms via WakeWordToggle; dispatches jarvis:ask to open JarvisBrain. Mounted in App.jsx. Build verified (exit 0).
