@@ -29,7 +29,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F09 Risk board — /entities/RiskSignal → severity-sorted cards; red pulse on critical. [2026-10-17] RiskBoard.jsx (already mounted in App.jsx) wired voice intent isRiskQuery+buildRiskScript into JarvisBrain.jsx; "JARVIS risks" now speaks severity summary and opens board; build verified (exit 0).
 - [x] F10 Task board — /entities/Task → live mission cards with status. [2026-10-17] TaskBoard.jsx status-sorted mission cards (in_progress/pending/blocked/done) fetching /entities/Task; "JARVIS, tasks/missions" voice intent speaks live summary; mounted App.jsx; build verified (exit 0).
 - [x] F11 Datasets browser — /v1/datasets → catalog list with row counts. [2026-10-17] DatasetsBrowser.jsx wired in App.jsx + JarvisBrain isDatasetsQuery/buildDatasetsScript: floating ⬡ DATA panel with filter, row counts, type/status badges, 120-s auto-refresh; "JARVIS datasets" speaks catalog count + top names; build verified (exit 0).
-- [ ] F12 Investigations list — /v1/investigations → open cases panel.
+- [x] F12 Investigations list — /v1/investigations → open cases panel. [2026-10-17] InvestigationsList.jsx: status-sorted open-cases panel (filter, 120-s auto-refresh) from /v1/investigations; isInvestigationsQuery+buildInvestigationsScript wired in JarvisBrain.jsx; ⌖ INTEL toggle button. Build verified (exit 0).
 - [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
 - [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
 - [ ] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live.
