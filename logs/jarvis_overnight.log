@@ -6,3 +6,4 @@
 [2026-10-17] F06 DONE — WorldIncidentFeed.jsx: mini Three.js globe with colour-coded earthquake pins + scrolling seismic list, M5+/M6+ stat filters, 60-s auto-refresh from /functions/getLiveIntel; mounted App.jsx:549. Build verified (exit 0).
 [2026-10-17] F07 DONE — MarketsTicker.jsx: scrolling bottom strip (30 px fixed) consuming /functions/getLiveIntel markets; animated ticker; expanded grid on click or 'JARVIS markets' voice intent; isMarketsQuery + buildMarketsScript wired in JarvisBrain.jsx. Mounted App.jsx:551. Build verified (exit 0).
 [2026-10-17] F08 EntityQuickSearch verified+fixed: jarvis:speak-dossier listener added to JarvisBrain.jsx; Ctrl+Shift+E + "JARVIS find X" voice intent; queries /v1/graph/subgraph + /entities/IntelProfile; TTS fires on result click. Build exit 0.
+[2026-10-17] F09 Risk board: wired isRiskQuery+buildRiskScript from RiskBoard.jsx into JarvisBrain.jsx; voice 'JARVIS risks' now speaks severity summary + opens board; build exit 0

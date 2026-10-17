@@ -95,6 +95,7 @@ import { isMarketsQuery, buildMarketsScript } from "./MarketsTicker";
 import { isEntitySearchQuery, extractEntitySearchTerm, buildEntityDossierScript } from "./EntityQuickSearch";
 import { isTaskQuery, buildTaskScript } from "./TaskBoard";
 import { isDatasetsQuery, buildDatasetsScript } from "./DatasetsBrowser";
+import { isRiskQuery, buildRiskScript } from "./RiskBoard";
 import { isInvestigationsQuery, buildInvestigationsScript } from "./InvestigationsList";
 import { isScenarioQuery, buildScenarioScript } from "./ScenarioLauncher";
 import { isDocumentQuery, buildDocumentScript } from "./DocumentSearch";
@@ -483,6 +484,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:entity-search", { detail: { term } }));
       let script = "";
       try { script = await buildEntityDossierScript(term); } catch { script = "Entity search unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F09: risk board — opens on jarvis:ask (RiskBoard listens); JarvisBrain speaks the severity summary.
+    if (isRiskQuery(q)) {
+      let script = "";
+      try { script = await buildRiskScript(); } catch { script = "Risk board is standing by, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
       return;
