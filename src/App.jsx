@@ -520,6 +520,7 @@ import TaskInvestmentSkillContactCoverage from '@/components/cinematic/TaskInves
 import SwarmMissionIntelCoverage from '@/components/cinematic/SwarmMissionIntelCoverage';
 import EndpointLatencyMonitor from '@/components/cinematic/EndpointLatencyMonitor';
 import OpsEventsTimeline from '@/components/cinematic/OpsEventsTimeline';
+import InvestigationScenarioCoverage from '@/components/cinematic/InvestigationScenarioCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1651,6 +1652,8 @@ function App() {
             <EndpointLatencyMonitor />
             {/* F296 (overnight 2026-10-17): Ops Events Timeline — ⊙ OPS-EVT button (left:56200, bottom:8, zIndex:109); polls /v1/ops/events every 45 s; chronological timeline with severity pills (CRITICAL=red/HIGH=amber/MEDIUM=cyan/LOW=green), type badges, relative timestamps; text search + type filter chips; isOpsEventsQuery+buildOpsEventsScript exported for JarvisBrain; "ops events"/"operations log"/"event log"/"ops feed" voice trigger; jarvis:ops-events-toggle event */}
             <OpsEventsTimeline />
+            {/* F297 (overnight 2026-10-17): Investigation × Scenario Response Coverage — ◈ INV-SIM button (left:56760, bottom:8, zIndex:110); parallel-fetches /v1/investigations + /v1/scenario/list; keyword-matches each open investigation against scenario names to surface COVERED vs GAP cases; stat tiles (cases/scenarios/covered/gap); amber badge on gap count; filter tabs ALL/COVERED/GAP + text search; expand row → matched scenario cards with relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isInvSimQuery+buildInvSimScript exported for JarvisBrain; "investigation scenarios"/"case scenarios"/"response coverage"/"investigation response"/"case coverage"/"inv scenario" voice trigger; jarvis:inv-scenario-coverage-toggle event; 90-s auto-refresh */}
+            <InvestigationScenarioCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
