@@ -30,7 +30,7 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F10 Task board — /entities/Task → live mission cards with status. [2026-10-17] TaskBoard.jsx status-sorted mission cards (in_progress/pending/blocked/done) fetching /entities/Task; "JARVIS, tasks/missions" voice intent speaks live summary; mounted App.jsx; build verified (exit 0).
 - [x] F11 Datasets browser — /v1/datasets → catalog list with row counts. [2026-10-17] DatasetsBrowser.jsx wired in App.jsx + JarvisBrain isDatasetsQuery/buildDatasetsScript: floating ⬡ DATA panel with filter, row counts, type/status badges, 120-s auto-refresh; "JARVIS datasets" speaks catalog count + top names; build verified (exit 0).
 - [x] F12 Investigations list — /v1/investigations → open cases panel. [2026-10-17] InvestigationsList.jsx: status-sorted open-cases panel (filter, 120-s auto-refresh) from /v1/investigations; isInvestigationsQuery+buildInvestigationsScript wired in JarvisBrain.jsx; ⌖ INTEL toggle button. Build verified (exit 0).
-- [ ] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome.
+- [x] F13 Scenario launcher — /v1/scenario/list → pick + run; show outcome. [2026-10-17] ScenarioLauncher.jsx: floating ▶ SIM panel lists /v1/scenario/list scenarios with filter, type/status badges, ▶ RUN button POSTs to /v1/scenario/{id}/run and shows outcome banner; "JARVIS scenarios" voice intent speaks count + top names via JarvisBrain; mounted App.jsx; build verified (exit 0).
 - [ ] F14 Document search — /v1/reports + /knowledge/* → query → results JARVIS summarizes.
 - [ ] F15 Skill scorecard — /v1/aip/skill → the self-improvement metrics, live.
 - [ ] F16 Brain-growth sparkline — poll /v1/cinematic/brain → live nodes/synapses chart over time.

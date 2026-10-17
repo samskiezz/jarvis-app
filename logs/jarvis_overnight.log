@@ -10,3 +10,4 @@
 [2026-10-17] F10 DONE — TaskBoard.jsx: status-sorted mission cards (in_progress/pending/blocked/done) from /entities/Task; isTaskQuery+buildTaskScript wired in JarvisBrain.jsx for voice summary; mounted App.jsx:557. Fixed duplicate-key esbuild warnings in OpsCasesPanel.jsx, SavedSearchesDrawer.jsx, PageDataLensDrawer.jsx. Build exit 0.
 [2026-10-17] F11 DONE — DatasetsBrowser.jsx: /v1/datasets catalog panel (filter, row counts, 120-s refresh) + JarvisBrain voice hook; build exit 0
 [2026-10-17] F12 DONE — InvestigationsList.jsx: status-sorted open-cases panel (filter, 120-s auto-refresh) from /v1/investigations; isInvestigationsQuery+buildInvestigationsScript wired in JarvisBrain.jsx; ⌖ INTEL toggle button; mounted App.jsx:561. Build verified (exit 0).
+[2026-10-17] F13 ScenarioLauncher: /v1/scenario/list panel + /v1/scenario/{id}/run POSTs + voice intent; mounted App.jsx + JarvisBrain; build exit 0
