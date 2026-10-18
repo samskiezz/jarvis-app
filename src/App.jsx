@@ -525,6 +525,7 @@ import SystemHeartbeatWaveform from '@/components/cinematic/SystemHeartbeatWavef
 import TaskCompletionRate from '@/components/cinematic/TaskCompletionRate';
 import RiskTaskBlockingMap from '@/components/cinematic/RiskTaskBlockingMap';
 import SwarmContactAssignmentMap from '@/components/cinematic/SwarmContactAssignmentMap';
+import InvestmentRiskExposureMap from '@/components/cinematic/InvestmentRiskExposureMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1666,6 +1667,8 @@ function App() {
             <RiskTaskBlockingMap />
             {/* F301 (overnight 2026-10-18): Swarm × Contact Assignment Map — ◈ SCMAP button (left:59000, bottom:8, zIndex:114); fetches /entities/SwarmJob + /entities/Contact; keyword-matches each job against contact names/roles to surface ASSIGNED vs UNASSIGNED jobs; stat tiles (jobs/assigned/unassigned/contacts); expandable rows show matched contacts with role badge; filter tabs ALL/ASSIGNED/UNASSIGNED; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwarmContactQuery+buildSwarmContactScript wired in JarvisBrain; "swarm assignment"/"swarm contacts"/"job assignment"/"who is assigned"/"scmap" voice triggers; jarvis:swarm-contact-map-toggle event; 90-s auto-refresh */}
             <SwarmContactAssignmentMap />
+            {/* F302 (overnight 2026-10-18): Investment × Risk Signal Exposure Map — ◈ IRMAP button (left:59560, bottom:8, zIndex:115); fetches /entities/Investment + /entities/RiskSignal; keyword-matches each investment against active risk signals to surface EXPOSED vs SAFE assets; severity-sorted rows; stat tiles (assets/exposed/safe/risks); expandable rows show matched risk signals with severity badge; filter tabs ALL/EXPOSED/SAFE; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isInvestmentRiskQuery+buildInvestmentRiskScript wired in JarvisBrain; "investment risk"/"portfolio risk"/"exposure map"/"asset risk"/"irmap" voice triggers; jarvis:investment-risk-map-toggle event; 90-s auto-refresh */}
+            <InvestmentRiskExposureMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
