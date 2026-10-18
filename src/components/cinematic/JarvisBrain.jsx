@@ -380,6 +380,7 @@ import { isKgcmapQuery, buildKgcmapScript } from "./KnowledgeGraphCentralityMap"
 import { isLitsFusionQuery, buildLitsFusionScript } from "./LiveIntelTaskScenarioFusion";
 import { isIopMapQuery, buildIopMapScript } from "./IntelProfileOpsMap";
 import { isContactSkillQuery, buildContactSkillScript } from "./ContactSkillExpertiseMatrix";
+import { isOpsTriageQuery, buildOpsTriageScript } from "./OpsEventTriageMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -789,6 +790,14 @@ export default function JarvisBrain() {
       document.dispatchEvent(new CustomEvent("jarvis:csexmat-toggle"));
       let script = "";
       try { script = buildContactSkillScript(); } catch { script = "Contact Skill Expertise Matrix online."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+    if (isOpsTriageQuery(q)) {
+      document.dispatchEvent(new CustomEvent("jarvis:otmap-toggle"));
+      let script = "";
+      try { script = buildOpsTriageScript(); } catch { script = "Ops Event Triage Map online."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;

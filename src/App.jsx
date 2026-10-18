@@ -536,6 +536,7 @@ import KnowledgeGraphCentralityMap from '@/components/cinematic/KnowledgeGraphCe
 import LiveIntelTaskScenarioFusion from '@/components/cinematic/LiveIntelTaskScenarioFusion';
 import IntelProfileOpsMap from '@/components/cinematic/IntelProfileOpsMap';
 import ContactSkillExpertiseMatrix from '@/components/cinematic/ContactSkillExpertiseMatrix';
+import OpsEventTriageMap from '@/components/cinematic/OpsEventTriageMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1699,6 +1700,8 @@ function App() {
             <IntelProfileOpsMap />
             {/* F312 (overnight 2026-10-18): Contact × AIP Skill Expertise Matrix — ◈ CSEXMAT button (left:65160, bottom:8, zIndex:125); fetches /entities/Contact + /v1/aip/skill; keyword-matches each contact's name/role/org/bio against skill name/description/domain; EXPERT(3+ skills)/POTENTIAL(1-2)/UNMATCHED classification; stat tiles (contacts/expert/potential/unmatched/skills); expandable rows show matched skills with relevance bar + hit count; ▶ ASSESS (per-contact + global) → /v1/jarvis/agent/chat + TTS; isContactSkillQuery+buildContactSkillScript wired in JarvisBrain; "skill expertise"/"personnel skill"/"contact expertise"/"skill matrix"/"who knows"/"expertise matrix"/"csexmat" voice triggers; jarvis:csexmat-toggle event; 90-s auto-refresh */}
             <ContactSkillExpertiseMatrix />
+            {/* F313 (overnight 2026-10-18): Ops Event Triage Map — ◈ OTMAP button (left:65720, bottom:8, zIndex:126); fetches /v1/ops/events + /v1/investigations + /entities/Task; keyword-matches each ops event against investigation titles/descriptions and task names; TRIAGED(inv+task)/ACTIVE(inv or task)/UNASSIGNED classification; stat tiles (events/triaged/active/unassigned/investigations/tasks); red pulse on unassigned count; expandable rows show matched investigations with status badge + matched tasks with status; filter tabs ALL/TRIAGED/ACTIVE/UNASSIGNED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOpsTriageQuery+buildOpsTriageScript wired in JarvisBrain; "ops triage"/"event triage"/"ops tasks"/"event tasks"/"triage map"/"otmap"/"ops investigation"/"event investigation"/"ops event map" voice triggers; jarvis:otmap-toggle event; 90-s auto-refresh */}
+            <OpsEventTriageMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
