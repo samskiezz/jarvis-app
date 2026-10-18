@@ -523,6 +523,7 @@ import OpsEventsTimeline from '@/components/cinematic/OpsEventsTimeline';
 import InvestigationScenarioCoverage from '@/components/cinematic/InvestigationScenarioCoverage';
 import SystemHeartbeatWaveform from '@/components/cinematic/SystemHeartbeatWaveform';
 import TaskCompletionRate from '@/components/cinematic/TaskCompletionRate';
+import RiskTaskBlockingMap from '@/components/cinematic/RiskTaskBlockingMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1660,6 +1661,8 @@ function App() {
             <SystemHeartbeatWaveform />
             {/* F299 (overnight 2026-10-18): Task Completion Rate Monitor — ◎ TRATE button (left:57880, bottom:8, zIndex:112); polls /entities/Task every 60 s; tracks done/total completion rate; rolling 20-reading history in localStorage; rate gauge (SVG ring) + stat tiles (done/active/blocked/pending) + trend sparkline; delta badge vs previous reading; red pulse when rate < 20%; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTaskRateQuery+buildTaskRateScript exported for JarvisBrain; "task rate"/"task completion"/"tasks done"/"how many tasks done"/"task progress"/"trate" voice trigger; jarvis:task-rate-toggle event */}
             <TaskCompletionRate />
+            {/* F300 (overnight 2026-10-18): Risk × Task Blocking Map — ◈ RTMAP button (left:58440, bottom:8, zIndex:113); fetches /entities/RiskSignal + /entities/Task; keyword-matches each risk against task titles/descriptions to surface potentially affected missions; severity-sorted rows; stat tiles (risks/critical/affected/no-match); expandable rows show matched task status; filter tabs ALL/CRITICAL/AFFECTED/NO MATCH; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRiskTaskQuery+buildRiskTaskScript wired in JarvisBrain; "risk tasks"/"blocked tasks"/"risk blocking"/"task risk map" voice trigger; jarvis:risk-task-map-toggle event; 90-s auto-refresh */}
+            <RiskTaskBlockingMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

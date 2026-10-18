@@ -106,6 +106,7 @@ import { isOpsEventsQuery, buildOpsEventsScript } from "./OpsEventsTimeline";
 import { isInvSimQuery, buildInvSimScript } from "./InvestigationScenarioCoverage";
 import { isHeartbeatQuery, buildHeartbeatScript } from "./SystemHeartbeatWaveform";
 import { isTaskRateQuery, buildTaskRateScript } from "./TaskCompletionRate";
+import { isRiskTaskQuery, buildRiskTaskScript } from "./RiskTaskBlockingMap";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -657,6 +658,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:heartbeat-toggle"));
       let script = "";
       try { script = await buildHeartbeatScript(); } catch { script = "System heartbeat data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+    // F300: risk-task blocking map — open panel and speak risk-vs-mission intersection brief.
+    if (isRiskTaskQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:risk-task-map-toggle"));
+      let script = "";
+      try { script = await buildRiskTaskScript(); } catch { script = "Risk-task analysis unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;
