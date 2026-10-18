@@ -378,6 +378,7 @@ import { isTiscoverQuery, buildTiscoverScript } from "./TaskInvestmentSkillConta
 import { isSmicovQuery, buildSmicovScript } from "./SwarmMissionIntelCoverage";
 import { isKgcmapQuery, buildKgcmapScript } from "./KnowledgeGraphCentralityMap";
 import { isLitsFusionQuery, buildLitsFusionScript } from "./LiveIntelTaskScenarioFusion";
+import { isIopMapQuery, buildIopMapScript } from "./IntelProfileOpsMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -771,6 +772,14 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:litsfusion-toggle"));
       let script = "";
       try { script = await buildLitsFusionScript(); } catch { script = "Live intel fusion data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+    if (isIopMapQuery(q)) {
+      document.dispatchEvent(new CustomEvent("jarvis:iopmap-toggle"));
+      let script = "";
+      try { script = buildIopMapScript(); } catch { script = "IOPMAP online. Opening Intel Profile Operations Map."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;
