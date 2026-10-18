@@ -543,6 +543,7 @@ import KnowledgeIntelInvestigationTriad from '@/components/cinematic/KnowledgeIn
 import ScenarioDatasetSkillReadiness from '@/components/cinematic/ScenarioDatasetSkillReadiness';
 import SwarmInvestmentRiskTriangle from '@/components/cinematic/SwarmInvestmentRiskTriangle';
 import ContactReportTaskChain from '@/components/cinematic/ContactReportTaskChain';
+import InvestigationTaskRiskResolution from '@/components/cinematic/InvestigationTaskRiskResolution';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1720,6 +1721,8 @@ function App() {
             <SwarmInvestmentRiskTriangle />
             {/* F35 (overnight 2026-10-18): Contact × Report × Task Action Chain — ◈ CRTACT button (left:68520, bottom:8, zIndex:133); fetches /entities/Contact + /v1/reports + /entities/Task; keyword-matches each contact against intelligence reports and active tasks to classify as ACTIVE/TRACKED/BRIEFED/DARK; stat tiles (contacts/active/tracked/briefed/dark/reports/tasks); amber pulse on dark count; expandable rows show matched reports with date badge + matched tasks with status badge; filter tabs ALL/ACTIVE/TRACKED/BRIEFED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCrtactQuery+buildCrtactScript exported for JarvisBrain; "contact report"/"contact task"/"action chain"/"dark contacts"/"contact chain"/"crtact"/"contact ops" voice triggers; jarvis:crtact-toggle event; 90-s auto-refresh */}
             <ContactReportTaskChain />
+            {/* F36 (overnight 2026-10-18): Investigation × Task × RiskSignal Resolution Chain — ◈ INVRES button (left:69080, bottom:8, zIndex:134); fetches /v1/investigations + /entities/Task + /entities/RiskSignal; keyword-matches each investigation against tasks and risk signals to classify as CONTAINED/TASKED/SIGNALED/OPEN; stat tiles (cases/contained/tasked/signaled/open/tasks/risks); amber pulse on open count; expandable rows show matched tasks with status badge + matched risk signals with severity badge; filter tabs ALL/CONTAINED/TASKED/SIGNALED/OPEN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isInvresQuery+buildInvresScript exported for JarvisBrain; "investigation resolution"/"open investigation"/"case resolution"/"invres"/"investigation risk"/"investigation task" voice triggers; jarvis:invres-toggle event; 90-s auto-refresh */}
+            <InvestigationTaskRiskResolution />
 
             <Suspense fallback={<Loading />}>
               <Routes>
