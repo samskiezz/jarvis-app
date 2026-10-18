@@ -535,6 +535,7 @@ import ReportInvestigationEvidenceMap from '@/components/cinematic/ReportInvesti
 import KnowledgeGraphCentralityMap from '@/components/cinematic/KnowledgeGraphCentralityMap';
 import LiveIntelTaskScenarioFusion from '@/components/cinematic/LiveIntelTaskScenarioFusion';
 import IntelProfileOpsMap from '@/components/cinematic/IntelProfileOpsMap';
+import ContactSkillExpertiseMatrix from '@/components/cinematic/ContactSkillExpertiseMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1696,6 +1697,8 @@ function App() {
             <LiveIntelTaskScenarioFusion />
             {/* F311 (overnight 2026-10-18): IntelProfile × Contact × SwarmJob Operational Dossier — ◈ IOPMAP button (left:64600, bottom:8, zIndex:124); fetches /entities/IntelProfile + /entities/Contact + /entities/SwarmJob; keyword-match each intel profile against contacts and swarm jobs; ACTIVE/MONITORED/DEPLOYED/DORMANT classification; stat tiles (profiles/contacts/jobs/active/monitored/deployed/dormant); dormant pulse; expandable rows show matched contacts with role badge + matched swarm jobs with status badge; filter tabs ALL/ACTIVE/MONITORED/DEPLOYED/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIopMapQuery+buildIopMapScript wired in JarvisBrain; "intel ops"/"intel dossier"/"intel profile ops"/"iopmap"/"profile swarm"/"intel contact map" voice triggers; jarvis:iopmap-toggle event; 90-s auto-refresh */}
             <IntelProfileOpsMap />
+            {/* F312 (overnight 2026-10-18): Contact × AIP Skill Expertise Matrix — ◈ CSEXMAT button (left:65160, bottom:8, zIndex:125); fetches /entities/Contact + /v1/aip/skill; keyword-matches each contact's name/role/org/bio against skill name/description/domain; EXPERT(3+ skills)/POTENTIAL(1-2)/UNMATCHED classification; stat tiles (contacts/expert/potential/unmatched/skills); expandable rows show matched skills with relevance bar + hit count; ▶ ASSESS (per-contact + global) → /v1/jarvis/agent/chat + TTS; isContactSkillQuery+buildContactSkillScript wired in JarvisBrain; "skill expertise"/"personnel skill"/"contact expertise"/"skill matrix"/"who knows"/"expertise matrix"/"csexmat" voice triggers; jarvis:csexmat-toggle event; 90-s auto-refresh */}
+            <ContactSkillExpertiseMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
