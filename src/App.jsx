@@ -541,6 +541,7 @@ import OpsEventTriageMap from '@/components/cinematic/OpsEventTriageMap';
 import DatasetSwarmKnowledgeCoverage from '@/components/cinematic/DatasetSwarmKnowledgeCoverage';
 import KnowledgeIntelInvestigationTriad from '@/components/cinematic/KnowledgeIntelInvestigationTriad';
 import ScenarioDatasetSkillReadiness from '@/components/cinematic/ScenarioDatasetSkillReadiness';
+import SwarmInvestmentRiskTriangle from '@/components/cinematic/SwarmInvestmentRiskTriangle';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1714,6 +1715,8 @@ function App() {
             <KnowledgeIntelInvestigationTriad />
             {/* F33 (overnight 2026-10-18): Scenario × Dataset × Skill Execution Readiness — ◈ SCNRDY button (left:67400, bottom:8, zIndex:129); fetches /v1/scenario/list + /v1/datasets + /v1/aip/skill; keyword-matches each scenario against available datasets and AIP skills to classify as READY/SKILLED/DATAD/BLOCKED; stat tiles (scenarios/ready/skilled/datad/blocked/datasets/skills); amber pulse on blocked count; expandable rows show matched skills + datasets; filter tabs ALL/READY/SKILLED/DATAD/BLOCKED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScnrdyQuery+buildScnrdyScript exported for JarvisBrain; "scenario readiness"/"scenario dataset skill"/"execution readiness"/"scnrdy"/"blocked scenarios" voice triggers; jarvis:scnrdy-toggle event; 90-s auto-refresh */}
             <ScenarioDatasetSkillReadiness />
+            {/* F34 (overnight 2026-10-18): Swarm × Investment × Risk Exposure Triangle — ◈ SWIRT button (left:67960, bottom:8, zIndex:131); fetches /entities/SwarmJob + /entities/Investment + /entities/RiskSignal; keyword-matches each investment against active swarm jobs and risk signals to classify as MONITORED/EXPOSED/RUNNING/DORMANT; stat tiles (invest/monitored/exposed/running/dormant/swarms/risks); red pulse on exposed count; expandable rows show matched risk signals with severity badge + matched swarm jobs with status; filter tabs ALL/MONITORED/EXPOSED/RUNNING/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwirtQuery+buildSwirtScript exported for JarvisBrain; "swarm investment"/"portfolio swarm"/"investment risk swarm"/"swirt"/"exposed investments" voice triggers; jarvis:swirt-toggle event; 90-s auto-refresh */}
+            <SwarmInvestmentRiskTriangle />
 
             <Suspense fallback={<Loading />}>
               <Routes>
