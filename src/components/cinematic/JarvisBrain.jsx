@@ -113,6 +113,7 @@ import { isIntelInvQuery, buildIntelInvScript } from "./IntelProfileInvestigatio
 import { isContactRiskSwarmQuery, buildContactRiskSwarmScript } from "./ContactRiskSwarmMatrix";
 import { isScenarioRiskReadinessQuery, buildScenarioRiskReadinessScript } from "./ScenarioRiskReadiness";
 import { isScenarioExecMonitorQuery, buildScenarioExecMonitorScript } from "./ScenarioExecMonitor";
+import { isSkillGapQuery, buildSkillGapScript } from "./AipSkillDatasetKnowledgeGap";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -727,6 +728,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:scenario-exec-monitor-toggle"));
       let script = "";
       try { script = await buildScenarioExecMonitorScript(); } catch { script = "Scenario execution data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+
+    // F307: AIP skill × dataset × knowledge gap — open panel and speak coverage brief.
+    if (isSkillGapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:skill-gap-toggle"));
+      let script = "";
+      try { script = await buildSkillGapScript(); } catch { script = "Skill gap data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;
