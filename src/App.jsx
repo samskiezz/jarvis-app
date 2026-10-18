@@ -542,6 +542,7 @@ import DatasetSwarmKnowledgeCoverage from '@/components/cinematic/DatasetSwarmKn
 import KnowledgeIntelInvestigationTriad from '@/components/cinematic/KnowledgeIntelInvestigationTriad';
 import ScenarioDatasetSkillReadiness from '@/components/cinematic/ScenarioDatasetSkillReadiness';
 import SwarmInvestmentRiskTriangle from '@/components/cinematic/SwarmInvestmentRiskTriangle';
+import ContactReportTaskChain from '@/components/cinematic/ContactReportTaskChain';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1717,6 +1718,8 @@ function App() {
             <ScenarioDatasetSkillReadiness />
             {/* F34 (overnight 2026-10-18): Swarm × Investment × Risk Exposure Triangle — ◈ SWIRT button (left:67960, bottom:8, zIndex:131); fetches /entities/SwarmJob + /entities/Investment + /entities/RiskSignal; keyword-matches each investment against active swarm jobs and risk signals to classify as MONITORED/EXPOSED/RUNNING/DORMANT; stat tiles (invest/monitored/exposed/running/dormant/swarms/risks); red pulse on exposed count; expandable rows show matched risk signals with severity badge + matched swarm jobs with status; filter tabs ALL/MONITORED/EXPOSED/RUNNING/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwirtQuery+buildSwirtScript exported for JarvisBrain; "swarm investment"/"portfolio swarm"/"investment risk swarm"/"swirt"/"exposed investments" voice triggers; jarvis:swirt-toggle event; 90-s auto-refresh */}
             <SwarmInvestmentRiskTriangle />
+            {/* F35 (overnight 2026-10-18): Contact × Report × Task Action Chain — ◈ CRTACT button (left:68520, bottom:8, zIndex:133); fetches /entities/Contact + /v1/reports + /entities/Task; keyword-matches each contact against intelligence reports and active tasks to classify as ACTIVE/TRACKED/BRIEFED/DARK; stat tiles (contacts/active/tracked/briefed/dark/reports/tasks); amber pulse on dark count; expandable rows show matched reports with date badge + matched tasks with status badge; filter tabs ALL/ACTIVE/TRACKED/BRIEFED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCrtactQuery+buildCrtactScript exported for JarvisBrain; "contact report"/"contact task"/"action chain"/"dark contacts"/"contact chain"/"crtact"/"contact ops" voice triggers; jarvis:crtact-toggle event; 90-s auto-refresh */}
+            <ContactReportTaskChain />
 
             <Suspense fallback={<Loading />}>
               <Routes>
