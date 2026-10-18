@@ -529,6 +529,7 @@ import InvestmentRiskExposureMap from '@/components/cinematic/InvestmentRiskExpo
 import IntelProfileInvestigationMap from '@/components/cinematic/IntelProfileInvestigationMap';
 import ContactRiskSwarmMatrix from '@/components/cinematic/ContactRiskSwarmMatrix';
 import ScenarioRiskReadiness from '@/components/cinematic/ScenarioRiskReadiness';
+import ScenarioExecMonitor from '@/components/cinematic/ScenarioExecMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1678,6 +1679,8 @@ function App() {
             <ContactRiskSwarmMatrix />
             {/* F305 (overnight 2026-10-18): Scenario × RiskSignal Readiness Coverage — ◈ SRMAP button (left:61240, bottom:8, zIndex:118); fetches /v1/scenario/list + /entities/RiskSignal; keyword-matches each risk signal against scenario titles/descriptions to surface COVERED vs EXPOSED risks; stat tiles (risks/covered/exposed/scenarios); red pulse on critical-exposed count; expandable rows show matched scenarios with status+type badges; filter tabs ALL/COVERED/EXPOSED; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScenarioRiskReadinessQuery+buildScenarioRiskReadinessScript wired in JarvisBrain; "scenario risk"/"risk playbook"/"risk coverage"/"response readiness"/"srmap" voice triggers; jarvis:scenario-risk-readiness-toggle event; 90-s auto-refresh */}
             <ScenarioRiskReadiness />
+            {/* F306 (overnight 2026-10-18): Scenario Execution Monitor — ◈ SCEXMON button (left:61800, bottom:8, zIndex:119); polls /v1/scenario/list every 45 s; classifies scenarios as RUNNING/ACTIVE/COMPLETED/FAILED/PENDING; stat tiles (total/running/active/completed/failed); red pulse on failed count; execution-state-sorted rows with last_run timestamp + outcome; expandable rows show id/category/priority/last-run/outcome; filter tabs ALL/RUNNING/ACTIVE/COMPLETED/FAILED; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScenarioExecMonitorQuery+buildScenarioExecMonitorScript wired in JarvisBrain; "scenario status"/"running scenarios"/"scenario monitor"/"scexmon"/"execution status" voice triggers; jarvis:scenario-exec-monitor-toggle event; 45-s auto-refresh */}
+            <ScenarioExecMonitor />
 
             <Suspense fallback={<Loading />}>
               <Routes>

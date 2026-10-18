@@ -112,6 +112,7 @@ import { isInvestmentRiskQuery, buildInvestmentRiskScript } from "./InvestmentRi
 import { isIntelInvQuery, buildIntelInvScript } from "./IntelProfileInvestigationMap";
 import { isContactRiskSwarmQuery, buildContactRiskSwarmScript } from "./ContactRiskSwarmMatrix";
 import { isScenarioRiskReadinessQuery, buildScenarioRiskReadinessScript } from "./ScenarioRiskReadiness";
+import { isScenarioExecMonitorQuery, buildScenarioExecMonitorScript } from "./ScenarioExecMonitor";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -721,6 +722,16 @@ export default function JarvisBrain() {
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;
     }
+    // F306: scenario execution monitor — open panel and speak live execution status brief.
+    if (isScenarioExecMonitorQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scenario-exec-monitor-toggle"));
+      let script = "";
+      try { script = await buildScenarioExecMonitorScript(); } catch { script = "Scenario execution data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+
     // F27: diagnostics queries open the service health panel and speak a live diagnostics brief.
     if (isDiagnosticsQuery(q)) {
       let script = "";
