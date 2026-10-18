@@ -114,6 +114,7 @@ import { isContactRiskSwarmQuery, buildContactRiskSwarmScript } from "./ContactR
 import { isScenarioRiskReadinessQuery, buildScenarioRiskReadinessScript } from "./ScenarioRiskReadiness";
 import { isScenarioExecMonitorQuery, buildScenarioExecMonitorScript } from "./ScenarioExecMonitor";
 import { isSkillGapQuery, buildSkillGapScript } from "./AipSkillDatasetKnowledgeGap";
+import { isReportInvEvidenceQuery, buildReportInvEvidenceScript } from "./ReportInvestigationEvidenceMap";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -738,6 +739,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:skill-gap-toggle"));
       let script = "";
       try { script = await buildSkillGapScript(); } catch { script = "Skill gap data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+
+    // F308: report-investigation evidence map queries open the evidence map panel and speak a live brief.
+    if (isReportInvEvidenceQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:report-inv-evidence-toggle"));
+      let script = "";
+      try { script = await buildReportInvEvidenceScript(); } catch { script = "Report evidence data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;

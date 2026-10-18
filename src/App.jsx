@@ -531,6 +531,7 @@ import ContactRiskSwarmMatrix from '@/components/cinematic/ContactRiskSwarmMatri
 import ScenarioRiskReadiness from '@/components/cinematic/ScenarioRiskReadiness';
 import ScenarioExecMonitor from '@/components/cinematic/ScenarioExecMonitor';
 import AipSkillDatasetKnowledgeGap from '@/components/cinematic/AipSkillDatasetKnowledgeGap';
+import ReportInvestigationEvidenceMap from '@/components/cinematic/ReportInvestigationEvidenceMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1684,6 +1685,8 @@ function App() {
             <ScenarioExecMonitor />
             {/* F307 (overnight 2026-10-18): AIP Skill × Dataset × Knowledge Gap Analysis — ◈ SKGAP button (left:62360, bottom:8, zIndex:120); fetches /v1/aip/skill + /v1/datasets + /knowledge/; keyword-matches each skill against dataset names/descriptions and knowledge article titles to surface COVERED vs GAP skills; stat tiles (skills/covered/gap/datasets/knowledge); amber pulse on gap count; expandable rows show matched datasets with type+rows + matched knowledge topics; filter tabs ALL/COVERED/GAP + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSkillGapQuery+buildSkillGapScript exported for JarvisBrain; "skill gap"/"knowledge gap"/"skill coverage"/"aip coverage"/"skgap"/"dataset skill" voice triggers; jarvis:skill-gap-toggle event; 90-s auto-refresh */}
             <AipSkillDatasetKnowledgeGap />
+            {/* F308 (overnight 2026-10-18): Reports × Investigation Evidence Map — ◈ RIEVMAP button (left:62920, bottom:8, zIndex:121); fetches /v1/reports + /v1/investigations; keyword-matches each report against investigation titles/descriptions to surface LINKED vs UNLINKED reports; stat tiles (reports/linked/unlinked/investigations); amber pulse on unlinked count; expandable rows show matched investigations with status badge; filter tabs ALL/LINKED/UNLINKED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isReportInvEvidenceQuery+buildReportInvEvidenceScript wired in JarvisBrain; "report evidence"/"evidence map"/"report cases"/"rievmap"/"investigation reports" voice triggers; jarvis:report-inv-evidence-toggle event; 90-s auto-refresh */}
+            <ReportInvestigationEvidenceMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
