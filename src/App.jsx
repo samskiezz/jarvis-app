@@ -528,6 +528,7 @@ import SwarmContactAssignmentMap from '@/components/cinematic/SwarmContactAssign
 import InvestmentRiskExposureMap from '@/components/cinematic/InvestmentRiskExposureMap';
 import IntelProfileInvestigationMap from '@/components/cinematic/IntelProfileInvestigationMap';
 import ContactRiskSwarmMatrix from '@/components/cinematic/ContactRiskSwarmMatrix';
+import ScenarioRiskReadiness from '@/components/cinematic/ScenarioRiskReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1675,6 +1676,8 @@ function App() {
             <IntelProfileInvestigationMap />
             {/* F304 (overnight 2026-10-18): Contact × RiskSignal × SwarmJob Personnel Exposure Matrix — ◈ CRSM button (left:60680, bottom:8, zIndex:117); fetches /entities/Contact + /entities/RiskSignal + /entities/SwarmJob; keyword-matches each contact against active risks and running swarm jobs to surface AT-RISK/ASSIGNED/UNPROTECTED personnel; stat tiles (contacts/at-risk/assigned/unprotected); amber pulse on unprotected count; expandable rows show matched risks with severity badges + matched swarm jobs with status; filter tabs ALL/AT-RISK/ASSIGNED/UNPROTECTED; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isContactRiskSwarmQuery+buildContactRiskSwarmScript wired in JarvisBrain; "contact risk"/"personnel risk"/"contact swarm"/"personnel matrix"/"crsm" voice triggers; jarvis:contact-risk-swarm-toggle event; 90-s auto-refresh */}
             <ContactRiskSwarmMatrix />
+            {/* F305 (overnight 2026-10-18): Scenario × RiskSignal Readiness Coverage — ◈ SRMAP button (left:61240, bottom:8, zIndex:118); fetches /v1/scenario/list + /entities/RiskSignal; keyword-matches each risk signal against scenario titles/descriptions to surface COVERED vs EXPOSED risks; stat tiles (risks/covered/exposed/scenarios); red pulse on critical-exposed count; expandable rows show matched scenarios with status+type badges; filter tabs ALL/COVERED/EXPOSED; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScenarioRiskReadinessQuery+buildScenarioRiskReadinessScript wired in JarvisBrain; "scenario risk"/"risk playbook"/"risk coverage"/"response readiness"/"srmap" voice triggers; jarvis:scenario-risk-readiness-toggle event; 90-s auto-refresh */}
+            <ScenarioRiskReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>

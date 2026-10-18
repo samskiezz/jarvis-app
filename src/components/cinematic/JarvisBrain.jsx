@@ -111,6 +111,7 @@ import { isSwarmContactQuery, buildSwarmContactScript } from "./SwarmContactAssi
 import { isInvestmentRiskQuery, buildInvestmentRiskScript } from "./InvestmentRiskExposureMap";
 import { isIntelInvQuery, buildIntelInvScript } from "./IntelProfileInvestigationMap";
 import { isContactRiskSwarmQuery, buildContactRiskSwarmScript } from "./ContactRiskSwarmMatrix";
+import { isScenarioRiskReadinessQuery, buildScenarioRiskReadinessScript } from "./ScenarioRiskReadiness";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -707,6 +708,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:contact-risk-swarm-toggle"));
       let script = "";
       try { script = await buildContactRiskSwarmScript(); } catch { script = "Personnel exposure data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+    // F305: scenario × risk readiness coverage — open panel and speak readiness brief.
+    if (isScenarioRiskReadinessQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:scenario-risk-readiness-toggle"));
+      let script = "";
+      try { script = await buildScenarioRiskReadinessScript(); } catch { script = "Scenario readiness data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;
