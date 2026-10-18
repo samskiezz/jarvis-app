@@ -105,6 +105,7 @@ import { isLatencyQuery, buildLatencyScript } from "./EndpointLatencyMonitor";
 import { isOpsEventsQuery, buildOpsEventsScript } from "./OpsEventsTimeline";
 import { isInvSimQuery, buildInvSimScript } from "./InvestigationScenarioCoverage";
 import { isHeartbeatQuery, buildHeartbeatScript } from "./SystemHeartbeatWaveform";
+import { isTaskRateQuery, buildTaskRateScript } from "./TaskCompletionRate";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -640,6 +641,15 @@ export default function JarvisBrain() {
       try { script = await buildInvSimScript(); } catch { script = "Investigation scenario coverage data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F299: task completion rate — open panel and speak done/total rate brief.
+    if (isTaskRateQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:task-rate-toggle"));
+      let script = "";
+      try { script = await buildTaskRateScript(); } catch { script = "Task completion data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;
     }
     // F298: system heartbeat waveform — open panel and speak live CPU/MEM/load brief.

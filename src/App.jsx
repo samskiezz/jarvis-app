@@ -522,6 +522,7 @@ import EndpointLatencyMonitor from '@/components/cinematic/EndpointLatencyMonito
 import OpsEventsTimeline from '@/components/cinematic/OpsEventsTimeline';
 import InvestigationScenarioCoverage from '@/components/cinematic/InvestigationScenarioCoverage';
 import SystemHeartbeatWaveform from '@/components/cinematic/SystemHeartbeatWaveform';
+import TaskCompletionRate from '@/components/cinematic/TaskCompletionRate';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1657,6 +1658,8 @@ function App() {
             <InvestigationScenarioCoverage />
             {/* F298 (overnight 2026-10-18): System CPU/MEM Heartbeat Waveform — ♥ BEAT button (left:57320, bottom:8, zIndex:111); polls /v1/jarvis/system/status every 10 s; rolling 40-reading history in localStorage; dual ECG-style SVG area waveforms (CPU green, MEM cyan); live stat row (CPU/MEM/LOAD) + rolling min/avg/max per channel; red pulse on CPU>85%; ▶ ASSESS → /v1/jarvis/agent/chat 1-sentence brief + TTS; isHeartbeatQuery+buildHeartbeatScript exported for JarvisBrain; "heartbeat"/"cpu waveform"/"system beat"/"system pulse"/"health waveform"/"vitals waveform" voice trigger; jarvis:heartbeat-toggle event */}
             <SystemHeartbeatWaveform />
+            {/* F299 (overnight 2026-10-18): Task Completion Rate Monitor — ◎ TRATE button (left:57880, bottom:8, zIndex:112); polls /entities/Task every 60 s; tracks done/total completion rate; rolling 20-reading history in localStorage; rate gauge (SVG ring) + stat tiles (done/active/blocked/pending) + trend sparkline; delta badge vs previous reading; red pulse when rate < 20%; ▶ ASSESS → /v1/jarvis/agent/chat 2-sentence brief + TTS; isTaskRateQuery+buildTaskRateScript exported for JarvisBrain; "task rate"/"task completion"/"tasks done"/"how many tasks done"/"task progress"/"trate" voice trigger; jarvis:task-rate-toggle event */}
+            <TaskCompletionRate />
 
             <Suspense fallback={<Loading />}>
               <Routes>
