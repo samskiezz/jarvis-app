@@ -18,3 +18,4 @@
 [2026-10-18] F298 SystemHeartbeatWaveform.jsx — rolling ECG-style CPU/MEM waveform from /v1/jarvis/system/status; ♥ BEAT toggle; voice intents wired in JarvisBrain; build exit 0
 [2026-10-18] F299 TaskCompletionRate: polls /entities/Task every 60s; rate gauge + sparkline + stat tiles (done/active/blocked/pending); rolling 20-reading localStorage history; isTaskRateQuery+buildTaskRateScript wired in JarvisBrain.jsx; mounted App.jsx. Build: PASS.
 [2026-10-18] F300 RiskTaskBlockingMap.jsx — /entities/RiskSignal × /entities/Task blocking map; severity-sorted; expandable matched tasks; ASSESS→agent/chat+TTS; wired JarvisBrain+App.jsx; build verified (exit 0).
+[2026-10-18] F301 SwarmContactAssignmentMap.jsx — /entities/SwarmJob × /entities/Contact keyword assignment map; ◈ SCMAP toggle; JarvisBrain wired; build exit 0

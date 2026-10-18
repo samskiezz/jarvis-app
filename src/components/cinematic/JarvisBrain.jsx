@@ -107,6 +107,7 @@ import { isInvSimQuery, buildInvSimScript } from "./InvestigationScenarioCoverag
 import { isHeartbeatQuery, buildHeartbeatScript } from "./SystemHeartbeatWaveform";
 import { isTaskRateQuery, buildTaskRateScript } from "./TaskCompletionRate";
 import { isRiskTaskQuery, buildRiskTaskScript } from "./RiskTaskBlockingMap";
+import { isSwarmContactQuery, buildSwarmContactScript } from "./SwarmContactAssignmentMap";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -667,6 +668,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:risk-task-map-toggle"));
       let script = "";
       try { script = await buildRiskTaskScript(); } catch { script = "Risk-task analysis unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+    // F301: swarm × contact assignment map — open panel and speak job assignment coverage brief.
+    if (isSwarmContactQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:swarm-contact-map-toggle"));
+      let script = "";
+      try { script = await buildSwarmContactScript(); } catch { script = "Swarm assignment data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;

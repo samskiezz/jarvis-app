@@ -524,6 +524,7 @@ import InvestigationScenarioCoverage from '@/components/cinematic/InvestigationS
 import SystemHeartbeatWaveform from '@/components/cinematic/SystemHeartbeatWaveform';
 import TaskCompletionRate from '@/components/cinematic/TaskCompletionRate';
 import RiskTaskBlockingMap from '@/components/cinematic/RiskTaskBlockingMap';
+import SwarmContactAssignmentMap from '@/components/cinematic/SwarmContactAssignmentMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1663,6 +1664,8 @@ function App() {
             <TaskCompletionRate />
             {/* F300 (overnight 2026-10-18): Risk × Task Blocking Map — ◈ RTMAP button (left:58440, bottom:8, zIndex:113); fetches /entities/RiskSignal + /entities/Task; keyword-matches each risk against task titles/descriptions to surface potentially affected missions; severity-sorted rows; stat tiles (risks/critical/affected/no-match); expandable rows show matched task status; filter tabs ALL/CRITICAL/AFFECTED/NO MATCH; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRiskTaskQuery+buildRiskTaskScript wired in JarvisBrain; "risk tasks"/"blocked tasks"/"risk blocking"/"task risk map" voice trigger; jarvis:risk-task-map-toggle event; 90-s auto-refresh */}
             <RiskTaskBlockingMap />
+            {/* F301 (overnight 2026-10-18): Swarm × Contact Assignment Map — ◈ SCMAP button (left:59000, bottom:8, zIndex:114); fetches /entities/SwarmJob + /entities/Contact; keyword-matches each job against contact names/roles to surface ASSIGNED vs UNASSIGNED jobs; stat tiles (jobs/assigned/unassigned/contacts); expandable rows show matched contacts with role badge; filter tabs ALL/ASSIGNED/UNASSIGNED; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwarmContactQuery+buildSwarmContactScript wired in JarvisBrain; "swarm assignment"/"swarm contacts"/"job assignment"/"who is assigned"/"scmap" voice triggers; jarvis:swarm-contact-map-toggle event; 90-s auto-refresh */}
+            <SwarmContactAssignmentMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
