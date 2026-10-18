@@ -540,6 +540,7 @@ import ContactSkillExpertiseMatrix from '@/components/cinematic/ContactSkillExpe
 import OpsEventTriageMap from '@/components/cinematic/OpsEventTriageMap';
 import DatasetSwarmKnowledgeCoverage from '@/components/cinematic/DatasetSwarmKnowledgeCoverage';
 import KnowledgeIntelInvestigationTriad from '@/components/cinematic/KnowledgeIntelInvestigationTriad';
+import ScenarioDatasetSkillReadiness from '@/components/cinematic/ScenarioDatasetSkillReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1711,6 +1712,8 @@ function App() {
             <DatasetSwarmKnowledgeCoverage />
             {/* F32 (overnight 2026-10-18): Knowledge × IntelProfile × Investigation Traceability Triad — ◈ KIITRIAD button (left:66840, bottom:8, zIndex:128); fetches /knowledge/ + /entities/IntelProfile + /v1/investigations; keyword-matches each knowledge article against intel profiles and investigations to surface COMPLETE/PROFILED/FILED/UNANCHORED articles; stat tiles (knowledge/complete/profiled/filed/unanchored/profiles/open cases); amber pulse on unanchored count; expandable rows show matched profiles with domain badge + matched investigations with status badge; filter tabs ALL/COMPLETE/PROFILED/FILED/UNANCHORED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKiitriаdQuery+buildKiitriаdScript exported for JarvisBrain; "knowledge triangle"/"knowledge traceability"/"intel knowledge"/"kiitriad"/"knowledge profile"/"knowledge investigation" voice triggers; jarvis:kiitriad-toggle event; 90-s auto-refresh */}
             <KnowledgeIntelInvestigationTriad />
+            {/* F33 (overnight 2026-10-18): Scenario × Dataset × Skill Execution Readiness — ◈ SCNRDY button (left:67400, bottom:8, zIndex:129); fetches /v1/scenario/list + /v1/datasets + /v1/aip/skill; keyword-matches each scenario against available datasets and AIP skills to classify as READY/SKILLED/DATAD/BLOCKED; stat tiles (scenarios/ready/skilled/datad/blocked/datasets/skills); amber pulse on blocked count; expandable rows show matched skills + datasets; filter tabs ALL/READY/SKILLED/DATAD/BLOCKED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScnrdyQuery+buildScnrdyScript exported for JarvisBrain; "scenario readiness"/"scenario dataset skill"/"execution readiness"/"scnrdy"/"blocked scenarios" voice triggers; jarvis:scnrdy-toggle event; 90-s auto-refresh */}
+            <ScenarioDatasetSkillReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>
