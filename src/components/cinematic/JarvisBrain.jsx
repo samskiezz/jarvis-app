@@ -110,6 +110,7 @@ import { isRiskTaskQuery, buildRiskTaskScript } from "./RiskTaskBlockingMap";
 import { isSwarmContactQuery, buildSwarmContactScript } from "./SwarmContactAssignmentMap";
 import { isInvestmentRiskQuery, buildInvestmentRiskScript } from "./InvestmentRiskExposureMap";
 import { isIntelInvQuery, buildIntelInvScript } from "./IntelProfileInvestigationMap";
+import { isContactRiskSwarmQuery, buildContactRiskSwarmScript } from "./ContactRiskSwarmMatrix";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -697,6 +698,15 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:intel-inv-map-toggle"));
       let script = "";
       try { script = await buildIntelInvScript(); } catch { script = "Intel profile linkage data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+    // F304: contact × risk × swarm personnel exposure matrix — open panel and speak exposure brief.
+    if (isContactRiskSwarmQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:contact-risk-swarm-toggle"));
+      let script = "";
+      try { script = await buildContactRiskSwarmScript(); } catch { script = "Personnel exposure data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;

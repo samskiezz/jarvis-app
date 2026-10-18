@@ -527,6 +527,7 @@ import RiskTaskBlockingMap from '@/components/cinematic/RiskTaskBlockingMap';
 import SwarmContactAssignmentMap from '@/components/cinematic/SwarmContactAssignmentMap';
 import InvestmentRiskExposureMap from '@/components/cinematic/InvestmentRiskExposureMap';
 import IntelProfileInvestigationMap from '@/components/cinematic/IntelProfileInvestigationMap';
+import ContactRiskSwarmMatrix from '@/components/cinematic/ContactRiskSwarmMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1672,6 +1673,8 @@ function App() {
             <InvestmentRiskExposureMap />
             {/* F303 (overnight 2026-10-18): Intel Profile × Investigation Linkage Map — ◈ IIMAP button (left:60120, bottom:8, zIndex:116); fetches /entities/IntelProfile + /v1/investigations; keyword-matches each intel profile against open investigations to surface LINKED vs UNLINKED profiles; stat tiles (profiles/linked/unlinked/open investigations); expandable rows show matched investigations with status badge; filter tabs ALL/LINKED/UNLINKED; isIntelInvQuery+buildIntelInvScript wired in JarvisBrain; "intel profile"/"intel cases"/"profile linkage"/"iimap" voice triggers; jarvis:intel-inv-map-toggle event; 90-s auto-refresh */}
             <IntelProfileInvestigationMap />
+            {/* F304 (overnight 2026-10-18): Contact × RiskSignal × SwarmJob Personnel Exposure Matrix — ◈ CRSM button (left:60680, bottom:8, zIndex:117); fetches /entities/Contact + /entities/RiskSignal + /entities/SwarmJob; keyword-matches each contact against active risks and running swarm jobs to surface AT-RISK/ASSIGNED/UNPROTECTED personnel; stat tiles (contacts/at-risk/assigned/unprotected); amber pulse on unprotected count; expandable rows show matched risks with severity badges + matched swarm jobs with status; filter tabs ALL/AT-RISK/ASSIGNED/UNPROTECTED; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isContactRiskSwarmQuery+buildContactRiskSwarmScript wired in JarvisBrain; "contact risk"/"personnel risk"/"contact swarm"/"personnel matrix"/"crsm" voice triggers; jarvis:contact-risk-swarm-toggle event; 90-s auto-refresh */}
+            <ContactRiskSwarmMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
