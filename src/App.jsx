@@ -539,6 +539,7 @@ import IntelProfileOpsMap from '@/components/cinematic/IntelProfileOpsMap';
 import ContactSkillExpertiseMatrix from '@/components/cinematic/ContactSkillExpertiseMatrix';
 import OpsEventTriageMap from '@/components/cinematic/OpsEventTriageMap';
 import DatasetSwarmKnowledgeCoverage from '@/components/cinematic/DatasetSwarmKnowledgeCoverage';
+import KnowledgeIntelInvestigationTriad from '@/components/cinematic/KnowledgeIntelInvestigationTriad';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1708,6 +1709,8 @@ function App() {
             <OpsEventTriageMap />
             {/* F314 / backlog F31 (overnight 2026-10-18): Dataset × SwarmJob × Knowledge Production Coverage Matrix — ◈ DSKPROD button (left:66280, bottom:8, zIndex:127); fetches /v1/datasets + /entities/SwarmJob + /knowledge/; keyword-matches each dataset against active swarm jobs and knowledge articles; PROCESSING/DOCUMENTED/ORPHAN classification; stat tiles (datasets/processing/documented/orphan/jobs/knowledge); amber pulse on orphan count; expandable rows show matched swarm jobs with status + matched knowledge articles; filter tabs ALL/PROCESSING/DOCUMENTED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDskprodQuery+buildDskprodScript exported for JarvisBrain; "dataset production"/"dataset coverage"/"dataset swarm"/"orphan datasets"/"dskprod"/"unprocessed dataset" voice triggers; jarvis:dskprod-toggle event; 90-s auto-refresh */}
             <DatasetSwarmKnowledgeCoverage />
+            {/* F32 (overnight 2026-10-18): Knowledge × IntelProfile × Investigation Traceability Triad — ◈ KIITRIAD button (left:66840, bottom:8, zIndex:128); fetches /knowledge/ + /entities/IntelProfile + /v1/investigations; keyword-matches each knowledge article against intel profiles and investigations to surface COMPLETE/PROFILED/FILED/UNANCHORED articles; stat tiles (knowledge/complete/profiled/filed/unanchored/profiles/open cases); amber pulse on unanchored count; expandable rows show matched profiles with domain badge + matched investigations with status badge; filter tabs ALL/COMPLETE/PROFILED/FILED/UNANCHORED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKiitriаdQuery+buildKiitriаdScript exported for JarvisBrain; "knowledge triangle"/"knowledge traceability"/"intel knowledge"/"kiitriad"/"knowledge profile"/"knowledge investigation" voice triggers; jarvis:kiitriad-toggle event; 90-s auto-refresh */}
+            <KnowledgeIntelInvestigationTriad />
 
             <Suspense fallback={<Loading />}>
               <Routes>
