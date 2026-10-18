@@ -376,6 +376,7 @@ import { isIsrmapQuery, buildIsrmapScript } from "./InvestmentSkillScenarioMap";
 import { isIahmonQuery, buildIahmonScript } from "./OpsAlertHorizonMonitor";
 import { isTiscoverQuery, buildTiscoverScript } from "./TaskInvestmentSkillContactCoverage";
 import { isSmicovQuery, buildSmicovScript } from "./SwarmMissionIntelCoverage";
+import { isKgcmapQuery, buildKgcmapScript } from "./KnowledgeGraphCentralityMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -749,6 +750,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:report-inv-evidence-toggle"));
       let script = "";
       try { script = await buildReportInvEvidenceScript(); } catch { script = "Report evidence data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+
+    // F309: knowledge graph centrality map queries open the KGCMAP panel and speak coverage brief.
+    if (isKgcmapQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:kgcmap-toggle"));
+      let script = "";
+      try { script = await buildKgcmapScript(); } catch { script = "Knowledge graph centrality data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;

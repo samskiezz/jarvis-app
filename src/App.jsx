@@ -532,6 +532,7 @@ import ScenarioRiskReadiness from '@/components/cinematic/ScenarioRiskReadiness'
 import ScenarioExecMonitor from '@/components/cinematic/ScenarioExecMonitor';
 import AipSkillDatasetKnowledgeGap from '@/components/cinematic/AipSkillDatasetKnowledgeGap';
 import ReportInvestigationEvidenceMap from '@/components/cinematic/ReportInvestigationEvidenceMap';
+import KnowledgeGraphCentralityMap from '@/components/cinematic/KnowledgeGraphCentralityMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1687,6 +1688,8 @@ function App() {
             <AipSkillDatasetKnowledgeGap />
             {/* F308 (overnight 2026-10-18): Reports × Investigation Evidence Map — ◈ RIEVMAP button (left:62920, bottom:8, zIndex:121); fetches /v1/reports + /v1/investigations; keyword-matches each report against investigation titles/descriptions to surface LINKED vs UNLINKED reports; stat tiles (reports/linked/unlinked/investigations); amber pulse on unlinked count; expandable rows show matched investigations with status badge; filter tabs ALL/LINKED/UNLINKED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isReportInvEvidenceQuery+buildReportInvEvidenceScript wired in JarvisBrain; "report evidence"/"evidence map"/"report cases"/"rievmap"/"investigation reports" voice triggers; jarvis:report-inv-evidence-toggle event; 90-s auto-refresh */}
             <ReportInvestigationEvidenceMap />
+            {/* F309 (overnight 2026-10-18): Knowledge × Graph Centrality Coverage Map — ◈ KGCMAP button (left:63480, bottom:8, zIndex:122); fetches /knowledge/ + /v1/graph/centrality; keyword-matches each knowledge article against centrality node names to surface ANCHORED vs FLOATING articles; stat tiles (knowledge/anchored/floating/nodes); amber pulse on floating count; expandable rows show matched nodes with centrality score; filter tabs ALL/ANCHORED/FLOATING + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKgcmapQuery+buildKgcmapScript wired in JarvisBrain; "knowledge graph"/"graph coverage"/"knowledge anchor"/"kgcmap"/"knowledge centrality" voice triggers; jarvis:kgcmap-toggle event; 90-s auto-refresh */}
+            <KnowledgeGraphCentralityMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
