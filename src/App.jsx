@@ -533,6 +533,7 @@ import ScenarioExecMonitor from '@/components/cinematic/ScenarioExecMonitor';
 import AipSkillDatasetKnowledgeGap from '@/components/cinematic/AipSkillDatasetKnowledgeGap';
 import ReportInvestigationEvidenceMap from '@/components/cinematic/ReportInvestigationEvidenceMap';
 import KnowledgeGraphCentralityMap from '@/components/cinematic/KnowledgeGraphCentralityMap';
+import LiveIntelTaskScenarioFusion from '@/components/cinematic/LiveIntelTaskScenarioFusion';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1690,6 +1691,8 @@ function App() {
             <ReportInvestigationEvidenceMap />
             {/* F309 (overnight 2026-10-18): Knowledge × Graph Centrality Coverage Map — ◈ KGCMAP button (left:63480, bottom:8, zIndex:122); fetches /knowledge/ + /v1/graph/centrality; keyword-matches each knowledge article against centrality node names to surface ANCHORED vs FLOATING articles; stat tiles (knowledge/anchored/floating/nodes); amber pulse on floating count; expandable rows show matched nodes with centrality score; filter tabs ALL/ANCHORED/FLOATING + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKgcmapQuery+buildKgcmapScript wired in JarvisBrain; "knowledge graph"/"graph coverage"/"knowledge anchor"/"kgcmap"/"knowledge centrality" voice triggers; jarvis:kgcmap-toggle event; 90-s auto-refresh */}
             <KnowledgeGraphCentralityMap />
+            {/* F310 (overnight 2026-10-18): Live Intel × Task × Scenario Fusion — ◈ LITSFUSION button (left:64040, bottom:8, zIndex:123); fetches /functions/getLiveIntel + /entities/Task + /v1/scenario/list; 3-way keyword-match each live event (seismic/market) against tasks and scenarios; TRIGGERED/MONITORED/READY/UNMATCHED classification; stat tiles (events/triggered/monitored/ready/tasks+scenarios); red pulse on triggered count; expandable rows show matched tasks+scenarios; filter tabs ALL/TRIGGERED/MONITORED/READY/UNMATCHED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLitsFusionQuery+buildLitsFusionScript wired in JarvisBrain; "intel fusion"/"live intel tasks"/"event task map"/"intel scenarios"/"litsfusion"/"live event fusion" voice triggers; jarvis:litsfusion-toggle event; 60-s auto-refresh */}
+            <LiveIntelTaskScenarioFusion />
 
             <Suspense fallback={<Loading />}>
               <Routes>

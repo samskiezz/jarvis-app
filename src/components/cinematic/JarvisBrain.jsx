@@ -377,6 +377,7 @@ import { isIahmonQuery, buildIahmonScript } from "./OpsAlertHorizonMonitor";
 import { isTiscoverQuery, buildTiscoverScript } from "./TaskInvestmentSkillContactCoverage";
 import { isSmicovQuery, buildSmicovScript } from "./SwarmMissionIntelCoverage";
 import { isKgcmapQuery, buildKgcmapScript } from "./KnowledgeGraphCentralityMap";
+import { isLitsFusionQuery, buildLitsFusionScript } from "./LiveIntelTaskScenarioFusion";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -760,6 +761,16 @@ export default function JarvisBrain() {
       window.dispatchEvent(new CustomEvent("jarvis:kgcmap-toggle"));
       let script = "";
       try { script = await buildKgcmapScript(); } catch { script = "Knowledge graph centrality data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
+      return;
+    }
+
+    // F310: live intel × task × scenario fusion queries open the LITSFUSION panel and speak fusion brief.
+    if (isLitsFusionQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:litsfusion-toggle"));
+      let script = "";
+      try { script = await buildLitsFusionScript(); } catch { script = "Live intel fusion data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;
