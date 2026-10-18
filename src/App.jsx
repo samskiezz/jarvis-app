@@ -526,6 +526,7 @@ import TaskCompletionRate from '@/components/cinematic/TaskCompletionRate';
 import RiskTaskBlockingMap from '@/components/cinematic/RiskTaskBlockingMap';
 import SwarmContactAssignmentMap from '@/components/cinematic/SwarmContactAssignmentMap';
 import InvestmentRiskExposureMap from '@/components/cinematic/InvestmentRiskExposureMap';
+import IntelProfileInvestigationMap from '@/components/cinematic/IntelProfileInvestigationMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1669,6 +1670,8 @@ function App() {
             <SwarmContactAssignmentMap />
             {/* F302 (overnight 2026-10-18): Investment × Risk Signal Exposure Map — ◈ IRMAP button (left:59560, bottom:8, zIndex:115); fetches /entities/Investment + /entities/RiskSignal; keyword-matches each investment against active risk signals to surface EXPOSED vs SAFE assets; severity-sorted rows; stat tiles (assets/exposed/safe/risks); expandable rows show matched risk signals with severity badge; filter tabs ALL/EXPOSED/SAFE; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isInvestmentRiskQuery+buildInvestmentRiskScript wired in JarvisBrain; "investment risk"/"portfolio risk"/"exposure map"/"asset risk"/"irmap" voice triggers; jarvis:investment-risk-map-toggle event; 90-s auto-refresh */}
             <InvestmentRiskExposureMap />
+            {/* F303 (overnight 2026-10-18): Intel Profile × Investigation Linkage Map — ◈ IIMAP button (left:60120, bottom:8, zIndex:116); fetches /entities/IntelProfile + /v1/investigations; keyword-matches each intel profile against open investigations to surface LINKED vs UNLINKED profiles; stat tiles (profiles/linked/unlinked/open investigations); expandable rows show matched investigations with status badge; filter tabs ALL/LINKED/UNLINKED; isIntelInvQuery+buildIntelInvScript wired in JarvisBrain; "intel profile"/"intel cases"/"profile linkage"/"iimap" voice triggers; jarvis:intel-inv-map-toggle event; 90-s auto-refresh */}
+            <IntelProfileInvestigationMap />
 
             <Suspense fallback={<Loading />}>
               <Routes>

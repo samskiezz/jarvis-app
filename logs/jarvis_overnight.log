@@ -20,3 +20,4 @@
 [2026-10-18] F300 RiskTaskBlockingMap.jsx — /entities/RiskSignal × /entities/Task blocking map; severity-sorted; expandable matched tasks; ASSESS→agent/chat+TTS; wired JarvisBrain+App.jsx; build verified (exit 0).
 [2026-10-18] F301 SwarmContactAssignmentMap.jsx — /entities/SwarmJob × /entities/Contact keyword assignment map; ◈ SCMAP toggle; JarvisBrain wired; build exit 0
 [2026-10-18] F302 InvestmentRiskExposureMap.jsx — Investment × Risk Signal Exposure Map: /entities/Investment + /entities/RiskSignal keyword-cross-ref; EXPOSED/SAFE tiles; severity-sorted rows; ▶ ASSESS TTS; ◈ IRMAP toggle; wired JarvisBrain F302 handler; build exit 0.
+[2026-10-18 05:14:45 UTC] F303: IntelProfileInvestigationMap.jsx — /entities/IntelProfile + /v1/investigations linkage map; LINKED/UNLINKED tiles; expandable investigation rows; IIMAP voice trigger; build exit 0.
