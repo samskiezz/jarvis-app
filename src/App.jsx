@@ -538,6 +538,7 @@ import LiveIntelTaskScenarioFusion from '@/components/cinematic/LiveIntelTaskSce
 import IntelProfileOpsMap from '@/components/cinematic/IntelProfileOpsMap';
 import ContactSkillExpertiseMatrix from '@/components/cinematic/ContactSkillExpertiseMatrix';
 import OpsEventTriageMap from '@/components/cinematic/OpsEventTriageMap';
+import DatasetSwarmKnowledgeCoverage from '@/components/cinematic/DatasetSwarmKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1705,6 +1706,8 @@ function App() {
             <ContactSkillExpertiseMatrix />
             {/* F313 (overnight 2026-10-18): Ops Event Triage Map — ◈ OTMAP button (left:65720, bottom:8, zIndex:126); fetches /v1/ops/events + /v1/investigations + /entities/Task; keyword-matches each ops event against investigation titles/descriptions and task names; TRIAGED(inv+task)/ACTIVE(inv or task)/UNASSIGNED classification; stat tiles (events/triaged/active/unassigned/investigations/tasks); red pulse on unassigned count; expandable rows show matched investigations with status badge + matched tasks with status; filter tabs ALL/TRIAGED/ACTIVE/UNASSIGNED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOpsTriageQuery+buildOpsTriageScript wired in JarvisBrain; "ops triage"/"event triage"/"ops tasks"/"event tasks"/"triage map"/"otmap"/"ops investigation"/"event investigation"/"ops event map" voice triggers; jarvis:otmap-toggle event; 90-s auto-refresh */}
             <OpsEventTriageMap />
+            {/* F314 / backlog F31 (overnight 2026-10-18): Dataset × SwarmJob × Knowledge Production Coverage Matrix — ◈ DSKPROD button (left:66280, bottom:8, zIndex:127); fetches /v1/datasets + /entities/SwarmJob + /knowledge/; keyword-matches each dataset against active swarm jobs and knowledge articles; PROCESSING/DOCUMENTED/ORPHAN classification; stat tiles (datasets/processing/documented/orphan/jobs/knowledge); amber pulse on orphan count; expandable rows show matched swarm jobs with status + matched knowledge articles; filter tabs ALL/PROCESSING/DOCUMENTED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDskprodQuery+buildDskprodScript exported for JarvisBrain; "dataset production"/"dataset coverage"/"dataset swarm"/"orphan datasets"/"dskprod"/"unprocessed dataset" voice triggers; jarvis:dskprod-toggle event; 90-s auto-refresh */}
+            <DatasetSwarmKnowledgeCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>

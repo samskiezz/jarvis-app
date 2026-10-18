@@ -48,4 +48,5 @@ Investment,Contact}` · `/v1/graph/*` · `/v1/ops/*` · `/v1/datasets` · `/v1/i
 - [x] F28 Command history — store + replay recent JARVIS commands (localStorage). [2026-10-18: CommandHistory.jsx wired in App.jsx; already live]
 - [x] F29 Multi-voice toggle — switch JARVIS TTS voice (ash/fable/onyx) live. [2026-10-18: MultiVoiceToggle.jsx wired in App.jsx; already live]
 - [x] F30 Scene auto-tour — cycle the 10 scenes hands-free with spoken narration of each. [2026-10-18: SceneAutoTour.jsx wired in App.jsx; already live]
+- [x] F31 Dataset × SwarmJob × Knowledge Production Coverage Matrix — ◈ DSKPROD toggle; /v1/datasets + /entities/SwarmJob + /knowledge/; PROCESSING/DOCUMENTED/ORPHAN classification; amber pulse on orphan count; expandable rows; ASSESS → /v1/jarvis/agent/chat + TTS; isDskprodQuery+buildDskprodScript wired for JarvisBrain. [2026-10-18: DatasetSwarmKnowledgeCoverage.jsx wired in App.jsx; esbuild JSX syntax verified; Vite build in progress]
 (Extend with more real features as endpoints allow. Prefer depth + real over count.)
