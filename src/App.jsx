@@ -521,6 +521,7 @@ import SwarmMissionIntelCoverage from '@/components/cinematic/SwarmMissionIntelC
 import EndpointLatencyMonitor from '@/components/cinematic/EndpointLatencyMonitor';
 import OpsEventsTimeline from '@/components/cinematic/OpsEventsTimeline';
 import InvestigationScenarioCoverage from '@/components/cinematic/InvestigationScenarioCoverage';
+import SystemHeartbeatWaveform from '@/components/cinematic/SystemHeartbeatWaveform';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1654,6 +1655,8 @@ function App() {
             <OpsEventsTimeline />
             {/* F297 (overnight 2026-10-17): Investigation × Scenario Response Coverage — ◈ INV-SIM button (left:56760, bottom:8, zIndex:110); parallel-fetches /v1/investigations + /v1/scenario/list; keyword-matches each open investigation against scenario names to surface COVERED vs GAP cases; stat tiles (cases/scenarios/covered/gap); amber badge on gap count; filter tabs ALL/COVERED/GAP + text search; expand row → matched scenario cards with relevance bar; ▶ ASSESS COVERAGE → /v1/jarvis/agent/chat 2-sentence brief + TTS; isInvSimQuery+buildInvSimScript exported for JarvisBrain; "investigation scenarios"/"case scenarios"/"response coverage"/"investigation response"/"case coverage"/"inv scenario" voice trigger; jarvis:inv-scenario-coverage-toggle event; 90-s auto-refresh */}
             <InvestigationScenarioCoverage />
+            {/* F298 (overnight 2026-10-18): System CPU/MEM Heartbeat Waveform — ♥ BEAT button (left:57320, bottom:8, zIndex:111); polls /v1/jarvis/system/status every 10 s; rolling 40-reading history in localStorage; dual ECG-style SVG area waveforms (CPU green, MEM cyan); live stat row (CPU/MEM/LOAD) + rolling min/avg/max per channel; red pulse on CPU>85%; ▶ ASSESS → /v1/jarvis/agent/chat 1-sentence brief + TTS; isHeartbeatQuery+buildHeartbeatScript exported for JarvisBrain; "heartbeat"/"cpu waveform"/"system beat"/"system pulse"/"health waveform"/"vitals waveform" voice trigger; jarvis:heartbeat-toggle event */}
+            <SystemHeartbeatWaveform />
 
             <Suspense fallback={<Loading />}>
               <Routes>

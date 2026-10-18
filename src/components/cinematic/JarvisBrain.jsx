@@ -104,6 +104,7 @@ import { isBrainQuery, buildBrainScript } from "./BrainGrowthSparkline";
 import { isLatencyQuery, buildLatencyScript } from "./EndpointLatencyMonitor";
 import { isOpsEventsQuery, buildOpsEventsScript } from "./OpsEventsTimeline";
 import { isInvSimQuery, buildInvSimScript } from "./InvestigationScenarioCoverage";
+import { isHeartbeatQuery, buildHeartbeatScript } from "./SystemHeartbeatWaveform";
 import { isAnchorQuery, buildAnchorScript } from "./SceneAnchorDrillDown";
 import { isVoiceQuery, buildVoiceScript, applyVoiceFromQuery, getActiveVoice } from "./MultiVoiceToggle";
 import { isTourQuery, buildTourScript } from "./SceneAutoTour";
@@ -639,6 +640,15 @@ export default function JarvisBrain() {
       try { script = await buildInvSimScript(); } catch { script = "Investigation scenario coverage data unavailable at this time, sir."; }
       setThinking(false); typeOut(script); speak(script);
       hideT.current = setTimeout(() => setOpen(false), Math.max(9000, script.length * 70));
+      return;
+    }
+    // F298: system heartbeat waveform — open panel and speak live CPU/MEM/load brief.
+    if (isHeartbeatQuery(q)) {
+      window.dispatchEvent(new CustomEvent("jarvis:heartbeat-toggle"));
+      let script = "";
+      try { script = await buildHeartbeatScript(); } catch { script = "System heartbeat data unavailable at this time, sir."; }
+      setThinking(false); typeOut(script); speak(script);
+      hideT.current = setTimeout(() => setOpen(false), Math.max(7000, script.length * 70));
       return;
     }
     // F27: diagnostics queries open the service health panel and speak a live diagnostics brief.
