@@ -566,6 +566,7 @@ import SwarmKnowledgeSkillAudit from '@/components/cinematic/SwarmKnowledgeSkill
 import ContactScenarioTaskMissionMatrix from '@/components/cinematic/ContactScenarioTaskMissionMatrix';
 import KnowledgeGraphContactDepthMap from '@/components/cinematic/KnowledgeGraphContactDepthMap';
 import ScenarioRiskContactThreatMatrix from '@/components/cinematic/ScenarioRiskContactThreatMatrix';
+import OpsAlertSkillDatasetIncidentReadiness from '@/components/cinematic/OpsAlertSkillDatasetIncidentReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1801,6 +1802,8 @@ function App() {
             <KnowledgeGraphContactDepthMap />
             {/* F59 (overnight 2026-10-19): Scenario × RiskSignal × Contact Strategic Threat Matrix — ◈ STHRMAT button (left:81400, bottom:8, zIndex:156); fetches /v1/scenario/list + /entities/RiskSignal + /entities/Contact; keyword-matches each scenario against risk signals AND contacts to classify as ACTIVE_THREAT/AT_RISK/SCENED/SHADOW; stat tiles (scenarios/risks/contacts/active_threat/at_risk/scened/shadow); red pulse on ACTIVE_THREAT count (scenarios fully activated with both threat signals and human contacts); expandable rows show matched risk signals with severity badge + matched contacts with role/org; filter tabs ALL/ACTIVE_THREAT/AT_RISK/SCENED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSthrmatQuery+buildSthrmatScript exported; "sthrmat"/"threat matrix"/"scenario threat"/"scenario risk contact"/"active threats"/"threat scenario"/"scenario threat matrix"/"scenario strategic threat"/"contact threat"/"risk contact scenario" voice triggers; jarvis:sthrmat-toggle event; 90-s auto-refresh */}
             <ScenarioRiskContactThreatMatrix />
+            {/* F60 (overnight 2026-10-19): Ops Alert × Skill × Dataset Incident Response Capability — ◈ IRCAP button (left:81960, bottom:8, zIndex:157); fetches /v1/ops/alerts + /v1/aip/skill + /v1/datasets; keyword-matches each ops alert against skills AND datasets to classify as CAPABLE/SKILLED/DATAED/BLIND; stat tiles (alerts/skills/datasets/capable/skilled/dataed/blind); red pulse on BLIND count (alerts with no skill coverage and no supporting dataset); expandable rows show matched skills with score badge + matched datasets with row-count badge; filter tabs ALL/CAPABLE/SKILLED/DATAED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIrcapQuery+buildIrcapScript exported; "ircap"/"incident readiness"/"ops skill"/"alert response"/"response capability"/"ops dataset"/"blind alerts"/"incident capability"/"ops readiness"/"alert skill"/"ops incident" voice triggers; jarvis:ircap-toggle event; 90-s auto-refresh */}
+            <OpsAlertSkillDatasetIncidentReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

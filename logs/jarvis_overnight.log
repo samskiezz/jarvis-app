@@ -62,3 +62,4 @@
 2026-10-19 F57 ContactScenarioTaskMissionMatrix.jsx — Contact × Scenario × Task Mission Activation Matrix; ACTIVE/SCENED/TASKED/SHADOW; ◈ CSTMX (left:80280,zIndex:154); isCstmxQuery wired in JarvisBrain; Vite build exit:0
 [2026-10-19] F58 KnowledgeGraphContactDepthMap — /knowledge/ + /v1/graph/centrality + /entities/Contact → ANCHORED/TRACED/LINKED/ORPHAN; Vite build exit:0
 [2026-10-19] F59 ScenarioRiskContactThreatMatrix.jsx — Scenario × RiskSignal × Contact Strategic Threat Matrix; /v1/scenario/list + /entities/RiskSignal + /entities/Contact; ACTIVE_THREAT/AT_RISK/SCENED/SHADOW; red pulse on ACTIVE_THREAT; ◈ STHRMAT (left:81400 zIndex:156); isSthrmatQuery wired in JarvisBrain; Vite build exit:0
+2026-10-19 F60 OpsAlertSkillDatasetIncidentReadiness.jsx: /v1/ops/alerts + /v1/aip/skill + /v1/datasets → CAPABLE/SKILLED/DATAED/BLIND; ◈ IRCAP; isIrcapQuery in JarvisBrain; Vite build exit:0
