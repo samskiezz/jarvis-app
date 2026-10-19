@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
 import { isDsknowQuery } from "@/components/cinematic/DatasetKnowledgeCoverage";
+import { isCstmxQuery } from "@/components/cinematic/ContactScenarioTaskMissionMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -92,6 +93,7 @@ export default function JarvisBrain() {
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
     if (isDsknowQuery(q)) { window.dispatchEvent(new Event("jarvis:dsknow-toggle")); }
+    if (isCstmxQuery(q))  { window.dispatchEvent(new Event("jarvis:cstmx-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

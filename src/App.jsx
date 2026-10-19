@@ -563,6 +563,7 @@ import DatasetGraphInvestigationNexus from '@/components/cinematic/DatasetGraphI
 import GraphKnowledgeReportSaturation from '@/components/cinematic/GraphKnowledgeReportSaturation';
 import LiveIntelRiskInvestigationTriage from '@/components/cinematic/LiveIntelRiskInvestigationTriage';
 import SwarmKnowledgeSkillAudit from '@/components/cinematic/SwarmKnowledgeSkillAudit';
+import ContactScenarioTaskMissionMatrix from '@/components/cinematic/ContactScenarioTaskMissionMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1792,6 +1793,8 @@ function App() {
             <LiveIntelRiskInvestigationTriage />
             {/* F56 (overnight 2026-10-19): SwarmJob × Knowledge × Skill Automation Intelligence Audit — ◈ SWKSAUD button (left:79720, bottom:8, zIndex:153); fetches /entities/SwarmJob + /knowledge/ + /v1/aip/skill; keyword-matches each swarm job against knowledge articles AND skills to classify as AUTONOMOUS/SKILLED/DOCUMENTED/BLIND; stat tiles (jobs/knowledge/skills/autonomous/skilled/documented/blind); amber pulse on BLIND count (automation jobs with no knowledge and no skill); expandable rows show matched knowledge articles with category badge + matched skills with score badge; filter tabs ALL/AUTONOMOUS/SKILLED/DOCUMENTED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwksaudQuery+buildSwksaudScript exported; "swarm audit"/"automation audit"/"swksaud"/"blind swarm"/"swarm knowledge"/"swarm skill"/"automation knowledge"/"unsupported swarm"/"swarm coverage"/"automation skill"/"automation intelligence"/"swarm intelligence audit" voice triggers; jarvis:swksaud-toggle event; 90-s auto-refresh */}
             <SwarmKnowledgeSkillAudit />
+            {/* F57 (overnight 2026-10-19): Contact × Scenario × Task Mission Activation Matrix — ◈ CSTMX button (left:80280, bottom:8, zIndex:154); fetches /entities/Contact + /v1/scenario/list + /entities/Task; keyword-matches each contact against scenarios AND tasks to classify as ACTIVE/SCENED/TASKED/SHADOW; stat tiles (contacts/scenarios/tasks/active/scened/tasked/shadow); amber pulse on SHADOW count (contacts with no mission footprint); expandable rows show matched scenarios with status badge + matched tasks with status badge; filter tabs ALL/ACTIVE/SCENED/TASKED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCstmxQuery+buildCstmxScript exported; "contact mission"/"mission activation"/"cstmx"/"contact scenario task"/"shadow contacts"/"mission matrix"/"contact mission matrix"/"unlinked contacts"/"contact activation"/"contact task scenario"/"dark contacts"/"mission coverage" voice triggers; jarvis:cstmx-toggle event; 90-s auto-refresh */}
+            <ContactScenarioTaskMissionMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
