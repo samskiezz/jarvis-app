@@ -547,6 +547,7 @@ import InvestigationTaskRiskResolution from '@/components/cinematic/Investigatio
 import DatasetReportScenarioEvidenceGap from '@/components/cinematic/DatasetReportScenarioEvidenceGap';
 import IntelProfileContactRiskAttribution from '@/components/cinematic/IntelProfileContactRiskAttribution';
 import TaskInvestigationKnowledgeClosure from '@/components/cinematic/TaskInvestigationKnowledgeClosure';
+import IntelProfileScenarioSwarmMatrix from '@/components/cinematic/IntelProfileScenarioSwarmMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1732,6 +1733,8 @@ function App() {
             <IntelProfileContactRiskAttribution />
             {/* F39 (overnight 2026-10-19): Task × Investigation × Knowledge Closure Audit — ◈ TKINV button (left:70760, bottom:8, zIndex:137); fetches /entities/Task + /v1/investigations + /knowledge/; keyword-matches each task against open investigations AND knowledge base items to classify as ANCHORED/TRACKED/DOCUMENTED/ORPHAN; stat tiles (tasks/invest/knowledge/anchored/tracked/documented/orphan); amber pulse on ORPHAN count; expandable rows show matched investigations with status badge + matched knowledge items with type badge; filter tabs ALL/ANCHORED/TRACKED/DOCUMENTED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTkinvQuery+buildTkinvScript exported; "task investigation"/"knowledge closure"/"task closure"/"tkinv"/"orphan task"/"task knowledge"/"task audit" voice triggers; jarvis:tkinv-toggle event; 90-s auto-refresh */}
             <TaskInvestigationKnowledgeClosure />
+            {/* F40 (overnight 2026-10-19): IntelProfile × Scenario × SwarmJob Intelligence Orchestration Matrix — ◈ IORMAT button (left:71320, bottom:8, zIndex:138); fetches /entities/IntelProfile + /v1/scenario/list + /entities/SwarmJob; keyword-matches each intel profile against active scenarios AND swarm jobs to classify as ORCHESTRATED/SCENED/SWARMED/SHADOW; stat tiles (profiles/scenarios/swarm jobs/orchestrated/scened/swarmed/shadow); amber pulse on SHADOW count; expandable rows show matched scenarios with status badge + matched swarm jobs with status badge; filter tabs ALL/ORCHESTRATED/SCENED/SWARMED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIormatQuery+buildIormatScript exported; "intel orchestration"/"scenario swarm"/"iormat"/"intel scenario"/"profile swarm"/"swarm matrix" voice triggers; jarvis:iormat-toggle event; 90-s auto-refresh */}
+            <IntelProfileScenarioSwarmMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
