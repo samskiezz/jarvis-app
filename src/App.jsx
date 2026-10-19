@@ -560,6 +560,7 @@ import RiskSignalReportKnowledgeDepth from '@/components/cinematic/RiskSignalRep
 import ContactInvestmentScenarioAlignment from '@/components/cinematic/ContactInvestmentScenarioAlignment';
 import RiskSignalPlaybookAudit from '@/components/cinematic/RiskSignalPlaybookAudit';
 import DatasetGraphInvestigationNexus from '@/components/cinematic/DatasetGraphInvestigationNexus';
+import GraphKnowledgeReportSaturation from '@/components/cinematic/GraphKnowledgeReportSaturation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1783,6 +1784,8 @@ function App() {
 
             {/* F53 (overnight 2026-10-19): Dataset × Graph × Investigation Evidence Network — ◈ DGNEX button (left:78040, bottom:8, zIndex:150); fetches /v1/datasets + /v1/graph/centrality + /v1/investigations; keyword-matches each dataset against graph centrality nodes AND open investigations to classify as ANCHORED/TRACED/DATAED/DARK; stat tiles (datasets/nodes/investigations/anchored/traced/dataed/dark); amber pulse on DARK count (isolated datasets — no graph presence, no investigation); expandable rows show matched graph nodes with centrality score badge + matched investigations with status badge; filter tabs ALL/ANCHORED/TRACED/DATAED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDgnexQuery+buildDgnexScript exported; "dataset graph investigation"/"evidence network"/"dgnex"/"dataset network"/"dataset investigation graph"/"data network"/"graph dataset"/"evidence dataset"/"network coverage" voice triggers; jarvis:dgnex-toggle event; 90-s auto-refresh */}
             <DatasetGraphInvestigationNexus />
+            {/* F54 (overnight 2026-10-19): Graph × Knowledge × Report Intelligence Saturation — ◈ GKRSAT button (left:78600, bottom:8, zIndex:151); fetches /v1/graph/centrality + /knowledge/ + /v1/reports; keyword-matches each graph node against knowledge articles AND intelligence reports to classify as SATURATED/KNOWN/REPORTED/DARK; stat tiles (nodes/knowledge/reports/saturated/known/reported/dark); amber pulse on DARK count (blind-spot nodes — no knowledge and no report coverage); expandable rows show matched knowledge articles with category badge + matched reports with date badge; filter tabs ALL/SATURATED/KNOWN/REPORTED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGkrsatQuery+buildGkrsatScript exported; "graph knowledge report"/"graph saturation"/"gkrsat"/"knowledge graph"/"saturated nodes"/"report knowledge graph"/"intelligence saturation"/"graph blind spot"/"node coverage"/"knowledge gap graph" voice triggers; jarvis:gkrsat-toggle event; 90-s auto-refresh */}
+            <GraphKnowledgeReportSaturation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
