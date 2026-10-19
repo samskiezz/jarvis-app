@@ -544,6 +544,7 @@ import ScenarioDatasetSkillReadiness from '@/components/cinematic/ScenarioDatase
 import SwarmInvestmentRiskTriangle from '@/components/cinematic/SwarmInvestmentRiskTriangle';
 import ContactReportTaskChain from '@/components/cinematic/ContactReportTaskChain';
 import InvestigationTaskRiskResolution from '@/components/cinematic/InvestigationTaskRiskResolution';
+import DatasetReportScenarioEvidenceGap from '@/components/cinematic/DatasetReportScenarioEvidenceGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1723,6 +1724,8 @@ function App() {
             <ContactReportTaskChain />
             {/* F36 (overnight 2026-10-18): Investigation × Task × RiskSignal Resolution Chain — ◈ INVRES button (left:69080, bottom:8, zIndex:134); fetches /v1/investigations + /entities/Task + /entities/RiskSignal; keyword-matches each investigation against tasks and risk signals to classify as CONTAINED/TASKED/SIGNALED/OPEN; stat tiles (cases/contained/tasked/signaled/open/tasks/risks); amber pulse on open count; expandable rows show matched tasks with status badge + matched risk signals with severity badge; filter tabs ALL/CONTAINED/TASKED/SIGNALED/OPEN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isInvresQuery+buildInvresScript exported for JarvisBrain; "investigation resolution"/"open investigation"/"case resolution"/"invres"/"investigation risk"/"investigation task" voice triggers; jarvis:invres-toggle event; 90-s auto-refresh */}
             <InvestigationTaskRiskResolution />
+            {/* F37 (overnight 2026-10-19): Dataset × Report × Scenario Evidence Gap — ◈ DRSEG button (left:69640, bottom:8, zIndex:135); fetches /v1/datasets + /v1/reports + /v1/scenario/list; keyword-matches each dataset against reports AND scenarios to classify as EVIDENCED/SCRIPTED/REPORTED/RAW; stat tiles (datasets/reports/scenarios/evidenced/scripted/reported/raw); amber pulse on RAW count; expandable rows show matched reports + matched scenarios; filter tabs ALL/EVIDENCED/SCRIPTED/REPORTED/RAW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDrsegQuery+buildDrsegScript exported for JarvisBrain; "evidence gap"/"dataset report"/"dataset scenario"/"drseg"/"raw dataset"/"orphan dataset" voice triggers; jarvis:drseg-toggle event; 90-s auto-refresh */}
+            <DatasetReportScenarioEvidenceGap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
