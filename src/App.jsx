@@ -559,6 +559,7 @@ import ReportKnowledgeScenarioSynthesis from '@/components/cinematic/ReportKnowl
 import RiskSignalReportKnowledgeDepth from '@/components/cinematic/RiskSignalReportKnowledgeDepth';
 import ContactInvestmentScenarioAlignment from '@/components/cinematic/ContactInvestmentScenarioAlignment';
 import RiskSignalPlaybookAudit from '@/components/cinematic/RiskSignalPlaybookAudit';
+import DatasetGraphInvestigationNexus from '@/components/cinematic/DatasetGraphInvestigationNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1779,6 +1780,9 @@ function App() {
 
             {/* F52 (overnight 2026-10-19): RiskSignal × Knowledge × Scenario Response Playbook Audit — ◈ RSPLAY button (left:77480, bottom:8, zIndex:149); fetches /entities/RiskSignal + /knowledge/ + /v1/scenario/list; keyword-matches each risk signal against knowledge articles AND runnable scenarios to classify as PREPARED/SCRIPTED/DOCUMENTED/BLIND; stat tiles (signals/articles/scenarios/prepared/scripted/documented/blind); red pulse on BLIND count; expandable rows show matched knowledge articles with category badge + matched scenarios with status badge; filter tabs ALL/PREPARED/SCRIPTED/DOCUMENTED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRsplayQuery+buildRsplayScript exported; "risk playbook"/"response playbook"/"rsplay"/"blind risks"/"risk knowledge scenario"/"unscripted risks"/"playbook audit"/"risk response gap"/"blind risk signals" voice triggers; jarvis:rsplay-toggle event; 90-s auto-refresh */}
             <RiskSignalPlaybookAudit />
+
+            {/* F53 (overnight 2026-10-19): Dataset × Graph × Investigation Evidence Network — ◈ DGNEX button (left:78040, bottom:8, zIndex:150); fetches /v1/datasets + /v1/graph/centrality + /v1/investigations; keyword-matches each dataset against graph centrality nodes AND open investigations to classify as ANCHORED/TRACED/DATAED/DARK; stat tiles (datasets/nodes/investigations/anchored/traced/dataed/dark); amber pulse on DARK count (isolated datasets — no graph presence, no investigation); expandable rows show matched graph nodes with centrality score badge + matched investigations with status badge; filter tabs ALL/ANCHORED/TRACED/DATAED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDgnexQuery+buildDgnexScript exported; "dataset graph investigation"/"evidence network"/"dgnex"/"dataset network"/"dataset investigation graph"/"data network"/"graph dataset"/"evidence dataset"/"network coverage" voice triggers; jarvis:dgnex-toggle event; 90-s auto-refresh */}
+            <DatasetGraphInvestigationNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
