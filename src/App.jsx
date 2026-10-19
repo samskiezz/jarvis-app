@@ -550,6 +550,7 @@ import TaskInvestigationKnowledgeClosure from '@/components/cinematic/TaskInvest
 import IntelProfileScenarioSwarmMatrix from '@/components/cinematic/IntelProfileScenarioSwarmMatrix';
 import InvestmentContactKnowledgeMatrix from '@/components/cinematic/InvestmentContactKnowledgeMatrix';
 import ScenarioInvestigationReportClosure from '@/components/cinematic/ScenarioInvestigationReportClosure';
+import SkillTaskRiskCapabilityGap from '@/components/cinematic/SkillTaskRiskCapabilityGap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1743,6 +1744,9 @@ function App() {
 
             {/* F42 (overnight 2026-10-19): Scenario × Investigation × Report Mission Closure Audit — ◈ SCMISS button (left:72440, bottom:8, zIndex:140); fetches /v1/scenario/list + /v1/investigations + /v1/reports; keyword-matches each scenario against investigations AND reports to classify as CLOSED/INVESTIGATED/REPORTED/OPEN; stat tiles (scenarios/investigations/reports/closed/investigated/reported/open); amber pulse on OPEN count; expandable rows show matched investigations with status badge + matched reports with date; filter tabs ALL/CLOSED/INVESTIGATED/REPORTED/OPEN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScmissQuery+buildScmissScript exported; "scenario closure"/"mission closure"/"scmiss"/"scenario investigation"/"scenario mission"/"open scenarios"/"mission audit" voice triggers; jarvis:scmiss-toggle event; 90-s auto-refresh */}
             <ScenarioInvestigationReportClosure />
+
+            {/* F43 (overnight 2026-10-19): Skill × Task × RiskSignal Capability Gap Analysis — ◈ SKTRGAP button (left:73000, bottom:8, zIndex:141); fetches /v1/aip/skill + /entities/Task + /entities/RiskSignal; keyword-matches each skill against active tasks AND risk signals to classify as COVERED/TASKED/SIGNALED/IDLE; stat tiles (skills/tasks/risks/covered/tasked/signaled/idle); amber pulse on IDLE count; expandable rows show matched tasks with status badge + matched risk signals with severity badge; filter tabs ALL/COVERED/TASKED/SIGNALED/IDLE + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSktrgapQuery+buildSktrgapScript exported; "skill gap"/"capability gap"/"sktrgap"/"skill task"/"skill risk"/"idle skills"/"unused skills"/"skill coverage" voice triggers; jarvis:sktrgap-toggle event; 90-s auto-refresh */}
+            <SkillTaskRiskCapabilityGap />
 
             <Suspense fallback={<Loading />}>
               <Routes>
