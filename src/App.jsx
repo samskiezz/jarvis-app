@@ -554,6 +554,7 @@ import SkillTaskRiskCapabilityGap from '@/components/cinematic/SkillTaskRiskCapa
 import SwarmDatasetReportPipeline from '@/components/cinematic/SwarmDatasetReportPipeline';
 import LiveIntelContactInvestmentNexus from '@/components/cinematic/LiveIntelContactInvestmentNexus';
 import GraphSkillInvestigationCoverage from '@/components/cinematic/GraphSkillInvestigationCoverage';
+import SystemStatusTaskSwarmReadiness from '@/components/cinematic/SystemStatusTaskSwarmReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1759,6 +1760,9 @@ function App() {
 
             {/* F46 (overnight 2026-10-19): Graph × Skill × Investigation Coverage Topology — ◈ GSKICOV button (left:74680, bottom:8, zIndex:144); fetches /v1/graph/centrality + /v1/aip/skill + /v1/investigations; keyword-matches each graph node against active skills AND investigations to classify as INVESTIGATED/SKILLED/TRACED/DARK; stat tiles (nodes/skills/investigations/investigated/skilled/traced/dark); amber pulse on DARK count; expandable rows show matched skills with score badge + matched investigations with status badge; filter tabs ALL/INVESTIGATED/SKILLED/TRACED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGskicovQuery+buildGskicovScript exported; "graph coverage"/"skill topology"/"graph investigation"/"coverage topology"/"gskicov"/"graph skill"/"node coverage"/"investigation topology"/"blind spot" voice triggers; jarvis:gskicov-toggle event; 90-s auto-refresh */}
             <GraphSkillInvestigationCoverage />
+
+            {/* F47 (overnight 2026-10-19): System Status × Task × SwarmJob Operational Readiness — ◈ SYSOPS button (left:75240, bottom:8, zIndex:145); fetches /v1/jarvis/system/status + /entities/Task + /entities/SwarmJob; keyword-matches each service/component against active tasks AND swarm jobs to classify as OPERATIONAL/TASKED/PROCESSING/STALLED; stat tiles (services/tasks/swarms/operational/tasked/processing/stalled); red pulse on STALLED count; expandable rows show matched tasks with status badge + matched swarm jobs with progress badge; filter tabs ALL/OPERATIONAL/TASKED/PROCESSING/STALLED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSysopsQuery+buildSysopsScript exported; "system ops"/"operational readiness"/"service status"/"sysops"/"system tasks"/"service tasks"/"swarm readiness"/"stalled services"/"ops readiness" voice triggers; jarvis:sysops-toggle event; 60-s auto-refresh */}
+            <SystemStatusTaskSwarmReadiness />
 
             <Suspense fallback={<Loading />}>
               <Routes>
