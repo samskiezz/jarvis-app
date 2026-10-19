@@ -553,6 +553,7 @@ import ScenarioInvestigationReportClosure from '@/components/cinematic/ScenarioI
 import SkillTaskRiskCapabilityGap from '@/components/cinematic/SkillTaskRiskCapabilityGap';
 import SwarmDatasetReportPipeline from '@/components/cinematic/SwarmDatasetReportPipeline';
 import LiveIntelContactInvestmentNexus from '@/components/cinematic/LiveIntelContactInvestmentNexus';
+import GraphSkillInvestigationCoverage from '@/components/cinematic/GraphSkillInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1755,6 +1756,9 @@ function App() {
 
             {/* F45 (overnight 2026-10-19): Live Intel × Contact × Investment Impact Nexus — ◈ LICIMP button (left:74120, bottom:8, zIndex:143); fetches /functions/getLiveIntel + /entities/Contact + /entities/Investment; keyword-matches each live event (seismic+market) against contacts AND investments to classify as IMPACTED/MONITORED/RELEVANT/NEUTRAL; stat tiles (events/contacts/investments/impacted/monitored/relevant/neutral); red pulse on IMPACTED count; expandable rows show matched contacts with role+org + matched investments with type/value; filter tabs ALL/IMPACTED/MONITORED/RELEVANT/NEUTRAL + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLicimpQuery+buildLicimpScript exported; "live impact"/"impact nexus"/"contact impact"/"investment impact"/"licimp"/"live intel nexus" voice triggers; jarvis:licimp-toggle event; 60-s auto-refresh */}
             <LiveIntelContactInvestmentNexus />
+
+            {/* F46 (overnight 2026-10-19): Graph × Skill × Investigation Coverage Topology — ◈ GSKICOV button (left:74680, bottom:8, zIndex:144); fetches /v1/graph/centrality + /v1/aip/skill + /v1/investigations; keyword-matches each graph node against active skills AND investigations to classify as INVESTIGATED/SKILLED/TRACED/DARK; stat tiles (nodes/skills/investigations/investigated/skilled/traced/dark); amber pulse on DARK count; expandable rows show matched skills with score badge + matched investigations with status badge; filter tabs ALL/INVESTIGATED/SKILLED/TRACED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGskicovQuery+buildGskicovScript exported; "graph coverage"/"skill topology"/"graph investigation"/"coverage topology"/"gskicov"/"graph skill"/"node coverage"/"investigation topology"/"blind spot" voice triggers; jarvis:gskicov-toggle event; 90-s auto-refresh */}
+            <GraphSkillInvestigationCoverage />
 
             <Suspense fallback={<Loading />}>
               <Routes>
