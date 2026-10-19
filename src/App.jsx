@@ -558,6 +558,7 @@ import SystemStatusTaskSwarmReadiness from '@/components/cinematic/SystemStatusT
 import ReportKnowledgeScenarioSynthesis from '@/components/cinematic/ReportKnowledgeScenarioSynthesis';
 import RiskSignalReportKnowledgeDepth from '@/components/cinematic/RiskSignalReportKnowledgeDepth';
 import ContactInvestmentScenarioAlignment from '@/components/cinematic/ContactInvestmentScenarioAlignment';
+import RiskSignalPlaybookAudit from '@/components/cinematic/RiskSignalPlaybookAudit';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1775,6 +1776,9 @@ function App() {
 
             {/* F50 (overnight 2026-10-19): Contact × Investment × Scenario Strategic Alignment — ◈ CISALIGN button (left:76920, bottom:8, zIndex:148); fetches /entities/Contact + /entities/Investment + /v1/scenario/list; keyword-matches each contact against investments AND scenarios to classify as ALIGNED/INVESTED/SCENED/SHADOW; stat tiles (contacts/investments/scenarios/aligned/invested/scened/shadow); amber pulse on SHADOW count; expandable rows show matched investments with type/value badge + matched scenarios with status badge; filter tabs ALL/ALIGNED/INVESTED/SCENED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCisalignQuery+buildCisalignScript exported; "contact investment scenario"/"strategic alignment"/"cisalign"/"shadow contacts"/"unaligned contacts"/"contact alignment"/"investment scenario"/"strategic contacts"/"contact strategy"/"dark contacts" voice triggers; jarvis:cisalign-toggle event; 90-s auto-refresh */}
             <ContactInvestmentScenarioAlignment />
+
+            {/* F52 (overnight 2026-10-19): RiskSignal × Knowledge × Scenario Response Playbook Audit — ◈ RSPLAY button (left:77480, bottom:8, zIndex:149); fetches /entities/RiskSignal + /knowledge/ + /v1/scenario/list; keyword-matches each risk signal against knowledge articles AND runnable scenarios to classify as PREPARED/SCRIPTED/DOCUMENTED/BLIND; stat tiles (signals/articles/scenarios/prepared/scripted/documented/blind); red pulse on BLIND count; expandable rows show matched knowledge articles with category badge + matched scenarios with status badge; filter tabs ALL/PREPARED/SCRIPTED/DOCUMENTED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRsplayQuery+buildRsplayScript exported; "risk playbook"/"response playbook"/"rsplay"/"blind risks"/"risk knowledge scenario"/"unscripted risks"/"playbook audit"/"risk response gap"/"blind risk signals" voice triggers; jarvis:rsplay-toggle event; 90-s auto-refresh */}
+            <RiskSignalPlaybookAudit />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
