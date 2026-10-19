@@ -549,6 +549,7 @@ import IntelProfileContactRiskAttribution from '@/components/cinematic/IntelProf
 import TaskInvestigationKnowledgeClosure from '@/components/cinematic/TaskInvestigationKnowledgeClosure';
 import IntelProfileScenarioSwarmMatrix from '@/components/cinematic/IntelProfileScenarioSwarmMatrix';
 import InvestmentContactKnowledgeMatrix from '@/components/cinematic/InvestmentContactKnowledgeMatrix';
+import ScenarioInvestigationReportClosure from '@/components/cinematic/ScenarioInvestigationReportClosure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1739,6 +1740,9 @@ function App() {
 
             {/* F41 (overnight 2026-10-19): Investment × Contact × Knowledge Wealth Intelligence Matrix — ◈ ICINTEL button (left:71880, bottom:8, zIndex:139); fetches /entities/Investment + /entities/Contact + /knowledge/; keyword-matches each investment against contacts AND knowledge items to classify as TRACKED/LINKED/DOCUMENTED/ORPHAN; stat tiles (investments/contacts/knowledge/tracked/linked/documented/orphan); amber pulse on ORPHAN count; expandable rows show matched contacts with role+org + matched knowledge items with category; filter tabs ALL/TRACKED/LINKED/DOCUMENTED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIcintelQuery+buildIcintelScript exported; "investment knowledge"/"wealth intel"/"icintel"/"invest contact"/"wealth knowledge"/"wealth matrix" voice triggers; jarvis:icintel-toggle event; 90-s auto-refresh */}
             <InvestmentContactKnowledgeMatrix />
+
+            {/* F42 (overnight 2026-10-19): Scenario × Investigation × Report Mission Closure Audit — ◈ SCMISS button (left:72440, bottom:8, zIndex:140); fetches /v1/scenario/list + /v1/investigations + /v1/reports; keyword-matches each scenario against investigations AND reports to classify as CLOSED/INVESTIGATED/REPORTED/OPEN; stat tiles (scenarios/investigations/reports/closed/investigated/reported/open); amber pulse on OPEN count; expandable rows show matched investigations with status badge + matched reports with date; filter tabs ALL/CLOSED/INVESTIGATED/REPORTED/OPEN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScmissQuery+buildScmissScript exported; "scenario closure"/"mission closure"/"scmiss"/"scenario investigation"/"scenario mission"/"open scenarios"/"mission audit" voice triggers; jarvis:scmiss-toggle event; 90-s auto-refresh */}
+            <ScenarioInvestigationReportClosure />
 
             <Suspense fallback={<Loading />}>
               <Routes>
