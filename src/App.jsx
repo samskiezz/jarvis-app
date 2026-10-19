@@ -557,6 +557,7 @@ import GraphSkillInvestigationCoverage from '@/components/cinematic/GraphSkillIn
 import SystemStatusTaskSwarmReadiness from '@/components/cinematic/SystemStatusTaskSwarmReadiness';
 import ReportKnowledgeScenarioSynthesis from '@/components/cinematic/ReportKnowledgeScenarioSynthesis';
 import RiskSignalReportKnowledgeDepth from '@/components/cinematic/RiskSignalReportKnowledgeDepth';
+import ContactInvestmentScenarioAlignment from '@/components/cinematic/ContactInvestmentScenarioAlignment';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1771,6 +1772,9 @@ function App() {
 
             {/* F49 (overnight 2026-10-19): RiskSignal × Report × Knowledge Threat Intelligence Depth — ◈ RRKDEP button (left:76360, bottom:8, zIndex:147); fetches /entities/RiskSignal + /v1/reports + /knowledge/; keyword-matches each risk signal against reports AND knowledge items to classify as DOCUMENTED/REPORTED/KNOWN/DARK; stat tiles (signals/reports/knowledge/documented/reported/known/dark); red pulse on DARK count (blind spot signals); expandable rows show matched reports with date badge + matched knowledge items with category badge; filter tabs ALL/DOCUMENTED/REPORTED/KNOWN/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRrkdepQuery+buildRrkdepScript exported; "risk report knowledge"/"threat depth"/"rrkdep"/"dark threats"/"undocumented risk"/"threat intelligence depth"/"risk knowledge"/"knowledge gap risk"/"dark risk signals"/"blind spot risk" voice triggers; jarvis:rrkdep-toggle event; 90-s auto-refresh */}
             <RiskSignalReportKnowledgeDepth />
+
+            {/* F50 (overnight 2026-10-19): Contact × Investment × Scenario Strategic Alignment — ◈ CISALIGN button (left:76920, bottom:8, zIndex:148); fetches /entities/Contact + /entities/Investment + /v1/scenario/list; keyword-matches each contact against investments AND scenarios to classify as ALIGNED/INVESTED/SCENED/SHADOW; stat tiles (contacts/investments/scenarios/aligned/invested/scened/shadow); amber pulse on SHADOW count; expandable rows show matched investments with type/value badge + matched scenarios with status badge; filter tabs ALL/ALIGNED/INVESTED/SCENED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCisalignQuery+buildCisalignScript exported; "contact investment scenario"/"strategic alignment"/"cisalign"/"shadow contacts"/"unaligned contacts"/"contact alignment"/"investment scenario"/"strategic contacts"/"contact strategy"/"dark contacts" voice triggers; jarvis:cisalign-toggle event; 90-s auto-refresh */}
+            <ContactInvestmentScenarioAlignment />
 
             <Suspense fallback={<Loading />}>
               <Routes>
