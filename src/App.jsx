@@ -555,6 +555,7 @@ import SwarmDatasetReportPipeline from '@/components/cinematic/SwarmDatasetRepor
 import LiveIntelContactInvestmentNexus from '@/components/cinematic/LiveIntelContactInvestmentNexus';
 import GraphSkillInvestigationCoverage from '@/components/cinematic/GraphSkillInvestigationCoverage';
 import SystemStatusTaskSwarmReadiness from '@/components/cinematic/SystemStatusTaskSwarmReadiness';
+import ReportKnowledgeScenarioSynthesis from '@/components/cinematic/ReportKnowledgeScenarioSynthesis';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1763,6 +1764,9 @@ function App() {
 
             {/* F47 (overnight 2026-10-19): System Status × Task × SwarmJob Operational Readiness — ◈ SYSOPS button (left:75240, bottom:8, zIndex:145); fetches /v1/jarvis/system/status + /entities/Task + /entities/SwarmJob; keyword-matches each service/component against active tasks AND swarm jobs to classify as OPERATIONAL/TASKED/PROCESSING/STALLED; stat tiles (services/tasks/swarms/operational/tasked/processing/stalled); red pulse on STALLED count; expandable rows show matched tasks with status badge + matched swarm jobs with progress badge; filter tabs ALL/OPERATIONAL/TASKED/PROCESSING/STALLED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSysopsQuery+buildSysopsScript exported; "system ops"/"operational readiness"/"service status"/"sysops"/"system tasks"/"service tasks"/"swarm readiness"/"stalled services"/"ops readiness" voice triggers; jarvis:sysops-toggle event; 60-s auto-refresh */}
             <SystemStatusTaskSwarmReadiness />
+
+            {/* F48 (overnight 2026-10-19): Report × Knowledge × Scenario Intelligence Synthesis — ◈ RKSSYN button (left:75800, bottom:8, zIndex:146); fetches /v1/reports + /knowledge/ + /v1/scenario/list; keyword-matches each report against knowledge items AND scenarios to classify as SYNTHESIZED/SCRIPTED/PUBLISHED/RAW; stat tiles (reports/knowledge/scenarios/synthesized/scripted/published/raw); amber pulse on RAW count; expandable rows show matched knowledge items with category badge + matched scenarios with status badge; filter tabs ALL/SYNTHESIZED/SCRIPTED/PUBLISHED/RAW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRkssynQuery+buildRkssynScript exported; "report synthesis"/"knowledge scenario"/"rkssyn"/"intelligence synthesis"/"report coverage"/"synthesis audit"/"raw reports"/"report scenario"/"report knowledge" voice triggers; jarvis:rkssyn-toggle event; 90-s auto-refresh */}
+            <ReportKnowledgeScenarioSynthesis />
 
             <Suspense fallback={<Loading />}>
               <Routes>
