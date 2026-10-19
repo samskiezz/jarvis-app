@@ -561,6 +561,7 @@ import ContactInvestmentScenarioAlignment from '@/components/cinematic/ContactIn
 import RiskSignalPlaybookAudit from '@/components/cinematic/RiskSignalPlaybookAudit';
 import DatasetGraphInvestigationNexus from '@/components/cinematic/DatasetGraphInvestigationNexus';
 import GraphKnowledgeReportSaturation from '@/components/cinematic/GraphKnowledgeReportSaturation';
+import LiveIntelRiskInvestigationTriage from '@/components/cinematic/LiveIntelRiskInvestigationTriage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1786,6 +1787,8 @@ function App() {
             <DatasetGraphInvestigationNexus />
             {/* F54 (overnight 2026-10-19): Graph × Knowledge × Report Intelligence Saturation — ◈ GKRSAT button (left:78600, bottom:8, zIndex:151); fetches /v1/graph/centrality + /knowledge/ + /v1/reports; keyword-matches each graph node against knowledge articles AND intelligence reports to classify as SATURATED/KNOWN/REPORTED/DARK; stat tiles (nodes/knowledge/reports/saturated/known/reported/dark); amber pulse on DARK count (blind-spot nodes — no knowledge and no report coverage); expandable rows show matched knowledge articles with category badge + matched reports with date badge; filter tabs ALL/SATURATED/KNOWN/REPORTED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGkrsatQuery+buildGkrsatScript exported; "graph knowledge report"/"graph saturation"/"gkrsat"/"knowledge graph"/"saturated nodes"/"report knowledge graph"/"intelligence saturation"/"graph blind spot"/"node coverage"/"knowledge gap graph" voice triggers; jarvis:gkrsat-toggle event; 90-s auto-refresh */}
             <GraphKnowledgeReportSaturation />
+            {/* F55 (overnight 2026-10-19): Live Intel × RiskSignal × Investigation Crisis Triage — ◈ LRTRI button (left:79160, bottom:8, zIndex:152); fetches /functions/getLiveIntel + /entities/RiskSignal + /v1/investigations; extracts live events (quakes/crypto/fx) and keyword-matches each against risk signals AND open investigations to classify as TRIAGED/SIGNALED/TRACKED/UNTRACKED; stat tiles (events/signals/investigations/triaged/signaled/tracked/untracked); red pulse on UNTRACKED count (unmonitored live events); expandable rows show matched risk signals with severity badge + matched investigations with status badge; filter tabs ALL/TRIAGED/SIGNALED/TRACKED/UNTRACKED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLrtriQuery+buildLrtriScript exported; "crisis triage"/"live intel risk"/"lrtri"/"untracked events"/"intel triage"/"live risk investigation"/"event coverage"/"intel coverage"/"risk triage"/"live event risk" voice triggers; jarvis:lrtri-toggle event; 90-s auto-refresh */}
+            <LiveIntelRiskInvestigationTriage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
