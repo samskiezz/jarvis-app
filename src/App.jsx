@@ -546,6 +546,7 @@ import ContactReportTaskChain from '@/components/cinematic/ContactReportTaskChai
 import InvestigationTaskRiskResolution from '@/components/cinematic/InvestigationTaskRiskResolution';
 import DatasetReportScenarioEvidenceGap from '@/components/cinematic/DatasetReportScenarioEvidenceGap';
 import IntelProfileContactRiskAttribution from '@/components/cinematic/IntelProfileContactRiskAttribution';
+import TaskInvestigationKnowledgeClosure from '@/components/cinematic/TaskInvestigationKnowledgeClosure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1729,6 +1730,8 @@ function App() {
             <DatasetReportScenarioEvidenceGap />
             {/* F38 (overnight 2026-10-19): IntelProfile × Contact × RiskSignal Threat Attribution — ◈ IATRIB button (left:70200, bottom:8, zIndex:136); fetches /entities/IntelProfile + /entities/Contact + /entities/RiskSignal; keyword-matches each intel profile against known contacts and active risk signals to classify as ATTRIBUTED/FLAGGED/PROFILED/SHADOW; stat tiles (profiles/contacts/risk-sigs/attributed/flagged/profiled/shadow); red pulse on ATTRIBUTED count; expandable rows show matched contacts with role/org + matched risk signals with severity badge; filter tabs ALL/ATTRIBUTED/FLAGGED/PROFILED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIatribQuery+buildIatribScript exported for JarvisBrain; "threat attribution"/"intel contact"/"risk attribution"/"iatrib"/"threat actor"/"attributed intel" voice triggers; jarvis:iatrib-toggle event; 90-s auto-refresh */}
             <IntelProfileContactRiskAttribution />
+            {/* F39 (overnight 2026-10-19): Task × Investigation × Knowledge Closure Audit — ◈ TKINV button (left:70760, bottom:8, zIndex:137); fetches /entities/Task + /v1/investigations + /knowledge/; keyword-matches each task against open investigations AND knowledge base items to classify as ANCHORED/TRACKED/DOCUMENTED/ORPHAN; stat tiles (tasks/invest/knowledge/anchored/tracked/documented/orphan); amber pulse on ORPHAN count; expandable rows show matched investigations with status badge + matched knowledge items with type badge; filter tabs ALL/ANCHORED/TRACKED/DOCUMENTED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTkinvQuery+buildTkinvScript exported; "task investigation"/"knowledge closure"/"task closure"/"tkinv"/"orphan task"/"task knowledge"/"task audit" voice triggers; jarvis:tkinv-toggle event; 90-s auto-refresh */}
+            <TaskInvestigationKnowledgeClosure />
 
             <Suspense fallback={<Loading />}>
               <Routes>
