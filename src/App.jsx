@@ -551,6 +551,7 @@ import IntelProfileScenarioSwarmMatrix from '@/components/cinematic/IntelProfile
 import InvestmentContactKnowledgeMatrix from '@/components/cinematic/InvestmentContactKnowledgeMatrix';
 import ScenarioInvestigationReportClosure from '@/components/cinematic/ScenarioInvestigationReportClosure';
 import SkillTaskRiskCapabilityGap from '@/components/cinematic/SkillTaskRiskCapabilityGap';
+import SwarmDatasetReportPipeline from '@/components/cinematic/SwarmDatasetReportPipeline';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1747,6 +1748,9 @@ function App() {
 
             {/* F43 (overnight 2026-10-19): Skill × Task × RiskSignal Capability Gap Analysis — ◈ SKTRGAP button (left:73000, bottom:8, zIndex:141); fetches /v1/aip/skill + /entities/Task + /entities/RiskSignal; keyword-matches each skill against active tasks AND risk signals to classify as COVERED/TASKED/SIGNALED/IDLE; stat tiles (skills/tasks/risks/covered/tasked/signaled/idle); amber pulse on IDLE count; expandable rows show matched tasks with status badge + matched risk signals with severity badge; filter tabs ALL/COVERED/TASKED/SIGNALED/IDLE + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSktrgapQuery+buildSktrgapScript exported; "skill gap"/"capability gap"/"sktrgap"/"skill task"/"skill risk"/"idle skills"/"unused skills"/"skill coverage" voice triggers; jarvis:sktrgap-toggle event; 90-s auto-refresh */}
             <SkillTaskRiskCapabilityGap />
+
+            {/* F44 (overnight 2026-10-19): SwarmJob × Dataset × Report Production Pipeline Audit — ◈ SWDRP button (left:73560, bottom:8, zIndex:142); fetches /entities/SwarmJob + /v1/datasets + /v1/reports; keyword-matches each swarm job against datasets AND reports to classify as PRODUCING/PLANNED/REPORTED/IDLE; stat tiles (jobs/datasets/reports/producing/planned/reported/idle); amber pulse on IDLE count; expandable rows show matched datasets with row-count badge + matched reports with date badge; filter tabs ALL/PRODUCING/PLANNED/REPORTED/IDLE + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwdrpQuery+buildSwdrpScript exported; "swarm pipeline"/"production pipeline"/"swdrp"/"swarm dataset"/"swarm report"/"idle swarm"/"pipeline audit" voice triggers; jarvis:swdrp-toggle event; 90-s auto-refresh */}
+            <SwarmDatasetReportPipeline />
 
             <Suspense fallback={<Loading />}>
               <Routes>
