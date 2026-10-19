@@ -60,3 +60,4 @@
 [2026-10-19] F55 LiveIntelRiskInvestigationTriage.jsx — Live Intel × RiskSignal × Investigation Crisis Triage; /functions/getLiveIntel + /entities/RiskSignal + /v1/investigations; TRIAGED/SIGNALED/TRACKED/UNTRACKED; red pulse on UNTRACKED; ◈ LRTRI (left:79160 zIndex:152); Vite build exit:0
 [2026-10-19] F56 SwarmKnowledgeSkillAudit.jsx — SwarmJob × Knowledge × Skill Automation Intelligence Audit; ◈ SWKSAUD (left:79720, zIndex:153); AUTONOMOUS/SKILLED/DOCUMENTED/BLIND; Vite build exit:0
 2026-10-19 F57 ContactScenarioTaskMissionMatrix.jsx — Contact × Scenario × Task Mission Activation Matrix; ACTIVE/SCENED/TASKED/SHADOW; ◈ CSTMX (left:80280,zIndex:154); isCstmxQuery wired in JarvisBrain; Vite build exit:0
+[2026-10-19] F58 KnowledgeGraphContactDepthMap — /knowledge/ + /v1/graph/centrality + /entities/Contact → ANCHORED/TRACED/LINKED/ORPHAN; Vite build exit:0

@@ -564,6 +564,7 @@ import GraphKnowledgeReportSaturation from '@/components/cinematic/GraphKnowledg
 import LiveIntelRiskInvestigationTriage from '@/components/cinematic/LiveIntelRiskInvestigationTriage';
 import SwarmKnowledgeSkillAudit from '@/components/cinematic/SwarmKnowledgeSkillAudit';
 import ContactScenarioTaskMissionMatrix from '@/components/cinematic/ContactScenarioTaskMissionMatrix';
+import KnowledgeGraphContactDepthMap from '@/components/cinematic/KnowledgeGraphContactDepthMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1795,6 +1796,8 @@ function App() {
             <SwarmKnowledgeSkillAudit />
             {/* F57 (overnight 2026-10-19): Contact × Scenario × Task Mission Activation Matrix — ◈ CSTMX button (left:80280, bottom:8, zIndex:154); fetches /entities/Contact + /v1/scenario/list + /entities/Task; keyword-matches each contact against scenarios AND tasks to classify as ACTIVE/SCENED/TASKED/SHADOW; stat tiles (contacts/scenarios/tasks/active/scened/tasked/shadow); amber pulse on SHADOW count (contacts with no mission footprint); expandable rows show matched scenarios with status badge + matched tasks with status badge; filter tabs ALL/ACTIVE/SCENED/TASKED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCstmxQuery+buildCstmxScript exported; "contact mission"/"mission activation"/"cstmx"/"contact scenario task"/"shadow contacts"/"mission matrix"/"contact mission matrix"/"unlinked contacts"/"contact activation"/"contact task scenario"/"dark contacts"/"mission coverage" voice triggers; jarvis:cstmx-toggle event; 90-s auto-refresh */}
             <ContactScenarioTaskMissionMatrix />
+            {/* F58 (overnight 2026-10-19): Knowledge × Graph × Contact Intelligence Depth Map — ◈ KGCDEP button (left:80840, bottom:8, zIndex:155); fetches /knowledge/ + /v1/graph/centrality + /entities/Contact; keyword-matches each knowledge article against graph nodes AND contacts to classify as ANCHORED/TRACED/LINKED/ORPHAN; stat tiles (articles/nodes/contacts/anchored/traced/linked/orphan); amber pulse on ORPHAN count (isolated articles with no structural grounding); expandable rows show matched graph nodes with centrality score badge + matched contacts with role/org; filter tabs ALL/ANCHORED/TRACED/LINKED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKgcdepQuery+buildKgcdepScript exported; "knowledge depth"/"knowledge graph contact"/"kgcdep"/"orphan knowledge"/"knowledge grounding"/"knowledge anchored"/"knowledge map"/"intel depth"/"knowledge coverage map"/"ungrounded knowledge"/"knowledge linkage" voice triggers; jarvis:kgcdep-toggle event; 90-s auto-refresh */}
+            <KnowledgeGraphContactDepthMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
