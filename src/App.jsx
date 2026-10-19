@@ -565,6 +565,7 @@ import LiveIntelRiskInvestigationTriage from '@/components/cinematic/LiveIntelRi
 import SwarmKnowledgeSkillAudit from '@/components/cinematic/SwarmKnowledgeSkillAudit';
 import ContactScenarioTaskMissionMatrix from '@/components/cinematic/ContactScenarioTaskMissionMatrix';
 import KnowledgeGraphContactDepthMap from '@/components/cinematic/KnowledgeGraphContactDepthMap';
+import ScenarioRiskContactThreatMatrix from '@/components/cinematic/ScenarioRiskContactThreatMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1798,6 +1799,8 @@ function App() {
             <ContactScenarioTaskMissionMatrix />
             {/* F58 (overnight 2026-10-19): Knowledge × Graph × Contact Intelligence Depth Map — ◈ KGCDEP button (left:80840, bottom:8, zIndex:155); fetches /knowledge/ + /v1/graph/centrality + /entities/Contact; keyword-matches each knowledge article against graph nodes AND contacts to classify as ANCHORED/TRACED/LINKED/ORPHAN; stat tiles (articles/nodes/contacts/anchored/traced/linked/orphan); amber pulse on ORPHAN count (isolated articles with no structural grounding); expandable rows show matched graph nodes with centrality score badge + matched contacts with role/org; filter tabs ALL/ANCHORED/TRACED/LINKED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKgcdepQuery+buildKgcdepScript exported; "knowledge depth"/"knowledge graph contact"/"kgcdep"/"orphan knowledge"/"knowledge grounding"/"knowledge anchored"/"knowledge map"/"intel depth"/"knowledge coverage map"/"ungrounded knowledge"/"knowledge linkage" voice triggers; jarvis:kgcdep-toggle event; 90-s auto-refresh */}
             <KnowledgeGraphContactDepthMap />
+            {/* F59 (overnight 2026-10-19): Scenario × RiskSignal × Contact Strategic Threat Matrix — ◈ STHRMAT button (left:81400, bottom:8, zIndex:156); fetches /v1/scenario/list + /entities/RiskSignal + /entities/Contact; keyword-matches each scenario against risk signals AND contacts to classify as ACTIVE_THREAT/AT_RISK/SCENED/SHADOW; stat tiles (scenarios/risks/contacts/active_threat/at_risk/scened/shadow); red pulse on ACTIVE_THREAT count (scenarios fully activated with both threat signals and human contacts); expandable rows show matched risk signals with severity badge + matched contacts with role/org; filter tabs ALL/ACTIVE_THREAT/AT_RISK/SCENED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSthrmatQuery+buildSthrmatScript exported; "sthrmat"/"threat matrix"/"scenario threat"/"scenario risk contact"/"active threats"/"threat scenario"/"scenario threat matrix"/"scenario strategic threat"/"contact threat"/"risk contact scenario" voice triggers; jarvis:sthrmat-toggle event; 90-s auto-refresh */}
+            <ScenarioRiskContactThreatMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
