@@ -552,6 +552,7 @@ import InvestmentContactKnowledgeMatrix from '@/components/cinematic/InvestmentC
 import ScenarioInvestigationReportClosure from '@/components/cinematic/ScenarioInvestigationReportClosure';
 import SkillTaskRiskCapabilityGap from '@/components/cinematic/SkillTaskRiskCapabilityGap';
 import SwarmDatasetReportPipeline from '@/components/cinematic/SwarmDatasetReportPipeline';
+import LiveIntelContactInvestmentNexus from '@/components/cinematic/LiveIntelContactInvestmentNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1751,6 +1752,9 @@ function App() {
 
             {/* F44 (overnight 2026-10-19): SwarmJob × Dataset × Report Production Pipeline Audit — ◈ SWDRP button (left:73560, bottom:8, zIndex:142); fetches /entities/SwarmJob + /v1/datasets + /v1/reports; keyword-matches each swarm job against datasets AND reports to classify as PRODUCING/PLANNED/REPORTED/IDLE; stat tiles (jobs/datasets/reports/producing/planned/reported/idle); amber pulse on IDLE count; expandable rows show matched datasets with row-count badge + matched reports with date badge; filter tabs ALL/PRODUCING/PLANNED/REPORTED/IDLE + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwdrpQuery+buildSwdrpScript exported; "swarm pipeline"/"production pipeline"/"swdrp"/"swarm dataset"/"swarm report"/"idle swarm"/"pipeline audit" voice triggers; jarvis:swdrp-toggle event; 90-s auto-refresh */}
             <SwarmDatasetReportPipeline />
+
+            {/* F45 (overnight 2026-10-19): Live Intel × Contact × Investment Impact Nexus — ◈ LICIMP button (left:74120, bottom:8, zIndex:143); fetches /functions/getLiveIntel + /entities/Contact + /entities/Investment; keyword-matches each live event (seismic+market) against contacts AND investments to classify as IMPACTED/MONITORED/RELEVANT/NEUTRAL; stat tiles (events/contacts/investments/impacted/monitored/relevant/neutral); red pulse on IMPACTED count; expandable rows show matched contacts with role+org + matched investments with type/value; filter tabs ALL/IMPACTED/MONITORED/RELEVANT/NEUTRAL + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLicimpQuery+buildLicimpScript exported; "live impact"/"impact nexus"/"contact impact"/"investment impact"/"licimp"/"live intel nexus" voice triggers; jarvis:licimp-toggle event; 60-s auto-refresh */}
+            <LiveIntelContactInvestmentNexus />
 
             <Suspense fallback={<Loading />}>
               <Routes>
