@@ -545,6 +545,7 @@ import SwarmInvestmentRiskTriangle from '@/components/cinematic/SwarmInvestmentR
 import ContactReportTaskChain from '@/components/cinematic/ContactReportTaskChain';
 import InvestigationTaskRiskResolution from '@/components/cinematic/InvestigationTaskRiskResolution';
 import DatasetReportScenarioEvidenceGap from '@/components/cinematic/DatasetReportScenarioEvidenceGap';
+import IntelProfileContactRiskAttribution from '@/components/cinematic/IntelProfileContactRiskAttribution';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1726,6 +1727,8 @@ function App() {
             <InvestigationTaskRiskResolution />
             {/* F37 (overnight 2026-10-19): Dataset × Report × Scenario Evidence Gap — ◈ DRSEG button (left:69640, bottom:8, zIndex:135); fetches /v1/datasets + /v1/reports + /v1/scenario/list; keyword-matches each dataset against reports AND scenarios to classify as EVIDENCED/SCRIPTED/REPORTED/RAW; stat tiles (datasets/reports/scenarios/evidenced/scripted/reported/raw); amber pulse on RAW count; expandable rows show matched reports + matched scenarios; filter tabs ALL/EVIDENCED/SCRIPTED/REPORTED/RAW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDrsegQuery+buildDrsegScript exported for JarvisBrain; "evidence gap"/"dataset report"/"dataset scenario"/"drseg"/"raw dataset"/"orphan dataset" voice triggers; jarvis:drseg-toggle event; 90-s auto-refresh */}
             <DatasetReportScenarioEvidenceGap />
+            {/* F38 (overnight 2026-10-19): IntelProfile × Contact × RiskSignal Threat Attribution — ◈ IATRIB button (left:70200, bottom:8, zIndex:136); fetches /entities/IntelProfile + /entities/Contact + /entities/RiskSignal; keyword-matches each intel profile against known contacts and active risk signals to classify as ATTRIBUTED/FLAGGED/PROFILED/SHADOW; stat tiles (profiles/contacts/risk-sigs/attributed/flagged/profiled/shadow); red pulse on ATTRIBUTED count; expandable rows show matched contacts with role/org + matched risk signals with severity badge; filter tabs ALL/ATTRIBUTED/FLAGGED/PROFILED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIatribQuery+buildIatribScript exported for JarvisBrain; "threat attribution"/"intel contact"/"risk attribution"/"iatrib"/"threat actor"/"attributed intel" voice triggers; jarvis:iatrib-toggle event; 90-s auto-refresh */}
+            <IntelProfileContactRiskAttribution />
 
             <Suspense fallback={<Loading />}>
               <Routes>
