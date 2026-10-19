@@ -562,6 +562,7 @@ import RiskSignalPlaybookAudit from '@/components/cinematic/RiskSignalPlaybookAu
 import DatasetGraphInvestigationNexus from '@/components/cinematic/DatasetGraphInvestigationNexus';
 import GraphKnowledgeReportSaturation from '@/components/cinematic/GraphKnowledgeReportSaturation';
 import LiveIntelRiskInvestigationTriage from '@/components/cinematic/LiveIntelRiskInvestigationTriage';
+import SwarmKnowledgeSkillAudit from '@/components/cinematic/SwarmKnowledgeSkillAudit';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1789,6 +1790,8 @@ function App() {
             <GraphKnowledgeReportSaturation />
             {/* F55 (overnight 2026-10-19): Live Intel × RiskSignal × Investigation Crisis Triage — ◈ LRTRI button (left:79160, bottom:8, zIndex:152); fetches /functions/getLiveIntel + /entities/RiskSignal + /v1/investigations; extracts live events (quakes/crypto/fx) and keyword-matches each against risk signals AND open investigations to classify as TRIAGED/SIGNALED/TRACKED/UNTRACKED; stat tiles (events/signals/investigations/triaged/signaled/tracked/untracked); red pulse on UNTRACKED count (unmonitored live events); expandable rows show matched risk signals with severity badge + matched investigations with status badge; filter tabs ALL/TRIAGED/SIGNALED/TRACKED/UNTRACKED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLrtriQuery+buildLrtriScript exported; "crisis triage"/"live intel risk"/"lrtri"/"untracked events"/"intel triage"/"live risk investigation"/"event coverage"/"intel coverage"/"risk triage"/"live event risk" voice triggers; jarvis:lrtri-toggle event; 90-s auto-refresh */}
             <LiveIntelRiskInvestigationTriage />
+            {/* F56 (overnight 2026-10-19): SwarmJob × Knowledge × Skill Automation Intelligence Audit — ◈ SWKSAUD button (left:79720, bottom:8, zIndex:153); fetches /entities/SwarmJob + /knowledge/ + /v1/aip/skill; keyword-matches each swarm job against knowledge articles AND skills to classify as AUTONOMOUS/SKILLED/DOCUMENTED/BLIND; stat tiles (jobs/knowledge/skills/autonomous/skilled/documented/blind); amber pulse on BLIND count (automation jobs with no knowledge and no skill); expandable rows show matched knowledge articles with category badge + matched skills with score badge; filter tabs ALL/AUTONOMOUS/SKILLED/DOCUMENTED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwksaudQuery+buildSwksaudScript exported; "swarm audit"/"automation audit"/"swksaud"/"blind swarm"/"swarm knowledge"/"swarm skill"/"automation knowledge"/"unsupported swarm"/"swarm coverage"/"automation skill"/"automation intelligence"/"swarm intelligence audit" voice triggers; jarvis:swksaud-toggle event; 90-s auto-refresh */}
+            <SwarmKnowledgeSkillAudit />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
