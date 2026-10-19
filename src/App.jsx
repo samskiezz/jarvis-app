@@ -556,6 +556,7 @@ import LiveIntelContactInvestmentNexus from '@/components/cinematic/LiveIntelCon
 import GraphSkillInvestigationCoverage from '@/components/cinematic/GraphSkillInvestigationCoverage';
 import SystemStatusTaskSwarmReadiness from '@/components/cinematic/SystemStatusTaskSwarmReadiness';
 import ReportKnowledgeScenarioSynthesis from '@/components/cinematic/ReportKnowledgeScenarioSynthesis';
+import RiskSignalReportKnowledgeDepth from '@/components/cinematic/RiskSignalReportKnowledgeDepth';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1767,6 +1768,9 @@ function App() {
 
             {/* F48 (overnight 2026-10-19): Report × Knowledge × Scenario Intelligence Synthesis — ◈ RKSSYN button (left:75800, bottom:8, zIndex:146); fetches /v1/reports + /knowledge/ + /v1/scenario/list; keyword-matches each report against knowledge items AND scenarios to classify as SYNTHESIZED/SCRIPTED/PUBLISHED/RAW; stat tiles (reports/knowledge/scenarios/synthesized/scripted/published/raw); amber pulse on RAW count; expandable rows show matched knowledge items with category badge + matched scenarios with status badge; filter tabs ALL/SYNTHESIZED/SCRIPTED/PUBLISHED/RAW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRkssynQuery+buildRkssynScript exported; "report synthesis"/"knowledge scenario"/"rkssyn"/"intelligence synthesis"/"report coverage"/"synthesis audit"/"raw reports"/"report scenario"/"report knowledge" voice triggers; jarvis:rkssyn-toggle event; 90-s auto-refresh */}
             <ReportKnowledgeScenarioSynthesis />
+
+            {/* F49 (overnight 2026-10-19): RiskSignal × Report × Knowledge Threat Intelligence Depth — ◈ RRKDEP button (left:76360, bottom:8, zIndex:147); fetches /entities/RiskSignal + /v1/reports + /knowledge/; keyword-matches each risk signal against reports AND knowledge items to classify as DOCUMENTED/REPORTED/KNOWN/DARK; stat tiles (signals/reports/knowledge/documented/reported/known/dark); red pulse on DARK count (blind spot signals); expandable rows show matched reports with date badge + matched knowledge items with category badge; filter tabs ALL/DOCUMENTED/REPORTED/KNOWN/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRrkdepQuery+buildRrkdepScript exported; "risk report knowledge"/"threat depth"/"rrkdep"/"dark threats"/"undocumented risk"/"threat intelligence depth"/"risk knowledge"/"knowledge gap risk"/"dark risk signals"/"blind spot risk" voice triggers; jarvis:rrkdep-toggle event; 90-s auto-refresh */}
+            <RiskSignalReportKnowledgeDepth />
 
             <Suspense fallback={<Loading />}>
               <Routes>
