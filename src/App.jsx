@@ -548,6 +548,7 @@ import DatasetReportScenarioEvidenceGap from '@/components/cinematic/DatasetRepo
 import IntelProfileContactRiskAttribution from '@/components/cinematic/IntelProfileContactRiskAttribution';
 import TaskInvestigationKnowledgeClosure from '@/components/cinematic/TaskInvestigationKnowledgeClosure';
 import IntelProfileScenarioSwarmMatrix from '@/components/cinematic/IntelProfileScenarioSwarmMatrix';
+import InvestmentContactKnowledgeMatrix from '@/components/cinematic/InvestmentContactKnowledgeMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1735,6 +1736,9 @@ function App() {
             <TaskInvestigationKnowledgeClosure />
             {/* F40 (overnight 2026-10-19): IntelProfile × Scenario × SwarmJob Intelligence Orchestration Matrix — ◈ IORMAT button (left:71320, bottom:8, zIndex:138); fetches /entities/IntelProfile + /v1/scenario/list + /entities/SwarmJob; keyword-matches each intel profile against active scenarios AND swarm jobs to classify as ORCHESTRATED/SCENED/SWARMED/SHADOW; stat tiles (profiles/scenarios/swarm jobs/orchestrated/scened/swarmed/shadow); amber pulse on SHADOW count; expandable rows show matched scenarios with status badge + matched swarm jobs with status badge; filter tabs ALL/ORCHESTRATED/SCENED/SWARMED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIormatQuery+buildIormatScript exported; "intel orchestration"/"scenario swarm"/"iormat"/"intel scenario"/"profile swarm"/"swarm matrix" voice triggers; jarvis:iormat-toggle event; 90-s auto-refresh */}
             <IntelProfileScenarioSwarmMatrix />
+
+            {/* F41 (overnight 2026-10-19): Investment × Contact × Knowledge Wealth Intelligence Matrix — ◈ ICINTEL button (left:71880, bottom:8, zIndex:139); fetches /entities/Investment + /entities/Contact + /knowledge/; keyword-matches each investment against contacts AND knowledge items to classify as TRACKED/LINKED/DOCUMENTED/ORPHAN; stat tiles (investments/contacts/knowledge/tracked/linked/documented/orphan); amber pulse on ORPHAN count; expandable rows show matched contacts with role+org + matched knowledge items with category; filter tabs ALL/TRACKED/LINKED/DOCUMENTED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIcintelQuery+buildIcintelScript exported; "investment knowledge"/"wealth intel"/"icintel"/"invest contact"/"wealth knowledge"/"wealth matrix" voice triggers; jarvis:icintel-toggle event; 90-s auto-refresh */}
+            <InvestmentContactKnowledgeMatrix />
 
             <Suspense fallback={<Loading />}>
               <Routes>
