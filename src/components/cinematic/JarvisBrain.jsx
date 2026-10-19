@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { apiBase } from "@/api/cinematicDataAdapters";
 import { isShowMeQuery, resolveShowMeQuery } from "./ShowMeNavigation";
+import { isDsknowQuery } from "@/components/cinematic/DatasetKnowledgeCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -90,6 +91,7 @@ export default function JarvisBrain() {
     setOpen(true); setThinking(true); setText("");
     const scene = detectScene(q);
     if (scene) navigate(`/cinematic/${scene}`);
+    if (isDsknowQuery(q)) { window.dispatchEvent(new Event("jarvis:dsknow-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

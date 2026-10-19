@@ -1775,7 +1775,6 @@ function App() {
 
             {/* F50 (overnight 2026-10-19): Contact × Investment × Scenario Strategic Alignment — ◈ CISALIGN button (left:76920, bottom:8, zIndex:148); fetches /entities/Contact + /entities/Investment + /v1/scenario/list; keyword-matches each contact against investments AND scenarios to classify as ALIGNED/INVESTED/SCENED/SHADOW; stat tiles (contacts/investments/scenarios/aligned/invested/scened/shadow); amber pulse on SHADOW count; expandable rows show matched investments with type/value badge + matched scenarios with status badge; filter tabs ALL/ALIGNED/INVESTED/SCENED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCisalignQuery+buildCisalignScript exported; "contact investment scenario"/"strategic alignment"/"cisalign"/"shadow contacts"/"unaligned contacts"/"contact alignment"/"investment scenario"/"strategic contacts"/"contact strategy"/"dark contacts" voice triggers; jarvis:cisalign-toggle event; 90-s auto-refresh */}
             <ContactInvestmentScenarioAlignment />
-
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
