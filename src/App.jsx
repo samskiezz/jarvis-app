@@ -590,6 +590,7 @@ import SceneKnowledgeTaskMissionReadiness from '@/components/cinematic/SceneKnow
 import ReportGraphContactAttributionMap from '@/components/cinematic/ReportGraphContactAttributionMap';
 import IntelProfileOpsAlertTaskEscalation from '@/components/cinematic/IntelProfileOpsAlertTaskEscalation';
 import GraphScenarioReportCoverageMap from '@/components/cinematic/GraphScenarioReportCoverageMap';
+import SwarmContactGraphOperationalNetwork from '@/components/cinematic/SwarmContactGraphOperationalNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1872,6 +1873,8 @@ function App() {
             <IntelProfileOpsAlertTaskEscalation />
             {/* F83 (overnight 2026-10-20): Graph × Scenario × Report Strategic Coverage Map — ◈ GSRMAP button (left:94840, bottom:8, zIndex:180); fetches /v1/graph/centrality + /v1/scenario/list + /v1/reports; keyword-matches each graph node against scenarios AND reports to classify MAPPED/SCRIPTED/PUBLISHED/DARK; stat tiles (nodes/scenarios/reports/mapped/scripted/published/dark); amber pulse on DARK count (blind-spot nodes with no scenario script and no report); expandable rows show matched scenarios with status badge + matched reports with date badge; filter tabs ALL/MAPPED/SCRIPTED/PUBLISHED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGsrmapQuery exported; "gsrmap"/"graph coverage"/"scenario report coverage"/"strategic coverage"/"dark graph"/"graph scenario report"/"node coverage"/"graph strategic"/"coverage map"/"node dark" voice triggers; jarvis:gsrmap-toggle event; 90-s auto-refresh */}
             <GraphScenarioReportCoverageMap />
+            {/* F84 (overnight 2026-10-20): SwarmJob × Contact × Graph Operational Network — ◈ SCGNET button (left:95400, bottom:8, zIndex:181); fetches /entities/SwarmJob + /entities/Contact + /v1/graph/centrality; keyword-matches each swarm job against contact names/orgs AND graph node labels to classify NETWORKED/CONNECTED/TRACED/ISOLATED; stat tiles (jobs/contacts/nodes/networked/connected/traced/isolated); red pulse on ISOLATED count; expandable rows show matched contacts with role/org + matched graph nodes with centrality score badge; filter tabs ALL/NETWORKED/CONNECTED/TRACED/ISOLATED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScgnetQuery exported; "scgnet"/"swarm network"/"swarm contact graph"/"operational network"/"swarm contact"/"isolated swarm"/"swarm graph"/"swarm operational"/"contact swarm graph" voice triggers; jarvis:scgnet-toggle event; 90-s auto-refresh */}
+            <SwarmContactGraphOperationalNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
