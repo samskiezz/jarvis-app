@@ -588,6 +588,7 @@ import ReportRiskSignalGraphWeb from '@/components/cinematic/ReportRiskSignalGra
 import OpsAlertReportInvestigationCoverage from '@/components/cinematic/OpsAlertReportInvestigationCoverage';
 import SceneKnowledgeTaskMissionReadiness from '@/components/cinematic/SceneKnowledgeTaskMissionReadiness';
 import ReportGraphContactAttributionMap from '@/components/cinematic/ReportGraphContactAttributionMap';
+import IntelProfileOpsAlertTaskEscalation from '@/components/cinematic/IntelProfileOpsAlertTaskEscalation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1866,6 +1867,8 @@ function App() {
             <SceneKnowledgeTaskMissionReadiness />
             {/* F81 (overnight 2026-10-20): Report × Graph × Contact Intelligence Attribution Map — ◈ RGCATTR button (left:93720, bottom:8, zIndex:178); fetches /v1/reports + /v1/graph/centrality + /entities/Contact; keyword-matches each report against graph nodes AND contacts to classify ATTRIBUTED/TRACED/LINKED/ORPHAN; stat tiles (reports/nodes/contacts/attributed/traced/linked/orphan); amber pulse on ORPHAN count (unlinked reports with no graph or contact anchor); expandable rows show matched graph nodes with centrality score badge + matched contacts with role/org; filter tabs ALL/ATTRIBUTED/TRACED/LINKED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRgcattrQuery exported; "rgcattr"/"report attribution"/"report graph contact"/"orphan reports"/"report intelligence attribution"/"unattributed reports"/"report contact"/"report graph" voice triggers; jarvis:rgcattr-toggle event; 90-s auto-refresh */}
             <ReportGraphContactAttributionMap />
+            {/* F82 (overnight 2026-10-20): IntelProfile × Ops Alert × Task Escalation Pipeline — ◈ IPELSC button (left:94280, bottom:8, zIndex:179); fetches /entities/IntelProfile + /v1/ops/alerts + /entities/Task; keyword-matches each intel profile against live ops alerts AND tasks to classify ESCALATED/ALERTED/TASKED/DORMANT; stat tiles (profiles/alerts/tasks/escalated/alerted/tasked/dormant); red pulse on DORMANT count (blind-spot profiles with no ops alert and no task); expandable rows show matched ops alerts with severity badge + matched tasks with status badge; filter tabs ALL/ESCALATED/ALERTED/TASKED/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIpelscQuery exported; "ipelsc"/"intel escalation"/"intel ops task"/"escalation pipeline"/"dormant intel"/"intel alert task"/"profile escalation"/"intel dormant" voice triggers; jarvis:ipelsc-toggle event; 90-s auto-refresh */}
+            <IntelProfileOpsAlertTaskEscalation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

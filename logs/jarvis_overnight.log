@@ -84,3 +84,4 @@
 [2026-10-20] F79 OpsAlertReportInvestigationCoverage.jsx — Ops Alert × Report × Investigation Incident Coverage Chain; ◈ ORICOV; /v1/ops/alerts + /v1/reports + /v1/investigations; COVERED/FILED/TRACKED/OPEN; isOricovQuery wired in JarvisBrain.jsx; Vite build exit:0
 [2026-10-20] F80 SceneKnowledgeTaskMissionReadiness.jsx — Scene × Knowledge × Task Mission Readiness Map (SKTMRD); wired in App.jsx + JarvisBrain.jsx; Vite build exit:0
 [2026-10-20] F81 ReportGraphContactAttributionMap.jsx — Report × Graph × Contact Intelligence Attribution Map (◈ RGCATTR); /v1/reports + /v1/graph/centrality + /entities/Contact → ATTRIBUTED/TRACED/LINKED/ORPHAN; Vite build exit:0; pushed to jarvis-overnight
+[2026-10-20] F82: IntelProfileOpsAlertTaskEscalation.jsx — /entities/IntelProfile + /v1/ops/alerts + /entities/Task → ESCALATED/ALERTED/TASKED/DORMANT; ◈ IPELSC (left:94280, zIndex:179); isIpelscQuery in JarvisBrain.jsx; Vite build exit:0

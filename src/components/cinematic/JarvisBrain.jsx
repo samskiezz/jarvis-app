@@ -26,6 +26,7 @@ import { isKosamatQuery } from "@/components/cinematic/KnowledgeOpsAlertSwarmAwa
 import { isTskintelQuery } from "@/components/cinematic/TaskSkillKnowledgeExecutionIntel";
 import { isOricovQuery } from "@/components/cinematic/OpsAlertReportInvestigationCoverage";
 import { isSktmrdQuery } from "@/components/cinematic/SceneKnowledgeTaskMissionReadiness";
+import { isIpelscQuery } from "@/components/cinematic/IntelProfileOpsAlertTaskEscalation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -138,6 +139,7 @@ export default function JarvisBrain() {
     if (isTskintelQuery(q)) { window.dispatchEvent(new Event("jarvis:tskintel-toggle")); }
     if (isOricovQuery(q))   { window.dispatchEvent(new Event("jarvis:oricov-toggle")); }
     if (isSktmrdQuery(q))   { window.dispatchEvent(new Event("jarvis:sktmrd-toggle")); }
+    if (isIpelscQuery(q))   { window.dispatchEvent(new Event("jarvis:ipelsc-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
