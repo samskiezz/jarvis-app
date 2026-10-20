@@ -575,6 +575,7 @@ import IntelProfileSwarmReportLedger from '@/components/cinematic/IntelProfileSw
 import DatasetContactTaskOwnership from '@/components/cinematic/DatasetContactTaskOwnership';
 import SkillReportInvestigationRemediationCoverage from '@/components/cinematic/SkillReportInvestigationRemediationCoverage';
 import LiveIntelScenarioSkillCrisisReadiness from '@/components/cinematic/LiveIntelScenarioSkillCrisisReadiness';
+import TaskGraphIntelProfileMissionNetwork from '@/components/cinematic/TaskGraphIntelProfileMissionNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1828,6 +1829,8 @@ function App() {
             <SkillReportInvestigationRemediationCoverage />
             {/* F68 (overnight 2026-10-20): Live Intel × Scenario × Skill Crisis Response Coverage — ◈ LCRCOV button (left:86440, bottom:8, zIndex:165); fetches /functions/getLiveIntel + /v1/scenario/list + /v1/aip/skill; keyword-matches each live intel event (quake/crypto/fx) against scenarios AND skills to classify as READY/SCRIPTED/SKILLED/BLIND; stat tiles (events/ready/scripted/skilled/blind); red pulse on BLIND count (undefended event types); expandable rows show matched scenarios with status badge + matched skills with score badge; filter tabs ALL/READY/SCRIPTED/SKILLED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLcrcovQuery exported; "lcrcov"/"live crisis"/"crisis readiness"/"crisis response coverage"/"intel scenario skill"/"blind events"/"undefended events"/"live intel crisis"/"event coverage"/"event readiness" voice triggers; jarvis:lcrcov-toggle event; 90-s auto-refresh */}
             <LiveIntelScenarioSkillCrisisReadiness />
+            {/* F69 (overnight 2026-10-20): Task × Graph × IntelProfile Mission Network Intelligence — ◈ TGINET button (left:87000, bottom:8, zIndex:166); fetches /entities/Task + /v1/graph/centrality + /entities/IntelProfile; keyword-matches each task against graph nodes AND intel profiles to classify as NETWORKED/PROFILED/TRACED/ORPHAN; stat tiles (tasks/nodes/profiles/networked/profiled/traced/orphan); amber pulse on ORPHAN count (blind-spot tasks with no graph or intel grounding); expandable rows show matched graph nodes with centrality score badge + matched intel profiles with category badge; filter tabs ALL/NETWORKED/PROFILED/TRACED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTginetQuery exported; "tginet"/"task network"/"task graph"/"task intel profile"/"mission network"/"orphan tasks"/"task graph intel"/"networked tasks"/"mission intelligence network"/"task intelligence"/"task profile"/"task centrality" voice triggers; jarvis:tginet-toggle event; 90-s auto-refresh */}
+            <TaskGraphIntelProfileMissionNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

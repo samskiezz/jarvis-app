@@ -71,3 +71,4 @@
 2026-10-20 F66 DatasetContactTaskOwnership.jsx — /v1/datasets + /entities/Contact + /entities/Task → OWNED/ACTIVE/STAFFED/ORPHAN; ◈ DCTOWN; isDctownQuery in JarvisBrain; Vite build exit:0
 2026-10-20T06:16:44Z F67 SkillReportInvestigationRemediationCoverage.jsx — Skill × Report × Investigation Remediation Coverage; ◈ SRIRM; /v1/aip/skill + /v1/reports + /v1/investigations; REMEDIATED/SCRIPTED/FILED/IDLE; Vite build exit:0; pushed to jarvis-overnight
 2026-10-20 F68 LiveIntelScenarioSkillCrisisReadiness.jsx — /functions/getLiveIntel+/v1/scenario/list+/v1/aip/skill; READY/SCRIPTED/SKILLED/BLIND; red pulse on BLIND; ASSESS+TTS; isLcrcovQuery in JarvisBrain; Vite build exit:0; pushed jarvis-overnight
+2026-10-20 F69 TaskGraphIntelProfileMissionNetwork.jsx — /entities/Task + /v1/graph/centrality + /entities/IntelProfile → NETWORKED/PROFILED/TRACED/ORPHAN; amber pulse on ORPHAN; ◈ TGINET; isTginetQuery in JarvisBrain; Vite build exit:0; pushed jarvis-overnight
