@@ -579,6 +579,7 @@ import TaskGraphIntelProfileMissionNetwork from '@/components/cinematic/TaskGrap
 import IntelProfileKnowledgeTaskExecutionMap from '@/components/cinematic/IntelProfileKnowledgeTaskExecutionMap';
 import SwarmScenarioKnowledgeReadiness from '@/components/cinematic/SwarmScenarioKnowledgeReadiness';
 import LiveIntelGraphDatasetEventSaturation from '@/components/cinematic/LiveIntelGraphDatasetEventSaturation';
+import ContactTaskGraphAccountability from '@/components/cinematic/ContactTaskGraphAccountability';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1840,6 +1841,8 @@ function App() {
             <SwarmScenarioKnowledgeReadiness />
             {/* F72 (overnight 2026-10-20): Live Intel × Graph × Dataset Event Saturation Map — ◈ LIGSAT button (left:88680, bottom:8, zIndex:169); fetches /functions/getLiveIntel + /v1/graph/centrality + /v1/datasets; keyword-matches each live intel event (quake/crypto/fx) against graph centrality nodes AND datasets to classify as MAPPED/TRACED/DATAED/DARK; stat tiles (events/nodes/datasets/mapped/traced/dataed/dark); amber pulse on DARK count (events with zero intelligence grounding); expandable rows show matched graph nodes with centrality score badge + matched datasets with row-count badge; filter tabs ALL/MAPPED/TRACED/DATAED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLigdsatQuery exported; "ligsat"/"live intel graph"/"event saturation"/"intel event map"/"dark events"/"unmapped events"/"live event graph"/"event dataset"/"event coverage"/"live graph dataset"/"intel saturation" voice triggers; jarvis:ligsat-toggle event; 90-s auto-refresh */}
             <LiveIntelGraphDatasetEventSaturation />
+            {/* F73 (overnight 2026-10-20): Contact × Task × Graph Mission Accountability Audit — ◈ CTGACC button (left:89240, bottom:8, zIndex:170); fetches /entities/Contact + /entities/Task + /v1/graph/centrality; keyword-matches each contact against tasks AND graph nodes to classify as ACCOUNTABLE/TASKED/TRACED/GHOST; stat tiles (contacts/tasks/nodes/accountable/tasked/traced/ghost); amber pulse on GHOST count (contacts with zero operational footprint); expandable rows show matched tasks with status badge + matched graph nodes with centrality score badge; filter tabs ALL/ACCOUNTABLE/TASKED/TRACED/GHOST + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCtgaccQuery exported; "ctgacc"/"contact accountability"/"contact task graph"/"ghost contacts"/"unaccountable contacts"/"contact mission"/"contact footprint"/"contact graph task"/"contact tracing"/"accountable contacts" voice triggers; jarvis:ctgacc-toggle event; 90-s auto-refresh */}
+            <ContactTaskGraphAccountability />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
