@@ -577,6 +577,7 @@ import SkillReportInvestigationRemediationCoverage from '@/components/cinematic/
 import LiveIntelScenarioSkillCrisisReadiness from '@/components/cinematic/LiveIntelScenarioSkillCrisisReadiness';
 import TaskGraphIntelProfileMissionNetwork from '@/components/cinematic/TaskGraphIntelProfileMissionNetwork';
 import IntelProfileKnowledgeTaskExecutionMap from '@/components/cinematic/IntelProfileKnowledgeTaskExecutionMap';
+import SwarmScenarioKnowledgeReadiness from '@/components/cinematic/SwarmScenarioKnowledgeReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1834,6 +1835,8 @@ function App() {
             <TaskGraphIntelProfileMissionNetwork />
             {/* F70 (overnight 2026-10-20): IntelProfile × Knowledge × Task Execution Map — ◈ IPKTEX button (left:87560, bottom:8, zIndex:167); fetches /entities/IntelProfile + /knowledge/ + /entities/Task; keyword-matches each intel profile against knowledge articles AND tasks to classify as EXECUTING/SCRIPTED/KNOWN/DARK; stat tiles (profiles/knowledge/tasks/executing/scripted/known/dark); red pulse on DARK count (blind-spot profiles with no knowledge or task grounding); expandable rows show matched knowledge articles with category badge + matched tasks with status badge; filter tabs ALL/EXECUTING/SCRIPTED/KNOWN/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIpktexQuery exported; "ipktex"/"intel execution map"/"intel task knowledge"/"profile execution map"/"dark profiles"/"intel knowledge task"/"execution map"/"profile darkness"/"profile gap"/"intel grounding" voice triggers; jarvis:ipktex-toggle event; 90-s auto-refresh */}
             <IntelProfileKnowledgeTaskExecutionMap />
+            {/* F71 (overnight 2026-10-20): SwarmJob × Scenario × Knowledge Tactical Readiness Index — ◈ SWSKRDY button (left:88120, bottom:8, zIndex:168); fetches /entities/SwarmJob + /v1/scenario/list + /knowledge/; keyword-matches each swarm job against scenarios AND knowledge articles to classify as READY/OPERATIONAL/PLANNED/BLIND; stat tiles (jobs/scenarios/knowledge/ready/operational/planned/blind); amber pulse on BLIND count (unsupported automation blind spots); expandable rows show matched scenarios with status badge + matched knowledge articles with category badge; filter tabs ALL/READY/OPERATIONAL/PLANNED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwskrdyQuery exported; "swskrdy"/"swarm readiness"/"swarm scenario knowledge"/"swarm tactical"/"tactical readiness"/"blind swarms"/"swarm blind"/"swarm knowledge"/"swarm scenario"/"swarm support" voice triggers; jarvis:swskrdy-toggle event; 90-s auto-refresh */}
+            <SwarmScenarioKnowledgeReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

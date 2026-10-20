@@ -73,3 +73,4 @@
 2026-10-20 F68 LiveIntelScenarioSkillCrisisReadiness.jsx — /functions/getLiveIntel+/v1/scenario/list+/v1/aip/skill; READY/SCRIPTED/SKILLED/BLIND; red pulse on BLIND; ASSESS+TTS; isLcrcovQuery in JarvisBrain; Vite build exit:0; pushed jarvis-overnight
 2026-10-20 F69 TaskGraphIntelProfileMissionNetwork.jsx — /entities/Task + /v1/graph/centrality + /entities/IntelProfile → NETWORKED/PROFILED/TRACED/ORPHAN; amber pulse on ORPHAN; ◈ TGINET; isTginetQuery in JarvisBrain; Vite build exit:0; pushed jarvis-overnight
 [2026-10-20 09:11 UTC] F70 IntelProfileKnowledgeTaskExecutionMap.jsx — IntelProfile × Knowledge × Task Execution Map; EXECUTING/SCRIPTED/KNOWN/DARK; red pulse on DARK; ◈ IPKTEX; Vite build exit:0
+[2026-10-20 10:17 UTC] F71 SwarmScenarioKnowledgeReadiness.jsx — SwarmJob × Scenario × Knowledge Tactical Readiness Index; READY/OPERATIONAL/PLANNED/BLIND; amber pulse on BLIND; ◈ SWSKRDY; isSwskrdyQuery in JarvisBrain; Vite build exit:0; pushed jarvis-overnight
