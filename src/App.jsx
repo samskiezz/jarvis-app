@@ -584,6 +584,7 @@ import LiveIntelBrainSystemConvergence from '@/components/cinematic/LiveIntelBra
 import OpsAlertIntelProfileGraphThreatNetwork from '@/components/cinematic/OpsAlertIntelProfileGraphThreatNetwork';
 import KnowledgeOpsAlertSwarmAwareness from '@/components/cinematic/KnowledgeOpsAlertSwarmAwareness';
 import TaskSkillKnowledgeExecutionIntel from '@/components/cinematic/TaskSkillKnowledgeExecutionIntel';
+import ReportRiskSignalGraphWeb from '@/components/cinematic/ReportRiskSignalGraphWeb';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1855,6 +1856,7 @@ function App() {
             <KnowledgeOpsAlertSwarmAwareness />
             {/* F77 (overnight 2026-10-20): Task × Skill × Knowledge Execution Intelligence — ◈ TSKINTEL button (left:91480, bottom:8, zIndex:174); fetches /entities/Task + /v1/aip/skill + /knowledge/; keyword-matches each task against skills AND knowledge articles to classify CAPABLE/SKILLED/KNOWN/BLIND; stat tiles (tasks/skills/articles/capable/skilled/known/blind); amber pulse on BLIND count (tasks with no skill support and no knowledge grounding); expandable rows show matched skills with score badge + matched knowledge articles with category badge; filter tabs ALL/CAPABLE/SKILLED/KNOWN/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTskintelQuery exported; "tskintel"/"task skill knowledge"/"execution intelligence"/"blind tasks"/"task capability"/"task knowledge"/"skill task coverage"/"execution gaps"/"task blind spots"/"capability gap tasks" voice triggers; jarvis:tskintel-toggle event; 90-s auto-refresh */}
             <TaskSkillKnowledgeExecutionIntel />
+            <ReportRiskSignalGraphWeb />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
