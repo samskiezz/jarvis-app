@@ -585,6 +585,7 @@ import OpsAlertIntelProfileGraphThreatNetwork from '@/components/cinematic/OpsAl
 import KnowledgeOpsAlertSwarmAwareness from '@/components/cinematic/KnowledgeOpsAlertSwarmAwareness';
 import TaskSkillKnowledgeExecutionIntel from '@/components/cinematic/TaskSkillKnowledgeExecutionIntel';
 import ReportRiskSignalGraphWeb from '@/components/cinematic/ReportRiskSignalGraphWeb';
+import OpsAlertReportInvestigationCoverage from '@/components/cinematic/OpsAlertReportInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1857,6 +1858,8 @@ function App() {
             {/* F77 (overnight 2026-10-20): Task × Skill × Knowledge Execution Intelligence — ◈ TSKINTEL button (left:91480, bottom:8, zIndex:174); fetches /entities/Task + /v1/aip/skill + /knowledge/; keyword-matches each task against skills AND knowledge articles to classify CAPABLE/SKILLED/KNOWN/BLIND; stat tiles (tasks/skills/articles/capable/skilled/known/blind); amber pulse on BLIND count (tasks with no skill support and no knowledge grounding); expandable rows show matched skills with score badge + matched knowledge articles with category badge; filter tabs ALL/CAPABLE/SKILLED/KNOWN/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTskintelQuery exported; "tskintel"/"task skill knowledge"/"execution intelligence"/"blind tasks"/"task capability"/"task knowledge"/"skill task coverage"/"execution gaps"/"task blind spots"/"capability gap tasks" voice triggers; jarvis:tskintel-toggle event; 90-s auto-refresh */}
             <TaskSkillKnowledgeExecutionIntel />
             <ReportRiskSignalGraphWeb />
+            {/* F79 (overnight 2026-10-20): Ops Alert × Report × Investigation Incident Coverage Chain — ◈ ORICOV button (left:92600, bottom:8, zIndex:176); fetches /v1/ops/alerts + /v1/reports + /v1/investigations; keyword-matches each alert against reports AND investigations to classify COVERED/FILED/TRACKED/OPEN; stat tiles (alerts/reports/invest./covered/filed/tracked/open); red pulse on OPEN count (alerts with no documentation or investigation); expandable rows show matched reports with date badge + matched investigations with status badge; filter tabs ALL/COVERED/FILED/TRACKED/OPEN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOricovQuery exported; "oricov"/"ops incident coverage"/"alert coverage"/"incident chain"/"open alerts"/"uncovered alerts"/"alert report"/"ops investigation"/"incident coverage chain"/"alert documentation"/"ops report coverage" voice triggers; jarvis:oricov-toggle event; 90-s auto-refresh */}
+            <OpsAlertReportInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

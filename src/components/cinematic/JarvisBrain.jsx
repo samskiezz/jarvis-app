@@ -24,6 +24,7 @@ import { isLbconvQuery } from "@/components/cinematic/LiveIntelBrainSystemConver
 import { isOagnetQuery } from "@/components/cinematic/OpsAlertIntelProfileGraphThreatNetwork";
 import { isKosamatQuery } from "@/components/cinematic/KnowledgeOpsAlertSwarmAwareness";
 import { isTskintelQuery } from "@/components/cinematic/TaskSkillKnowledgeExecutionIntel";
+import { isOricovQuery } from "@/components/cinematic/OpsAlertReportInvestigationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -134,6 +135,7 @@ export default function JarvisBrain() {
     if (isOagnetQuery(q))  { window.dispatchEvent(new Event("jarvis:oagnet-toggle")); }
     if (isKosamatQuery(q))  { window.dispatchEvent(new Event("jarvis:kosamat-toggle")); }
     if (isTskintelQuery(q)) { window.dispatchEvent(new Event("jarvis:tskintel-toggle")); }
+    if (isOricovQuery(q))   { window.dispatchEvent(new Event("jarvis:oricov-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
