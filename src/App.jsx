@@ -576,6 +576,7 @@ import DatasetContactTaskOwnership from '@/components/cinematic/DatasetContactTa
 import SkillReportInvestigationRemediationCoverage from '@/components/cinematic/SkillReportInvestigationRemediationCoverage';
 import LiveIntelScenarioSkillCrisisReadiness from '@/components/cinematic/LiveIntelScenarioSkillCrisisReadiness';
 import TaskGraphIntelProfileMissionNetwork from '@/components/cinematic/TaskGraphIntelProfileMissionNetwork';
+import IntelProfileKnowledgeTaskExecutionMap from '@/components/cinematic/IntelProfileKnowledgeTaskExecutionMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1831,6 +1832,8 @@ function App() {
             <LiveIntelScenarioSkillCrisisReadiness />
             {/* F69 (overnight 2026-10-20): Task × Graph × IntelProfile Mission Network Intelligence — ◈ TGINET button (left:87000, bottom:8, zIndex:166); fetches /entities/Task + /v1/graph/centrality + /entities/IntelProfile; keyword-matches each task against graph nodes AND intel profiles to classify as NETWORKED/PROFILED/TRACED/ORPHAN; stat tiles (tasks/nodes/profiles/networked/profiled/traced/orphan); amber pulse on ORPHAN count (blind-spot tasks with no graph or intel grounding); expandable rows show matched graph nodes with centrality score badge + matched intel profiles with category badge; filter tabs ALL/NETWORKED/PROFILED/TRACED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTginetQuery exported; "tginet"/"task network"/"task graph"/"task intel profile"/"mission network"/"orphan tasks"/"task graph intel"/"networked tasks"/"mission intelligence network"/"task intelligence"/"task profile"/"task centrality" voice triggers; jarvis:tginet-toggle event; 90-s auto-refresh */}
             <TaskGraphIntelProfileMissionNetwork />
+            {/* F70 (overnight 2026-10-20): IntelProfile × Knowledge × Task Execution Map — ◈ IPKTEX button (left:87560, bottom:8, zIndex:167); fetches /entities/IntelProfile + /knowledge/ + /entities/Task; keyword-matches each intel profile against knowledge articles AND tasks to classify as EXECUTING/SCRIPTED/KNOWN/DARK; stat tiles (profiles/knowledge/tasks/executing/scripted/known/dark); red pulse on DARK count (blind-spot profiles with no knowledge or task grounding); expandable rows show matched knowledge articles with category badge + matched tasks with status badge; filter tabs ALL/EXECUTING/SCRIPTED/KNOWN/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIpktexQuery exported; "ipktex"/"intel execution map"/"intel task knowledge"/"profile execution map"/"dark profiles"/"intel knowledge task"/"execution map"/"profile darkness"/"profile gap"/"intel grounding" voice triggers; jarvis:ipktex-toggle event; 90-s auto-refresh */}
+            <IntelProfileKnowledgeTaskExecutionMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

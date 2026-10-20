@@ -16,6 +16,7 @@ import { isDctownQuery } from "@/components/cinematic/DatasetContactTaskOwnershi
 import { isSrirmQuery } from "@/components/cinematic/SkillReportInvestigationRemediationCoverage";
 import { isLcrcovQuery } from "@/components/cinematic/LiveIntelScenarioSkillCrisisReadiness";
 import { isTginetQuery } from "@/components/cinematic/TaskGraphIntelProfileMissionNetwork";
+import { isIpktexQuery } from "@/components/cinematic/IntelProfileKnowledgeTaskExecutionMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -118,6 +119,7 @@ export default function JarvisBrain() {
     if (isSrirmQuery(q))   { window.dispatchEvent(new Event("jarvis:srirm-toggle")); }
     if (isLcrcovQuery(q))  { window.dispatchEvent(new Event("jarvis:lcrcov-toggle")); }
     if (isTginetQuery(q))  { window.dispatchEvent(new Event("jarvis:tginet-toggle")); }
+    if (isIpktexQuery(q))  { window.dispatchEvent(new Event("jarvis:ipktex-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
