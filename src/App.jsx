@@ -572,6 +572,7 @@ import BrainDatasetKnowledgeCoherence from '@/components/cinematic/BrainDatasetK
 import ReportSkillContactCoverage from '@/components/cinematic/ReportSkillContactCoverage';
 import GraphContactInvestmentAssetMap from '@/components/cinematic/GraphContactInvestmentAssetMap';
 import IntelProfileSwarmReportLedger from '@/components/cinematic/IntelProfileSwarmReportLedger';
+import DatasetContactTaskOwnership from '@/components/cinematic/DatasetContactTaskOwnership';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1819,6 +1820,8 @@ function App() {
             <GraphContactInvestmentAssetMap />
             {/* F65 (overnight 2026-10-20): IntelProfile × SwarmJob × Report Intelligence Execution Ledger — ◈ IELGR button (left:84760, bottom:8, zIndex:162); fetches /entities/IntelProfile + /entities/SwarmJob + /v1/reports; keyword-matches each intel profile against swarm jobs AND reports to classify as EXECUTING/SWARMED/FILED/SHADOW; stat tiles (profiles/jobs/reports/executing/swarmed/filed/shadow); red pulse on SHADOW count (dormant profiles with no execution trail and no filed report); expandable rows show matched swarm jobs with status badge + matched reports with date badge; filter tabs ALL/EXECUTING/SWARMED/FILED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIelgrQuery exported; "ielgr"/"intel execution"/"intel ledger"/"execution ledger"/"profile execution"/"swarm report"/"intel swarm"/"intel filing"/"execution coverage"/"profile filing" voice triggers; jarvis:ielgr-toggle event; 90-s auto-refresh */}
             <IntelProfileSwarmReportLedger />
+            {/* F66 (overnight 2026-10-20): Dataset × Contact × Task Operational Data Ownership — ◈ DCTOWN button (left:85320, bottom:8, zIndex:163); fetches /v1/datasets + /entities/Contact + /entities/Task; keyword-matches each dataset against contacts (owners/stakeholders) AND tasks (operational usage) to classify as OWNED/ACTIVE/STAFFED/ORPHAN; stat tiles (datasets/contacts/tasks/owned/active/staffed/orphan); amber pulse on ORPHAN count (unowned and untasked data blind spots); expandable rows show matched contacts with role/org + matched tasks with status badge; filter tabs ALL/OWNED/ACTIVE/STAFFED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDctownQuery exported; "dctown"/"dataset ownership"/"dataset owner"/"orphan datasets"/"dataset contact task"/"data ownership"/"unowned datasets"/"dataset staffing" voice triggers; jarvis:dctown-toggle event; 90-s auto-refresh */}
+            <DatasetContactTaskOwnership />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
