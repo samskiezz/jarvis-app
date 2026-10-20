@@ -11,6 +11,7 @@ import { isInvactQuery } from "@/components/cinematic/InvestigationScenarioKnowl
 import { isBrncohQuery } from "@/components/cinematic/BrainDatasetKnowledgeCoherence";
 import { isRscovQuery }  from "@/components/cinematic/ReportSkillContactCoverage";
 import { isGcisamQuery } from "@/components/cinematic/GraphContactInvestmentAssetMap";
+import { isIelgrQuery }  from "@/components/cinematic/IntelProfileSwarmReportLedger";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -108,6 +109,7 @@ export default function JarvisBrain() {
     if (isBrncohQuery(q))  { window.dispatchEvent(new Event("jarvis:brncoh-toggle")); }
     if (isRscovQuery(q))   { window.dispatchEvent(new Event("jarvis:rscov-toggle")); }
     if (isGcisamQuery(q))  { window.dispatchEvent(new Event("jarvis:gcisam-toggle")); }
+    if (isIelgrQuery(q))   { window.dispatchEvent(new Event("jarvis:ielgr-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

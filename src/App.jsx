@@ -571,6 +571,7 @@ import InvestigationScenarioKnowledgeActionability from '@/components/cinematic/
 import BrainDatasetKnowledgeCoherence from '@/components/cinematic/BrainDatasetKnowledgeCoherence';
 import ReportSkillContactCoverage from '@/components/cinematic/ReportSkillContactCoverage';
 import GraphContactInvestmentAssetMap from '@/components/cinematic/GraphContactInvestmentAssetMap';
+import IntelProfileSwarmReportLedger from '@/components/cinematic/IntelProfileSwarmReportLedger';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1816,6 +1817,8 @@ function App() {
             <ReportSkillContactCoverage />
             {/* F64 (overnight 2026-10-20): Graph × Contact × Investment Strategic Asset Map — ◈ GCISAM button (left:84200, bottom:8, zIndex:161); fetches /v1/graph/centrality + /entities/Contact + /entities/Investment; keyword-matches each graph node against contacts AND investments to classify as STRATEGIC/CONNECTED/FUNDED/SHADOW; stat tiles (nodes/contacts/investments/strategic/connected/funded/shadow); red pulse on SHADOW count (blind-spot nodes with no contact or investment link); expandable rows show matched contacts with role/org + matched investments with type/value; filter tabs ALL/STRATEGIC/CONNECTED/FUNDED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGcisamQuery exported; "gcisam"/"graph contact investment"/"strategic asset map"/"strategic assets"/"asset map"/"connected assets"/"shadow nodes"/"graph investment"/"graph contact"/"asset coverage" voice triggers; jarvis:gcisam-toggle event; 90-s auto-refresh */}
             <GraphContactInvestmentAssetMap />
+            {/* F65 (overnight 2026-10-20): IntelProfile × SwarmJob × Report Intelligence Execution Ledger — ◈ IELGR button (left:84760, bottom:8, zIndex:162); fetches /entities/IntelProfile + /entities/SwarmJob + /v1/reports; keyword-matches each intel profile against swarm jobs AND reports to classify as EXECUTING/SWARMED/FILED/SHADOW; stat tiles (profiles/jobs/reports/executing/swarmed/filed/shadow); red pulse on SHADOW count (dormant profiles with no execution trail and no filed report); expandable rows show matched swarm jobs with status badge + matched reports with date badge; filter tabs ALL/EXECUTING/SWARMED/FILED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIelgrQuery exported; "ielgr"/"intel execution"/"intel ledger"/"execution ledger"/"profile execution"/"swarm report"/"intel swarm"/"intel filing"/"execution coverage"/"profile filing" voice triggers; jarvis:ielgr-toggle event; 90-s auto-refresh */}
+            <IntelProfileSwarmReportLedger />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

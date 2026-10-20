@@ -67,3 +67,4 @@
 [2026-10-20] F62 BrainDatasetKnowledgeCoherence.jsx — /v1/cinematic/brain+/v1/datasets+/knowledge/ → COHERENT/DATAED/KNOWN/DARK; ◈ BRNCOH (left:83080, zIndex:159); isBrncohQuery wired in JarvisBrain.jsx; Vite build exit:0
 [2026-10-20] F63 ReportSkillContactCoverage.jsx: /v1/reports + /v1/aip/skill + /entities/Contact → ATTRIBUTED/SKILLED/LINKED/UNKNOWN; ◈ RSCOV (left:83640, zIndex:160); Vite build exit:0
 [2026-10-20] F64 GraphContactInvestmentAssetMap.jsx — Graph × Contact × Investment Strategic Asset Map; STRATEGIC/CONNECTED/FUNDED/SHADOW; ◈ GCISAM (left:84200, zIndex:161); isGcisamQuery wired in JarvisBrain.jsx; Vite build exit:0; pushed to jarvis-overnight
+[2026-10-20] F65 IntelProfileSwarmReportLedger.jsx — /entities/IntelProfile + /entities/SwarmJob + /v1/reports → EXECUTING/SWARMED/FILED/SHADOW; ◈ IELGR (left:84760, zIndex:162); isIelgrQuery wired in JarvisBrain.jsx; Vite build exit:0; pushed to jarvis-overnight
