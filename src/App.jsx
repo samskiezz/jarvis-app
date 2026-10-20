@@ -573,6 +573,7 @@ import ReportSkillContactCoverage from '@/components/cinematic/ReportSkillContac
 import GraphContactInvestmentAssetMap from '@/components/cinematic/GraphContactInvestmentAssetMap';
 import IntelProfileSwarmReportLedger from '@/components/cinematic/IntelProfileSwarmReportLedger';
 import DatasetContactTaskOwnership from '@/components/cinematic/DatasetContactTaskOwnership';
+import SkillReportInvestigationRemediationCoverage from '@/components/cinematic/SkillReportInvestigationRemediationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1822,6 +1823,8 @@ function App() {
             <IntelProfileSwarmReportLedger />
             {/* F66 (overnight 2026-10-20): Dataset × Contact × Task Operational Data Ownership — ◈ DCTOWN button (left:85320, bottom:8, zIndex:163); fetches /v1/datasets + /entities/Contact + /entities/Task; keyword-matches each dataset against contacts (owners/stakeholders) AND tasks (operational usage) to classify as OWNED/ACTIVE/STAFFED/ORPHAN; stat tiles (datasets/contacts/tasks/owned/active/staffed/orphan); amber pulse on ORPHAN count (unowned and untasked data blind spots); expandable rows show matched contacts with role/org + matched tasks with status badge; filter tabs ALL/OWNED/ACTIVE/STAFFED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDctownQuery exported; "dctown"/"dataset ownership"/"dataset owner"/"orphan datasets"/"dataset contact task"/"data ownership"/"unowned datasets"/"dataset staffing" voice triggers; jarvis:dctown-toggle event; 90-s auto-refresh */}
             <DatasetContactTaskOwnership />
+            {/* F67 (overnight 2026-10-20): Skill × Report × Investigation Remediation Coverage — ◈ SRIRM button (left:85880, bottom:8, zIndex:164); fetches /v1/aip/skill + /v1/reports + /v1/investigations; keyword-matches each skill against reports AND investigations to classify as REMEDIATED/SCRIPTED/FILED/IDLE; stat tiles (skills/reports/investigations/remediated/scripted/filed/idle); amber pulse on IDLE count (skills with no report trail and no investigation — blind spots); expandable rows show matched reports with date badge + matched investigations with status badge; filter tabs ALL/REMEDIATED/SCRIPTED/FILED/IDLE + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSrirmQuery exported; "srirm"/"skill remediation"/"skill report investigation"/"idle skills"/"remediation coverage"/"skill investigation"/"skill coverage"/"remediated skills"/"skill report coverage"/"skill filing" voice triggers; jarvis:srirm-toggle event; 90-s auto-refresh */}
+            <SkillReportInvestigationRemediationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

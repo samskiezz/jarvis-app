@@ -13,6 +13,7 @@ import { isRscovQuery }  from "@/components/cinematic/ReportSkillContactCoverage
 import { isGcisamQuery } from "@/components/cinematic/GraphContactInvestmentAssetMap";
 import { isIelgrQuery }  from "@/components/cinematic/IntelProfileSwarmReportLedger";
 import { isDctownQuery } from "@/components/cinematic/DatasetContactTaskOwnership";
+import { isSrirmQuery } from "@/components/cinematic/SkillReportInvestigationRemediationCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -112,6 +113,7 @@ export default function JarvisBrain() {
     if (isGcisamQuery(q))  { window.dispatchEvent(new Event("jarvis:gcisam-toggle")); }
     if (isIelgrQuery(q))   { window.dispatchEvent(new Event("jarvis:ielgr-toggle")); }
     if (isDctownQuery(q))  { window.dispatchEvent(new Event("jarvis:dctown-toggle")); }
+    if (isSrirmQuery(q))   { window.dispatchEvent(new Event("jarvis:srirm-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
