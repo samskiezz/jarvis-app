@@ -7,6 +7,7 @@ import { isCstmxQuery } from "@/components/cinematic/ContactScenarioTaskMissionM
 import { isKgcdepQuery } from "@/components/cinematic/KnowledgeGraphContactDepthMap";
 import { isSthrmatQuery } from "@/components/cinematic/ScenarioRiskContactThreatMatrix";
 import { isIrcapQuery } from "@/components/cinematic/OpsAlertSkillDatasetIncidentReadiness";
+import { isInvactQuery } from "@/components/cinematic/InvestigationScenarioKnowledgeActionability";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -100,6 +101,7 @@ export default function JarvisBrain() {
     if (isKgcdepQuery(q))  { window.dispatchEvent(new Event("jarvis:kgcdep-toggle")); }
     if (isSthrmatQuery(q)) { window.dispatchEvent(new Event("jarvis:sthrmat-toggle")); }
     if (isIrcapQuery(q))   { window.dispatchEvent(new Event("jarvis:ircap-toggle")); }
+    if (isInvactQuery(q))  { window.dispatchEvent(new Event("jarvis:invact-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

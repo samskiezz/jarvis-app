@@ -567,6 +567,7 @@ import ContactScenarioTaskMissionMatrix from '@/components/cinematic/ContactScen
 import KnowledgeGraphContactDepthMap from '@/components/cinematic/KnowledgeGraphContactDepthMap';
 import ScenarioRiskContactThreatMatrix from '@/components/cinematic/ScenarioRiskContactThreatMatrix';
 import OpsAlertSkillDatasetIncidentReadiness from '@/components/cinematic/OpsAlertSkillDatasetIncidentReadiness';
+import InvestigationScenarioKnowledgeActionability from '@/components/cinematic/InvestigationScenarioKnowledgeActionability';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1804,6 +1805,8 @@ function App() {
             <ScenarioRiskContactThreatMatrix />
             {/* F60 (overnight 2026-10-19): Ops Alert × Skill × Dataset Incident Response Capability — ◈ IRCAP button (left:81960, bottom:8, zIndex:157); fetches /v1/ops/alerts + /v1/aip/skill + /v1/datasets; keyword-matches each ops alert against skills AND datasets to classify as CAPABLE/SKILLED/DATAED/BLIND; stat tiles (alerts/skills/datasets/capable/skilled/dataed/blind); red pulse on BLIND count (alerts with no skill coverage and no supporting dataset); expandable rows show matched skills with score badge + matched datasets with row-count badge; filter tabs ALL/CAPABLE/SKILLED/DATAED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIrcapQuery+buildIrcapScript exported; "ircap"/"incident readiness"/"ops skill"/"alert response"/"response capability"/"ops dataset"/"blind alerts"/"incident capability"/"ops readiness"/"alert skill"/"ops incident" voice triggers; jarvis:ircap-toggle event; 90-s auto-refresh */}
             <OpsAlertSkillDatasetIncidentReadiness />
+            {/* F61 (overnight 2026-10-20): Investigation × Scenario × Knowledge Actionability — ◈ INVACT button (left:82520, bottom:8, zIndex:158); fetches /v1/investigations + /v1/scenario/list + /knowledge/; keyword-matches each investigation against scenarios AND knowledge articles to classify as ACTIONABLE/SCRIPTED/KNOWN/COLD; stat tiles (investigations/scenarios/articles/actionable/scripted/known/cold); amber pulse on COLD count (investigations with no operational support); expandable rows show matched scenarios with status badge + matched knowledge articles with category badge; filter tabs ALL/ACTIONABLE/SCRIPTED/KNOWN/COLD + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isInvactQuery exported; "invact"/"investigation actionability"/"cold cases"/"cold investigations"/"investigation scenario"/"investigation knowledge"/"actionable investigations"/"open cold cases"/"inv action"/"case readiness" voice triggers; jarvis:invact-toggle event; 90-s auto-refresh */}
+            <InvestigationScenarioKnowledgeActionability />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
