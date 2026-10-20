@@ -568,6 +568,7 @@ import KnowledgeGraphContactDepthMap from '@/components/cinematic/KnowledgeGraph
 import ScenarioRiskContactThreatMatrix from '@/components/cinematic/ScenarioRiskContactThreatMatrix';
 import OpsAlertSkillDatasetIncidentReadiness from '@/components/cinematic/OpsAlertSkillDatasetIncidentReadiness';
 import InvestigationScenarioKnowledgeActionability from '@/components/cinematic/InvestigationScenarioKnowledgeActionability';
+import BrainDatasetKnowledgeCoherence from '@/components/cinematic/BrainDatasetKnowledgeCoherence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1807,6 +1808,8 @@ function App() {
             <OpsAlertSkillDatasetIncidentReadiness />
             {/* F61 (overnight 2026-10-20): Investigation × Scenario × Knowledge Actionability — ◈ INVACT button (left:82520, bottom:8, zIndex:158); fetches /v1/investigations + /v1/scenario/list + /knowledge/; keyword-matches each investigation against scenarios AND knowledge articles to classify as ACTIONABLE/SCRIPTED/KNOWN/COLD; stat tiles (investigations/scenarios/articles/actionable/scripted/known/cold); amber pulse on COLD count (investigations with no operational support); expandable rows show matched scenarios with status badge + matched knowledge articles with category badge; filter tabs ALL/ACTIONABLE/SCRIPTED/KNOWN/COLD + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isInvactQuery exported; "invact"/"investigation actionability"/"cold cases"/"cold investigations"/"investigation scenario"/"investigation knowledge"/"actionable investigations"/"open cold cases"/"inv action"/"case readiness" voice triggers; jarvis:invact-toggle event; 90-s auto-refresh */}
             <InvestigationScenarioKnowledgeActionability />
+            {/* F62 (overnight 2026-10-20): Brain × Dataset × Knowledge Intelligence Coherence — ◈ BRNCOH button (left:83080, bottom:8, zIndex:159); fetches /v1/cinematic/brain + /v1/datasets + /knowledge/; extracts graph nodes from brain stats and keyword-matches each against datasets AND knowledge articles to classify as COHERENT/DATAED/KNOWN/DARK; stat tiles (nodes/datasets/articles/coherent/dataed/known/dark); amber pulse on DARK count (blind-spot nodes with no dataset or knowledge grounding); expandable rows show matched datasets with row-count badge + matched knowledge articles with category badge; filter tabs ALL/COHERENT/DATAED/KNOWN/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isBrncohQuery exported; "brncoh"/"brain coherence"/"brain dataset"/"brain knowledge"/"knowledge coherence"/"dataset coherence"/"brain coverage"/"intelligence coherence"/"brain grounding"/"dark nodes" voice triggers; jarvis:brncoh-toggle event; 90-s auto-refresh */}
+            <BrainDatasetKnowledgeCoherence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
