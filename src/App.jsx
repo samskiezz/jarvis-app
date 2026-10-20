@@ -586,6 +586,7 @@ import KnowledgeOpsAlertSwarmAwareness from '@/components/cinematic/KnowledgeOps
 import TaskSkillKnowledgeExecutionIntel from '@/components/cinematic/TaskSkillKnowledgeExecutionIntel';
 import ReportRiskSignalGraphWeb from '@/components/cinematic/ReportRiskSignalGraphWeb';
 import OpsAlertReportInvestigationCoverage from '@/components/cinematic/OpsAlertReportInvestigationCoverage';
+import SceneKnowledgeTaskMissionReadiness from '@/components/cinematic/SceneKnowledgeTaskMissionReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1860,6 +1861,8 @@ function App() {
             <ReportRiskSignalGraphWeb />
             {/* F79 (overnight 2026-10-20): Ops Alert × Report × Investigation Incident Coverage Chain — ◈ ORICOV button (left:92600, bottom:8, zIndex:176); fetches /v1/ops/alerts + /v1/reports + /v1/investigations; keyword-matches each alert against reports AND investigations to classify COVERED/FILED/TRACKED/OPEN; stat tiles (alerts/reports/invest./covered/filed/tracked/open); red pulse on OPEN count (alerts with no documentation or investigation); expandable rows show matched reports with date badge + matched investigations with status badge; filter tabs ALL/COVERED/FILED/TRACKED/OPEN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOricovQuery exported; "oricov"/"ops incident coverage"/"alert coverage"/"incident chain"/"open alerts"/"uncovered alerts"/"alert report"/"ops investigation"/"incident coverage chain"/"alert documentation"/"ops report coverage" voice triggers; jarvis:oricov-toggle event; 90-s auto-refresh */}
             <OpsAlertReportInvestigationCoverage />
+            {/* F80 (overnight 2026-10-20): Scene × Knowledge × Task Mission Readiness Map — ◈ SKTMRD button (left:93160, bottom:8, zIndex:177); fetches all 10 cinematic scenes (/v1/cinematic/scene/{1..10}) + /knowledge/ + /entities/Task; keyword-matches each scene's title+anchors against knowledge articles AND active tasks to classify READY/KNOWN/TASKED/DARK; stat tiles (scenes/knowledge/tasks/ready/known/tasked/dark); amber pulse on DARK count; expandable rows show matched knowledge articles with category badge + matched tasks with status badge; filter tabs ALL/READY/KNOWN/TASKED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSktmrdQuery exported; "sktmrd"/"scene readiness"/"mission readiness"/"scene knowledge"/"scene task"/"dark scenes"/"ungrounded scenes"/"cinematic readiness"/"scene mission"/"scene coverage" voice triggers; jarvis:sktmrd-toggle event; 90-s auto-refresh */}
+            <SceneKnowledgeTaskMissionReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
