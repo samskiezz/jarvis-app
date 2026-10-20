@@ -583,6 +583,7 @@ import ContactTaskGraphAccountability from '@/components/cinematic/ContactTaskGr
 import LiveIntelBrainSystemConvergence from '@/components/cinematic/LiveIntelBrainSystemConvergence';
 import OpsAlertIntelProfileGraphThreatNetwork from '@/components/cinematic/OpsAlertIntelProfileGraphThreatNetwork';
 import KnowledgeOpsAlertSwarmAwareness from '@/components/cinematic/KnowledgeOpsAlertSwarmAwareness';
+import TaskSkillKnowledgeExecutionIntel from '@/components/cinematic/TaskSkillKnowledgeExecutionIntel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1852,6 +1853,8 @@ function App() {
             <OpsAlertIntelProfileGraphThreatNetwork />
             {/* F76 (overnight 2026-10-20): Knowledge × Ops Alert × SwarmJob Situational Awareness Matrix — ◈ KOSAMAT button (left:90920, bottom:8, zIndex:173); fetches /knowledge/ + /v1/ops/alerts + /entities/SwarmJob; keyword-matches each knowledge article against ops alerts AND swarm jobs to classify AWARE/ALERTED/PROCESSING/BLIND; stat tiles (articles/alerts/jobs/aware/alerted/processing/blind); amber pulse on BLIND count (situational blind-spot articles with no alert and no swarm job match); expandable rows show matched ops alerts with severity badge + matched swarm jobs with status badge; filter tabs ALL/AWARE/ALERTED/PROCESSING/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKosamatQuery exported; "kosamat"/"knowledge ops awareness"/"aware knowledge"/"situational awareness"/"blind knowledge"/"knowledge alerts"/"knowledge swarm"/"ops knowledge coverage"/"knowledge monitoring"/"awareness audit" voice triggers; jarvis:kosamat-toggle event; 90-s auto-refresh */}
             <KnowledgeOpsAlertSwarmAwareness />
+            {/* F77 (overnight 2026-10-20): Task × Skill × Knowledge Execution Intelligence — ◈ TSKINTEL button (left:91480, bottom:8, zIndex:174); fetches /entities/Task + /v1/aip/skill + /knowledge/; keyword-matches each task against skills AND knowledge articles to classify CAPABLE/SKILLED/KNOWN/BLIND; stat tiles (tasks/skills/articles/capable/skilled/known/blind); amber pulse on BLIND count (tasks with no skill support and no knowledge grounding); expandable rows show matched skills with score badge + matched knowledge articles with category badge; filter tabs ALL/CAPABLE/SKILLED/KNOWN/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTskintelQuery exported; "tskintel"/"task skill knowledge"/"execution intelligence"/"blind tasks"/"task capability"/"task knowledge"/"skill task coverage"/"execution gaps"/"task blind spots"/"capability gap tasks" voice triggers; jarvis:tskintel-toggle event; 90-s auto-refresh */}
+            <TaskSkillKnowledgeExecutionIntel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
