@@ -580,6 +580,7 @@ import IntelProfileKnowledgeTaskExecutionMap from '@/components/cinematic/IntelP
 import SwarmScenarioKnowledgeReadiness from '@/components/cinematic/SwarmScenarioKnowledgeReadiness';
 import LiveIntelGraphDatasetEventSaturation from '@/components/cinematic/LiveIntelGraphDatasetEventSaturation';
 import ContactTaskGraphAccountability from '@/components/cinematic/ContactTaskGraphAccountability';
+import LiveIntelBrainSystemConvergence from '@/components/cinematic/LiveIntelBrainSystemConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1843,6 +1844,8 @@ function App() {
             <LiveIntelGraphDatasetEventSaturation />
             {/* F73 (overnight 2026-10-20): Contact × Task × Graph Mission Accountability Audit — ◈ CTGACC button (left:89240, bottom:8, zIndex:170); fetches /entities/Contact + /entities/Task + /v1/graph/centrality; keyword-matches each contact against tasks AND graph nodes to classify as ACCOUNTABLE/TASKED/TRACED/GHOST; stat tiles (contacts/tasks/nodes/accountable/tasked/traced/ghost); amber pulse on GHOST count (contacts with zero operational footprint); expandable rows show matched tasks with status badge + matched graph nodes with centrality score badge; filter tabs ALL/ACCOUNTABLE/TASKED/TRACED/GHOST + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCtgaccQuery exported; "ctgacc"/"contact accountability"/"contact task graph"/"ghost contacts"/"unaccountable contacts"/"contact mission"/"contact footprint"/"contact graph task"/"contact tracing"/"accountable contacts" voice triggers; jarvis:ctgacc-toggle event; 90-s auto-refresh */}
             <ContactTaskGraphAccountability />
+            {/* F74 (overnight 2026-10-20): LiveIntel × Brain × System Convergence Radar — ◈ LBCONV button (left:89800, bottom:8, zIndex:171); fetches /functions/getLiveIntel + /v1/cinematic/brain + /v1/jarvis/system/status; groups live events by category (quake region, crypto symbol, FX pair) and cross-references against brain node labels AND system service health to classify CONVERGED/SENSING/DEGRADED/BLIND; stat tiles (events/nodes/services/converged/sensing/degraded/blind); red pulse on BLIND count (live event types with no brain model + degraded system); expandable rows show matched brain nodes with centrality score badge + system service status list; filter tabs ALL/CONVERGED/SENSING/DEGRADED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLbconvQuery exported; "lbconv"/"convergence radar"/"live intel brain"/"system convergence"/"brain convergence"/"intel brain system"/"blind spots"/"convergence" voice triggers; jarvis:lbconv-toggle event; 90-s auto-refresh */}
+            <LiveIntelBrainSystemConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

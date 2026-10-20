@@ -20,6 +20,7 @@ import { isIpktexQuery } from "@/components/cinematic/IntelProfileKnowledgeTaskE
 import { isSwskrdyQuery } from "@/components/cinematic/SwarmScenarioKnowledgeReadiness";
 import { isLigdsatQuery } from "@/components/cinematic/LiveIntelGraphDatasetEventSaturation";
 import { isCtgaccQuery } from "@/components/cinematic/ContactTaskGraphAccountability";
+import { isLbconvQuery } from "@/components/cinematic/LiveIntelBrainSystemConvergence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -126,6 +127,7 @@ export default function JarvisBrain() {
     if (isSwskrdyQuery(q)) { window.dispatchEvent(new Event("jarvis:swskrdy-toggle")); }
     if (isLigdsatQuery(q)) { window.dispatchEvent(new Event("jarvis:ligsat-toggle")); }
     if (isCtgaccQuery(q))  { window.dispatchEvent(new Event("jarvis:ctgacc-toggle")); }
+    if (isLbconvQuery(q))  { window.dispatchEvent(new Event("jarvis:lbconv-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
