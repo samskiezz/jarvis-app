@@ -570,6 +570,7 @@ import OpsAlertSkillDatasetIncidentReadiness from '@/components/cinematic/OpsAle
 import InvestigationScenarioKnowledgeActionability from '@/components/cinematic/InvestigationScenarioKnowledgeActionability';
 import BrainDatasetKnowledgeCoherence from '@/components/cinematic/BrainDatasetKnowledgeCoherence';
 import ReportSkillContactCoverage from '@/components/cinematic/ReportSkillContactCoverage';
+import GraphContactInvestmentAssetMap from '@/components/cinematic/GraphContactInvestmentAssetMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1813,6 +1814,8 @@ function App() {
             <BrainDatasetKnowledgeCoherence />
             {/* F63 (overnight 2026-10-20): Report × Skill × Contact Authorship Coverage — ◈ RSCOV button (left:83640, bottom:8, zIndex:160); fetches /v1/reports + /v1/aip/skill + /entities/Contact; keyword-matches each report against skills AND contacts to classify as ATTRIBUTED/SKILLED/LINKED/UNKNOWN; stat tiles (reports/skills/contacts/attributed/skilled/linked/unknown); amber pulse on UNKNOWN count (orphaned reports with no skill or contact match); expandable rows show matched skills with score badge + matched contacts with role/org; filter tabs ALL/ATTRIBUTED/SKILLED/LINKED/UNKNOWN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRscovQuery exported; "rscov"/"report skill"/"report contact"/"authorship coverage"/"report coverage"/"skill contact"/"report attribution"/"unknown reports"/"orphaned reports"/"report audit" voice triggers; jarvis:rscov-toggle event; 90-s auto-refresh */}
             <ReportSkillContactCoverage />
+            {/* F64 (overnight 2026-10-20): Graph × Contact × Investment Strategic Asset Map — ◈ GCISAM button (left:84200, bottom:8, zIndex:161); fetches /v1/graph/centrality + /entities/Contact + /entities/Investment; keyword-matches each graph node against contacts AND investments to classify as STRATEGIC/CONNECTED/FUNDED/SHADOW; stat tiles (nodes/contacts/investments/strategic/connected/funded/shadow); red pulse on SHADOW count (blind-spot nodes with no contact or investment link); expandable rows show matched contacts with role/org + matched investments with type/value; filter tabs ALL/STRATEGIC/CONNECTED/FUNDED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGcisamQuery exported; "gcisam"/"graph contact investment"/"strategic asset map"/"strategic assets"/"asset map"/"connected assets"/"shadow nodes"/"graph investment"/"graph contact"/"asset coverage" voice triggers; jarvis:gcisam-toggle event; 90-s auto-refresh */}
+            <GraphContactInvestmentAssetMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
