@@ -574,6 +574,7 @@ import GraphContactInvestmentAssetMap from '@/components/cinematic/GraphContactI
 import IntelProfileSwarmReportLedger from '@/components/cinematic/IntelProfileSwarmReportLedger';
 import DatasetContactTaskOwnership from '@/components/cinematic/DatasetContactTaskOwnership';
 import SkillReportInvestigationRemediationCoverage from '@/components/cinematic/SkillReportInvestigationRemediationCoverage';
+import LiveIntelScenarioSkillCrisisReadiness from '@/components/cinematic/LiveIntelScenarioSkillCrisisReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1825,6 +1826,8 @@ function App() {
             <DatasetContactTaskOwnership />
             {/* F67 (overnight 2026-10-20): Skill × Report × Investigation Remediation Coverage — ◈ SRIRM button (left:85880, bottom:8, zIndex:164); fetches /v1/aip/skill + /v1/reports + /v1/investigations; keyword-matches each skill against reports AND investigations to classify as REMEDIATED/SCRIPTED/FILED/IDLE; stat tiles (skills/reports/investigations/remediated/scripted/filed/idle); amber pulse on IDLE count (skills with no report trail and no investigation — blind spots); expandable rows show matched reports with date badge + matched investigations with status badge; filter tabs ALL/REMEDIATED/SCRIPTED/FILED/IDLE + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSrirmQuery exported; "srirm"/"skill remediation"/"skill report investigation"/"idle skills"/"remediation coverage"/"skill investigation"/"skill coverage"/"remediated skills"/"skill report coverage"/"skill filing" voice triggers; jarvis:srirm-toggle event; 90-s auto-refresh */}
             <SkillReportInvestigationRemediationCoverage />
+            {/* F68 (overnight 2026-10-20): Live Intel × Scenario × Skill Crisis Response Coverage — ◈ LCRCOV button (left:86440, bottom:8, zIndex:165); fetches /functions/getLiveIntel + /v1/scenario/list + /v1/aip/skill; keyword-matches each live intel event (quake/crypto/fx) against scenarios AND skills to classify as READY/SCRIPTED/SKILLED/BLIND; stat tiles (events/ready/scripted/skilled/blind); red pulse on BLIND count (undefended event types); expandable rows show matched scenarios with status badge + matched skills with score badge; filter tabs ALL/READY/SCRIPTED/SKILLED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLcrcovQuery exported; "lcrcov"/"live crisis"/"crisis readiness"/"crisis response coverage"/"intel scenario skill"/"blind events"/"undefended events"/"live intel crisis"/"event coverage"/"event readiness" voice triggers; jarvis:lcrcov-toggle event; 90-s auto-refresh */}
+            <LiveIntelScenarioSkillCrisisReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
