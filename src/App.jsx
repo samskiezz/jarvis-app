@@ -578,6 +578,7 @@ import LiveIntelScenarioSkillCrisisReadiness from '@/components/cinematic/LiveIn
 import TaskGraphIntelProfileMissionNetwork from '@/components/cinematic/TaskGraphIntelProfileMissionNetwork';
 import IntelProfileKnowledgeTaskExecutionMap from '@/components/cinematic/IntelProfileKnowledgeTaskExecutionMap';
 import SwarmScenarioKnowledgeReadiness from '@/components/cinematic/SwarmScenarioKnowledgeReadiness';
+import LiveIntelGraphDatasetEventSaturation from '@/components/cinematic/LiveIntelGraphDatasetEventSaturation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1837,6 +1838,8 @@ function App() {
             <IntelProfileKnowledgeTaskExecutionMap />
             {/* F71 (overnight 2026-10-20): SwarmJob × Scenario × Knowledge Tactical Readiness Index — ◈ SWSKRDY button (left:88120, bottom:8, zIndex:168); fetches /entities/SwarmJob + /v1/scenario/list + /knowledge/; keyword-matches each swarm job against scenarios AND knowledge articles to classify as READY/OPERATIONAL/PLANNED/BLIND; stat tiles (jobs/scenarios/knowledge/ready/operational/planned/blind); amber pulse on BLIND count (unsupported automation blind spots); expandable rows show matched scenarios with status badge + matched knowledge articles with category badge; filter tabs ALL/READY/OPERATIONAL/PLANNED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwskrdyQuery exported; "swskrdy"/"swarm readiness"/"swarm scenario knowledge"/"swarm tactical"/"tactical readiness"/"blind swarms"/"swarm blind"/"swarm knowledge"/"swarm scenario"/"swarm support" voice triggers; jarvis:swskrdy-toggle event; 90-s auto-refresh */}
             <SwarmScenarioKnowledgeReadiness />
+            {/* F72 (overnight 2026-10-20): Live Intel × Graph × Dataset Event Saturation Map — ◈ LIGSAT button (left:88680, bottom:8, zIndex:169); fetches /functions/getLiveIntel + /v1/graph/centrality + /v1/datasets; keyword-matches each live intel event (quake/crypto/fx) against graph centrality nodes AND datasets to classify as MAPPED/TRACED/DATAED/DARK; stat tiles (events/nodes/datasets/mapped/traced/dataed/dark); amber pulse on DARK count (events with zero intelligence grounding); expandable rows show matched graph nodes with centrality score badge + matched datasets with row-count badge; filter tabs ALL/MAPPED/TRACED/DATAED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLigdsatQuery exported; "ligsat"/"live intel graph"/"event saturation"/"intel event map"/"dark events"/"unmapped events"/"live event graph"/"event dataset"/"event coverage"/"live graph dataset"/"intel saturation" voice triggers; jarvis:ligsat-toggle event; 90-s auto-refresh */}
+            <LiveIntelGraphDatasetEventSaturation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

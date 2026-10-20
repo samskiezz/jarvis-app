@@ -18,6 +18,7 @@ import { isLcrcovQuery } from "@/components/cinematic/LiveIntelScenarioSkillCris
 import { isTginetQuery } from "@/components/cinematic/TaskGraphIntelProfileMissionNetwork";
 import { isIpktexQuery } from "@/components/cinematic/IntelProfileKnowledgeTaskExecutionMap";
 import { isSwskrdyQuery } from "@/components/cinematic/SwarmScenarioKnowledgeReadiness";
+import { isLigdsatQuery } from "@/components/cinematic/LiveIntelGraphDatasetEventSaturation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -122,6 +123,7 @@ export default function JarvisBrain() {
     if (isTginetQuery(q))  { window.dispatchEvent(new Event("jarvis:tginet-toggle")); }
     if (isIpktexQuery(q))  { window.dispatchEvent(new Event("jarvis:ipktex-toggle")); }
     if (isSwskrdyQuery(q)) { window.dispatchEvent(new Event("jarvis:swskrdy-toggle")); }
+    if (isLigdsatQuery(q)) { window.dispatchEvent(new Event("jarvis:ligsat-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
