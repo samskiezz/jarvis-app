@@ -581,6 +581,7 @@ import SwarmScenarioKnowledgeReadiness from '@/components/cinematic/SwarmScenari
 import LiveIntelGraphDatasetEventSaturation from '@/components/cinematic/LiveIntelGraphDatasetEventSaturation';
 import ContactTaskGraphAccountability from '@/components/cinematic/ContactTaskGraphAccountability';
 import LiveIntelBrainSystemConvergence from '@/components/cinematic/LiveIntelBrainSystemConvergence';
+import OpsAlertIntelProfileGraphThreatNetwork from '@/components/cinematic/OpsAlertIntelProfileGraphThreatNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1846,6 +1847,8 @@ function App() {
             <ContactTaskGraphAccountability />
             {/* F74 (overnight 2026-10-20): LiveIntel × Brain × System Convergence Radar — ◈ LBCONV button (left:89800, bottom:8, zIndex:171); fetches /functions/getLiveIntel + /v1/cinematic/brain + /v1/jarvis/system/status; groups live events by category (quake region, crypto symbol, FX pair) and cross-references against brain node labels AND system service health to classify CONVERGED/SENSING/DEGRADED/BLIND; stat tiles (events/nodes/services/converged/sensing/degraded/blind); red pulse on BLIND count (live event types with no brain model + degraded system); expandable rows show matched brain nodes with centrality score badge + system service status list; filter tabs ALL/CONVERGED/SENSING/DEGRADED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLbconvQuery exported; "lbconv"/"convergence radar"/"live intel brain"/"system convergence"/"brain convergence"/"intel brain system"/"blind spots"/"convergence" voice triggers; jarvis:lbconv-toggle event; 90-s auto-refresh */}
             <LiveIntelBrainSystemConvergence />
+            {/* F75 (overnight 2026-10-20): Ops Alert × IntelProfile × Graph Threat Response Network — ◈ OAGNET button (left:90360, bottom:8, zIndex:172); fetches /v1/ops/alerts + /entities/IntelProfile + /v1/graph/centrality; keyword-matches each ops alert against intel profiles AND graph centrality nodes to classify ATTRIBUTED/PROFILED/TRACED/DARK; stat tiles (alerts/profiles/nodes/attributed/profiled/traced/dark); red pulse on DARK count (untracked threat alerts with no intel profile or graph trace); expandable rows show matched intel profiles with category badge + matched graph nodes with centrality score badge; filter tabs ALL/ATTRIBUTED/PROFILED/TRACED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOagnetQuery exported; "oagnet"/"ops alert intel"/"threat network"/"alert intel graph"/"threat response network"/"alert attribution"/"ops threat network" voice triggers; jarvis:oagnet-toggle event; 90-s auto-refresh */}
+            <OpsAlertIntelProfileGraphThreatNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
