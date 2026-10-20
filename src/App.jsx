@@ -582,6 +582,7 @@ import LiveIntelGraphDatasetEventSaturation from '@/components/cinematic/LiveInt
 import ContactTaskGraphAccountability from '@/components/cinematic/ContactTaskGraphAccountability';
 import LiveIntelBrainSystemConvergence from '@/components/cinematic/LiveIntelBrainSystemConvergence';
 import OpsAlertIntelProfileGraphThreatNetwork from '@/components/cinematic/OpsAlertIntelProfileGraphThreatNetwork';
+import KnowledgeOpsAlertSwarmAwareness from '@/components/cinematic/KnowledgeOpsAlertSwarmAwareness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1849,6 +1850,8 @@ function App() {
             <LiveIntelBrainSystemConvergence />
             {/* F75 (overnight 2026-10-20): Ops Alert × IntelProfile × Graph Threat Response Network — ◈ OAGNET button (left:90360, bottom:8, zIndex:172); fetches /v1/ops/alerts + /entities/IntelProfile + /v1/graph/centrality; keyword-matches each ops alert against intel profiles AND graph centrality nodes to classify ATTRIBUTED/PROFILED/TRACED/DARK; stat tiles (alerts/profiles/nodes/attributed/profiled/traced/dark); red pulse on DARK count (untracked threat alerts with no intel profile or graph trace); expandable rows show matched intel profiles with category badge + matched graph nodes with centrality score badge; filter tabs ALL/ATTRIBUTED/PROFILED/TRACED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOagnetQuery exported; "oagnet"/"ops alert intel"/"threat network"/"alert intel graph"/"threat response network"/"alert attribution"/"ops threat network" voice triggers; jarvis:oagnet-toggle event; 90-s auto-refresh */}
             <OpsAlertIntelProfileGraphThreatNetwork />
+            {/* F76 (overnight 2026-10-20): Knowledge × Ops Alert × SwarmJob Situational Awareness Matrix — ◈ KOSAMAT button (left:90920, bottom:8, zIndex:173); fetches /knowledge/ + /v1/ops/alerts + /entities/SwarmJob; keyword-matches each knowledge article against ops alerts AND swarm jobs to classify AWARE/ALERTED/PROCESSING/BLIND; stat tiles (articles/alerts/jobs/aware/alerted/processing/blind); amber pulse on BLIND count (situational blind-spot articles with no alert and no swarm job match); expandable rows show matched ops alerts with severity badge + matched swarm jobs with status badge; filter tabs ALL/AWARE/ALERTED/PROCESSING/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKosamatQuery exported; "kosamat"/"knowledge ops awareness"/"aware knowledge"/"situational awareness"/"blind knowledge"/"knowledge alerts"/"knowledge swarm"/"ops knowledge coverage"/"knowledge monitoring"/"awareness audit" voice triggers; jarvis:kosamat-toggle event; 90-s auto-refresh */}
+            <KnowledgeOpsAlertSwarmAwareness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
