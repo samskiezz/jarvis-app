@@ -569,6 +569,7 @@ import ScenarioRiskContactThreatMatrix from '@/components/cinematic/ScenarioRisk
 import OpsAlertSkillDatasetIncidentReadiness from '@/components/cinematic/OpsAlertSkillDatasetIncidentReadiness';
 import InvestigationScenarioKnowledgeActionability from '@/components/cinematic/InvestigationScenarioKnowledgeActionability';
 import BrainDatasetKnowledgeCoherence from '@/components/cinematic/BrainDatasetKnowledgeCoherence';
+import ReportSkillContactCoverage from '@/components/cinematic/ReportSkillContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1810,6 +1811,8 @@ function App() {
             <InvestigationScenarioKnowledgeActionability />
             {/* F62 (overnight 2026-10-20): Brain × Dataset × Knowledge Intelligence Coherence — ◈ BRNCOH button (left:83080, bottom:8, zIndex:159); fetches /v1/cinematic/brain + /v1/datasets + /knowledge/; extracts graph nodes from brain stats and keyword-matches each against datasets AND knowledge articles to classify as COHERENT/DATAED/KNOWN/DARK; stat tiles (nodes/datasets/articles/coherent/dataed/known/dark); amber pulse on DARK count (blind-spot nodes with no dataset or knowledge grounding); expandable rows show matched datasets with row-count badge + matched knowledge articles with category badge; filter tabs ALL/COHERENT/DATAED/KNOWN/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isBrncohQuery exported; "brncoh"/"brain coherence"/"brain dataset"/"brain knowledge"/"knowledge coherence"/"dataset coherence"/"brain coverage"/"intelligence coherence"/"brain grounding"/"dark nodes" voice triggers; jarvis:brncoh-toggle event; 90-s auto-refresh */}
             <BrainDatasetKnowledgeCoherence />
+            {/* F63 (overnight 2026-10-20): Report × Skill × Contact Authorship Coverage — ◈ RSCOV button (left:83640, bottom:8, zIndex:160); fetches /v1/reports + /v1/aip/skill + /entities/Contact; keyword-matches each report against skills AND contacts to classify as ATTRIBUTED/SKILLED/LINKED/UNKNOWN; stat tiles (reports/skills/contacts/attributed/skilled/linked/unknown); amber pulse on UNKNOWN count (orphaned reports with no skill or contact match); expandable rows show matched skills with score badge + matched contacts with role/org; filter tabs ALL/ATTRIBUTED/SKILLED/LINKED/UNKNOWN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRscovQuery exported; "rscov"/"report skill"/"report contact"/"authorship coverage"/"report coverage"/"skill contact"/"report attribution"/"unknown reports"/"orphaned reports"/"report audit" voice triggers; jarvis:rscov-toggle event; 90-s auto-refresh */}
+            <ReportSkillContactCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
