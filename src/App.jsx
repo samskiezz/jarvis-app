@@ -587,6 +587,7 @@ import TaskSkillKnowledgeExecutionIntel from '@/components/cinematic/TaskSkillKn
 import ReportRiskSignalGraphWeb from '@/components/cinematic/ReportRiskSignalGraphWeb';
 import OpsAlertReportInvestigationCoverage from '@/components/cinematic/OpsAlertReportInvestigationCoverage';
 import SceneKnowledgeTaskMissionReadiness from '@/components/cinematic/SceneKnowledgeTaskMissionReadiness';
+import ReportGraphContactAttributionMap from '@/components/cinematic/ReportGraphContactAttributionMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1863,6 +1864,8 @@ function App() {
             <OpsAlertReportInvestigationCoverage />
             {/* F80 (overnight 2026-10-20): Scene × Knowledge × Task Mission Readiness Map — ◈ SKTMRD button (left:93160, bottom:8, zIndex:177); fetches all 10 cinematic scenes (/v1/cinematic/scene/{1..10}) + /knowledge/ + /entities/Task; keyword-matches each scene's title+anchors against knowledge articles AND active tasks to classify READY/KNOWN/TASKED/DARK; stat tiles (scenes/knowledge/tasks/ready/known/tasked/dark); amber pulse on DARK count; expandable rows show matched knowledge articles with category badge + matched tasks with status badge; filter tabs ALL/READY/KNOWN/TASKED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSktmrdQuery exported; "sktmrd"/"scene readiness"/"mission readiness"/"scene knowledge"/"scene task"/"dark scenes"/"ungrounded scenes"/"cinematic readiness"/"scene mission"/"scene coverage" voice triggers; jarvis:sktmrd-toggle event; 90-s auto-refresh */}
             <SceneKnowledgeTaskMissionReadiness />
+            {/* F81 (overnight 2026-10-20): Report × Graph × Contact Intelligence Attribution Map — ◈ RGCATTR button (left:93720, bottom:8, zIndex:178); fetches /v1/reports + /v1/graph/centrality + /entities/Contact; keyword-matches each report against graph nodes AND contacts to classify ATTRIBUTED/TRACED/LINKED/ORPHAN; stat tiles (reports/nodes/contacts/attributed/traced/linked/orphan); amber pulse on ORPHAN count (unlinked reports with no graph or contact anchor); expandable rows show matched graph nodes with centrality score badge + matched contacts with role/org; filter tabs ALL/ATTRIBUTED/TRACED/LINKED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRgcattrQuery exported; "rgcattr"/"report attribution"/"report graph contact"/"orphan reports"/"report intelligence attribution"/"unattributed reports"/"report contact"/"report graph" voice triggers; jarvis:rgcattr-toggle event; 90-s auto-refresh */}
+            <ReportGraphContactAttributionMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
