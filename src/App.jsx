@@ -592,6 +592,7 @@ import IntelProfileOpsAlertTaskEscalation from '@/components/cinematic/IntelProf
 import GraphScenarioReportCoverageMap from '@/components/cinematic/GraphScenarioReportCoverageMap';
 import SwarmContactGraphOperationalNetwork from '@/components/cinematic/SwarmContactGraphOperationalNetwork';
 import DatasetScenarioRiskThreatExposure from '@/components/cinematic/DatasetScenarioRiskThreatExposure';
+import SkillGraphScenarioExecutionCoverage from '@/components/cinematic/SkillGraphScenarioExecutionCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1878,6 +1879,8 @@ function App() {
             <SwarmContactGraphOperationalNetwork />
             {/* F85 (overnight 2026-10-21): Dataset × Scenario × RiskSignal Threat Exposure Coverage Matrix — ◈ DSRTX button (left:95960, bottom:8, zIndex:182); fetches /v1/datasets + /v1/scenario/list + /entities/RiskSignal; keyword-matches each dataset against scenarios AND risk signals to classify SECURED/SCRIPTED/SIGNALED/EXPOSED; stat tiles (datasets/scenarios/signals/secured/scripted/signaled/exposed); red pulse on EXPOSED count (datasets with no scenario coverage and no threat signal — full blind spots); expandable rows show matched scenarios with status badge + matched risk signals with severity badge; filter tabs ALL/SECURED/SCRIPTED/SIGNALED/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDsrtxQuery exported; "dsrtx"/"dataset threat"/"dataset exposure"/"threat exposure coverage"/"exposed datasets"/"dataset risk scenario"/"scenario coverage datasets"/"threat scenario coverage"/"dataset threat exposure" voice triggers; jarvis:dsrtx-toggle event; 90-s auto-refresh */}
             <DatasetScenarioRiskThreatExposure />
+            {/* F86 (overnight 2026-10-21): Skill × Graph × Scenario Strategic Execution Coverage — ◈ SGSCEX button (left:96520, bottom:8, zIndex:183); fetches /v1/aip/skill + /v1/graph/centrality + /v1/scenario/list; keyword-matches each skill against graph nodes AND scenarios to classify DEPLOYED/NETWORKED/SCRIPTED/ISOLATED; stat tiles (skills/nodes/scenarios/deployed/networked/scripted/isolated); amber pulse on ISOLATED count (blind-spot skills with no graph presence and no runnable scenario); expandable rows show matched graph nodes with centrality score badge + matched scenarios with status badge; filter tabs ALL/DEPLOYED/NETWORKED/SCRIPTED/ISOLATED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSgscexQuery exported; "sgscex"/"skill graph scenario"/"execution coverage"/"isolated skills"/"skill execution"/"skill network scenario"/"skill coverage"/"deployment gap"/"skill deployment"/"skill blind spots"/"skill strategic coverage" voice triggers; jarvis:sgscex-toggle event; 90-s auto-refresh */}
+            <SkillGraphScenarioExecutionCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
