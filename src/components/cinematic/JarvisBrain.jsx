@@ -36,6 +36,7 @@ import { isIwsdefQuery } from "@/components/cinematic/InvestmentSkillScenarioDef
 import { isCkobrfQuery } from "@/components/cinematic/ContactKnowledgeOpsAlertBriefing";
 import { isSciramQuery } from "@/components/cinematic/SkillContactInvestmentReadiness";
 import { isSwgkconvQuery } from "@/components/cinematic/SwarmGraphKnowledgeConvergence";
+import { isSgrsawQuery } from "@/components/cinematic/SceneGraphRiskSituationalAwareness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -158,6 +159,7 @@ export default function JarvisBrain() {
     if (isCkobrfQuery(q))  { window.dispatchEvent(new Event("jarvis:ckobrf-toggle")); }
     if (isSciramQuery(q))   { window.dispatchEvent(new Event("jarvis:sciram-toggle")); }
     if (isSwgkconvQuery(q)) { window.dispatchEvent(new Event("jarvis:swgkconv-toggle")); }
+    if (isSgrsawQuery(q))   { window.dispatchEvent(new Event("jarvis:sgrsaw-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

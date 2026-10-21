@@ -599,6 +599,7 @@ import InvestmentSkillScenarioDefenseCoverage from '@/components/cinematic/Inves
 import ContactKnowledgeOpsAlertBriefing from '@/components/cinematic/ContactKnowledgeOpsAlertBriefing';
 import SkillContactInvestmentReadiness from '@/components/cinematic/SkillContactInvestmentReadiness';
 import SwarmGraphKnowledgeConvergence from '@/components/cinematic/SwarmGraphKnowledgeConvergence';
+import SceneGraphRiskSituationalAwareness from '@/components/cinematic/SceneGraphRiskSituationalAwareness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1899,6 +1900,8 @@ function App() {
             <SkillContactInvestmentReadiness />
             {/* F92 (overnight 2026-10-21): SwarmJob × Graph × Knowledge Convergence Intelligence — ◈ SWGKCONV button (left:99880, bottom:8, zIndex:189); fetches /entities/SwarmJob + /v1/graph/centrality + /knowledge/; keyword-matches each swarm job (name/type/description) against graph centrality node labels AND knowledge article titles/categories to classify CONVERGED/TRACED/DOCUMENTED/ISOLATED; stat tiles (jobs/nodes/articles/converged/traced/documented/isolated); amber pulse on ISOLATED count (automation blind spots with no graph presence and no knowledge grounding); expandable rows show matched graph nodes with centrality score badge + matched knowledge articles with category badge; filter tabs ALL/CONVERGED/TRACED/DOCUMENTED/ISOLATED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwgkconvQuery exported; "swgkconv"/"swarm graph knowledge"/"swarm convergence"/"isolated swarms"/"automation intelligence"/"swarm knowledge gap"/"swarm graph convergence"/"automation blind spot"/"swarm isolated"/"swarm grounding" voice triggers; jarvis:swgkconv-toggle event; 90-s auto-refresh */}
             <SwarmGraphKnowledgeConvergence />
+            {/* F93 (overnight 2026-10-21): Scene × Graph × RiskSignal Strategic Situational Awareness — ◈ SGRSAW button (left:100440, bottom:8, zIndex:190); fetches all 10 cinematic scenes (/v1/cinematic/scene/{1..10}) + /v1/graph/centrality + /entities/RiskSignal; keyword-matches each scene's title/description/anchors against graph centrality node labels AND risk signal names/categories to classify AWARE/TRACED/SIGNALED/BLIND; stat tiles (scenes/nodes/signals/aware/traced/signaled/blind); red pulse on BLIND count (scenes with no graph trace and no risk signal — operational blind spots); expandable rows show matched graph nodes with centrality score badge + matched risk signals with severity badge; filter tabs ALL/AWARE/TRACED/SIGNALED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSgrsawQuery exported; "sgrsaw"/"scene graph risk"/"situational awareness"/"scene risk"/"scene blind spot"/"scene threat"/"scene intelligence"/"scene risk coverage"/"scene situational"/"strategic awareness"/"blind scenes"/"scene grounding" voice triggers; jarvis:sgrsaw-toggle event; 90-s auto-refresh */}
+            <SceneGraphRiskSituationalAwareness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
