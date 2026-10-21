@@ -593,6 +593,7 @@ import GraphScenarioReportCoverageMap from '@/components/cinematic/GraphScenario
 import SwarmContactGraphOperationalNetwork from '@/components/cinematic/SwarmContactGraphOperationalNetwork';
 import DatasetScenarioRiskThreatExposure from '@/components/cinematic/DatasetScenarioRiskThreatExposure';
 import SkillGraphScenarioExecutionCoverage from '@/components/cinematic/SkillGraphScenarioExecutionCoverage';
+import InvestigationIntelSkillResponseIndex from '@/components/cinematic/InvestigationIntelSkillResponseIndex';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1881,6 +1882,8 @@ function App() {
             <DatasetScenarioRiskThreatExposure />
             {/* F86 (overnight 2026-10-21): Skill × Graph × Scenario Strategic Execution Coverage — ◈ SGSCEX button (left:96520, bottom:8, zIndex:183); fetches /v1/aip/skill + /v1/graph/centrality + /v1/scenario/list; keyword-matches each skill against graph nodes AND scenarios to classify DEPLOYED/NETWORKED/SCRIPTED/ISOLATED; stat tiles (skills/nodes/scenarios/deployed/networked/scripted/isolated); amber pulse on ISOLATED count (blind-spot skills with no graph presence and no runnable scenario); expandable rows show matched graph nodes with centrality score badge + matched scenarios with status badge; filter tabs ALL/DEPLOYED/NETWORKED/SCRIPTED/ISOLATED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSgscexQuery exported; "sgscex"/"skill graph scenario"/"execution coverage"/"isolated skills"/"skill execution"/"skill network scenario"/"skill coverage"/"deployment gap"/"skill deployment"/"skill blind spots"/"skill strategic coverage" voice triggers; jarvis:sgscex-toggle event; 90-s auto-refresh */}
             <SkillGraphScenarioExecutionCoverage />
+            {/* F87 (overnight 2026-10-21): Investigation × IntelProfile × Skill Active Response Index — ◈ IIRSRP button (left:97080, bottom:8, zIndex:184); fetches /v1/investigations + /entities/IntelProfile + /v1/aip/skill; keyword-matches each investigation against intel profile names/categories AND skill names/descriptions to classify RESPONDING/PROFILED/CAPABLE/OPEN; stat tiles (investigations/profiles/skills/responding/profiled/capable/open); red pulse on OPEN count (undefended open cases with no intel profile and no matching skill); expandable rows show matched intel profiles with category badge + matched skills with score badge; filter tabs ALL/RESPONDING/PROFILED/CAPABLE/OPEN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIirsrpQuery exported; "iirsrp"/"investigation intel skill"/"active response index"/"open investigations"/"investigation response"/"undefended cases"/"investigation profile skill"/"response index"/"investigation capability"/"open cases skill"/"investigation blind spots"/"response pipeline" voice triggers; jarvis:iirsrp-toggle event; 90-s auto-refresh */}
+            <InvestigationIntelSkillResponseIndex />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
