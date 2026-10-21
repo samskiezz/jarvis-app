@@ -598,6 +598,7 @@ import LiveIntelTaskOpsAlertThreatResponse from '@/components/cinematic/LiveInte
 import InvestmentSkillScenarioDefenseCoverage from '@/components/cinematic/InvestmentSkillScenarioDefenseCoverage';
 import ContactKnowledgeOpsAlertBriefing from '@/components/cinematic/ContactKnowledgeOpsAlertBriefing';
 import SkillContactInvestmentReadiness from '@/components/cinematic/SkillContactInvestmentReadiness';
+import SwarmGraphKnowledgeConvergence from '@/components/cinematic/SwarmGraphKnowledgeConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1896,6 +1897,8 @@ function App() {
             <ContactKnowledgeOpsAlertBriefing />
             {/* F91 (overnight 2026-10-21): Skill × Contact × Investment Strategic Readiness Matrix — ◈ SCIRAM button (left:99320, bottom:8, zIndex:188); fetches /v1/aip/skill + /entities/Contact + /entities/Investment; keyword-matches each skill (name/description/category) against contact names/roles/organisations AND investment names/types/asset_classes to classify READY/SUPPORTED/FUNDED/BLIND; stat tiles (skills/contacts/investments/ready/supported/funded/blind); amber pulse on BLIND count (unanchored capabilities — skills with no contact owner and no investment backing); expandable rows show matched contacts with role/org badge + matched investments with type/value badge; filter tabs ALL/READY/SUPPORTED/FUNDED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSciramQuery exported; "sciram"/"skill contact investment"/"skill funding"/"blind skills"/"skill readiness"/"skill support"/"capability readiness"/"funded skills"/"supported skills"/"skill owner"/"unanchored skills"/"skill coverage" voice triggers; jarvis:sciram-toggle event; 90-s auto-refresh */}
             <SkillContactInvestmentReadiness />
+            {/* F92 (overnight 2026-10-21): SwarmJob × Graph × Knowledge Convergence Intelligence — ◈ SWGKCONV button (left:99880, bottom:8, zIndex:189); fetches /entities/SwarmJob + /v1/graph/centrality + /knowledge/; keyword-matches each swarm job (name/type/description) against graph centrality node labels AND knowledge article titles/categories to classify CONVERGED/TRACED/DOCUMENTED/ISOLATED; stat tiles (jobs/nodes/articles/converged/traced/documented/isolated); amber pulse on ISOLATED count (automation blind spots with no graph presence and no knowledge grounding); expandable rows show matched graph nodes with centrality score badge + matched knowledge articles with category badge; filter tabs ALL/CONVERGED/TRACED/DOCUMENTED/ISOLATED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwgkconvQuery exported; "swgkconv"/"swarm graph knowledge"/"swarm convergence"/"isolated swarms"/"automation intelligence"/"swarm knowledge gap"/"swarm graph convergence"/"automation blind spot"/"swarm isolated"/"swarm grounding" voice triggers; jarvis:swgkconv-toggle event; 90-s auto-refresh */}
+            <SwarmGraphKnowledgeConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

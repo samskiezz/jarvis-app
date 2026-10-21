@@ -94,3 +94,4 @@
 [2026-10-21] F89 InvestmentSkillScenarioDefenseCoverage.jsx: Investment × Skill × Scenario Wealth Defense Coverage (DEFENDED/SKILLED/SCRIPTED/EXPOSED); ◈ IWSDEF (left:98200, zIndex:186); Vite build exit:0
 [2026-10-21] F90 ContactKnowledgeOpsAlertBriefing.jsx — Contact × Knowledge × Ops Alert Situational Briefing Matrix; BRIEFED/ALERTED/KNOWN/DARK; ◈ CKOBRF (left:98760, zIndex:187); amber pulse on DARK; isCkobrfQuery wired JarvisBrain; Vite build exit:0; pushed to jarvis-overnight
 [2026-10-21] F91 SkillContactInvestmentReadiness.jsx — Skill×Contact×Investment READY/SUPPORTED/FUNDED/BLIND matrix; SCIRAM toggle; Vite build exit:0
+[2026-10-21] F92 SwarmGraphKnowledgeConvergence.jsx — SwarmJob × Graph × Knowledge Convergence Intelligence; ◈ SWGKCONV; /entities/SwarmJob + /v1/graph/centrality + /knowledge/; CONVERGED/TRACED/DOCUMENTED/ISOLATED; Vite build exit:0; pushed to jarvis-overnight

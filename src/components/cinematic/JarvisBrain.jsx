@@ -35,6 +35,7 @@ import { isLtorcaQuery } from "@/components/cinematic/LiveIntelTaskOpsAlertThrea
 import { isIwsdefQuery } from "@/components/cinematic/InvestmentSkillScenarioDefenseCoverage";
 import { isCkobrfQuery } from "@/components/cinematic/ContactKnowledgeOpsAlertBriefing";
 import { isSciramQuery } from "@/components/cinematic/SkillContactInvestmentReadiness";
+import { isSwgkconvQuery } from "@/components/cinematic/SwarmGraphKnowledgeConvergence";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -155,7 +156,8 @@ export default function JarvisBrain() {
     if (isLtorcaQuery(q))  { window.dispatchEvent(new Event("jarvis:ltorca-toggle")); }
     if (isIwsdefQuery(q))  { window.dispatchEvent(new Event("jarvis:iwsdef-toggle")); }
     if (isCkobrfQuery(q))  { window.dispatchEvent(new Event("jarvis:ckobrf-toggle")); }
-    if (isSciramQuery(q))  { window.dispatchEvent(new Event("jarvis:sciram-toggle")); }
+    if (isSciramQuery(q))   { window.dispatchEvent(new Event("jarvis:sciram-toggle")); }
+    if (isSwgkconvQuery(q)) { window.dispatchEvent(new Event("jarvis:swgkconv-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
