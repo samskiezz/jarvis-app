@@ -606,6 +606,7 @@ import SceneSystemStatusOpsPosture from '@/components/cinematic/SceneSystemStatu
 import BrainOpsAlertScenarioReadiness from '@/components/cinematic/BrainOpsAlertScenarioReadiness';
 import GraphTaskKnowledgeContactNexus from '@/components/cinematic/GraphTaskKnowledgeContactNexus';
 import ContactInvestigationBrainAttribution from '@/components/cinematic/ContactInvestigationBrainAttribution';
+import RiskInvestmentWealthExposure from '@/components/cinematic/RiskInvestmentWealthExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1919,6 +1920,8 @@ function App() {
             <GraphTaskKnowledgeContactNexus />
             {/* F99 (overnight 2026-10-21): Contact × Investigation × Brain Threat Attribution Intelligence — ◈ CIBATT button (left:103800, bottom:8, zIndex:196); fetches /entities/Contact + /v1/investigations + /v1/cinematic/brain; keyword-matches each contact (name/role/org/aliases) against investigation titles/descriptions AND brain node labels to classify ATTRIBUTED/TRACED/TRACKED/GHOST; stat tiles (contacts/investigations/nodes/attributed/traced/tracked/ghost); amber pulse on GHOST count (unknown actors with zero coverage); expandable rows show matched investigations with status badge + matched brain nodes with centrality score badge; filter tabs ALL/ATTRIBUTED/TRACED/TRACKED/GHOST + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCibattQuery exported; "cibatt"/"contact brain attribution"/"contact investigation brain"/"ghost contacts"/"unknown actors"/"contact attribution"/"contact brain"/"contact investigation attribution"/"actor brain"/"contact brain investigation"/"actor attribution"/"contact ghost" voice triggers; jarvis:cibatt-toggle event; 90-s auto-refresh */}
             <ContactInvestigationBrainAttribution />
+            {/* F100 (overnight 2026-10-21): RiskSignal × Investment × Contact × Knowledge Threat Wealth Exposure Matrix — ◈ RIWEX button (left:104360, bottom:8, zIndex:197); fetches /entities/RiskSignal + /entities/Investment + /entities/Contact + /knowledge/; keyword-matches each investment against risk signals AND contacts AND knowledge articles to classify DEFENDED/MONITORED/LINKED/EXPOSED; stat tiles (investments/signals/contacts/articles/defended/monitored/linked/exposed); red pulse on EXPOSED count (wealth blind spots — unmonitored investments with zero threat-signal, contact, or knowledge grounding); expandable rows show matched risk signals with severity badge + matched contacts with role/org + matched knowledge articles with category badge; filter tabs ALL/DEFENDED/MONITORED/LINKED/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRiwexQuery exported; "riwex"/"risk investment"/"wealth exposure"/"investment threat"/"exposed investments"/"wealth threat"/"threat wealth coverage"/"investment risk knowledge"/"wealth contact risk"/"investment threat exposure"/"wealth defense gap"/"financial threat exposure" voice triggers; jarvis:riwex-toggle event; 90-s auto-refresh */}
+            <RiskInvestmentWealthExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
