@@ -612,6 +612,7 @@ import BrainContactReportTaskMap from '@/components/cinematic/BrainContactReport
 import OpsAlertBrainDatasetReportContinuity from '@/components/cinematic/OpsAlertBrainDatasetReportContinuity';
 import SceneContactSkillReportMissionAuthority from '@/components/cinematic/SceneContactSkillReportMissionAuthority';
 import ScenarioInvestigationContactDatasetLifecycle from '@/components/cinematic/ScenarioInvestigationContactDatasetLifecycle';
+import SwarmReportContactSkillTraceability from '@/components/cinematic/SwarmReportContactSkillTraceability';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1937,6 +1938,8 @@ function App() {
             <SceneContactSkillReportMissionAuthority />
             {/* F105 (overnight 2026-10-21): Scenario × Investigation × Contact × Dataset Operational Mission Lifecycle — ◈ OMLCYC button (left:107160, bottom:8, zIndex:202); fetches /v1/scenario/list + /v1/investigations + /entities/Contact + /v1/datasets; keyword-matches each scenario against investigation titles/subjects, contact names/roles/orgs, and dataset names/tags to classify COMPLETE/TRACKED/STAFFED/DARK; stat tiles (scenarios/investigations/contacts/datasets/complete/tracked/staffed/dark); amber pulse on DARK count (lifecycle blind spots); expandable rows show matched investigations with status badge + matched contacts with role/org + matched datasets with row-count badge; filter tabs ALL/COMPLETE/TRACKED/STAFFED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOmlcycQuery exported; "omlcyc"/"mission lifecycle"/"operational lifecycle"/"scenario lifecycle"/"mission complete"/"dark missions"/"ungrounded scenarios"/"lifecycle audit"/"scenario investigation"/"mission tracking"/"operational mission lifecycle"/"scenario dataset contact" voice triggers; jarvis:omlcyc-toggle event; 90-s auto-refresh */}
             <ScenarioInvestigationContactDatasetLifecycle />
+            {/* F106 (overnight 2026-10-21): SwarmJob × Report × Contact × Skill Execution Traceability Matrix — ◈ SWTRACE button (left:107720, bottom:8, zIndex:203); fetches /entities/SwarmJob + /v1/reports + /entities/Contact + /v1/aip/skill; keyword-matches each swarm job (name/type/status) against report titles/categories, contact names/roles/orgs, and skill names/categories to classify TRACED/SKILLED/CONNECTED/ORPHAN; stat tiles (jobs/reports/contacts/skills/traced/skilled/connected/orphan); red pulse on ORPHAN count (execution accountability blind spots); expandable rows show matched reports with date badge + matched contacts with role/org + matched skills with score badge; filter tabs ALL/TRACED/SKILLED/CONNECTED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwtraceQuery exported; "swtrace"/"swarm traceability"/"swarm report"/"swarm accountability"/"orphan swarm"/"swarm skill"/"execution traceability"/"swarm contact"/"swarm coverage"/"automation traceability"/"swarm blind spots"/"execution accountability"/"swarm grounding" voice triggers; jarvis:swtrace-toggle event; 90-s auto-refresh */}
+            <SwarmReportContactSkillTraceability />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
