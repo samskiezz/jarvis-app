@@ -603,6 +603,7 @@ import SceneGraphRiskSituationalAwareness from '@/components/cinematic/SceneGrap
 import OpsAlertBrainIntelFusion from '@/components/cinematic/OpsAlertBrainIntelFusion';
 import DatasetIntelProfileOpsAlertNexus from '@/components/cinematic/DatasetIntelProfileOpsAlertNexus';
 import SceneSystemStatusOpsPosture from '@/components/cinematic/SceneSystemStatusOpsPosture';
+import BrainOpsAlertScenarioReadiness from '@/components/cinematic/BrainOpsAlertScenarioReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1911,6 +1912,8 @@ function App() {
             <DatasetIntelProfileOpsAlertNexus />
             {/* F96 (overnight 2026-10-21): Scene × System Status × Ops Alert Operational Posture Monitor — ◈ SCNPOS button (left:102120, bottom:8, zIndex:193); fetches all 10 /v1/cinematic/scene/{1..10} + /v1/jarvis/system/status + /v1/ops/alerts; keyword-matches each scene title/description/anchor-names against system service names/health AND ops alert messages/types to classify OPERATIONAL/DEGRADED/ALERTED/OFFLINE; stat tiles (scenes/services/alerts/operational/degraded/alerted/offline); red pulse on OFFLINE count (unmonitored scenes — operational blind spots); expandable rows show matched system services with health status badge + matched ops alerts with severity badge; filter tabs ALL/OPERATIONAL/DEGRADED/ALERTED/OFFLINE + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScnposQuery exported; "scene posture"/"scnpos"/"scene status"/"scene operational"/"operational posture"/"offline scenes"/"scene health"/"scene alert"/"scene system"/"posture monitor"/"operational posture monitor"/"scene coverage posture"/"scene ops" voice triggers; jarvis:scnpos-toggle event; 90-s auto-refresh */}
             <SceneSystemStatusOpsPosture />
+            {/* F97 (overnight 2026-10-21): Brain × Ops Alert × Scenario Intelligence Readiness Index — ◈ BIRSIX button (left:102680, bottom:8, zIndex:194); fetches /v1/cinematic/brain + /v1/ops/alerts + /v1/scenario/list; keyword-matches each brain node (label/type) against ops alert messages/types AND scenario names/descriptions to classify READY/ALERTED/SCRIPTED/BLIND; stat tiles (nodes/alerts/scenarios/ready/alerted/scripted/blind); red pulse on BLIND count (brain model gaps with zero operational coverage); expandable rows show matched ops alerts with severity badge + matched scenarios with status badge; filter tabs ALL/READY/ALERTED/SCRIPTED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isBirsixQuery exported; "birsix"/"brain readiness"/"brain ops alert scenario"/"brain coverage"/"brain blind"/"brain scenario"/"brain alert coverage"/"brain intelligence readiness"/"intelligence readiness"/"brain operational"/"brain playbook"/"readiness index"/"brain ops scenario"/"intelligence coverage index" voice triggers; jarvis:birsix-toggle event; 90-s auto-refresh */}
+            <BrainOpsAlertScenarioReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
