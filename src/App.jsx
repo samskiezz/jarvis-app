@@ -601,6 +601,7 @@ import SkillContactInvestmentReadiness from '@/components/cinematic/SkillContact
 import SwarmGraphKnowledgeConvergence from '@/components/cinematic/SwarmGraphKnowledgeConvergence';
 import SceneGraphRiskSituationalAwareness from '@/components/cinematic/SceneGraphRiskSituationalAwareness';
 import OpsAlertBrainIntelFusion from '@/components/cinematic/OpsAlertBrainIntelFusion';
+import DatasetIntelProfileOpsAlertNexus from '@/components/cinematic/DatasetIntelProfileOpsAlertNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1905,6 +1906,8 @@ function App() {
             <SceneGraphRiskSituationalAwareness />
             {/* F94 (overnight 2026-10-21): Ops Alert × Brain × IntelProfile Intelligence Fusion — ◈ OBIFUS button (left:101000, bottom:8, zIndex:191); fetches /v1/ops/alerts + /v1/cinematic/brain + /entities/IntelProfile; keyword-matches each ops alert (message/type/severity) against brain node labels AND intel profile names/categories to classify FUSED/MODELED/PROFILED/DARK; stat tiles (alerts/nodes/profiles/fused/modeled/profiled/dark); red pulse on DARK count (unattributed alerts with no brain model grounding and no intel profile — blind-spot alerts); expandable rows show matched brain nodes with centrality score badge + matched intel profiles with category badge; filter tabs ALL/FUSED/MODELED/PROFILED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isObifusQuery exported; "obifus"/"ops alert brain"/"ops intel fusion"/"alert brain"/"alert profile"/"dark alerts"/"unattributed alerts"/"ops brain fusion"/"intel alert"/"ops fusion"/"alert attribution"/"blind alerts" voice triggers; jarvis:obifus-toggle event; 90-s auto-refresh */}
             <OpsAlertBrainIntelFusion />
+            {/* F95 (overnight 2026-10-21): Dataset × IntelProfile × Ops Alert Intelligence Data Nexus — ◈ DIANEX button (left:101560, bottom:8, zIndex:192); fetches /v1/datasets + /entities/IntelProfile + /v1/ops/alerts; keyword-matches each dataset (name/description/tags) against intel profile names/categories AND ops alert messages/types to classify ACTIVATED/PROFILED/ALERTED/ORPHAN; stat tiles (datasets/profiles/alerts/activated/profiled/alerted/orphan); red pulse on ORPHAN count (blind-spot datasets with no intel profile and no ops alert coverage); expandable rows show matched intel profiles with category badge + matched ops alerts with severity badge; filter tabs ALL/ACTIVATED/PROFILED/ALERTED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDianexQuery exported; "dianex"/"dataset intel profile"/"dataset ops alert"/"dataset nexus"/"orphan datasets"/"dataset blind spot"/"dataset alert coverage"/"dataset intelligence nexus"/"intel data nexus"/"dataset profile ops"/"data nexus"/"unmonitored datasets"/"dataset alert" voice triggers; jarvis:dianex-toggle event; 90-s auto-refresh */}
+            <DatasetIntelProfileOpsAlertNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
