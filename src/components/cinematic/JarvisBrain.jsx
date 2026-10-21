@@ -44,6 +44,7 @@ import { isBirsixQuery } from "@/components/cinematic/BrainOpsAlertScenarioReadi
 import { isMxnexQuery } from "@/components/cinematic/GraphTaskKnowledgeContactNexus";
 import { isCibattQuery } from "@/components/cinematic/ContactInvestigationBrainAttribution";
 import { isRiwexQuery } from "@/components/cinematic/RiskInvestmentWealthExposure";
+import { isKiprodQuery } from "@/components/cinematic/KnowledgeIntelSwarmOpsIndex";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -174,6 +175,7 @@ export default function JarvisBrain() {
     if (isMxnexQuery(q))    { window.dispatchEvent(new Event("jarvis:mxnex-toggle")); }
     if (isCibattQuery(q))   { window.dispatchEvent(new Event("jarvis:cibatt-toggle")); }
     if (isRiwexQuery(q))    { window.dispatchEvent(new Event("jarvis:riwex-toggle")); }
+    if (isKiprodQuery(q))   { window.dispatchEvent(new Event("jarvis:kiprod-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

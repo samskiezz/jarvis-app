@@ -607,6 +607,7 @@ import BrainOpsAlertScenarioReadiness from '@/components/cinematic/BrainOpsAlert
 import GraphTaskKnowledgeContactNexus from '@/components/cinematic/GraphTaskKnowledgeContactNexus';
 import ContactInvestigationBrainAttribution from '@/components/cinematic/ContactInvestigationBrainAttribution';
 import RiskInvestmentWealthExposure from '@/components/cinematic/RiskInvestmentWealthExposure';
+import KnowledgeIntelSwarmOpsIndex from '@/components/cinematic/KnowledgeIntelSwarmOpsIndex';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1922,6 +1923,8 @@ function App() {
             <ContactInvestigationBrainAttribution />
             {/* F100 (overnight 2026-10-21): RiskSignal × Investment × Contact × Knowledge Threat Wealth Exposure Matrix — ◈ RIWEX button (left:104360, bottom:8, zIndex:197); fetches /entities/RiskSignal + /entities/Investment + /entities/Contact + /knowledge/; keyword-matches each investment against risk signals AND contacts AND knowledge articles to classify DEFENDED/MONITORED/LINKED/EXPOSED; stat tiles (investments/signals/contacts/articles/defended/monitored/linked/exposed); red pulse on EXPOSED count (wealth blind spots — unmonitored investments with zero threat-signal, contact, or knowledge grounding); expandable rows show matched risk signals with severity badge + matched contacts with role/org + matched knowledge articles with category badge; filter tabs ALL/DEFENDED/MONITORED/LINKED/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRiwexQuery exported; "riwex"/"risk investment"/"wealth exposure"/"investment threat"/"exposed investments"/"wealth threat"/"threat wealth coverage"/"investment risk knowledge"/"wealth contact risk"/"investment threat exposure"/"wealth defense gap"/"financial threat exposure" voice triggers; jarvis:riwex-toggle event; 90-s auto-refresh */}
             <RiskInvestmentWealthExposure />
+            {/* F101 (overnight 2026-10-21): Knowledge × IntelProfile × SwarmJob × Ops Alert Deep Intelligence Production Index — ◈ KIPROD button (left:104920, bottom:8, zIndex:198); fetches /knowledge/ + /entities/IntelProfile + /entities/SwarmJob + /v1/ops/alerts; keyword-matches each knowledge article (title/category/description/tags) against intel profile names/categories, swarm job names/types, and ops alert titles/categories to classify ACTIVE/PROFILED/PROCESSING/DARK; stat tiles (articles/profiles/jobs/alerts/active/profiled/processing/dark); amber pulse on DARK count (orphaned knowledge — intelligence dead-end); expandable rows show matched intel profiles with category badge + matched swarm jobs with status badge + matched ops alerts with severity badge; filter tabs ALL/ACTIVE/PROFILED/PROCESSING/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKiprodQuery exported; "kiprod"/"knowledge production"/"intel knowledge"/"deep intelligence production"/"orphan knowledge"/"knowledge blind spot"/"knowledge profiling"/"dark knowledge"/"knowledge swarm"/"knowledge ops index"/"intelligence production" voice triggers; jarvis:kiprod-toggle event; 90-s auto-refresh */}
+            <KnowledgeIntelSwarmOpsIndex />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
