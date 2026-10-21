@@ -608,6 +608,7 @@ import GraphTaskKnowledgeContactNexus from '@/components/cinematic/GraphTaskKnow
 import ContactInvestigationBrainAttribution from '@/components/cinematic/ContactInvestigationBrainAttribution';
 import RiskInvestmentWealthExposure from '@/components/cinematic/RiskInvestmentWealthExposure';
 import KnowledgeIntelSwarmOpsIndex from '@/components/cinematic/KnowledgeIntelSwarmOpsIndex';
+import BrainContactReportTaskMap from '@/components/cinematic/BrainContactReportTaskMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1925,6 +1926,8 @@ function App() {
             <RiskInvestmentWealthExposure />
             {/* F101 (overnight 2026-10-21): Knowledge × IntelProfile × SwarmJob × Ops Alert Deep Intelligence Production Index — ◈ KIPROD button (left:104920, bottom:8, zIndex:198); fetches /knowledge/ + /entities/IntelProfile + /entities/SwarmJob + /v1/ops/alerts; keyword-matches each knowledge article (title/category/description/tags) against intel profile names/categories, swarm job names/types, and ops alert titles/categories to classify ACTIVE/PROFILED/PROCESSING/DARK; stat tiles (articles/profiles/jobs/alerts/active/profiled/processing/dark); amber pulse on DARK count (orphaned knowledge — intelligence dead-end); expandable rows show matched intel profiles with category badge + matched swarm jobs with status badge + matched ops alerts with severity badge; filter tabs ALL/ACTIVE/PROFILED/PROCESSING/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isKiprodQuery exported; "kiprod"/"knowledge production"/"intel knowledge"/"deep intelligence production"/"orphan knowledge"/"knowledge blind spot"/"knowledge profiling"/"dark knowledge"/"knowledge swarm"/"knowledge ops index"/"intelligence production" voice triggers; jarvis:kiprod-toggle event; 90-s auto-refresh */}
             <KnowledgeIntelSwarmOpsIndex />
+            {/* F102 (overnight 2026-10-21): Brain × Contact × Report × Task Intelligence Authority Map — ◈ BCRTMAP button (left:105480, bottom:8, zIndex:199); fetches /v1/cinematic/brain + /entities/Contact + /v1/reports + /entities/Task; keyword-matches each brain node against contact names/roles, report titles/categories, and task titles to classify COMMANDING/STAFFED/DOCUMENTED/GHOST; stat tiles (nodes/contacts/reports/tasks/commanding/staffed/documented/ghost); amber pulse on GHOST count (ungrounded brain nodes — operational blind spots); expandable rows show matched contacts with role/org + matched reports with date badge + matched tasks with status badge; filter tabs ALL/COMMANDING/STAFFED/DOCUMENTED/GHOST + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isBcrtmapQuery exported; "bcrtmap"/"brain contact report"/"brain authority"/"commanding nodes"/"ghost brain nodes"/"brain grounding"/"brain contact task"/"brain coverage authority"/"brain report contact"/"intelligence authority map"/"brain task coverage"/"brain mission coverage"/"brain staffing" voice triggers; jarvis:bcrtmap-toggle event; 90-s auto-refresh */}
+            <BrainContactReportTaskMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
