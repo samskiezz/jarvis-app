@@ -611,6 +611,7 @@ import KnowledgeIntelSwarmOpsIndex from '@/components/cinematic/KnowledgeIntelSw
 import BrainContactReportTaskMap from '@/components/cinematic/BrainContactReportTaskMap';
 import OpsAlertBrainDatasetReportContinuity from '@/components/cinematic/OpsAlertBrainDatasetReportContinuity';
 import SceneContactSkillReportMissionAuthority from '@/components/cinematic/SceneContactSkillReportMissionAuthority';
+import ScenarioInvestigationContactDatasetLifecycle from '@/components/cinematic/ScenarioInvestigationContactDatasetLifecycle';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1934,6 +1935,8 @@ function App() {
             <OpsAlertBrainDatasetReportContinuity />
             {/* F104 (overnight 2026-10-21): Scene × Contact × Skill × Report Operational Mission Authority — ◈ SCMAAUTH button (left:106600, bottom:8, zIndex:201); fetches all 10 /v1/cinematic/scene/{1..10} + /entities/Contact + /v1/aip/skill + /v1/reports; keyword-matches each scene (title/description/anchors) against contact names/roles/orgs, skill names/categories, and report titles/categories to classify AUTHORIZED/STAFFED/CAPABLE/DARK; stat tiles (scenes/contacts/skills/reports/authorized/staffed/capable/dark); amber pulse on DARK count (ungrounded scenes — mission blind spots); expandable rows show matched contacts with role/org + matched skills with score badge + matched reports with date badge; filter tabs ALL/AUTHORIZED/STAFFED/CAPABLE/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScmaauthQuery exported; "scmaauth"/"scene mission authority"/"scene authority"/"mission authority"/"scene staffing"/"scene coverage"/"scene operational authority"/"operational mission authority"/"scene contact skill"/"scene report"/"dark scenes"/"unstaffed scenes"/"mission blind spots"/"scene grounding" voice triggers; jarvis:scmaauth-toggle event; 90-s auto-refresh */}
             <SceneContactSkillReportMissionAuthority />
+            {/* F105 (overnight 2026-10-21): Scenario × Investigation × Contact × Dataset Operational Mission Lifecycle — ◈ OMLCYC button (left:107160, bottom:8, zIndex:202); fetches /v1/scenario/list + /v1/investigations + /entities/Contact + /v1/datasets; keyword-matches each scenario against investigation titles/subjects, contact names/roles/orgs, and dataset names/tags to classify COMPLETE/TRACKED/STAFFED/DARK; stat tiles (scenarios/investigations/contacts/datasets/complete/tracked/staffed/dark); amber pulse on DARK count (lifecycle blind spots); expandable rows show matched investigations with status badge + matched contacts with role/org + matched datasets with row-count badge; filter tabs ALL/COMPLETE/TRACKED/STAFFED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOmlcycQuery exported; "omlcyc"/"mission lifecycle"/"operational lifecycle"/"scenario lifecycle"/"mission complete"/"dark missions"/"ungrounded scenarios"/"lifecycle audit"/"scenario investigation"/"mission tracking"/"operational mission lifecycle"/"scenario dataset contact" voice triggers; jarvis:omlcyc-toggle event; 90-s auto-refresh */}
+            <ScenarioInvestigationContactDatasetLifecycle />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
