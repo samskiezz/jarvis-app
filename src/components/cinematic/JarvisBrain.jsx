@@ -41,6 +41,7 @@ import { isObifusQuery } from "@/components/cinematic/OpsAlertBrainIntelFusion";
 import { isDianexQuery } from "@/components/cinematic/DatasetIntelProfileOpsAlertNexus";
 import { isScnposQuery } from "@/components/cinematic/SceneSystemStatusOpsPosture";
 import { isBirsixQuery } from "@/components/cinematic/BrainOpsAlertScenarioReadiness";
+import { isMxnexQuery } from "@/components/cinematic/GraphTaskKnowledgeContactNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -168,6 +169,7 @@ export default function JarvisBrain() {
     if (isDianexQuery(q))   { window.dispatchEvent(new Event("jarvis:dianex-toggle")); }
     if (isScnposQuery(q))   { window.dispatchEvent(new Event("jarvis:scnpos-toggle")); }
     if (isBirsixQuery(q))   { window.dispatchEvent(new Event("jarvis:birsix-toggle")); }
+    if (isMxnexQuery(q))    { window.dispatchEvent(new Event("jarvis:mxnex-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

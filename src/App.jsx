@@ -604,6 +604,7 @@ import OpsAlertBrainIntelFusion from '@/components/cinematic/OpsAlertBrainIntelF
 import DatasetIntelProfileOpsAlertNexus from '@/components/cinematic/DatasetIntelProfileOpsAlertNexus';
 import SceneSystemStatusOpsPosture from '@/components/cinematic/SceneSystemStatusOpsPosture';
 import BrainOpsAlertScenarioReadiness from '@/components/cinematic/BrainOpsAlertScenarioReadiness';
+import GraphTaskKnowledgeContactNexus from '@/components/cinematic/GraphTaskKnowledgeContactNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1914,6 +1915,7 @@ function App() {
             <SceneSystemStatusOpsPosture />
             {/* F97 (overnight 2026-10-21): Brain × Ops Alert × Scenario Intelligence Readiness Index — ◈ BIRSIX button (left:102680, bottom:8, zIndex:194); fetches /v1/cinematic/brain + /v1/ops/alerts + /v1/scenario/list; keyword-matches each brain node (label/type) against ops alert messages/types AND scenario names/descriptions to classify READY/ALERTED/SCRIPTED/BLIND; stat tiles (nodes/alerts/scenarios/ready/alerted/scripted/blind); red pulse on BLIND count (brain model gaps with zero operational coverage); expandable rows show matched ops alerts with severity badge + matched scenarios with status badge; filter tabs ALL/READY/ALERTED/SCRIPTED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isBirsixQuery exported; "birsix"/"brain readiness"/"brain ops alert scenario"/"brain coverage"/"brain blind"/"brain scenario"/"brain alert coverage"/"brain intelligence readiness"/"intelligence readiness"/"brain operational"/"brain playbook"/"readiness index"/"brain ops scenario"/"intelligence coverage index" voice triggers; jarvis:birsix-toggle event; 90-s auto-refresh */}
             <BrainOpsAlertScenarioReadiness />
+            <GraphTaskKnowledgeContactNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -100,3 +100,4 @@
 [2026-10-21 12:11 UTC] F95 DatasetIntelProfileOpsAlertNexus.jsx — Dataset × IntelProfile × Ops Alert Intelligence Data Nexus; ACTIVATED/PROFILED/ALERTED/ORPHAN; ◈ DIANEX (left:101560, zIndex:192); Vite build exit:0
 2026-10-21 F96 SceneSystemStatusOpsPosture.jsx — Scene × System Status × Ops Alert Operational Posture Monitor; OPERATIONAL/DEGRADED/ALERTED/OFFLINE; red pulse OFFLINE; ◈ SCNPOS; isScnposQuery wired; Vite build exit:0
 [2026-10-21] F97 BrainOpsAlertScenarioReadiness.jsx — Brain × Ops Alert × Scenario Intelligence Readiness Index (◈ BIRSIX); /v1/cinematic/brain + /v1/ops/alerts + /v1/scenario/list; READY/ALERTED/SCRIPTED/BLIND; isBirsixQuery wired in JarvisBrain.jsx; Vite build exit:0
+[2026-10-21] F98 GraphTaskKnowledgeContactNexus.jsx — ◈ MXNEX quad-source: /v1/graph/centrality + /entities/Task + /knowledge/ + /entities/Contact → ANCHORED/ACTIVE/DOCUMENTED/GHOST; red pulse on GHOST; isMxnexQuery wired JarvisBrain; Vite build exit:0
