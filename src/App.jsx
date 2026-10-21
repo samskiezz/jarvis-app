@@ -591,6 +591,7 @@ import ReportGraphContactAttributionMap from '@/components/cinematic/ReportGraph
 import IntelProfileOpsAlertTaskEscalation from '@/components/cinematic/IntelProfileOpsAlertTaskEscalation';
 import GraphScenarioReportCoverageMap from '@/components/cinematic/GraphScenarioReportCoverageMap';
 import SwarmContactGraphOperationalNetwork from '@/components/cinematic/SwarmContactGraphOperationalNetwork';
+import DatasetScenarioRiskThreatExposure from '@/components/cinematic/DatasetScenarioRiskThreatExposure';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1875,6 +1876,8 @@ function App() {
             <GraphScenarioReportCoverageMap />
             {/* F84 (overnight 2026-10-20): SwarmJob × Contact × Graph Operational Network — ◈ SCGNET button (left:95400, bottom:8, zIndex:181); fetches /entities/SwarmJob + /entities/Contact + /v1/graph/centrality; keyword-matches each swarm job against contact names/orgs AND graph node labels to classify NETWORKED/CONNECTED/TRACED/ISOLATED; stat tiles (jobs/contacts/nodes/networked/connected/traced/isolated); red pulse on ISOLATED count; expandable rows show matched contacts with role/org + matched graph nodes with centrality score badge; filter tabs ALL/NETWORKED/CONNECTED/TRACED/ISOLATED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScgnetQuery exported; "scgnet"/"swarm network"/"swarm contact graph"/"operational network"/"swarm contact"/"isolated swarm"/"swarm graph"/"swarm operational"/"contact swarm graph" voice triggers; jarvis:scgnet-toggle event; 90-s auto-refresh */}
             <SwarmContactGraphOperationalNetwork />
+            {/* F85 (overnight 2026-10-21): Dataset × Scenario × RiskSignal Threat Exposure Coverage Matrix — ◈ DSRTX button (left:95960, bottom:8, zIndex:182); fetches /v1/datasets + /v1/scenario/list + /entities/RiskSignal; keyword-matches each dataset against scenarios AND risk signals to classify SECURED/SCRIPTED/SIGNALED/EXPOSED; stat tiles (datasets/scenarios/signals/secured/scripted/signaled/exposed); red pulse on EXPOSED count (datasets with no scenario coverage and no threat signal — full blind spots); expandable rows show matched scenarios with status badge + matched risk signals with severity badge; filter tabs ALL/SECURED/SCRIPTED/SIGNALED/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDsrtxQuery exported; "dsrtx"/"dataset threat"/"dataset exposure"/"threat exposure coverage"/"exposed datasets"/"dataset risk scenario"/"scenario coverage datasets"/"threat scenario coverage"/"dataset threat exposure" voice triggers; jarvis:dsrtx-toggle event; 90-s auto-refresh */}
+            <DatasetScenarioRiskThreatExposure />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
