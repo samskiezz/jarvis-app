@@ -597,6 +597,7 @@ import InvestigationIntelSkillResponseIndex from '@/components/cinematic/Investi
 import LiveIntelTaskOpsAlertThreatResponse from '@/components/cinematic/LiveIntelTaskOpsAlertThreatResponse';
 import InvestmentSkillScenarioDefenseCoverage from '@/components/cinematic/InvestmentSkillScenarioDefenseCoverage';
 import ContactKnowledgeOpsAlertBriefing from '@/components/cinematic/ContactKnowledgeOpsAlertBriefing';
+import SkillContactInvestmentReadiness from '@/components/cinematic/SkillContactInvestmentReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1893,6 +1894,8 @@ function App() {
             <InvestmentSkillScenarioDefenseCoverage />
             {/* F90 (overnight 2026-10-21): Contact × Knowledge × Ops Alert Situational Briefing Matrix — ◈ CKOBRF button (left:98760, bottom:8, zIndex:187); fetches /entities/Contact + /knowledge/ + /v1/ops/alerts; keyword-matches each contact (name/role/org/description) against knowledge article titles/categories AND ops alert messages/types to classify BRIEFED/ALERTED/KNOWN/DARK; stat tiles (contacts/knowledge/alerts/briefed/alerted/known/dark); amber pulse on DARK count (invisible actors — contacts with no knowledge grounding and no active alert coverage); expandable rows show matched knowledge articles with category badge + matched ops alerts with severity badge; filter tabs ALL/BRIEFED/ALERTED/KNOWN/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCkobrfQuery exported; "ckobrf"/"contact briefing"/"contact knowledge ops"/"dark contacts"/"contact alert coverage"/"contact situational briefing"/"invisible contacts"/"contact ops alert"/"contact knowledge alert"/"unmonitored contacts"/"contact dark"/"briefed contacts"/"contact coverage" voice triggers; jarvis:ckobrf-toggle event; 90-s auto-refresh */}
             <ContactKnowledgeOpsAlertBriefing />
+            {/* F91 (overnight 2026-10-21): Skill × Contact × Investment Strategic Readiness Matrix — ◈ SCIRAM button (left:99320, bottom:8, zIndex:188); fetches /v1/aip/skill + /entities/Contact + /entities/Investment; keyword-matches each skill (name/description/category) against contact names/roles/organisations AND investment names/types/asset_classes to classify READY/SUPPORTED/FUNDED/BLIND; stat tiles (skills/contacts/investments/ready/supported/funded/blind); amber pulse on BLIND count (unanchored capabilities — skills with no contact owner and no investment backing); expandable rows show matched contacts with role/org badge + matched investments with type/value badge; filter tabs ALL/READY/SUPPORTED/FUNDED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSciramQuery exported; "sciram"/"skill contact investment"/"skill funding"/"blind skills"/"skill readiness"/"skill support"/"capability readiness"/"funded skills"/"supported skills"/"skill owner"/"unanchored skills"/"skill coverage" voice triggers; jarvis:sciram-toggle event; 90-s auto-refresh */}
+            <SkillContactInvestmentReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
