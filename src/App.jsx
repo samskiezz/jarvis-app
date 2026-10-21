@@ -609,6 +609,7 @@ import ContactInvestigationBrainAttribution from '@/components/cinematic/Contact
 import RiskInvestmentWealthExposure from '@/components/cinematic/RiskInvestmentWealthExposure';
 import KnowledgeIntelSwarmOpsIndex from '@/components/cinematic/KnowledgeIntelSwarmOpsIndex';
 import BrainContactReportTaskMap from '@/components/cinematic/BrainContactReportTaskMap';
+import OpsAlertBrainDatasetReportContinuity from '@/components/cinematic/OpsAlertBrainDatasetReportContinuity';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1928,6 +1929,8 @@ function App() {
             <KnowledgeIntelSwarmOpsIndex />
             {/* F102 (overnight 2026-10-21): Brain × Contact × Report × Task Intelligence Authority Map — ◈ BCRTMAP button (left:105480, bottom:8, zIndex:199); fetches /v1/cinematic/brain + /entities/Contact + /v1/reports + /entities/Task; keyword-matches each brain node against contact names/roles, report titles/categories, and task titles to classify COMMANDING/STAFFED/DOCUMENTED/GHOST; stat tiles (nodes/contacts/reports/tasks/commanding/staffed/documented/ghost); amber pulse on GHOST count (ungrounded brain nodes — operational blind spots); expandable rows show matched contacts with role/org + matched reports with date badge + matched tasks with status badge; filter tabs ALL/COMMANDING/STAFFED/DOCUMENTED/GHOST + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isBcrtmapQuery exported; "bcrtmap"/"brain contact report"/"brain authority"/"commanding nodes"/"ghost brain nodes"/"brain grounding"/"brain contact task"/"brain coverage authority"/"brain report contact"/"intelligence authority map"/"brain task coverage"/"brain mission coverage"/"brain staffing" voice triggers; jarvis:bcrtmap-toggle event; 90-s auto-refresh */}
             <BrainContactReportTaskMap />
+            {/* F103 (overnight 2026-10-21): Ops Alert × Brain × Dataset × Report Operational Intelligence Continuity — ◈ OABDCONT button (left:106040, bottom:8, zIndex:200); fetches /v1/ops/alerts + /v1/cinematic/brain + /v1/datasets + /v1/reports; keyword-matches each ops alert against brain node labels, dataset names, and report titles to classify CONTINUOUS/MODELED/DATAED/BLIND; stat tiles (alerts/brain/datasets/reports/continuous/modeled/dataed/blind); red pulse on BLIND count (ungrounded operational blind spots); expandable rows show matched brain nodes with centrality score badge + matched datasets with row-count badge + matched reports with date badge; filter tabs ALL/CONTINUOUS/MODELED/DATAED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOabdcontQuery exported; "oabdcont"/"ops continuity"/"operational continuity"/"ops brain data report"/"intelligence continuity"/"alert coverage continuity"/"ops intelligence continuity"/"brain alert report"/"data alert continuity"/"alert blind spots"/"ops coverage gaps"/"alert grounding"/"continuity check" voice triggers; jarvis:oabdcont-toggle event; 90-s auto-refresh */}
+            <OpsAlertBrainDatasetReportContinuity />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
