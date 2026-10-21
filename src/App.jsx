@@ -600,6 +600,7 @@ import ContactKnowledgeOpsAlertBriefing from '@/components/cinematic/ContactKnow
 import SkillContactInvestmentReadiness from '@/components/cinematic/SkillContactInvestmentReadiness';
 import SwarmGraphKnowledgeConvergence from '@/components/cinematic/SwarmGraphKnowledgeConvergence';
 import SceneGraphRiskSituationalAwareness from '@/components/cinematic/SceneGraphRiskSituationalAwareness';
+import OpsAlertBrainIntelFusion from '@/components/cinematic/OpsAlertBrainIntelFusion';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1902,6 +1903,8 @@ function App() {
             <SwarmGraphKnowledgeConvergence />
             {/* F93 (overnight 2026-10-21): Scene × Graph × RiskSignal Strategic Situational Awareness — ◈ SGRSAW button (left:100440, bottom:8, zIndex:190); fetches all 10 cinematic scenes (/v1/cinematic/scene/{1..10}) + /v1/graph/centrality + /entities/RiskSignal; keyword-matches each scene's title/description/anchors against graph centrality node labels AND risk signal names/categories to classify AWARE/TRACED/SIGNALED/BLIND; stat tiles (scenes/nodes/signals/aware/traced/signaled/blind); red pulse on BLIND count (scenes with no graph trace and no risk signal — operational blind spots); expandable rows show matched graph nodes with centrality score badge + matched risk signals with severity badge; filter tabs ALL/AWARE/TRACED/SIGNALED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSgrsawQuery exported; "sgrsaw"/"scene graph risk"/"situational awareness"/"scene risk"/"scene blind spot"/"scene threat"/"scene intelligence"/"scene risk coverage"/"scene situational"/"strategic awareness"/"blind scenes"/"scene grounding" voice triggers; jarvis:sgrsaw-toggle event; 90-s auto-refresh */}
             <SceneGraphRiskSituationalAwareness />
+            {/* F94 (overnight 2026-10-21): Ops Alert × Brain × IntelProfile Intelligence Fusion — ◈ OBIFUS button (left:101000, bottom:8, zIndex:191); fetches /v1/ops/alerts + /v1/cinematic/brain + /entities/IntelProfile; keyword-matches each ops alert (message/type/severity) against brain node labels AND intel profile names/categories to classify FUSED/MODELED/PROFILED/DARK; stat tiles (alerts/nodes/profiles/fused/modeled/profiled/dark); red pulse on DARK count (unattributed alerts with no brain model grounding and no intel profile — blind-spot alerts); expandable rows show matched brain nodes with centrality score badge + matched intel profiles with category badge; filter tabs ALL/FUSED/MODELED/PROFILED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isObifusQuery exported; "obifus"/"ops alert brain"/"ops intel fusion"/"alert brain"/"alert profile"/"dark alerts"/"unattributed alerts"/"ops brain fusion"/"intel alert"/"ops fusion"/"alert attribution"/"blind alerts" voice triggers; jarvis:obifus-toggle event; 90-s auto-refresh */}
+            <OpsAlertBrainIntelFusion />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
