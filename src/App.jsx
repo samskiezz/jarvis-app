@@ -602,6 +602,7 @@ import SwarmGraphKnowledgeConvergence from '@/components/cinematic/SwarmGraphKno
 import SceneGraphRiskSituationalAwareness from '@/components/cinematic/SceneGraphRiskSituationalAwareness';
 import OpsAlertBrainIntelFusion from '@/components/cinematic/OpsAlertBrainIntelFusion';
 import DatasetIntelProfileOpsAlertNexus from '@/components/cinematic/DatasetIntelProfileOpsAlertNexus';
+import SceneSystemStatusOpsPosture from '@/components/cinematic/SceneSystemStatusOpsPosture';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1908,6 +1909,8 @@ function App() {
             <OpsAlertBrainIntelFusion />
             {/* F95 (overnight 2026-10-21): Dataset × IntelProfile × Ops Alert Intelligence Data Nexus — ◈ DIANEX button (left:101560, bottom:8, zIndex:192); fetches /v1/datasets + /entities/IntelProfile + /v1/ops/alerts; keyword-matches each dataset (name/description/tags) against intel profile names/categories AND ops alert messages/types to classify ACTIVATED/PROFILED/ALERTED/ORPHAN; stat tiles (datasets/profiles/alerts/activated/profiled/alerted/orphan); red pulse on ORPHAN count (blind-spot datasets with no intel profile and no ops alert coverage); expandable rows show matched intel profiles with category badge + matched ops alerts with severity badge; filter tabs ALL/ACTIVATED/PROFILED/ALERTED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDianexQuery exported; "dianex"/"dataset intel profile"/"dataset ops alert"/"dataset nexus"/"orphan datasets"/"dataset blind spot"/"dataset alert coverage"/"dataset intelligence nexus"/"intel data nexus"/"dataset profile ops"/"data nexus"/"unmonitored datasets"/"dataset alert" voice triggers; jarvis:dianex-toggle event; 90-s auto-refresh */}
             <DatasetIntelProfileOpsAlertNexus />
+            {/* F96 (overnight 2026-10-21): Scene × System Status × Ops Alert Operational Posture Monitor — ◈ SCNPOS button (left:102120, bottom:8, zIndex:193); fetches all 10 /v1/cinematic/scene/{1..10} + /v1/jarvis/system/status + /v1/ops/alerts; keyword-matches each scene title/description/anchor-names against system service names/health AND ops alert messages/types to classify OPERATIONAL/DEGRADED/ALERTED/OFFLINE; stat tiles (scenes/services/alerts/operational/degraded/alerted/offline); red pulse on OFFLINE count (unmonitored scenes — operational blind spots); expandable rows show matched system services with health status badge + matched ops alerts with severity badge; filter tabs ALL/OPERATIONAL/DEGRADED/ALERTED/OFFLINE + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScnposQuery exported; "scene posture"/"scnpos"/"scene status"/"scene operational"/"operational posture"/"offline scenes"/"scene health"/"scene alert"/"scene system"/"posture monitor"/"operational posture monitor"/"scene coverage posture"/"scene ops" voice triggers; jarvis:scnpos-toggle event; 90-s auto-refresh */}
+            <SceneSystemStatusOpsPosture />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

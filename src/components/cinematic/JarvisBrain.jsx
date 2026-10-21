@@ -39,6 +39,7 @@ import { isSwgkconvQuery } from "@/components/cinematic/SwarmGraphKnowledgeConve
 import { isSgrsawQuery } from "@/components/cinematic/SceneGraphRiskSituationalAwareness";
 import { isObifusQuery } from "@/components/cinematic/OpsAlertBrainIntelFusion";
 import { isDianexQuery } from "@/components/cinematic/DatasetIntelProfileOpsAlertNexus";
+import { isScnposQuery } from "@/components/cinematic/SceneSystemStatusOpsPosture";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -164,6 +165,7 @@ export default function JarvisBrain() {
     if (isSgrsawQuery(q))   { window.dispatchEvent(new Event("jarvis:sgrsaw-toggle")); }
     if (isObifusQuery(q))   { window.dispatchEvent(new Event("jarvis:obifus-toggle")); }
     if (isDianexQuery(q))   { window.dispatchEvent(new Event("jarvis:dianex-toggle")); }
+    if (isScnposQuery(q))   { window.dispatchEvent(new Event("jarvis:scnpos-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
