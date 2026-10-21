@@ -605,6 +605,7 @@ import DatasetIntelProfileOpsAlertNexus from '@/components/cinematic/DatasetInte
 import SceneSystemStatusOpsPosture from '@/components/cinematic/SceneSystemStatusOpsPosture';
 import BrainOpsAlertScenarioReadiness from '@/components/cinematic/BrainOpsAlertScenarioReadiness';
 import GraphTaskKnowledgeContactNexus from '@/components/cinematic/GraphTaskKnowledgeContactNexus';
+import ContactInvestigationBrainAttribution from '@/components/cinematic/ContactInvestigationBrainAttribution';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1916,6 +1917,8 @@ function App() {
             {/* F97 (overnight 2026-10-21): Brain × Ops Alert × Scenario Intelligence Readiness Index — ◈ BIRSIX button (left:102680, bottom:8, zIndex:194); fetches /v1/cinematic/brain + /v1/ops/alerts + /v1/scenario/list; keyword-matches each brain node (label/type) against ops alert messages/types AND scenario names/descriptions to classify READY/ALERTED/SCRIPTED/BLIND; stat tiles (nodes/alerts/scenarios/ready/alerted/scripted/blind); red pulse on BLIND count (brain model gaps with zero operational coverage); expandable rows show matched ops alerts with severity badge + matched scenarios with status badge; filter tabs ALL/READY/ALERTED/SCRIPTED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isBirsixQuery exported; "birsix"/"brain readiness"/"brain ops alert scenario"/"brain coverage"/"brain blind"/"brain scenario"/"brain alert coverage"/"brain intelligence readiness"/"intelligence readiness"/"brain operational"/"brain playbook"/"readiness index"/"brain ops scenario"/"intelligence coverage index" voice triggers; jarvis:birsix-toggle event; 90-s auto-refresh */}
             <BrainOpsAlertScenarioReadiness />
             <GraphTaskKnowledgeContactNexus />
+            {/* F99 (overnight 2026-10-21): Contact × Investigation × Brain Threat Attribution Intelligence — ◈ CIBATT button (left:103800, bottom:8, zIndex:196); fetches /entities/Contact + /v1/investigations + /v1/cinematic/brain; keyword-matches each contact (name/role/org/aliases) against investigation titles/descriptions AND brain node labels to classify ATTRIBUTED/TRACED/TRACKED/GHOST; stat tiles (contacts/investigations/nodes/attributed/traced/tracked/ghost); amber pulse on GHOST count (unknown actors with zero coverage); expandable rows show matched investigations with status badge + matched brain nodes with centrality score badge; filter tabs ALL/ATTRIBUTED/TRACED/TRACKED/GHOST + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCibattQuery exported; "cibatt"/"contact brain attribution"/"contact investigation brain"/"ghost contacts"/"unknown actors"/"contact attribution"/"contact brain"/"contact investigation attribution"/"actor brain"/"contact brain investigation"/"actor attribution"/"contact ghost" voice triggers; jarvis:cibatt-toggle event; 90-s auto-refresh */}
+            <ContactInvestigationBrainAttribution />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
