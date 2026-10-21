@@ -594,6 +594,7 @@ import SwarmContactGraphOperationalNetwork from '@/components/cinematic/SwarmCon
 import DatasetScenarioRiskThreatExposure from '@/components/cinematic/DatasetScenarioRiskThreatExposure';
 import SkillGraphScenarioExecutionCoverage from '@/components/cinematic/SkillGraphScenarioExecutionCoverage';
 import InvestigationIntelSkillResponseIndex from '@/components/cinematic/InvestigationIntelSkillResponseIndex';
+import LiveIntelTaskOpsAlertThreatResponse from '@/components/cinematic/LiveIntelTaskOpsAlertThreatResponse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1884,6 +1885,8 @@ function App() {
             <SkillGraphScenarioExecutionCoverage />
             {/* F87 (overnight 2026-10-21): Investigation × IntelProfile × Skill Active Response Index — ◈ IIRSRP button (left:97080, bottom:8, zIndex:184); fetches /v1/investigations + /entities/IntelProfile + /v1/aip/skill; keyword-matches each investigation against intel profile names/categories AND skill names/descriptions to classify RESPONDING/PROFILED/CAPABLE/OPEN; stat tiles (investigations/profiles/skills/responding/profiled/capable/open); red pulse on OPEN count (undefended open cases with no intel profile and no matching skill); expandable rows show matched intel profiles with category badge + matched skills with score badge; filter tabs ALL/RESPONDING/PROFILED/CAPABLE/OPEN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIirsrpQuery exported; "iirsrp"/"investigation intel skill"/"active response index"/"open investigations"/"investigation response"/"undefended cases"/"investigation profile skill"/"response index"/"investigation capability"/"open cases skill"/"investigation blind spots"/"response pipeline" voice triggers; jarvis:iirsrp-toggle event; 90-s auto-refresh */}
             <InvestigationIntelSkillResponseIndex />
+            {/* F88 (overnight 2026-10-21): Live Intel × Task × Ops Alert Operational Threat Response — ◈ LTORCA button (left:97640, bottom:8, zIndex:185); fetches /functions/getLiveIntel + /entities/Task + /v1/ops/alerts; keyword-matches each live event (earthquake region, crypto symbol, FX pair) against task titles/descriptions AND ops alert messages to classify RESPONDING/TASKED/ALERTED/UNTRACKED; stat tiles (events/tasks/alerts/responding/tasked/alerted/untracked); red pulse on UNTRACKED count (live threats with no active task and no ops alert — operational blind spots); expandable rows show matched tasks with status badge + matched ops alerts with severity badge; filter tabs ALL/RESPONDING/TASKED/ALERTED/UNTRACKED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLtorcaQuery exported; "ltorca"/"live intel task ops"/"threat response"/"untracked threats"/"live threat response"/"operational threat response"/"live event task"/"ops alert live intel"/"threat coverage"/"live event untracked"/"incident response chain"/"threat response pipeline" voice triggers; jarvis:ltorca-toggle event; 90-s auto-refresh */}
+            <LiveIntelTaskOpsAlertThreatResponse />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
