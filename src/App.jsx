@@ -596,6 +596,7 @@ import SkillGraphScenarioExecutionCoverage from '@/components/cinematic/SkillGra
 import InvestigationIntelSkillResponseIndex from '@/components/cinematic/InvestigationIntelSkillResponseIndex';
 import LiveIntelTaskOpsAlertThreatResponse from '@/components/cinematic/LiveIntelTaskOpsAlertThreatResponse';
 import InvestmentSkillScenarioDefenseCoverage from '@/components/cinematic/InvestmentSkillScenarioDefenseCoverage';
+import ContactKnowledgeOpsAlertBriefing from '@/components/cinematic/ContactKnowledgeOpsAlertBriefing';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1890,6 +1891,8 @@ function App() {
             <LiveIntelTaskOpsAlertThreatResponse />
             {/* F89 (overnight 2026-10-21): Investment × Skill × Scenario Wealth Defense Coverage — ◈ IWSDEF button (left:98200, bottom:8, zIndex:186); fetches /entities/Investment + /v1/aip/skill + /v1/scenario/list; keyword-matches each investment (name/type/asset_class/description) against skill names/descriptions AND scenario titles/descriptions to classify DEFENDED/SKILLED/SCRIPTED/EXPOSED; stat tiles (investments/skills/scenarios/defended/skilled/scripted/exposed); red pulse on EXPOSED count (investments with no skill coverage and no defensive scenario — wealth blind spots); expandable rows show matched skills with score badge + matched scenarios with status badge; filter tabs ALL/DEFENDED/SKILLED/SCRIPTED/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIwsdefQuery exported; "iwsdef"/"investment defense"/"wealth defense"/"investment skill scenario"/"exposed investments"/"investment coverage"/"investment scenario coverage"/"investment skill coverage"/"investment risk coverage"/"undefended investments"/"wealth defense coverage"/"investment protection" voice triggers; jarvis:iwsdef-toggle event; 90-s auto-refresh */}
             <InvestmentSkillScenarioDefenseCoverage />
+            {/* F90 (overnight 2026-10-21): Contact × Knowledge × Ops Alert Situational Briefing Matrix — ◈ CKOBRF button (left:98760, bottom:8, zIndex:187); fetches /entities/Contact + /knowledge/ + /v1/ops/alerts; keyword-matches each contact (name/role/org/description) against knowledge article titles/categories AND ops alert messages/types to classify BRIEFED/ALERTED/KNOWN/DARK; stat tiles (contacts/knowledge/alerts/briefed/alerted/known/dark); amber pulse on DARK count (invisible actors — contacts with no knowledge grounding and no active alert coverage); expandable rows show matched knowledge articles with category badge + matched ops alerts with severity badge; filter tabs ALL/BRIEFED/ALERTED/KNOWN/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCkobrfQuery exported; "ckobrf"/"contact briefing"/"contact knowledge ops"/"dark contacts"/"contact alert coverage"/"contact situational briefing"/"invisible contacts"/"contact ops alert"/"contact knowledge alert"/"unmonitored contacts"/"contact dark"/"briefed contacts"/"contact coverage" voice triggers; jarvis:ckobrf-toggle event; 90-s auto-refresh */}
+            <ContactKnowledgeOpsAlertBriefing />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
