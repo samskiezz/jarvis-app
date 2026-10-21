@@ -595,6 +595,7 @@ import DatasetScenarioRiskThreatExposure from '@/components/cinematic/DatasetSce
 import SkillGraphScenarioExecutionCoverage from '@/components/cinematic/SkillGraphScenarioExecutionCoverage';
 import InvestigationIntelSkillResponseIndex from '@/components/cinematic/InvestigationIntelSkillResponseIndex';
 import LiveIntelTaskOpsAlertThreatResponse from '@/components/cinematic/LiveIntelTaskOpsAlertThreatResponse';
+import InvestmentSkillScenarioDefenseCoverage from '@/components/cinematic/InvestmentSkillScenarioDefenseCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1887,6 +1888,8 @@ function App() {
             <InvestigationIntelSkillResponseIndex />
             {/* F88 (overnight 2026-10-21): Live Intel × Task × Ops Alert Operational Threat Response — ◈ LTORCA button (left:97640, bottom:8, zIndex:185); fetches /functions/getLiveIntel + /entities/Task + /v1/ops/alerts; keyword-matches each live event (earthquake region, crypto symbol, FX pair) against task titles/descriptions AND ops alert messages to classify RESPONDING/TASKED/ALERTED/UNTRACKED; stat tiles (events/tasks/alerts/responding/tasked/alerted/untracked); red pulse on UNTRACKED count (live threats with no active task and no ops alert — operational blind spots); expandable rows show matched tasks with status badge + matched ops alerts with severity badge; filter tabs ALL/RESPONDING/TASKED/ALERTED/UNTRACKED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLtorcaQuery exported; "ltorca"/"live intel task ops"/"threat response"/"untracked threats"/"live threat response"/"operational threat response"/"live event task"/"ops alert live intel"/"threat coverage"/"live event untracked"/"incident response chain"/"threat response pipeline" voice triggers; jarvis:ltorca-toggle event; 90-s auto-refresh */}
             <LiveIntelTaskOpsAlertThreatResponse />
+            {/* F89 (overnight 2026-10-21): Investment × Skill × Scenario Wealth Defense Coverage — ◈ IWSDEF button (left:98200, bottom:8, zIndex:186); fetches /entities/Investment + /v1/aip/skill + /v1/scenario/list; keyword-matches each investment (name/type/asset_class/description) against skill names/descriptions AND scenario titles/descriptions to classify DEFENDED/SKILLED/SCRIPTED/EXPOSED; stat tiles (investments/skills/scenarios/defended/skilled/scripted/exposed); red pulse on EXPOSED count (investments with no skill coverage and no defensive scenario — wealth blind spots); expandable rows show matched skills with score badge + matched scenarios with status badge; filter tabs ALL/DEFENDED/SKILLED/SCRIPTED/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIwsdefQuery exported; "iwsdef"/"investment defense"/"wealth defense"/"investment skill scenario"/"exposed investments"/"investment coverage"/"investment scenario coverage"/"investment skill coverage"/"investment risk coverage"/"undefended investments"/"wealth defense coverage"/"investment protection" voice triggers; jarvis:iwsdef-toggle event; 90-s auto-refresh */}
+            <InvestmentSkillScenarioDefenseCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
