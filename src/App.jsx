@@ -610,6 +610,7 @@ import RiskInvestmentWealthExposure from '@/components/cinematic/RiskInvestmentW
 import KnowledgeIntelSwarmOpsIndex from '@/components/cinematic/KnowledgeIntelSwarmOpsIndex';
 import BrainContactReportTaskMap from '@/components/cinematic/BrainContactReportTaskMap';
 import OpsAlertBrainDatasetReportContinuity from '@/components/cinematic/OpsAlertBrainDatasetReportContinuity';
+import SceneContactSkillReportMissionAuthority from '@/components/cinematic/SceneContactSkillReportMissionAuthority';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1931,6 +1932,8 @@ function App() {
             <BrainContactReportTaskMap />
             {/* F103 (overnight 2026-10-21): Ops Alert × Brain × Dataset × Report Operational Intelligence Continuity — ◈ OABDCONT button (left:106040, bottom:8, zIndex:200); fetches /v1/ops/alerts + /v1/cinematic/brain + /v1/datasets + /v1/reports; keyword-matches each ops alert against brain node labels, dataset names, and report titles to classify CONTINUOUS/MODELED/DATAED/BLIND; stat tiles (alerts/brain/datasets/reports/continuous/modeled/dataed/blind); red pulse on BLIND count (ungrounded operational blind spots); expandable rows show matched brain nodes with centrality score badge + matched datasets with row-count badge + matched reports with date badge; filter tabs ALL/CONTINUOUS/MODELED/DATAED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOabdcontQuery exported; "oabdcont"/"ops continuity"/"operational continuity"/"ops brain data report"/"intelligence continuity"/"alert coverage continuity"/"ops intelligence continuity"/"brain alert report"/"data alert continuity"/"alert blind spots"/"ops coverage gaps"/"alert grounding"/"continuity check" voice triggers; jarvis:oabdcont-toggle event; 90-s auto-refresh */}
             <OpsAlertBrainDatasetReportContinuity />
+            {/* F104 (overnight 2026-10-21): Scene × Contact × Skill × Report Operational Mission Authority — ◈ SCMAAUTH button (left:106600, bottom:8, zIndex:201); fetches all 10 /v1/cinematic/scene/{1..10} + /entities/Contact + /v1/aip/skill + /v1/reports; keyword-matches each scene (title/description/anchors) against contact names/roles/orgs, skill names/categories, and report titles/categories to classify AUTHORIZED/STAFFED/CAPABLE/DARK; stat tiles (scenes/contacts/skills/reports/authorized/staffed/capable/dark); amber pulse on DARK count (ungrounded scenes — mission blind spots); expandable rows show matched contacts with role/org + matched skills with score badge + matched reports with date badge; filter tabs ALL/AUTHORIZED/STAFFED/CAPABLE/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScmaauthQuery exported; "scmaauth"/"scene mission authority"/"scene authority"/"mission authority"/"scene staffing"/"scene coverage"/"scene operational authority"/"operational mission authority"/"scene contact skill"/"scene report"/"dark scenes"/"unstaffed scenes"/"mission blind spots"/"scene grounding" voice triggers; jarvis:scmaauth-toggle event; 90-s auto-refresh */}
+            <SceneContactSkillReportMissionAuthority />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -47,6 +47,7 @@ import { isRiwexQuery } from "@/components/cinematic/RiskInvestmentWealthExposur
 import { isKiprodQuery } from "@/components/cinematic/KnowledgeIntelSwarmOpsIndex";
 import { isBcrtmapQuery } from "@/components/cinematic/BrainContactReportTaskMap";
 import { isOabdcontQuery } from "@/components/cinematic/OpsAlertBrainDatasetReportContinuity";
+import { isScmaauthQuery } from "@/components/cinematic/SceneContactSkillReportMissionAuthority";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -180,6 +181,7 @@ export default function JarvisBrain() {
     if (isKiprodQuery(q))   { window.dispatchEvent(new Event("jarvis:kiprod-toggle")); }
     if (isBcrtmapQuery(q))   { window.dispatchEvent(new Event("jarvis:bcrtmap-toggle")); }
     if (isOabdcontQuery(q))  { window.dispatchEvent(new Event("jarvis:oabdcont-toggle")); }
+    if (isScmaauthQuery(q))  { window.dispatchEvent(new Event("jarvis:scmaauth-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
