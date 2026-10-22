@@ -50,6 +50,7 @@ import { isOabdcontQuery } from "@/components/cinematic/OpsAlertBrainDatasetRepo
 import { isScmaauthQuery } from "@/components/cinematic/SceneContactSkillReportMissionAuthority";
 import { isOmlcycQuery } from "@/components/cinematic/ScenarioInvestigationContactDatasetLifecycle";
 import { isSwtraceQuery } from "@/components/cinematic/SwarmReportContactSkillTraceability";
+import { isIbsrcovQuery } from "@/components/cinematic/InvestigationBrainSkillReportCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -186,6 +187,7 @@ export default function JarvisBrain() {
     if (isScmaauthQuery(q))  { window.dispatchEvent(new Event("jarvis:scmaauth-toggle")); }
     if (isOmlcycQuery(q))    { window.dispatchEvent(new Event("jarvis:omlcyc-toggle")); }
     if (isSwtraceQuery(q))  { window.dispatchEvent(new Event("jarvis:swtrace-toggle")); }
+    if (isIbsrcovQuery(q))  { window.dispatchEvent(new Event("jarvis:ibsrcov-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

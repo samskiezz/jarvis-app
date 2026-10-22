@@ -613,6 +613,7 @@ import OpsAlertBrainDatasetReportContinuity from '@/components/cinematic/OpsAler
 import SceneContactSkillReportMissionAuthority from '@/components/cinematic/SceneContactSkillReportMissionAuthority';
 import ScenarioInvestigationContactDatasetLifecycle from '@/components/cinematic/ScenarioInvestigationContactDatasetLifecycle';
 import SwarmReportContactSkillTraceability from '@/components/cinematic/SwarmReportContactSkillTraceability';
+import InvestigationBrainSkillReportCoverage from '@/components/cinematic/InvestigationBrainSkillReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1940,6 +1941,8 @@ function App() {
             <ScenarioInvestigationContactDatasetLifecycle />
             {/* F106 (overnight 2026-10-21): SwarmJob × Report × Contact × Skill Execution Traceability Matrix — ◈ SWTRACE button (left:107720, bottom:8, zIndex:203); fetches /entities/SwarmJob + /v1/reports + /entities/Contact + /v1/aip/skill; keyword-matches each swarm job (name/type/status) against report titles/categories, contact names/roles/orgs, and skill names/categories to classify TRACED/SKILLED/CONNECTED/ORPHAN; stat tiles (jobs/reports/contacts/skills/traced/skilled/connected/orphan); red pulse on ORPHAN count (execution accountability blind spots); expandable rows show matched reports with date badge + matched contacts with role/org + matched skills with score badge; filter tabs ALL/TRACED/SKILLED/CONNECTED/ORPHAN + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwtraceQuery exported; "swtrace"/"swarm traceability"/"swarm report"/"swarm accountability"/"orphan swarm"/"swarm skill"/"execution traceability"/"swarm contact"/"swarm coverage"/"automation traceability"/"swarm blind spots"/"execution accountability"/"swarm grounding" voice triggers; jarvis:swtrace-toggle event; 90-s auto-refresh */}
             <SwarmReportContactSkillTraceability />
+            {/* F107 (overnight 2026-10-22): Investigation × Brain × Skill × Report Active Intelligence Coverage — ◈ IBSRCOV button (left:108280, bottom:8, zIndex:204); fetches /v1/investigations + /v1/cinematic/brain + /v1/aip/skill + /v1/reports; keyword-matches each investigation against brain nodes, skill names/categories, and report titles/categories to classify GROUNDED/CAPABLE/DOCUMENTED/BLIND; stat tiles (invs/nodes/skills/reports/grounded/capable/documented/blind); red pulse on BLIND count (undefended open cases); expandable rows show matched brain nodes with centrality score badge + matched skills with score badge + matched reports with date badge; filter tabs ALL/GROUNDED/CAPABLE/DOCUMENTED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIbsrcovQuery exported; "ibsrcov"/"investigation brain skill"/"active intelligence coverage"/"blind investigations"/"investigation coverage"/"investigation skill report"/"investigation brain"/"undefended investigations"/"open case coverage"/"case intelligence"/"investigation intelligence gap"/"intelligence dead ends" voice triggers; jarvis:ibsrcov-toggle event; 90-s auto-refresh */}
+            <InvestigationBrainSkillReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
