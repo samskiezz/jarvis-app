@@ -631,6 +631,7 @@ import OpsAlertSwarmContactScenarioCoverage from '@/components/cinematic/OpsAler
 import IntelProfileDatasetKnowledgeRiskMap from '@/components/cinematic/IntelProfileDatasetKnowledgeRiskMap';
 import GraphIntelSwarmReportAudit from '@/components/cinematic/GraphIntelSwarmReportAudit';
 import TaskContactOpsAlertBrainMissionChain from '@/components/cinematic/TaskContactOpsAlertBrainMissionChain';
+import SkillSwarmReportGraphExecutionNetwork from '@/components/cinematic/SkillSwarmReportGraphExecutionNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1994,6 +1995,8 @@ function App() {
             <GraphIntelSwarmReportAudit />
             {/* F124 (overnight 2026-10-22): Task × Contact × Ops Alert × Brain Mission Critical Response Chain — ◈ MCRCHN button (left:117800, bottom:8, zIndex:221); fetches /entities/Task + /entities/Contact + /v1/ops/alerts + /v1/cinematic/brain; keyword-matches each task against contacts, ops alerts, and brain nodes to classify CRITICAL/STAFFED/ALERTED/ADRIFT (4-source); stat tiles (tasks/contacts/alerts/brain/critical/staffed/alerted/adrift); red pulse on ADRIFT count (mission orphans with no contact owner, no ops alert, no brain model); expandable rows show matched contacts with role/org + matched ops alerts with severity badge + matched brain nodes with centrality score badge; filter tabs ALL/CRITICAL/STAFFED/ALERTED/ADRIFT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isMcrchQuery exported; "mcrchn"/"mission chain"/"task response chain"/"critical response"/"mission critical"/"task ops alert"/"task brain response"/"task contact chain"/"task adrift"/"adrift tasks"/"mission orphan"/"unstaffed task"/"task coverage chain" voice triggers; jarvis:mcrchn-toggle event; 90-s auto-refresh */}
             <TaskContactOpsAlertBrainMissionChain />
+            {/* F125 (overnight 2026-10-22): Skill × SwarmJob × Report × Graph Operational Execution Network — ◈ SSGEX button (left:118360, bottom:8, zIndex:222); fetches /v1/aip/skill + /entities/SwarmJob + /v1/reports + /v1/graph/centrality; keyword-matches each skill against swarm jobs, reports, and graph nodes to classify DEPLOYED/PROCESSING/PUBLISHED/DORMANT (4-source); stat tiles (skills/swarm/reports/graph/deployed/processing/published/dormant); red pulse on DORMANT count (isolated skills: no automation, no report, no graph trace); expandable rows show matched swarm jobs with status badge + matched reports with date badge + matched graph nodes with centrality score badge; filter tabs ALL/DEPLOYED/PROCESSING/PUBLISHED/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSsgexQuery exported; "ssgex"/"skill execution network"/"skill swarm report"/"skill graph network"/"dormant skills"/"idle skills"/"skill deployment"/"skill automation network" voice triggers; jarvis:ssgex-toggle event; 90-s auto-refresh */}
+            <SkillSwarmReportGraphExecutionNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

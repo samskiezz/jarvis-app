@@ -67,6 +67,7 @@ import { isErescovQuery } from "@/components/cinematic/OpsAlertSwarmContactScena
 import { isIdkrmapQuery } from "@/components/cinematic/IntelProfileDatasetKnowledgeRiskMap";
 import { isGisraudQuery } from "@/components/cinematic/GraphIntelSwarmReportAudit";
 import { isMcrchQuery } from "@/components/cinematic/TaskContactOpsAlertBrainMissionChain";
+import { isSsgexQuery } from "@/components/cinematic/SkillSwarmReportGraphExecutionNetwork";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -220,6 +221,7 @@ export default function JarvisBrain() {
     if (isIdkrmapQuery(q))   { window.dispatchEvent(new Event("jarvis:idkrmap-toggle")); }
     if (isGisraudQuery(q))   { window.dispatchEvent(new Event("jarvis:gisraud-toggle")); }
     if (isMcrchQuery(q))     { window.dispatchEvent(new Event("jarvis:mcrchn-toggle")); }
+    if (isSsgexQuery(q))     { window.dispatchEvent(new Event("jarvis:ssgex-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
