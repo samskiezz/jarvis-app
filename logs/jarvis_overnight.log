@@ -114,3 +114,4 @@
 [2026-10-22] F109 IntelProfileReportOpsAlertGraphChain.jsx — IntelProfile×Report×OpsAlert×Graph Intelligence Impact Chain (HIGH_IMPACT/DOCUMENTED/ALERTED/DORMANT); ◈ IRAIGC (left:109400, zIndex:206); Vite build exit:0; pushed to jarvis-overnight
 [2026-10-22] F110 RiskSignalSkillGraphContactNetwork.jsx — ◈ TRCNET; /entities/RiskSignal + /v1/aip/skill + /v1/graph/centrality + /entities/Contact; COVERED/CAPABLE/TRACED/EXPOSED; red pulse on EXPOSED; isTrcnetQuery in JarvisBrain.jsx; Vite build exit:0
 2026-10-22 F111 TaskDatasetBrainInvestigationDepth.jsx — Task × Dataset × Brain × Investigation GROUNDED/SUPPORTED/TRACKED/ADRIFT; ◈ TDBIEX (left:110520 zIndex:208); Vite build exit:0; pushed to jarvis-overnight
+[2026-10-22] F112 ScenarioContactKnowledgeRiskReadiness.jsx — Scenario×Contact×Knowledge×RiskSignal PREPARED/PLANNED/KNOWN/BLIND; ◈ SCKNRR (left:111080, zIndex:209); Vite build exit:0; pushed to jarvis-overnight
