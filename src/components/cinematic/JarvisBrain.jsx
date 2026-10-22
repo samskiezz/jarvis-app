@@ -55,6 +55,7 @@ import { isDsgprodQuery } from "@/components/cinematic/DatasetSwarmGraphOpsProdu
 import { isTrcnetQuery } from "@/components/cinematic/RiskSignalSkillGraphContactNetwork";
 import { isTdbiexQuery } from "@/components/cinematic/TaskDatasetBrainInvestigationDepth";
 import { isScknrrQuery } from "@/components/cinematic/ScenarioContactKnowledgeRiskReadiness";
+import { isRbadnQuery } from "@/components/cinematic/ReportBrainOpsAlertContactNetwork";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -196,6 +197,7 @@ export default function JarvisBrain() {
     if (isTrcnetQuery(q))   { window.dispatchEvent(new Event("jarvis:trcnet-toggle")); }
     if (isTdbiexQuery(q))   { window.dispatchEvent(new Event("jarvis:tdbiex-toggle")); }
     if (isScknrrQuery(q))   { window.dispatchEvent(new Event("jarvis:scknrr-toggle")); }
+    if (isRbadnQuery(q))    { window.dispatchEvent(new Event("jarvis:rbacdn-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
