@@ -630,6 +630,7 @@ import RiskSignalScenarioBrainTaskEscalation from '@/components/cinematic/RiskSi
 import OpsAlertSwarmContactScenarioCoverage from '@/components/cinematic/OpsAlertSwarmContactScenarioCoverage';
 import IntelProfileDatasetKnowledgeRiskMap from '@/components/cinematic/IntelProfileDatasetKnowledgeRiskMap';
 import GraphIntelSwarmReportAudit from '@/components/cinematic/GraphIntelSwarmReportAudit';
+import TaskContactOpsAlertBrainMissionChain from '@/components/cinematic/TaskContactOpsAlertBrainMissionChain';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1991,6 +1992,8 @@ function App() {
             <IntelProfileDatasetKnowledgeRiskMap />
             {/* F123 (overnight 2026-10-22): Graph × IntelProfile × SwarmJob × Report Intelligence Execution Audit — ◈ GISRAUD button (left:117240, bottom:8, zIndex:220); fetches /v1/graph/centrality + /entities/IntelProfile + /entities/SwarmJob + /v1/reports; keyword-matches each graph node against intel profiles, swarm jobs, and reports to classify EXECUTING/ORCHESTRATED/SWARMED/DORMANT (4-source); stat tiles (nodes/intel/swarm-jobs/reports/executing/orchestrated/swarmed/dormant); red pulse on DORMANT count (blind-spot nodes with no intel attribution, no automation, no filed report); expandable rows show matched intel profiles with category badge + matched swarm jobs with status badge + matched reports with date badge; filter tabs ALL/EXECUTING/ORCHESTRATED/SWARMED/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGisraudQuery exported; "gisraud"/"graph intel swarm audit"/"graph intel execution"/"intel execution audit"/"swarm report audit"/"graph swarm report"/"execution audit"/"intel swarm audit"/"graph dormant"/"dormant intel"/"graph execution audit"/"intel orchestration audit"/"graph attribution"/"swarm attribution"/"execution footprint"/"graph blind spot" voice triggers; jarvis:gisraud-toggle event; 90-s auto-refresh */}
             <GraphIntelSwarmReportAudit />
+            {/* F124 (overnight 2026-10-22): Task × Contact × Ops Alert × Brain Mission Critical Response Chain — ◈ MCRCHN button (left:117800, bottom:8, zIndex:221); fetches /entities/Task + /entities/Contact + /v1/ops/alerts + /v1/cinematic/brain; keyword-matches each task against contacts, ops alerts, and brain nodes to classify CRITICAL/STAFFED/ALERTED/ADRIFT (4-source); stat tiles (tasks/contacts/alerts/brain/critical/staffed/alerted/adrift); red pulse on ADRIFT count (mission orphans with no contact owner, no ops alert, no brain model); expandable rows show matched contacts with role/org + matched ops alerts with severity badge + matched brain nodes with centrality score badge; filter tabs ALL/CRITICAL/STAFFED/ALERTED/ADRIFT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isMcrchQuery exported; "mcrchn"/"mission chain"/"task response chain"/"critical response"/"mission critical"/"task ops alert"/"task brain response"/"task contact chain"/"task adrift"/"adrift tasks"/"mission orphan"/"unstaffed task"/"task coverage chain" voice triggers; jarvis:mcrchn-toggle event; 90-s auto-refresh */}
+            <TaskContactOpsAlertBrainMissionChain />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
