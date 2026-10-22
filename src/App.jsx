@@ -634,6 +634,7 @@ import TaskContactOpsAlertBrainMissionChain from '@/components/cinematic/TaskCon
 import SkillSwarmReportGraphExecutionNetwork from '@/components/cinematic/SkillSwarmReportGraphExecutionNetwork';
 import InvestigationDatasetSkillContactCoverage from '@/components/cinematic/InvestigationDatasetSkillContactCoverage';
 import SwarmAlertKnowledgeReportCoverage from '@/components/cinematic/SwarmAlertKnowledgeReportCoverage';
+import IntelProfileFullAssetCoverage from '@/components/cinematic/IntelProfileFullAssetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2003,6 +2004,8 @@ function App() {
             <InvestigationDatasetSkillContactCoverage />
             {/* F127 (overnight 2026-10-22): SwarmJob × Ops Alert × Knowledge × Report — Automated Response Coverage Matrix — ◈ SWARKMAT button (left:119480, bottom:8, zIndex:224); fetches /entities/SwarmJob + /v1/ops/alerts + /knowledge/ + /v1/reports; keyword-matches each swarm job against ops alerts, knowledge articles, and reports to classify RESPONSIVE/ALERTED/DOCUMENTED/BLIND (4-source); stat tiles (jobs/alerts/knowledge/reports/responsive/alerted/documented/blind); amber pulse on BLIND count (automation blind spots: no alert trigger, no knowledge grounding, no report output); expandable rows show matched ops alerts with severity badge + matched knowledge articles with category badge + matched reports with date badge; filter tabs ALL/RESPONSIVE/ALERTED/DOCUMENTED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwarkmatQuery exported; "swarkmat"/"swarm alert"/"automated response coverage"/"swarm response"/"automation coverage"/"blind automation"/"automation blind spot"/"swarm coverage audit" voice triggers; jarvis:swarkmat-toggle event; 90-s auto-refresh */}
             <SwarmAlertKnowledgeReportCoverage />
+            {/* F128 (overnight 2026-10-22): IntelProfile × Contact × Dataset × Scenario × Skill — Full Asset Coverage (5-source) — ◈ IPFAC5 button (left:120040, bottom:8, zIndex:225); fetches /entities/IntelProfile + /entities/Contact + /v1/datasets + /v1/scenario/list + /v1/aip/skill; keyword-matches each intel profile against contacts, datasets, scenarios, and skills to classify GROUNDED/CAPABLE/SOURCED/SHADOW (5-source); stat tiles (profiles/contacts/datasets/scenarios/skills/grounded/capable/sourced/shadow); red pulse on SHADOW count (full intelligence blind spots: no personnel, no data, no playbook, no skill); expandable rows show matched contacts with role/org + matched datasets with row-count badge + matched scenarios with status badge + matched skills with score badge; filter tabs ALL/GROUNDED/CAPABLE/SOURCED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIpfac5Query+buildIpfac5Script exported; "ipfac5"/"intel full coverage"/"full intel coverage"/"intel asset coverage"/"shadow intel"/"intel blind spot"/"full coverage audit" voice triggers; jarvis:ipfac5-toggle event; 90-s auto-refresh */}
+            <IntelProfileFullAssetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

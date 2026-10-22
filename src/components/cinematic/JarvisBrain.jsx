@@ -70,6 +70,7 @@ import { isMcrchQuery } from "@/components/cinematic/TaskContactOpsAlertBrainMis
 import { isSsgexQuery } from "@/components/cinematic/SkillSwarmReportGraphExecutionNetwork";
 import { isIdscovQuery } from "@/components/cinematic/InvestigationDatasetSkillContactCoverage";
 import { isSwarkmatQuery } from "@/components/cinematic/SwarmAlertKnowledgeReportCoverage";
+import { isIpfac5Query } from "@/components/cinematic/IntelProfileFullAssetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -226,6 +227,7 @@ export default function JarvisBrain() {
     if (isSsgexQuery(q))     { window.dispatchEvent(new Event("jarvis:ssgex-toggle")); }
     if (isIdscovQuery(q))    { window.dispatchEvent(new Event("jarvis:idscov-toggle")); }
     if (isSwarkmatQuery(q))  { window.dispatchEvent(new Event("jarvis:swarkmat-toggle")); }
+    if (isIpfac5Query(q))    { window.dispatchEvent(new Event("jarvis:ipfac5-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
