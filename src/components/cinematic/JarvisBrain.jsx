@@ -65,6 +65,7 @@ import { isCsbfndQuery } from "@/components/cinematic/ContactScenarioBrainDatase
 import { isRstexQuery } from "@/components/cinematic/RiskSignalScenarioBrainTaskEscalation";
 import { isErescovQuery } from "@/components/cinematic/OpsAlertSwarmContactScenarioCoverage";
 import { isIdkrmapQuery } from "@/components/cinematic/IntelProfileDatasetKnowledgeRiskMap";
+import { isGisraudQuery } from "@/components/cinematic/GraphIntelSwarmReportAudit";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -216,6 +217,7 @@ export default function JarvisBrain() {
     if (isRstexQuery(q))     { window.dispatchEvent(new Event("jarvis:rstex-toggle")); }
     if (isErescovQuery(q))   { window.dispatchEvent(new Event("jarvis:erescov-toggle")); }
     if (isIdkrmapQuery(q))   { window.dispatchEvent(new Event("jarvis:idkrmap-toggle")); }
+    if (isGisraudQuery(q))   { window.dispatchEvent(new Event("jarvis:gisraud-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
