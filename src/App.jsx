@@ -632,6 +632,7 @@ import IntelProfileDatasetKnowledgeRiskMap from '@/components/cinematic/IntelPro
 import GraphIntelSwarmReportAudit from '@/components/cinematic/GraphIntelSwarmReportAudit';
 import TaskContactOpsAlertBrainMissionChain from '@/components/cinematic/TaskContactOpsAlertBrainMissionChain';
 import SkillSwarmReportGraphExecutionNetwork from '@/components/cinematic/SkillSwarmReportGraphExecutionNetwork';
+import InvestigationDatasetSkillContactCoverage from '@/components/cinematic/InvestigationDatasetSkillContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1997,6 +1998,8 @@ function App() {
             <TaskContactOpsAlertBrainMissionChain />
             {/* F125 (overnight 2026-10-22): Skill × SwarmJob × Report × Graph Operational Execution Network — ◈ SSGEX button (left:118360, bottom:8, zIndex:222); fetches /v1/aip/skill + /entities/SwarmJob + /v1/reports + /v1/graph/centrality; keyword-matches each skill against swarm jobs, reports, and graph nodes to classify DEPLOYED/PROCESSING/PUBLISHED/DORMANT (4-source); stat tiles (skills/swarm/reports/graph/deployed/processing/published/dormant); red pulse on DORMANT count (isolated skills: no automation, no report, no graph trace); expandable rows show matched swarm jobs with status badge + matched reports with date badge + matched graph nodes with centrality score badge; filter tabs ALL/DEPLOYED/PROCESSING/PUBLISHED/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSsgexQuery exported; "ssgex"/"skill execution network"/"skill swarm report"/"skill graph network"/"dormant skills"/"idle skills"/"skill deployment"/"skill automation network" voice triggers; jarvis:ssgex-toggle event; 90-s auto-refresh */}
             <SkillSwarmReportGraphExecutionNetwork />
+            {/* F126 (overnight 2026-10-22): Investigation × Dataset × Skill × Contact — Active Mission Intelligence Coverage — ◈ IDSCOV button (left:118920, bottom:8, zIndex:223); fetches /v1/investigations + /v1/datasets + /v1/aip/skill + /entities/Contact; keyword-matches each investigation against datasets, skills, and contacts to classify COVERED/RESOURCED/SKILLED/EXPOSED (4-source); stat tiles (cases/datasets/skills/contacts/covered/resourced/skilled/exposed); red pulse on EXPOSED count (undefended open cases: no data source, no skill, no contact); expandable rows show matched datasets with row-count badge + matched skills with score badge + matched contacts with role/org; filter tabs ALL/COVERED/RESOURCED/SKILLED/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIdscovQuery exported; "idscov"/"investigation coverage"/"exposed investigations"/"undefended cases"/"case intelligence coverage" voice triggers; jarvis:idscov-toggle event; 90-s auto-refresh */}
+            <InvestigationDatasetSkillContactCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
