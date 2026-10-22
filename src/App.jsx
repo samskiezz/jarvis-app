@@ -635,6 +635,7 @@ import SkillSwarmReportGraphExecutionNetwork from '@/components/cinematic/SkillS
 import InvestigationDatasetSkillContactCoverage from '@/components/cinematic/InvestigationDatasetSkillContactCoverage';
 import SwarmAlertKnowledgeReportCoverage from '@/components/cinematic/SwarmAlertKnowledgeReportCoverage';
 import IntelProfileFullAssetCoverage from '@/components/cinematic/IntelProfileFullAssetCoverage';
+import TaskBrainGraphReportOpsMissionControl from '@/components/cinematic/TaskBrainGraphReportOpsMissionControl';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2006,6 +2007,8 @@ function App() {
             <SwarmAlertKnowledgeReportCoverage />
             {/* F128 (overnight 2026-10-22): IntelProfile × Contact × Dataset × Scenario × Skill — Full Asset Coverage (5-source) — ◈ IPFAC5 button (left:120040, bottom:8, zIndex:225); fetches /entities/IntelProfile + /entities/Contact + /v1/datasets + /v1/scenario/list + /v1/aip/skill; keyword-matches each intel profile against contacts, datasets, scenarios, and skills to classify GROUNDED/CAPABLE/SOURCED/SHADOW (5-source); stat tiles (profiles/contacts/datasets/scenarios/skills/grounded/capable/sourced/shadow); red pulse on SHADOW count (full intelligence blind spots: no personnel, no data, no playbook, no skill); expandable rows show matched contacts with role/org + matched datasets with row-count badge + matched scenarios with status badge + matched skills with score badge; filter tabs ALL/GROUNDED/CAPABLE/SOURCED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIpfac5Query+buildIpfac5Script exported; "ipfac5"/"intel full coverage"/"full intel coverage"/"intel asset coverage"/"shadow intel"/"intel blind spot"/"full coverage audit" voice triggers; jarvis:ipfac5-toggle event; 90-s auto-refresh */}
             <IntelProfileFullAssetCoverage />
+            {/* F129 (overnight 2026-10-22): Task × Brain × Graph × Report × Ops Alert — Mission Control Intelligence (5-source) — ◈ MCTRL button (left:120600, bottom:8, zIndex:226); fetches /entities/Task + /v1/cinematic/brain + /v1/graph/centrality + /v1/reports + /v1/ops/alerts; keyword-matches each task against brain nodes, graph centrality nodes, reports, and ops alerts to classify COMMANDED/MODELED/GRAPHED/DOCUMENTED/ADRIFT (5-source); stat tiles (tasks/brain/graph/reports/alerts/commanded/modeled/graphed/documented/adrift); red pulse on ADRIFT count (mission orphans: no brain model, no graph trace, no report, no ops alert); expandable rows show matched brain nodes with centrality score badge + matched graph nodes with centrality score badge + matched reports with date badge + matched ops alerts with severity badge; filter tabs ALL/COMMANDED/MODELED/GRAPHED/DOCUMENTED/ADRIFT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isMctrlQuery+buildMctrlScript exported; "mctrl"/"mission control"/"task mission control"/"mission orphan"/"adrift tasks"/"task brain graph"/"task report alert"/"commanded tasks"/"mission audit" voice triggers; jarvis:mctrl-toggle event; 90-s auto-refresh */}
+            <TaskBrainGraphReportOpsMissionControl />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
