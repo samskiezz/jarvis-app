@@ -617,6 +617,7 @@ import InvestigationBrainSkillReportCoverage from '@/components/cinematic/Invest
 import DatasetSwarmGraphOpsProductionAudit from '@/components/cinematic/DatasetSwarmGraphOpsProductionAudit';
 import IntelProfileReportOpsAlertGraphChain from '@/components/cinematic/IntelProfileReportOpsAlertGraphChain';
 import RiskSignalSkillGraphContactNetwork from '@/components/cinematic/RiskSignalSkillGraphContactNetwork';
+import TaskDatasetBrainInvestigationDepth from '@/components/cinematic/TaskDatasetBrainInvestigationDepth';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -1952,6 +1953,8 @@ function App() {
             <IntelProfileReportOpsAlertGraphChain />
             {/* F110 (overnight 2026-10-22): RiskSignal × Skill × Graph × Contact Threat Response Capability Network — ◈ TRCNET button (left:109960, bottom:8, zIndex:207); fetches /entities/RiskSignal + /v1/aip/skill + /v1/graph/centrality + /entities/Contact; keyword-matches each risk signal (title/type/description) against skill names/descriptions, graph node labels/types, and contact names/orgs to classify COVERED/CAPABLE/TRACED/EXPOSED; stat tiles (signals/covered/capable/traced/exposed); red pulse on EXPOSED count (full defense blind spots); expandable rows show matched skills with score badge + matched graph nodes with centrality score badge + matched contacts with role/org; filter tabs ALL/COVERED/CAPABLE/TRACED/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTrcnetQuery exported; "trcnet"/"threat response"/"response network"/"defense coverage"/"threat capability"/"threat network"/"response capability"/"risk response"/"threat defense"/"exposed threats"/"skill gap"/"response gap"/"defense blind spot"/"threat coverage"/"capability network" voice triggers; jarvis:trcnet-toggle event; 90-s auto-refresh */}
             <RiskSignalSkillGraphContactNetwork />
+            {/* F111 (overnight 2026-10-22): Task × Dataset × Brain × Investigation Operational Execution Depth — ◈ TDBIEX button (left:110520, bottom:8, zIndex:208); fetches /entities/Task + /v1/datasets + /v1/cinematic/brain + /v1/investigations; keyword-matches each task against dataset names/descriptions, brain node labels/types, and investigation summaries to classify GROUNDED/SUPPORTED/TRACKED/ADRIFT; stat tiles (tasks/grounded/supported/tracked/adrift); red pulse on ADRIFT count (tasks with no dataset grounding, no brain model, and no linked investigation — operational blind spots); expandable rows show matched datasets with row-count badge + matched brain nodes with centrality score badge + matched investigations with status badge; filter tabs ALL/GROUNDED/SUPPORTED/TRACKED/ADRIFT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTdbiexQuery exported; "tdbiex"/"task execution depth"/"task grounding"/"adrift tasks"/"task blind spot"/"task dataset"/"task brain"/"task investigation"/"execution depth"/"grounded tasks"/"operational depth"/"task coverage"/"task anchor" voice triggers; jarvis:tdbiex-toggle event; 90-s auto-refresh */}
+            <TaskDatasetBrainInvestigationDepth />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
