@@ -633,6 +633,7 @@ import GraphIntelSwarmReportAudit from '@/components/cinematic/GraphIntelSwarmRe
 import TaskContactOpsAlertBrainMissionChain from '@/components/cinematic/TaskContactOpsAlertBrainMissionChain';
 import SkillSwarmReportGraphExecutionNetwork from '@/components/cinematic/SkillSwarmReportGraphExecutionNetwork';
 import InvestigationDatasetSkillContactCoverage from '@/components/cinematic/InvestigationDatasetSkillContactCoverage';
+import SwarmAlertKnowledgeReportCoverage from '@/components/cinematic/SwarmAlertKnowledgeReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2000,6 +2001,8 @@ function App() {
             <SkillSwarmReportGraphExecutionNetwork />
             {/* F126 (overnight 2026-10-22): Investigation × Dataset × Skill × Contact — Active Mission Intelligence Coverage — ◈ IDSCOV button (left:118920, bottom:8, zIndex:223); fetches /v1/investigations + /v1/datasets + /v1/aip/skill + /entities/Contact; keyword-matches each investigation against datasets, skills, and contacts to classify COVERED/RESOURCED/SKILLED/EXPOSED (4-source); stat tiles (cases/datasets/skills/contacts/covered/resourced/skilled/exposed); red pulse on EXPOSED count (undefended open cases: no data source, no skill, no contact); expandable rows show matched datasets with row-count badge + matched skills with score badge + matched contacts with role/org; filter tabs ALL/COVERED/RESOURCED/SKILLED/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIdscovQuery exported; "idscov"/"investigation coverage"/"exposed investigations"/"undefended cases"/"case intelligence coverage" voice triggers; jarvis:idscov-toggle event; 90-s auto-refresh */}
             <InvestigationDatasetSkillContactCoverage />
+            {/* F127 (overnight 2026-10-22): SwarmJob × Ops Alert × Knowledge × Report — Automated Response Coverage Matrix — ◈ SWARKMAT button (left:119480, bottom:8, zIndex:224); fetches /entities/SwarmJob + /v1/ops/alerts + /knowledge/ + /v1/reports; keyword-matches each swarm job against ops alerts, knowledge articles, and reports to classify RESPONSIVE/ALERTED/DOCUMENTED/BLIND (4-source); stat tiles (jobs/alerts/knowledge/reports/responsive/alerted/documented/blind); amber pulse on BLIND count (automation blind spots: no alert trigger, no knowledge grounding, no report output); expandable rows show matched ops alerts with severity badge + matched knowledge articles with category badge + matched reports with date badge; filter tabs ALL/RESPONSIVE/ALERTED/DOCUMENTED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwarkmatQuery exported; "swarkmat"/"swarm alert"/"automated response coverage"/"swarm response"/"automation coverage"/"blind automation"/"automation blind spot"/"swarm coverage audit" voice triggers; jarvis:swarkmat-toggle event; 90-s auto-refresh */}
+            <SwarmAlertKnowledgeReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
