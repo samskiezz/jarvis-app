@@ -61,6 +61,7 @@ import { isIsgrmxQuery } from "@/components/cinematic/InvestmentScenarioGraphRis
 import { isSdkopmQuery } from "@/components/cinematic/SceneDatasetKnowledgeSkillFoundation";
 import { isCtidopQuery } from "@/components/cinematic/ContactTaskInvestigationDatasetCoverage";
 import { isKgonetQuery } from "@/components/cinematic/KnowledgeGraphOpsSwarmNetwork";
+import { isCsbfndQuery } from "@/components/cinematic/ContactScenarioBrainDatasetFoundation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -208,6 +209,7 @@ export default function JarvisBrain() {
     if (isSdkopmQuery(q))    { window.dispatchEvent(new Event("jarvis:sdkopm-toggle")); }
     if (isCtidopQuery(q))    { window.dispatchEvent(new Event("jarvis:ctidop-toggle")); }
     if (isKgonetQuery(q))    { window.dispatchEvent(new Event("jarvis:kgonet-toggle")); }
+    if (isCsbfndQuery(q))    { window.dispatchEvent(new Event("jarvis:csbfnd-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
