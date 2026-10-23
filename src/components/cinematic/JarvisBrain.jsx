@@ -78,6 +78,7 @@ import { isScsdrsQuery } from "@/components/cinematic/SceneContactSkillDatasetRi
 import { isCrkoaQuery } from "@/components/cinematic/ContactReportKnowledgeGraphAlertDistribution";
 import { isDbtscnQuery } from "@/components/cinematic/DatasetBrainTaskScenarioContactAuthorityNetwork";
 import { isIrosiQuery } from "@/components/cinematic/InvestmentRiskOpsSwarmInvestigationMatrix";
+import { isBsdcsQuery } from "@/components/cinematic/BrainScenarioDatasetContactSkillFoundation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -242,6 +243,7 @@ export default function JarvisBrain() {
     if (isCrkoaQuery(q))     { window.dispatchEvent(new Event("jarvis:crkoa-toggle")); }
     if (isDbtscnQuery(q))    { window.dispatchEvent(new Event("jarvis:dbtscn-toggle")); }
     if (isIrosiQuery(q))     { window.dispatchEvent(new Event("jarvis:irosi-toggle")); }
+    if (isBsdcsQuery(q))     { window.dispatchEvent(new Event("jarvis:bsdcs-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
