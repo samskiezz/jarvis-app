@@ -655,6 +655,7 @@ import IntelProfileReportTaskDatasetBrainAuthority from '@/components/cinematic/
 import GraphIntelProfileScenarioContactOpsCommand from '@/components/cinematic/GraphIntelProfileScenarioContactOpsCommand';
 import SkillIntelGraphDatasetOpsCommand from '@/components/cinematic/SkillIntelGraphDatasetOpsCommand';
 import LiveIntelScenarioContactDatasetReportNexus from '@/components/cinematic/LiveIntelScenarioContactDatasetReportNexus';
+import OpsAlertDatasetGraphBrainContactFusion from '@/components/cinematic/OpsAlertDatasetGraphBrainContactFusion';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2066,6 +2067,8 @@ function App() {
             <SkillIntelGraphDatasetOpsCommand />
             {/* F148 (overnight 2026-10-23): LiveIntel × Scenario × Contact × Dataset × Report — Live Threat Response Intelligence Nexus (5-source) — ◈ LTRINEX button (left:131240, bottom:8, zIndex:245); fetches /functions/getLiveIntel + /v1/scenario/list + /entities/Contact + /v1/datasets + /v1/reports; groups live events by category (earthquake region, crypto symbol, FX pair) and keyword-matches against scenarios, contacts, datasets, and reports to classify RESPONDING/STAGED/STAFFED/DARK; red pulse on DARK count (live event categories with no scenario playbook, no contact owner, no dataset, no report — full live intelligence blind spots); expandable rows show matched scenarios with status badge + matched contacts with role/org + matched datasets with row-count badge + matched reports with date badge; filter tabs ALL/RESPONDING/STAGED/STAFFED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLtrinexQuery+buildLtrinexScript exported; "ltrinex"/"live threat nexus"/"live intel scenario"/"live threat response"/"dark live events"/"threat response nexus"/"live response intelligence" voice triggers; jarvis:ltrinex-toggle event; 90-s auto-refresh */}
             <LiveIntelScenarioContactDatasetReportNexus />
+            {/* F149 (overnight 2026-10-23): Ops Alert × Dataset × Graph × Brain × Contact — Full Operational Intelligence Fusion (5-source) — ◈ OAGBCFUS button (left:131800, bottom:8, zIndex:246); fetches /v1/ops/alerts + /v1/datasets + /v1/graph/centrality + /v1/cinematic/brain + /entities/Contact; keyword-matches each ops alert against datasets, graph nodes, brain nodes, and contacts to classify FUSED/GROUNDED/PARTIAL/BLIND; red pulse on BLIND count (ops alerts with no dataset backing, no graph trace, no brain model, no contact owner — full operational blind spots); expandable rows show matched datasets with row-count badge + matched graph nodes with centrality score badge + matched brain nodes with type badge + matched contacts with role/org; filter tabs ALL/FUSED/GROUNDED/PARTIAL/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOagbcfusQuery+buildOagbcfusScript exported; "oagbcfus"/"ops alert fusion"/"alert dataset graph"/"ops brain contact"/"alert intelligence fusion"/"operational intelligence fusion" voice triggers; jarvis:oagbcfus-toggle event; 90-s auto-refresh */}
+            <OpsAlertDatasetGraphBrainContactFusion />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

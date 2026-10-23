@@ -91,6 +91,7 @@ import { isIptdbaQuery } from "@/components/cinematic/IntelProfileReportTaskData
 import { isGiscnetQuery } from "@/components/cinematic/GraphIntelProfileScenarioContactOpsCommand";
 import { isSkicovQuery } from "@/components/cinematic/SkillIntelGraphDatasetOpsCommand";
 import { isLtrinexQuery } from "@/components/cinematic/LiveIntelScenarioContactDatasetReportNexus";
+import { isOagbcfusQuery } from "@/components/cinematic/OpsAlertDatasetGraphBrainContactFusion";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -267,7 +268,8 @@ export default function JarvisBrain() {
     if (isIptdbaQuery(q))   { window.dispatchEvent(new Event("jarvis:iptdba-toggle")); }
     if (isGiscnetQuery(q))  { window.dispatchEvent(new Event("jarvis:giscnet-toggle")); }
     if (isSkicovQuery(q))   { window.dispatchEvent(new Event("jarvis:skicov-toggle")); }
-    if (isLtrinexQuery(q))  { window.dispatchEvent(new Event("jarvis:ltrinex-toggle")); }
+    if (isLtrinexQuery(q))    { window.dispatchEvent(new Event("jarvis:ltrinex-toggle")); }
+    if (isOagbcfusQuery(q))  { window.dispatchEvent(new Event("jarvis:oagbcfus-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
