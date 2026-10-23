@@ -650,6 +650,7 @@ import RiskKnowledgeDatasetReportBrainDepth from '@/components/cinematic/RiskKno
 import InvestigationIntelSwarmDatasetBrainFoundation from '@/components/cinematic/InvestigationIntelSwarmDatasetBrainFoundation';
 import SceneOpsIntelReportGraphAuthority from '@/components/cinematic/SceneOpsIntelReportGraphAuthority';
 import ContactInvestmentSwarmBrainOpsMonitor from '@/components/cinematic/ContactInvestmentSwarmBrainOpsMonitor';
+import TaskKnowledgeGraphRiskOpsDepth from '@/components/cinematic/TaskKnowledgeGraphRiskOpsDepth';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2051,6 +2052,8 @@ function App() {
             <SceneOpsIntelReportGraphAuthority />
             {/* F143 (overnight 2026-10-23): Contact × Investment × SwarmJob × Brain × Ops Alert — Operational Wealth Command Monitor (5-source) — ◈ CIBOC button (left:128440, bottom:8, zIndex:240); fetches /entities/Contact + /entities/Investment + /entities/SwarmJob + /v1/cinematic/brain + /v1/ops/alerts; keyword-matches each contact against investments, swarm jobs, brain nodes, and ops alerts to classify COMMANDING/FUNDED/PROCESSING/GHOST; red pulse on GHOST count (contacts with no investment link, no swarm automation, no brain grounding, no ops alert — zero operational authority); expandable rows show matched investments with type/value badge + matched swarm jobs with status badge + matched brain nodes with centrality score badge + matched ops alerts with severity badge; filter tabs ALL/COMMANDING/FUNDED/PROCESSING/GHOST + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCibocQuery+buildCibocScript exported; "ciboc"/"contact wealth command"/"operational wealth"/"ghost contacts"/"contact investment swarm"/"wealth command" voice triggers; jarvis:ciboc-toggle event; 90-s auto-refresh */}
             <ContactInvestmentSwarmBrainOpsMonitor />
+            {/* F144 (overnight 2026-10-23): Task × Knowledge × Graph × RiskSignal × Ops Alert — Operational Threat Intelligence Depth (5-source) — ◈ TKGROA button (left:129000, bottom:8, zIndex:241); fetches /entities/Task + /knowledge/ + /v1/graph/centrality + /entities/RiskSignal + /v1/ops/alerts; keyword-matches each task against knowledge articles, graph nodes, risk signals, and ops alerts to classify GROUNDED/AWARE/PARTIAL/BLIND; red pulse on BLIND count (tasks with no knowledge grounding, no graph trace, no risk signal, no ops alert — full intelligence dead spots); expandable rows show matched knowledge articles with category badge + matched graph nodes with centrality score badge + matched risk signals with severity badge + matched ops alerts with severity badge; filter tabs ALL/GROUNDED/AWARE/PARTIAL/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTkgroaQuery+buildTkgroaScript exported; "tkgroa"/"task intelligence depth"/"task threat intel"/"task blind"/"blind task"/"task knowledge graph"/"task risk ops" voice triggers; jarvis:tkgroa-toggle event; 90-s auto-refresh */}
+            <TaskKnowledgeGraphRiskOpsDepth />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
