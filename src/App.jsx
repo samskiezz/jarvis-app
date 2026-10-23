@@ -653,6 +653,7 @@ import ContactInvestmentSwarmBrainOpsMonitor from '@/components/cinematic/Contac
 import TaskKnowledgeGraphRiskOpsDepth from '@/components/cinematic/TaskKnowledgeGraphRiskOpsDepth';
 import IntelProfileReportTaskDatasetBrainAuthority from '@/components/cinematic/IntelProfileReportTaskDatasetBrainAuthority';
 import GraphIntelProfileScenarioContactOpsCommand from '@/components/cinematic/GraphIntelProfileScenarioContactOpsCommand';
+import SkillIntelGraphDatasetOpsCommand from '@/components/cinematic/SkillIntelGraphDatasetOpsCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2060,6 +2061,8 @@ function App() {
             <IntelProfileReportTaskDatasetBrainAuthority />
             {/* F146 (overnight 2026-10-23): Graph × IntelProfile × Scenario × Contact × Ops Alert — Strategic Intelligence Command Network (5-source) — ◈ GISCNET button (left:130120, bottom:8, zIndex:243); fetches /v1/graph/centrality + /entities/IntelProfile + /v1/scenario/list + /entities/Contact + /v1/ops/alerts; keyword-matches each graph node against intel profiles, scenarios, contacts, and ops alerts to classify COMMANDING/ACTIVE/MONITORED/DARK (5-source); red pulse on DARK count (blind-spot nodes with no intel profile, no scenario, no contact, and no ops alert — full strategic dead zones); expandable rows show matched intel profiles with category badge + matched scenarios with status badge + matched contacts with role/org + matched ops alerts with severity badge; filter tabs ALL/COMMANDING/ACTIVE/MONITORED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGiscnetQuery+buildGiscnetScript exported; "giscnet"/"graph intel scenario"/"strategic command network"/"dark node"/"graph command intel"/"strategic intelligence command" voice triggers; jarvis:giscnet-toggle event; 90-s auto-refresh */}
             <GraphIntelProfileScenarioContactOpsCommand />
+            {/* F147 (overnight 2026-10-23): Skill × IntelProfile × Graph × Dataset × Ops Alert — Intelligence Capability Coverage Network (5-source) — ◈ SKICOV button (left:130680, bottom:8, zIndex:244); fetches /v1/aip/skill + /entities/IntelProfile + /v1/graph/centrality + /v1/datasets + /v1/ops/alerts; keyword-matches each skill against intel profiles, graph nodes, datasets, and ops alerts to classify DEPLOYED/ACTIVE/PARTIAL/BLIND; red pulse on BLIND count (skills with no intel profile, no graph trace, no dataset, no ops alert — full capability blind spots); expandable rows show matched intel profiles with category badge + matched graph nodes with centrality score badge + matched datasets with row-count badge + matched ops alerts with severity badge; filter tabs ALL/DEPLOYED/ACTIVE/PARTIAL/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSkicovQuery+buildSkicovScript exported; "skicov"/"skill intel graph"/"skill capability coverage"/"intelligence capability network"/"skill graph dataset"/"blind skill"/"skill blind" voice triggers; jarvis:skicov-toggle event; 90-s auto-refresh */}
+            <SkillIntelGraphDatasetOpsCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

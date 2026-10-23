@@ -89,6 +89,7 @@ import { isCibocQuery } from "@/components/cinematic/ContactInvestmentSwarmBrain
 import { isTkgroaQuery } from "@/components/cinematic/TaskKnowledgeGraphRiskOpsDepth";
 import { isIptdbaQuery } from "@/components/cinematic/IntelProfileReportTaskDatasetBrainAuthority";
 import { isGiscnetQuery } from "@/components/cinematic/GraphIntelProfileScenarioContactOpsCommand";
+import { isSkicovQuery } from "@/components/cinematic/SkillIntelGraphDatasetOpsCommand";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -264,6 +265,7 @@ export default function JarvisBrain() {
     if (isTkgroaQuery(q))   { window.dispatchEvent(new Event("jarvis:tkgroa-toggle")); }
     if (isIptdbaQuery(q))   { window.dispatchEvent(new Event("jarvis:iptdba-toggle")); }
     if (isGiscnetQuery(q))  { window.dispatchEvent(new Event("jarvis:giscnet-toggle")); }
+    if (isSkicovQuery(q))   { window.dispatchEvent(new Event("jarvis:skicov-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
