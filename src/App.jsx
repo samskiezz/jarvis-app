@@ -649,6 +649,7 @@ import SwarmKnowledgeContactOpsInvestigationCoverage from '@/components/cinemati
 import RiskKnowledgeDatasetReportBrainDepth from '@/components/cinematic/RiskKnowledgeDatasetReportBrainDepth';
 import InvestigationIntelSwarmDatasetBrainFoundation from '@/components/cinematic/InvestigationIntelSwarmDatasetBrainFoundation';
 import SceneOpsIntelReportGraphAuthority from '@/components/cinematic/SceneOpsIntelReportGraphAuthority';
+import ContactInvestmentSwarmBrainOpsMonitor from '@/components/cinematic/ContactInvestmentSwarmBrainOpsMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2048,6 +2049,8 @@ function App() {
             <InvestigationIntelSwarmDatasetBrainFoundation />
             {/* F142 (overnight 2026-10-23): Scene × Ops Alert × IntelProfile × Report × Graph — Cinematic Scene Intelligence Authority Audit (5-source) — ◈ SCAUTH button (left:127880, bottom:8, zIndex:239); fetches all 10 /v1/cinematic/scene/{1..10} + /v1/ops/alerts + /entities/IntelProfile + /v1/reports + /v1/graph/centrality; keyword-matches each cinematic scene against ops alerts, intel profiles, reports, and graph nodes to classify AUTHORIZED/ACTIVE/PARTIAL/DARK; red pulse on DARK count (unmonitored scenes with no ops alert, no intel profile, no report, no graph trace — operational blind spots); expandable rows show matched ops alerts with severity badge + matched intel profiles with category badge + matched reports with date badge + matched graph nodes with centrality score badge; filter tabs ALL/AUTHORIZED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScauthQuery+buildScauthScript exported; "scauth"/"scene authority"/"scene intel authority"/"cinematic authority"/"unmonitored scene"/"scene blind" voice triggers; jarvis:scauth-toggle event; 90-s auto-refresh */}
             <SceneOpsIntelReportGraphAuthority />
+            {/* F143 (overnight 2026-10-23): Contact × Investment × SwarmJob × Brain × Ops Alert — Operational Wealth Command Monitor (5-source) — ◈ CIBOC button (left:128440, bottom:8, zIndex:240); fetches /entities/Contact + /entities/Investment + /entities/SwarmJob + /v1/cinematic/brain + /v1/ops/alerts; keyword-matches each contact against investments, swarm jobs, brain nodes, and ops alerts to classify COMMANDING/FUNDED/PROCESSING/GHOST; red pulse on GHOST count (contacts with no investment link, no swarm automation, no brain grounding, no ops alert — zero operational authority); expandable rows show matched investments with type/value badge + matched swarm jobs with status badge + matched brain nodes with centrality score badge + matched ops alerts with severity badge; filter tabs ALL/COMMANDING/FUNDED/PROCESSING/GHOST + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCibocQuery+buildCibocScript exported; "ciboc"/"contact wealth command"/"operational wealth"/"ghost contacts"/"contact investment swarm"/"wealth command" voice triggers; jarvis:ciboc-toggle event; 90-s auto-refresh */}
+            <ContactInvestmentSwarmBrainOpsMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
