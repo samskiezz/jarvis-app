@@ -645,6 +645,7 @@ import InvestmentRiskOpsSwarmInvestigationMatrix from '@/components/cinematic/In
 import BrainScenarioDatasetContactSkillFoundation from '@/components/cinematic/BrainScenarioDatasetContactSkillFoundation';
 import ScenarioGraphReportOpsAlertContactCoverage from '@/components/cinematic/ScenarioGraphReportOpsAlertContactCoverage';
 import TaskSkillDatasetReportGraphFoundation from '@/components/cinematic/TaskSkillDatasetReportGraphFoundation';
+import SwarmKnowledgeContactOpsInvestigationCoverage from '@/components/cinematic/SwarmKnowledgeContactOpsInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2037,6 +2038,8 @@ function App() {
             <ScenarioGraphReportOpsAlertContactCoverage />
             {/* F138 (overnight 2026-10-23): Task × Skill × Dataset × Report × Graph — Operational Execution Intelligence Foundation (5-source) — ◈ TEXIF button (left:125640, bottom:8, zIndex:235); fetches /entities/Task + /v1/aip/skill + /v1/datasets + /v1/reports + /v1/graph/centrality; keyword-matches each task against skills, datasets, reports, and graph nodes to classify GROUNDED/CAPABLE/SOURCED/ADRIFT (5-source); stat tiles (tasks/grounded/capable/sourced/adrift); red pulse on ADRIFT count (tasks with zero execution grounding — no skill, no dataset, no report, no graph trace); expandable rows show matched skills with score badge + matched datasets with row-count badge + matched reports with date badge + matched graph nodes with centrality score badge; filter tabs ALL/GROUNDED/CAPABLE/SOURCED/ADRIFT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTexifQuery+buildTexifScript exported; "texif"/"task execution"/"task foundation"/"task intelligence foundation"/"adrift task"/"execution foundation" voice triggers; jarvis:texif-toggle event; 90-s auto-refresh */}
             <TaskSkillDatasetReportGraphFoundation />
+            {/* F139 (overnight 2026-10-23): SwarmJob × Knowledge × Contact × Ops Alert × Investigation — Intelligence Production Coverage (5-source) — ◈ SWKCIA button (left:126200, bottom:8, zIndex:236); fetches /entities/SwarmJob + /knowledge/ + /entities/Contact + /v1/ops/alerts + /v1/investigations; keyword-matches each swarm job against knowledge articles, contacts, ops alerts, and investigations to classify PRODUCING/DOCUMENTED/PARTIAL/BLIND (5-source); amber pulse on BLIND count (automation dead-ends: no knowledge grounding, no contact owner, no ops alert, no investigation); expandable rows show matched knowledge articles with category badge + matched contacts with role/org + matched ops alerts with severity badge + matched investigations with status badge; filter tabs ALL/PRODUCING/DOCUMENTED/PARTIAL/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwkciaQuery+buildSwkciaScript exported; "swkcia"/"swarm knowledge contact"/"swarm production coverage"/"intel production"/"blind swarm"/"automation coverage" voice triggers; jarvis:swkcia-toggle event; 90-s auto-refresh */}
+            <SwarmKnowledgeContactOpsInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
