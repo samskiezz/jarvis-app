@@ -648,6 +648,7 @@ import TaskSkillDatasetReportGraphFoundation from '@/components/cinematic/TaskSk
 import SwarmKnowledgeContactOpsInvestigationCoverage from '@/components/cinematic/SwarmKnowledgeContactOpsInvestigationCoverage';
 import RiskKnowledgeDatasetReportBrainDepth from '@/components/cinematic/RiskKnowledgeDatasetReportBrainDepth';
 import InvestigationIntelSwarmDatasetBrainFoundation from '@/components/cinematic/InvestigationIntelSwarmDatasetBrainFoundation';
+import SceneOpsIntelReportGraphAuthority from '@/components/cinematic/SceneOpsIntelReportGraphAuthority';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2045,6 +2046,8 @@ function App() {
             <RiskKnowledgeDatasetReportBrainDepth />
             {/* F141 (overnight 2026-10-23): Investigation × IntelProfile × SwarmJob × Dataset × Brain — Active Case Intelligence Foundation (5-source) — ◈ INVFND button (left:127320, bottom:8, zIndex:238); fetches /v1/investigations + /entities/IntelProfile + /entities/SwarmJob + /v1/datasets + /v1/cinematic/brain; keyword-matches each investigation against intel profiles, swarm jobs, datasets, and brain nodes to classify PROSECUTED/ACTIVE/PARTIAL/DARK (5-source); red pulse on DARK count (open cases with no intel profile, no swarm automation, no dataset, no brain model — operational dead spots); expandable rows show matched intel profiles with category badge + matched swarm jobs with status badge + matched datasets with row-count badge + matched brain nodes with type badge; filter tabs ALL/PROSECUTED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isInvfndQuery+buildInvfndScript exported; "invfnd"/"investigation foundation"/"case intelligence"/"active case intel"/"dark case" voice triggers; jarvis:invfnd-toggle event; 90-s auto-refresh */}
             <InvestigationIntelSwarmDatasetBrainFoundation />
+            {/* F142 (overnight 2026-10-23): Scene × Ops Alert × IntelProfile × Report × Graph — Cinematic Scene Intelligence Authority Audit (5-source) — ◈ SCAUTH button (left:127880, bottom:8, zIndex:239); fetches all 10 /v1/cinematic/scene/{1..10} + /v1/ops/alerts + /entities/IntelProfile + /v1/reports + /v1/graph/centrality; keyword-matches each cinematic scene against ops alerts, intel profiles, reports, and graph nodes to classify AUTHORIZED/ACTIVE/PARTIAL/DARK; red pulse on DARK count (unmonitored scenes with no ops alert, no intel profile, no report, no graph trace — operational blind spots); expandable rows show matched ops alerts with severity badge + matched intel profiles with category badge + matched reports with date badge + matched graph nodes with centrality score badge; filter tabs ALL/AUTHORIZED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScauthQuery+buildScauthScript exported; "scauth"/"scene authority"/"scene intel authority"/"cinematic authority"/"unmonitored scene"/"scene blind" voice triggers; jarvis:scauth-toggle event; 90-s auto-refresh */}
+            <SceneOpsIntelReportGraphAuthority />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
