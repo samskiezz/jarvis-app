@@ -652,6 +652,7 @@ import SceneOpsIntelReportGraphAuthority from '@/components/cinematic/SceneOpsIn
 import ContactInvestmentSwarmBrainOpsMonitor from '@/components/cinematic/ContactInvestmentSwarmBrainOpsMonitor';
 import TaskKnowledgeGraphRiskOpsDepth from '@/components/cinematic/TaskKnowledgeGraphRiskOpsDepth';
 import IntelProfileReportTaskDatasetBrainAuthority from '@/components/cinematic/IntelProfileReportTaskDatasetBrainAuthority';
+import GraphIntelProfileScenarioContactOpsCommand from '@/components/cinematic/GraphIntelProfileScenarioContactOpsCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2057,6 +2058,8 @@ function App() {
             <TaskKnowledgeGraphRiskOpsDepth />
             {/* F145 (overnight 2026-10-23): IntelProfile × Report × Task × Dataset × Brain — Intelligence Production Authority (5-source) — ◈ IPTDBA button (left:129560, bottom:8, zIndex:242); fetches /entities/IntelProfile + /v1/reports + /entities/Task + /v1/datasets + /v1/cinematic/brain; keyword-matches each intel profile against reports, tasks, datasets, and brain nodes to classify COMMANDING/ACTIVE/PARTIAL/DORMANT; red pulse on DORMANT count (full intel dead-ends — profiles with no report, no task, no dataset, no brain model); expandable rows show matched reports with date badge + matched tasks with status badge + matched datasets with row-count badge + matched brain nodes with type badge; filter tabs ALL/COMMANDING/ACTIVE/PARTIAL/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIptdbaQuery+buildIptdbaScript exported; "iptdba"/"intel production authority"/"intel commanding"/"dormant intel"/"intel report task dataset"/"intel brain authority" voice triggers; jarvis:iptdba-toggle event; 90-s auto-refresh */}
             <IntelProfileReportTaskDatasetBrainAuthority />
+            {/* F146 (overnight 2026-10-23): Graph × IntelProfile × Scenario × Contact × Ops Alert — Strategic Intelligence Command Network (5-source) — ◈ GISCNET button (left:130120, bottom:8, zIndex:243); fetches /v1/graph/centrality + /entities/IntelProfile + /v1/scenario/list + /entities/Contact + /v1/ops/alerts; keyword-matches each graph node against intel profiles, scenarios, contacts, and ops alerts to classify COMMANDING/ACTIVE/MONITORED/DARK (5-source); red pulse on DARK count (blind-spot nodes with no intel profile, no scenario, no contact, and no ops alert — full strategic dead zones); expandable rows show matched intel profiles with category badge + matched scenarios with status badge + matched contacts with role/org + matched ops alerts with severity badge; filter tabs ALL/COMMANDING/ACTIVE/MONITORED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGiscnetQuery+buildGiscnetScript exported; "giscnet"/"graph intel scenario"/"strategic command network"/"dark node"/"graph command intel"/"strategic intelligence command" voice triggers; jarvis:giscnet-toggle event; 90-s auto-refresh */}
+            <GraphIntelProfileScenarioContactOpsCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
