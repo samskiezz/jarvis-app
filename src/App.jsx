@@ -647,6 +647,7 @@ import ScenarioGraphReportOpsAlertContactCoverage from '@/components/cinematic/S
 import TaskSkillDatasetReportGraphFoundation from '@/components/cinematic/TaskSkillDatasetReportGraphFoundation';
 import SwarmKnowledgeContactOpsInvestigationCoverage from '@/components/cinematic/SwarmKnowledgeContactOpsInvestigationCoverage';
 import RiskKnowledgeDatasetReportBrainDepth from '@/components/cinematic/RiskKnowledgeDatasetReportBrainDepth';
+import InvestigationIntelSwarmDatasetBrainFoundation from '@/components/cinematic/InvestigationIntelSwarmDatasetBrainFoundation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2042,6 +2043,8 @@ function App() {
             {/* F139 (overnight 2026-10-23): SwarmJob × Knowledge × Contact × Ops Alert × Investigation — Intelligence Production Coverage (5-source) — ◈ SWKCIA button (left:126200, bottom:8, zIndex:236); fetches /entities/SwarmJob + /knowledge/ + /entities/Contact + /v1/ops/alerts + /v1/investigations; keyword-matches each swarm job against knowledge articles, contacts, ops alerts, and investigations to classify PRODUCING/DOCUMENTED/PARTIAL/BLIND (5-source); amber pulse on BLIND count (automation dead-ends: no knowledge grounding, no contact owner, no ops alert, no investigation); expandable rows show matched knowledge articles with category badge + matched contacts with role/org + matched ops alerts with severity badge + matched investigations with status badge; filter tabs ALL/PRODUCING/DOCUMENTED/PARTIAL/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSwkciaQuery+buildSwkciaScript exported; "swkcia"/"swarm knowledge contact"/"swarm production coverage"/"intel production"/"blind swarm"/"automation coverage" voice triggers; jarvis:swkcia-toggle event; 90-s auto-refresh */}
             <SwarmKnowledgeContactOpsInvestigationCoverage />
             <RiskKnowledgeDatasetReportBrainDepth />
+            {/* F141 (overnight 2026-10-23): Investigation × IntelProfile × SwarmJob × Dataset × Brain — Active Case Intelligence Foundation (5-source) — ◈ INVFND button (left:127320, bottom:8, zIndex:238); fetches /v1/investigations + /entities/IntelProfile + /entities/SwarmJob + /v1/datasets + /v1/cinematic/brain; keyword-matches each investigation against intel profiles, swarm jobs, datasets, and brain nodes to classify PROSECUTED/ACTIVE/PARTIAL/DARK (5-source); red pulse on DARK count (open cases with no intel profile, no swarm automation, no dataset, no brain model — operational dead spots); expandable rows show matched intel profiles with category badge + matched swarm jobs with status badge + matched datasets with row-count badge + matched brain nodes with type badge; filter tabs ALL/PROSECUTED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isInvfndQuery+buildInvfndScript exported; "invfnd"/"investigation foundation"/"case intelligence"/"active case intel"/"dark case" voice triggers; jarvis:invfnd-toggle event; 90-s auto-refresh */}
+            <InvestigationIntelSwarmDatasetBrainFoundation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
