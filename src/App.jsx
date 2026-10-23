@@ -643,6 +643,7 @@ import ContactReportKnowledgeGraphAlertDistribution from '@/components/cinematic
 import DatasetBrainTaskScenarioContactAuthorityNetwork from '@/components/cinematic/DatasetBrainTaskScenarioContactAuthorityNetwork';
 import InvestmentRiskOpsSwarmInvestigationMatrix from '@/components/cinematic/InvestmentRiskOpsSwarmInvestigationMatrix';
 import BrainScenarioDatasetContactSkillFoundation from '@/components/cinematic/BrainScenarioDatasetContactSkillFoundation';
+import ScenarioGraphReportOpsAlertContactCoverage from '@/components/cinematic/ScenarioGraphReportOpsAlertContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2031,6 +2032,8 @@ function App() {
             <InvestmentRiskOpsSwarmInvestigationMatrix />
             {/* F136 (overnight 2026-10-23): Brain × Scenario × Dataset × Contact × Skill — Operational Readiness Foundation (5-source) — ◈ BSDCS button (left:124520, bottom:8, zIndex:233); fetches /v1/cinematic/brain + /v1/scenario/list + /v1/datasets + /entities/Contact + /v1/aip/skill; keyword-matches each brain node against scenarios, datasets, contacts, and skills to classify OPERATIONAL/CAPABLE/PARTIAL/DARK (5-source); stat tiles (nodes/operational/capable/partial/dark); red pulse on DARK count (blind-spot brain nodes: no scenario, no dataset, no contact, no skill grounding); expandable rows show matched scenarios with status badge + matched datasets with row-count badge + matched contacts with role/org + matched skills with score badge; filter tabs ALL/OPERATIONAL/CAPABLE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isBsdcsQuery+buildBsdcsScript exported; "bsdcs"/"brain readiness"/"brain operational"/"brain scenario"/"brain dataset"/"brain skill"/"brain foundation"/"brain grounding"/"dark nodes"/"blind brain"/"node readiness"/"brain coverage" voice triggers; jarvis:bsdcs-toggle event; 90-s auto-refresh */}
             <BrainScenarioDatasetContactSkillFoundation />
+            {/* F137 (overnight 2026-10-23): Scenario × Graph × Report × Ops Alert × Contact — Strategic Operations Coverage (5-source) — ◈ SGROCOV button (left:125080, bottom:8, zIndex:234); fetches /v1/scenario/list + /v1/graph/centrality + /v1/reports + /v1/ops/alerts + /entities/Contact; keyword-matches each scenario against graph nodes, reports, ops alerts, and contacts to classify COMMANDING/ACTIVE/MONITORED/SHADOW (5-source); stat tiles (scenarios/commanding/active/monitored/shadow); red pulse on SHADOW count (strategically ungrounded scenarios: no graph trace, no report, no ops alert, no contact owner); expandable rows show matched graph nodes with centrality score badge + matched reports with date badge + matched ops alerts with severity badge + matched contacts with role/org; filter tabs ALL/COMMANDING/ACTIVE/MONITORED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSgrocovQuery+buildSgrocovScript exported; "sgrocov"/"scenario coverage"/"strategic ops"/"scenario graph"/"scenario shadow" voice triggers; jarvis:sgrocov-toggle event; 90-s auto-refresh */}
+            <ScenarioGraphReportOpsAlertContactCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
