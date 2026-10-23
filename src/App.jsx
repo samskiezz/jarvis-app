@@ -644,6 +644,7 @@ import DatasetBrainTaskScenarioContactAuthorityNetwork from '@/components/cinema
 import InvestmentRiskOpsSwarmInvestigationMatrix from '@/components/cinematic/InvestmentRiskOpsSwarmInvestigationMatrix';
 import BrainScenarioDatasetContactSkillFoundation from '@/components/cinematic/BrainScenarioDatasetContactSkillFoundation';
 import ScenarioGraphReportOpsAlertContactCoverage from '@/components/cinematic/ScenarioGraphReportOpsAlertContactCoverage';
+import TaskSkillDatasetReportGraphFoundation from '@/components/cinematic/TaskSkillDatasetReportGraphFoundation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2034,6 +2035,8 @@ function App() {
             <BrainScenarioDatasetContactSkillFoundation />
             {/* F137 (overnight 2026-10-23): Scenario × Graph × Report × Ops Alert × Contact — Strategic Operations Coverage (5-source) — ◈ SGROCOV button (left:125080, bottom:8, zIndex:234); fetches /v1/scenario/list + /v1/graph/centrality + /v1/reports + /v1/ops/alerts + /entities/Contact; keyword-matches each scenario against graph nodes, reports, ops alerts, and contacts to classify COMMANDING/ACTIVE/MONITORED/SHADOW (5-source); stat tiles (scenarios/commanding/active/monitored/shadow); red pulse on SHADOW count (strategically ungrounded scenarios: no graph trace, no report, no ops alert, no contact owner); expandable rows show matched graph nodes with centrality score badge + matched reports with date badge + matched ops alerts with severity badge + matched contacts with role/org; filter tabs ALL/COMMANDING/ACTIVE/MONITORED/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSgrocovQuery+buildSgrocovScript exported; "sgrocov"/"scenario coverage"/"strategic ops"/"scenario graph"/"scenario shadow" voice triggers; jarvis:sgrocov-toggle event; 90-s auto-refresh */}
             <ScenarioGraphReportOpsAlertContactCoverage />
+            {/* F138 (overnight 2026-10-23): Task × Skill × Dataset × Report × Graph — Operational Execution Intelligence Foundation (5-source) — ◈ TEXIF button (left:125640, bottom:8, zIndex:235); fetches /entities/Task + /v1/aip/skill + /v1/datasets + /v1/reports + /v1/graph/centrality; keyword-matches each task against skills, datasets, reports, and graph nodes to classify GROUNDED/CAPABLE/SOURCED/ADRIFT (5-source); stat tiles (tasks/grounded/capable/sourced/adrift); red pulse on ADRIFT count (tasks with zero execution grounding — no skill, no dataset, no report, no graph trace); expandable rows show matched skills with score badge + matched datasets with row-count badge + matched reports with date badge + matched graph nodes with centrality score badge; filter tabs ALL/GROUNDED/CAPABLE/SOURCED/ADRIFT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTexifQuery+buildTexifScript exported; "texif"/"task execution"/"task foundation"/"task intelligence foundation"/"adrift task"/"execution foundation" voice triggers; jarvis:texif-toggle event; 90-s auto-refresh */}
+            <TaskSkillDatasetReportGraphFoundation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
