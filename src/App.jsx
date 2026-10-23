@@ -651,6 +651,7 @@ import InvestigationIntelSwarmDatasetBrainFoundation from '@/components/cinemati
 import SceneOpsIntelReportGraphAuthority from '@/components/cinematic/SceneOpsIntelReportGraphAuthority';
 import ContactInvestmentSwarmBrainOpsMonitor from '@/components/cinematic/ContactInvestmentSwarmBrainOpsMonitor';
 import TaskKnowledgeGraphRiskOpsDepth from '@/components/cinematic/TaskKnowledgeGraphRiskOpsDepth';
+import IntelProfileReportTaskDatasetBrainAuthority from '@/components/cinematic/IntelProfileReportTaskDatasetBrainAuthority';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2054,6 +2055,8 @@ function App() {
             <ContactInvestmentSwarmBrainOpsMonitor />
             {/* F144 (overnight 2026-10-23): Task × Knowledge × Graph × RiskSignal × Ops Alert — Operational Threat Intelligence Depth (5-source) — ◈ TKGROA button (left:129000, bottom:8, zIndex:241); fetches /entities/Task + /knowledge/ + /v1/graph/centrality + /entities/RiskSignal + /v1/ops/alerts; keyword-matches each task against knowledge articles, graph nodes, risk signals, and ops alerts to classify GROUNDED/AWARE/PARTIAL/BLIND; red pulse on BLIND count (tasks with no knowledge grounding, no graph trace, no risk signal, no ops alert — full intelligence dead spots); expandable rows show matched knowledge articles with category badge + matched graph nodes with centrality score badge + matched risk signals with severity badge + matched ops alerts with severity badge; filter tabs ALL/GROUNDED/AWARE/PARTIAL/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTkgroaQuery+buildTkgroaScript exported; "tkgroa"/"task intelligence depth"/"task threat intel"/"task blind"/"blind task"/"task knowledge graph"/"task risk ops" voice triggers; jarvis:tkgroa-toggle event; 90-s auto-refresh */}
             <TaskKnowledgeGraphRiskOpsDepth />
+            {/* F145 (overnight 2026-10-23): IntelProfile × Report × Task × Dataset × Brain — Intelligence Production Authority (5-source) — ◈ IPTDBA button (left:129560, bottom:8, zIndex:242); fetches /entities/IntelProfile + /v1/reports + /entities/Task + /v1/datasets + /v1/cinematic/brain; keyword-matches each intel profile against reports, tasks, datasets, and brain nodes to classify COMMANDING/ACTIVE/PARTIAL/DORMANT; red pulse on DORMANT count (full intel dead-ends — profiles with no report, no task, no dataset, no brain model); expandable rows show matched reports with date badge + matched tasks with status badge + matched datasets with row-count badge + matched brain nodes with type badge; filter tabs ALL/COMMANDING/ACTIVE/PARTIAL/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIptdbaQuery+buildIptdbaScript exported; "iptdba"/"intel production authority"/"intel commanding"/"dormant intel"/"intel report task dataset"/"intel brain authority" voice triggers; jarvis:iptdba-toggle event; 90-s auto-refresh */}
+            <IntelProfileReportTaskDatasetBrainAuthority />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

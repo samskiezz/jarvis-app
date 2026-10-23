@@ -87,6 +87,7 @@ import { isInvfndQuery } from "@/components/cinematic/InvestigationIntelSwarmDat
 import { isScauthQuery } from "@/components/cinematic/SceneOpsIntelReportGraphAuthority";
 import { isCibocQuery } from "@/components/cinematic/ContactInvestmentSwarmBrainOpsMonitor";
 import { isTkgroaQuery } from "@/components/cinematic/TaskKnowledgeGraphRiskOpsDepth";
+import { isIptdbaQuery } from "@/components/cinematic/IntelProfileReportTaskDatasetBrainAuthority";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -260,6 +261,7 @@ export default function JarvisBrain() {
     if (isScauthQuery(q))   { window.dispatchEvent(new Event("jarvis:scauth-toggle")); }
     if (isCibocQuery(q))    { window.dispatchEvent(new Event("jarvis:ciboc-toggle")); }
     if (isTkgroaQuery(q))   { window.dispatchEvent(new Event("jarvis:tkgroa-toggle")); }
+    if (isIptdbaQuery(q))   { window.dispatchEvent(new Event("jarvis:iptdba-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
