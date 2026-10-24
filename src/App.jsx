@@ -662,6 +662,7 @@ import InvestigationSkillGraphContactRiskDefense from '@/components/cinematic/In
 import ReportBrainDatasetOpsInvestigationContinuity from '@/components/cinematic/ReportBrainDatasetOpsInvestigationContinuity';
 import SceneContactKnowledgeIntelDepthMap from '@/components/cinematic/SceneContactKnowledgeIntelDepthMap';
 import InvestmentBrainContactReportAlertChain from '@/components/cinematic/InvestmentBrainContactReportAlertChain';
+import RiskSignalContactScenarioSkillInvestigationCoverage from '@/components/cinematic/RiskSignalContactScenarioSkillInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2088,6 +2089,9 @@ function App() {
 
             {/* F155 (overnight 2026-10-24): Investment × Brain × Contact × Report × Ops Alert — Wealth Intelligence Authority Chain (5-source) — ◈ IBCRAL button (left:135160, bottom:8, zIndex:252); fetches /entities/Investment + /v1/cinematic/brain + /entities/Contact + /v1/reports + /v1/ops/alerts; keyword-matches each investment against brain nodes, contacts, reports, and ops alerts to classify COMMANDING/ACTIVE/PARTIAL/EXPOSED (5-source); red pulse on EXPOSED count (wealth blind spots — investments with no brain model, no contact owner, no filed report, no ops alert coverage); expandable rows show matched brain nodes with centrality score badge + matched contacts with role/org + matched reports with date badge + matched ops alerts with severity badge; filter tabs ALL/COMMANDING/ACTIVE/PARTIAL/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIbcralQuery+buildIbcralScript exported; "ibcral"/"investment brain"/"investment authority"/"wealth intelligence authority"/"wealth chain"/"investment brain contact"/"investment report alert"/"investment ops alert"/"investment command"/"wealth authority chain"/"investment coverage chain"/"investment operational authority"/"wealth exposed"/"exposed investment"/"investment blind"/"blind investment"/"wealth intelligence chain"/"investment monitoring chain" voice triggers; jarvis:ibcral-toggle event; 90-s auto-refresh */}
             <InvestmentBrainContactReportAlertChain />
+
+            {/* F156 (overnight 2026-10-24): RiskSignal × Contact × Scenario × Skill × Investigation — Threat Defence Coverage Network (5-source) — ◈ RCSSI button (left:135720, bottom:8, zIndex:253); fetches /entities/RiskSignal + /entities/Contact + /v1/scenario/list + /v1/aip/skill + /v1/investigations; keyword-matches each risk signal against contacts, scenarios, skills, and investigations to classify DEFENDED/COVERED/PARTIAL/EXPOSED (5-source); red pulse on EXPOSED count (threats with zero defence coverage — no assigned contact, no scenario playbook, no skill match, no investigation); expandable rows show matched contacts with role/org + matched scenarios with status badge + matched skills with score badge + matched investigations with status badge; filter tabs ALL/DEFENDED/COVERED/PARTIAL/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRcssiQuery+buildRcssiScript exported; voice triggers; jarvis:rcssi-toggle event; 90-s auto-refresh */}
+            <RiskSignalContactScenarioSkillInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
