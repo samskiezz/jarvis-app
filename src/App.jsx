@@ -664,6 +664,7 @@ import SceneContactKnowledgeIntelDepthMap from '@/components/cinematic/SceneCont
 import InvestmentBrainContactReportAlertChain from '@/components/cinematic/InvestmentBrainContactReportAlertChain';
 import RiskSignalContactScenarioSkillInvestigationCoverage from '@/components/cinematic/RiskSignalContactScenarioSkillInvestigationCoverage';
 import DatasetKnowledgeGraphOpsAlertSaturation from '@/components/cinematic/DatasetKnowledgeGraphOpsAlertSaturation';
+import TaskReportContactGraphBrainMissionWeb from '@/components/cinematic/TaskReportContactGraphBrainMissionWeb';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2096,6 +2097,9 @@ function App() {
 
             {/* F157 (overnight 2026-10-24): Dataset × Knowledge × Graph × Ops Alert — Intelligence Evidence Saturation Index (4-source) — ◈ DKGOAD button (left:136280, bottom:8, zIndex:254); fetches /v1/datasets + /knowledge/ + /v1/graph/centrality + /v1/ops/alerts; keyword-matches each dataset against knowledge articles, graph centrality nodes, and ops alerts to classify SATURATED/INDEXED/MONITORED/DARK; amber pulse on DARK count (blind-spot datasets with no knowledge article, no graph trace, no ops alert coverage); expandable rows show matched knowledge articles with category badge + matched graph nodes with centrality score badge + matched ops alerts with severity badge; filter tabs ALL/SATURATED/INDEXED/MONITORED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDkgoadQuery+buildDkgoadScript exported; voice triggers; jarvis:dkgoad-toggle event; 90-s auto-refresh */}
             <DatasetKnowledgeGraphOpsAlertSaturation />
+
+            {/* F158 (overnight 2026-10-24): Task × Report × Contact × Graph × Brain — Mission Execution Intelligence Web (5-source) — ◈ TRCGBX button (left:136840, bottom:8, zIndex:255); fetches /entities/Task + /v1/reports + /entities/Contact + /v1/graph/centrality + /v1/cinematic/brain; keyword-matches each task against reports, contacts, graph nodes, and brain nodes to classify EXECUTING/DOCUMENTED/STAFFED/ADRIFT (5-source); red pulse on ADRIFT count (mission dead-ends with no report trail, no contact owner, no graph trace, no brain grounding — full mission blind spots); expandable rows show matched reports with date badge + matched contacts with role/org + matched graph nodes with centrality score badge + matched brain nodes with centrality score badge; filter tabs ALL/EXECUTING/DOCUMENTED/STAFFED/ADRIFT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTrcgbxQuery+buildTrcgbxScript exported; "trcgbx"/"task report contact"/"mission execution web"/"mission intelligence web"/"adrift task"/"task brain graph"/"task mission web"/"task adrift"/"task execution intel" voice triggers; jarvis:trcgbx-toggle event; 90-s auto-refresh */}
+            <TaskReportContactGraphBrainMissionWeb />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
