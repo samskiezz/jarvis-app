@@ -665,6 +665,7 @@ import InvestmentBrainContactReportAlertChain from '@/components/cinematic/Inves
 import RiskSignalContactScenarioSkillInvestigationCoverage from '@/components/cinematic/RiskSignalContactScenarioSkillInvestigationCoverage';
 import DatasetKnowledgeGraphOpsAlertSaturation from '@/components/cinematic/DatasetKnowledgeGraphOpsAlertSaturation';
 import TaskReportContactGraphBrainMissionWeb from '@/components/cinematic/TaskReportContactGraphBrainMissionWeb';
+import IntelProfileGraphKnowledgeSkillAudit from '@/components/cinematic/IntelProfileGraphKnowledgeSkillAudit';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2100,6 +2101,8 @@ function App() {
 
             {/* F158 (overnight 2026-10-24): Task × Report × Contact × Graph × Brain — Mission Execution Intelligence Web (5-source) — ◈ TRCGBX button (left:136840, bottom:8, zIndex:255); fetches /entities/Task + /v1/reports + /entities/Contact + /v1/graph/centrality + /v1/cinematic/brain; keyword-matches each task against reports, contacts, graph nodes, and brain nodes to classify EXECUTING/DOCUMENTED/STAFFED/ADRIFT (5-source); red pulse on ADRIFT count (mission dead-ends with no report trail, no contact owner, no graph trace, no brain grounding — full mission blind spots); expandable rows show matched reports with date badge + matched contacts with role/org + matched graph nodes with centrality score badge + matched brain nodes with centrality score badge; filter tabs ALL/EXECUTING/DOCUMENTED/STAFFED/ADRIFT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTrcgbxQuery+buildTrcgbxScript exported; "trcgbx"/"task report contact"/"mission execution web"/"mission intelligence web"/"adrift task"/"task brain graph"/"task mission web"/"task adrift"/"task execution intel" voice triggers; jarvis:trcgbx-toggle event; 90-s auto-refresh */}
             <TaskReportContactGraphBrainMissionWeb />
+            {/* F159 (overnight 2026-10-24): IntelProfile × Graph × Knowledge × Skill — Intelligence Asset Audit (4-source) — ◈ IGKAUD button (left:137400, bottom:8, zIndex:256); fetches /entities/IntelProfile + /v1/graph/centrality + /knowledge/ + /v1/aip/skill; keyword-matches each intel profile against graph centrality nodes, knowledge articles, and skills to classify GROUNDED/NETWORKED/KNOWN/DORMANT; red pulse on DORMANT count (intel profiles with no graph trace, no knowledge article, no skill match — intelligence dead-ends); expandable rows show matched graph nodes with centrality score badge + matched knowledge articles with category badge + matched skills with score badge; filter tabs ALL/GROUNDED/NETWORKED/KNOWN/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIgkaudQuery+buildIgkaudScript exported; "igkaud"/"intel profile graph"/"intel profile knowledge"/"intel profile skill"/"intel asset audit"/"dormant intel"/"intel grounded" voice triggers; jarvis:igkaud-toggle event; 90-s auto-refresh */}
+            <IntelProfileGraphKnowledgeSkillAudit />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
