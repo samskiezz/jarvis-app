@@ -666,6 +666,7 @@ import RiskSignalContactScenarioSkillInvestigationCoverage from '@/components/ci
 import DatasetKnowledgeGraphOpsAlertSaturation from '@/components/cinematic/DatasetKnowledgeGraphOpsAlertSaturation';
 import TaskReportContactGraphBrainMissionWeb from '@/components/cinematic/TaskReportContactGraphBrainMissionWeb';
 import IntelProfileGraphKnowledgeSkillAudit from '@/components/cinematic/IntelProfileGraphKnowledgeSkillAudit';
+import SwarmScenarioContactRiskReportCoverage from '@/components/cinematic/SwarmScenarioContactRiskReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2103,6 +2104,8 @@ function App() {
             <TaskReportContactGraphBrainMissionWeb />
             {/* F159 (overnight 2026-10-24): IntelProfile × Graph × Knowledge × Skill — Intelligence Asset Audit (4-source) — ◈ IGKAUD button (left:137400, bottom:8, zIndex:256); fetches /entities/IntelProfile + /v1/graph/centrality + /knowledge/ + /v1/aip/skill; keyword-matches each intel profile against graph centrality nodes, knowledge articles, and skills to classify GROUNDED/NETWORKED/KNOWN/DORMANT; red pulse on DORMANT count (intel profiles with no graph trace, no knowledge article, no skill match — intelligence dead-ends); expandable rows show matched graph nodes with centrality score badge + matched knowledge articles with category badge + matched skills with score badge; filter tabs ALL/GROUNDED/NETWORKED/KNOWN/DORMANT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIgkaudQuery+buildIgkaudScript exported; "igkaud"/"intel profile graph"/"intel profile knowledge"/"intel profile skill"/"intel asset audit"/"dormant intel"/"intel grounded" voice triggers; jarvis:igkaud-toggle event; 90-s auto-refresh */}
             <IntelProfileGraphKnowledgeSkillAudit />
+            {/* F160 (overnight 2026-10-24): SwarmJob × Scenario × Contact × RiskSignal × Report — Threat Operations Coverage (5-source) — ◈ SSCRR button (left:137960, bottom:8, zIndex:257); fetches /entities/SwarmJob + /v1/scenario/list + /entities/Contact + /entities/RiskSignal + /v1/reports; keyword-matches each swarm job against scenarios, contacts, risk signals, and reports to classify COVERED/PARTIAL/MINIMAL/BLIND; red pulse on BLIND count (fully undefended automation — no scenario playbook, no contact owner, no risk signal, no filed report); expandable rows show matched scenarios with status badge + matched contacts with role/org + matched risk signals with severity badge + matched reports with date badge; filter tabs ALL/COVERED/PARTIAL/MINIMAL/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSscrrQuery+buildSscrrScript exported; "sscrr"/"swarm scenario contact"/"swarm threat coverage"/"swarm operations coverage"/"automation threat coverage"/"blind swarm"/"swarm blind" voice triggers; jarvis:sscrr-toggle event; 90-s auto-refresh */}
+            <SwarmScenarioContactRiskReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
