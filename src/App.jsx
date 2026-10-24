@@ -667,6 +667,7 @@ import DatasetKnowledgeGraphOpsAlertSaturation from '@/components/cinematic/Data
 import TaskReportContactGraphBrainMissionWeb from '@/components/cinematic/TaskReportContactGraphBrainMissionWeb';
 import IntelProfileGraphKnowledgeSkillAudit from '@/components/cinematic/IntelProfileGraphKnowledgeSkillAudit';
 import SwarmScenarioContactRiskReportCoverage from '@/components/cinematic/SwarmScenarioContactRiskReportCoverage';
+import GraphSwarmKnowledgeDatasetContactFoundation from '@/components/cinematic/GraphSwarmKnowledgeDatasetContactFoundation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2106,6 +2107,8 @@ function App() {
             <IntelProfileGraphKnowledgeSkillAudit />
             {/* F160 (overnight 2026-10-24): SwarmJob × Scenario × Contact × RiskSignal × Report — Threat Operations Coverage (5-source) — ◈ SSCRR button (left:137960, bottom:8, zIndex:257); fetches /entities/SwarmJob + /v1/scenario/list + /entities/Contact + /entities/RiskSignal + /v1/reports; keyword-matches each swarm job against scenarios, contacts, risk signals, and reports to classify COVERED/PARTIAL/MINIMAL/BLIND; red pulse on BLIND count (fully undefended automation — no scenario playbook, no contact owner, no risk signal, no filed report); expandable rows show matched scenarios with status badge + matched contacts with role/org + matched risk signals with severity badge + matched reports with date badge; filter tabs ALL/COVERED/PARTIAL/MINIMAL/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSscrrQuery+buildSscrrScript exported; "sscrr"/"swarm scenario contact"/"swarm threat coverage"/"swarm operations coverage"/"automation threat coverage"/"blind swarm"/"swarm blind" voice triggers; jarvis:sscrr-toggle event; 90-s auto-refresh */}
             <SwarmScenarioContactRiskReportCoverage />
+            {/* F161 (overnight 2026-10-24): Graph × SwarmJob × Knowledge × Dataset × Contact — Operational Intelligence Foundation (5-source) — ◈ GSKDC button (left:138520, bottom:8, zIndex:258); fetches /v1/graph/centrality + /entities/SwarmJob + /knowledge/ + /v1/datasets + /entities/Contact; keyword-matches each graph node against swarm jobs, knowledge articles, datasets, and contacts to classify GROUNDED/ACTIVE/PARTIAL/DARK; amber pulse on DARK count (blind-spot nodes with no swarm automation, no knowledge article, no dataset, no contact owner); expandable rows show matched swarm jobs with status badge + matched knowledge articles with category badge + matched datasets with row-count badge + matched contacts with role/org; filter tabs ALL/GROUNDED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGskdcQuery+buildGskdcScript exported; "gskdc"/"graph swarm knowledge"/"graph operational foundation"/"graph dark"/"dark graph node"/"graph coverage foundation"/"intelligence foundation"/"graph knowledge dataset" voice triggers; jarvis:gskdc-toggle event; 90-s auto-refresh */}
+            <GraphSwarmKnowledgeDatasetContactFoundation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
