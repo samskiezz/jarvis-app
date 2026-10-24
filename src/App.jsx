@@ -669,6 +669,7 @@ import IntelProfileGraphKnowledgeSkillAudit from '@/components/cinematic/IntelPr
 import SwarmScenarioContactRiskReportCoverage from '@/components/cinematic/SwarmScenarioContactRiskReportCoverage';
 import GraphSwarmKnowledgeDatasetContactFoundation from '@/components/cinematic/GraphSwarmKnowledgeDatasetContactFoundation';
 import InvestmentKnowledgeGraphSkillScenarioReadiness from '@/components/cinematic/InvestmentKnowledgeGraphSkillScenarioReadiness';
+import GraphDatasetTaskContactOpsNetwork from '@/components/cinematic/GraphDatasetTaskContactOpsNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2112,6 +2113,8 @@ function App() {
             <GraphSwarmKnowledgeDatasetContactFoundation />
             {/* F162 (overnight 2026-10-24): Investment × Knowledge × Graph × Skill × Scenario — Wealth Intelligence Readiness Matrix (5-source) — ◈ IKGSM button (left:139080, bottom:8, zIndex:259); fetches /entities/Investment + /knowledge/ + /v1/graph/centrality + /v1/aip/skill + /v1/scenario/list; keyword-matches each investment against knowledge articles, graph nodes, skills, and scenarios to classify FORTIFIED/RESEARCHED/PARTIAL/EXPOSED; red pulse on EXPOSED count (full wealth intelligence blind spots — investments with no knowledge article, no graph trace, no skill coverage, no defensive scenario); expandable rows show matched knowledge articles with category badge + matched graph nodes with centrality score badge + matched skills with score badge + matched scenarios with status badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIkgsmQuery+buildIkgsmScript exported; "ikgsm"/"investment knowledge graph"/"wealth intelligence readiness"/"wealth readiness matrix"/"investment graph skill"/"exposed investment"/"wealth blind"/"investment coverage" voice triggers; jarvis:ikgsm-toggle event; 90-s auto-refresh */}
             <InvestmentKnowledgeGraphSkillScenarioReadiness />
+            {/* F163 (overnight 2026-10-24): Graph × Dataset × Task × Contact × Ops Alert — Full Operational Coverage Network (5-source) — ◈ GDTCOA button (left:139640, bottom:8, zIndex:260); fetches /v1/graph/centrality + /v1/datasets + /entities/Task + /entities/Contact + /v1/ops/alerts; keyword-matches each graph node against datasets, tasks, contacts, and ops alerts to classify GROUNDED/ACTIVE/PARTIAL/DARK; amber pulse on DARK count (blind-spot nodes with no dataset backing, no task, no contact owner, no ops alert coverage); expandable rows show matched datasets with row-count badge + matched tasks with status badge + matched contacts with role/org + matched ops alerts with severity badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGdtcoaQuery+buildGdtcoaScript exported; "gdtcoa"/"graph dataset task"/"graph contact ops"/"graph operational coverage"/"operational coverage network"/"node coverage"/"dark node"/"blind-spot node" voice triggers; jarvis:gdtcoa-toggle event; 90-s auto-refresh */}
+            <GraphDatasetTaskContactOpsNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
