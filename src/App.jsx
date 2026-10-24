@@ -663,6 +663,7 @@ import ReportBrainDatasetOpsInvestigationContinuity from '@/components/cinematic
 import SceneContactKnowledgeIntelDepthMap from '@/components/cinematic/SceneContactKnowledgeIntelDepthMap';
 import InvestmentBrainContactReportAlertChain from '@/components/cinematic/InvestmentBrainContactReportAlertChain';
 import RiskSignalContactScenarioSkillInvestigationCoverage from '@/components/cinematic/RiskSignalContactScenarioSkillInvestigationCoverage';
+import DatasetKnowledgeGraphOpsAlertSaturation from '@/components/cinematic/DatasetKnowledgeGraphOpsAlertSaturation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2092,6 +2093,9 @@ function App() {
 
             {/* F156 (overnight 2026-10-24): RiskSignal × Contact × Scenario × Skill × Investigation — Threat Defence Coverage Network (5-source) — ◈ RCSSI button (left:135720, bottom:8, zIndex:253); fetches /entities/RiskSignal + /entities/Contact + /v1/scenario/list + /v1/aip/skill + /v1/investigations; keyword-matches each risk signal against contacts, scenarios, skills, and investigations to classify DEFENDED/COVERED/PARTIAL/EXPOSED (5-source); red pulse on EXPOSED count (threats with zero defence coverage — no assigned contact, no scenario playbook, no skill match, no investigation); expandable rows show matched contacts with role/org + matched scenarios with status badge + matched skills with score badge + matched investigations with status badge; filter tabs ALL/DEFENDED/COVERED/PARTIAL/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRcssiQuery+buildRcssiScript exported; voice triggers; jarvis:rcssi-toggle event; 90-s auto-refresh */}
             <RiskSignalContactScenarioSkillInvestigationCoverage />
+
+            {/* F157 (overnight 2026-10-24): Dataset × Knowledge × Graph × Ops Alert — Intelligence Evidence Saturation Index (4-source) — ◈ DKGOAD button (left:136280, bottom:8, zIndex:254); fetches /v1/datasets + /knowledge/ + /v1/graph/centrality + /v1/ops/alerts; keyword-matches each dataset against knowledge articles, graph centrality nodes, and ops alerts to classify SATURATED/INDEXED/MONITORED/DARK; amber pulse on DARK count (blind-spot datasets with no knowledge article, no graph trace, no ops alert coverage); expandable rows show matched knowledge articles with category badge + matched graph nodes with centrality score badge + matched ops alerts with severity badge; filter tabs ALL/SATURATED/INDEXED/MONITORED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDkgoadQuery+buildDkgoadScript exported; voice triggers; jarvis:dkgoad-toggle event; 90-s auto-refresh */}
+            <DatasetKnowledgeGraphOpsAlertSaturation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
