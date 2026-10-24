@@ -671,6 +671,7 @@ import GraphSwarmKnowledgeDatasetContactFoundation from '@/components/cinematic/
 import InvestmentKnowledgeGraphSkillScenarioReadiness from '@/components/cinematic/InvestmentKnowledgeGraphSkillScenarioReadiness';
 import GraphDatasetTaskContactOpsNetwork from '@/components/cinematic/GraphDatasetTaskContactOpsNetwork';
 import ScenarioGraphContactBrainDatasetExecMap from '@/components/cinematic/ScenarioGraphContactBrainDatasetExecMap';
+import SkillKnowledgeContactOpsAlertBrainCommand from '@/components/cinematic/SkillKnowledgeContactOpsAlertBrainCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2118,6 +2119,8 @@ function App() {
             <GraphDatasetTaskContactOpsNetwork />
             {/* F164 (overnight 2026-10-24): Scenario × Graph × Contact × Brain × Dataset — Scenario Intelligence Execution Map (5-source) — ◈ SIGEXM button (left:140200, bottom:8, zIndex:261); fetches /v1/scenario/list + /v1/graph/centrality + /entities/Contact + /v1/cinematic/brain + /v1/datasets; keyword-matches each scenario against graph nodes, contacts, brain nodes, and datasets to classify ARMED/STAGED/PARTIAL/UNARMED; red pulse on UNARMED count (blind-spot scenarios with no graph trace, no contact owner, no brain model, no dataset — cannot execute); expandable rows show matched graph nodes with centrality score badge + matched contacts with role/org + matched brain nodes with type badge + matched datasets with row-count badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSigexmQuery+buildSigexmScript exported; "sigexm"/"scenario graph contact"/"scenario brain dataset"/"scenario execution map"/"execution map"/"scenario armed"/"unarmed scenario"/"scenario intelligence map"/"scenario coverage"/"execution coverage" voice triggers; jarvis:sigexm-toggle event; 90-s auto-refresh */}
             <ScenarioGraphContactBrainDatasetExecMap />
+            {/* F165 (overnight 2026-10-24): Skill × Knowledge × Contact × Ops Alert × Brain — Capability Intelligence Command (5-source) — ◈ SKCOBR button (left:140760, bottom:8, zIndex:262); fetches /v1/aip/skill + /knowledge/ + /entities/Contact + /v1/ops/alerts + /v1/cinematic/brain; keyword-matches each skill against knowledge articles, contacts, ops alerts, and brain nodes to classify COMMANDED/CAPABLE/PARTIAL/BLIND; red pulse on BLIND count (isolated skills with no knowledge article, no contact owner, no ops alert, no brain model — capability blind spots); expandable rows show matched knowledge articles with category badge + matched contacts with role/org + matched ops alerts with severity badge + matched brain nodes with type badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSkcobrQuery+buildSkcobrScript exported; "skcobr"/"skill knowledge contact"/"skill brain command"/"capability intelligence command"/"capability command"/"blind skill"/"skill blind spot"/"skill capability gap"/"capability blind"/"skill coverage"/"skill brain coverage"/"commanded skill" voice triggers; jarvis:skcobr-toggle event; 90-s auto-refresh */}
+            <SkillKnowledgeContactOpsAlertBrainCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
