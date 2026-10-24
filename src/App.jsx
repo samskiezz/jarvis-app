@@ -668,6 +668,7 @@ import TaskReportContactGraphBrainMissionWeb from '@/components/cinematic/TaskRe
 import IntelProfileGraphKnowledgeSkillAudit from '@/components/cinematic/IntelProfileGraphKnowledgeSkillAudit';
 import SwarmScenarioContactRiskReportCoverage from '@/components/cinematic/SwarmScenarioContactRiskReportCoverage';
 import GraphSwarmKnowledgeDatasetContactFoundation from '@/components/cinematic/GraphSwarmKnowledgeDatasetContactFoundation';
+import InvestmentKnowledgeGraphSkillScenarioReadiness from '@/components/cinematic/InvestmentKnowledgeGraphSkillScenarioReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2109,6 +2110,8 @@ function App() {
             <SwarmScenarioContactRiskReportCoverage />
             {/* F161 (overnight 2026-10-24): Graph × SwarmJob × Knowledge × Dataset × Contact — Operational Intelligence Foundation (5-source) — ◈ GSKDC button (left:138520, bottom:8, zIndex:258); fetches /v1/graph/centrality + /entities/SwarmJob + /knowledge/ + /v1/datasets + /entities/Contact; keyword-matches each graph node against swarm jobs, knowledge articles, datasets, and contacts to classify GROUNDED/ACTIVE/PARTIAL/DARK; amber pulse on DARK count (blind-spot nodes with no swarm automation, no knowledge article, no dataset, no contact owner); expandable rows show matched swarm jobs with status badge + matched knowledge articles with category badge + matched datasets with row-count badge + matched contacts with role/org; filter tabs ALL/GROUNDED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGskdcQuery+buildGskdcScript exported; "gskdc"/"graph swarm knowledge"/"graph operational foundation"/"graph dark"/"dark graph node"/"graph coverage foundation"/"intelligence foundation"/"graph knowledge dataset" voice triggers; jarvis:gskdc-toggle event; 90-s auto-refresh */}
             <GraphSwarmKnowledgeDatasetContactFoundation />
+            {/* F162 (overnight 2026-10-24): Investment × Knowledge × Graph × Skill × Scenario — Wealth Intelligence Readiness Matrix (5-source) — ◈ IKGSM button (left:139080, bottom:8, zIndex:259); fetches /entities/Investment + /knowledge/ + /v1/graph/centrality + /v1/aip/skill + /v1/scenario/list; keyword-matches each investment against knowledge articles, graph nodes, skills, and scenarios to classify FORTIFIED/RESEARCHED/PARTIAL/EXPOSED; red pulse on EXPOSED count (full wealth intelligence blind spots — investments with no knowledge article, no graph trace, no skill coverage, no defensive scenario); expandable rows show matched knowledge articles with category badge + matched graph nodes with centrality score badge + matched skills with score badge + matched scenarios with status badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIkgsmQuery+buildIkgsmScript exported; "ikgsm"/"investment knowledge graph"/"wealth intelligence readiness"/"wealth readiness matrix"/"investment graph skill"/"exposed investment"/"wealth blind"/"investment coverage" voice triggers; jarvis:ikgsm-toggle event; 90-s auto-refresh */}
+            <InvestmentKnowledgeGraphSkillScenarioReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

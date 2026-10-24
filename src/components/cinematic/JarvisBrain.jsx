@@ -103,6 +103,7 @@ import { isTrcgbxQuery } from "@/components/cinematic/TaskReportContactGraphBrai
 import { isIgkaudQuery } from "@/components/cinematic/IntelProfileGraphKnowledgeSkillAudit";
 import { isSscrrQuery } from "@/components/cinematic/SwarmScenarioContactRiskReportCoverage";
 import { isGskdcQuery } from "@/components/cinematic/GraphSwarmKnowledgeDatasetContactFoundation";
+import { isIkgsmQuery } from "@/components/cinematic/InvestmentKnowledgeGraphSkillScenarioReadiness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -292,6 +293,7 @@ export default function JarvisBrain() {
     if (isIgkaudQuery(q))    { window.dispatchEvent(new Event("jarvis:igkaud-toggle")); }
     if (isSscrrQuery(q))     { window.dispatchEvent(new Event("jarvis:sscrr-toggle")); }
     if (isGskdcQuery(q))     { window.dispatchEvent(new Event("jarvis:gskdc-toggle")); }
+    if (isIkgsmQuery(q))     { window.dispatchEvent(new Event("jarvis:ikgsm-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
