@@ -96,6 +96,7 @@ import { isKstcrmQuery } from "@/components/cinematic/KnowledgeScenarioTaskConta
 import { isSsrrcQuery } from "@/components/cinematic/SwarmScenarioRiskReportContactResponse";
 import { isIsgrcdQuery } from "@/components/cinematic/InvestigationSkillGraphContactRiskDefense";
 import { isRbdoicQuery } from "@/components/cinematic/ReportBrainDatasetOpsInvestigationContinuity";
+import { isScknidQuery } from "@/components/cinematic/SceneContactKnowledgeIntelDepthMap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -278,6 +279,7 @@ export default function JarvisBrain() {
     if (isSsrrcQuery(q))     { window.dispatchEvent(new Event("jarvis:ssrrc-toggle")); }
     if (isIsgrcdQuery(q))    { window.dispatchEvent(new Event("jarvis:isgrcd-toggle")); }
     if (isRbdoicQuery(q))    { window.dispatchEvent(new Event("jarvis:rbdoic-toggle")); }
+    if (isScknidQuery(q))    { window.dispatchEvent(new Event("jarvis:scknid-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
