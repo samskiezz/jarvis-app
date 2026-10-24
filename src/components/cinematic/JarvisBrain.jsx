@@ -107,6 +107,7 @@ import { isIkgsmQuery } from "@/components/cinematic/InvestmentKnowledgeGraphSki
 import { isGdtcoaQuery } from "@/components/cinematic/GraphDatasetTaskContactOpsNetwork";
 import { isSigexmQuery } from "@/components/cinematic/ScenarioGraphContactBrainDatasetExecMap";
 import { isSkcobrQuery } from "@/components/cinematic/SkillKnowledgeContactOpsAlertBrainCommand";
+import { isDborcaQuery } from "@/components/cinematic/DatasetBrainOpsRiskContactPosture";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -300,6 +301,7 @@ export default function JarvisBrain() {
     if (isGdtcoaQuery(q))    { window.dispatchEvent(new Event("jarvis:gdtcoa-toggle")); }
     if (isSigexmQuery(q))    { window.dispatchEvent(new Event("jarvis:sigexm-toggle")); }
     if (isSkcobrQuery(q))    { window.dispatchEvent(new Event("jarvis:skcobr-toggle")); }
+    if (isDborcaQuery(q))    { window.dispatchEvent(new Event("jarvis:dborca-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

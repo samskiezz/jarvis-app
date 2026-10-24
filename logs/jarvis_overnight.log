@@ -168,3 +168,4 @@
 [2026-10-24] F163 GraphDatasetTaskContactOpsNetwork.jsx — Graph×Dataset×Task×Contact×OpsAlert 5-source coverage network; ◈ GDTCOA (left:139640, zIndex:260); Vite build exit:0
 [2026-10-24] F164 ScenarioGraphContactBrainDatasetExecMap.jsx — ◈ SIGEXM; 5-source (scenario/graph/contact/brain/dataset); ARMED/STAGED/PARTIAL/UNARMED; red pulse on unarmed; Vite build exit:0
 [2026-10-24] F165 SkillKnowledgeContactOpsAlertBrainCommand.jsx — ◈ SKCOBR; 5-source (skill+knowledge+contact+ops-alert+brain); COMMANDED/CAPABLE/PARTIAL/BLIND; red pulse on BLIND; ASSESS+TTS; Vite build exit:0; pushed to jarvis-overnight
+[2026-10-24] F166 DatasetBrainOpsRiskContactPosture.jsx — Dataset × Brain × Ops Alert × RiskSignal × Contact (5-source) DEFENDED/MONITORED/PARTIAL/EXPOSED — ◈ DBORCA (left:141320, zIndex:263) — Vite build exit:0

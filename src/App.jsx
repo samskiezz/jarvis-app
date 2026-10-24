@@ -672,6 +672,7 @@ import InvestmentKnowledgeGraphSkillScenarioReadiness from '@/components/cinemat
 import GraphDatasetTaskContactOpsNetwork from '@/components/cinematic/GraphDatasetTaskContactOpsNetwork';
 import ScenarioGraphContactBrainDatasetExecMap from '@/components/cinematic/ScenarioGraphContactBrainDatasetExecMap';
 import SkillKnowledgeContactOpsAlertBrainCommand from '@/components/cinematic/SkillKnowledgeContactOpsAlertBrainCommand';
+import DatasetBrainOpsRiskContactPosture from '@/components/cinematic/DatasetBrainOpsRiskContactPosture';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2121,6 +2122,8 @@ function App() {
             <ScenarioGraphContactBrainDatasetExecMap />
             {/* F165 (overnight 2026-10-24): Skill × Knowledge × Contact × Ops Alert × Brain — Capability Intelligence Command (5-source) — ◈ SKCOBR button (left:140760, bottom:8, zIndex:262); fetches /v1/aip/skill + /knowledge/ + /entities/Contact + /v1/ops/alerts + /v1/cinematic/brain; keyword-matches each skill against knowledge articles, contacts, ops alerts, and brain nodes to classify COMMANDED/CAPABLE/PARTIAL/BLIND; red pulse on BLIND count (isolated skills with no knowledge article, no contact owner, no ops alert, no brain model — capability blind spots); expandable rows show matched knowledge articles with category badge + matched contacts with role/org + matched ops alerts with severity badge + matched brain nodes with type badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSkcobrQuery+buildSkcobrScript exported; "skcobr"/"skill knowledge contact"/"skill brain command"/"capability intelligence command"/"capability command"/"blind skill"/"skill blind spot"/"skill capability gap"/"capability blind"/"skill coverage"/"skill brain coverage"/"commanded skill" voice triggers; jarvis:skcobr-toggle event; 90-s auto-refresh */}
             <SkillKnowledgeContactOpsAlertBrainCommand />
+            {/* F166 (overnight 2026-10-24): Dataset × Brain × Ops Alert × RiskSignal × Contact — Data Intelligence Posture (5-source) — ◈ DBORCA button (left:141320, bottom:8, zIndex:263); fetches /v1/datasets + /v1/cinematic/brain + /v1/ops/alerts + /entities/RiskSignal + /entities/Contact; keyword-matches each dataset against brain nodes, ops alerts, risk signals, and contacts to classify DEFENDED/MONITORED/PARTIAL/EXPOSED; red pulse on EXPOSED count (datasets with no brain model, no ops alert, no risk signal, no contact owner — full data blind spots); expandable rows show matched brain nodes with centrality score badge + matched ops alerts with severity badge + matched risk signals with severity badge + matched contacts with role/org; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDborcaQuery+buildDborcaScript exported; "dborca"/"dataset brain ops"/"dataset risk contact"/"data intelligence posture"/"data posture"/"exposed dataset"/"dataset exposed"/"dataset blind spot"/"data blind"/"dataset coverage"/"dataset defense"/"defended dataset"/"data ops alert"/"dataset risk signal"/"dataset contact owner" voice triggers; jarvis:dborca-toggle event; 90-s auto-refresh */}
+            <DatasetBrainOpsRiskContactPosture />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
