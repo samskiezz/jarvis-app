@@ -670,6 +670,7 @@ import SwarmScenarioContactRiskReportCoverage from '@/components/cinematic/Swarm
 import GraphSwarmKnowledgeDatasetContactFoundation from '@/components/cinematic/GraphSwarmKnowledgeDatasetContactFoundation';
 import InvestmentKnowledgeGraphSkillScenarioReadiness from '@/components/cinematic/InvestmentKnowledgeGraphSkillScenarioReadiness';
 import GraphDatasetTaskContactOpsNetwork from '@/components/cinematic/GraphDatasetTaskContactOpsNetwork';
+import ScenarioGraphContactBrainDatasetExecMap from '@/components/cinematic/ScenarioGraphContactBrainDatasetExecMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2115,6 +2116,8 @@ function App() {
             <InvestmentKnowledgeGraphSkillScenarioReadiness />
             {/* F163 (overnight 2026-10-24): Graph × Dataset × Task × Contact × Ops Alert — Full Operational Coverage Network (5-source) — ◈ GDTCOA button (left:139640, bottom:8, zIndex:260); fetches /v1/graph/centrality + /v1/datasets + /entities/Task + /entities/Contact + /v1/ops/alerts; keyword-matches each graph node against datasets, tasks, contacts, and ops alerts to classify GROUNDED/ACTIVE/PARTIAL/DARK; amber pulse on DARK count (blind-spot nodes with no dataset backing, no task, no contact owner, no ops alert coverage); expandable rows show matched datasets with row-count badge + matched tasks with status badge + matched contacts with role/org + matched ops alerts with severity badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGdtcoaQuery+buildGdtcoaScript exported; "gdtcoa"/"graph dataset task"/"graph contact ops"/"graph operational coverage"/"operational coverage network"/"node coverage"/"dark node"/"blind-spot node" voice triggers; jarvis:gdtcoa-toggle event; 90-s auto-refresh */}
             <GraphDatasetTaskContactOpsNetwork />
+            {/* F164 (overnight 2026-10-24): Scenario × Graph × Contact × Brain × Dataset — Scenario Intelligence Execution Map (5-source) — ◈ SIGEXM button (left:140200, bottom:8, zIndex:261); fetches /v1/scenario/list + /v1/graph/centrality + /entities/Contact + /v1/cinematic/brain + /v1/datasets; keyword-matches each scenario against graph nodes, contacts, brain nodes, and datasets to classify ARMED/STAGED/PARTIAL/UNARMED; red pulse on UNARMED count (blind-spot scenarios with no graph trace, no contact owner, no brain model, no dataset — cannot execute); expandable rows show matched graph nodes with centrality score badge + matched contacts with role/org + matched brain nodes with type badge + matched datasets with row-count badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSigexmQuery+buildSigexmScript exported; "sigexm"/"scenario graph contact"/"scenario brain dataset"/"scenario execution map"/"execution map"/"scenario armed"/"unarmed scenario"/"scenario intelligence map"/"scenario coverage"/"execution coverage" voice triggers; jarvis:sigexm-toggle event; 90-s auto-refresh */}
+            <ScenarioGraphContactBrainDatasetExecMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
