@@ -699,6 +699,7 @@ import ScenarioDatasetContactBrainGraphRisk from '@/components/cinematic/Scenari
 import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 import SystemBrainKnowledgeHealthMonitor from '@/components/cinematic/SystemBrainKnowledgeHealthMonitor';
 import SkillDatasetBrainOpsContactReportNexus from '@/components/cinematic/SkillDatasetBrainOpsContactReportNexus';
+import InvestigationDatasetBrainKnowledgeOpsProsecution from '@/components/cinematic/InvestigationDatasetBrainKnowledgeOpsProsecution';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2202,6 +2203,8 @@ function App() {
             <SystemBrainKnowledgeHealthMonitor />
             {/* F192 (overnight 2026-10-25): Skill × Dataset × Brain × Ops Alert × Contact × Report Capability Nexus — ◈ SDBARC button (left:155320, bottom:8, zIndex:288); fetches /v1/aip/skill + /v1/datasets + /v1/cinematic/brain + /v1/ops/alerts + /entities/Contact + /v1/reports; keyword-cross-references each skill against all 5 other sources to classify COMMANDED/ACTIVE/PARTIAL/DARK; red pulse on DARK count (capability blind spots with zero intelligence grounding); expandable rows show matched datasets with row-count badge + brain nodes with centrality score + ops alerts with severity + contacts with role/org + reports with date; ▶ ASSESS DARK CAPABILITIES → /v1/jarvis/agent/chat advisory + TTS; isSdbarcQuery+buildSdbarcScript exported; "skill command"/"sdbarc"/"skill data ops"/"capability nexus"/"dark skills" voice triggers; jarvis:sdbarc-toggle event; 90-s auto-refresh */}
             <SkillDatasetBrainOpsContactReportNexus />
+            {/* F193 (overnight 2026-10-25): Investigation × Dataset × Brain × Knowledge × Ops Alert Evidence Prosecution Web — ◈ IVPWEB button (left:155880, bottom:8, zIndex:289); fetches /v1/investigations + /v1/datasets + /v1/cinematic/brain + /knowledge/ + /v1/ops/alerts; keyword-cross-references each investigation against all 4 other sources to classify PROSECUTING/RESOURCED/PARTIAL/COLD; red pulse on COLD count (prosecution dead-ends with zero evidence support); expandable rows show matched datasets with row-count badge + brain nodes with centrality score + knowledge articles with category badge + ops alerts with severity badge; ▶ ASSESS COLD CASES → /v1/jarvis/agent/chat advisory + TTS; isIvpwebQuery+buildIvpwebScript exported; "prosecution web"/"ivpweb"/"cold cases"/"investigation evidence" voice triggers; jarvis:ivpweb-toggle event; 90-s auto-refresh */}
+            <InvestigationDatasetBrainKnowledgeOpsProsecution />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
