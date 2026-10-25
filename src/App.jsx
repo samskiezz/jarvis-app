@@ -692,6 +692,7 @@ import IntelProfileKnowledgeOpsAlertTaskChain from '@/components/cinematic/Intel
 import ContactGraphOpsTaskReportAccountability from '@/components/cinematic/ContactGraphOpsTaskReportAccountability';
 import BrainDatasetSkillInvestigationTaskDepth from '@/components/cinematic/BrainDatasetSkillInvestigationTaskDepth';
 import ContactScenarioRiskSwarmKnowledgeAwareness from '@/components/cinematic/ContactScenarioRiskSwarmKnowledgeAwareness';
+import GraphDatasetTaskReportSkillContactAuth from '@/components/cinematic/GraphDatasetTaskReportSkillContactAuth';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2181,6 +2182,8 @@ function App() {
             <BrainDatasetSkillInvestigationTaskDepth />
             {/* F185 (overnight 2026-10-25): Contact × Scenario × RiskSignal × SwarmJob × Knowledge — Full Operational Mission Awareness (5-source) — ◈ CSRSK button (left:151960, bottom:8, zIndex:282); fetches /entities/Contact + /v1/scenario/list + /entities/RiskSignal + /entities/SwarmJob + /knowledge/; keyword-matches each contact against scenarios, risk signals, swarm jobs, and knowledge articles to classify AWARE/COVERED/PARTIAL/DARK; amber pulse on DARK count (invisible operators with zero mission awareness); expandable rows show matched scenarios with status badge + matched risk signals with severity badge + matched swarm jobs with status badge + matched knowledge articles with category badge; filter tabs ALL/AWARE/COVERED/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCsrskQuery exported; jarvis:csrsk-toggle event; 90-s auto-refresh */}
             <ContactScenarioRiskSwarmKnowledgeAwareness />
+            {/* F186 (overnight 2026-10-25): Graph × Dataset × Task × Report × Skill × Contact — Operational Execution Authority (6-source) — ◈ GDTRSC button (left:152520, bottom:8, zIndex:283); fetches /v1/graph/centrality + /v1/datasets + /entities/Task + /v1/reports + /v1/aip/skill + /entities/Contact; keyword-matches each graph node against datasets, tasks, reports, skills, and contacts to classify COMMANDING/ACTIVE/PARTIAL/DARK; red pulse on DARK count (blind-spot nodes — zero operational grounding); expandable rows show matched datasets with row-count badge + matched tasks with status badge + matched reports with date badge + matched skills with score badge + matched contacts with role/org; filter tabs ALL/COMMANDING/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGdtrscQuery+buildGdtrscScript exported; jarvis:gdtrsc-toggle event; 90-s auto-refresh */}
+            <GraphDatasetTaskReportSkillContactAuth />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
