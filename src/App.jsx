@@ -690,6 +690,7 @@ import DatasetOpsAlertGraphScenarioReportIndex from '@/components/cinematic/Data
 import GraphDatasetContactRiskSkillReportNexus from '@/components/cinematic/GraphDatasetContactRiskSkillReportNexus';
 import IntelProfileKnowledgeOpsAlertTaskChain from '@/components/cinematic/IntelProfileKnowledgeOpsAlertTaskChain';
 import ContactGraphOpsTaskReportAccountability from '@/components/cinematic/ContactGraphOpsTaskReportAccountability';
+import BrainDatasetSkillInvestigationTaskDepth from '@/components/cinematic/BrainDatasetSkillInvestigationTaskDepth';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2175,6 +2176,8 @@ function App() {
             <IntelProfileKnowledgeOpsAlertTaskChain />
             {/* F183 (overnight 2026-10-25): Contact × Graph × Ops Alert × Task × Report — Full Mission Accountability Network (5-source) — ◈ CGORTR button (left:150840, bottom:8, zIndex:280); fetches /entities/Contact + /v1/graph/centrality + /v1/ops/alerts + /entities/Task + /v1/reports; keyword-matches each contact against graph nodes, ops alerts, tasks, and reports to classify ACCOUNTABLE/ACTIVE/MONITORED/GHOST; red pulse on GHOST count (contacts with no graph trace, no ops alert, no task, no filed report — zero operational footprint); expandable rows show matched graph nodes with centrality score badge + matched ops alerts with severity badge + matched tasks with status badge + matched reports with date badge; filter tabs ALL/ACCOUNTABLE/ACTIVE/MONITORED/GHOST + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCgortrQuery+buildCgortrScript exported; jarvis:cgortr-toggle event; 90-s auto-refresh */}
             <ContactGraphOpsTaskReportAccountability />
+            {/* F184 (overnight 2026-10-25): Brain × Dataset × Skill × Investigation × Task — Operational Intelligence Depth Coverage (5-source) — ◈ BDSITK button (left:151400, bottom:8, zIndex:281); fetches /v1/cinematic/brain + /v1/datasets + /v1/aip/skill + /v1/investigations + /entities/Task; keyword-matches each brain node against datasets, skills, investigations, and tasks to classify GROUNDED/EQUIPPED/ACTIVE/BLIND; red pulse on BLIND count (brain nodes with no dataset backing, no skill coverage, no investigation, no task — full operational dead zones); expandable rows show matched datasets with row-count badge + matched skills with score badge + matched investigations with status badge + matched tasks with status badge; filter tabs ALL/GROUNDED/EQUIPPED/ACTIVE/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isBdsitkQuery+buildBdsitkScript exported; jarvis:bdsitk-toggle event; 90-s auto-refresh */}
+            <BrainDatasetSkillInvestigationTaskDepth />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
