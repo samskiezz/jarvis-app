@@ -112,6 +112,7 @@ import { isLkgctmQuery } from "@/components/cinematic/LiveIntelKnowledgeGraphCon
 import { isSbgoraQuery } from "@/components/cinematic/ScenarioBrainGraphOpsReportAuthority";
 import { isIopdepQuery } from "@/components/cinematic/IntelProfileOrchestrationDepthMap";
 import { isBiscrQuery } from "@/components/cinematic/BrainInvestigationSkillContactReportClosure";
+import { isKspbscQuery } from "@/components/cinematic/KnowledgeScenarioIntelBrainSwarmContactActivation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -310,6 +311,7 @@ export default function JarvisBrain() {
     if (isSbgoraQuery(q))    { window.dispatchEvent(new Event("jarvis:sbgora-toggle")); }
     if (isIopdepQuery(q))    { window.dispatchEvent(new Event("jarvis:iopdep-toggle")); }
     if (isBiscrQuery(q))     { window.dispatchEvent(new Event("jarvis:biscr-toggle")); }
+    if (isKspbscQuery(q))   { window.dispatchEvent(new Event("jarvis:kspbsc-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
