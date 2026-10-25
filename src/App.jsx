@@ -689,6 +689,7 @@ import RiskSignalDatasetContactGraphKnowledgeSaturation from '@/components/cinem
 import DatasetOpsAlertGraphScenarioReportIndex from '@/components/cinematic/DatasetOpsAlertGraphScenarioReportIndex';
 import GraphDatasetContactRiskSkillReportNexus from '@/components/cinematic/GraphDatasetContactRiskSkillReportNexus';
 import IntelProfileKnowledgeOpsAlertTaskChain from '@/components/cinematic/IntelProfileKnowledgeOpsAlertTaskChain';
+import ContactGraphOpsTaskReportAccountability from '@/components/cinematic/ContactGraphOpsTaskReportAccountability';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2172,6 +2173,8 @@ function App() {
             <GraphDatasetContactRiskSkillReportNexus />
             {/* F182 (overnight 2026-10-25): IntelProfile × Knowledge × Ops Alert × Task — Intelligence Activation Chain (4-source) — ◈ IKOATC button (left:150280, bottom:8, zIndex:279); fetches /entities/IntelProfile + /knowledge/ + /v1/ops/alerts + /entities/Task; keyword-matches each intel profile against knowledge articles, ops alerts, and tasks to classify ACTIVATED/ALERTED/DOCUMENTED/DARK; red pulse on DARK count (dormant intel profiles with no knowledge article, no ops alert, no task); expandable rows show matched knowledge articles with category badge + matched ops alerts with severity badge + matched tasks with status badge; filter tabs ALL/ACTIVATED/ALERTED/DOCUMENTED/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIkoatcQuery+buildIkoatcScript exported; jarvis:ikoatc-toggle event; 90-s auto-refresh */}
             <IntelProfileKnowledgeOpsAlertTaskChain />
+            {/* F183 (overnight 2026-10-25): Contact × Graph × Ops Alert × Task × Report — Full Mission Accountability Network (5-source) — ◈ CGORTR button (left:150840, bottom:8, zIndex:280); fetches /entities/Contact + /v1/graph/centrality + /v1/ops/alerts + /entities/Task + /v1/reports; keyword-matches each contact against graph nodes, ops alerts, tasks, and reports to classify ACCOUNTABLE/ACTIVE/MONITORED/GHOST; red pulse on GHOST count (contacts with no graph trace, no ops alert, no task, no filed report — zero operational footprint); expandable rows show matched graph nodes with centrality score badge + matched ops alerts with severity badge + matched tasks with status badge + matched reports with date badge; filter tabs ALL/ACCOUNTABLE/ACTIVE/MONITORED/GHOST + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCgortrQuery+buildCgortrScript exported; jarvis:cgortr-toggle event; 90-s auto-refresh */}
+            <ContactGraphOpsTaskReportAccountability />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
