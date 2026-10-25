@@ -173,3 +173,4 @@
 [2026-10-24] F168 ScenarioBrainGraphOpsReportAuthority.jsx — Scenario × Brain × Graph × Ops Alert × Report Strategic Command Authority Map (◈ SBGORA, left:142440, zIndex:265); 5-source COMMANDING/ACTIVE/PARTIAL/UNARMED; Vite build exit:0
 [2026-10-24] F169 IntelProfileOrchestrationDepthMap.jsx — IntelProfile × Scenario × Knowledge × Graph × Task (5-source); ◈ IOPDEP left:143000 zIndex:266; Vite build exit:0
 [2026-10-25] F170 RiskSignalContactDatasetKnowledgeOpsCoverage.jsx — ◈ RCKDOA (left:143560, zIndex:267); /entities/RiskSignal + /entities/Contact + /v1/datasets + /knowledge/ + /v1/ops/alerts; SECURED/TRACKED/PARTIAL/EXPOSED; red pulse on EXPOSED; isRckdoaQuery+buildRckdoaScript exported; Vite build exit:0
+[2026-10-25] F171 DONE — GraphRiskTaskContactScenarioOpsNetwork.jsx: 6-source matrix (graph×risk×task×contact×scenario×ops); FORTIFIED/COVERED/PARTIAL/BLIND; red pulse on BLIND count; ASSESS+TTS; ◈ GRTCSA (left:144120, zIndex:268); Vite build exit:0.
