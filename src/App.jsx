@@ -698,6 +698,7 @@ import LiveIntelBrainGraphKnowledgeRiskOpsConvergence from '@/components/cinemat
 import ScenarioDatasetContactBrainGraphRisk from '@/components/cinematic/ScenarioDatasetContactBrainGraphRisk';
 import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 import SystemBrainKnowledgeHealthMonitor from '@/components/cinematic/SystemBrainKnowledgeHealthMonitor';
+import SkillDatasetBrainOpsContactReportNexus from '@/components/cinematic/SkillDatasetBrainOpsContactReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2199,6 +2200,8 @@ function App() {
             <SkillGapAdvisor />
             {/* F191 (overnight 2026-10-25): System × Brain × Knowledge Health Continuity Monitor — ◈ SKHCM button (left:154760, bottom:8, zIndex:287); fetches /v1/jarvis/system/status + /v1/cinematic/brain + /knowledge/; keyword-cross-references each service against brain nodes and knowledge articles to classify HEALTHY/DEGRADED/UNDOCUMENTED/OFFLINE; red pulse on UNDOCUMENTED count (degraded/offline services with no recovery docs — recovery blind spots); expandable rows show matched brain nodes with score badge + matched knowledge articles with category badge; ▶ ASSESS RECOVERY → /v1/jarvis/agent/chat recovery advisory + TTS; isSkhcmQuery+buildSkhcmScript exported; "system health"/"health monitor"/"skhcm"/"undocumented service"/"degraded services"/"recovery gap" voice triggers; jarvis:skhcm-toggle event; 90-s auto-refresh */}
             <SystemBrainKnowledgeHealthMonitor />
+            {/* F192 (overnight 2026-10-25): Skill × Dataset × Brain × Ops Alert × Contact × Report Capability Nexus — ◈ SDBARC button (left:155320, bottom:8, zIndex:288); fetches /v1/aip/skill + /v1/datasets + /v1/cinematic/brain + /v1/ops/alerts + /entities/Contact + /v1/reports; keyword-cross-references each skill against all 5 other sources to classify COMMANDED/ACTIVE/PARTIAL/DARK; red pulse on DARK count (capability blind spots with zero intelligence grounding); expandable rows show matched datasets with row-count badge + brain nodes with centrality score + ops alerts with severity + contacts with role/org + reports with date; ▶ ASSESS DARK CAPABILITIES → /v1/jarvis/agent/chat advisory + TTS; isSdbarcQuery+buildSdbarcScript exported; "skill command"/"sdbarc"/"skill data ops"/"capability nexus"/"dark skills" voice triggers; jarvis:sdbarc-toggle event; 90-s auto-refresh */}
+            <SkillDatasetBrainOpsContactReportNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
