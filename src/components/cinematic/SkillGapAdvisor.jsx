@@ -142,6 +142,16 @@ export default function SkillGapAdvisor() {
     return () => window.removeEventListener("jarvis:skillgap-toggle", onToggle);
   }, []);
 
+  // voice intent — opens panel when query matches skill gap regex
+  useEffect(() => {
+    const onAsk = (e) => {
+      const q = e?.detail?.text || e?.detail?.query || "";
+      if (GAP_RE.test(q)) setOpen(true);
+    };
+    window.addEventListener("jarvis:ask", onAsk);
+    return () => window.removeEventListener("jarvis:ask", onAsk);
+  }, []);
+
   const avg = skills.length
     ? Math.round(skills.reduce((s, x) => s + x.score, 0) / skills.length)
     : 0;

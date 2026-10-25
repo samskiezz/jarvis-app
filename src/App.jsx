@@ -696,6 +696,7 @@ import GraphDatasetTaskReportSkillContactAuth from '@/components/cinematic/Graph
 import IntelProfileGraphRiskOpsContactCommand from '@/components/cinematic/IntelProfileGraphRiskOpsContactCommand';
 import LiveIntelBrainGraphKnowledgeRiskOpsConvergence from '@/components/cinematic/LiveIntelBrainGraphKnowledgeRiskOpsConvergence';
 import ScenarioDatasetContactBrainGraphRisk from '@/components/cinematic/ScenarioDatasetContactBrainGraphRisk';
+import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2193,6 +2194,8 @@ function App() {
             <LiveIntelBrainGraphKnowledgeRiskOpsConvergence />
             {/* F189 (overnight 2026-10-25): Scenario × Dataset × Contact × Brain × Graph × RiskSignal — Full Mission Intelligence Foundation (6-source) — ◈ SCDBGR button (left:154200, bottom:8, zIndex:286); fetches /v1/scenario/list + /v1/datasets + /entities/Contact + /v1/cinematic/brain + /v1/graph/centrality + /entities/RiskSignal; keyword-matches each scenario against datasets, contacts, brain nodes, graph nodes, and risk signals to classify FORTIFIED/STAGED/PARTIAL/UNARMED; red pulse on UNARMED count (scenarios with no dataset backing, no contact owner, no brain model, no graph trace, no risk signal — fully unexecutable mission blind spots); expandable rows show matched datasets with row-count badge + matched contacts with role/org + matched brain nodes with type badge + matched graph nodes with centrality score badge + matched risk signals with severity badge; filter tabs ALL/FORTIFIED/STAGED/PARTIAL/UNARMED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isScdbgrQuery+buildScdbgrScript exported; "scdbgr"/"scenario foundation"/"scenario dataset contact"/"unarmed scenario"/"scenario blind spot"/"scenario brain graph"/"mission foundation"/"scenario coverage foundation"/"scenario risk coverage"/"fortified scenario" voice triggers; jarvis:scdbgr-toggle event; 90-s auto-refresh */}
             <ScenarioDatasetContactBrainGraphRisk />
+            {/* F190 (overnight 2026-10-25): Skill gap advisor — ◈ GAPS button (left:3508, bottom:8, zIndex:60); fetches /v1/aip/skill; sorts by score; identifies bottom-3 skills; sends each to /v1/jarvis/agent/chat for AI-generated actionable training plans; critical-gap badge count (skills below 70); score bars per skill; "skill gap"/"training plan"/"learning plan"/"capability gap"/"upskill"/"weakest skill"/"skill deficit" voice trigger via jarvis:ask; jarvis:skillgap-toggle event; 5-min auto-refresh */}
+            <SkillGapAdvisor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
