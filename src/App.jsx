@@ -693,6 +693,7 @@ import ContactGraphOpsTaskReportAccountability from '@/components/cinematic/Cont
 import BrainDatasetSkillInvestigationTaskDepth from '@/components/cinematic/BrainDatasetSkillInvestigationTaskDepth';
 import ContactScenarioRiskSwarmKnowledgeAwareness from '@/components/cinematic/ContactScenarioRiskSwarmKnowledgeAwareness';
 import GraphDatasetTaskReportSkillContactAuth from '@/components/cinematic/GraphDatasetTaskReportSkillContactAuth';
+import IntelProfileGraphRiskOpsContactCommand from '@/components/cinematic/IntelProfileGraphRiskOpsContactCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2184,6 +2185,8 @@ function App() {
             <ContactScenarioRiskSwarmKnowledgeAwareness />
             {/* F186 (overnight 2026-10-25): Graph × Dataset × Task × Report × Skill × Contact — Operational Execution Authority (6-source) — ◈ GDTRSC button (left:152520, bottom:8, zIndex:283); fetches /v1/graph/centrality + /v1/datasets + /entities/Task + /v1/reports + /v1/aip/skill + /entities/Contact; keyword-matches each graph node against datasets, tasks, reports, skills, and contacts to classify COMMANDING/ACTIVE/PARTIAL/DARK; red pulse on DARK count (blind-spot nodes — zero operational grounding); expandable rows show matched datasets with row-count badge + matched tasks with status badge + matched reports with date badge + matched skills with score badge + matched contacts with role/org; filter tabs ALL/COMMANDING/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGdtrscQuery+buildGdtrscScript exported; jarvis:gdtrsc-toggle event; 90-s auto-refresh */}
             <GraphDatasetTaskReportSkillContactAuth />
+            {/* F187 (overnight 2026-10-25): IntelProfile × Graph × RiskSignal × Ops Alert × Contact — Threat Attribution Command Network (5-source) — ◈ IGRCAT button (left:153080, bottom:8, zIndex:284); fetches /entities/IntelProfile + /v1/graph/centrality + /entities/RiskSignal + /v1/ops/alerts + /entities/Contact; keyword-matches each intel profile against graph nodes, risk signals, ops alerts, and contacts to classify COMMANDING/ACTIVE/PARTIAL/SHADOW; red pulse on SHADOW count (blind intel profiles — zero attribution footprint); expandable rows show matched graph nodes with centrality score badge + matched risk signals with severity badge + matched ops alerts with severity badge + matched contacts with role/org; filter tabs ALL/COMMANDING/ACTIVE/PARTIAL/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIgrcatQuery+buildIgrcatScript exported; jarvis:igrcat-toggle event; 90-s auto-refresh */}
+            <IntelProfileGraphRiskOpsContactCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
