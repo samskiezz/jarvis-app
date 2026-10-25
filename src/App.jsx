@@ -687,6 +687,7 @@ import ScenarioSkillContactKnowledgeGraphSwarmReadiness from '@/components/cinem
 import TaskReportBrainSkillOpsInvestigationClosureWeb from '@/components/cinematic/TaskReportBrainSkillOpsInvestigationClosureWeb';
 import RiskSignalDatasetContactGraphKnowledgeSaturation from '@/components/cinematic/RiskSignalDatasetContactGraphKnowledgeSaturation';
 import DatasetOpsAlertGraphScenarioReportIndex from '@/components/cinematic/DatasetOpsAlertGraphScenarioReportIndex';
+import GraphDatasetContactRiskSkillReportNexus from '@/components/cinematic/GraphDatasetContactRiskSkillReportNexus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2166,6 +2167,8 @@ function App() {
             <RiskSignalDatasetContactGraphKnowledgeSaturation />
             {/* F180 (overnight 2026-10-25): Dataset × Ops Alert × Graph × Scenario × Report — Full Intelligence Posture Index (5-source) — ◈ DOGRAFI button (left:149160, bottom:8, zIndex:277); fetches /v1/datasets + /v1/ops/alerts + /v1/graph/centrality + /v1/scenario/list + /v1/reports; keyword-matches each dataset against ops alerts, graph nodes, scenarios, and reports to classify GROUNDED/ACTIVE/PARTIAL/DARK; amber pulse on DARK count (datasets with no ops alert, no graph trace, no scenario, no filed report — complete intelligence dead-ends); expandable rows show matched ops alerts with severity badge + matched graph nodes with centrality score badge + matched scenarios with status badge + matched reports with date badge; filter tabs ALL/GROUNDED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDografiQuery+buildDografiScript exported; voice triggers; jarvis:dografi-toggle event; 90-s auto-refresh */}
             <DatasetOpsAlertGraphScenarioReportIndex />
+            {/* F181 (overnight 2026-10-25): Graph × Dataset × Contact × RiskSignal × Skill × Report — Full Operational Coverage Nexus (6-source) — ◈ GCDRSR button (left:149720, bottom:8, zIndex:278); fetches /v1/graph/centrality + /v1/datasets + /entities/Contact + /entities/RiskSignal + /v1/aip/skill + /v1/reports; keyword-matches each graph node against datasets, contacts, risk signals, skills, and reports to classify COVERED/ACTIVE/PARTIAL/DARK; red pulse on DARK count (blind-spot graph nodes with no dataset backing, no contact owner, no risk signal, no skill match, no filed report); expandable rows show matched datasets with row-count badge + matched contacts with role/org + matched risk signals with severity badge + matched skills with score badge + matched reports with date badge; filter tabs ALL/COVERED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGcdrsrQuery+buildGcdrsrScript exported; "gcdrsr"/"graph coverage nexus"/"full operational coverage"/"graph operational nexus"/"graph full coverage"/"blind graph node"/"graph dark node"/"graph dataset contact"/"graph risk skill report"/"graph coverage network"/"operational coverage nexus"/"graph blind spot"/"graph operational blind" voice triggers; jarvis:gcdrsr-toggle event; 90-s auto-refresh */}
+            <GraphDatasetContactRiskSkillReportNexus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

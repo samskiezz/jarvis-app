@@ -120,6 +120,7 @@ import { isSmrwebQuery } from "@/components/cinematic/ScenarioSkillContactKnowle
 import { isTmicwbQuery } from "@/components/cinematic/TaskReportBrainSkillOpsInvestigationClosureWeb";
 import { isRdcgkQuery } from "@/components/cinematic/RiskSignalDatasetContactGraphKnowledgeSaturation";
 import { isDografiQuery } from "@/components/cinematic/DatasetOpsAlertGraphScenarioReportIndex";
+import { isGcdrsrQuery } from "@/components/cinematic/GraphDatasetContactRiskSkillReportNexus";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -326,6 +327,7 @@ export default function JarvisBrain() {
     if (isTmicwbQuery(q))   { window.dispatchEvent(new Event("jarvis:tmicwb-toggle")); }
     if (isRdcgkQuery(q))    { window.dispatchEvent(new Event("jarvis:rdcgk-toggle")); }
     if (isDografiQuery(q))  { window.dispatchEvent(new Event("jarvis:dografi-toggle")); }
+    if (isGcdrsrQuery(q))   { window.dispatchEvent(new Event("jarvis:gcdrsr-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
