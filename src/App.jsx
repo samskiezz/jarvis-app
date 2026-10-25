@@ -697,6 +697,7 @@ import IntelProfileGraphRiskOpsContactCommand from '@/components/cinematic/Intel
 import LiveIntelBrainGraphKnowledgeRiskOpsConvergence from '@/components/cinematic/LiveIntelBrainGraphKnowledgeRiskOpsConvergence';
 import ScenarioDatasetContactBrainGraphRisk from '@/components/cinematic/ScenarioDatasetContactBrainGraphRisk';
 import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
+import SystemBrainKnowledgeHealthMonitor from '@/components/cinematic/SystemBrainKnowledgeHealthMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2196,6 +2197,8 @@ function App() {
             <ScenarioDatasetContactBrainGraphRisk />
             {/* F190 (overnight 2026-10-25): Skill gap advisor — ◈ GAPS button (left:3508, bottom:8, zIndex:60); fetches /v1/aip/skill; sorts by score; identifies bottom-3 skills; sends each to /v1/jarvis/agent/chat for AI-generated actionable training plans; critical-gap badge count (skills below 70); score bars per skill; "skill gap"/"training plan"/"learning plan"/"capability gap"/"upskill"/"weakest skill"/"skill deficit" voice trigger via jarvis:ask; jarvis:skillgap-toggle event; 5-min auto-refresh */}
             <SkillGapAdvisor />
+            {/* F191 (overnight 2026-10-25): System × Brain × Knowledge Health Continuity Monitor — ◈ SKHCM button (left:154760, bottom:8, zIndex:287); fetches /v1/jarvis/system/status + /v1/cinematic/brain + /knowledge/; keyword-cross-references each service against brain nodes and knowledge articles to classify HEALTHY/DEGRADED/UNDOCUMENTED/OFFLINE; red pulse on UNDOCUMENTED count (degraded/offline services with no recovery docs — recovery blind spots); expandable rows show matched brain nodes with score badge + matched knowledge articles with category badge; ▶ ASSESS RECOVERY → /v1/jarvis/agent/chat recovery advisory + TTS; isSkhcmQuery+buildSkhcmScript exported; "system health"/"health monitor"/"skhcm"/"undocumented service"/"degraded services"/"recovery gap" voice triggers; jarvis:skhcm-toggle event; 90-s auto-refresh */}
+            <SystemBrainKnowledgeHealthMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
