@@ -180,3 +180,4 @@
 [2026-10-25] F175: IntelProfileReportContactTaskGraphOpsWeb.jsx — ◈ IPCTWEB (left:146360, zIndex:272); 6-source IntelProfile×Report×Contact×Task×Graph×OpsAlert; COMMANDING/ACTIVE/PARTIAL/DORMANT; red pulse on DORMANT; ASSESS+TTS; isIpctwebQuery in JarvisBrain.jsx; Vite build exit:0
 [2026-10-25] F176 SwarmInvestigationRiskContactReportKnowledge.jsx (SITCOP, 6-source) — wired in App.jsx + JarvisBrain.jsx; Vite build exit:0
 [2026-10-25] F177 ScenarioSkillContactKnowledgeGraphSwarmReadiness.jsx — ◈ SMRWEB (left:147480, zIndex:274); 6-source READY/ARMED/PARTIAL/GROUNDED; isSmrwebQuery wired in JarvisBrain; Vite build exit:0
+[2026-10-25] F178 Task × Report × Brain × Skill × Ops Alert × Investigation Full Mission Intelligence Closure Web (◈ TMICWB, left:148040, zIndex:275) — TaskReportBrainSkillOpsInvestigationClosureWeb.jsx wired in App.jsx + JarvisBrain.jsx; CLOSED/CAPABLE/MONITORED/ADRIFT classification (6-source); red pulse on ADRIFT count; Vite build exit:0
