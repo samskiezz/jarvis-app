@@ -124,6 +124,7 @@ import { isGcdrsrQuery } from "@/components/cinematic/GraphDatasetContactRiskSki
 import { isIkoatcQuery } from "@/components/cinematic/IntelProfileKnowledgeOpsAlertTaskChain";
 import { isCgortrQuery } from "@/components/cinematic/ContactGraphOpsTaskReportAccountability";
 import { isBdsitkQuery } from "@/components/cinematic/BrainDatasetSkillInvestigationTaskDepth";
+import { isCsrskQuery } from "@/components/cinematic/ContactScenarioRiskSwarmKnowledgeAwareness";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -334,6 +335,7 @@ export default function JarvisBrain() {
     if (isIkoatcQuery(q))   { window.dispatchEvent(new Event("jarvis:ikoatc-toggle")); }
     if (isCgortrQuery(q))   { window.dispatchEvent(new Event("jarvis:cgortr-toggle")); }
     if (isBdsitkQuery(q))   { window.dispatchEvent(new Event("jarvis:bdsitk-toggle")); }
+    if (isCsrskQuery(q))    { window.dispatchEvent(new Event("jarvis:csrsk-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

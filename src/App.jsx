@@ -691,6 +691,7 @@ import GraphDatasetContactRiskSkillReportNexus from '@/components/cinematic/Grap
 import IntelProfileKnowledgeOpsAlertTaskChain from '@/components/cinematic/IntelProfileKnowledgeOpsAlertTaskChain';
 import ContactGraphOpsTaskReportAccountability from '@/components/cinematic/ContactGraphOpsTaskReportAccountability';
 import BrainDatasetSkillInvestigationTaskDepth from '@/components/cinematic/BrainDatasetSkillInvestigationTaskDepth';
+import ContactScenarioRiskSwarmKnowledgeAwareness from '@/components/cinematic/ContactScenarioRiskSwarmKnowledgeAwareness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2178,6 +2179,8 @@ function App() {
             <ContactGraphOpsTaskReportAccountability />
             {/* F184 (overnight 2026-10-25): Brain × Dataset × Skill × Investigation × Task — Operational Intelligence Depth Coverage (5-source) — ◈ BDSITK button (left:151400, bottom:8, zIndex:281); fetches /v1/cinematic/brain + /v1/datasets + /v1/aip/skill + /v1/investigations + /entities/Task; keyword-matches each brain node against datasets, skills, investigations, and tasks to classify GROUNDED/EQUIPPED/ACTIVE/BLIND; red pulse on BLIND count (brain nodes with no dataset backing, no skill coverage, no investigation, no task — full operational dead zones); expandable rows show matched datasets with row-count badge + matched skills with score badge + matched investigations with status badge + matched tasks with status badge; filter tabs ALL/GROUNDED/EQUIPPED/ACTIVE/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isBdsitkQuery+buildBdsitkScript exported; jarvis:bdsitk-toggle event; 90-s auto-refresh */}
             <BrainDatasetSkillInvestigationTaskDepth />
+            {/* F185 (overnight 2026-10-25): Contact × Scenario × RiskSignal × SwarmJob × Knowledge — Full Operational Mission Awareness (5-source) — ◈ CSRSK button (left:151960, bottom:8, zIndex:282); fetches /entities/Contact + /v1/scenario/list + /entities/RiskSignal + /entities/SwarmJob + /knowledge/; keyword-matches each contact against scenarios, risk signals, swarm jobs, and knowledge articles to classify AWARE/COVERED/PARTIAL/DARK; amber pulse on DARK count (invisible operators with zero mission awareness); expandable rows show matched scenarios with status badge + matched risk signals with severity badge + matched swarm jobs with status badge + matched knowledge articles with category badge; filter tabs ALL/AWARE/COVERED/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isCsrskQuery exported; jarvis:csrsk-toggle event; 90-s auto-refresh */}
+            <ContactScenarioRiskSwarmKnowledgeAwareness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
