@@ -694,6 +694,7 @@ import BrainDatasetSkillInvestigationTaskDepth from '@/components/cinematic/Brai
 import ContactScenarioRiskSwarmKnowledgeAwareness from '@/components/cinematic/ContactScenarioRiskSwarmKnowledgeAwareness';
 import GraphDatasetTaskReportSkillContactAuth from '@/components/cinematic/GraphDatasetTaskReportSkillContactAuth';
 import IntelProfileGraphRiskOpsContactCommand from '@/components/cinematic/IntelProfileGraphRiskOpsContactCommand';
+import LiveIntelBrainGraphKnowledgeRiskOpsConvergence from '@/components/cinematic/LiveIntelBrainGraphKnowledgeRiskOpsConvergence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2187,6 +2188,8 @@ function App() {
             <GraphDatasetTaskReportSkillContactAuth />
             {/* F187 (overnight 2026-10-25): IntelProfile × Graph × RiskSignal × Ops Alert × Contact — Threat Attribution Command Network (5-source) — ◈ IGRCAT button (left:153080, bottom:8, zIndex:284); fetches /entities/IntelProfile + /v1/graph/centrality + /entities/RiskSignal + /v1/ops/alerts + /entities/Contact; keyword-matches each intel profile against graph nodes, risk signals, ops alerts, and contacts to classify COMMANDING/ACTIVE/PARTIAL/SHADOW; red pulse on SHADOW count (blind intel profiles — zero attribution footprint); expandable rows show matched graph nodes with centrality score badge + matched risk signals with severity badge + matched ops alerts with severity badge + matched contacts with role/org; filter tabs ALL/COMMANDING/ACTIVE/PARTIAL/SHADOW + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIgrcatQuery+buildIgrcatScript exported; jarvis:igrcat-toggle event; 90-s auto-refresh */}
             <IntelProfileGraphRiskOpsContactCommand />
+            {/* F188 (overnight 2026-10-25): LiveIntel × Brain × Graph × Knowledge × RiskSignal × Ops Alert — Full Situational Intelligence Convergence (6-source) — ◈ LBGKRS button (left:153640, bottom:8, zIndex:285); fetches /functions/getLiveIntel + /v1/cinematic/brain + /v1/graph/centrality + /knowledge/ + /entities/RiskSignal + /v1/ops/alerts; groups live events by category (quake region, crypto symbol, FX pair) and keyword-cross-references each category against brain nodes, graph nodes, knowledge articles, risk signals, and ops alerts to classify CONVERGED/SENSING/SIGNALED/BLIND; red pulse on BLIND count (live events with zero intelligence saturation — full situational blind spots); expandable rows show matched brain nodes with type badge + matched graph nodes with centrality score badge + matched knowledge articles with category badge + matched risk signals with severity badge + matched ops alerts with severity badge; filter tabs ALL/CONVERGED/SENSING/SIGNALED/BLIND + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isLbgkrsQuery+buildLbgkrsScript exported; jarvis:lbgkrs-toggle event; 90-s auto-refresh */}
+            <LiveIntelBrainGraphKnowledgeRiskOpsConvergence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
