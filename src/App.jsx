@@ -686,6 +686,7 @@ import SwarmInvestigationRiskContactReportKnowledge from '@/components/cinematic
 import ScenarioSkillContactKnowledgeGraphSwarmReadiness from '@/components/cinematic/ScenarioSkillContactKnowledgeGraphSwarmReadiness';
 import TaskReportBrainSkillOpsInvestigationClosureWeb from '@/components/cinematic/TaskReportBrainSkillOpsInvestigationClosureWeb';
 import RiskSignalDatasetContactGraphKnowledgeSaturation from '@/components/cinematic/RiskSignalDatasetContactGraphKnowledgeSaturation';
+import DatasetOpsAlertGraphScenarioReportIndex from '@/components/cinematic/DatasetOpsAlertGraphScenarioReportIndex';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2163,6 +2164,8 @@ function App() {
             <TaskReportBrainSkillOpsInvestigationClosureWeb />
             {/* F179 (overnight 2026-10-25): RiskSignal × Dataset × Contact × Graph × Knowledge — Intelligence Saturation Foundation (5-source) — ◈ RDCGK button (left:148600, bottom:8, zIndex:276); fetches /entities/RiskSignal + /v1/datasets + /entities/Contact + /v1/graph/centrality + /knowledge/; keyword-matches each risk signal against datasets, contacts, graph nodes, and knowledge articles to classify FORTIFIED/TRACKED/PARTIAL/EXPOSED; red pulse on EXPOSED count (threat signals with no dataset backing, no contact owner, no graph trace, no knowledge article — full intelligence blind spots); expandable rows show matched datasets with row-count badge + matched contacts with role/org + matched graph nodes with centrality score badge + matched knowledge articles with category badge; filter tabs ALL/FORTIFIED/TRACKED/PARTIAL/EXPOSED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRdcgkQuery+buildRdcgkScript exported; "rdcgk"/"risk saturation"/"threat saturation"/"risk dataset contact"/"risk graph knowledge"/"threat foundation"/"exposed risk"/"blind threat"/"risk blind spot"/"threat intelligence saturation"/"risk coverage foundation"/"risk knowledge gap"/"threat coverage foundation" voice triggers; jarvis:rdcgk-toggle event; 90-s auto-refresh */}
             <RiskSignalDatasetContactGraphKnowledgeSaturation />
+            {/* F180 (overnight 2026-10-25): Dataset × Ops Alert × Graph × Scenario × Report — Full Intelligence Posture Index (5-source) — ◈ DOGRAFI button (left:149160, bottom:8, zIndex:277); fetches /v1/datasets + /v1/ops/alerts + /v1/graph/centrality + /v1/scenario/list + /v1/reports; keyword-matches each dataset against ops alerts, graph nodes, scenarios, and reports to classify GROUNDED/ACTIVE/PARTIAL/DARK; amber pulse on DARK count (datasets with no ops alert, no graph trace, no scenario, no filed report — complete intelligence dead-ends); expandable rows show matched ops alerts with severity badge + matched graph nodes with centrality score badge + matched scenarios with status badge + matched reports with date badge; filter tabs ALL/GROUNDED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDografiQuery+buildDografiScript exported; voice triggers; jarvis:dografi-toggle event; 90-s auto-refresh */}
+            <DatasetOpsAlertGraphScenarioReportIndex />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
