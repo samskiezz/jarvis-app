@@ -115,6 +115,7 @@ import { isBiscrQuery } from "@/components/cinematic/BrainInvestigationSkillCont
 import { isKspbscQuery } from "@/components/cinematic/KnowledgeScenarioIntelBrainSwarmContactActivation";
 import { isTocroacQuery } from "@/components/cinematic/TaskDatasetContactReportOpsGraphCoverage";
 import { isIpctwebQuery } from "@/components/cinematic/IntelProfileReportContactTaskGraphOpsWeb";
+import { isSitcopQuery } from "@/components/cinematic/SwarmInvestigationRiskContactReportKnowledge";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -316,6 +317,7 @@ export default function JarvisBrain() {
     if (isKspbscQuery(q))   { window.dispatchEvent(new Event("jarvis:kspbsc-toggle")); }
     if (isTocroacQuery(q))  { window.dispatchEvent(new Event("jarvis:tocroa-toggle")); }
     if (isIpctwebQuery(q))  { window.dispatchEvent(new Event("jarvis:ipctweb-toggle")); }
+    if (isSitcopQuery(q))   { window.dispatchEvent(new Event("jarvis:sitcop-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
