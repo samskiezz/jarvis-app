@@ -143,6 +143,7 @@ import { isOcdtsaQuery } from "@/components/cinematic/OpsAlertContactDatasetTask
 import { isJiprodQuery } from "@/components/cinematic/JarvisIntelligenceProductionIndex";
 import { isGkoatcQuery } from "@/components/cinematic/GraphKnowledgeOpsTaskContactPulse";
 import { isDpscmQuery } from "@/components/cinematic/DatasetSkillSwarmScenarioReportProductionReadiness";
+import { isOatkwebQuery } from "@/components/cinematic/OpsAlertContactTaskSkillKnowledgeCommandWeb";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -372,6 +373,7 @@ export default function JarvisBrain() {
     if (isJiprodQuery(q))   { window.dispatchEvent(new Event("jarvis:jiprod-toggle")); }
     if (isGkoatcQuery(q))   { window.dispatchEvent(new Event("jarvis:gkoatc-toggle")); }
     if (isDpscmQuery(q))    { window.dispatchEvent(new Event("jarvis:dpscm-toggle")); }
+    if (isOatkwebQuery(q))  { window.dispatchEvent(new Event("jarvis:oatkweb-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

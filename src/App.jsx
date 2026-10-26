@@ -711,6 +711,7 @@ import OpsAlertContactDatasetTaskSkillMatrix from '@/components/cinematic/OpsAle
 import JarvisIntelligenceProductionIndex from '@/components/cinematic/JarvisIntelligenceProductionIndex';
 import GraphKnowledgeOpsTaskContactPulse from '@/components/cinematic/GraphKnowledgeOpsTaskContactPulse';
 import DatasetSkillSwarmScenarioReportProductionReadiness from '@/components/cinematic/DatasetSkillSwarmScenarioReportProductionReadiness';
+import OpsAlertContactTaskSkillKnowledgeCommandWeb from '@/components/cinematic/OpsAlertContactTaskSkillKnowledgeCommandWeb';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2238,6 +2239,8 @@ function App() {
             <GraphKnowledgeOpsTaskContactPulse />
             {/* F204 (overnight 2026-10-26): Dataset × Skill × SwarmJob × Scenario × Report Production Readiness Command Map — ◈ DPSCM button (left:162040, bottom:8, zIndex:300); fetches /v1/datasets + /v1/aip/skill + /entities/SwarmJob + /v1/scenario/list + /v1/reports; keyword-cross-references each dataset against all 4 other sources to classify ARMED/CAPABLE/PARTIAL/UNARMED; red pulse on UNARMED count (datasets with no skill, no swarm, no scenario, no report — production blind spots); expandable rows show matched skills (score badge) + swarm jobs (status badge) + scenarios (status badge) + reports (date badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDpscmQuery+buildDpscmScript exported; "dataset production"/"dpscm"/"production readiness"/"dataset command"/"armed datasets"/"unarmed datasets"/"production map" voice triggers; jarvis:dpscm-toggle event; 90-s auto-refresh */}
             <DatasetSkillSwarmScenarioReportProductionReadiness />
+            {/* F205 (overnight 2026-10-26): Ops Alert × Contact × Task × Skill × Knowledge Incident Command Intelligence Web — ◈ OATKWEB button (left:162600, bottom:8, zIndex:301); fetches /v1/ops/alerts + /entities/Contact + /entities/Task + /v1/aip/skill + /knowledge/; keyword-cross-references each alert against all 4 other sources to classify COMMANDED/MANAGED/PARTIAL/BLIND; red pulse on BLIND count (alerts with no contact owner, no task, no skill, no knowledge — full incident blind spots); expandable rows show matched contacts (role/org) + tasks (status badge) + skills (score badge) + knowledge articles (category badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOatkwebQuery exported; "incident command"/"oatkweb"/"alert command web"/"alert intelligence"/"blind alerts"/"commanded alerts"/"incident response web" voice triggers; jarvis:oatkweb-toggle event; 90-s auto-refresh */}
+            <OpsAlertContactTaskSkillKnowledgeCommandWeb />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
