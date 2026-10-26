@@ -703,6 +703,7 @@ import InvestigationDatasetBrainKnowledgeOpsProsecution from '@/components/cinem
 import ContactSkillDatasetInvestigationOpsCoverage from '@/components/cinematic/ContactSkillDatasetInvestigationOpsCoverage';
 import IntelProfileDatasetKnowledgeSkillGraph from '@/components/cinematic/IntelProfileDatasetKnowledgeSkillGraph';
 import InvestigationContactBrainGraphOpsCommand from '@/components/cinematic/InvestigationContactBrainGraphOpsCommand';
+import RiskSignalScenarioContactSkillReport from '@/components/cinematic/RiskSignalScenarioContactSkillReport';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2214,6 +2215,8 @@ function App() {
             <IntelProfileDatasetKnowledgeSkillGraph />
             {/* F196 (overnight 2026-10-26): Investigation × Contact × Brain × Graph × Ops Alert Active Case Command Coverage — ◈ ICCGOA button (left:157560, bottom:8, zIndex:292); fetches /v1/investigations + /entities/Contact + /v1/cinematic/brain + /v1/graph/centrality + /v1/ops/alerts; keyword-cross-references each investigation against all 4 other sources to classify COMMANDED/STAFFED/TRACED/COLD; red pulse on COLD count (cold cases — investigations with no contact owner, no brain model, no graph trace, no ops alert); expandable rows show matched contacts with role/org + matched brain nodes with type/score badge + matched graph nodes with centrality score badge + matched ops alerts with severity badge; ▶ ASSESS COLD CASES → /v1/jarvis/agent/chat advisory + TTS; isIccgoaQuery exported; "investigation command"/"iccgoa"/"cold cases"/"case coverage" voice triggers; jarvis:iccgoa-toggle event; 90-s auto-refresh */}
             <InvestigationContactBrainGraphOpsCommand />
+            {/* F197 (overnight 2026-10-26): RiskSignal × Scenario × Contact × Skill × Report Comprehensive Threat Response Coverage — ◈ RSSCR button (left:158120, bottom:8, zIndex:293); fetches /entities/RiskSignal + /v1/scenario/list + /entities/Contact + /v1/aip/skill + /v1/reports; keyword-cross-references each risk signal against all 4 other sources to classify DEFENDED/COVERED/PARTIAL/EXPOSED; red pulse on EXPOSED count (fully undefended threats with no scenario playbook, no contact owner, no skill match, no filed report); expandable rows show matched scenarios with status badge + matched contacts with role/org + matched skills with score badge + matched reports with date badge; ▶ ASSESS EXPOSED THREATS → /v1/jarvis/agent/chat advisory + TTS; isRsscrQuery+buildRsscrScript exported; "threat coverage"/"rsscr"/"exposed threats"/"risk coverage"/"threat response" voice triggers; jarvis:rsscr-toggle event; 90-s auto-refresh */}
+            <RiskSignalScenarioContactSkillReport />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
