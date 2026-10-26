@@ -720,6 +720,7 @@ import SwarmDatasetContactRiskReportChain from '@/components/cinematic/SwarmData
 import TaskOpsAlertBrainScenarioCommand from '@/components/cinematic/TaskOpsAlertBrainScenarioCommand';
 import LiveIntelOpsCrisisManagementNetwork from '@/components/cinematic/LiveIntelOpsCrisisManagementNetwork';
 import OpsAlertDatasetScenarioKnowledgeContactFoundation from '@/components/cinematic/OpsAlertDatasetScenarioKnowledgeContactFoundation';
+import SkillBrainOpsInvestigationCapabilityMonitor from '@/components/cinematic/SkillBrainOpsInvestigationCapabilityMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2265,6 +2266,8 @@ function App() {
             <LiveIntelOpsCrisisManagementNetwork />
             {/* F213 (overnight 2026-10-26): OpsAlert × Dataset × Scenario × Knowledge × Contact Incident Evidence Intelligence Foundation — ◈ ODSKFC button (left:167080, bottom:8, zIndex:309); fetches /v1/ops/alerts + /v1/datasets + /v1/scenario/list + /knowledge/ + /entities/Contact; cross-references each alert against all 4 evidence sources; classifies GROUNDED/STAGED/PARTIAL/BLIND (GROUNDED=alert matched in all 4 sources; STAGED=scenario+≥3; PARTIAL=≥1; BLIND=0 matches); red pulse on BLIND count; expandable rows show matched datasets with row-count badge + matched scenarios with status badge + matched knowledge with category badge + matched contacts with role/org; filter tabs ALL/GROUNDED/STAGED/PARTIAL/BLIND + text search; ▶ ASSESS BLIND ALERTS → /v1/jarvis/agent/chat + TTS; isOdskfcQuery+buildOdskfcScript exported; "odskfc"/"incident evidence"/"alert foundation"/"blind alert"/"alert coverage"/"incident blind spot"/"alert dataset"/"ops evidence"/"incident knowledge"/"alert grounding"/"incident scenario"/"ops alert foundation"/"alert ground" voice triggers; jarvis:odskfc-toggle event; 90-s auto-refresh */}
             <OpsAlertDatasetScenarioKnowledgeContactFoundation />
+            {/* F214 (overnight 2026-10-26): Skill × Brain × Ops Alert × Investigation Intelligence Capability Monitor — ◈ SKBIAM button (left:167640, bottom:8, zIndex:310); fetches /v1/aip/skill + /v1/cinematic/brain + /v1/ops/alerts + /v1/investigations; keyword-cross-references each skill against all 3 other sources to classify DEPLOYED/ALERTED/TRACKED/IDLE; red pulse on IDLE count (isolated skills with no brain model, no alert trigger, no investigation — zero operational grounding); expandable rows show matched brain nodes with type badge + matched ops alerts with severity badge + matched investigations with status badge; filter tabs ALL/DEPLOYED/ALERTED/TRACKED/IDLE + text search; ▶ ASSESS IDLE CAPABILITIES → /v1/jarvis/agent/chat + TTS; isSkbiamQuery+buildSkbiamScript exported; "skbiam"/"skill capability"/"idle skills"/"skill alert"/"skill brain"/"capability monitor"/"skill investigation"/"skill ops"/"isolated skills"/"capability gap brain"/"skill idle"/"ops skill" voice triggers; jarvis:skbiam-toggle event; 90-s auto-refresh */}
+            <SkillBrainOpsInvestigationCapabilityMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

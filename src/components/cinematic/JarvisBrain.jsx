@@ -152,6 +152,7 @@ import { isSdcrrQuery } from "@/components/cinematic/SwarmDatasetContactRiskRepo
 import { isTobscmdQuery } from "@/components/cinematic/TaskOpsAlertBrainScenarioCommand";
 import { isLicmnQuery } from "@/components/cinematic/LiveIntelOpsCrisisManagementNetwork";
 import { isOdskfcQuery } from "@/components/cinematic/OpsAlertDatasetScenarioKnowledgeContactFoundation";
+import { isSkbiamQuery } from "@/components/cinematic/SkillBrainOpsInvestigationCapabilityMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -390,6 +391,7 @@ export default function JarvisBrain() {
     if (isTobscmdQuery(q))  { window.dispatchEvent(new Event("jarvis:tobscmd-toggle")); }
     if (isLicmnQuery(q))    { window.dispatchEvent(new Event("jarvis:licmn-toggle")); }
     if (isOdskfcQuery(q))   { window.dispatchEvent(new Event("jarvis:odskfc-toggle")); }
+    if (isSkbiamQuery(q))   { window.dispatchEvent(new Event("jarvis:skbiam-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
