@@ -708,6 +708,7 @@ import SwarmRiskContactDatasetGraphDefenseMap from '@/components/cinematic/Swarm
 import SceneKnowledgeOpsSkillPosture from '@/components/cinematic/SceneKnowledgeOpsSkillPosture';
 import BrainRiskKnowledgeTaskCoherenceWeb from '@/components/cinematic/BrainRiskKnowledgeTaskCoherenceWeb';
 import OpsAlertContactDatasetTaskSkillMatrix from '@/components/cinematic/OpsAlertContactDatasetTaskSkillMatrix';
+import JarvisIntelligenceProductionIndex from '@/components/cinematic/JarvisIntelligenceProductionIndex';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2229,6 +2230,8 @@ function App() {
             <BrainRiskKnowledgeTaskCoherenceWeb />
             {/* F201 (overnight 2026-10-26): Ops Alert × Contact × Dataset × Task × Skill Incident Response Authority Matrix — ◈ OCDTSA button (left:160360, bottom:8, zIndex:297); fetches /v1/ops/alerts + /entities/Contact + /v1/datasets + /entities/Task + /v1/aip/skill; keyword-cross-references each ops alert against all 4 other sources to classify COVERED/MANAGED/PARTIAL/BLIND; red pulse on BLIND count (fully undefended incidents with no contact owner, no dataset, no task, no skill); expandable rows show matched contacts with role/org + matched datasets with row-count badge + matched tasks with status badge + matched skills with score badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOcdtsaQuery+buildOcdtsaScript exported; "incident matrix"/"ocdtsa"/"blind alerts"/"ops coverage"/"alert response authority"/"alert skill"/"incident response matrix" voice triggers; jarvis:ocdtsa-toggle event; 90-s auto-refresh */}
             <OpsAlertContactDatasetTaskSkillMatrix />
+            {/* F202 (overnight 2026-10-26): JARVIS Intelligence Production Index — ◈ JIPROD button (left:160920, bottom:8, zIndex:298); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /v1/datasets + /v1/reports + /v1/investigations + /v1/aip/skill; computes 6-dimension composite production health score (0-100): service health %, brain size, data volume, intel output, case load, capability score; composite HEALTHY ≥80/DEGRADED 50-79/CRITICAL <50 with color-coded ring gauge; individual score bars per dimension with detail labels; red badge on score < 50; ▶ ASSESS → /v1/jarvis/agent/chat advisory for weakest dimension + TTS; isJiprodQuery+buildJiprodScript exported; "production index"/"jiprod"/"intelligence production"/"production score"/"system production"/"jarvis production"/"production health"/"jarvis health score" voice triggers; jarvis:jiprod-toggle event; 60-s auto-refresh */}
+            <JarvisIntelligenceProductionIndex />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
