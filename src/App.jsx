@@ -713,6 +713,7 @@ import GraphKnowledgeOpsTaskContactPulse from '@/components/cinematic/GraphKnowl
 import DatasetSkillSwarmScenarioReportProductionReadiness from '@/components/cinematic/DatasetSkillSwarmScenarioReportProductionReadiness';
 import OpsAlertContactTaskSkillKnowledgeCommandWeb from '@/components/cinematic/OpsAlertContactTaskSkillKnowledgeCommandWeb';
 import ScenarioGraphTaskKnowledgeOpsMap from '@/components/cinematic/ScenarioGraphTaskKnowledgeOpsMap';
+import InvestmentReportRiskSkillGraphCoverage from '@/components/cinematic/InvestmentReportRiskSkillGraphCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2244,6 +2245,8 @@ function App() {
             <OpsAlertContactTaskSkillKnowledgeCommandWeb />
             {/* F206 (overnight 2026-10-26): Scenario × Graph × Task × Knowledge × Ops Alert Full Strategic Execution Map — ◈ SGTMAP button (left:163160, bottom:8, zIndex:302); fetches /v1/scenario/list + /v1/graph/centrality + /entities/Task + /knowledge/ + /v1/ops/alerts; keyword-cross-references each scenario against all 4 other sources to classify ARMED/GROUNDED/PARTIAL/UNARMED; red pulse on UNARMED count (scenarios with no graph trace, no task, no knowledge, no alert — fully unexecutable); expandable rows show matched graph nodes (centrality score badge) + tasks (status badge) + knowledge articles (category badge) + ops alerts (severity badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSgtmapQuery exported; "scenario map"/"sgtmap"/"strategic execution"/"unarmed scenarios"/"scenario graph"/"scenario intelligence map"/"strategic map" voice triggers; jarvis:sgtmap-toggle event; 90-s auto-refresh */}
             <ScenarioGraphTaskKnowledgeOpsMap />
+            {/* F207 (overnight 2026-10-26): Investment × Report × RiskSignal × Skill × Graph Wealth Risk Intelligence Coverage — ◈ WRIMAP button (left:163720, bottom:8, zIndex:303); fetches /entities/Investment + /v1/reports + /entities/RiskSignal + /v1/aip/skill + /v1/graph/centrality; keyword-cross-references each investment against all 4 other sources to classify SECURED/ASSESSED/PARTIAL/EXPOSED; red pulse on EXPOSED count (investments with no risk signal, no report, no skill match, no graph trace — fully unprotected financial assets); expandable rows show matched risk signals (severity badge) + matched reports (date badge) + matched skills (score badge) + matched graph nodes (centrality score badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isWrimapQuery exported; "wealth risk"/"wrimap"/"investment coverage"/"exposed investments"/"investment risk"/"financial coverage"/"investment intelligence" voice triggers; jarvis:wrimap-toggle event; 90-s auto-refresh */}
+            <InvestmentReportRiskSkillGraphCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
