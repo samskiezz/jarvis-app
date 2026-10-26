@@ -139,6 +139,7 @@ import { isRsscrQuery } from "@/components/cinematic/RiskSignalScenarioContactSk
 import { isSdcmapQuery } from "@/components/cinematic/SwarmRiskContactDatasetGraphDefenseMap";
 import { isSkopsQuery } from "@/components/cinematic/SceneKnowledgeOpsSkillPosture";
 import { isBrktwebQuery } from "@/components/cinematic/BrainRiskKnowledgeTaskCoherenceWeb";
+import { isOcdtsaQuery } from "@/components/cinematic/OpsAlertContactDatasetTaskSkillMatrix";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -364,6 +365,7 @@ export default function JarvisBrain() {
     if (isSdcmapQuery(q))   { window.dispatchEvent(new Event("jarvis:sdcmap-toggle")); }
     if (isSkopsQuery(q))    { window.dispatchEvent(new Event("jarvis:skops-toggle")); }
     if (isBrktwebQuery(q))  { window.dispatchEvent(new Event("jarvis:brktweb-toggle")); }
+    if (isOcdtsaQuery(q))   { window.dispatchEvent(new Event("jarvis:ocdtsa-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

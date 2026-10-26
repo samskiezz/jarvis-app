@@ -707,6 +707,7 @@ import RiskSignalScenarioContactSkillReport from '@/components/cinematic/RiskSig
 import SwarmRiskContactDatasetGraphDefenseMap from '@/components/cinematic/SwarmRiskContactDatasetGraphDefenseMap';
 import SceneKnowledgeOpsSkillPosture from '@/components/cinematic/SceneKnowledgeOpsSkillPosture';
 import BrainRiskKnowledgeTaskCoherenceWeb from '@/components/cinematic/BrainRiskKnowledgeTaskCoherenceWeb';
+import OpsAlertContactDatasetTaskSkillMatrix from '@/components/cinematic/OpsAlertContactDatasetTaskSkillMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2226,6 +2227,8 @@ function App() {
             <SceneKnowledgeOpsSkillPosture />
             {/* F200 (overnight 2026-10-26): Brain × RiskSignal × Knowledge × Task Intelligence Coherence Web — ◈ BRKTWEB button (left:159800, bottom:8, zIndex:296); fetches /v1/cinematic/brain + /entities/RiskSignal + /knowledge/ + /entities/Task; keyword-cross-references each brain node against all 3 other sources to classify COHERENT/SIGNALED/DOCUMENTED/DARK; red pulse on DARK count (brain nodes with no risk signal, no knowledge article, no task — pure intelligence blind spots); expandable rows show matched risk signals with severity badge + matched knowledge articles with category badge + matched tasks with status badge; ▶ ASSESS → /v1/jarvis/agent/chat advisory + TTS; isBrktwebQuery+buildBrktwebScript exported; "brain coherence"/"brktweb"/"dark brain"/"brain risk knowledge"/"brain task coherence"/"coherence web"/"intelligence coherence" voice triggers; jarvis:brktweb-toggle event; 90-s auto-refresh */}
             <BrainRiskKnowledgeTaskCoherenceWeb />
+            {/* F201 (overnight 2026-10-26): Ops Alert × Contact × Dataset × Task × Skill Incident Response Authority Matrix — ◈ OCDTSA button (left:160360, bottom:8, zIndex:297); fetches /v1/ops/alerts + /entities/Contact + /v1/datasets + /entities/Task + /v1/aip/skill; keyword-cross-references each ops alert against all 4 other sources to classify COVERED/MANAGED/PARTIAL/BLIND; red pulse on BLIND count (fully undefended incidents with no contact owner, no dataset, no task, no skill); expandable rows show matched contacts with role/org + matched datasets with row-count badge + matched tasks with status badge + matched skills with score badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOcdtsaQuery+buildOcdtsaScript exported; "incident matrix"/"ocdtsa"/"blind alerts"/"ops coverage"/"alert response authority"/"alert skill"/"incident response matrix" voice triggers; jarvis:ocdtsa-toggle event; 90-s auto-refresh */}
+            <OpsAlertContactDatasetTaskSkillMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
