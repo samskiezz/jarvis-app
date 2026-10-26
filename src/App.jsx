@@ -714,6 +714,7 @@ import DatasetSkillSwarmScenarioReportProductionReadiness from '@/components/cin
 import OpsAlertContactTaskSkillKnowledgeCommandWeb from '@/components/cinematic/OpsAlertContactTaskSkillKnowledgeCommandWeb';
 import ScenarioGraphTaskKnowledgeOpsMap from '@/components/cinematic/ScenarioGraphTaskKnowledgeOpsMap';
 import InvestmentReportRiskSkillGraphCoverage from '@/components/cinematic/InvestmentReportRiskSkillGraphCoverage';
+import IntelProfileTaskKnowledgeOpsContactWeb from '@/components/cinematic/IntelProfileTaskKnowledgeOpsContactWeb';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2247,6 +2248,8 @@ function App() {
             <ScenarioGraphTaskKnowledgeOpsMap />
             {/* F207 (overnight 2026-10-26): Investment × Report × RiskSignal × Skill × Graph Wealth Risk Intelligence Coverage — ◈ WRIMAP button (left:163720, bottom:8, zIndex:303); fetches /entities/Investment + /v1/reports + /entities/RiskSignal + /v1/aip/skill + /v1/graph/centrality; keyword-cross-references each investment against all 4 other sources to classify SECURED/ASSESSED/PARTIAL/EXPOSED; red pulse on EXPOSED count (investments with no risk signal, no report, no skill match, no graph trace — fully unprotected financial assets); expandable rows show matched risk signals (severity badge) + matched reports (date badge) + matched skills (score badge) + matched graph nodes (centrality score badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isWrimapQuery exported; "wealth risk"/"wrimap"/"investment coverage"/"exposed investments"/"investment risk"/"financial coverage"/"investment intelligence" voice triggers; jarvis:wrimap-toggle event; 90-s auto-refresh */}
             <InvestmentReportRiskSkillGraphCoverage />
+            {/* F208 (overnight 2026-10-26): IntelProfile × Task × Knowledge × Ops Alert × Contact Intelligence Command Web — ◈ ITKOCW button (left:164280, bottom:8, zIndex:304); fetches /entities/IntelProfile + /entities/Task + /knowledge/ + /v1/ops/alerts + /entities/Contact; keyword-cross-references each intel profile against all 4 other sources to classify COMMANDING/ACTIVE/PARTIAL/DARK; red pulse on DARK count (dead intel profiles with no task, no knowledge article, no ops alert, no contact owner — full intelligence dead-ends); expandable rows show matched tasks (status badge) + matched knowledge articles (category badge) + matched ops alerts (severity badge) + matched contacts (role/org); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isItkocwQuery+buildItkocwScript exported; "intel command web"/"itkocw"/"intelligence command"/"dark intel"/"intel profile command"/"dead intel"/"profile web" voice triggers; jarvis:itkocw-toggle event; 90-s auto-refresh */}
+            <IntelProfileTaskKnowledgeOpsContactWeb />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
