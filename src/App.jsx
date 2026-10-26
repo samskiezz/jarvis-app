@@ -706,6 +706,7 @@ import InvestigationContactBrainGraphOpsCommand from '@/components/cinematic/Inv
 import RiskSignalScenarioContactSkillReport from '@/components/cinematic/RiskSignalScenarioContactSkillReport';
 import SwarmRiskContactDatasetGraphDefenseMap from '@/components/cinematic/SwarmRiskContactDatasetGraphDefenseMap';
 import SceneKnowledgeOpsSkillPosture from '@/components/cinematic/SceneKnowledgeOpsSkillPosture';
+import BrainRiskKnowledgeTaskCoherenceWeb from '@/components/cinematic/BrainRiskKnowledgeTaskCoherenceWeb';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2223,6 +2224,8 @@ function App() {
             <SwarmRiskContactDatasetGraphDefenseMap />
             {/* F199 (overnight 2026-10-26): Scene × Knowledge × Ops Alert × Skill Operational Knowledge Posture — ◈ SKOPS button (left:159240, bottom:8, zIndex:295); fetches all 10 /v1/cinematic/scene/{1..10} + /knowledge/ + /v1/ops/alerts + /v1/aip/skill; keyword-cross-references each scene against all 3 other sources to classify FORTIFIED/SUPPORTED/PARTIAL/BLIND; amber pulse on BLIND count (fully ungrounded scenes with no knowledge article, no ops alert, no skill match); expandable rows show matched knowledge articles with category badge + matched ops alerts with severity badge + matched skills with score badge; ▶ ASSESS BLIND SCENES → /v1/jarvis/agent/chat advisory + TTS; isSkopsQuery+buildSkopsScript exported; "scene posture"/"skops"/"blind scene"/"scene knowledge ops"/"scene skill"/"scene operational posture"/"scene coverage posture" voice triggers; jarvis:skops-toggle event; 90-s auto-refresh */}
             <SceneKnowledgeOpsSkillPosture />
+            {/* F200 (overnight 2026-10-26): Brain × RiskSignal × Knowledge × Task Intelligence Coherence Web — ◈ BRKTWEB button (left:159800, bottom:8, zIndex:296); fetches /v1/cinematic/brain + /entities/RiskSignal + /knowledge/ + /entities/Task; keyword-cross-references each brain node against all 3 other sources to classify COHERENT/SIGNALED/DOCUMENTED/DARK; red pulse on DARK count (brain nodes with no risk signal, no knowledge article, no task — pure intelligence blind spots); expandable rows show matched risk signals with severity badge + matched knowledge articles with category badge + matched tasks with status badge; ▶ ASSESS → /v1/jarvis/agent/chat advisory + TTS; isBrktwebQuery+buildBrktwebScript exported; "brain coherence"/"brktweb"/"dark brain"/"brain risk knowledge"/"brain task coherence"/"coherence web"/"intelligence coherence" voice triggers; jarvis:brktweb-toggle event; 90-s auto-refresh */}
+            <BrainRiskKnowledgeTaskCoherenceWeb />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
