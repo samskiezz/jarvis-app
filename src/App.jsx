@@ -719,6 +719,7 @@ import RiskSignalGraphKnowledgeOpsContactSaturation from '@/components/cinematic
 import SwarmDatasetContactRiskReportChain from '@/components/cinematic/SwarmDatasetContactRiskReportChain';
 import TaskOpsAlertBrainScenarioCommand from '@/components/cinematic/TaskOpsAlertBrainScenarioCommand';
 import LiveIntelOpsCrisisManagementNetwork from '@/components/cinematic/LiveIntelOpsCrisisManagementNetwork';
+import OpsAlertDatasetScenarioKnowledgeContactFoundation from '@/components/cinematic/OpsAlertDatasetScenarioKnowledgeContactFoundation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2262,6 +2263,8 @@ function App() {
             <TaskOpsAlertBrainScenarioCommand />
             {/* F212 (overnight 2026-10-26): LiveIntel × OpsAlert × Investigation × Contact Incident Crisis Management Network — ◈ LICMN button (left:166520, bottom:8, zIndex:308); fetches /functions/getLiveIntel + /v1/ops/alerts + /v1/investigations + /entities/Contact; groups live events by category (quake region, crypto symbol, FX pair); keyword-cross-references each category against all 3 other sources to classify MANAGED/ALERTED/TRACKED/UNMANAGED; red pulse on UNMANAGED count (live crisis events with no ops alert, no investigation, no contact owner — zero incident management coverage); expandable rows show matched ops alerts with severity badge + matched investigations with status badge + matched contacts with role/org; filter tabs ALL/MANAGED/ALERTED/TRACKED/UNMANAGED + text search; ▶ ASSESS UNMANAGED CRISES → /v1/jarvis/agent/chat + TTS; isLicmnQuery+buildLicmnScript exported; "licmn"/"crisis management"/"live crisis"/"incident management network"/"live alert investigation"/"crisis network"/"live contact"/"incident crisis"/"crisis response network"/"live ops"/"live incidents"/"crisis intel"/"unmanaged crisis" voice triggers; jarvis:licmn-toggle event; 90-s auto-refresh */}
             <LiveIntelOpsCrisisManagementNetwork />
+            {/* F213 (overnight 2026-10-26): OpsAlert × Dataset × Scenario × Knowledge × Contact Incident Evidence Intelligence Foundation — ◈ ODSKFC button (left:167080, bottom:8, zIndex:309); fetches /v1/ops/alerts + /v1/datasets + /v1/scenario/list + /knowledge/ + /entities/Contact; cross-references each alert against all 4 evidence sources; classifies GROUNDED/STAGED/PARTIAL/BLIND (GROUNDED=alert matched in all 4 sources; STAGED=scenario+≥3; PARTIAL=≥1; BLIND=0 matches); red pulse on BLIND count; expandable rows show matched datasets with row-count badge + matched scenarios with status badge + matched knowledge with category badge + matched contacts with role/org; filter tabs ALL/GROUNDED/STAGED/PARTIAL/BLIND + text search; ▶ ASSESS BLIND ALERTS → /v1/jarvis/agent/chat + TTS; isOdskfcQuery+buildOdskfcScript exported; "odskfc"/"incident evidence"/"alert foundation"/"blind alert"/"alert coverage"/"incident blind spot"/"alert dataset"/"ops evidence"/"incident knowledge"/"alert grounding"/"incident scenario"/"ops alert foundation"/"alert ground" voice triggers; jarvis:odskfc-toggle event; 90-s auto-refresh */}
+            <OpsAlertDatasetScenarioKnowledgeContactFoundation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
