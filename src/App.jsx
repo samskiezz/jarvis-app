@@ -709,6 +709,7 @@ import SceneKnowledgeOpsSkillPosture from '@/components/cinematic/SceneKnowledge
 import BrainRiskKnowledgeTaskCoherenceWeb from '@/components/cinematic/BrainRiskKnowledgeTaskCoherenceWeb';
 import OpsAlertContactDatasetTaskSkillMatrix from '@/components/cinematic/OpsAlertContactDatasetTaskSkillMatrix';
 import JarvisIntelligenceProductionIndex from '@/components/cinematic/JarvisIntelligenceProductionIndex';
+import GraphKnowledgeOpsTaskContactPulse from '@/components/cinematic/GraphKnowledgeOpsTaskContactPulse';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2232,6 +2233,8 @@ function App() {
             <OpsAlertContactDatasetTaskSkillMatrix />
             {/* F202 (overnight 2026-10-26): JARVIS Intelligence Production Index — ◈ JIPROD button (left:160920, bottom:8, zIndex:298); parallel-fetches /v1/jarvis/system/status + /v1/cinematic/brain + /v1/datasets + /v1/reports + /v1/investigations + /v1/aip/skill; computes 6-dimension composite production health score (0-100): service health %, brain size, data volume, intel output, case load, capability score; composite HEALTHY ≥80/DEGRADED 50-79/CRITICAL <50 with color-coded ring gauge; individual score bars per dimension with detail labels; red badge on score < 50; ▶ ASSESS → /v1/jarvis/agent/chat advisory for weakest dimension + TTS; isJiprodQuery+buildJiprodScript exported; "production index"/"jiprod"/"intelligence production"/"production score"/"system production"/"jarvis production"/"production health"/"jarvis health score" voice triggers; jarvis:jiprod-toggle event; 60-s auto-refresh */}
             <JarvisIntelligenceProductionIndex />
+            {/* F203 (overnight 2026-10-26): Graph × Knowledge × Ops Alert × Task × Contact Intelligence Pulse — ◈ GKOATC button (left:161480, bottom:8, zIndex:299); fetches /v1/graph/centrality + /knowledge/ + /v1/ops/alerts + /entities/Task + /entities/Contact; keyword-cross-references each graph node against all 4 other sources to classify ACTIVE/ANCHORED/PARTIAL/DEAD; red pulse on DEAD count (blind-spot nodes — full intelligence dead zones); expandable rows show matched knowledge articles with category badge + ops alerts with severity badge + tasks with status badge + contacts with role/org; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGkoatcQuery+buildGkoatcScript exported; "graph intelligence pulse"/"gkoatc"/"intelligence pulse"/"dead nodes"/"graph contact task"/"node pulse" voice triggers; jarvis:gkoatc-toggle event; 90-s auto-refresh */}
+            <GraphKnowledgeOpsTaskContactPulse />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
