@@ -701,6 +701,7 @@ import SystemBrainKnowledgeHealthMonitor from '@/components/cinematic/SystemBrai
 import SkillDatasetBrainOpsContactReportNexus from '@/components/cinematic/SkillDatasetBrainOpsContactReportNexus';
 import InvestigationDatasetBrainKnowledgeOpsProsecution from '@/components/cinematic/InvestigationDatasetBrainKnowledgeOpsProsecution';
 import ContactSkillDatasetInvestigationOpsCoverage from '@/components/cinematic/ContactSkillDatasetInvestigationOpsCoverage';
+import IntelProfileDatasetKnowledgeSkillGraph from '@/components/cinematic/IntelProfileDatasetKnowledgeSkillGraph';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2208,6 +2209,8 @@ function App() {
             <InvestigationDatasetBrainKnowledgeOpsProsecution />
             {/* F194 (overnight 2026-10-26): Contact × Skill × Dataset × Investigation × Ops Alert Personnel Intelligence Readiness — ◈ CIDIO button (left:156440, bottom:8, zIndex:290); fetches /entities/Contact + /v1/aip/skill + /v1/datasets + /v1/investigations + /v1/ops/alerts; keyword-cross-references each contact against all 4 other sources to classify READY/SKILLED/PARTIAL/DARK; red pulse on DARK count (personnel blind spots — contacts with no skill, no dataset, no investigation, no ops alert); expandable rows show matched skills with score badge + matched datasets with row-count badge + matched investigations with status badge + matched ops alerts with severity badge; ▶ ASSESS DARK CONTACTS → /v1/jarvis/agent/chat advisory + TTS; isCidioQuery+buildCidioScript exported; "contact readiness"/"cidio"/"personnel readiness"/"dark contacts" voice triggers; jarvis:cidio-toggle event; 90-s auto-refresh */}
             <ContactSkillDatasetInvestigationOpsCoverage />
+            {/* F195 (overnight 2026-10-26): IntelProfile × Dataset × Knowledge × Skill × Graph Intelligence Capability Foundation — ◈ IDKSGF button (left:157000, bottom:8, zIndex:291); fetches /entities/IntelProfile + /v1/datasets + /knowledge/ + /v1/aip/skill + /v1/graph/centrality; keyword-cross-references each intel profile against all 4 other sources to classify GROUNDED/CAPABLE/KNOWN/DARK; red pulse on DARK count (capability blind spots — profiles with no dataset, no knowledge article, no skill match, no graph trace); expandable rows show matched datasets with row-count badge + matched knowledge articles with category badge + matched skills with score badge + matched graph nodes with centrality score badge; ▶ ASSESS DARK PROFILES → /v1/jarvis/agent/chat advisory + TTS; isIdksgfQuery exported; "intel capability"/"idksgf"/"profile capability"/"dark profiles" voice triggers; jarvis:idksgf-toggle event; 90-s auto-refresh */}
+            <IntelProfileDatasetKnowledgeSkillGraph />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
