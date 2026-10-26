@@ -134,6 +134,7 @@ import { isSdbarcQuery, buildSdbarcScript } from "@/components/cinematic/SkillDa
 import { isIvpwebQuery } from "@/components/cinematic/InvestigationDatasetBrainKnowledgeOpsProsecution";
 import { isCidioQuery } from "@/components/cinematic/ContactSkillDatasetInvestigationOpsCoverage";
 import { isIdksgfQuery } from "@/components/cinematic/IntelProfileDatasetKnowledgeSkillGraph";
+import { isIccgoaQuery } from "@/components/cinematic/InvestigationContactBrainGraphOpsCommand";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -354,6 +355,7 @@ export default function JarvisBrain() {
     if (isIvpwebQuery(q))   { window.dispatchEvent(new Event("jarvis:ivpweb-toggle")); }
     if (isCidioQuery(q))    { window.dispatchEvent(new Event("jarvis:cidio-toggle")); }
     if (isIdksgfQuery(q))   { window.dispatchEvent(new Event("jarvis:idksgf-toggle")); }
+    if (isIccgoaQuery(q))   { window.dispatchEvent(new Event("jarvis:iccgoa-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

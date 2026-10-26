@@ -702,6 +702,7 @@ import SkillDatasetBrainOpsContactReportNexus from '@/components/cinematic/Skill
 import InvestigationDatasetBrainKnowledgeOpsProsecution from '@/components/cinematic/InvestigationDatasetBrainKnowledgeOpsProsecution';
 import ContactSkillDatasetInvestigationOpsCoverage from '@/components/cinematic/ContactSkillDatasetInvestigationOpsCoverage';
 import IntelProfileDatasetKnowledgeSkillGraph from '@/components/cinematic/IntelProfileDatasetKnowledgeSkillGraph';
+import InvestigationContactBrainGraphOpsCommand from '@/components/cinematic/InvestigationContactBrainGraphOpsCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2211,6 +2212,8 @@ function App() {
             <ContactSkillDatasetInvestigationOpsCoverage />
             {/* F195 (overnight 2026-10-26): IntelProfile × Dataset × Knowledge × Skill × Graph Intelligence Capability Foundation — ◈ IDKSGF button (left:157000, bottom:8, zIndex:291); fetches /entities/IntelProfile + /v1/datasets + /knowledge/ + /v1/aip/skill + /v1/graph/centrality; keyword-cross-references each intel profile against all 4 other sources to classify GROUNDED/CAPABLE/KNOWN/DARK; red pulse on DARK count (capability blind spots — profiles with no dataset, no knowledge article, no skill match, no graph trace); expandable rows show matched datasets with row-count badge + matched knowledge articles with category badge + matched skills with score badge + matched graph nodes with centrality score badge; ▶ ASSESS DARK PROFILES → /v1/jarvis/agent/chat advisory + TTS; isIdksgfQuery exported; "intel capability"/"idksgf"/"profile capability"/"dark profiles" voice triggers; jarvis:idksgf-toggle event; 90-s auto-refresh */}
             <IntelProfileDatasetKnowledgeSkillGraph />
+            {/* F196 (overnight 2026-10-26): Investigation × Contact × Brain × Graph × Ops Alert Active Case Command Coverage — ◈ ICCGOA button (left:157560, bottom:8, zIndex:292); fetches /v1/investigations + /entities/Contact + /v1/cinematic/brain + /v1/graph/centrality + /v1/ops/alerts; keyword-cross-references each investigation against all 4 other sources to classify COMMANDED/STAFFED/TRACED/COLD; red pulse on COLD count (cold cases — investigations with no contact owner, no brain model, no graph trace, no ops alert); expandable rows show matched contacts with role/org + matched brain nodes with type/score badge + matched graph nodes with centrality score badge + matched ops alerts with severity badge; ▶ ASSESS COLD CASES → /v1/jarvis/agent/chat advisory + TTS; isIccgoaQuery exported; "investigation command"/"iccgoa"/"cold cases"/"case coverage" voice triggers; jarvis:iccgoa-toggle event; 90-s auto-refresh */}
+            <InvestigationContactBrainGraphOpsCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
