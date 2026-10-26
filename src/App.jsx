@@ -710,6 +710,7 @@ import BrainRiskKnowledgeTaskCoherenceWeb from '@/components/cinematic/BrainRisk
 import OpsAlertContactDatasetTaskSkillMatrix from '@/components/cinematic/OpsAlertContactDatasetTaskSkillMatrix';
 import JarvisIntelligenceProductionIndex from '@/components/cinematic/JarvisIntelligenceProductionIndex';
 import GraphKnowledgeOpsTaskContactPulse from '@/components/cinematic/GraphKnowledgeOpsTaskContactPulse';
+import DatasetSkillSwarmScenarioReportProductionReadiness from '@/components/cinematic/DatasetSkillSwarmScenarioReportProductionReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2235,6 +2236,8 @@ function App() {
             <JarvisIntelligenceProductionIndex />
             {/* F203 (overnight 2026-10-26): Graph × Knowledge × Ops Alert × Task × Contact Intelligence Pulse — ◈ GKOATC button (left:161480, bottom:8, zIndex:299); fetches /v1/graph/centrality + /knowledge/ + /v1/ops/alerts + /entities/Task + /entities/Contact; keyword-cross-references each graph node against all 4 other sources to classify ACTIVE/ANCHORED/PARTIAL/DEAD; red pulse on DEAD count (blind-spot nodes — full intelligence dead zones); expandable rows show matched knowledge articles with category badge + ops alerts with severity badge + tasks with status badge + contacts with role/org; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isGkoatcQuery+buildGkoatcScript exported; "graph intelligence pulse"/"gkoatc"/"intelligence pulse"/"dead nodes"/"graph contact task"/"node pulse" voice triggers; jarvis:gkoatc-toggle event; 90-s auto-refresh */}
             <GraphKnowledgeOpsTaskContactPulse />
+            {/* F204 (overnight 2026-10-26): Dataset × Skill × SwarmJob × Scenario × Report Production Readiness Command Map — ◈ DPSCM button (left:162040, bottom:8, zIndex:300); fetches /v1/datasets + /v1/aip/skill + /entities/SwarmJob + /v1/scenario/list + /v1/reports; keyword-cross-references each dataset against all 4 other sources to classify ARMED/CAPABLE/PARTIAL/UNARMED; red pulse on UNARMED count (datasets with no skill, no swarm, no scenario, no report — production blind spots); expandable rows show matched skills (score badge) + swarm jobs (status badge) + scenarios (status badge) + reports (date badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isDpscmQuery+buildDpscmScript exported; "dataset production"/"dpscm"/"production readiness"/"dataset command"/"armed datasets"/"unarmed datasets"/"production map" voice triggers; jarvis:dpscm-toggle event; 90-s auto-refresh */}
+            <DatasetSkillSwarmScenarioReportProductionReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
