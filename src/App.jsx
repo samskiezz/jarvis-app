@@ -705,6 +705,7 @@ import IntelProfileDatasetKnowledgeSkillGraph from '@/components/cinematic/Intel
 import InvestigationContactBrainGraphOpsCommand from '@/components/cinematic/InvestigationContactBrainGraphOpsCommand';
 import RiskSignalScenarioContactSkillReport from '@/components/cinematic/RiskSignalScenarioContactSkillReport';
 import SwarmRiskContactDatasetGraphDefenseMap from '@/components/cinematic/SwarmRiskContactDatasetGraphDefenseMap';
+import SceneKnowledgeOpsSkillPosture from '@/components/cinematic/SceneKnowledgeOpsSkillPosture';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2220,6 +2221,8 @@ function App() {
             <RiskSignalScenarioContactSkillReport />
             {/* F198 (overnight 2026-10-26): SwarmJob × RiskSignal × Contact × Dataset × Graph Automated Defense Coverage Map — ◈ SDCMAP button (left:158680, bottom:8, zIndex:294); fetches /entities/SwarmJob + /entities/RiskSignal + /entities/Contact + /v1/datasets + /v1/graph/centrality; keyword-cross-references each swarm job against all 4 other sources to classify COVERED/ACTIVE/PARTIAL/BLIND; red pulse on BLIND count (fully unmonitored swarm jobs with no risk signal, no contact owner, no dataset, no graph trace); expandable rows show matched risk signals with severity badge + matched contacts with role/org + matched datasets with row-count badge + matched graph nodes with centrality score badge; ▶ ASSESS BLIND SWARM JOBS → /v1/jarvis/agent/chat advisory + TTS; isSdcmapQuery+buildSdcmapScript exported; "swarm defense"/"sdcmap"/"blind automation"/"swarm coverage"/"automated defense" voice triggers; jarvis:sdcmap-toggle event; 90-s auto-refresh */}
             <SwarmRiskContactDatasetGraphDefenseMap />
+            {/* F199 (overnight 2026-10-26): Scene × Knowledge × Ops Alert × Skill Operational Knowledge Posture — ◈ SKOPS button (left:159240, bottom:8, zIndex:295); fetches all 10 /v1/cinematic/scene/{1..10} + /knowledge/ + /v1/ops/alerts + /v1/aip/skill; keyword-cross-references each scene against all 3 other sources to classify FORTIFIED/SUPPORTED/PARTIAL/BLIND; amber pulse on BLIND count (fully ungrounded scenes with no knowledge article, no ops alert, no skill match); expandable rows show matched knowledge articles with category badge + matched ops alerts with severity badge + matched skills with score badge; ▶ ASSESS BLIND SCENES → /v1/jarvis/agent/chat advisory + TTS; isSkopsQuery+buildSkopsScript exported; "scene posture"/"skops"/"blind scene"/"scene knowledge ops"/"scene skill"/"scene operational posture"/"scene coverage posture" voice triggers; jarvis:skops-toggle event; 90-s auto-refresh */}
+            <SceneKnowledgeOpsSkillPosture />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
