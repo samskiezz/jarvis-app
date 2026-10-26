@@ -716,6 +716,7 @@ import ScenarioGraphTaskKnowledgeOpsMap from '@/components/cinematic/ScenarioGra
 import InvestmentReportRiskSkillGraphCoverage from '@/components/cinematic/InvestmentReportRiskSkillGraphCoverage';
 import IntelProfileTaskKnowledgeOpsContactWeb from '@/components/cinematic/IntelProfileTaskKnowledgeOpsContactWeb';
 import RiskSignalGraphKnowledgeOpsContactSaturation from '@/components/cinematic/RiskSignalGraphKnowledgeOpsContactSaturation';
+import SwarmDatasetContactRiskReportChain from '@/components/cinematic/SwarmDatasetContactRiskReportChain';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2253,6 +2254,8 @@ function App() {
             <IntelProfileTaskKnowledgeOpsContactWeb />
             {/* F209 (overnight 2026-10-26): RiskSignal × Graph × Knowledge × Ops Alert × Contact Threat Attribution Saturation Monitor — ◈ TASMON button (left:164840, bottom:8, zIndex:305); fetches /entities/RiskSignal + /v1/graph/centrality + /knowledge/ + /v1/ops/alerts + /entities/Contact; keyword-cross-references each risk signal against all 4 other sources to classify SATURATED/ATTRIBUTED/SIGNALED/DARK; red pulse on DARK count (risk signals with no graph trace, no knowledge, no ops alert, no contact owner — fully ungrounded threat signals); expandable rows show matched graph nodes (centrality score badge) + matched knowledge articles (category badge) + matched ops alerts (severity badge) + matched contacts (role/org); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTasmonQuery+buildTasmonScript exported; "tasmon"/"threat saturation"/"signal saturation"/"dark signals"/"risk saturation"/"threat attribution"/"saturated risks" voice triggers; jarvis:tasmon-toggle event; 90-s auto-refresh */}
             <RiskSignalGraphKnowledgeOpsContactSaturation />
+            {/* F210 (overnight 2026-10-26): SwarmJob × Dataset × Contact × RiskSignal × Report Automation Production Coverage Chain — ◈ SDCRR button (left:165400, bottom:8, zIndex:306); fetches /entities/SwarmJob + /v1/datasets + /entities/Contact + /entities/RiskSignal + /v1/reports; keyword-cross-references each swarm job against all 4 other sources to classify COVERED/OWNED/PARTIAL/ISOLATED; red pulse on ISOLATED count (automation blind spots — unowned, data-less, threat-unmapped, unfiled jobs); expandable rows show matched datasets (row-count badge) + matched contacts (role/org) + matched risk signals (severity badge) + matched reports (date badge); filter tabs ALL/COVERED/OWNED/PARTIAL/ISOLATED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSdcrrQuery+buildSdcrrScript exported; "sdcrr"/"swarm coverage"/"automation coverage"/"swarm production"/"isolated swarm"/"swarm blind spot"/"automation blind spot"/"swarm data contact"/"swarm report"/"automation production coverage"/"swarm risk report"/"swarm ownership"/"automation ownership" voice triggers; jarvis:sdcrr-toggle event; 90-s auto-refresh */}
+            <SwarmDatasetContactRiskReportChain />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
