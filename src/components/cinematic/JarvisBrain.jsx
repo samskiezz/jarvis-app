@@ -147,6 +147,7 @@ import { isOatkwebQuery } from "@/components/cinematic/OpsAlertContactTaskSkillK
 import { isSgtmapQuery } from "@/components/cinematic/ScenarioGraphTaskKnowledgeOpsMap";
 import { isWrimapQuery } from "@/components/cinematic/InvestmentReportRiskSkillGraphCoverage";
 import { isItkocwQuery } from "@/components/cinematic/IntelProfileTaskKnowledgeOpsContactWeb";
+import { isTasmonQuery } from "@/components/cinematic/RiskSignalGraphKnowledgeOpsContactSaturation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -380,6 +381,7 @@ export default function JarvisBrain() {
     if (isSgtmapQuery(q))   { window.dispatchEvent(new Event("jarvis:sgtmap-toggle")); }
     if (isWrimapQuery(q))   { window.dispatchEvent(new Event("jarvis:wrimap-toggle")); }
     if (isItkocwQuery(q))  { window.dispatchEvent(new Event("jarvis:itkocw-toggle")); }
+    if (isTasmonQuery(q))  { window.dispatchEvent(new Event("jarvis:tasmon-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

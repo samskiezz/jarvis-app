@@ -715,6 +715,7 @@ import OpsAlertContactTaskSkillKnowledgeCommandWeb from '@/components/cinematic/
 import ScenarioGraphTaskKnowledgeOpsMap from '@/components/cinematic/ScenarioGraphTaskKnowledgeOpsMap';
 import InvestmentReportRiskSkillGraphCoverage from '@/components/cinematic/InvestmentReportRiskSkillGraphCoverage';
 import IntelProfileTaskKnowledgeOpsContactWeb from '@/components/cinematic/IntelProfileTaskKnowledgeOpsContactWeb';
+import RiskSignalGraphKnowledgeOpsContactSaturation from '@/components/cinematic/RiskSignalGraphKnowledgeOpsContactSaturation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2250,6 +2251,8 @@ function App() {
             <InvestmentReportRiskSkillGraphCoverage />
             {/* F208 (overnight 2026-10-26): IntelProfile × Task × Knowledge × Ops Alert × Contact Intelligence Command Web — ◈ ITKOCW button (left:164280, bottom:8, zIndex:304); fetches /entities/IntelProfile + /entities/Task + /knowledge/ + /v1/ops/alerts + /entities/Contact; keyword-cross-references each intel profile against all 4 other sources to classify COMMANDING/ACTIVE/PARTIAL/DARK; red pulse on DARK count (dead intel profiles with no task, no knowledge article, no ops alert, no contact owner — full intelligence dead-ends); expandable rows show matched tasks (status badge) + matched knowledge articles (category badge) + matched ops alerts (severity badge) + matched contacts (role/org); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isItkocwQuery+buildItkocwScript exported; "intel command web"/"itkocw"/"intelligence command"/"dark intel"/"intel profile command"/"dead intel"/"profile web" voice triggers; jarvis:itkocw-toggle event; 90-s auto-refresh */}
             <IntelProfileTaskKnowledgeOpsContactWeb />
+            {/* F209 (overnight 2026-10-26): RiskSignal × Graph × Knowledge × Ops Alert × Contact Threat Attribution Saturation Monitor — ◈ TASMON button (left:164840, bottom:8, zIndex:305); fetches /entities/RiskSignal + /v1/graph/centrality + /knowledge/ + /v1/ops/alerts + /entities/Contact; keyword-cross-references each risk signal against all 4 other sources to classify SATURATED/ATTRIBUTED/SIGNALED/DARK; red pulse on DARK count (risk signals with no graph trace, no knowledge, no ops alert, no contact owner — fully ungrounded threat signals); expandable rows show matched graph nodes (centrality score badge) + matched knowledge articles (category badge) + matched ops alerts (severity badge) + matched contacts (role/org); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTasmonQuery+buildTasmonScript exported; "tasmon"/"threat saturation"/"signal saturation"/"dark signals"/"risk saturation"/"threat attribution"/"saturated risks" voice triggers; jarvis:tasmon-toggle event; 90-s auto-refresh */}
+            <RiskSignalGraphKnowledgeOpsContactSaturation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
