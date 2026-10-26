@@ -704,6 +704,7 @@ import ContactSkillDatasetInvestigationOpsCoverage from '@/components/cinematic/
 import IntelProfileDatasetKnowledgeSkillGraph from '@/components/cinematic/IntelProfileDatasetKnowledgeSkillGraph';
 import InvestigationContactBrainGraphOpsCommand from '@/components/cinematic/InvestigationContactBrainGraphOpsCommand';
 import RiskSignalScenarioContactSkillReport from '@/components/cinematic/RiskSignalScenarioContactSkillReport';
+import SwarmRiskContactDatasetGraphDefenseMap from '@/components/cinematic/SwarmRiskContactDatasetGraphDefenseMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2217,6 +2218,8 @@ function App() {
             <InvestigationContactBrainGraphOpsCommand />
             {/* F197 (overnight 2026-10-26): RiskSignal × Scenario × Contact × Skill × Report Comprehensive Threat Response Coverage — ◈ RSSCR button (left:158120, bottom:8, zIndex:293); fetches /entities/RiskSignal + /v1/scenario/list + /entities/Contact + /v1/aip/skill + /v1/reports; keyword-cross-references each risk signal against all 4 other sources to classify DEFENDED/COVERED/PARTIAL/EXPOSED; red pulse on EXPOSED count (fully undefended threats with no scenario playbook, no contact owner, no skill match, no filed report); expandable rows show matched scenarios with status badge + matched contacts with role/org + matched skills with score badge + matched reports with date badge; ▶ ASSESS EXPOSED THREATS → /v1/jarvis/agent/chat advisory + TTS; isRsscrQuery+buildRsscrScript exported; "threat coverage"/"rsscr"/"exposed threats"/"risk coverage"/"threat response" voice triggers; jarvis:rsscr-toggle event; 90-s auto-refresh */}
             <RiskSignalScenarioContactSkillReport />
+            {/* F198 (overnight 2026-10-26): SwarmJob × RiskSignal × Contact × Dataset × Graph Automated Defense Coverage Map — ◈ SDCMAP button (left:158680, bottom:8, zIndex:294); fetches /entities/SwarmJob + /entities/RiskSignal + /entities/Contact + /v1/datasets + /v1/graph/centrality; keyword-cross-references each swarm job against all 4 other sources to classify COVERED/ACTIVE/PARTIAL/BLIND; red pulse on BLIND count (fully unmonitored swarm jobs with no risk signal, no contact owner, no dataset, no graph trace); expandable rows show matched risk signals with severity badge + matched contacts with role/org + matched datasets with row-count badge + matched graph nodes with centrality score badge; ▶ ASSESS BLIND SWARM JOBS → /v1/jarvis/agent/chat advisory + TTS; isSdcmapQuery+buildSdcmapScript exported; "swarm defense"/"sdcmap"/"blind automation"/"swarm coverage"/"automated defense" voice triggers; jarvis:sdcmap-toggle event; 90-s auto-refresh */}
+            <SwarmRiskContactDatasetGraphDefenseMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
