@@ -700,6 +700,7 @@ import SkillGapAdvisor from '@/components/cinematic/SkillGapAdvisor';
 import SystemBrainKnowledgeHealthMonitor from '@/components/cinematic/SystemBrainKnowledgeHealthMonitor';
 import SkillDatasetBrainOpsContactReportNexus from '@/components/cinematic/SkillDatasetBrainOpsContactReportNexus';
 import InvestigationDatasetBrainKnowledgeOpsProsecution from '@/components/cinematic/InvestigationDatasetBrainKnowledgeOpsProsecution';
+import ContactSkillDatasetInvestigationOpsCoverage from '@/components/cinematic/ContactSkillDatasetInvestigationOpsCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2205,6 +2206,8 @@ function App() {
             <SkillDatasetBrainOpsContactReportNexus />
             {/* F193 (overnight 2026-10-25): Investigation × Dataset × Brain × Knowledge × Ops Alert Evidence Prosecution Web — ◈ IVPWEB button (left:155880, bottom:8, zIndex:289); fetches /v1/investigations + /v1/datasets + /v1/cinematic/brain + /knowledge/ + /v1/ops/alerts; keyword-cross-references each investigation against all 4 other sources to classify PROSECUTING/RESOURCED/PARTIAL/COLD; red pulse on COLD count (prosecution dead-ends with zero evidence support); expandable rows show matched datasets with row-count badge + brain nodes with centrality score + knowledge articles with category badge + ops alerts with severity badge; ▶ ASSESS COLD CASES → /v1/jarvis/agent/chat advisory + TTS; isIvpwebQuery+buildIvpwebScript exported; "prosecution web"/"ivpweb"/"cold cases"/"investigation evidence" voice triggers; jarvis:ivpweb-toggle event; 90-s auto-refresh */}
             <InvestigationDatasetBrainKnowledgeOpsProsecution />
+            {/* F194 (overnight 2026-10-26): Contact × Skill × Dataset × Investigation × Ops Alert Personnel Intelligence Readiness — ◈ CIDIO button (left:156440, bottom:8, zIndex:290); fetches /entities/Contact + /v1/aip/skill + /v1/datasets + /v1/investigations + /v1/ops/alerts; keyword-cross-references each contact against all 4 other sources to classify READY/SKILLED/PARTIAL/DARK; red pulse on DARK count (personnel blind spots — contacts with no skill, no dataset, no investigation, no ops alert); expandable rows show matched skills with score badge + matched datasets with row-count badge + matched investigations with status badge + matched ops alerts with severity badge; ▶ ASSESS DARK CONTACTS → /v1/jarvis/agent/chat advisory + TTS; isCidioQuery+buildCidioScript exported; "contact readiness"/"cidio"/"personnel readiness"/"dark contacts" voice triggers; jarvis:cidio-toggle event; 90-s auto-refresh */}
+            <ContactSkillDatasetInvestigationOpsCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -132,6 +132,7 @@ import { isScdbgrQuery } from "@/components/cinematic/ScenarioDatasetContactBrai
 import { isSkhcmQuery, buildSkhcmScript } from "@/components/cinematic/SystemBrainKnowledgeHealthMonitor";
 import { isSdbarcQuery, buildSdbarcScript } from "@/components/cinematic/SkillDatasetBrainOpsContactReportNexus";
 import { isIvpwebQuery } from "@/components/cinematic/InvestigationDatasetBrainKnowledgeOpsProsecution";
+import { isCidioQuery } from "@/components/cinematic/ContactSkillDatasetInvestigationOpsCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -350,6 +351,7 @@ export default function JarvisBrain() {
     if (isSkhcmQuery(q))    { window.dispatchEvent(new Event("jarvis:skhcm-toggle")); }
     if (isSdbarcQuery(q))   { window.dispatchEvent(new Event("jarvis:sdbarc-toggle")); }
     if (isIvpwebQuery(q))   { window.dispatchEvent(new Event("jarvis:ivpweb-toggle")); }
+    if (isCidioQuery(q))    { window.dispatchEvent(new Event("jarvis:cidio-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
