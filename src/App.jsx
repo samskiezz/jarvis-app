@@ -717,6 +717,7 @@ import InvestmentReportRiskSkillGraphCoverage from '@/components/cinematic/Inves
 import IntelProfileTaskKnowledgeOpsContactWeb from '@/components/cinematic/IntelProfileTaskKnowledgeOpsContactWeb';
 import RiskSignalGraphKnowledgeOpsContactSaturation from '@/components/cinematic/RiskSignalGraphKnowledgeOpsContactSaturation';
 import SwarmDatasetContactRiskReportChain from '@/components/cinematic/SwarmDatasetContactRiskReportChain';
+import TaskOpsAlertBrainScenarioCommand from '@/components/cinematic/TaskOpsAlertBrainScenarioCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2256,6 +2257,8 @@ function App() {
             <RiskSignalGraphKnowledgeOpsContactSaturation />
             {/* F210 (overnight 2026-10-26): SwarmJob × Dataset × Contact × RiskSignal × Report Automation Production Coverage Chain — ◈ SDCRR button (left:165400, bottom:8, zIndex:306); fetches /entities/SwarmJob + /v1/datasets + /entities/Contact + /entities/RiskSignal + /v1/reports; keyword-cross-references each swarm job against all 4 other sources to classify COVERED/OWNED/PARTIAL/ISOLATED; red pulse on ISOLATED count (automation blind spots — unowned, data-less, threat-unmapped, unfiled jobs); expandable rows show matched datasets (row-count badge) + matched contacts (role/org) + matched risk signals (severity badge) + matched reports (date badge); filter tabs ALL/COVERED/OWNED/PARTIAL/ISOLATED + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSdcrrQuery+buildSdcrrScript exported; "sdcrr"/"swarm coverage"/"automation coverage"/"swarm production"/"isolated swarm"/"swarm blind spot"/"automation blind spot"/"swarm data contact"/"swarm report"/"automation production coverage"/"swarm risk report"/"swarm ownership"/"automation ownership" voice triggers; jarvis:sdcrr-toggle event; 90-s auto-refresh */}
             <SwarmDatasetContactRiskReportChain />
+            {/* F211 (overnight 2026-10-26): Task × Ops Alert × Brain × Scenario Full Mission Command Intelligence — ◈ TOBSCMD button (left:165960, bottom:8, zIndex:307); fetches /entities/Task + /v1/ops/alerts + /v1/cinematic/brain + /v1/scenario/list; keyword-cross-references each task against all 3 other sources to classify COMMANDED/ARMED/MONITORED/ADRIFT; red pulse on ADRIFT count (operationally blind tasks with no alert trigger, no brain model, no playbook); expandable rows show matched ops alerts (severity badge) + matched brain nodes (centrality score badge) + matched scenarios (status badge); filter tabs ALL/COMMANDED/ARMED/MONITORED/ADRIFT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTobscmdQuery+buildTobscmdScript exported; "tobscmd"/"task command"/"mission command"/"adrift tasks"/"task alert brain"/"task scenario"/"mission intelligence"/"task operational command"/"task mission"/"blind tasks"/"task brain scenario"/"task ops alert"/"task grounding" voice triggers; jarvis:tobscmd-toggle event; 90-s auto-refresh */}
+            <TaskOpsAlertBrainScenarioCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
