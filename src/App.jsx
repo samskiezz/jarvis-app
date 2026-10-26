@@ -718,6 +718,7 @@ import IntelProfileTaskKnowledgeOpsContactWeb from '@/components/cinematic/Intel
 import RiskSignalGraphKnowledgeOpsContactSaturation from '@/components/cinematic/RiskSignalGraphKnowledgeOpsContactSaturation';
 import SwarmDatasetContactRiskReportChain from '@/components/cinematic/SwarmDatasetContactRiskReportChain';
 import TaskOpsAlertBrainScenarioCommand from '@/components/cinematic/TaskOpsAlertBrainScenarioCommand';
+import LiveIntelOpsCrisisManagementNetwork from '@/components/cinematic/LiveIntelOpsCrisisManagementNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2259,6 +2260,8 @@ function App() {
             <SwarmDatasetContactRiskReportChain />
             {/* F211 (overnight 2026-10-26): Task × Ops Alert × Brain × Scenario Full Mission Command Intelligence — ◈ TOBSCMD button (left:165960, bottom:8, zIndex:307); fetches /entities/Task + /v1/ops/alerts + /v1/cinematic/brain + /v1/scenario/list; keyword-cross-references each task against all 3 other sources to classify COMMANDED/ARMED/MONITORED/ADRIFT; red pulse on ADRIFT count (operationally blind tasks with no alert trigger, no brain model, no playbook); expandable rows show matched ops alerts (severity badge) + matched brain nodes (centrality score badge) + matched scenarios (status badge); filter tabs ALL/COMMANDED/ARMED/MONITORED/ADRIFT + text search; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isTobscmdQuery+buildTobscmdScript exported; "tobscmd"/"task command"/"mission command"/"adrift tasks"/"task alert brain"/"task scenario"/"mission intelligence"/"task operational command"/"task mission"/"blind tasks"/"task brain scenario"/"task ops alert"/"task grounding" voice triggers; jarvis:tobscmd-toggle event; 90-s auto-refresh */}
             <TaskOpsAlertBrainScenarioCommand />
+            {/* F212 (overnight 2026-10-26): LiveIntel × OpsAlert × Investigation × Contact Incident Crisis Management Network — ◈ LICMN button (left:166520, bottom:8, zIndex:308); fetches /functions/getLiveIntel + /v1/ops/alerts + /v1/investigations + /entities/Contact; groups live events by category (quake region, crypto symbol, FX pair); keyword-cross-references each category against all 3 other sources to classify MANAGED/ALERTED/TRACKED/UNMANAGED; red pulse on UNMANAGED count (live crisis events with no ops alert, no investigation, no contact owner — zero incident management coverage); expandable rows show matched ops alerts with severity badge + matched investigations with status badge + matched contacts with role/org; filter tabs ALL/MANAGED/ALERTED/TRACKED/UNMANAGED + text search; ▶ ASSESS UNMANAGED CRISES → /v1/jarvis/agent/chat + TTS; isLicmnQuery+buildLicmnScript exported; "licmn"/"crisis management"/"live crisis"/"incident management network"/"live alert investigation"/"crisis network"/"live contact"/"incident crisis"/"crisis response network"/"live ops"/"live incidents"/"crisis intel"/"unmanaged crisis" voice triggers; jarvis:licmn-toggle event; 90-s auto-refresh */}
+            <LiveIntelOpsCrisisManagementNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
