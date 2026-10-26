@@ -712,6 +712,7 @@ import JarvisIntelligenceProductionIndex from '@/components/cinematic/JarvisInte
 import GraphKnowledgeOpsTaskContactPulse from '@/components/cinematic/GraphKnowledgeOpsTaskContactPulse';
 import DatasetSkillSwarmScenarioReportProductionReadiness from '@/components/cinematic/DatasetSkillSwarmScenarioReportProductionReadiness';
 import OpsAlertContactTaskSkillKnowledgeCommandWeb from '@/components/cinematic/OpsAlertContactTaskSkillKnowledgeCommandWeb';
+import ScenarioGraphTaskKnowledgeOpsMap from '@/components/cinematic/ScenarioGraphTaskKnowledgeOpsMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2241,6 +2242,8 @@ function App() {
             <DatasetSkillSwarmScenarioReportProductionReadiness />
             {/* F205 (overnight 2026-10-26): Ops Alert × Contact × Task × Skill × Knowledge Incident Command Intelligence Web — ◈ OATKWEB button (left:162600, bottom:8, zIndex:301); fetches /v1/ops/alerts + /entities/Contact + /entities/Task + /v1/aip/skill + /knowledge/; keyword-cross-references each alert against all 4 other sources to classify COMMANDED/MANAGED/PARTIAL/BLIND; red pulse on BLIND count (alerts with no contact owner, no task, no skill, no knowledge — full incident blind spots); expandable rows show matched contacts (role/org) + tasks (status badge) + skills (score badge) + knowledge articles (category badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isOatkwebQuery exported; "incident command"/"oatkweb"/"alert command web"/"alert intelligence"/"blind alerts"/"commanded alerts"/"incident response web" voice triggers; jarvis:oatkweb-toggle event; 90-s auto-refresh */}
             <OpsAlertContactTaskSkillKnowledgeCommandWeb />
+            {/* F206 (overnight 2026-10-26): Scenario × Graph × Task × Knowledge × Ops Alert Full Strategic Execution Map — ◈ SGTMAP button (left:163160, bottom:8, zIndex:302); fetches /v1/scenario/list + /v1/graph/centrality + /entities/Task + /knowledge/ + /v1/ops/alerts; keyword-cross-references each scenario against all 4 other sources to classify ARMED/GROUNDED/PARTIAL/UNARMED; red pulse on UNARMED count (scenarios with no graph trace, no task, no knowledge, no alert — fully unexecutable); expandable rows show matched graph nodes (centrality score badge) + tasks (status badge) + knowledge articles (category badge) + ops alerts (severity badge); ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isSgtmapQuery exported; "scenario map"/"sgtmap"/"strategic execution"/"unarmed scenarios"/"scenario graph"/"scenario intelligence map"/"strategic map" voice triggers; jarvis:sgtmap-toggle event; 90-s auto-refresh */}
+            <ScenarioGraphTaskKnowledgeOpsMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
