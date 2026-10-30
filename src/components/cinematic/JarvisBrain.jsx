@@ -155,6 +155,7 @@ import { isOdskfcQuery } from "@/components/cinematic/OpsAlertDatasetScenarioKno
 import { isSkbiamQuery } from "@/components/cinematic/SkillBrainOpsInvestigationCapabilityMonitor";
 import { isPortQuery } from "@/components/cinematic/ContactBrainGraphDatasetSkillReadiness";
 import { isWlcmonQuery } from "@/components/cinematic/InvestmentBrainContactInvestigationOpsMonitor";
+import { isTsbcgQuery } from "@/components/cinematic/TaskSkillBrainContactGraphFoundation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -396,6 +397,7 @@ export default function JarvisBrain() {
     if (isSkbiamQuery(q))   { window.dispatchEvent(new Event("jarvis:skbiam-toggle")); }
     if (isPortQuery(q))     { window.dispatchEvent(new Event("jarvis:pori-toggle")); }
     if (isWlcmonQuery(q))   { window.dispatchEvent(new Event("jarvis:wlcmon-toggle")); }
+    if (isTsbcgQuery(q))    { window.dispatchEvent(new Event("jarvis:tsbcg-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
