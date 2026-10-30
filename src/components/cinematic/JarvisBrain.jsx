@@ -157,6 +157,7 @@ import { isPortQuery } from "@/components/cinematic/ContactBrainGraphDatasetSkil
 import { isWlcmonQuery } from "@/components/cinematic/InvestmentBrainContactInvestigationOpsMonitor";
 import { isTsbcgQuery } from "@/components/cinematic/TaskSkillBrainContactGraphFoundation";
 import { isRsgsmapQuery } from "@/components/cinematic/ReportSwarmGraphContactScenarioMap";
+import { isItcbpcQuery } from "@/components/cinematic/InvestigationTaskContactBrainProsecutionCommand";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -400,6 +401,7 @@ export default function JarvisBrain() {
     if (isWlcmonQuery(q))   { window.dispatchEvent(new Event("jarvis:wlcmon-toggle")); }
     if (isTsbcgQuery(q))    { window.dispatchEvent(new Event("jarvis:tsbcg-toggle")); }
     if (isRsgsmapQuery(q))  { window.dispatchEvent(new Event("jarvis:rsgsmap-toggle")); }
+    if (isItcbpcQuery(q))  { window.dispatchEvent(new Event("jarvis:itcbpc-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

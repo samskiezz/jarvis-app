@@ -725,6 +725,7 @@ import ContactBrainGraphDatasetSkillReadiness from '@/components/cinematic/Conta
 import InvestmentBrainContactInvestigationOpsMonitor from '@/components/cinematic/InvestmentBrainContactInvestigationOpsMonitor';
 import TaskSkillBrainContactGraphFoundation from '@/components/cinematic/TaskSkillBrainContactGraphFoundation';
 import ReportSwarmGraphContactScenarioMap from '@/components/cinematic/ReportSwarmGraphContactScenarioMap';
+import InvestigationTaskContactBrainProsecutionCommand from '@/components/cinematic/InvestigationTaskContactBrainProsecutionCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2280,6 +2281,8 @@ function App() {
             <TaskSkillBrainContactGraphFoundation />
             {/* F218 (overnight 2026-10-30): Report × SwarmJob × Graph × Contact × Scenario Intelligence Activation Chain — ◈ RSGSMAP button (left:169880, bottom:8, zIndex:314); fetches /v1/reports + /entities/SwarmJob + /v1/graph/centrality + /entities/Contact + /v1/scenario/list; keyword-cross-references each report against all 4 other sources to classify ACTIVATED/ACTIVE/PARTIAL/DARK; amber pulse on DARK count (intelligence dead-ends — reports with no swarm automation, no graph trace, no contact owner, no scenario backing); expandable rows show matched swarm jobs with status badge + matched graph nodes with centrality score badge + matched contacts with role/org + matched scenarios with status badge; filter tabs ALL/ACTIVATED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS DARK REPORTS → /v1/jarvis/agent/chat + TTS; isRsgsmapQuery+buildRsgsmapScript exported; "rsgsmap"/"report swarm"/"report scenario map"/"intelligence activation"/"report graph contact"/"report scenario"/"dark reports"/"dead intelligence"/"report activation"/"report coverage map"/"intelligence dead end"/"activation chain" voice triggers; jarvis:rsgsmap-toggle event; 90-s auto-refresh */}
             <ReportSwarmGraphContactScenarioMap />
+            {/* F219 (overnight 2026-10-30): Investigation × Task × Contact × Brain Prosecution Command Intelligence — ◈ ITCBPC button (left:170440, bottom:8, zIndex:315); fetches /v1/investigations + /entities/Task + /entities/Contact + /v1/cinematic/brain; keyword-cross-references each investigation against all 3 other sources to classify PROSECUTING/ACTIVE/STAFFED/COLD; red pulse on COLD count (prosecution dead-ends — open investigations with no task, no brain model, no contact lead); expandable rows show matched tasks with status badge + matched contacts with role/org + matched brain nodes with type badge; filter tabs ALL/PROSECUTING/ACTIVE/STAFFED/COLD + text search; ▶ ASSESS COLD CASES → /v1/jarvis/agent/chat + TTS; isItcbpcQuery+buildItcbpcScript exported; "itcbpc"/"investigation prosecution"/"cold cases"/"prosecution command"/"investigation task contact"/"investigation brain"/"undefended cases"/"prosecution blind spot"/"case command"/"open investigation" voice triggers; jarvis:itcbpc-toggle event; 90-s auto-refresh */}
+            <InvestigationTaskContactBrainProsecutionCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
