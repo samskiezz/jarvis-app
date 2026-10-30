@@ -724,6 +724,7 @@ import SkillBrainOpsInvestigationCapabilityMonitor from '@/components/cinematic/
 import ContactBrainGraphDatasetSkillReadiness from '@/components/cinematic/ContactBrainGraphDatasetSkillReadiness';
 import InvestmentBrainContactInvestigationOpsMonitor from '@/components/cinematic/InvestmentBrainContactInvestigationOpsMonitor';
 import TaskSkillBrainContactGraphFoundation from '@/components/cinematic/TaskSkillBrainContactGraphFoundation';
+import ReportSwarmGraphContactScenarioMap from '@/components/cinematic/ReportSwarmGraphContactScenarioMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2277,6 +2278,8 @@ function App() {
             <InvestmentBrainContactInvestigationOpsMonitor />
             {/* F217 (overnight 2026-10-30): Task × Skill × Brain × Contact × Graph Full Mission Capability Intelligence Foundation — ◈ TSBCG button (left:169320, bottom:8, zIndex:313); fetches /entities/Task + /v1/aip/skill + /v1/cinematic/brain + /entities/Contact + /v1/graph/centrality; keyword-cross-references each task against all 4 other sources to classify GROUNDED/CAPABLE/STAFFED/ADRIFT; red pulse on ADRIFT count (mission orphans — tasks with no skill coverage, no brain model, no contact owner, no graph trace); expandable rows show matched skills with score badge + matched brain nodes with type badge + matched contacts with role/org + matched graph nodes with centrality score badge; filter tabs ALL/GROUNDED/CAPABLE/STAFFED/ADRIFT + text search; ▶ ASSESS ADRIFT TASKS → /v1/jarvis/agent/chat + TTS; isTsbcgQuery+buildTsbcgScript exported; "tsbcg"/"task brain"/"mission capability"/"task skill brain"/"task contact brain"/"capability foundation"/"task graph"/"mission foundation"/"task capability"/"operational foundation"/"mission grounded"/"adrift tasks" voice triggers; jarvis:tsbcg-toggle event; 90-s auto-refresh */}
             <TaskSkillBrainContactGraphFoundation />
+            {/* F218 (overnight 2026-10-30): Report × SwarmJob × Graph × Contact × Scenario Intelligence Activation Chain — ◈ RSGSMAP button (left:169880, bottom:8, zIndex:314); fetches /v1/reports + /entities/SwarmJob + /v1/graph/centrality + /entities/Contact + /v1/scenario/list; keyword-cross-references each report against all 4 other sources to classify ACTIVATED/ACTIVE/PARTIAL/DARK; amber pulse on DARK count (intelligence dead-ends — reports with no swarm automation, no graph trace, no contact owner, no scenario backing); expandable rows show matched swarm jobs with status badge + matched graph nodes with centrality score badge + matched contacts with role/org + matched scenarios with status badge; filter tabs ALL/ACTIVATED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS DARK REPORTS → /v1/jarvis/agent/chat + TTS; isRsgsmapQuery+buildRsgsmapScript exported; "rsgsmap"/"report swarm"/"report scenario map"/"intelligence activation"/"report graph contact"/"report scenario"/"dark reports"/"dead intelligence"/"report activation"/"report coverage map"/"intelligence dead end"/"activation chain" voice triggers; jarvis:rsgsmap-toggle event; 90-s auto-refresh */}
+            <ReportSwarmGraphContactScenarioMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
