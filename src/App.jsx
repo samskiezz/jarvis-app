@@ -721,6 +721,7 @@ import TaskOpsAlertBrainScenarioCommand from '@/components/cinematic/TaskOpsAler
 import LiveIntelOpsCrisisManagementNetwork from '@/components/cinematic/LiveIntelOpsCrisisManagementNetwork';
 import OpsAlertDatasetScenarioKnowledgeContactFoundation from '@/components/cinematic/OpsAlertDatasetScenarioKnowledgeContactFoundation';
 import SkillBrainOpsInvestigationCapabilityMonitor from '@/components/cinematic/SkillBrainOpsInvestigationCapabilityMonitor';
+import ContactBrainGraphDatasetSkillReadiness from '@/components/cinematic/ContactBrainGraphDatasetSkillReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2268,6 +2269,8 @@ function App() {
             <OpsAlertDatasetScenarioKnowledgeContactFoundation />
             {/* F214 (overnight 2026-10-26): Skill × Brain × Ops Alert × Investigation Intelligence Capability Monitor — ◈ SKBIAM button (left:167640, bottom:8, zIndex:310); fetches /v1/aip/skill + /v1/cinematic/brain + /v1/ops/alerts + /v1/investigations; keyword-cross-references each skill against all 3 other sources to classify DEPLOYED/ALERTED/TRACKED/IDLE; red pulse on IDLE count (isolated skills with no brain model, no alert trigger, no investigation — zero operational grounding); expandable rows show matched brain nodes with type badge + matched ops alerts with severity badge + matched investigations with status badge; filter tabs ALL/DEPLOYED/ALERTED/TRACKED/IDLE + text search; ▶ ASSESS IDLE CAPABILITIES → /v1/jarvis/agent/chat + TTS; isSkbiamQuery+buildSkbiamScript exported; "skbiam"/"skill capability"/"idle skills"/"skill alert"/"skill brain"/"capability monitor"/"skill investigation"/"skill ops"/"isolated skills"/"capability gap brain"/"skill idle"/"ops skill" voice triggers; jarvis:skbiam-toggle event; 90-s auto-refresh */}
             <SkillBrainOpsInvestigationCapabilityMonitor />
+            {/* F215 (overnight 2026-10-30): Contact × Brain × Graph × Dataset × Skill Personnel Operational Readiness Index — ◈ PORI button (left:168200, bottom:8, zIndex:311); fetches /entities/Contact + /v1/cinematic/brain + /v1/graph/centrality + /v1/datasets + /v1/aip/skill; keyword-cross-references each contact against all 4 other sources to classify READY/ACTIVE/PARTIAL/GHOST; red pulse on GHOST count (untethered operators with no brain model, no graph trace, no dataset link, no skill match); expandable rows show matched brain nodes with type badge + matched graph nodes with centrality score badge + matched datasets with row-count badge + matched skills with score badge; filter tabs ALL/READY/ACTIVE/PARTIAL/GHOST + text search; ▶ ASSESS GHOST PERSONNEL → /v1/jarvis/agent/chat + TTS; isPortQuery+buildPoriScript exported; "pori"/"personnel readiness"/"contact readiness"/"ghost personnel"/"untethered contact"/"personnel index"/"contact brain"/"contact skill"/"ghost contacts"/"contact graph"/"contact dataset"/"readiness index" voice triggers; jarvis:pori-toggle event; 90-s auto-refresh */}
+            <ContactBrainGraphDatasetSkillReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

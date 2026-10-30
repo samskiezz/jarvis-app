@@ -216,3 +216,4 @@
 2026-10-26 F212 LiveIntelOpsCrisisManagementNetwork.jsx — LiveIntel×OpsAlert×Investigation×Contact MANAGED/ALERTED/TRACKED/UNMANAGED; ◈ LICMN (left:166520, zIndex:308); isLicmnQuery+buildLicmnScript wired in JarvisBrain.jsx; Vite build exit:0
 2026-10-26 F213 OpsAlertDatasetScenarioKnowledgeContactFoundation.jsx — OpsAlert×Dataset×Scenario×Knowledge×Contact GROUNDED/STAGED/PARTIAL/BLIND; ◈ ODSKFC (left:167080, zIndex:309); isOdskfcQuery+buildOdskfcScript wired in JarvisBrain.jsx; Vite build exit:0
 2026-10-26 F214 SkillBrainOpsInvestigationCapabilityMonitor.jsx — Skill×Brain×OpsAlert×Investigation DEPLOYED/ALERTED/TRACKED/IDLE; ◈ SKBIAM (left:167640, zIndex:310); isSkbiamQuery+buildSkbiamScript wired in JarvisBrain.jsx; Vite build exit:0
+[2026-10-30] F215 ContactBrainGraphDatasetSkillReadiness.jsx — Contact × Brain × Graph × Dataset × Skill Personnel Readiness Index (PORI); 5-source READY/ACTIVE/PARTIAL/GHOST; Vite build exit:0; pushed to jarvis-overnight
