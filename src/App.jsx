@@ -733,6 +733,7 @@ import ContactGraphSkillBrainCommand from '@/components/cinematic/ContactGraphSk
 import KnowledgeContactTaskRiskActivation from '@/components/cinematic/KnowledgeContactTaskRiskActivation';
 import OpsAlertScenarioContactSkillDefence from '@/components/cinematic/OpsAlertScenarioContactSkillDefence';
 import DatasetSwarmContactOpsAccountability from '@/components/cinematic/DatasetSwarmContactOpsAccountability';
+import IntelProfileGraphOpsAlertKnowledgeDepth from '@/components/cinematic/IntelProfileGraphOpsAlertKnowledgeDepth';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2304,6 +2305,8 @@ function App() {
             <OpsAlertScenarioContactSkillDefence />
             {/* F226 (overnight 2026-10-31): Dataset × SwarmJob × Contact × Ops Alert Production Accountability Coverage — ◈ DACOV button (left:174360, bottom:8, zIndex:322); fetches /v1/datasets + /entities/SwarmJob + /entities/Contact + /v1/ops/alerts; keyword-cross-references each dataset against swarm job names, contact names/roles/orgs, and ops alert titles/descriptions to classify ACCOUNTABLE/OWNED/PROCESSING/ORPHAN; red pulse on ORPHAN count (unaccountable datasets with no swarm job, no contact owner, no ops alert); expandable rows show matched swarm jobs with status badge + matched contacts with role/org + matched ops alerts with severity badge; ▶ ASSESS ORPHAN DATASETS → /v1/jarvis/agent/chat + TTS; isDacovQuery+buildDacovScript exported; "dacov"/"dataset accountability"/"data ownership"/"orphan dataset"/"unaccountable data"/"dataset coverage"/"data production"/"swarm data"/"dataset swarm" voice triggers; jarvis:dacov-toggle event; 90-s auto-refresh */}
             <DatasetSwarmContactOpsAccountability />
+            {/* F227 (overnight 2026-10-31): IntelProfile × Graph × Ops Alert × Knowledge Intelligence Threat Depth Map — ◈ IGOADEP button (left:174920, bottom:8, zIndex:323); fetches /entities/IntelProfile + /v1/graph/centrality + /v1/ops/alerts + /knowledge/; keyword-cross-references each intel profile against graph centrality nodes, ops alerts, and knowledge articles to classify SATURATED/TRACED/ALERTED/DARK; red pulse on DARK count (intelligence dead-ends — profiles with no graph trace, no ops alert, no knowledge article); expandable rows show matched graph nodes with centrality score badge + matched ops alerts with severity badge + matched knowledge articles with category badge; ▶ ASSESS DARK PROFILES → /v1/jarvis/agent/chat + TTS; isIgoadepQuery+buildIgoadepScript exported; "igoadep"/"intel depth"/"intel profile depth"/"dark intel profile"/"intel knowledge"/"profile ops alert"/"intel graph depth"/"intelligence depth"/"intel saturation"/"dark profiles" voice triggers; jarvis:igoadep-toggle event; 90-s auto-refresh */}
+            <IntelProfileGraphOpsAlertKnowledgeDepth />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
