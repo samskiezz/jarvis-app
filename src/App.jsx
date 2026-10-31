@@ -748,6 +748,7 @@ import IntelProfileRiskTaskKnowledgePriority from '@/components/cinematic/IntelP
 import ReportGraphSkillOpsAlertCoverage from '@/components/cinematic/ReportGraphSkillOpsAlertCoverage';
 import InvestigationScenarioSkillAlertCoverage from '@/components/cinematic/InvestigationScenarioSkillAlertCoverage';
 import ContactKnowledgeScenarioTaskMatrix from '@/components/cinematic/ContactKnowledgeScenarioTaskMatrix';
+import GraphKnowledgeTaskOpsAlertActionMap from '@/components/cinematic/GraphKnowledgeTaskOpsAlertActionMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2349,6 +2350,8 @@ function App() {
             <InvestigationScenarioSkillAlertCoverage />
             {/* F241 (overnight 2026-10-31): Contact × Knowledge × Scenario × Task Intelligence Activation Coverage — ◈ CKSTMX button (left:182760, bottom:8, zIndex:337); fetches /entities/Contact + /knowledge/ + /v1/scenario/list + /entities/Task; keyword-matches each contact against knowledge articles, scenarios, and tasks to classify ACTIVATED/SCENED/TASKED/DORMANT; amber pulse on DORMANT count; expandable rows show matched knowledge articles with category badge + matched scenarios with status badge + matched tasks with status badge; ASSESS + TTS; isCkstmxQuery+buildCkstmxScript exported; jarvis:ckstmx-toggle event; 90-s auto-refresh */}
             <ContactKnowledgeScenarioTaskMatrix />
+            {/* F242 (overnight 2026-10-31): Graph × Knowledge × Task × Ops Alert Intelligence Action Map — ◈ GKTAMAP button (left:183320, bottom:8, zIndex:338); fetches /v1/graph/centrality + /knowledge/ + /entities/Task + /v1/ops/alerts; keyword-matches each graph node (label/type/community) against knowledge articles, tasks, and ops alerts to classify COMMANDED/GROUNDED/ACTIVE/DARK; red pulse on DARK count (blind-spot nodes with no knowledge, no task, no ops alert coverage); expandable rows show matched knowledge articles with category badge + matched tasks with status badge + matched ops alerts with severity badge; ASSESS + TTS; isGktamapQuery+buildGktamapScript exported; jarvis:gktamap-toggle event; 90-s auto-refresh */}
+            <GraphKnowledgeTaskOpsAlertActionMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
