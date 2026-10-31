@@ -745,6 +745,7 @@ import SkillScenarioContactBrainReadiness from '@/components/cinematic/SkillScen
 import GraphOpsAlertTaskContactCommand from '@/components/cinematic/GraphOpsAlertTaskContactCommand';
 import KnowledgeTaskOpsContactActivation from '@/components/cinematic/KnowledgeTaskOpsContactActivation';
 import IntelProfileRiskTaskKnowledgePriority from '@/components/cinematic/IntelProfileRiskTaskKnowledgePriority';
+import ReportGraphSkillOpsAlertCoverage from '@/components/cinematic/ReportGraphSkillOpsAlertCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2340,6 +2341,8 @@ function App() {
             <KnowledgeTaskOpsContactActivation />
             {/* F238 (overnight 2026-10-31): IntelProfile × RiskSignal × Task × Knowledge Intelligence Priority Matrix — ◈ IRTKPM button (left:181080, bottom:8, zIndex:334); fetches /entities/IntelProfile + /entities/RiskSignal + /entities/Task + /knowledge/; keyword-cross-references each intel profile (name/category/description) against risk signal titles/descriptions, task names/objectives, and knowledge article titles/summaries to classify CRITICAL/ACTIVE/TRACKED/DARK; red pulse on DARK count (intelligence dead-ends — blind profiles with no risk signal, no task, no knowledge article); expandable rows show matched risk signals with severity badge + matched tasks with status badge + matched knowledge articles with category badge; ▶ ASSESS DARK PROFILES → /v1/jarvis/agent/chat + TTS; isIrtkpmQuery+buildIrtkpmScript exported; voice triggers "irtkpm"/"intel priority"/"intel risk task"/"intel priority matrix"/"dark intel"/"intel blind"/"blind profile"/"intel grounding"/"profile dark"/"intel knowledge"/"intel risk knowledge"; jarvis:irtkpm-toggle event; 90-s auto-refresh */}
             <IntelProfileRiskTaskKnowledgePriority />
+            {/* F239 (overnight 2026-10-31): Report × Graph × Skill × Ops Alert Command Intelligence Coverage — ◈ RGSCOV button (left:181640, bottom:8, zIndex:335); fetches /v1/reports + /v1/graph/centrality + /v1/aip/skill + /v1/ops/alerts; keyword-matches each report against graph nodes, skills, and ops alerts to classify COMMANDED/ACTIVE/PARTIAL/DARK; red pulse on DARK count (intelligence dead-ends — reports with no graph trace, no skill backing, no ops alert coverage); expandable rows show matched graph nodes with centrality score badge + matched skills with score badge + matched ops alerts with severity badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRgscovQuery+buildRgscovScript exported; jarvis:rgscov-toggle event; 90-s auto-refresh */}
+            <ReportGraphSkillOpsAlertCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
