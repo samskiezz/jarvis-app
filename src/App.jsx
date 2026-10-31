@@ -728,6 +728,7 @@ import ReportSwarmGraphContactScenarioMap from '@/components/cinematic/ReportSwa
 import InvestigationTaskContactBrainProsecutionCommand from '@/components/cinematic/InvestigationTaskContactBrainProsecutionCommand';
 import DatasetInvestigationScenarioOpsAlert from '@/components/cinematic/DatasetInvestigationScenarioOpsAlert';
 import RiskSignalScenarioGraphDatasetLandscape from '@/components/cinematic/RiskSignalScenarioGraphDatasetLandscape';
+import BrainScenarioTaskReportCoverage from '@/components/cinematic/BrainScenarioTaskReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2289,6 +2290,8 @@ function App() {
             <DatasetInvestigationScenarioOpsAlert />
             {/* F221 (overnight 2026-10-31): RiskSignal × Scenario × Graph × Dataset Threat Landscape Coverage Map — ◈ THLMAP button (left:171560, bottom:8, zIndex:317); fetches /entities/RiskSignal + /v1/scenario/list + /v1/graph/centrality + /v1/datasets; keyword-cross-references each risk signal against all 3 other sources to classify COVERED/PARTIAL/TRACED/EXPOSED; red pulse on EXPOSED count (fully unmapped threats — no playbook, no graph node, no data source); expandable rows show matched scenarios with status badge + matched graph nodes with centrality score badge + matched datasets with row-count badge; filter tabs ALL/COVERED/PARTIAL/TRACED/EXPOSED + text search; ▶ ASSESS EXPOSED THREATS → /v1/jarvis/agent/chat + TTS; isThlmapQuery+buildThlmapScript exported; voice triggers; jarvis:thlmap-toggle event; 90-s auto-refresh */}
             <RiskSignalScenarioGraphDatasetLandscape />
+            {/* F222 (overnight 2026-10-31): Brain × Scenario × Task × Report Coverage Chain — ◈ BSTRC button (left:172120, bottom:8, zIndex:318); fetches /v1/cinematic/brain + /v1/scenario/list + /entities/Task + /v1/reports; keyword-cross-references each brain node against all 3 other sources to classify COMMANDED/ACTIVE/PARTIAL/DARK; red pulse on DARK count (unoperationalised brain nodes — no scenario playbook, no active task, no filed report); expandable rows show matched scenarios with status badge + matched tasks with status badge + matched reports with date badge; filter tabs ALL/COMMANDED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS DARK NODES → /v1/jarvis/agent/chat + TTS; isBstrcQuery+buildBstrcScript exported; "bstrc"/"brain scenario task"/"brain coverage"/"brain report"/"brain task coverage"/"dark brain node"/"unoperationalised brain"/"brain command coverage"/"brain scenario coverage"/"brain report coverage" voice triggers; jarvis:bstrc-toggle event; 90-s auto-refresh */}
+            <BrainScenarioTaskReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
