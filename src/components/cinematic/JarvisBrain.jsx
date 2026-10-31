@@ -162,6 +162,7 @@ import { isDisproQuery } from "@/components/cinematic/DatasetInvestigationScenar
 import { isThlmapQuery } from "@/components/cinematic/RiskSignalScenarioGraphDatasetLandscape";
 import { isBstrcQuery } from "@/components/cinematic/BrainScenarioTaskReportCoverage";
 import { isCgsbpcQuery } from "@/components/cinematic/ContactGraphSkillBrainCommand";
+import { isKctrasQuery } from "@/components/cinematic/KnowledgeContactTaskRiskActivation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -410,6 +411,7 @@ export default function JarvisBrain() {
     if (isThlmapQuery(q))  { window.dispatchEvent(new Event("jarvis:thlmap-toggle")); }
     if (isBstrcQuery(q))   { window.dispatchEvent(new Event("jarvis:bstrc-toggle")); }
     if (isCgsbpcQuery(q))  { window.dispatchEvent(new Event("jarvis:cgsbpc-toggle")); }
+    if (isKctrasQuery(q))  { window.dispatchEvent(new Event("jarvis:kctras-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
