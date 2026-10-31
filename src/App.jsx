@@ -740,6 +740,7 @@ import RiskSignalTaskKnowledgeReportCoverage from '@/components/cinematic/RiskSi
 import SceneContactOpsInvestigationCoverage from '@/components/cinematic/SceneContactOpsInvestigationCoverage';
 import GraphIntelProfileInvestmentScenarioNetwork from '@/components/cinematic/GraphIntelProfileInvestmentScenarioNetwork';
 import SceneTaskContactRiskMonitoring from '@/components/cinematic/SceneTaskContactRiskMonitoring';
+import InvestmentDatasetReportKnowledgeFoundation from '@/components/cinematic/InvestmentDatasetReportKnowledgeFoundation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2325,6 +2326,8 @@ function App() {
             <GraphIntelProfileInvestmentScenarioNetwork />
             {/* F233 (overnight 2026-10-31): Scene × Task × Contact × RiskSignal Operational Monitoring Coverage — ◈ SCTRMON button (left:178280, bottom:8, zIndex:329); fetches all 10 /v1/cinematic/scene/{1..10} + /entities/Task + /entities/Contact + /entities/RiskSignal; keyword-cross-references each scene (title/description/anchors) against task titles/descriptions, contact names/roles/organisations, and risk signal titles/descriptions/sources to classify SECURED/ACTIVE/PARTIAL/DARK; amber pulse on DARK count (unmonitored scenes with no tasks, no staff, no threat signal); expandable rows show matched tasks with status badge + matched contacts with role/org + matched risk signals with severity badge; ▶ ASSESS DARK SCENES → /v1/jarvis/agent/chat + TTS; isSctrmonQuery+buildSctrmonScript exported; "sctrmon"/"scene monitor"/"scene coverage"/"scene task risk"/"scene operational"/"dark scenes"/"unmonitored scenes" voice triggers; jarvis:sctrmon-toggle event; 90-s auto-refresh */}
             <SceneTaskContactRiskMonitoring />
+            {/* F234 (overnight 2026-10-31): Investment × Dataset × Report × Knowledge Wealth Intelligence Foundation — ◈ WIFDTN button (left:178840, bottom:8, zIndex:330); fetches /entities/Investment + /v1/datasets + /v1/reports + /knowledge/; keyword-cross-references each investment (name/type/sector/description) against dataset names/descriptions, report titles/summaries, and knowledge article titles/summaries to classify FORTIFIED/SOURCED/REPORTED/EXPOSED; red pulse on EXPOSED count (full wealth blind spots — investments with no dataset, no report, no knowledge article); expandable rows show matched datasets with row-count badge + matched reports with date badge + matched knowledge articles with category badge; ▶ ASSESS EXPOSED INVESTMENTS → /v1/jarvis/agent/chat + TTS; isWifdtnQuery+buildWifdtnScript exported; "wifdtn"/"wealth foundation"/"investment knowledge"/"investment data"/"investment report"/"exposed investment"/"wealth blind spot"/"investment intelligence"/"investment coverage" voice triggers; jarvis:wifdtn-toggle event; 90-s auto-refresh */}
+            <InvestmentDatasetReportKnowledgeFoundation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
