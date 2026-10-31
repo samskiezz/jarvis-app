@@ -741,6 +741,7 @@ import SceneContactOpsInvestigationCoverage from '@/components/cinematic/SceneCo
 import GraphIntelProfileInvestmentScenarioNetwork from '@/components/cinematic/GraphIntelProfileInvestmentScenarioNetwork';
 import SceneTaskContactRiskMonitoring from '@/components/cinematic/SceneTaskContactRiskMonitoring';
 import InvestmentDatasetReportKnowledgeFoundation from '@/components/cinematic/InvestmentDatasetReportKnowledgeFoundation';
+import SkillScenarioContactBrainReadiness from '@/components/cinematic/SkillScenarioContactBrainReadiness';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2328,6 +2329,8 @@ function App() {
             <SceneTaskContactRiskMonitoring />
             {/* F234 (overnight 2026-10-31): Investment × Dataset × Report × Knowledge Wealth Intelligence Foundation — ◈ WIFDTN button (left:178840, bottom:8, zIndex:330); fetches /entities/Investment + /v1/datasets + /v1/reports + /knowledge/; keyword-cross-references each investment (name/type/sector/description) against dataset names/descriptions, report titles/summaries, and knowledge article titles/summaries to classify FORTIFIED/SOURCED/REPORTED/EXPOSED; red pulse on EXPOSED count (full wealth blind spots — investments with no dataset, no report, no knowledge article); expandable rows show matched datasets with row-count badge + matched reports with date badge + matched knowledge articles with category badge; ▶ ASSESS EXPOSED INVESTMENTS → /v1/jarvis/agent/chat + TTS; isWifdtnQuery+buildWifdtnScript exported; "wifdtn"/"wealth foundation"/"investment knowledge"/"investment data"/"investment report"/"exposed investment"/"wealth blind spot"/"investment intelligence"/"investment coverage" voice triggers; jarvis:wifdtn-toggle event; 90-s auto-refresh */}
             <InvestmentDatasetReportKnowledgeFoundation />
+            {/* F235 (overnight 2026-10-31): Skill × Scenario × Contact × Brain Capability Readiness Intelligence Map — ◈ SSCBRM button (left:179400, bottom:8, zIndex:331); fetches /v1/aip/skill + /v1/scenario/list + /entities/Contact + /v1/cinematic/brain; keyword-cross-references each skill (name/description/category) against scenario titles/descriptions, contact names/roles/orgs, and brain node labels/types to classify FORTIFIED/CAPABLE/STAFFED/BLIND; amber pulse on BLIND count (capability blind spots — skills with no scenario playbook, no contact, no brain model); expandable rows show matched scenarios with status badge + matched contacts with role/org + matched brain nodes with type badge; ▶ ASSESS BLIND SKILLS → /v1/jarvis/agent/chat + TTS; isSscbrmQuery+buildSscbrmScript exported; "sscbrm"/"skill readiness"/"capability readiness"/"skill brain"/"blind skill"/"skill scenario"/"capability intelligence"/"skill coverage"/"capability map"/"skill contact"/"unanchored skill"/"skill grounding" voice triggers; jarvis:sscbrm-toggle event; 90-s auto-refresh */}
+            <SkillScenarioContactBrainReadiness />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
