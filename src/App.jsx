@@ -746,6 +746,7 @@ import GraphOpsAlertTaskContactCommand from '@/components/cinematic/GraphOpsAler
 import KnowledgeTaskOpsContactActivation from '@/components/cinematic/KnowledgeTaskOpsContactActivation';
 import IntelProfileRiskTaskKnowledgePriority from '@/components/cinematic/IntelProfileRiskTaskKnowledgePriority';
 import ReportGraphSkillOpsAlertCoverage from '@/components/cinematic/ReportGraphSkillOpsAlertCoverage';
+import InvestigationScenarioSkillAlertCoverage from '@/components/cinematic/InvestigationScenarioSkillAlertCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2343,6 +2344,8 @@ function App() {
             <IntelProfileRiskTaskKnowledgePriority />
             {/* F239 (overnight 2026-10-31): Report × Graph × Skill × Ops Alert Command Intelligence Coverage — ◈ RGSCOV button (left:181640, bottom:8, zIndex:335); fetches /v1/reports + /v1/graph/centrality + /v1/aip/skill + /v1/ops/alerts; keyword-matches each report against graph nodes, skills, and ops alerts to classify COMMANDED/ACTIVE/PARTIAL/DARK; red pulse on DARK count (intelligence dead-ends — reports with no graph trace, no skill backing, no ops alert coverage); expandable rows show matched graph nodes with centrality score badge + matched skills with score badge + matched ops alerts with severity badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isRgscovQuery+buildRgscovScript exported; jarvis:rgscov-toggle event; 90-s auto-refresh */}
             <ReportGraphSkillOpsAlertCoverage />
+            {/* F240 (overnight 2026-10-31): Investigation × Scenario × Skill × Ops Alert Active Case Response Coverage — ◈ ISSCRC button (left:182200, bottom:8, zIndex:336); fetches /v1/investigations + /v1/scenario/list + /v1/aip/skill + /v1/ops/alerts; keyword-matches each investigation against scenario playbooks, skills, and ops alerts to classify COVERED/SCRIPTED/SKILLED/EXPOSED; red pulse on EXPOSED count (fully undefended open cases with no scenario playbook, no matching skill, and no ops alert monitoring); expandable rows show matched scenarios with phase badge + matched skills with score badge + matched ops alerts with severity badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIsscrcQuery+buildIsscrcScript exported; jarvis:isscrc-toggle event; 90-s auto-refresh */}
+            <InvestigationScenarioSkillAlertCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
