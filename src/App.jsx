@@ -734,6 +734,7 @@ import KnowledgeContactTaskRiskActivation from '@/components/cinematic/Knowledge
 import OpsAlertScenarioContactSkillDefence from '@/components/cinematic/OpsAlertScenarioContactSkillDefence';
 import DatasetSwarmContactOpsAccountability from '@/components/cinematic/DatasetSwarmContactOpsAccountability';
 import IntelProfileGraphOpsAlertKnowledgeDepth from '@/components/cinematic/IntelProfileGraphOpsAlertKnowledgeDepth';
+import InvestigationTaskContactDatasetCoverage from '@/components/cinematic/InvestigationTaskContactDatasetCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2307,6 +2308,8 @@ function App() {
             <DatasetSwarmContactOpsAccountability />
             {/* F227 (overnight 2026-10-31): IntelProfile × Graph × Ops Alert × Knowledge Intelligence Threat Depth Map — ◈ IGOADEP button (left:174920, bottom:8, zIndex:323); fetches /entities/IntelProfile + /v1/graph/centrality + /v1/ops/alerts + /knowledge/; keyword-cross-references each intel profile against graph centrality nodes, ops alerts, and knowledge articles to classify SATURATED/TRACED/ALERTED/DARK; red pulse on DARK count (intelligence dead-ends — profiles with no graph trace, no ops alert, no knowledge article); expandable rows show matched graph nodes with centrality score badge + matched ops alerts with severity badge + matched knowledge articles with category badge; ▶ ASSESS DARK PROFILES → /v1/jarvis/agent/chat + TTS; isIgoadepQuery+buildIgoadepScript exported; "igoadep"/"intel depth"/"intel profile depth"/"dark intel profile"/"intel knowledge"/"profile ops alert"/"intel graph depth"/"intelligence depth"/"intel saturation"/"dark profiles" voice triggers; jarvis:igoadep-toggle event; 90-s auto-refresh */}
             <IntelProfileGraphOpsAlertKnowledgeDepth />
+            {/* F228 (overnight 2026-10-31): Investigation × Task × Contact × Dataset Full Mission Prosecution Coverage — ◈ ITCOVEX button (left:175480, bottom:8, zIndex:324); fetches /v1/investigations + /entities/Task + /entities/Contact + /v1/datasets; keyword-cross-references each investigation against tasks, contacts, and datasets to classify PROSECUTING/ACTIVE/STAFFED/COLD; red pulse on COLD count (prosecution dead-ends — no task, no contact owner, no dataset backing); expandable rows show matched tasks with status badge + matched contacts with role/org + matched datasets with row-count badge; ▶ ASSESS COLD CASES → /v1/jarvis/agent/chat + TTS; isItcovexQuery+buildItcovexScript exported; "itcovex"/"investigation coverage"/"prosecution coverage"/"cold investigation"/"investigation task"/"investigation contact"/"investigation dataset"/"prosecution gap"/"cold case coverage"/"case coverage"/"investigation staffing"/"case dataset" voice triggers; jarvis:itcovex-toggle event; 90-s auto-refresh */}
+            <InvestigationTaskContactDatasetCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -166,6 +166,7 @@ import { isKctrasQuery } from "@/components/cinematic/KnowledgeContactTaskRiskAc
 import { isIscdefQuery } from "@/components/cinematic/OpsAlertScenarioContactSkillDefence";
 import { isDacovQuery }  from "@/components/cinematic/DatasetSwarmContactOpsAccountability";
 import { isIgoadepQuery } from "@/components/cinematic/IntelProfileGraphOpsAlertKnowledgeDepth";
+import { isItcovexQuery } from "@/components/cinematic/InvestigationTaskContactDatasetCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -418,6 +419,7 @@ export default function JarvisBrain() {
     if (isIscdefQuery(q))  { window.dispatchEvent(new Event("jarvis:iscdef-toggle")); }
     if (isDacovQuery(q))   { window.dispatchEvent(new Event("jarvis:dacov-toggle")); }
     if (isIgoadepQuery(q)) { window.dispatchEvent(new Event("jarvis:igoadep-toggle")); }
+    if (isItcovexQuery(q)) { window.dispatchEvent(new Event("jarvis:itcovex-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
