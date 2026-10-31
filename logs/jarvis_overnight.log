@@ -226,3 +226,4 @@
 [2026-10-31] F222 Brain × Scenario × Task × Report Coverage Chain — BrainScenarioTaskReportCoverage.jsx; ◈ BSTRC (left:172120, zIndex:318); 4-source COMMANDED/ACTIVE/PARTIAL/DARK; Vite build exit:0
 [2026-10-31] F223: ContactGraphSkillBrainCommand.jsx — Contact × Graph × Skill × Brain Operational Personnel Intelligence Command (◈ CGSBPC, left:172680, zIndex:319); Vite build exit:0; pushed to jarvis-overnight
 [2026-10-31] F224 KnowledgeContactTaskRiskActivation.jsx — Knowledge × Contact × Task × RiskSignal ACTIVATED/ACTIONED/REFERENCED/DORMANT; ◈ KCTRAS (left:173240, zIndex:320); isKctrasQuery wired in JarvisBrain.jsx; Vite build exit:0; pushed to jarvis-overnight
+2026-10-31 F225 OpsAlertScenarioContactSkillDefence — COVERED/MANAGED/PARTIAL/BLIND on /v1/ops/alerts×/v1/scenario/list×/entities/Contact×/v1/aip/skill — build exit:0 — pushed jarvis-overnight

@@ -731,6 +731,7 @@ import RiskSignalScenarioGraphDatasetLandscape from '@/components/cinematic/Risk
 import BrainScenarioTaskReportCoverage from '@/components/cinematic/BrainScenarioTaskReportCoverage';
 import ContactGraphSkillBrainCommand from '@/components/cinematic/ContactGraphSkillBrainCommand';
 import KnowledgeContactTaskRiskActivation from '@/components/cinematic/KnowledgeContactTaskRiskActivation';
+import OpsAlertScenarioContactSkillDefence from '@/components/cinematic/OpsAlertScenarioContactSkillDefence';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2298,6 +2299,8 @@ function App() {
             <ContactGraphSkillBrainCommand />
             {/* F224 (overnight 2026-10-31): Knowledge × Contact × Task × RiskSignal Intelligence Activation Map — ◈ KCTRAS button (left:173240, bottom:8, zIndex:320); fetches /knowledge/ + /entities/Contact + /entities/Task + /entities/RiskSignal; keyword-cross-references each knowledge article against all 3 other sources to classify ACTIVATED/ACTIONED/REFERENCED/DORMANT; amber pulse on DORMANT count (dormant knowledge — no contact owner, no active task, no threat signal reference); expandable rows show matched contacts with role/org + matched tasks with status badge + matched risk signals with severity badge; filter tabs ALL/ACTIVATED/ACTIONED/REFERENCED/DORMANT + text search; ▶ ASSESS DORMANT KNOWLEDGE → /v1/jarvis/agent/chat + TTS; isKctrasQuery+buildKctrasScript exported; "kctras"/"knowledge activation"/"dormant knowledge"/"dormant intel"/"knowledge contact"/"knowledge task"/"knowledge risk"/"knowledge map"/"intelligence activation map"/"knowledge operationalisation"/"knowledge coverage" voice triggers; jarvis:kctras-toggle event; 90-s auto-refresh */}
             <KnowledgeContactTaskRiskActivation />
+            {/* F225 (overnight 2026-10-31): Ops Alert × Scenario × Contact × Skill Full Incident Defence Coverage — ◈ ISCDEF button (left:173800, bottom:8, zIndex:321); fetches /v1/ops/alerts + /v1/scenario/list + /entities/Contact + /v1/aip/skill; keyword-cross-references each ops alert against scenario names, contact names/roles/orgs, and skill names/descriptions to classify COVERED/MANAGED/PARTIAL/BLIND; red pulse on BLIND count; expandable rows; ▶ ASSESS BLIND ALERTS; isIscdefQuery+buildIscdefScript exported; jarvis:iscdef-toggle event; 90-s auto-refresh */}
+            <OpsAlertScenarioContactSkillDefence />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
