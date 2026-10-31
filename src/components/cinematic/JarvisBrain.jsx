@@ -170,6 +170,7 @@ import { isItcovexQuery } from "@/components/cinematic/InvestigationTaskContactD
 import { isSwscimQuery } from "@/components/cinematic/SwarmJobScenarioContactInvestigationMissionMap";
 import { isRstkrcQuery } from "@/components/cinematic/RiskSignalTaskKnowledgeReportCoverage";
 import { isScovopQuery } from "@/components/cinematic/SceneContactOpsInvestigationCoverage";
+import { isGiisnQuery }  from "@/components/cinematic/GraphIntelProfileInvestmentScenarioNetwork";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -426,6 +427,7 @@ export default function JarvisBrain() {
     if (isSwscimQuery(q))  { window.dispatchEvent(new Event("jarvis:swscim-toggle")); }
     if (isRstkrcQuery(q))  { window.dispatchEvent(new Event("jarvis:rstkrc-toggle")); }
     if (isScovopQuery(q))  { window.dispatchEvent(new Event("jarvis:scovop-toggle")); }
+    if (isGiisnQuery(q))   { window.dispatchEvent(new Event("jarvis:giisn-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

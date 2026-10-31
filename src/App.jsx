@@ -738,6 +738,7 @@ import InvestigationTaskContactDatasetCoverage from '@/components/cinematic/Inve
 import SwarmJobScenarioContactInvestigationMissionMap from '@/components/cinematic/SwarmJobScenarioContactInvestigationMissionMap';
 import RiskSignalTaskKnowledgeReportCoverage from '@/components/cinematic/RiskSignalTaskKnowledgeReportCoverage';
 import SceneContactOpsInvestigationCoverage from '@/components/cinematic/SceneContactOpsInvestigationCoverage';
+import GraphIntelProfileInvestmentScenarioNetwork from '@/components/cinematic/GraphIntelProfileInvestmentScenarioNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2319,6 +2320,8 @@ function App() {
             <RiskSignalTaskKnowledgeReportCoverage />
             {/* F231 (overnight 2026-10-31): Scene × Contact × Ops Alert × Investigation Operational Situational Coverage — ◈ SCOVOP button (left:177160, bottom:8, zIndex:327); fetches all 10 /v1/cinematic/scene/{1..10} + /entities/Contact + /v1/ops/alerts + /v1/investigations; keyword-cross-references each scene (title/description/anchor labels) against contact names/orgs/roles, ops alert titles/descriptions, and investigation titles/summaries to classify COVERED/MONITORED/STAFFED/DARK; red pulse on DARK count (fully unmonitored operational environments with no contact owner, no ops alert, no investigation); expandable rows show matched contacts with role/org + matched ops alerts with severity badge + matched investigations with status badge; ▶ ASSESS DARK SCENES → /v1/jarvis/agent/chat + TTS; isScovopQuery+buildScovopScript exported; "scovop"/"scene coverage"/"scene contact"/"operational coverage"/"dark scene"/"unmonitored scene"/"scene ops"/"situational coverage"/"scene investigation"/"operational situational" voice triggers; jarvis:scovop-toggle event; 90-s auto-refresh */}
             <SceneContactOpsInvestigationCoverage />
+            {/* F232 (overnight 2026-10-31): Graph × IntelProfile × Investment × Scenario Strategic Intelligence Network — ◈ GIISN button (left:177720, bottom:8, zIndex:328); fetches /v1/graph/centrality + /entities/IntelProfile + /entities/Investment + /v1/scenario/list; keyword-cross-references each graph centrality node (label/type/community) against intel profile names/categories, investment names/types/sectors, and scenario names/descriptions to classify STRATEGIC/NETWORKED/VISIBLE/BLIND; amber pulse on BLIND count (blind-spot nodes with zero intel, wealth, or scenario grounding); expandable rows show matched intel profiles with category badge + matched investments with type/value badge + matched scenarios with status badge; ▶ ASSESS BLIND GRAPH NODES → /v1/jarvis/agent/chat + TTS; isGiisnQuery+buildGiisnScript exported; "giisn"/"graph intel investment"/"strategic network"/"graph strategy"/"intel network"/"investment network"/"scenario network"/"strategic coverage"/"network blind spot"/"graph blind" voice triggers; jarvis:giisn-toggle event; 90-s auto-refresh */}
+            <GraphIntelProfileInvestmentScenarioNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
