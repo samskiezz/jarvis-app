@@ -729,6 +729,7 @@ import InvestigationTaskContactBrainProsecutionCommand from '@/components/cinema
 import DatasetInvestigationScenarioOpsAlert from '@/components/cinematic/DatasetInvestigationScenarioOpsAlert';
 import RiskSignalScenarioGraphDatasetLandscape from '@/components/cinematic/RiskSignalScenarioGraphDatasetLandscape';
 import BrainScenarioTaskReportCoverage from '@/components/cinematic/BrainScenarioTaskReportCoverage';
+import ContactGraphSkillBrainCommand from '@/components/cinematic/ContactGraphSkillBrainCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2292,6 +2293,8 @@ function App() {
             <RiskSignalScenarioGraphDatasetLandscape />
             {/* F222 (overnight 2026-10-31): Brain × Scenario × Task × Report Coverage Chain — ◈ BSTRC button (left:172120, bottom:8, zIndex:318); fetches /v1/cinematic/brain + /v1/scenario/list + /entities/Task + /v1/reports; keyword-cross-references each brain node against all 3 other sources to classify COMMANDED/ACTIVE/PARTIAL/DARK; red pulse on DARK count (unoperationalised brain nodes — no scenario playbook, no active task, no filed report); expandable rows show matched scenarios with status badge + matched tasks with status badge + matched reports with date badge; filter tabs ALL/COMMANDED/ACTIVE/PARTIAL/DARK + text search; ▶ ASSESS DARK NODES → /v1/jarvis/agent/chat + TTS; isBstrcQuery+buildBstrcScript exported; "bstrc"/"brain scenario task"/"brain coverage"/"brain report"/"brain task coverage"/"dark brain node"/"unoperationalised brain"/"brain command coverage"/"brain scenario coverage"/"brain report coverage" voice triggers; jarvis:bstrc-toggle event; 90-s auto-refresh */}
             <BrainScenarioTaskReportCoverage />
+            {/* F223 (overnight 2026-10-31): Contact × Graph × Skill × Brain Operational Personnel Intelligence Command — ◈ CGSBPC button (left:172680, bottom:8, zIndex:319); fetches /entities/Contact + /v1/graph/centrality + /v1/aip/skill + /v1/cinematic/brain; keyword-cross-references each contact against graph nodes, skills, and brain nodes to classify COMMANDING/NETWORKED/CAPABLE/GHOST; red pulse on GHOST count (untethered operators — contacts with no graph trace, no skill match, no brain model); expandable rows show matched graph nodes with centrality score badge + matched skills with score badge + matched brain nodes with type badge; filter tabs ALL/COMMANDING/NETWORKED/CAPABLE/GHOST + text search; ▶ ASSESS GHOST CONTACTS → /v1/jarvis/agent/chat + TTS; isCgsbpcQuery+buildCgsbpcScript exported; "cgsbpc"/"contact graph skill"/"personnel command"/"ghost contact"/"untethered operator"/"contact network"/"operator coverage"/"contact skill brain"/"personnel intelligence" voice triggers; jarvis:cgsbpc-toggle event; 90-s auto-refresh */}
+            <ContactGraphSkillBrainCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
