@@ -747,6 +747,7 @@ import KnowledgeTaskOpsContactActivation from '@/components/cinematic/KnowledgeT
 import IntelProfileRiskTaskKnowledgePriority from '@/components/cinematic/IntelProfileRiskTaskKnowledgePriority';
 import ReportGraphSkillOpsAlertCoverage from '@/components/cinematic/ReportGraphSkillOpsAlertCoverage';
 import InvestigationScenarioSkillAlertCoverage from '@/components/cinematic/InvestigationScenarioSkillAlertCoverage';
+import ContactKnowledgeScenarioTaskMatrix from '@/components/cinematic/ContactKnowledgeScenarioTaskMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2346,6 +2347,8 @@ function App() {
             <ReportGraphSkillOpsAlertCoverage />
             {/* F240 (overnight 2026-10-31): Investigation × Scenario × Skill × Ops Alert Active Case Response Coverage — ◈ ISSCRC button (left:182200, bottom:8, zIndex:336); fetches /v1/investigations + /v1/scenario/list + /v1/aip/skill + /v1/ops/alerts; keyword-matches each investigation against scenario playbooks, skills, and ops alerts to classify COVERED/SCRIPTED/SKILLED/EXPOSED; red pulse on EXPOSED count (fully undefended open cases with no scenario playbook, no matching skill, and no ops alert monitoring); expandable rows show matched scenarios with phase badge + matched skills with score badge + matched ops alerts with severity badge; ▶ ASSESS → /v1/jarvis/agent/chat + TTS; isIsscrcQuery+buildIsscrcScript exported; jarvis:isscrc-toggle event; 90-s auto-refresh */}
             <InvestigationScenarioSkillAlertCoverage />
+            {/* F241 (overnight 2026-10-31): Contact × Knowledge × Scenario × Task Intelligence Activation Coverage — ◈ CKSTMX button (left:182760, bottom:8, zIndex:337); fetches /entities/Contact + /knowledge/ + /v1/scenario/list + /entities/Task; keyword-matches each contact against knowledge articles, scenarios, and tasks to classify ACTIVATED/SCENED/TASKED/DORMANT; amber pulse on DORMANT count; expandable rows show matched knowledge articles with category badge + matched scenarios with status badge + matched tasks with status badge; ASSESS + TTS; isCkstmxQuery+buildCkstmxScript exported; jarvis:ckstmx-toggle event; 90-s auto-refresh */}
+            <ContactKnowledgeScenarioTaskMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
