@@ -736,6 +736,7 @@ import DatasetSwarmContactOpsAccountability from '@/components/cinematic/Dataset
 import IntelProfileGraphOpsAlertKnowledgeDepth from '@/components/cinematic/IntelProfileGraphOpsAlertKnowledgeDepth';
 import InvestigationTaskContactDatasetCoverage from '@/components/cinematic/InvestigationTaskContactDatasetCoverage';
 import SwarmJobScenarioContactInvestigationMissionMap from '@/components/cinematic/SwarmJobScenarioContactInvestigationMissionMap';
+import RiskSignalTaskKnowledgeReportCoverage from '@/components/cinematic/RiskSignalTaskKnowledgeReportCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2313,6 +2314,8 @@ function App() {
             <InvestigationTaskContactDatasetCoverage />
             {/* F229 (overnight 2026-10-31): SwarmJob × Scenario × Contact × Investigation Autonomous Mission Coverage Map — ◈ SWSCIM button (left:176040, bottom:8, zIndex:325); fetches /entities/SwarmJob + /v1/scenario/list + /entities/Contact + /v1/investigations; keyword-cross-references each swarm job against scenarios, contacts, and investigations to classify AUTONOMOUS/COORDINATED/STAFFED/ORPHAN; amber pulse on ORPHAN count (automation blind spots — no scenario, no owner, no investigation); expandable rows show matched scenarios with status badge + matched contacts with role/org + matched investigations with status badge; ▶ ASSESS ORPHAN SWARM JOBS → /v1/jarvis/agent/chat + TTS; isSwscimQuery+buildSwscimScript exported; "swscim"/"swarm mission"/"swarm coverage"/"swarm investigation"/"autonomous mission"/"mission automation"/"swarm orphan"/"swarm coordination"/"automation coverage"/"swarm blind spot" voice triggers; jarvis:swscim-toggle event; 90-s auto-refresh */}
             <SwarmJobScenarioContactInvestigationMissionMap />
+            {/* F230 (overnight 2026-10-31): RiskSignal × Task × Knowledge × Report Threat Response Evidence Coverage — ◈ RSTKRC button (left:176600, bottom:8, zIndex:326); fetches /entities/RiskSignal + /entities/Task + /knowledge/ + /v1/reports; keyword-cross-references each risk signal (title/description/category/severity) against task names, knowledge article titles/summaries, and report titles to classify COVERED/ACTIONED/TRACKED/EXPOSED; red pulse on EXPOSED count (fully ungrounded threat signals with no task, no knowledge article, no report); expandable rows show matched tasks with status badge + matched knowledge articles with category badge + matched reports with date badge; ▶ ASSESS EXPOSED RISK SIGNALS → /v1/jarvis/agent/chat + TTS; isRstkrcQuery+buildRstkrcScript exported; "rstkrc"/"threat response coverage"/"risk task knowledge"/"risk evidence"/"exposed risk signal"/"risk report"/"threat knowledge gap"/"risk coverage"/"ungrounded threat"/"threat evidence gap" voice triggers; jarvis:rstkrc-toggle event; 90-s auto-refresh */}
+            <RiskSignalTaskKnowledgeReportCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
