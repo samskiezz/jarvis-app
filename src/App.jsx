@@ -726,6 +726,7 @@ import InvestmentBrainContactInvestigationOpsMonitor from '@/components/cinemati
 import TaskSkillBrainContactGraphFoundation from '@/components/cinematic/TaskSkillBrainContactGraphFoundation';
 import ReportSwarmGraphContactScenarioMap from '@/components/cinematic/ReportSwarmGraphContactScenarioMap';
 import InvestigationTaskContactBrainProsecutionCommand from '@/components/cinematic/InvestigationTaskContactBrainProsecutionCommand';
+import DatasetInvestigationScenarioOpsAlert from '@/components/cinematic/DatasetInvestigationScenarioOpsAlert';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2283,6 +2284,8 @@ function App() {
             <ReportSwarmGraphContactScenarioMap />
             {/* F219 (overnight 2026-10-30): Investigation × Task × Contact × Brain Prosecution Command Intelligence — ◈ ITCBPC button (left:170440, bottom:8, zIndex:315); fetches /v1/investigations + /entities/Task + /entities/Contact + /v1/cinematic/brain; keyword-cross-references each investigation against all 3 other sources to classify PROSECUTING/ACTIVE/STAFFED/COLD; red pulse on COLD count (prosecution dead-ends — open investigations with no task, no brain model, no contact lead); expandable rows show matched tasks with status badge + matched contacts with role/org + matched brain nodes with type badge; filter tabs ALL/PROSECUTING/ACTIVE/STAFFED/COLD + text search; ▶ ASSESS COLD CASES → /v1/jarvis/agent/chat + TTS; isItcbpcQuery+buildItcbpcScript exported; "itcbpc"/"investigation prosecution"/"cold cases"/"prosecution command"/"investigation task contact"/"investigation brain"/"undefended cases"/"prosecution blind spot"/"case command"/"open investigation" voice triggers; jarvis:itcbpc-toggle event; 90-s auto-refresh */}
             <InvestigationTaskContactBrainProsecutionCommand />
+            {/* F220 (overnight 2026-10-31): Dataset × Investigation × Scenario × Ops Alert Evidence Prosecution Coverage — ◈ DISPRO button (left:171000, bottom:8, zIndex:316); fetches /v1/datasets + /v1/investigations + /v1/scenario/list + /v1/ops/alerts; keyword-cross-references each dataset against all 3 other sources to classify PROSECUTED/TRACKED/STAGED/ORPHAN; amber pulse on ORPHAN count (evidence dead-ends — datasets with no investigation, no scenario playbook, and no ops alert coverage); expandable rows show matched investigations with status badge + matched scenarios with status badge + matched ops alerts with severity badge; filter tabs ALL/PROSECUTED/TRACKED/STAGED/ORPHAN + text search; ▶ ASSESS ORPHAN DATASETS → /v1/jarvis/agent/chat + TTS; isDisproQuery+buildDisproScript exported; "dispro"/"dataset investigation"/"evidence prosecution"/"dataset scenario"/"evidence gap"/"evidence coverage"/"dataset ops"/"dataset blind spot"/"investigation evidence"/"evidence dead end"/"orphan dataset" voice triggers; jarvis:dispro-toggle event; 90-s auto-refresh */}
+            <DatasetInvestigationScenarioOpsAlert />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
