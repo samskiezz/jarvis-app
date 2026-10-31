@@ -737,6 +737,7 @@ import IntelProfileGraphOpsAlertKnowledgeDepth from '@/components/cinematic/Inte
 import InvestigationTaskContactDatasetCoverage from '@/components/cinematic/InvestigationTaskContactDatasetCoverage';
 import SwarmJobScenarioContactInvestigationMissionMap from '@/components/cinematic/SwarmJobScenarioContactInvestigationMissionMap';
 import RiskSignalTaskKnowledgeReportCoverage from '@/components/cinematic/RiskSignalTaskKnowledgeReportCoverage';
+import SceneContactOpsInvestigationCoverage from '@/components/cinematic/SceneContactOpsInvestigationCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2316,6 +2317,8 @@ function App() {
             <SwarmJobScenarioContactInvestigationMissionMap />
             {/* F230 (overnight 2026-10-31): RiskSignal × Task × Knowledge × Report Threat Response Evidence Coverage — ◈ RSTKRC button (left:176600, bottom:8, zIndex:326); fetches /entities/RiskSignal + /entities/Task + /knowledge/ + /v1/reports; keyword-cross-references each risk signal (title/description/category/severity) against task names, knowledge article titles/summaries, and report titles to classify COVERED/ACTIONED/TRACKED/EXPOSED; red pulse on EXPOSED count (fully ungrounded threat signals with no task, no knowledge article, no report); expandable rows show matched tasks with status badge + matched knowledge articles with category badge + matched reports with date badge; ▶ ASSESS EXPOSED RISK SIGNALS → /v1/jarvis/agent/chat + TTS; isRstkrcQuery+buildRstkrcScript exported; "rstkrc"/"threat response coverage"/"risk task knowledge"/"risk evidence"/"exposed risk signal"/"risk report"/"threat knowledge gap"/"risk coverage"/"ungrounded threat"/"threat evidence gap" voice triggers; jarvis:rstkrc-toggle event; 90-s auto-refresh */}
             <RiskSignalTaskKnowledgeReportCoverage />
+            {/* F231 (overnight 2026-10-31): Scene × Contact × Ops Alert × Investigation Operational Situational Coverage — ◈ SCOVOP button (left:177160, bottom:8, zIndex:327); fetches all 10 /v1/cinematic/scene/{1..10} + /entities/Contact + /v1/ops/alerts + /v1/investigations; keyword-cross-references each scene (title/description/anchor labels) against contact names/orgs/roles, ops alert titles/descriptions, and investigation titles/summaries to classify COVERED/MONITORED/STAFFED/DARK; red pulse on DARK count (fully unmonitored operational environments with no contact owner, no ops alert, no investigation); expandable rows show matched contacts with role/org + matched ops alerts with severity badge + matched investigations with status badge; ▶ ASSESS DARK SCENES → /v1/jarvis/agent/chat + TTS; isScovopQuery+buildScovopScript exported; "scovop"/"scene coverage"/"scene contact"/"operational coverage"/"dark scene"/"unmonitored scene"/"scene ops"/"situational coverage"/"scene investigation"/"operational situational" voice triggers; jarvis:scovop-toggle event; 90-s auto-refresh */}
+            <SceneContactOpsInvestigationCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
