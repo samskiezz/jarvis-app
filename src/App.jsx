@@ -743,6 +743,7 @@ import SceneTaskContactRiskMonitoring from '@/components/cinematic/SceneTaskCont
 import InvestmentDatasetReportKnowledgeFoundation from '@/components/cinematic/InvestmentDatasetReportKnowledgeFoundation';
 import SkillScenarioContactBrainReadiness from '@/components/cinematic/SkillScenarioContactBrainReadiness';
 import GraphOpsAlertTaskContactCommand from '@/components/cinematic/GraphOpsAlertTaskContactCommand';
+import KnowledgeTaskOpsContactActivation from '@/components/cinematic/KnowledgeTaskOpsContactActivation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2334,6 +2335,8 @@ function App() {
             <SkillScenarioContactBrainReadiness />
             {/* F236 (overnight 2026-10-31): Graph × Ops Alert × Task × Contact Operational Readiness Command Network — ◈ GORCN button (left:179960, bottom:8, zIndex:332); fetches /v1/graph/centrality + /v1/ops/alerts + /entities/Task + /entities/Contact; keyword-cross-references each graph node (label/name/type) against ops alert titles/descriptions, task names/descriptions, and contact names/roles/orgs to classify COMMANDING/ACTIVE/STAFFED/DARK; red pulse on DARK count (blind-spot nodes with no alert coverage, no task, no contact owner); expandable rows show matched ops alerts with severity badge + matched tasks with status badge + matched contacts with role/org; ▶ ASSESS DARK NODES → /v1/jarvis/agent/chat + TTS; isGorcnQuery+buildGorcnScript exported; "gorcn"/"graph command"/"graph ops"/"node command"/"dark node"/"blind node"/"graph task"/"graph contact"/"operational node"/"node coverage"/"graph coverage" voice triggers; jarvis:gorcn-toggle event; 90-s auto-refresh */}
             <GraphOpsAlertTaskContactCommand />
+            {/* F237 (overnight 2026-10-31): Knowledge × Task × Ops Alert × Contact Intelligence Activation Coverage — ◈ KTOCAC button (left:180520, bottom:8, zIndex:333); fetches /knowledge/ + /entities/Task + /v1/ops/alerts + /entities/Contact; keyword-cross-references each knowledge article against task names/descriptions, ops alert titles, and contact names/roles/orgs to classify ACTIVATED/ACTIONED/ALERTED/DORMANT; red pulse on DORMANT count (intelligence dead-ends — articles with no task, no ops alert, no contact owner); expandable rows show matched tasks with status badge + matched ops alerts with severity badge + matched contacts with role/org; ▶ ASSESS DORMANT ARTICLES → /v1/jarvis/agent/chat + TTS; isKtocacQuery+buildKtocacScript exported; voice triggers "ktocac"/"knowledge activation"/"knowledge task ops"/"dormant knowledge"/"dormant article"/"knowledge coverage"/"knowledge contact"/"knowledge alert"/"intel activation"/"knowledge ops"/"dead knowledge"/"knowledge grounding"; jarvis:ktocac-toggle event; 90-s auto-refresh */}
+            <KnowledgeTaskOpsContactActivation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
