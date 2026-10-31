@@ -742,6 +742,7 @@ import GraphIntelProfileInvestmentScenarioNetwork from '@/components/cinematic/G
 import SceneTaskContactRiskMonitoring from '@/components/cinematic/SceneTaskContactRiskMonitoring';
 import InvestmentDatasetReportKnowledgeFoundation from '@/components/cinematic/InvestmentDatasetReportKnowledgeFoundation';
 import SkillScenarioContactBrainReadiness from '@/components/cinematic/SkillScenarioContactBrainReadiness';
+import GraphOpsAlertTaskContactCommand from '@/components/cinematic/GraphOpsAlertTaskContactCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2331,6 +2332,8 @@ function App() {
             <InvestmentDatasetReportKnowledgeFoundation />
             {/* F235 (overnight 2026-10-31): Skill × Scenario × Contact × Brain Capability Readiness Intelligence Map — ◈ SSCBRM button (left:179400, bottom:8, zIndex:331); fetches /v1/aip/skill + /v1/scenario/list + /entities/Contact + /v1/cinematic/brain; keyword-cross-references each skill (name/description/category) against scenario titles/descriptions, contact names/roles/orgs, and brain node labels/types to classify FORTIFIED/CAPABLE/STAFFED/BLIND; amber pulse on BLIND count (capability blind spots — skills with no scenario playbook, no contact, no brain model); expandable rows show matched scenarios with status badge + matched contacts with role/org + matched brain nodes with type badge; ▶ ASSESS BLIND SKILLS → /v1/jarvis/agent/chat + TTS; isSscbrmQuery+buildSscbrmScript exported; "sscbrm"/"skill readiness"/"capability readiness"/"skill brain"/"blind skill"/"skill scenario"/"capability intelligence"/"skill coverage"/"capability map"/"skill contact"/"unanchored skill"/"skill grounding" voice triggers; jarvis:sscbrm-toggle event; 90-s auto-refresh */}
             <SkillScenarioContactBrainReadiness />
+            {/* F236 (overnight 2026-10-31): Graph × Ops Alert × Task × Contact Operational Readiness Command Network — ◈ GORCN button (left:179960, bottom:8, zIndex:332); fetches /v1/graph/centrality + /v1/ops/alerts + /entities/Task + /entities/Contact; keyword-cross-references each graph node (label/name/type) against ops alert titles/descriptions, task names/descriptions, and contact names/roles/orgs to classify COMMANDING/ACTIVE/STAFFED/DARK; red pulse on DARK count (blind-spot nodes with no alert coverage, no task, no contact owner); expandable rows show matched ops alerts with severity badge + matched tasks with status badge + matched contacts with role/org; ▶ ASSESS DARK NODES → /v1/jarvis/agent/chat + TTS; isGorcnQuery+buildGorcnScript exported; "gorcn"/"graph command"/"graph ops"/"node command"/"dark node"/"blind node"/"graph task"/"graph contact"/"operational node"/"node coverage"/"graph coverage" voice triggers; jarvis:gorcn-toggle event; 90-s auto-refresh */}
+            <GraphOpsAlertTaskContactCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
