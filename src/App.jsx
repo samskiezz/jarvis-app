@@ -744,6 +744,7 @@ import InvestmentDatasetReportKnowledgeFoundation from '@/components/cinematic/I
 import SkillScenarioContactBrainReadiness from '@/components/cinematic/SkillScenarioContactBrainReadiness';
 import GraphOpsAlertTaskContactCommand from '@/components/cinematic/GraphOpsAlertTaskContactCommand';
 import KnowledgeTaskOpsContactActivation from '@/components/cinematic/KnowledgeTaskOpsContactActivation';
+import IntelProfileRiskTaskKnowledgePriority from '@/components/cinematic/IntelProfileRiskTaskKnowledgePriority';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2337,6 +2338,8 @@ function App() {
             <GraphOpsAlertTaskContactCommand />
             {/* F237 (overnight 2026-10-31): Knowledge × Task × Ops Alert × Contact Intelligence Activation Coverage — ◈ KTOCAC button (left:180520, bottom:8, zIndex:333); fetches /knowledge/ + /entities/Task + /v1/ops/alerts + /entities/Contact; keyword-cross-references each knowledge article against task names/descriptions, ops alert titles, and contact names/roles/orgs to classify ACTIVATED/ACTIONED/ALERTED/DORMANT; red pulse on DORMANT count (intelligence dead-ends — articles with no task, no ops alert, no contact owner); expandable rows show matched tasks with status badge + matched ops alerts with severity badge + matched contacts with role/org; ▶ ASSESS DORMANT ARTICLES → /v1/jarvis/agent/chat + TTS; isKtocacQuery+buildKtocacScript exported; voice triggers "ktocac"/"knowledge activation"/"knowledge task ops"/"dormant knowledge"/"dormant article"/"knowledge coverage"/"knowledge contact"/"knowledge alert"/"intel activation"/"knowledge ops"/"dead knowledge"/"knowledge grounding"; jarvis:ktocac-toggle event; 90-s auto-refresh */}
             <KnowledgeTaskOpsContactActivation />
+            {/* F238 (overnight 2026-10-31): IntelProfile × RiskSignal × Task × Knowledge Intelligence Priority Matrix — ◈ IRTKPM button (left:181080, bottom:8, zIndex:334); fetches /entities/IntelProfile + /entities/RiskSignal + /entities/Task + /knowledge/; keyword-cross-references each intel profile (name/category/description) against risk signal titles/descriptions, task names/objectives, and knowledge article titles/summaries to classify CRITICAL/ACTIVE/TRACKED/DARK; red pulse on DARK count (intelligence dead-ends — blind profiles with no risk signal, no task, no knowledge article); expandable rows show matched risk signals with severity badge + matched tasks with status badge + matched knowledge articles with category badge; ▶ ASSESS DARK PROFILES → /v1/jarvis/agent/chat + TTS; isIrtkpmQuery+buildIrtkpmScript exported; voice triggers "irtkpm"/"intel priority"/"intel risk task"/"intel priority matrix"/"dark intel"/"intel blind"/"blind profile"/"intel grounding"/"profile dark"/"intel knowledge"/"intel risk knowledge"; jarvis:irtkpm-toggle event; 90-s auto-refresh */}
+            <IntelProfileRiskTaskKnowledgePriority />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
