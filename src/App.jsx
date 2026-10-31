@@ -732,6 +732,7 @@ import BrainScenarioTaskReportCoverage from '@/components/cinematic/BrainScenari
 import ContactGraphSkillBrainCommand from '@/components/cinematic/ContactGraphSkillBrainCommand';
 import KnowledgeContactTaskRiskActivation from '@/components/cinematic/KnowledgeContactTaskRiskActivation';
 import OpsAlertScenarioContactSkillDefence from '@/components/cinematic/OpsAlertScenarioContactSkillDefence';
+import DatasetSwarmContactOpsAccountability from '@/components/cinematic/DatasetSwarmContactOpsAccountability';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2301,6 +2302,8 @@ function App() {
             <KnowledgeContactTaskRiskActivation />
             {/* F225 (overnight 2026-10-31): Ops Alert × Scenario × Contact × Skill Full Incident Defence Coverage — ◈ ISCDEF button (left:173800, bottom:8, zIndex:321); fetches /v1/ops/alerts + /v1/scenario/list + /entities/Contact + /v1/aip/skill; keyword-cross-references each ops alert against scenario names, contact names/roles/orgs, and skill names/descriptions to classify COVERED/MANAGED/PARTIAL/BLIND; red pulse on BLIND count; expandable rows; ▶ ASSESS BLIND ALERTS; isIscdefQuery+buildIscdefScript exported; jarvis:iscdef-toggle event; 90-s auto-refresh */}
             <OpsAlertScenarioContactSkillDefence />
+            {/* F226 (overnight 2026-10-31): Dataset × SwarmJob × Contact × Ops Alert Production Accountability Coverage — ◈ DACOV button (left:174360, bottom:8, zIndex:322); fetches /v1/datasets + /entities/SwarmJob + /entities/Contact + /v1/ops/alerts; keyword-cross-references each dataset against swarm job names, contact names/roles/orgs, and ops alert titles/descriptions to classify ACCOUNTABLE/OWNED/PROCESSING/ORPHAN; red pulse on ORPHAN count (unaccountable datasets with no swarm job, no contact owner, no ops alert); expandable rows show matched swarm jobs with status badge + matched contacts with role/org + matched ops alerts with severity badge; ▶ ASSESS ORPHAN DATASETS → /v1/jarvis/agent/chat + TTS; isDacovQuery+buildDacovScript exported; "dacov"/"dataset accountability"/"data ownership"/"orphan dataset"/"unaccountable data"/"dataset coverage"/"data production"/"swarm data"/"dataset swarm" voice triggers; jarvis:dacov-toggle event; 90-s auto-refresh */}
+            <DatasetSwarmContactOpsAccountability />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
