@@ -749,6 +749,7 @@ import ReportGraphSkillOpsAlertCoverage from '@/components/cinematic/ReportGraph
 import InvestigationScenarioSkillAlertCoverage from '@/components/cinematic/InvestigationScenarioSkillAlertCoverage';
 import ContactKnowledgeScenarioTaskMatrix from '@/components/cinematic/ContactKnowledgeScenarioTaskMatrix';
 import GraphKnowledgeTaskOpsAlertActionMap from '@/components/cinematic/GraphKnowledgeTaskOpsAlertActionMap';
+import ScenarioBrainContactOpsActivation from '@/components/cinematic/ScenarioBrainContactOpsActivation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2352,6 +2353,8 @@ function App() {
             <ContactKnowledgeScenarioTaskMatrix />
             {/* F242 (overnight 2026-10-31): Graph × Knowledge × Task × Ops Alert Intelligence Action Map — ◈ GKTAMAP button (left:183320, bottom:8, zIndex:338); fetches /v1/graph/centrality + /knowledge/ + /entities/Task + /v1/ops/alerts; keyword-matches each graph node (label/type/community) against knowledge articles, tasks, and ops alerts to classify COMMANDED/GROUNDED/ACTIVE/DARK; red pulse on DARK count (blind-spot nodes with no knowledge, no task, no ops alert coverage); expandable rows show matched knowledge articles with category badge + matched tasks with status badge + matched ops alerts with severity badge; ASSESS + TTS; isGktamapQuery+buildGktamapScript exported; jarvis:gktamap-toggle event; 90-s auto-refresh */}
             <GraphKnowledgeTaskOpsAlertActionMap />
+            {/* F243 (overnight 2026-10-31): Scenario × Brain × Contact × Ops Alert Strategic Activation Coverage — ◈ SBCOA button (left:183880, bottom:8, zIndex:339); fetches /v1/scenario/list + /v1/cinematic/brain + /entities/Contact + /v1/ops/alerts; keyword-matches each scenario against brain nodes, contacts, and ops alerts to classify ACTIVE/PARTIAL/MINIMAL/DARK; red pulse on DARK count (unactivated scenarios with no brain model, no contact owner, no ops alert); expandable rows show matched brain nodes with type badge + matched contacts with role/org + matched ops alerts with severity badge; ASSESS + TTS; isSbcoaQuery+buildSbcoaScript exported; jarvis:sbcoa-toggle event; 90-s auto-refresh */}
+            <ScenarioBrainContactOpsActivation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

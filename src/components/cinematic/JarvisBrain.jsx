@@ -181,6 +181,7 @@ import { isRgscovQuery }  from "@/components/cinematic/ReportGraphSkillOpsAlertC
 import { isIsscrcQuery }  from "@/components/cinematic/InvestigationScenarioSkillAlertCoverage";
 import { isCkstmxQuery }  from "@/components/cinematic/ContactKnowledgeScenarioTaskMatrix";
 import { isGktamapQuery } from "@/components/cinematic/GraphKnowledgeTaskOpsAlertActionMap";
+import { isSbcoaQuery } from "@/components/cinematic/ScenarioBrainContactOpsActivation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -448,6 +449,7 @@ export default function JarvisBrain() {
     if (isIsscrcQuery(q))  { window.dispatchEvent(new Event("jarvis:isscrc-toggle")); }
     if (isCkstmxQuery(q))  { window.dispatchEvent(new Event("jarvis:ckstmx-toggle")); }
     if (isGktamapQuery(q)) { window.dispatchEvent(new Event("jarvis:gktamap-toggle")); }
+    if (isSbcoaQuery(q))   { window.dispatchEvent(new Event("jarvis:sbcoa-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
