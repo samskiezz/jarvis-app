@@ -735,6 +735,7 @@ import OpsAlertScenarioContactSkillDefence from '@/components/cinematic/OpsAlert
 import DatasetSwarmContactOpsAccountability from '@/components/cinematic/DatasetSwarmContactOpsAccountability';
 import IntelProfileGraphOpsAlertKnowledgeDepth from '@/components/cinematic/IntelProfileGraphOpsAlertKnowledgeDepth';
 import InvestigationTaskContactDatasetCoverage from '@/components/cinematic/InvestigationTaskContactDatasetCoverage';
+import SwarmJobScenarioContactInvestigationMissionMap from '@/components/cinematic/SwarmJobScenarioContactInvestigationMissionMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2310,6 +2311,8 @@ function App() {
             <IntelProfileGraphOpsAlertKnowledgeDepth />
             {/* F228 (overnight 2026-10-31): Investigation × Task × Contact × Dataset Full Mission Prosecution Coverage — ◈ ITCOVEX button (left:175480, bottom:8, zIndex:324); fetches /v1/investigations + /entities/Task + /entities/Contact + /v1/datasets; keyword-cross-references each investigation against tasks, contacts, and datasets to classify PROSECUTING/ACTIVE/STAFFED/COLD; red pulse on COLD count (prosecution dead-ends — no task, no contact owner, no dataset backing); expandable rows show matched tasks with status badge + matched contacts with role/org + matched datasets with row-count badge; ▶ ASSESS COLD CASES → /v1/jarvis/agent/chat + TTS; isItcovexQuery+buildItcovexScript exported; "itcovex"/"investigation coverage"/"prosecution coverage"/"cold investigation"/"investigation task"/"investigation contact"/"investigation dataset"/"prosecution gap"/"cold case coverage"/"case coverage"/"investigation staffing"/"case dataset" voice triggers; jarvis:itcovex-toggle event; 90-s auto-refresh */}
             <InvestigationTaskContactDatasetCoverage />
+            {/* F229 (overnight 2026-10-31): SwarmJob × Scenario × Contact × Investigation Autonomous Mission Coverage Map — ◈ SWSCIM button (left:176040, bottom:8, zIndex:325); fetches /entities/SwarmJob + /v1/scenario/list + /entities/Contact + /v1/investigations; keyword-cross-references each swarm job against scenarios, contacts, and investigations to classify AUTONOMOUS/COORDINATED/STAFFED/ORPHAN; amber pulse on ORPHAN count (automation blind spots — no scenario, no owner, no investigation); expandable rows show matched scenarios with status badge + matched contacts with role/org + matched investigations with status badge; ▶ ASSESS ORPHAN SWARM JOBS → /v1/jarvis/agent/chat + TTS; isSwscimQuery+buildSwscimScript exported; "swscim"/"swarm mission"/"swarm coverage"/"swarm investigation"/"autonomous mission"/"mission automation"/"swarm orphan"/"swarm coordination"/"automation coverage"/"swarm blind spot" voice triggers; jarvis:swscim-toggle event; 90-s auto-refresh */}
+            <SwarmJobScenarioContactInvestigationMissionMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
