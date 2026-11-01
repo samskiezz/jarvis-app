@@ -765,6 +765,7 @@ import ScenarioContactRiskDatasetCoverageMap from '@/components/cinematic/Scenar
 import KnowledgeTaskContactSwarmAccountability from '@/components/cinematic/KnowledgeTaskContactSwarmAccountability';
 import ScenarioTaskContactBrainMissionAuthority from '@/components/cinematic/ScenarioTaskContactBrainMissionAuthority';
 import BrainRiskSignalReportSwarmMatrix from '@/components/cinematic/BrainRiskSignalReportSwarmMatrix';
+import SkillContactOpsGraphCapabilityNetwork from '@/components/cinematic/SkillContactOpsGraphCapabilityNetwork';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2400,6 +2401,8 @@ function App() {
             <ScenarioTaskContactBrainMissionAuthority />
             {/* F258 (overnight 2026-11-01): Brain × RiskSignal × Report × SwarmJob Operational Threat Intelligence Matrix — ◈ BRRSWT button (left:192280, bottom:8, zIndex:354); fetches /v1/cinematic/brain + /entities/RiskSignal + /v1/reports + /entities/SwarmJob; keyword-matches each brain node against risk signals, reports, and swarm jobs to classify COMMANDED/SIGNALED/PROCESSED/DARK; red pulse on DARK count (brain nodes with no threat signal, no report, no swarm job — operational blind spots); expandable rows show matched risk signals with severity badge + matched reports with date badge + matched swarm jobs with status badge; ASSESS + TTS; isBrrswtQuery+buildBrrswtScript exported; jarvis:brrswt-toggle event; 90-s auto-refresh */}
             <BrainRiskSignalReportSwarmMatrix />
+            {/* F259 (overnight 2026-11-01): Skill × Contact × Ops Alert × Graph Capability Command Network — ◈ SCOAGC button (left:192840, bottom:8, zIndex:355); fetches /v1/aip/skill + /entities/Contact + /v1/ops/alerts + /v1/graph/centrality; keyword-matches each skill against contacts, ops alerts, and graph nodes to classify COMMANDING/STAFFED/ALERTED/DARK; red pulse on DARK count (skills with no owner, no alert, no graph trace — capability blind spots); expandable rows show matched contacts with role/org + matched alerts with severity badge + matched graph nodes with centrality score; ASSESS + TTS; isScoagcQuery+buildScoagcScript exported; jarvis:scoagc-toggle event; 90-s auto-refresh */}
+            <SkillContactOpsGraphCapabilityNetwork />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
