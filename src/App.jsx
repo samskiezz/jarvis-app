@@ -754,6 +754,7 @@ import IntelProfileGraphTaskOpsNetwork from '@/components/cinematic/IntelProfile
 import SwarmKnowledgeOpsContactCoverage from '@/components/cinematic/SwarmKnowledgeOpsContactCoverage';
 import RiskSignalDatasetInvestigationContact from '@/components/cinematic/RiskSignalDatasetInvestigationContact';
 import BrainIntelProfileOpsAlertTaskActivation from '@/components/cinematic/BrainIntelProfileOpsAlertTaskActivation';
+import ContactScenarioOpsRiskCoverage from '@/components/cinematic/ContactScenarioOpsRiskCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2367,6 +2368,8 @@ function App() {
             <RiskSignalDatasetInvestigationContact />
             {/* F247 (overnight 2026-11-01): Brain × IntelProfile × Ops Alert × Task Intelligence Command Activation — ◈ BIOTCMD button (left:186120, bottom:8, zIndex:343); fetches /v1/cinematic/brain + /entities/IntelProfile + /v1/ops/alerts + /entities/Task; keyword-matches each brain node against intel profiles, ops alerts, and tasks to classify ACTIVATED/COMMANDING/ACTIVE/DARK; red pulse on DARK count (unactivated brain nodes with no intel profile, no ops alert, no task grounding); expandable rows show matched intel profiles with category badge + matched ops alerts with severity badge + matched tasks with status badge; ASSESS + TTS; isBiotcmdQuery+buildBiotcmdScript exported; jarvis:biotcmd-toggle event; 90-s auto-refresh */}
             <BrainIntelProfileOpsAlertTaskActivation />
+            {/* F248 (overnight 2026-11-01): Contact × Scenario × Ops Alert × RiskSignal Operational Threat Coverage — ◈ CSORC button (left:186680, bottom:8, zIndex:344); fetches /entities/Contact + /v1/scenario/list + /v1/ops/alerts + /entities/RiskSignal; keyword-matches each contact against scenarios, ops alerts, and risk signals to classify COVERED/ALERTED/PARTIAL/DARK; red pulse on DARK count (personnel with no matching scenario playbook, no ops alert, and no risk signal coverage); expandable rows show matched scenarios with playbook badge + matched ops alerts with severity badge + matched risk signals with level badge; ASSESS + TTS; isCsorcQuery+buildCsorcScript exported; jarvis:csorc-toggle event; 90-s auto-refresh */}
+            <ContactScenarioOpsRiskCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
