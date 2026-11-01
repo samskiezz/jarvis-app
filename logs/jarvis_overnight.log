@@ -251,3 +251,4 @@
 2026-11-01 F247 BrainIntelProfileOpsAlertTaskActivation.jsx — Brain × IntelProfile × Ops Alert × Task Intelligence Command Activation — ◈ BIOTCMD (left:186120, zIndex:343) — /v1/cinematic/brain + /entities/IntelProfile + /v1/ops/alerts + /entities/Task — ACTIVATED/COMMANDING/ACTIVE/DARK — Vite build exit:0
 2026-11-01 | F248 | ContactScenarioOpsRiskCoverage.jsx | Contact×Scenario×OpsAlert×RiskSignal COVERED/ALERTED/PARTIAL/DARK; ◈ CSORC left:186680 zIndex:344; isCsorcQuery wired JarvisBrain.jsx; Vite build exit:0
 [2026-11-01] F249 IntelProfileTaskScenarioKnowledgeCoverage.jsx — IntelProfile × Task × Scenario × Knowledge Intelligence Orchestration Coverage (ITSKOC); wired App.jsx + JarvisBrain.jsx; Vite build exit:0; pushed to jarvis-overnight
+[2026-11-01] F250 DatasetOpsScenarioContactActivation (◈ DOSCAM): Dataset×OpsAlert×Scenario×Contact 4-source activation map; ACTIVATED/MONITORED/STAGED/DARK; left:187800 zIndex:346; Vite build exit:0

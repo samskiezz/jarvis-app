@@ -188,6 +188,7 @@ import { isRidigcQuery } from "@/components/cinematic/RiskSignalDatasetInvestiga
 import { isBiotcmdQuery } from "@/components/cinematic/BrainIntelProfileOpsAlertTaskActivation";
 import { isCsorcQuery } from "@/components/cinematic/ContactScenarioOpsRiskCoverage";
 import { isItskocQuery } from "@/components/cinematic/IntelProfileTaskScenarioKnowledgeCoverage";
+import { isDoscamQuery } from "@/components/cinematic/DatasetOpsScenarioContactActivation";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -462,6 +463,7 @@ export default function JarvisBrain() {
     if (isBiotcmdQuery(q)) { window.dispatchEvent(new Event("jarvis:biotcmd-toggle")); }
     if (isCsorcQuery(q))   { window.dispatchEvent(new Event("jarvis:csorc-toggle")); }
     if (isItskocQuery(q))  { window.dispatchEvent(new Event("jarvis:itskoc-toggle")); }
+    if (isDoscamQuery(q))  { window.dispatchEvent(new Event("jarvis:doscam-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

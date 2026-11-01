@@ -756,6 +756,7 @@ import RiskSignalDatasetInvestigationContact from '@/components/cinematic/RiskSi
 import BrainIntelProfileOpsAlertTaskActivation from '@/components/cinematic/BrainIntelProfileOpsAlertTaskActivation';
 import ContactScenarioOpsRiskCoverage from '@/components/cinematic/ContactScenarioOpsRiskCoverage';
 import IntelProfileTaskScenarioKnowledgeCoverage from '@/components/cinematic/IntelProfileTaskScenarioKnowledgeCoverage';
+import DatasetOpsScenarioContactActivation from '@/components/cinematic/DatasetOpsScenarioContactActivation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2373,6 +2374,8 @@ function App() {
             <ContactScenarioOpsRiskCoverage />
             {/* F249 (overnight 2026-11-01): IntelProfile × Task × Scenario × Knowledge Intelligence Orchestration Coverage — ◈ ITSKOC button (left:187240, bottom:8, zIndex:345); fetches /entities/IntelProfile + /entities/Task + /v1/scenario/list + /knowledge/; keyword-matches each intel profile against tasks, scenarios, and knowledge articles to classify ORCHESTRATED/ACTIVE/SCRIPTED/DORMANT; red pulse on DORMANT count (dead intel profiles with no task, no scenario playbook, no knowledge article); expandable rows show matched tasks with status badge + matched scenarios with status badge + matched knowledge articles with category badge; ASSESS + TTS; isItskocQuery+buildItskocScript exported; jarvis:itskoc-toggle event; 90-s auto-refresh */}
             <IntelProfileTaskScenarioKnowledgeCoverage />
+            {/* F250 (overnight 2026-11-01): Dataset × Ops Alert × Scenario × Contact Evidence Intelligence Activation Map — ◈ DOSCAM button (left:187800, bottom:8, zIndex:346); fetches /v1/datasets + /v1/ops/alerts + /v1/scenario/list + /entities/Contact; keyword-matches each dataset against ops alerts, scenarios, and contacts to classify ACTIVATED/MONITORED/STAGED/DARK; red pulse on DARK count (evidence blind spots with no ops alert coverage, no scenario playbook, no assigned contact); expandable rows show matched alerts with severity badge + matched scenarios with status badge + matched contacts with role/org; ASSESS + TTS; isDoscamQuery+buildDoscamScript exported; jarvis:doscam-toggle event; 90-s auto-refresh */}
+            <DatasetOpsScenarioContactActivation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
