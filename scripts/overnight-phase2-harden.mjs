@@ -171,7 +171,37 @@ function checkBacklogConsistency() {
   return { passed: issues.length === 0, issues };
 }
 
-// ── Check 5 & 6: Toggle position and zIndex collision detection ──
+// ── Check 5: Broken API URL pattern detection ──
+function checkApiPatterns() {
+  const issues = [];
+  if (!existsSync(CINEMATIC)) return { passed: true, issues };
+
+  const files = readdirSync(CINEMATIC).filter(f => f.endsWith(".jsx") || f.endsWith(".js"));
+  const brokenRe = /^const\s+API\s*=\s*import\.meta\.env\.VITE_API_URL\s*(\|\||[?]{2})\s*['"]["'];?$/;
+
+  for (const file of files) {
+    const fullPath = join(CINEMATIC, file);
+    const content = readSafe(fullPath);
+    if (!content) continue;
+
+    const lines = content.split("\n");
+    for (let i = 0; i < lines.length; i++) {
+      const trimmed = lines[i].trim();
+      if (brokenRe.test(trimmed)) {
+        issues.push({
+          file,
+          line: i + 1,
+          code: trimmed,
+          reason: "VITE_API_URL || '' resolves to empty string — fetches hit frontend origin, not backend",
+          fix: "Replace with: import { apiBase } from '@/api/cinematicDataAdapters'; then use apiBase() instead of API",
+        });
+      }
+    }
+  }
+  return { passed: issues.length === 0, issues };
+}
+
+// ── Check 6 & 7: Toggle position and zIndex collision detection ──
 function checkToggleCollisions() {
   const positionIssues = [];
   const zIndexIssues = [];
@@ -303,6 +333,9 @@ function main() {
   const backlog = checkBacklogConsistency();
   console.log(`  Backlog consistency:  ${backlog.passed ? "PASS" : `FAIL (${backlog.issues.length})`}`);
 
+  const apiPatterns = checkApiPatterns();
+  console.log(`  API URL patterns:    ${apiPatterns.passed ? "PASS" : `FAIL (${apiPatterns.issues.length} broken)`}`);
+
   const collisions = checkToggleCollisions();
   console.log(`  Toggle collisions:   ${collisions.positions.passed ? "PASS" : `FAIL (${collisions.positions.issues.length})`}`);
   console.log(`  zIndex collisions:   ${collisions.zIndexes.passed ? "PASS" : `FAIL (${collisions.zIndexes.issues.length})`}`);
@@ -324,7 +357,7 @@ function main() {
   }
 
   const allPassed = deadImports.passed && appMounts.passed && brainWiring.passed &&
-    backlog.passed && collisions.positions.passed && collisions.zIndexes.passed && eslint.passed;
+    backlog.passed && apiPatterns.passed && collisions.positions.passed && collisions.zIndexes.passed && eslint.passed;
 
   const report = {
     passed: allPassed,
@@ -334,6 +367,7 @@ function main() {
       appMounts,
       brainWiring,
       backlogConsistency: backlog,
+      apiPatterns,
       toggleCollisions: collisions.positions,
       zIndexCollisions: collisions.zIndexes,
       eslint,

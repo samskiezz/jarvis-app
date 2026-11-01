@@ -771,6 +771,7 @@ import SwarmDatasetContactGraphIntelMap from '@/components/cinematic/SwarmDatase
 import TaskKnowledgeBrainGraphFoundation from '@/components/cinematic/TaskKnowledgeBrainGraphFoundation';
 import OpsAlertDatasetInvestigationBrainContinuity from '@/components/cinematic/OpsAlertDatasetInvestigationBrainContinuity';
 import ReportScenarioRiskGraphStrategicCommand from '@/components/cinematic/ReportScenarioRiskGraphStrategicCommand';
+import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2415,6 +2416,7 @@ function App() {
             <TaskKnowledgeBrainGraphFoundation />
             <OpsAlertDatasetInvestigationBrainContinuity />
             <ReportScenarioRiskGraphStrategicCommand />
+            <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
