@@ -752,6 +752,7 @@ import GraphKnowledgeTaskOpsAlertActionMap from '@/components/cinematic/GraphKno
 import ScenarioBrainContactOpsActivation from '@/components/cinematic/ScenarioBrainContactOpsActivation';
 import IntelProfileGraphTaskOpsNetwork from '@/components/cinematic/IntelProfileGraphTaskOpsNetwork';
 import SwarmKnowledgeOpsContactCoverage from '@/components/cinematic/SwarmKnowledgeOpsContactCoverage';
+import RiskSignalDatasetInvestigationContact from '@/components/cinematic/RiskSignalDatasetInvestigationContact';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2361,6 +2362,8 @@ function App() {
             <IntelProfileGraphTaskOpsNetwork />
             {/* F245 (overnight 2026-11-01): SwarmJob × Knowledge × Ops Alert × Contact Automation Intelligence Coverage — ◈ SKOAC button (left:185000, bottom:8, zIndex:341); fetches /entities/SwarmJob + /knowledge/ + /v1/ops/alerts + /entities/Contact; keyword-matches each swarm job against knowledge articles, ops alerts, and contacts to classify COVERED/ALERTED/STAFFED/BLIND; amber pulse on BLIND count (automation blind-spots with no knowledge article, no ops alert, no contact owner); expandable rows show matched knowledge articles + matched ops alerts with severity badge + matched contacts with role/org; ASSESS + TTS; isSkoacQuery+buildSkoacScript exported; jarvis:skoac-toggle event; 90-s auto-refresh */}
             <SwarmKnowledgeOpsContactCoverage />
+            {/* F246 (overnight 2026-11-01): RiskSignal × Dataset × Investigation × Contact Threat Intelligence Grounding — ◈ RIDIGC button (left:185560, bottom:8, zIndex:342); fetches /entities/RiskSignal + /v1/datasets + /v1/investigations + /entities/Contact; keyword-matches each risk signal against datasets, investigations, and contacts to classify GROUNDED/TRACKED/LINKED/DARK; red pulse on DARK count (ungrounded threat signals with no dataset backing, no investigation, no contact owner); expandable rows show matched datasets with row-count badge + matched investigations with status badge + matched contacts with role/org; ASSESS + TTS; isRidigcQuery+buildRidigcScript exported; jarvis:ridigc-toggle event; 90-s auto-refresh */}
+            <RiskSignalDatasetInvestigationContact />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
