@@ -766,6 +766,7 @@ import KnowledgeTaskContactSwarmAccountability from '@/components/cinematic/Know
 import ScenarioTaskContactBrainMissionAuthority from '@/components/cinematic/ScenarioTaskContactBrainMissionAuthority';
 import BrainRiskSignalReportSwarmMatrix from '@/components/cinematic/BrainRiskSignalReportSwarmMatrix';
 import SkillContactOpsGraphCapabilityNetwork from '@/components/cinematic/SkillContactOpsGraphCapabilityNetwork';
+import InvestigationIntelProfileInvestmentReport from '@/components/cinematic/InvestigationIntelProfileInvestmentReport';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2403,6 +2404,8 @@ function App() {
             <BrainRiskSignalReportSwarmMatrix />
             {/* F259 (overnight 2026-11-01): Skill × Contact × Ops Alert × Graph Capability Command Network — ◈ SCOAGC button (left:192840, bottom:8, zIndex:355); fetches /v1/aip/skill + /entities/Contact + /v1/ops/alerts + /v1/graph/centrality; keyword-matches each skill against contacts, ops alerts, and graph nodes to classify COMMANDING/STAFFED/ALERTED/DARK; red pulse on DARK count (skills with no owner, no alert, no graph trace — capability blind spots); expandable rows show matched contacts with role/org + matched alerts with severity badge + matched graph nodes with centrality score; ASSESS + TTS; isScoagcQuery+buildScoagcScript exported; jarvis:scoagc-toggle event; 90-s auto-refresh */}
             <SkillContactOpsGraphCapabilityNetwork />
+            {/* F260 (overnight 2026-11-01): Investigation × IntelProfile × Investment × Report Intelligence Asset Ownership Map — ◈ INVIAM button (left:193400, bottom:8, zIndex:356); fetches /v1/investigations + /entities/IntelProfile + /entities/Investment + /v1/reports; keyword-matches each investigation against intel profiles, investments, and reports to classify ANCHORED/PROFILED/TRACKED/ADRIFT; red pulse on ADRIFT count (intelligence orphans with no intel profile, no investment tracking, no report); expandable rows show matched intel profiles with type badge + matched investments with amount/status badge + matched reports with date badge; ASSESS + TTS; isInviamQuery+buildInviamScript exported; jarvis:inviam-toggle event; 90-s auto-refresh */}
+            <InvestigationIntelProfileInvestmentReport />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
