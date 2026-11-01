@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'REMEDIATED', 'SCRIPTED', 'FILED', 'IDLE'];
@@ -108,9 +109,9 @@ export default function SkillReportInvestigationRemediationCoverage() {
     setLoading(true);
     try {
       const [skRes, rpRes, invRes] = await Promise.all([
-        fetch(`${API}/v1/aip/skill`,      { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/v1/reports`,        { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/v1/investigations`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/aip/skill`,      { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/reports`,        { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/investigations`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
       ]);
       const [skRaw, rpRaw, invRaw] = await Promise.all([
         skRes.ok  ? skRes.json()  : {},
@@ -161,7 +162,7 @@ export default function SkillReportInvestigationRemediationCoverage() {
     const remediatedCount = rows.filter(r => r.cls === 'REMEDIATED').length;
     const prompt = `Jarvis, I have ${rows.length} skills. ${idleCount} are IDLE (no associated report and no investigation — blind spots in the remediation picture). ${remediatedCount} are REMEDIATED (both a report and an investigation are linked). Provide a 2-sentence operational advisory on addressing idle skills and ensuring all active remediation efforts are properly filed.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -171,7 +172,7 @@ export default function SkillReportInvestigationRemediationCoverage() {
       setAssessment(text);
       if (text) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
             body: JSON.stringify({ text, voice: 'ash' }),

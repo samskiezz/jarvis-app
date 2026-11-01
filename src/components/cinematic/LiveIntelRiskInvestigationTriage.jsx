@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'TRIAGED', 'SIGNALED', 'TRACKED', 'UNTRACKED'];
@@ -165,9 +166,9 @@ export default function LiveIntelRiskInvestigationTriage() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [liRes, sigRes, invRes] = await Promise.all([
-        fetch(`${API}/functions/getLiveIntel`, { headers: h }),
-        fetch(`${API}/entities/RiskSignal`,    { headers: h }),
-        fetch(`${API}/v1/investigations`,      { headers: h }),
+        fetch(`${apiBase()}/functions/getLiveIntel`, { headers: h }),
+        fetch(`${apiBase()}/entities/RiskSignal`,    { headers: h }),
+        fetch(`${apiBase()}/v1/investigations`,      { headers: h }),
       ]);
       const [liRaw, sigRaw, invRaw] = await Promise.all([
         liRes.ok  ? liRes.json()  : {},
@@ -220,7 +221,7 @@ export default function LiveIntelRiskInvestigationTriage() {
     const untrackedNames = rows.filter(r => r._cls === 'UNTRACKED').slice(0, 5).map(r => r.name).join(', ');
     const prompt = `Live Intel × Risk Signal × Investigation Crisis Triage: ${rows.length} live intelligence events cross-referenced against ${sigCount} filed risk signals and ${invCount} open investigations. ${counts.TRIAGED} events are TRIAGED (matched both a risk signal AND an investigation — fully monitored). ${counts.SIGNALED} events are SIGNALED (matched a risk signal but have no open investigation — flagged but not yet being investigated). ${counts.TRACKED} events are TRACKED (under active investigation but no risk signal has been filed — operationally tracked but not formally flagged). ${counts.UNTRACKED} events are UNTRACKED — no risk signal and no investigation, representing the highest crisis coverage gaps in live intelligence.${untrackedNames ? ` Untracked events include: ${untrackedNames}.` : ''} Assess overall crisis triage coverage, identify which untracked events represent the highest operational risk, and recommend whether new risk signals or investigations should be opened immediately.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

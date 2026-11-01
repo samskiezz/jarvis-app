@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const TABS = ['ALL', 'FULLY_COVERED', 'DUAL_COVERED', 'SINGLE_LINKED', 'UNCOVERED'];
 const CLASS_COLOR = {
   FULLY_COVERED: '#22c55e',
@@ -53,10 +54,10 @@ export default function InvestigationGraphSkillRiskNexus() {
     setError('');
     try {
       const [invRes, comRes, skillRes, riskRes] = await Promise.all([
-        fetch(`${API}/v1/investigations`),
-        fetch(`${API}/v1/graph/communities`),
-        fetch(`${API}/v1/aip/skill`),
-        fetch(`${API}/entities/RiskSignal`),
+        fetch(`${apiBase()}/v1/investigations`),
+        fetch(`${apiBase()}/v1/graph/communities`),
+        fetch(`${apiBase()}/v1/aip/skill`),
+        fetch(`${apiBase()}/entities/RiskSignal`),
       ]);
       const [invData, comData, skillData, riskData] = await Promise.all([
         invRes.ok ? invRes.json() : [],
@@ -99,7 +100,7 @@ export default function InvestigationGraphSkillRiskNexus() {
   const assess = useCallback(async (row) => {
     setAssessing(row.id);
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

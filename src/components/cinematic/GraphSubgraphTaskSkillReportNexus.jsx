@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const TABS = ['ALL', 'FULLY_MAPPED', 'DUAL_LINKED', 'SINGLE_LINKED', 'UNMAPPED'];
 const CLASS_COLOR = {
   FULLY_MAPPED: '#22c55e',
@@ -58,10 +59,10 @@ export default function GraphSubgraphTaskSkillReportNexus() {
     setError('');
     try {
       const [subRes, taskRes, skillRes, rptRes] = await Promise.all([
-        fetch(`${API}/v1/graph/subgraph`),
-        fetch(`${API}/entities/Task`),
-        fetch(`${API}/v1/aip/skill`),
-        fetch(`${API}/v1/reports`),
+        fetch(`${apiBase()}/v1/graph/subgraph`),
+        fetch(`${apiBase()}/entities/Task`),
+        fetch(`${apiBase()}/v1/aip/skill`),
+        fetch(`${apiBase()}/v1/reports`),
       ]);
       const [subData, taskData, skillData, rptData] = await Promise.all([
         subRes.ok ? subRes.json() : [],
@@ -119,7 +120,7 @@ export default function GraphSubgraphTaskSkillReportNexus() {
   const assess = useCallback(async (row) => {
     setAssessing(row.id || row.name);
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

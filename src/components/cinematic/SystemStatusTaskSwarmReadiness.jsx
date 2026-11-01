@@ -21,8 +21,9 @@
  * Auto-refresh: 60 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'OPERATIONAL', 'TASKED', 'PROCESSING', 'STALLED'];
@@ -115,9 +116,9 @@ export default function SystemStatusTaskSwarmReadiness() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [sysRes, taskRes, swarmRes] = await Promise.all([
-        fetch(`${API}/v1/jarvis/system/status`, { headers: h }),
-        fetch(`${API}/entities/Task`,           { headers: h }),
-        fetch(`${API}/entities/SwarmJob`,       { headers: h }),
+        fetch(`${apiBase()}/v1/jarvis/system/status`, { headers: h }),
+        fetch(`${apiBase()}/entities/Task`,           { headers: h }),
+        fetch(`${apiBase()}/entities/SwarmJob`,       { headers: h }),
       ]);
       const [sysRaw, taskRaw, swarmRaw] = await Promise.all([
         sysRes.ok   ? sysRes.json()   : {},
@@ -172,7 +173,7 @@ export default function SystemStatusTaskSwarmReadiness() {
     const stalledNames = rows.filter(r => r._cls === 'STALLED').slice(0, 5).map(r => r.name).join(', ');
     const prompt = `System Status × Task × SwarmJob Operational Readiness assessment: ${rows.length} services cross-referenced against ${taskCount} tasks and ${swarmCount} swarm jobs. ${counts.OPERATIONAL} services have full coverage (task + swarm). ${counts.TASKED} have task assignment only. ${counts.PROCESSING} have swarm activity only. ${counts.STALLED} services are stalled — no matched task or swarm job. ${stalledNames ? `Stalled services: ${stalledNames}.` : ''} Assess the operational readiness, identify the most critical stalled services, and recommend task or swarm job assignment priorities.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

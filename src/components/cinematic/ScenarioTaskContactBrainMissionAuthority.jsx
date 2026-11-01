@@ -33,8 +33,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COMMANDING', 'ACTIVE', 'PARTIAL', 'UNARMED'];
@@ -202,7 +203,7 @@ export default function ScenarioTaskContactBrainMissionAuthority() {
     setAdvice('');
     try {
       const prompt = buildStcbmiScript();
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: hdr,
         body: JSON.stringify({ message: prompt }),
       });
@@ -210,7 +211,7 @@ export default function ScenarioTaskContactBrainMissionAuthority() {
       const text = d.response || d.message || d.text || JSON.stringify(d);
       setAdvice(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST', headers: hdr,
           body: JSON.stringify({ text: text.slice(0, 300) }),
         });

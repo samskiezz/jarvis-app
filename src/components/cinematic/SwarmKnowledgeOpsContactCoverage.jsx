@@ -31,8 +31,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'ALERTED', 'STAFFED', 'BLIND'];
@@ -178,10 +179,10 @@ export default function SwarmKnowledgeOpsContactCoverage() {
     setErr('');
     try {
       const [jRaw, kRaw, aRaw, cRaw] = await Promise.all([
-        safeFetch(`${API}/entities/SwarmJob`),
-        safeFetch(`${API}/knowledge/`),
-        safeFetch(`${API}/v1/ops/alerts`),
-        safeFetch(`${API}/entities/Contact`),
+        safeFetch(`${apiBase()}/entities/SwarmJob`),
+        safeFetch(`${apiBase()}/knowledge/`),
+        safeFetch(`${apiBase()}/v1/ops/alerts`),
+        safeFetch(`${apiBase()}/entities/Contact`),
       ]);
       const jArr = normalizeSwarms(jRaw);
       const kArr = normalizeKnowledge(kRaw);
@@ -236,7 +237,7 @@ export default function SwarmKnowledgeOpsContactCoverage() {
     setAssess('');
     try {
       const script = buildSkoacScript(counts);
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: hdr(),
         body: JSON.stringify({ message: script }),
@@ -245,7 +246,7 @@ export default function SwarmKnowledgeOpsContactCoverage() {
       const text = j?.response || j?.message || j?.result || 'No assessment returned.';
       setAssess(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST', headers: hdr(),
           body: JSON.stringify({ text: text.slice(0, 400) }),
         });

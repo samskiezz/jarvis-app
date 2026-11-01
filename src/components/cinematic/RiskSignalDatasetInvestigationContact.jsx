@@ -31,8 +31,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'GROUNDED', 'TRACKED', 'LINKED', 'DARK'];
@@ -177,10 +178,10 @@ export default function RiskSignalDatasetInvestigationContact() {
     setErr('');
     try {
       const [rRaw, dRaw, iRaw, cRaw] = await Promise.all([
-        safeFetch(`${API}/entities/RiskSignal`),
-        safeFetch(`${API}/v1/datasets`),
-        safeFetch(`${API}/v1/investigations`),
-        safeFetch(`${API}/entities/Contact`),
+        safeFetch(`${apiBase()}/entities/RiskSignal`),
+        safeFetch(`${apiBase()}/v1/datasets`),
+        safeFetch(`${apiBase()}/v1/investigations`),
+        safeFetch(`${apiBase()}/entities/Contact`),
       ]);
       const rArr = normalizeRiskSignals(rRaw);
       const dArr = normalizeDatasets(dRaw);
@@ -235,7 +236,7 @@ export default function RiskSignalDatasetInvestigationContact() {
     setAssess('');
     try {
       const script = buildRidigcScript(counts);
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: hdr(),
         body: JSON.stringify({ message: script }),
@@ -244,7 +245,7 @@ export default function RiskSignalDatasetInvestigationContact() {
       const text = j?.response || j?.message || j?.result || 'No assessment returned.';
       setAssess(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST', headers: hdr(),
           body: JSON.stringify({ text: text.slice(0, 400) }),
         });

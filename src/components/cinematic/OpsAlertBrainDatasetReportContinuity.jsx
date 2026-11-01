@@ -31,8 +31,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'CONTINUOUS', 'MODELED', 'DATAED', 'BLIND'];
@@ -203,7 +204,7 @@ export default function OpsAlertBrainDatasetReportContinuity() {
     const total  = rows.length;
     const prompt = `Ops Alert Intelligence Continuity audit: ${total} alerts total. ${blind} BLIND (no brain model, no dataset, no report — operational blind spots). Provide a 2-sentence advisory on which alert categories to prioritize for intelligence grounding.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),
@@ -212,7 +213,7 @@ export default function OpsAlertBrainDatasetReportContinuity() {
       const text = data.response || data.message || data.content || data.text || '';
       setAssessment(text);
       if (text) {
-        fetch(`${API}/v1/voice/tts`, {
+        fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ text: text.slice(0, 400) }),

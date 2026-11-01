@@ -31,8 +31,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'PRODUCING', 'PROCESSING', 'MONITORED', 'ORPHAN'];
@@ -168,7 +169,7 @@ export default function DatasetSwarmGraphOpsProductionAudit() {
     const summary = `Datasets: ${rows.length}. Producing: ${counts.PRODUCING}. Processing: ${counts.PROCESSING}. Monitored: ${counts.MONITORED}. Orphan: ${counts.ORPHAN}.`;
     const prompt = `JARVIS dataset-swarm-graph-ops production audit: ${summary}. Identify the most critical orphaned datasets with no automation, graph, or alert coverage. Provide 2-sentence advisory.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -177,7 +178,7 @@ export default function DatasetSwarmGraphOpsProductionAudit() {
       const text = d.response || d.message || d.content || JSON.stringify(d);
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 400) }),

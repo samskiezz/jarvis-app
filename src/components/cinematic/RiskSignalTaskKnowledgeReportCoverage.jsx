@@ -33,8 +33,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'ACTIONED', 'TRACKED', 'EXPOSED'];
@@ -171,10 +172,10 @@ export default function RiskSignalTaskKnowledgeReportCoverage() {
     try {
       const h = { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` };
       const [rRisk, rTask, rKnow, rRep] = await Promise.all([
-        fetch(`${API}/entities/RiskSignal`, { headers: h }).then(r => r.ok ? r.json() : null),
-        fetch(`${API}/entities/Task`,       { headers: h }).then(r => r.ok ? r.json() : null),
-        fetch(`${API}/knowledge/`,          { headers: h }).then(r => r.ok ? r.json() : null),
-        fetch(`${API}/v1/reports`,          { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/entities/RiskSignal`, { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/entities/Task`,       { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/knowledge/`,          { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/v1/reports`,          { headers: h }).then(r => r.ok ? r.json() : null),
       ]);
 
       const risks     = normalizeRisks(rRisk);
@@ -226,7 +227,7 @@ export default function RiskSignalTaskKnowledgeReportCoverage() {
     try {
       const h = { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` };
       const script = buildRstkrcScript();
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: h,
         body: JSON.stringify({ message: script }),
       });
@@ -235,7 +236,7 @@ export default function RiskSignalTaskKnowledgeReportCoverage() {
       setAssessment(txt);
       if (txt) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST', headers: h,
             body: JSON.stringify({ text: txt.slice(0, 400) }),
           });

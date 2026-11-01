@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'TASKED', 'SIGNALED', 'IDLE'];
@@ -83,9 +84,9 @@ export default function SkillTaskRiskCapabilityGap() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [skRes, tkRes, rsRes] = await Promise.all([
-        fetch(`${API}/v1/aip/skill`,        { headers: h }),
-        fetch(`${API}/entities/Task`,        { headers: h }),
-        fetch(`${API}/entities/RiskSignal`,  { headers: h }),
+        fetch(`${apiBase()}/v1/aip/skill`,        { headers: h }),
+        fetch(`${apiBase()}/entities/Task`,        { headers: h }),
+        fetch(`${apiBase()}/entities/RiskSignal`,  { headers: h }),
       ]);
       const [skData, tkData, rsData] = await Promise.all([
         skRes.ok ? skRes.json() : [],
@@ -131,7 +132,7 @@ export default function SkillTaskRiskCapabilityGap() {
     rows.forEach(r => { if (counts[r._cls] !== undefined) counts[r._cls]++; });
     const prompt = `Skill capability gap analysis: ${rows.length} skills total — ${counts.COVERED} fully deployed (matched tasks + risk signals), ${counts.TASKED} task-assigned only (no risk coverage), ${counts.SIGNALED} risk-relevant only (no assigned task), ${counts.IDLE} completely idle (no task or risk signal match). Assess the capability coverage quality, identify the highest-value idle skills that should be deployed, and highlight any critical risks that lack a skilled response.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

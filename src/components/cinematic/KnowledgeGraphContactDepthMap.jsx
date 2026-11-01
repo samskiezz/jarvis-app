@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ANCHORED', 'TRACED', 'LINKED', 'ORPHAN'];
@@ -104,9 +105,9 @@ export default function KnowledgeGraphContactDepthMap() {
     try {
       const h = { Authorization: `Bearer ${API_KEY}` };
       const [kRes, gRes, cRes] = await Promise.all([
-        fetch(`${API}/knowledge/`,              { headers: h }),
-        fetch(`${API}/v1/graph/centrality`,     { headers: h }),
-        fetch(`${API}/entities/Contact`,        { headers: h }),
+        fetch(`${apiBase()}/knowledge/`,              { headers: h }),
+        fetch(`${apiBase()}/v1/graph/centrality`,     { headers: h }),
+        fetch(`${apiBase()}/entities/Contact`,        { headers: h }),
       ]);
       const [kRaw, gRaw, cRaw] = await Promise.all([
         kRes.ok ? kRes.json() : {},
@@ -160,7 +161,7 @@ export default function KnowledgeGraphContactDepthMap() {
     const orphanCount = rows.filter(r => r._cls === 'ORPHAN').length;
     const prompt = `Knowledge × Graph × Contact Depth Map: ${rows.length} articles cross-referenced against ${nodeCount} graph nodes and ${contactCount} contacts. ANCHORED:${rows.filter(r=>r._cls==='ANCHORED').length} TRACED:${rows.filter(r=>r._cls==='TRACED').length} LINKED:${rows.filter(r=>r._cls==='LINKED').length} ORPHAN:${orphanCount}. Provide a 2-sentence strategic assessment of knowledge grounding depth and which orphan articles represent the highest intelligence blind spots.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -170,7 +171,7 @@ export default function KnowledgeGraphContactDepthMap() {
       setAssessment(answer);
       if (answer) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: answer }),
           });

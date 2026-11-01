@@ -33,8 +33,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COMMANDED', 'ACTIVE', 'PARTIAL', 'DARK'];
@@ -174,10 +175,10 @@ export default function BrainScenarioTaskReportCoverage() {
     try {
       const h = { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` };
       const [rBr, rSc, rTk, rRp] = await Promise.all([
-        fetch(`${API}/v1/cinematic/brain`,  { headers: h }).then(r => r.ok ? r.json() : null),
-        fetch(`${API}/v1/scenario/list`,    { headers: h }).then(r => r.ok ? r.json() : null),
-        fetch(`${API}/entities/Task`,       { headers: h }).then(r => r.ok ? r.json() : null),
-        fetch(`${API}/v1/reports`,          { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/v1/cinematic/brain`,  { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/v1/scenario/list`,    { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/entities/Task`,       { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/v1/reports`,          { headers: h }).then(r => r.ok ? r.json() : null),
       ]);
 
       const brainNodes = normalizeBrain(rBr);
@@ -229,7 +230,7 @@ export default function BrainScenarioTaskReportCoverage() {
     try {
       const h = { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` };
       const script = buildBstrcScript();
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: h,
         body: JSON.stringify({ message: script }),
       });
@@ -238,7 +239,7 @@ export default function BrainScenarioTaskReportCoverage() {
       setAssessment(txt);
       if (txt) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST', headers: h,
             body: JSON.stringify({ text: txt.slice(0, 400) }),
           });

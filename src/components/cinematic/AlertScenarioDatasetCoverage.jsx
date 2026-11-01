@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULL_COVERAGE', 'SCENARIO_ONLY', 'DATA_ONLY', 'DARK'];
 
@@ -71,9 +72,9 @@ export default function AlertScenarioDatasetCoverage() {
     setErr(null);
     try {
       const [alertsRes, scenariosRes, datasetsRes] = await Promise.all([
-        fetch(`${API}/v1/alerts?status=open&limit=100`),
-        fetch(`${API}/v1/scenario/list`),
-        fetch(`${API}/v1/datasets`),
+        fetch(`${apiBase()}/v1/alerts?status=open&limit=100`),
+        fetch(`${apiBase()}/v1/scenario/list`),
+        fetch(`${apiBase()}/v1/datasets`),
       ]);
 
       const alertsData = alertsRes.ok ? await alertsRes.json() : { alerts: [], items: [] };
@@ -151,7 +152,7 @@ export default function AlertScenarioDatasetCoverage() {
     setBrief('');
     try {
       const summary = `${counts.FULL_COVERAGE} full-coverage, ${counts.SCENARIO_ONLY} scenario-only, ${counts.DATA_ONLY} data-only, ${counts.DARK} dark alerts with no coverage.`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

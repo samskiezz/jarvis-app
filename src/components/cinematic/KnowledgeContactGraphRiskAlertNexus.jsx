@@ -37,8 +37,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'SATURATED', 'ANCHORED', 'PARTIAL', 'DARK'];
@@ -211,7 +212,7 @@ export default function KnowledgeContactGraphRiskAlertNexus() {
     const summary = `Knowledge articles: ${rows.length}. Saturated: ${counts.SATURATED}. Anchored: ${counts.ANCHORED}. Partial: ${counts.PARTIAL}. Dark: ${counts.DARK}.`;
     const prompt = `JARVIS knowledge intelligence coverage nexus audit: ${summary}. Identify the most critical DARK knowledge articles — those with no contact owner, no graph trace, no risk signal, and no ops alert coverage — representing full intelligence dead-ends. Provide a 2-sentence advisory on the top dark articles and priority actions to bring them into full intelligence saturation across contacts, graph, risk signals, and operational alerts.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -220,7 +221,7 @@ export default function KnowledgeContactGraphRiskAlertNexus() {
       const text = d.response || d.message || d.content || JSON.stringify(d);
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 400) }),

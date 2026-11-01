@@ -32,8 +32,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'RESPONSIVE', 'ALERTED', 'DOCUMENTED', 'BLIND'];
@@ -200,7 +201,7 @@ export default function SwarmAlertKnowledgeReportCoverage() {
     const summary = `SwarmJobs: ${rows.length}. Responsive: ${counts.RESPONSIVE}. Alerted: ${counts.ALERTED}. Documented: ${counts.DOCUMENTED}. Blind: ${counts.BLIND}.`;
     const prompt = `JARVIS swarm-alert-knowledge-report automated response coverage: ${summary}. Identify the most critical BLIND automation jobs — those with no ops alert trigger, no knowledge grounding, and no filed report. Provide a 2-sentence advisory on the highest-risk blind swarm jobs and priority actions to anchor them to alerts, knowledge articles, and reports to close the automation intelligence gap.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -209,7 +210,7 @@ export default function SwarmAlertKnowledgeReportCoverage() {
       const text = d.response || d.message || d.content || JSON.stringify(d);
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 400) }),

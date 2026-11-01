@@ -30,8 +30,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ACTIVE', 'PARTIAL', 'MINIMAL', 'DARK'];
@@ -165,10 +166,10 @@ export default function ScenarioBrainContactOpsActivation() {
     try {
       const hdrs = { Authorization: `Bearer ${API_KEY}` };
       const [sR, bR, cR, aR] = await Promise.all([
-        fetch(`${API}/v1/scenario/list`,       { headers: hdrs }),
-        fetch(`${API}/v1/cinematic/brain`,     { headers: hdrs }),
-        fetch(`${API}/entities/Contact`,       { headers: hdrs }),
-        fetch(`${API}/v1/ops/alerts`,          { headers: hdrs }),
+        fetch(`${apiBase()}/v1/scenario/list`,       { headers: hdrs }),
+        fetch(`${apiBase()}/v1/cinematic/brain`,     { headers: hdrs }),
+        fetch(`${apiBase()}/entities/Contact`,       { headers: hdrs }),
+        fetch(`${apiBase()}/v1/ops/alerts`,          { headers: hdrs }),
       ]);
       const [sD, bD, cD, aD] = await Promise.all([
         sR.ok ? sR.json() : [],
@@ -227,7 +228,7 @@ export default function ScenarioBrainContactOpsActivation() {
     setAssessing(true);
     const script = buildSbcoaScript(rows);
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: script }),
@@ -236,7 +237,7 @@ export default function ScenarioBrainContactOpsActivation() {
       const text = (d.answer || d.message || '').replace(/<<ACTION:[^>]*>>/g, '').trim();
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 500) }),

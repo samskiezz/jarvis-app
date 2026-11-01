@@ -29,8 +29,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'SIGNALED', 'MONITORED', 'ADRIFT'];
@@ -155,10 +156,10 @@ export default function TaskRiskOpsGraphThreatCoverage() {
     try {
       const h = { Authorization: `Bearer ${API_KEY}` };
       const [ta, ri, al, gr] = await Promise.all([
-        fetch(`${API}/entities/Task`,          { headers: h }).then(r => r.ok ? r.json() : []),
-        fetch(`${API}/entities/RiskSignal`,    { headers: h }).then(r => r.ok ? r.json() : []),
-        fetch(`${API}/v1/ops/alerts`,          { headers: h }).then(r => r.ok ? r.json() : []),
-        fetch(`${API}/v1/graph/centrality`,    { headers: h }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/entities/Task`,          { headers: h }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/entities/RiskSignal`,    { headers: h }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/v1/ops/alerts`,          { headers: h }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/v1/graph/centrality`,    { headers: h }).then(r => r.ok ? r.json() : []),
       ]);
       const tasks  = normalizeTasks(ta);
       const risks  = normalizeRisks(ri);
@@ -208,7 +209,7 @@ export default function TaskRiskOpsGraphThreatCoverage() {
     setAssessText('');
     const script = buildTrgcovScript(rows);
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: script }),
@@ -217,7 +218,7 @@ export default function TaskRiskOpsGraphThreatCoverage() {
       const text = d.response || d.message || d.answer || JSON.stringify(d);
       setAssessText(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 400) }),

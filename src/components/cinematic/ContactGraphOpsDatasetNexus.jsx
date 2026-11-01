@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_MAPPED', 'DUAL_LINKED', 'SINGLE_LINKED', 'ISOLATED'];
 
@@ -44,10 +45,10 @@ export default function ContactGraphOpsDatasetNexus() {
     setErr(null);
     try {
       const [ctRes, gcRes, oeRes, dsRes] = await Promise.all([
-        fetch(`${API}/entities/Contact?limit=200`),
-        fetch(`${API}/v1/graph/centrality`),
-        fetch(`${API}/v1/ops/events`),
-        fetch(`${API}/v1/datasets`),
+        fetch(`${apiBase()}/entities/Contact?limit=200`),
+        fetch(`${apiBase()}/v1/graph/centrality`),
+        fetch(`${apiBase()}/v1/ops/events`),
+        fetch(`${apiBase()}/v1/datasets`),
       ]);
       const ctData = ctRes.ok ? await ctRes.json() : {};
       const gcData = gcRes.ok ? await gcRes.json() : {};
@@ -164,7 +165,7 @@ export default function ContactGraphOpsDatasetNexus() {
     setAssessing(true);
     setBrief('');
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

@@ -20,8 +20,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'PREPARED', 'SCRIPTED', 'DOCUMENTED', 'BLIND'];
@@ -100,9 +101,9 @@ export default function RiskSignalPlaybookAudit() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [sigRes, artRes, scnRes] = await Promise.all([
-        fetch(`${API}/entities/RiskSignal`, { headers: h }),
-        fetch(`${API}/knowledge/`,          { headers: h }),
-        fetch(`${API}/v1/scenario/list`,    { headers: h }),
+        fetch(`${apiBase()}/entities/RiskSignal`, { headers: h }),
+        fetch(`${apiBase()}/knowledge/`,          { headers: h }),
+        fetch(`${apiBase()}/v1/scenario/list`,    { headers: h }),
       ]);
       const [sigRaw, artRaw, scnRaw] = await Promise.all([
         sigRes.ok ? sigRes.json() : [],
@@ -155,7 +156,7 @@ export default function RiskSignalPlaybookAudit() {
     const critBlinds = rows.filter(r => r._cls === 'BLIND' && ['critical','high'].includes(r.severity)).length;
     const prompt = `Risk Signal Playbook Audit: ${rows.length} risk signals cross-referenced against ${articleCount} knowledge articles and ${scenarioCount} runnable scenarios. ${counts.PREPARED} signals are fully prepared (both documented AND have a runnable scenario playbook). ${counts.SCRIPTED} have a scenario only (script exists but no knowledge backing). ${counts.DOCUMENTED} have knowledge documentation only (no runnable scenario). ${counts.BLIND} signals are completely blind — no documentation and no scenario playbook.${critBlinds ? ` Of those, ${critBlinds} are critical or high severity.` : ''}${blindNames ? ` Blind signals include: ${blindNames}.` : ''} Assess the overall playbook coverage, identify the highest-priority blind risk signals that need immediate scenario development or documentation, and recommend a remediation sequence to eliminate the most dangerous coverage gaps.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

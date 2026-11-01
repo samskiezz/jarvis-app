@@ -36,8 +36,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'GROUNDED', 'CAPABLE', 'SOURCED', 'SHADOW'];
@@ -212,7 +213,7 @@ export default function IntelProfileFullAssetCoverage() {
     const summary = `IntelProfiles: ${rows.length}. Grounded: ${counts.GROUNDED}. Capable: ${counts.CAPABLE}. Sourced: ${counts.SOURCED}. Shadow: ${counts.SHADOW}.`;
     const prompt = `JARVIS intel-profile full-asset coverage audit: ${summary}. Identify the most critical SHADOW intel profiles — those with no contact owner, no dataset, no runnable scenario, and no supporting skill. Provide a 2-sentence advisory on the top blind-spot profiles and priority actions to anchor them across personnel, data, playbook, and capability layers.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -221,7 +222,7 @@ export default function IntelProfileFullAssetCoverage() {
       const text = d.response || d.message || d.content || JSON.stringify(d);
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 400) }),

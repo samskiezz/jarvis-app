@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'FULLY_EQUIPPED', 'DUAL_SUPPORTED', 'SINGLE_LINKED', 'ORPHANED'];
@@ -48,10 +49,10 @@ export default function SwarmMissionIntelCoverage() {
     setError('');
     try {
       const [swarmRes, kbRes, scenRes, contRes] = await Promise.all([
-        fetch(`${API}/entities/SwarmJob`),
-        fetch(`${API}/knowledge/`),
-        fetch(`${API}/v1/scenario/list`),
-        fetch(`${API}/entities/Contact`),
+        fetch(`${apiBase()}/entities/SwarmJob`),
+        fetch(`${apiBase()}/knowledge/`),
+        fetch(`${apiBase()}/v1/scenario/list`),
+        fetch(`${apiBase()}/entities/Contact`),
       ]);
       const swarmJson = swarmRes.ok ? await swarmRes.json() : {};
       const kbJson    = kbRes.ok   ? await kbRes.json()    : {};
@@ -135,7 +136,7 @@ export default function SwarmMissionIntelCoverage() {
   const assess = async (jobId, context) => {
     setAssessing(jobId);
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: `Assess mission intelligence coverage for swarm job. Context: ${context}` }),
@@ -154,7 +155,7 @@ export default function SwarmMissionIntelCoverage() {
     const context = `Total jobs: ${rows.length}, Orphaned (no KB/scenario/contact): ${orphaned.length}, Coverage: ${covPct}%. Top orphaned: ${orphaned.slice(0, 3).map(r => r.job.name || r.job.title).join(', ')}`;
     setAssessing('global');
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: `Provide a 2-sentence swarm mission intelligence coverage brief. ${context}` }),

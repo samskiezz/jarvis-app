@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_MAPPED', 'CLUSTERED_ONLY', 'PLANNED_ONLY', 'UNMAPPED'];
 
@@ -80,9 +81,9 @@ export default function IntelProfileGraphCommunitiesScenario() {
     setErr(null);
     try {
       const [profilesRes, communitiesRes, scenariosRes] = await Promise.all([
-        fetch(`${API}/entities/IntelProfile`),
-        fetch(`${API}/v1/graph/communities`),
-        fetch(`${API}/v1/scenario/list`),
+        fetch(`${apiBase()}/entities/IntelProfile`),
+        fetch(`${apiBase()}/v1/graph/communities`),
+        fetch(`${apiBase()}/v1/scenario/list`),
       ]);
 
       const profilesData = profilesRes.ok ? await profilesRes.json() : {};
@@ -147,7 +148,7 @@ export default function IntelProfileGraphCommunitiesScenario() {
     setBrief('');
     try {
       const summary = `${counts.FULLY_MAPPED} fully-mapped, ${counts.CLUSTERED_ONLY} cluster-only, ${counts.PLANNED_ONLY} scenario-only, ${counts.UNMAPPED} unmapped intel profiles with no graph community or scenario coverage.`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

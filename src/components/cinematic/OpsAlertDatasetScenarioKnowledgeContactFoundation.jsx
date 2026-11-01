@@ -34,8 +34,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'GROUNDED', 'STAGED', 'PARTIAL', 'BLIND'];
@@ -158,11 +159,11 @@ export default function OpsAlertDatasetScenarioKnowledgeContactFoundation() {
       const hdrs = { Authorization: `Bearer ${API_KEY}` };
 
       const [alertsRaw, datasetsRaw, scenariosRaw, knowledgeRaw, contactsRaw] = await Promise.all([
-        fetch(`${API}/v1/ops/alerts`,       { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/v1/datasets`,         { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/v1/scenario/list`,    { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/knowledge/`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/entities/Contact`,    { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/ops/alerts`,       { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/datasets`,         { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/scenario/list`,    { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/knowledge/`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/entities/Contact`,    { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
       ]);
 
       const alerts    = normalizeAlerts(alertsRaw);
@@ -276,7 +277,7 @@ export default function OpsAlertDatasetScenarioKnowledgeContactFoundation() {
     setAssessing(true);
     setAssessment('');
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method:  'POST',
         headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body:    JSON.stringify({ message: buildOdskfcScript() }),

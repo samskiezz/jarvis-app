@@ -19,8 +19,9 @@
  * Auto-refresh: 60 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'IMPACTED', 'MONITORED', 'RELEVANT', 'NEUTRAL'];
@@ -102,9 +103,9 @@ export default function LiveIntelContactInvestmentNexus() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [intelRes, conRes, invRes] = await Promise.all([
-        fetch(`${API}/functions/getLiveIntel`, { headers: h }),
-        fetch(`${API}/entities/Contact`,       { headers: h }),
-        fetch(`${API}/entities/Investment`,    { headers: h }),
+        fetch(`${apiBase()}/functions/getLiveIntel`, { headers: h }),
+        fetch(`${apiBase()}/entities/Contact`,       { headers: h }),
+        fetch(`${apiBase()}/entities/Investment`,    { headers: h }),
       ]);
       const [intelRaw, conRaw, invRaw] = await Promise.all([
         intelRes.ok ? intelRes.json() : {},
@@ -152,7 +153,7 @@ export default function LiveIntelContactInvestmentNexus() {
     rows.forEach(r => { if (counts[r._cls] !== undefined) counts[r._cls]++; });
     const prompt = `Live Intel × Contact × Investment impact nexus assessment: ${rows.length} live events assessed across ${contactCount} contacts and ${investCount} investments. ${counts.IMPACTED} events are fully IMPACTED — matching both known contacts and portfolio investments. ${counts.MONITORED} events have personnel coverage only (no tracked investment exposure). ${counts.RELEVANT} events affect portfolio holdings but have no personnel match. ${counts.NEUTRAL} events are unconnected background noise. Assess the highest-priority impact events, identify any critical asset or personnel exposure, and recommend immediate response priorities.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

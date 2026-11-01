@@ -25,8 +25,9 @@
  * Mounted in src/App.jsx.
  */
 import { useEffect, useRef, useState } from "react";
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL ?? "";
+// API base resolved via apiBase()
 const CY = "#29E7FF";
 const AM = "#FFB340";
 const RD = "#FF4444";
@@ -112,8 +113,8 @@ export default function TaskRiskCorrelation() {
     setErr(null);
     try {
       const [tr, rr] = await Promise.all([
-        fetch(`${API}/entities/Task`),
-        fetch(`${API}/entities/RiskSignal`),
+        fetch(`${apiBase()}/entities/Task`),
+        fetch(`${apiBase()}/entities/RiskSignal`),
       ]);
       const [td, rd] = await Promise.all([tr.json(), rr.json()]);
       const tasks = Array.isArray(td) ? td : (td.items ?? td.results ?? []);
@@ -145,7 +146,7 @@ export default function TaskRiskCorrelation() {
     setAssessText("");
     const script = buildTaskRiskScript(rows);
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: `Briefly assess this task-risk coverage in 2 sentences: ${script}` }),
@@ -153,7 +154,7 @@ export default function TaskRiskCorrelation() {
       const d = await r.json();
       const text = d.response ?? d.message ?? d.content ?? script;
       setAssessText(text);
-      await fetch(`${API}/v1/voice/tts`, {
+      await fetch(`${apiBase()}/v1/voice/tts`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text }),

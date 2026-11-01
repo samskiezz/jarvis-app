@@ -20,8 +20,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'DOCUMENTED', 'REPORTED', 'KNOWN', 'DARK'];
@@ -98,9 +99,9 @@ export default function RiskSignalReportKnowledgeDepth() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [sigRes, rptRes, knwRes] = await Promise.all([
-        fetch(`${API}/entities/RiskSignal`, { headers: h }),
-        fetch(`${API}/v1/reports`,          { headers: h }),
-        fetch(`${API}/knowledge/`,          { headers: h }),
+        fetch(`${apiBase()}/entities/RiskSignal`, { headers: h }),
+        fetch(`${apiBase()}/v1/reports`,          { headers: h }),
+        fetch(`${apiBase()}/knowledge/`,          { headers: h }),
       ]);
       const [sigRaw, rptRaw, knwRaw] = await Promise.all([
         sigRes.ok ? sigRes.json() : [],
@@ -152,7 +153,7 @@ export default function RiskSignalReportKnowledgeDepth() {
     const darkTitles = rows.filter(r => r._cls === 'DARK').slice(0, 5).map(r => r.title).join(', ');
     const prompt = `RiskSignal × Report × Knowledge Threat Intelligence Depth assessment: ${rows.length} risk signals cross-referenced against ${reportCount} reports and ${knowledgeCount} knowledge items. ${counts.DOCUMENTED} signals are fully documented (both a report AND knowledge item). ${counts.REPORTED} are reported only (logged in a report but no knowledge synthesis exists). ${counts.KNOWN} are known only (knowledge exists but no formal report). ${counts.DARK} signals are completely dark — no documentation in either reports or knowledge base.${darkTitles ? ` Dark signals include: ${darkTitles}.` : ''} Assess the threat intelligence depth, identify which dark signals pose the greatest risk, and recommend priority documentation actions to reduce blind spots.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

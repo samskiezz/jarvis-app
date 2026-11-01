@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ALIGNED', 'INVESTED', 'SCENED', 'SHADOW'];
@@ -105,9 +106,9 @@ export default function ContactInvestmentScenarioAlignment() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [ctcRes, invRes, scnRes] = await Promise.all([
-        fetch(`${API}/entities/Contact`,   { headers: h }),
-        fetch(`${API}/entities/Investment`,{ headers: h }),
-        fetch(`${API}/v1/scenario/list`,   { headers: h }),
+        fetch(`${apiBase()}/entities/Contact`,   { headers: h }),
+        fetch(`${apiBase()}/entities/Investment`,{ headers: h }),
+        fetch(`${apiBase()}/v1/scenario/list`,   { headers: h }),
       ]);
       const [ctcRaw, invRaw, scnRaw] = await Promise.all([
         ctcRes.ok ? ctcRes.json() : [],
@@ -160,7 +161,7 @@ export default function ContactInvestmentScenarioAlignment() {
     const shadowNames = rows.filter(r => r._cls === 'SHADOW').slice(0, 5).map(r => r.name).join(', ');
     const prompt = `Contact × Investment × Scenario Strategic Alignment assessment: ${rows.length} contacts cross-referenced against ${investmentCount} investments and ${scenarioCount} scenarios. ${counts.ALIGNED} contacts are fully aligned (matched both investments AND scenarios — strategically integrated). ${counts.INVESTED} are investment-linked only (financially tied but not scenario-mapped). ${counts.SCENED} are scenario-relevant only (appear in scenarios but have no investment link). ${counts.SHADOW} contacts are completely dark — no alignment with any investment or scenario.${shadowNames ? ` Shadow contacts include: ${shadowNames}.` : ''} Assess the strategic alignment depth, identify which shadow contacts represent the highest operational risk, and recommend priority actions to reduce blind spots in the contact-investment-scenario triad.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

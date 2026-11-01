@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'PROCESSING', 'DOCUMENTED', 'ORPHAN'];
@@ -83,9 +84,9 @@ export default function DatasetSwarmKnowledgeCoverage() {
     try {
       const hdr = { Authorization: `Bearer ${API_KEY}` };
       const [dsRes, jobRes, knowRes] = await Promise.all([
-        fetch(`${API}/v1/datasets`,       { headers: hdr }),
-        fetch(`${API}/entities/SwarmJob`, { headers: hdr }),
-        fetch(`${API}/knowledge/`,        { headers: hdr }),
+        fetch(`${apiBase()}/v1/datasets`,       { headers: hdr }),
+        fetch(`${apiBase()}/entities/SwarmJob`, { headers: hdr }),
+        fetch(`${apiBase()}/knowledge/`,        { headers: hdr }),
       ]);
 
       const dsList  = await dsRes.json().catch(() => []);
@@ -151,7 +152,7 @@ export default function DatasetSwarmKnowledgeCoverage() {
     const doc     = counts.DOCUMENTED;
     const prompt  = `JARVIS dataset production coverage assessment: ${total} datasets total. ${proc} actively processing via swarm jobs, ${doc} documented in knowledge base, ${orphans} orphaned with no coverage. Provide a 2-sentence operational briefing on dataset health and the highest-priority action.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),

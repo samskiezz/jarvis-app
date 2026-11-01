@@ -32,8 +32,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'AUTHORIZED', 'STAFFED', 'CAPABLE', 'DARK'];
@@ -204,7 +205,7 @@ export default function SceneContactSkillReportMissionAuthority() {
     const total = rows.length;
     const prompt = `Scene Mission Authority audit: ${total} cinematic scenes analyzed. ${dark} DARK (no contact owner, no matching skill, no filed report — operational mission blind spots). Provide a 2-sentence advisory on which scenes to prioritize for staffing and capability grounding.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),
@@ -213,7 +214,7 @@ export default function SceneContactSkillReportMissionAuthority() {
       const text = data.response || data.message || data.content || data.text || '';
       setAssessment(text);
       if (text) {
-        fetch(`${API}/v1/voice/tts`, {
+        fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
           body: JSON.stringify({ text: text.slice(0, 400) }),

@@ -22,8 +22,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'CONVERGED', 'SENSING', 'DEGRADED', 'BLIND'];
@@ -109,9 +110,9 @@ export default function LiveIntelBrainSystemConvergence() {
     setError(null);
     try {
       const [iRes, bRes, sRes] = await Promise.all([
-        fetch(`${API}/functions/getLiveIntel`, { headers }),
-        fetch(`${API}/v1/cinematic/brain`,      { headers }),
-        fetch(`${API}/v1/jarvis/system/status`, { headers }),
+        fetch(`${apiBase()}/functions/getLiveIntel`, { headers }),
+        fetch(`${apiBase()}/v1/cinematic/brain`,      { headers }),
+        fetch(`${apiBase()}/v1/jarvis/system/status`, { headers }),
       ]);
       const [iRaw, bRaw, sRaw] = await Promise.all([
         iRes.ok ? iRes.json() : {},
@@ -235,7 +236,7 @@ export default function LiveIntelBrainSystemConvergence() {
     setAssessing(true);
     try {
       const script = buildLbconvScript();
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers,
         body: JSON.stringify({ message: script }),
       });

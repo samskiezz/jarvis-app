@@ -33,8 +33,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COMMANDING', 'NETWORKED', 'CAPABLE', 'GHOST'];
@@ -172,10 +173,10 @@ export default function ContactGraphSkillBrainCommand() {
     try {
       const h = { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` };
       const [rCt, rGr, rSk, rBr] = await Promise.all([
-        fetch(`${API}/entities/Contact`,       { headers: h }).then(r => r.ok ? r.json() : null),
-        fetch(`${API}/v1/graph/centrality`,    { headers: h }).then(r => r.ok ? r.json() : null),
-        fetch(`${API}/v1/aip/skill`,           { headers: h }).then(r => r.ok ? r.json() : null),
-        fetch(`${API}/v1/cinematic/brain`,     { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/entities/Contact`,       { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/v1/graph/centrality`,    { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/v1/aip/skill`,           { headers: h }).then(r => r.ok ? r.json() : null),
+        fetch(`${apiBase()}/v1/cinematic/brain`,     { headers: h }).then(r => r.ok ? r.json() : null),
       ]);
 
       const contacts   = normalizeContacts(rCt);
@@ -227,7 +228,7 @@ export default function ContactGraphSkillBrainCommand() {
     try {
       const h = { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` };
       const script = buildCgsbpcScript();
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: h,
         body: JSON.stringify({ message: script }),
       });
@@ -236,7 +237,7 @@ export default function ContactGraphSkillBrainCommand() {
       setAssessment(txt);
       if (txt) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST', headers: h,
             body: JSON.stringify({ text: txt.slice(0, 400) }),
           });

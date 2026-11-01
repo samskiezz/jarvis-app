@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'CONTAINED', 'TASKED', 'SIGNALED', 'OPEN'];
@@ -91,9 +92,9 @@ export default function InvestigationTaskRiskResolution() {
     setLoading(true); setError('');
     try {
       const [invRes, taskRes, riskRes] = await Promise.all([
-        fetch(`${API}/v1/investigations`, { headers }),
-        fetch(`${API}/entities/Task`, { headers }),
-        fetch(`${API}/entities/RiskSignal`, { headers }),
+        fetch(`${apiBase()}/v1/investigations`, { headers }),
+        fetch(`${apiBase()}/entities/Task`, { headers }),
+        fetch(`${apiBase()}/entities/RiskSignal`, { headers }),
       ]);
       const invData  = invRes.ok  ? await invRes.json()  : [];
       const taskData = taskRes.ok ? await taskRes.json() : [];
@@ -156,7 +157,7 @@ export default function InvestigationTaskRiskResolution() {
       `Active tasks: ${taskCount}. Risk signals: ${riskCount}. ` +
       `In two sentences, identify the most critical resolution gap and recommend the immediate triage action.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers,
         body: JSON.stringify({ message: prompt }),
       });

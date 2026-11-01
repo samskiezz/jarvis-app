@@ -33,8 +33,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ACCOUNTABLE', 'OWNED', 'PROCESSING', 'ORPHAN'];
@@ -174,10 +175,10 @@ export default function DatasetSwarmContactOpsAccountability() {
     setLoading(true); setError(null);
     try {
       const [dRes, sRes, cRes, aRes] = await Promise.all([
-        fetch(`${API}/v1/datasets`,          { headers: hdrs }),
-        fetch(`${API}/entities/SwarmJob`,    { headers: hdrs }),
-        fetch(`${API}/entities/Contact`,     { headers: hdrs }),
-        fetch(`${API}/v1/ops/alerts`,        { headers: hdrs }),
+        fetch(`${apiBase()}/v1/datasets`,          { headers: hdrs }),
+        fetch(`${apiBase()}/entities/SwarmJob`,    { headers: hdrs }),
+        fetch(`${apiBase()}/entities/Contact`,     { headers: hdrs }),
+        fetch(`${apiBase()}/v1/ops/alerts`,        { headers: hdrs }),
       ]);
       const [dRaw, sRaw, cRaw, aRaw] = await Promise.all([
         dRes.ok ? dRes.json() : [],
@@ -222,7 +223,7 @@ export default function DatasetSwarmContactOpsAccountability() {
     });
     setAssessing(true); setAssessment('');
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: hdrs,
         body: JSON.stringify({ message: script }),
       });

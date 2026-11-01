@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_AUTOMATED', 'SKILL_BACKED', 'ALERT_DRIVEN', 'UNAUTOMATED'];
 
@@ -44,9 +45,9 @@ export default function SwarmJobAipSkillAlertNexus() {
     setErr(null);
     try {
       const [sjRes, asRes, alRes] = await Promise.all([
-        fetch(`${API}/entities/SwarmJob?limit=200`),
-        fetch(`${API}/v1/aip/skill`),
-        fetch(`${API}/v1/ops/alerts`),
+        fetch(`${apiBase()}/entities/SwarmJob?limit=200`),
+        fetch(`${apiBase()}/v1/aip/skill`),
+        fetch(`${apiBase()}/v1/ops/alerts`),
       ]);
       const sjData = sjRes.ok ? await sjRes.json() : {};
       const asData = asRes.ok ? await asRes.json() : {};
@@ -148,7 +149,7 @@ export default function SwarmJobAipSkillAlertNexus() {
     setBrief('');
     try {
       const ctx = `SwarmJobs:${stats.total} AIPSkills:referenced AlertsLinked:referenced FullyAutomated:${stats.fullyAuto} SkillBacked:${stats.skillOnly} AlertDriven:${stats.alertOnly} Unautomated:${stats.unautomated} AUTO%:${autoPct}`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: `SOARNEX assessment: ${ctx}. In 2 sentences, assess swarm job automation coverage and identify the highest-priority unautomated gap.` }),

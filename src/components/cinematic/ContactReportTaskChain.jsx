@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ACTIVE', 'TRACKED', 'BRIEFED', 'DARK'];
@@ -84,9 +85,9 @@ export default function ContactReportTaskChain() {
     setLoading(true); setError('');
     try {
       const [cRes, rRes, tRes] = await Promise.all([
-        fetch(`${API}/entities/Contact`, { headers }),
-        fetch(`${API}/v1/reports`, { headers }),
-        fetch(`${API}/entities/Task`, { headers }),
+        fetch(`${apiBase()}/entities/Contact`, { headers }),
+        fetch(`${apiBase()}/v1/reports`, { headers }),
+        fetch(`${apiBase()}/entities/Task`, { headers }),
       ]);
       const cData = cRes.ok ? await cRes.json() : [];
       const rData = rRes.ok ? await rRes.json() : [];
@@ -148,7 +149,7 @@ export default function ContactReportTaskChain() {
       `Reports in corpus: ${reportCount}. Active tasks: ${taskCount}. ` +
       `In two sentences, identify the intelligence coverage gap and recommend immediate action.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers,
         body: JSON.stringify({ message: prompt }),
       });

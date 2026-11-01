@@ -22,8 +22,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'RESPONDING', 'TASKED', 'ALERTED', 'UNTRACKED'];
@@ -132,9 +133,9 @@ export default function LiveIntelTaskOpsAlertThreatResponse() {
     try {
       const hdrs = { Authorization: `Bearer ${API_KEY}` };
       const [intelRaw, taskRaw, alertRaw] = await Promise.all([
-        fetch(`${API}/functions/getLiveIntel`, { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/entities/Task`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/v1/ops/alerts`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/functions/getLiveIntel`, { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/entities/Task`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/ops/alerts`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
       ]);
 
       const liveEvents = extractLiveEvents(intelRaw);
@@ -196,7 +197,7 @@ export default function LiveIntelTaskOpsAlertThreatResponse() {
     setAssessment('');
     try {
       const hdrs = { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: hdrs,
         body: JSON.stringify({ message: buildLtorcaScript() }),
       });

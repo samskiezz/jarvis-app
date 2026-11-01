@@ -34,8 +34,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'MANAGED', 'ALERTED', 'TRACKED', 'UNMANAGED'];
@@ -166,10 +167,10 @@ export default function LiveIntelOpsCrisisManagementNetwork() {
     setLoading(true); setErr(null);
     try {
       const [liRes, alRes, invRes, conRes] = await Promise.all([
-        fetch(`${API}/functions/getLiveIntel`, { headers }).then(r => r.ok ? r.json() : {}),
-        fetch(`${API}/v1/ops/alerts`,           { headers }).then(r => r.ok ? r.json() : []),
-        fetch(`${API}/v1/investigations`,        { headers }).then(r => r.ok ? r.json() : []),
-        fetch(`${API}/entities/Contact`,         { headers }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/functions/getLiveIntel`, { headers }).then(r => r.ok ? r.json() : {}),
+        fetch(`${apiBase()}/v1/ops/alerts`,           { headers }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/v1/investigations`,        { headers }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/entities/Contact`,         { headers }).then(r => r.ok ? r.json() : []),
       ]);
 
       const rawAlerts   = normalizeAlerts(alRes);
@@ -237,7 +238,7 @@ export default function LiveIntelOpsCrisisManagementNetwork() {
     setAssessing(true); setAssessment('');
     const script = buildLicmnScript(categories);
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { ...headers, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: script }),

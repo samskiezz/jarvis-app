@@ -34,8 +34,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'OWNED', 'PARTIAL', 'ISOLATED'];
@@ -161,11 +162,11 @@ export default function SwarmDatasetContactRiskReportChain() {
       const hdrs = { Authorization: `Bearer ${API_KEY}` };
 
       const [jobsRaw, datasetsRaw, contactsRaw, signalsRaw, reportsRaw] = await Promise.all([
-        fetch(`${API}/entities/SwarmJob`,   { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/v1/datasets`,         { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/entities/Contact`,    { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/entities/RiskSignal`, { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/v1/reports`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/entities/SwarmJob`,   { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/datasets`,         { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/entities/Contact`,    { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/entities/RiskSignal`, { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/reports`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
       ]);
 
       const jobs     = normalizeSwarmJobs(jobsRaw);
@@ -275,7 +276,7 @@ export default function SwarmDatasetContactRiskReportChain() {
     setAssessing(true);
     setAssessment('');
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method:  'POST',
         headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body:    JSON.stringify({ message: buildSdcrrScript() }),

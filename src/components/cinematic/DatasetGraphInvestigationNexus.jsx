@@ -20,8 +20,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ANCHORED', 'TRACED', 'DATAED', 'DARK'];
@@ -102,9 +103,9 @@ export default function DatasetGraphInvestigationNexus() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [dsRes, grRes, invRes] = await Promise.all([
-        fetch(`${API}/v1/datasets`,          { headers: h }),
-        fetch(`${API}/v1/graph/centrality`,  { headers: h }),
-        fetch(`${API}/v1/investigations`,    { headers: h }),
+        fetch(`${apiBase()}/v1/datasets`,          { headers: h }),
+        fetch(`${apiBase()}/v1/graph/centrality`,  { headers: h }),
+        fetch(`${apiBase()}/v1/investigations`,    { headers: h }),
       ]);
       const [dsRaw, grRaw, invRaw] = await Promise.all([
         dsRes.ok  ? dsRes.json()  : [],
@@ -156,7 +157,7 @@ export default function DatasetGraphInvestigationNexus() {
     const darkNames = rows.filter(r => r._cls === 'DARK').slice(0, 5).map(r => r.name).join(', ');
     const prompt = `Dataset × Graph × Investigation Evidence Network: ${rows.length} datasets cross-referenced against ${nodeCount} graph centrality nodes and ${invCount} open investigations. ${counts.ANCHORED} datasets are ANCHORED (present in both the graph and an investigation — fully networked evidence). ${counts.TRACED} are TRACED (in the graph but no investigation — graph-visible but not under active inquiry). ${counts.DATAED} are DATAED (in an investigation but absent from the graph — case exists but not graph-integrated). ${counts.DARK} datasets are DARK — no graph presence and no investigation linkage whatsoever, representing potential blind spots in the evidence network.${darkNames ? ` Dark datasets include: ${darkNames}.` : ''} Assess the overall evidence network coverage, identify which dark datasets pose the highest intelligence risk, and recommend priority actions to anchor them into the knowledge graph or open investigations.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_SUPPORTED', 'SKILL_ONLY', 'KB_ONLY', 'DARK'];
 
@@ -37,9 +38,9 @@ export default function AlertAipKnowledgeNexus() {
     setErr(null);
     try {
       const [alRes, skRes, kbRes] = await Promise.all([
-        fetch(`${API}/v1/alerts?status=open&limit=100`),
-        fetch(`${API}/v1/aip/skill`),
-        fetch(`${API}/knowledge/`),
+        fetch(`${apiBase()}/v1/alerts?status=open&limit=100`),
+        fetch(`${apiBase()}/v1/aip/skill`),
+        fetch(`${apiBase()}/knowledge/`),
       ]);
       const alData = alRes.ok ? await alRes.json() : {};
       const skData = skRes.ok ? await skRes.json() : {};
@@ -132,7 +133,7 @@ export default function AlertAipKnowledgeNexus() {
     setBrief('');
     try {
       const summary = `${counts.FULLY_SUPPORTED} alerts fully supported (skill+KB), ${counts.SKILL_ONLY} skill-only, ${counts.KB_ONLY} KB-only, ${counts.DARK} dark (no skill or KB coverage).`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

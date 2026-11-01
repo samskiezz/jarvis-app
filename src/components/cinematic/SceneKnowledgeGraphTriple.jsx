@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const TABS = ['ALL', 'FULLY_GROUNDED', 'KB_ONLY', 'GRAPH_ONLY', 'THEORETICAL'];
 const SCENE_IDS = ['01_command_atrium','02_neural_core','03_threat_theatre','04_mission_ops',
   '05_data_vault','06_comms_hub','07_analytics_bay','08_sovereign_grid','09_deep_research','10_executive_bridge'];
@@ -76,9 +77,9 @@ export default function SceneKnowledgeGraphTriple() {
     setErr(null);
     try {
       const [kbRes, graphRes, ...sceneResults] = await Promise.all([
-        fetch(`${API}/knowledge/`),
-        fetch(`${API}/v1/graph/centrality`),
-        ...SCENE_IDS.map(id => fetch(`${API}/v1/cinematic/scene/${id}`).then(r => r.ok ? r.json() : null).catch(() => null)),
+        fetch(`${apiBase()}/knowledge/`),
+        fetch(`${apiBase()}/v1/graph/centrality`),
+        ...SCENE_IDS.map(id => fetch(`${apiBase()}/v1/cinematic/scene/${id}`).then(r => r.ok ? r.json() : null).catch(() => null)),
       ]);
 
       const kbData = kbRes.ok ? await kbRes.json() : {};
@@ -141,7 +142,7 @@ export default function SceneKnowledgeGraphTriple() {
     setBrief('');
     try {
       const summary = `Cinematic scene coverage: ${counts.FULLY_GROUNDED} fully grounded (KB + graph), ${counts.KB_ONLY} KB-only, ${counts.GRAPH_ONLY} graph-only, ${counts.THEORETICAL} theoretical (no coverage).`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

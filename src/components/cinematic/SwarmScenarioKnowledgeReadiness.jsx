@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'READY', 'OPERATIONAL', 'PLANNED', 'BLIND'];
@@ -86,9 +87,9 @@ export default function SwarmScenarioKnowledgeReadiness() {
     setError(null);
     try {
       const [jRes, sRes, kRes] = await Promise.all([
-        fetch(`${API}/entities/SwarmJob`,    { headers }),
-        fetch(`${API}/v1/scenario/list`,     { headers }),
-        fetch(`${API}/knowledge/`,           { headers }),
+        fetch(`${apiBase()}/entities/SwarmJob`,    { headers }),
+        fetch(`${apiBase()}/v1/scenario/list`,     { headers }),
+        fetch(`${apiBase()}/knowledge/`,           { headers }),
       ]);
       const [jRaw, sRaw, kRaw] = await Promise.all([
         jRes.ok ? jRes.json() : {},
@@ -143,7 +144,7 @@ export default function SwarmScenarioKnowledgeReadiness() {
     setAssessing(true);
     try {
       const script = buildSwskrdyScript();
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers,
         body: JSON.stringify({ message: script }),
       });

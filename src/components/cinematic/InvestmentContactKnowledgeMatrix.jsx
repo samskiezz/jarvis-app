@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'TRACKED', 'LINKED', 'DOCUMENTED', 'ORPHAN'];
@@ -83,9 +84,9 @@ export default function InvestmentContactKnowledgeMatrix() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [invRes, ctRes, knRes] = await Promise.all([
-        fetch(`${API}/entities/Investment`, { headers: h }),
-        fetch(`${API}/entities/Contact`,    { headers: h }),
-        fetch(`${API}/knowledge/`,          { headers: h }),
+        fetch(`${apiBase()}/entities/Investment`, { headers: h }),
+        fetch(`${apiBase()}/entities/Contact`,    { headers: h }),
+        fetch(`${apiBase()}/knowledge/`,          { headers: h }),
       ]);
       const [invData, ctData, knData] = await Promise.all([
         invRes.ok ? invRes.json() : [],
@@ -131,7 +132,7 @@ export default function InvestmentContactKnowledgeMatrix() {
     rows.forEach(r => { if (counts[r._cls] !== undefined) counts[r._cls]++; });
     const prompt = `Investment intelligence coverage: ${rows.length} investments total — ${counts.TRACKED} fully tracked (contact+knowledge), ${counts.LINKED} contact-linked only, ${counts.DOCUMENTED} knowledge-documented only, ${counts.ORPHAN} orphan (no intelligence links). Assess coverage quality and identify the most critical orphan investments to address.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

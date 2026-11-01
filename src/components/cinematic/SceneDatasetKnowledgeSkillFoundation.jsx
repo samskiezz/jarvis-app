@@ -32,8 +32,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const SCENE_IDS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
@@ -189,7 +190,7 @@ export default function SceneDatasetKnowledgeSkillFoundation() {
     const summary = `Scenes: ${rows.length}. Operational: ${counts.OPERATIONAL}. Equipped: ${counts.EQUIPPED}. Aware: ${counts.AWARE}. Dark: ${counts.DARK}.`;
     const prompt = `JARVIS scene operational foundation audit: ${summary}. Identify the most critical dark scenes — those with zero dataset backing, no knowledge grounding, and no skill support. Provide a 2-sentence advisory on the deepest operational blind spots and priority actions to ground the unanchored scenes.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -198,7 +199,7 @@ export default function SceneDatasetKnowledgeSkillFoundation() {
       const text = d.response || d.message || d.content || JSON.stringify(d);
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 400) }),

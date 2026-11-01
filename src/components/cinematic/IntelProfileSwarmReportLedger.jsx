@@ -20,8 +20,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'EXECUTING', 'SWARMED', 'FILED', 'SHADOW'];
@@ -107,9 +108,9 @@ export default function IntelProfileSwarmReportLedger() {
     setLoading(true);
     try {
       const [profRes, jobsRes, repsRes] = await Promise.all([
-        fetch(`${API}/entities/IntelProfile`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/entities/SwarmJob`,     { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/v1/reports`,            { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/entities/IntelProfile`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/entities/SwarmJob`,     { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/reports`,            { headers: { Authorization: `Bearer ${API_KEY}` } }),
       ]);
       const [profRaw, jobsRaw, repsRaw] = await Promise.all([
         profRes.ok ? profRes.json() : {},
@@ -161,7 +162,7 @@ export default function IntelProfileSwarmReportLedger() {
     const executingCount = rows.filter(r => r.cls === 'EXECUTING').length;
     const prompt = `Jarvis, I have ${rows.length} intel profiles. ${shadowCount} are SHADOW (no swarm job or report — dormant with no execution trail). ${executingCount} are EXECUTING (active swarm job AND filed report). Provide a 2-sentence operational advisory on activating dormant profiles and ensuring all active swarm executions are documented in filed reports.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -171,7 +172,7 @@ export default function IntelProfileSwarmReportLedger() {
       setAssessment(text);
       if (text) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
             body: JSON.stringify({ text, voice: 'ash' }),

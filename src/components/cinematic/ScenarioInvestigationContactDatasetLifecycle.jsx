@@ -31,8 +31,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COMPLETE', 'TRACKED', 'STAFFED', 'DARK'];
@@ -185,7 +186,7 @@ export default function ScenarioInvestigationContactDatasetLifecycle() {
     const complete = rows.filter(r => r.cls === 'COMPLETE').length;
     const prompt  = `JARVIS mission lifecycle audit: ${rows.length} scenarios — ${complete} COMPLETE, ${dark} DARK (lifecycle blind spots). Top dark scenarios: ${rows.filter(r => r.cls === 'DARK').slice(0, 3).map(r => r.name).join(', ') || 'none'}. Provide a 2-sentence operational advisory.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -194,7 +195,7 @@ export default function ScenarioInvestigationContactDatasetLifecycle() {
       const answer = (d.answer || '').replace(/<<ACTION:[^>]*>>/g, '').trim();
       setAssessment(answer);
       try {
-        const tr = await fetch(`${API}/v1/voice/tts`, {
+        const tr = await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: answer }),

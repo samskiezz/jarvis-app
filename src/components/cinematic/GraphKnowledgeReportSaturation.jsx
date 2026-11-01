@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'SATURATED', 'KNOWN', 'REPORTED', 'DARK'];
@@ -93,9 +94,9 @@ export default function GraphKnowledgeReportSaturation() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [grRes, knRes, rpRes] = await Promise.all([
-        fetch(`${API}/v1/graph/centrality`, { headers: h }),
-        fetch(`${API}/knowledge/`,          { headers: h }),
-        fetch(`${API}/v1/reports`,          { headers: h }),
+        fetch(`${apiBase()}/v1/graph/centrality`, { headers: h }),
+        fetch(`${apiBase()}/knowledge/`,          { headers: h }),
+        fetch(`${apiBase()}/v1/reports`,          { headers: h }),
       ]);
       const [grRaw, knRaw, rpRaw] = await Promise.all([
         grRes.ok ? grRes.json() : [],
@@ -147,7 +148,7 @@ export default function GraphKnowledgeReportSaturation() {
     const darkNames = rows.filter(r => r._cls === 'DARK').slice(0, 5).map(r => r.name).join(', ');
     const prompt = `Graph × Knowledge × Report Intelligence Saturation: ${rows.length} graph centrality nodes cross-referenced against ${knowledgeCount} knowledge articles and ${reportCount} intelligence reports. ${counts.SATURATED} nodes are SATURATED (covered by both knowledge and reports — fully documented). ${counts.KNOWN} are KNOWN (have knowledge articles but no intelligence reports — documented but not yet operationally reported). ${counts.REPORTED} are REPORTED (appear in intelligence reports but lack knowledge base entries — operationally active but undocumented). ${counts.DARK} nodes are DARK — no knowledge articles and no reports, representing the highest intelligence blind spots in the graph.${darkNames ? ` Dark nodes include: ${darkNames}.` : ''} Assess the overall intelligence saturation of the knowledge graph, identify which dark nodes are highest-centrality (most influential) and therefore highest priority to document, and recommend actions to close the knowledge and reporting gaps.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ATTRIBUTED', 'PROFILED', 'TRACED', 'DARK'];
@@ -89,9 +90,9 @@ export default function OpsAlertIntelProfileGraphThreatNetwork() {
     try {
       const hdrs = { Authorization: `Bearer ${API_KEY}` };
       const [aRes, pRes, gRes] = await Promise.all([
-        fetch(`${API}/v1/ops/alerts`, { headers: hdrs }).catch(() => null),
-        fetch(`${API}/entities/IntelProfile`, { headers: hdrs }).catch(() => null),
-        fetch(`${API}/v1/graph/centrality`, { headers: hdrs }).catch(() => null),
+        fetch(`${apiBase()}/v1/ops/alerts`, { headers: hdrs }).catch(() => null),
+        fetch(`${apiBase()}/entities/IntelProfile`, { headers: hdrs }).catch(() => null),
+        fetch(`${apiBase()}/v1/graph/centrality`, { headers: hdrs }).catch(() => null),
       ]);
 
       const aJson = aRes?.ok ? await aRes.json().catch(() => ({})) : {};
@@ -171,7 +172,7 @@ export default function OpsAlertIntelProfileGraphThreatNetwork() {
     setAssessing(true);
     try {
       const script = buildOagnetScript();
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: script }),

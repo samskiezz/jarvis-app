@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'SECURED', 'SCRIPTED', 'SIGNALED', 'EXPOSED'];
@@ -93,9 +94,9 @@ export default function DatasetScenarioRiskThreatExposure() {
     try {
       const hdrs = { Authorization: `Bearer ${API_KEY}` };
       const [dsRaw, scRaw, rsRaw] = await Promise.all([
-        fetch(`${API}/v1/datasets`,         { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/v1/scenario/list`,     { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/entities/RiskSignal`,  { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/datasets`,         { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/scenario/list`,     { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/entities/RiskSignal`,  { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
       ]);
 
       const datasets  = normalizeArray(dsRaw, ['items','datasets','results','data']);
@@ -165,7 +166,7 @@ export default function DatasetScenarioRiskThreatExposure() {
     setAssessment('');
     try {
       const hdrs = { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: hdrs,
         body: JSON.stringify({ message: buildDsrtxScript() }),
       });

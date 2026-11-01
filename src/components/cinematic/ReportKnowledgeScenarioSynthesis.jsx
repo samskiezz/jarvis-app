@@ -20,8 +20,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'SYNTHESIZED', 'SCRIPTED', 'PUBLISHED', 'RAW'];
@@ -93,9 +94,9 @@ export default function ReportKnowledgeScenarioSynthesis() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [rptRes, knwRes, scnRes] = await Promise.all([
-        fetch(`${API}/v1/reports`,       { headers: h }),
-        fetch(`${API}/knowledge/`,       { headers: h }),
-        fetch(`${API}/v1/scenario/list`, { headers: h }),
+        fetch(`${apiBase()}/v1/reports`,       { headers: h }),
+        fetch(`${apiBase()}/knowledge/`,       { headers: h }),
+        fetch(`${apiBase()}/v1/scenario/list`, { headers: h }),
       ]);
       const [rptRaw, knwRaw, scnRaw] = await Promise.all([
         rptRes.ok ? rptRes.json() : [],
@@ -147,7 +148,7 @@ export default function ReportKnowledgeScenarioSynthesis() {
     const rawTitles = rows.filter(r => r._cls === 'RAW').slice(0, 5).map(r => r.title).join(', ');
     const prompt = `Report × Knowledge × Scenario Intelligence Synthesis assessment: ${rows.length} reports cross-referenced against ${knowledgeCount} knowledge items and ${scenarioCount} scenarios. ${counts.SYNTHESIZED} reports are fully synthesized (knowledge + scenario). ${counts.SCRIPTED} are scripted only (scenario linked, no knowledge). ${counts.PUBLISHED} are published only (knowledge exists, no scenario). ${counts.RAW} reports are raw — no knowledge or scenario linkage. ${rawTitles ? `Raw reports: ${rawTitles}.` : ''} Assess the intelligence synthesis coverage, identify the most critical raw reports, and recommend which knowledge items or scenarios should be created to close the synthesis gap.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

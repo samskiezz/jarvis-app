@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ATTRIBUTED', 'SKILLED', 'LINKED', 'UNKNOWN'];
@@ -108,9 +109,9 @@ export default function ReportSkillContactCoverage() {
     setLoading(true);
     try {
       const [repRes, sklRes, cntRes] = await Promise.all([
-        fetch(`${API}/v1/reports`,      { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/v1/aip/skill`,    { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/entities/Contact`,{ headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/reports`,      { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/aip/skill`,    { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/entities/Contact`,{ headers: { Authorization: `Bearer ${API_KEY}` } }),
       ]);
       const [repRaw, sklRaw, cntRaw] = await Promise.all([
         repRes.ok ? repRes.json() : {},
@@ -162,7 +163,7 @@ export default function ReportSkillContactCoverage() {
     const attributedCount = rows.filter(r => r.cls === 'ATTRIBUTED').length;
     const prompt = `Jarvis, I have ${rows.length} reports. ${unknownCount} are UNKNOWN (no matching skill or contact). ${attributedCount} are fully ATTRIBUTED. Provide a 2-sentence operational advisory on improving report authorship coverage and reducing orphaned reports.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -172,7 +173,7 @@ export default function ReportSkillContactCoverage() {
       setAssessment(text);
       if (text) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
             body: JSON.stringify({ text, voice: 'ash' }),

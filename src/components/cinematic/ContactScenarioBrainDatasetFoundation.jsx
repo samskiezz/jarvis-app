@@ -32,8 +32,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ANCHORED', 'SCENED', 'MODELED', 'GHOST'];
@@ -203,7 +204,7 @@ export default function ContactScenarioBrainDatasetFoundation() {
     const summary = `Contacts: ${rows.length}. Anchored: ${counts.ANCHORED}. Scened: ${counts.SCENED}. Modeled: ${counts.MODELED}. Ghost: ${counts.GHOST}.`;
     const prompt = `JARVIS contact mission intelligence foundation audit: ${summary}. Identify the most critical ghost contacts — those with no scenario, no brain model, and no dataset grounding — operational blind spots in the mission network. Provide a 2-sentence advisory on the deepest coverage gaps and priority actions to integrate isolated contacts into the intelligence foundation.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -212,7 +213,7 @@ export default function ContactScenarioBrainDatasetFoundation() {
       const text = d.response || d.message || d.content || JSON.stringify(d);
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 400) }),

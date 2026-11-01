@@ -33,8 +33,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'MANAGED', 'PARTIAL', 'BLIND'];
@@ -177,10 +178,10 @@ export default function OpsAlertScenarioContactSkillDefence() {
     setLoading(true); setError(null);
     try {
       const [aRes, sRes, cRes, skRes] = await Promise.all([
-        fetch(`${API}/v1/ops/alerts`,      { headers: hdrs }),
-        fetch(`${API}/v1/scenario/list`,   { headers: hdrs }),
-        fetch(`${API}/entities/Contact`,   { headers: hdrs }),
-        fetch(`${API}/v1/aip/skill`,       { headers: hdrs }),
+        fetch(`${apiBase()}/v1/ops/alerts`,      { headers: hdrs }),
+        fetch(`${apiBase()}/v1/scenario/list`,   { headers: hdrs }),
+        fetch(`${apiBase()}/entities/Contact`,   { headers: hdrs }),
+        fetch(`${apiBase()}/v1/aip/skill`,       { headers: hdrs }),
       ]);
       const [aRaw, sRaw, cRaw, skRaw] = await Promise.all([
         aRes.ok  ? aRes.json()  : [],
@@ -225,7 +226,7 @@ export default function OpsAlertScenarioContactSkillDefence() {
     });
     setAssessing(true); setAssessment('');
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: hdrs,
         body: JSON.stringify({ message: script }),
       });

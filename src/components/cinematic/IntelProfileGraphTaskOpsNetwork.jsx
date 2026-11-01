@@ -32,8 +32,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COMMANDING', 'ACTIVE', 'PARTIAL', 'DARK'];
@@ -180,10 +181,10 @@ export default function IntelProfileGraphTaskOpsNetwork() {
     setErr('');
     try {
       const [pRaw, gRaw, tRaw, aRaw] = await Promise.all([
-        safeFetch(`${API}/entities/IntelProfile`),
-        safeFetch(`${API}/v1/graph/centrality`),
-        safeFetch(`${API}/entities/Task`),
-        safeFetch(`${API}/v1/ops/alerts`),
+        safeFetch(`${apiBase()}/entities/IntelProfile`),
+        safeFetch(`${apiBase()}/v1/graph/centrality`),
+        safeFetch(`${apiBase()}/entities/Task`),
+        safeFetch(`${apiBase()}/v1/ops/alerts`),
       ]);
       const pArr = normalizeProfiles(pRaw);
       const gArr = normalizeGraph(gRaw);
@@ -238,7 +239,7 @@ export default function IntelProfileGraphTaskOpsNetwork() {
     setAssess('');
     try {
       const script = buildIgtoaScript(counts);
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: hdr(),
         body: JSON.stringify({ message: script }),
@@ -247,7 +248,7 @@ export default function IntelProfileGraphTaskOpsNetwork() {
       const text = j?.response || j?.message || j?.result || 'No assessment returned.';
       setAssess(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST', headers: hdr(),
           body: JSON.stringify({ text: text.slice(0, 400) }),
         });

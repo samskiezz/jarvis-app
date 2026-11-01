@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'CLOSED', 'INVESTIGATED', 'REPORTED', 'OPEN'];
@@ -83,9 +84,9 @@ export default function ScenarioInvestigationReportClosure() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [scRes, invRes, repRes] = await Promise.all([
-        fetch(`${API}/v1/scenario/list`,   { headers: h }),
-        fetch(`${API}/v1/investigations`,  { headers: h }),
-        fetch(`${API}/v1/reports`,         { headers: h }),
+        fetch(`${apiBase()}/v1/scenario/list`,   { headers: h }),
+        fetch(`${apiBase()}/v1/investigations`,  { headers: h }),
+        fetch(`${apiBase()}/v1/reports`,         { headers: h }),
       ]);
       const [scData, invData, repData] = await Promise.all([
         scRes.ok  ? scRes.json()  : [],
@@ -131,7 +132,7 @@ export default function ScenarioInvestigationReportClosure() {
     rows.forEach(r => { if (counts[r._cls] !== undefined) counts[r._cls]++; });
     const prompt = `Mission closure audit: ${rows.length} scenarios total — ${counts.CLOSED} fully closed (investigation+report), ${counts.INVESTIGATED} investigation-only (no report), ${counts.REPORTED} report-only (no investigation), ${counts.OPEN} completely open (no intelligence coverage). Assess mission closure quality and identify the most critical open scenarios requiring immediate investigation or reporting.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

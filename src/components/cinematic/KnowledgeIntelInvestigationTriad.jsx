@@ -20,8 +20,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COMPLETE', 'PROFILED', 'FILED', 'UNANCHORED'];
@@ -85,9 +86,9 @@ export default function KnowledgeIntelInvestigationTriad() {
     try {
       const hdr = { Authorization: `Bearer ${API_KEY}` };
       const [knowRes, profRes, invRes] = await Promise.all([
-        fetch(`${API}/knowledge/`,               { headers: hdr }),
-        fetch(`${API}/entities/IntelProfile`,    { headers: hdr }),
-        fetch(`${API}/v1/investigations`,        { headers: hdr }),
+        fetch(`${apiBase()}/knowledge/`,               { headers: hdr }),
+        fetch(`${apiBase()}/entities/IntelProfile`,    { headers: hdr }),
+        fetch(`${apiBase()}/v1/investigations`,        { headers: hdr }),
       ]);
 
       const knowRaw = await knowRes.json().catch(() => []);
@@ -155,7 +156,7 @@ export default function KnowledgeIntelInvestigationTriad() {
     const unanchored = counts.UNANCHORED;
     const prompt = `JARVIS knowledge traceability assessment: ${total} knowledge articles total. ${complete} fully traced (linked to both intel profiles and investigations), ${profiled} profiled only, ${filed} filed only, ${unanchored} unanchored with no traceability. Provide a 2-sentence operational briefing on knowledge coverage and the highest-priority action.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),

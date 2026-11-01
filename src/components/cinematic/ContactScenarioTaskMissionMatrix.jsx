@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ACTIVE', 'SCENED', 'TASKED', 'SHADOW'];
@@ -103,9 +104,9 @@ export default function ContactScenarioTaskMissionMatrix() {
     try {
       const h = { Authorization: `Bearer ${API_KEY}` };
       const [cRes, sRes, tRes] = await Promise.all([
-        fetch(`${API}/entities/Contact`, { headers: h }),
-        fetch(`${API}/v1/scenario/list`, { headers: h }),
-        fetch(`${API}/entities/Task`,    { headers: h }),
+        fetch(`${apiBase()}/entities/Contact`, { headers: h }),
+        fetch(`${apiBase()}/v1/scenario/list`, { headers: h }),
+        fetch(`${apiBase()}/entities/Task`,    { headers: h }),
       ]);
       const [cRaw, sRaw, tRaw] = await Promise.all([
         cRes.ok ? cRes.json() : {},
@@ -153,7 +154,7 @@ export default function ContactScenarioTaskMissionMatrix() {
     const shadowCount = rows.filter(r => r._cls === 'SHADOW').length;
     const prompt = `Mission Activation Matrix: ${rows.length} contacts cross-referenced against ${scenCount} scenarios and ${taskCount} tasks. ACTIVE:${rows.filter(r=>r._cls==='ACTIVE').length} SCENED:${rows.filter(r=>r._cls==='SCENED').length} TASKED:${rows.filter(r=>r._cls==='TASKED').length} SHADOW:${shadowCount}. Provide a 2-sentence strategic assessment of mission activation coverage and which shadow contacts warrant immediate tasking.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -163,7 +164,7 @@ export default function ContactScenarioTaskMissionMatrix() {
       setAssessment(answer);
       if (answer) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: answer }),
           });

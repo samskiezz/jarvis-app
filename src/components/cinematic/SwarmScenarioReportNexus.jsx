@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_DOCUMENTED', 'SCENARIO_ONLY', 'REPORT_ONLY', 'DARK'];
 
@@ -37,9 +38,9 @@ export default function SwarmScenarioReportNexus() {
     setErr(null);
     try {
       const [jobsRes, scenRes, rptRes] = await Promise.all([
-        fetch(`${API}/entities/SwarmJob`),
-        fetch(`${API}/v1/scenario/list`),
-        fetch(`${API}/v1/reports`),
+        fetch(`${apiBase()}/entities/SwarmJob`),
+        fetch(`${apiBase()}/v1/scenario/list`),
+        fetch(`${apiBase()}/v1/reports`),
       ]);
       const jobsData = jobsRes.ok ? await jobsRes.json() : {};
       const scenData = scenRes.ok ? await scenRes.json() : {};
@@ -129,7 +130,7 @@ export default function SwarmScenarioReportNexus() {
     setBrief('');
     try {
       const summary = `${counts.FULLY_DOCUMENTED} swarm jobs fully documented (scenario+report), ${counts.SCENARIO_ONLY} scenario-only, ${counts.REPORT_ONLY} report-only, ${counts.DARK} dark (no coverage).`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

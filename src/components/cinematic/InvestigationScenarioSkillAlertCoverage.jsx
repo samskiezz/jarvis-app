@@ -33,8 +33,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'SCRIPTED', 'SKILLED', 'EXPOSED'];
@@ -180,10 +181,10 @@ export default function InvestigationScenarioSkillAlertCoverage() {
     setErr('');
     try {
       const [iRaw, scRaw, skRaw, aRaw] = await Promise.all([
-        safeFetch(`${API}/v1/investigations`),
-        safeFetch(`${API}/v1/scenario/list`),
-        safeFetch(`${API}/v1/aip/skill`),
-        safeFetch(`${API}/v1/ops/alerts`),
+        safeFetch(`${apiBase()}/v1/investigations`),
+        safeFetch(`${apiBase()}/v1/scenario/list`),
+        safeFetch(`${apiBase()}/v1/aip/skill`),
+        safeFetch(`${apiBase()}/v1/ops/alerts`),
       ]);
       const iArr  = normalizeInvestigations(iRaw);
       const scArr = normalizeScenarios(scRaw);
@@ -238,7 +239,7 @@ export default function InvestigationScenarioSkillAlertCoverage() {
     setAssess('');
     try {
       const script = buildIsscrcScript(counts);
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: hdr(),
         body: JSON.stringify({ message: script }),
@@ -247,7 +248,7 @@ export default function InvestigationScenarioSkillAlertCoverage() {
       const text = j?.response || j?.message || j?.result || 'No assessment returned.';
       setAssess(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST', headers: hdr(),
           body: JSON.stringify({ text: text.slice(0, 400) }),
         });

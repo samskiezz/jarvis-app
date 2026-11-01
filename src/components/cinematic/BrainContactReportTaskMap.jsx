@@ -31,8 +31,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COMMANDING', 'STAFFED', 'DOCUMENTED', 'GHOST'];
@@ -120,10 +121,10 @@ export default function BrainContactReportTaskMap() {
       const hdrs = { Authorization: `Bearer ${API_KEY}` };
 
       const [brainRaw, contactsRaw, reportsRaw, tasksRaw] = await Promise.all([
-        fetch(`${API}/v1/cinematic/brain`,  { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/entities/Contact`,    { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/v1/reports`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/entities/Task`,       { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/cinematic/brain`,  { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/entities/Contact`,    { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/reports`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/entities/Task`,       { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
       ]);
 
       const nodes    = normalizeArray(brainRaw,    ['nodes', 'items', 'results', 'data', 'entities']);
@@ -224,7 +225,7 @@ export default function BrainContactReportTaskMap() {
     setAssessing(true);
     setAssessment('');
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method:  'POST',
         headers: { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body:    JSON.stringify({ message: buildBcrtmapScript() }),

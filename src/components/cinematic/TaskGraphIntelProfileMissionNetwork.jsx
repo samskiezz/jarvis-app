@@ -22,8 +22,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'NETWORKED', 'PROFILED', 'TRACED', 'ORPHAN'];
@@ -90,9 +91,9 @@ export default function TaskGraphIntelProfileMissionNetwork() {
     setLoading(true); setError(null);
     try {
       const [tRes, gRes, pRes] = await Promise.all([
-        fetch(`${API}/entities/Task`, { headers: h }),
-        fetch(`${API}/v1/graph/centrality`, { headers: h }),
-        fetch(`${API}/entities/IntelProfile`, { headers: h }),
+        fetch(`${apiBase()}/entities/Task`, { headers: h }),
+        fetch(`${apiBase()}/v1/graph/centrality`, { headers: h }),
+        fetch(`${apiBase()}/entities/IntelProfile`, { headers: h }),
       ]);
       const [tJson, gJson, pJson] = await Promise.all([tRes.json(), gRes.json(), pRes.json()]);
 
@@ -168,7 +169,7 @@ export default function TaskGraphIntelProfileMissionNetwork() {
     try {
       const script = buildTginetScript() +
         ` Current counts: tasks=${rows.length}, networked=${counts.NETWORKED}, profiled=${counts.PROFILED}, traced=${counts.TRACED}, orphan=${counts.ORPHAN}.`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: { ...h, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: script }),
       });

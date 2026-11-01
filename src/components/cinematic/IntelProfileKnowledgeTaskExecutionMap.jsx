@@ -22,8 +22,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'EXECUTING', 'SCRIPTED', 'KNOWN', 'DARK'];
@@ -87,9 +88,9 @@ export default function IntelProfileKnowledgeTaskExecutionMap() {
     setError(null);
     try {
       const [pRes, kRes, tRes] = await Promise.all([
-        fetch(`${API}/entities/IntelProfile`, { headers }),
-        fetch(`${API}/knowledge/`,            { headers }),
-        fetch(`${API}/entities/Task`,         { headers }),
+        fetch(`${apiBase()}/entities/IntelProfile`, { headers }),
+        fetch(`${apiBase()}/knowledge/`,            { headers }),
+        fetch(`${apiBase()}/entities/Task`,         { headers }),
       ]);
       const [pRaw, kRaw, tRaw] = await Promise.all([
         pRes.ok ? pRes.json() : {},
@@ -144,7 +145,7 @@ export default function IntelProfileKnowledgeTaskExecutionMap() {
     setAssessing(true);
     try {
       const script = buildIpktexScript();
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers,
         body: JSON.stringify({ message: script }),
       });

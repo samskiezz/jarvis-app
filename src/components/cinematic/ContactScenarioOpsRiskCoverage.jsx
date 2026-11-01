@@ -30,8 +30,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'ALERTED', 'PARTIAL', 'DARK'];
@@ -175,10 +176,10 @@ export default function ContactScenarioOpsRiskCoverage() {
     setErr('');
     try {
       const [cRaw, sRaw, aRaw, rRaw] = await Promise.all([
-        safeFetch(`${API}/entities/Contact`),
-        safeFetch(`${API}/v1/scenario/list`),
-        safeFetch(`${API}/v1/ops/alerts`),
-        safeFetch(`${API}/entities/RiskSignal`),
+        safeFetch(`${apiBase()}/entities/Contact`),
+        safeFetch(`${apiBase()}/v1/scenario/list`),
+        safeFetch(`${apiBase()}/v1/ops/alerts`),
+        safeFetch(`${apiBase()}/entities/RiskSignal`),
       ]);
       const cArr = normalizeContacts(cRaw);
       const sArr = normalizeScenarios(sRaw);
@@ -233,7 +234,7 @@ export default function ContactScenarioOpsRiskCoverage() {
     setAssess('');
     try {
       const script = buildCsorcScript(counts);
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: hdr(),
         body: JSON.stringify({ message: script }),
@@ -242,7 +243,7 @@ export default function ContactScenarioOpsRiskCoverage() {
       const text = j?.response || j?.message || j?.result || 'No assessment returned.';
       setAssess(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST', headers: hdr(),
           body: JSON.stringify({ text: text.slice(0, 400) }),
         });

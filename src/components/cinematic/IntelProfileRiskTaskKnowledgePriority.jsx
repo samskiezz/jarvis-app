@@ -32,8 +32,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'CRITICAL', 'ACTIVE', 'TRACKED', 'DARK'];
@@ -178,10 +179,10 @@ export default function IntelProfileRiskTaskKnowledgePriority() {
     setLoading(true); setError(null);
     try {
       const [pRes, rRes, tRes, kRes] = await Promise.all([
-        fetch(`${API}/entities/IntelProfile`, { headers: hdrs }),
-        fetch(`${API}/entities/RiskSignal`,   { headers: hdrs }),
-        fetch(`${API}/entities/Task`,         { headers: hdrs }),
-        fetch(`${API}/knowledge/`,            { headers: hdrs }),
+        fetch(`${apiBase()}/entities/IntelProfile`, { headers: hdrs }),
+        fetch(`${apiBase()}/entities/RiskSignal`,   { headers: hdrs }),
+        fetch(`${apiBase()}/entities/Task`,         { headers: hdrs }),
+        fetch(`${apiBase()}/knowledge/`,            { headers: hdrs }),
       ]);
       const [pRaw, rRaw, tRaw, kRaw] = await Promise.all([
         pRes.ok ? pRes.json() : [],
@@ -225,7 +226,7 @@ export default function IntelProfileRiskTaskKnowledgePriority() {
     });
     setAssessing(true); setAssessment('');
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: hdrs,
         body: JSON.stringify({ message: script }),
       });

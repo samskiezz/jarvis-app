@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ATTRIBUTED', 'FLAGGED', 'PROFILED', 'SHADOW'];
@@ -86,9 +87,9 @@ export default function IntelProfileContactRiskAttribution() {
     setLoading(true); setError('');
     try {
       const [ipRes, ctRes, rsRes] = await Promise.all([
-        fetch(`${API}/entities/IntelProfile`, { headers }),
-        fetch(`${API}/entities/Contact`, { headers }),
-        fetch(`${API}/entities/RiskSignal`, { headers }),
+        fetch(`${apiBase()}/entities/IntelProfile`, { headers }),
+        fetch(`${apiBase()}/entities/Contact`, { headers }),
+        fetch(`${apiBase()}/entities/RiskSignal`, { headers }),
       ]);
       const ipData = ipRes.ok ? await ipRes.json() : [];
       const ctData = ctRes.ok ? await ctRes.json() : [];
@@ -154,7 +155,7 @@ export default function IntelProfileContactRiskAttribution() {
       `Known contacts: ${contactCount}. Active risk signals: ${riskCount}. ` +
       `In two sentences, identify the most critical threat attribution finding and recommend the immediate intelligence action.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers,
         body: JSON.stringify({ message: prompt }),
       });

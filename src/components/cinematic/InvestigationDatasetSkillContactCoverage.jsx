@@ -30,8 +30,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'RESOURCED', 'SKILLED', 'EXPOSED'];
@@ -197,7 +198,7 @@ export default function InvestigationDatasetSkillContactCoverage() {
     const summary = `Investigations: ${rows.length}. Covered: ${counts.COVERED}. Resourced: ${counts.RESOURCED}. Skilled: ${counts.SKILLED}. Exposed: ${counts.EXPOSED}.`;
     const prompt = `JARVIS investigation–dataset–skill–contact active mission intelligence coverage: ${summary}. Identify the most critical EXPOSED investigations — open cases with no dataset, no skill coverage, and no assigned contact. Provide a 2-sentence advisory on the highest-risk exposed cases and priority actions to resource, skill, and staff them to close the mission intelligence gap.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -206,7 +207,7 @@ export default function InvestigationDatasetSkillContactCoverage() {
       const text = d.response || d.message || d.content || JSON.stringify(d);
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 400) }),

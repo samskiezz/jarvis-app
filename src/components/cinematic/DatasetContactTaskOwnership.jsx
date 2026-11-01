@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'OWNED', 'ACTIVE', 'STAFFED', 'ORPHAN'];
@@ -106,9 +107,9 @@ export default function DatasetContactTaskOwnership() {
     setLoading(true);
     try {
       const [dsRes, ctRes, tkRes] = await Promise.all([
-        fetch(`${API}/v1/datasets`,        { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/entities/Contact`,   { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/entities/Task`,      { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/datasets`,        { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/entities/Contact`,   { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/entities/Task`,      { headers: { Authorization: `Bearer ${API_KEY}` } }),
       ]);
       const [dsRaw, ctRaw, tkRaw] = await Promise.all([
         dsRes.ok ? dsRes.json() : {},
@@ -159,7 +160,7 @@ export default function DatasetContactTaskOwnership() {
     const ownedCount  = rows.filter(r => r.cls === 'OWNED').length;
     const prompt = `Jarvis, I have ${rows.length} datasets. ${orphanCount} are ORPHAN (no known owner and no active task — data blind spots). ${ownedCount} are OWNED (contact assigned and operationally tasked). Provide a 2-sentence operational advisory on assigning ownership to orphan datasets and ensuring all active datasets are tied to operational tasks.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -169,7 +170,7 @@ export default function DatasetContactTaskOwnership() {
       setAssessment(text);
       if (text) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
             body: JSON.stringify({ text, voice: 'ash' }),

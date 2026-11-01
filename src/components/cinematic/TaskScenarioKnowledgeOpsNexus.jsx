@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_READY', 'DUAL_READY', 'SINGLE_LINKED', 'UNREADY'];
 
@@ -44,10 +45,10 @@ export default function TaskScenarioKnowledgeOpsNexus() {
     setErr(null);
     try {
       const [tkRes, scRes, kbRes, alRes] = await Promise.all([
-        fetch(`${API}/entities/Task?limit=200`),
-        fetch(`${API}/v1/scenario/list`),
-        fetch(`${API}/knowledge/`),
-        fetch(`${API}/v1/ops/alerts?status=open&limit=200`),
+        fetch(`${apiBase()}/entities/Task?limit=200`),
+        fetch(`${apiBase()}/v1/scenario/list`),
+        fetch(`${apiBase()}/knowledge/`),
+        fetch(`${apiBase()}/v1/ops/alerts?status=open&limit=200`),
       ]);
       const tkData = tkRes.ok ? await tkRes.json() : {};
       const scData = scRes.ok ? await scRes.json() : {};
@@ -158,7 +159,7 @@ export default function TaskScenarioKnowledgeOpsNexus() {
     setBrief('');
     try {
       const summary = `${counts.ALL} tasks total — ${counts.FULLY_READY} fully ready (scenario+KB+alert), ${counts.DUAL_READY} dual-ready, ${counts.SINGLE_LINKED} single-linked, ${counts.UNREADY} unready (no mission context). Coverage: ${covPct}%.`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

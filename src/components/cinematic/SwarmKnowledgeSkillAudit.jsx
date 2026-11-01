@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'AUTONOMOUS', 'SKILLED', 'DOCUMENTED', 'BLIND'];
@@ -103,9 +104,9 @@ export default function SwarmKnowledgeSkillAudit() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [swRes, knRes, skRes] = await Promise.all([
-        fetch(`${API}/entities/SwarmJob`, { headers: h }),
-        fetch(`${API}/knowledge/`,        { headers: h }),
-        fetch(`${API}/v1/aip/skill`,      { headers: h }),
+        fetch(`${apiBase()}/entities/SwarmJob`, { headers: h }),
+        fetch(`${apiBase()}/knowledge/`,        { headers: h }),
+        fetch(`${apiBase()}/v1/aip/skill`,      { headers: h }),
       ]);
       const [swRaw, knRaw, skRaw] = await Promise.all([
         swRes.ok ? swRes.json() : [],
@@ -166,7 +167,7 @@ export default function SwarmKnowledgeSkillAudit() {
     const blindNames = rows.filter(r => r._cls === 'BLIND').slice(0, 5).map(r => r.name).join(', ');
     const prompt = `SwarmJob × Knowledge × Skill Automation Intelligence Audit: ${rows.length} swarm jobs cross-referenced against ${knowCount} knowledge articles and ${skillCount} skills. ${counts.AUTONOMOUS} jobs are AUTONOMOUS (matched both knowledge documentation AND a supporting skill — fully backed automation). ${counts.SKILLED} jobs are SKILLED (matched a skill but have no knowledge documentation — capability exists but undocumented). ${counts.DOCUMENTED} jobs are DOCUMENTED (matched a knowledge article but no skill — documented but no JARVIS skill mapped to it). ${counts.BLIND} jobs are BLIND — no knowledge article and no skill, representing automation running without documentation or skill support.${blindNames ? ` Blind automation jobs include: ${blindNames}.` : ''} Assess the overall automation intelligence health, identify which blind swarm jobs represent the highest operational risk from running undocumented and unsupported, and recommend whether to create knowledge articles, map skills, or pause any blind jobs.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

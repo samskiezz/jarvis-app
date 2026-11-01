@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_GROUNDED', 'KB_ONLY', 'DATA_ONLY', 'DARK'];
 
@@ -37,9 +38,9 @@ export default function ContactKnowledgeDatasetMap() {
     setErr(null);
     try {
       const [ctRes, kbRes, dsRes] = await Promise.all([
-        fetch(`${API}/entities/Contact`),
-        fetch(`${API}/knowledge/`),
-        fetch(`${API}/v1/datasets`),
+        fetch(`${apiBase()}/entities/Contact`),
+        fetch(`${apiBase()}/knowledge/`),
+        fetch(`${apiBase()}/v1/datasets`),
       ]);
       const ctData = ctRes.ok ? await ctRes.json() : {};
       const kbData = kbRes.ok ? await kbRes.json() : {};
@@ -132,7 +133,7 @@ export default function ContactKnowledgeDatasetMap() {
     setBrief('');
     try {
       const summary = `${counts.FULLY_GROUNDED} contacts fully grounded (KB+dataset match), ${counts.KB_ONLY} KB-only, ${counts.DATA_ONLY} data-only, ${counts.DARK} dark (no KB or dataset coverage).`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

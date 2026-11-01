@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'PRODUCING', 'PLANNED', 'REPORTED', 'IDLE'];
@@ -83,9 +84,9 @@ export default function SwarmDatasetReportPipeline() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [swRes, dsRes, rpRes] = await Promise.all([
-        fetch(`${API}/entities/SwarmJob`, { headers: h }),
-        fetch(`${API}/v1/datasets`,       { headers: h }),
-        fetch(`${API}/v1/reports`,        { headers: h }),
+        fetch(`${apiBase()}/entities/SwarmJob`, { headers: h }),
+        fetch(`${apiBase()}/v1/datasets`,       { headers: h }),
+        fetch(`${apiBase()}/v1/reports`,        { headers: h }),
       ]);
       const [swData, dsData, rpData] = await Promise.all([
         swRes.ok ? swRes.json() : [],
@@ -131,7 +132,7 @@ export default function SwarmDatasetReportPipeline() {
     rows.forEach(r => { if (counts[r._cls] !== undefined) counts[r._cls]++; });
     const prompt = `SwarmJob production pipeline audit: ${rows.length} swarm jobs total — ${counts.PRODUCING} fully producing (matched datasets + reports), ${counts.PLANNED} planned (dataset input, no report output), ${counts.REPORTED} reported-only (output exists, no dataset trace), ${counts.IDLE} idle (no dataset or report match). Assess the production pipeline health, identify the highest-priority idle jobs that should be producing, and highlight any pipeline bottlenecks or orphaned outputs.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

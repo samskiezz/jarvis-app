@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ORCHESTRATED', 'SCENED', 'SWARMED', 'SHADOW'];
@@ -84,9 +85,9 @@ export default function IntelProfileScenarioSwarmMatrix() {
     setLoading(true); setError('');
     try {
       const [profRes, scenRes, swarmRes] = await Promise.all([
-        fetch(`${API}/entities/IntelProfile`, { headers }),
-        fetch(`${API}/v1/scenario/list`, { headers }),
-        fetch(`${API}/entities/SwarmJob`, { headers }),
+        fetch(`${apiBase()}/entities/IntelProfile`, { headers }),
+        fetch(`${apiBase()}/v1/scenario/list`, { headers }),
+        fetch(`${apiBase()}/entities/SwarmJob`, { headers }),
       ]);
       const profData  = profRes.ok  ? await profRes.json()  : [];
       const scenData  = scenRes.ok  ? await scenRes.json()  : [];
@@ -152,7 +153,7 @@ export default function IntelProfileScenarioSwarmMatrix() {
       `Active scenarios: ${scenCount}. Active swarm jobs: ${swarmCount}. ` +
       `In two sentences, identify the most critical orchestration gap and recommend the immediate action to operationalise shadow intel profiles.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers,
         body: JSON.stringify({ message: prompt }),
       });

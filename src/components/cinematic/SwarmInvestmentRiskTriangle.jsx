@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'MONITORED', 'EXPOSED', 'RUNNING', 'DORMANT'];
@@ -84,9 +85,9 @@ export default function SwarmInvestmentRiskTriangle() {
     try {
       const hdr = { Authorization: `Bearer ${API_KEY}` };
       const [swRes, invRes, rkRes] = await Promise.all([
-        fetch(`${API}/entities/SwarmJob`,     { headers: hdr }),
-        fetch(`${API}/entities/Investment`,   { headers: hdr }),
-        fetch(`${API}/entities/RiskSignal`,   { headers: hdr }),
+        fetch(`${apiBase()}/entities/SwarmJob`,     { headers: hdr }),
+        fetch(`${apiBase()}/entities/Investment`,   { headers: hdr }),
+        fetch(`${apiBase()}/entities/RiskSignal`,   { headers: hdr }),
       ]);
 
       const swRaw  = await swRes.json().catch(() => []);
@@ -134,7 +135,7 @@ export default function SwarmInvestmentRiskTriangle() {
     rows.forEach(r => { counts[r._cls] = (counts[r._cls] || 0) + 1; });
     const prompt = `Portfolio-swarm-risk status: ${rows.length} investments. MONITORED (swarm+risk): ${counts.MONITORED}, EXPOSED (risk, no swarm): ${counts.EXPOSED}, RUNNING (swarm, no risk): ${counts.RUNNING}, DORMANT (neither): ${counts.DORMANT}. In 2 sentences, identify the highest-priority exposed investments and recommend immediate swarm deployment actions.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),

@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ACTIONABLE', 'SCRIPTED', 'KNOWN', 'COLD'];
@@ -109,9 +110,9 @@ export default function InvestigationScenarioKnowledgeActionability() {
     setLoading(true);
     try {
       const [invRes, scnRes, knwRes] = await Promise.all([
-        fetch(`${API}/v1/investigations`,   { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/v1/scenario/list`,    { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/knowledge/`,          { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/investigations`,   { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/scenario/list`,    { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/knowledge/`,          { headers: { Authorization: `Bearer ${API_KEY}` } }),
       ]);
       const [invRaw, scnRaw, knwRaw] = await Promise.all([
         invRes.ok ? invRes.json() : {},
@@ -159,7 +160,7 @@ export default function InvestigationScenarioKnowledgeActionability() {
     const actionableCount = rows.filter(r => r.cls === 'ACTIONABLE').length;
     const prompt = `Jarvis, I have ${rows.length} investigations. ${coldCount} are COLD (no matching scenario or knowledge). ${actionableCount} are fully ACTIONABLE. Provide a 2-sentence operational advisory on prioritising cold-case investigation support.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -169,7 +170,7 @@ export default function InvestigationScenarioKnowledgeActionability() {
       setAssessment(text);
       if (text) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
             body: JSON.stringify({ text, voice: 'ash' }),

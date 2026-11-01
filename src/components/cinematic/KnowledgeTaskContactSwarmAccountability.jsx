@@ -33,8 +33,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'GROUNDED', 'ACTIVE', 'STAFFED', 'DARK'];
@@ -161,10 +162,10 @@ export default function KnowledgeTaskContactSwarmAccountability() {
     try {
       const h = { Authorization: `Bearer ${API_KEY}` };
       const [kn, ta, co, sw] = await Promise.all([
-        fetch(`${API}/knowledge/`,          { headers: h }).then(r => r.ok ? r.json() : []),
-        fetch(`${API}/entities/Task`,       { headers: h }).then(r => r.ok ? r.json() : []),
-        fetch(`${API}/entities/Contact`,    { headers: h }).then(r => r.ok ? r.json() : []),
-        fetch(`${API}/entities/SwarmJob`,   { headers: h }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/knowledge/`,          { headers: h }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/entities/Task`,       { headers: h }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/entities/Contact`,    { headers: h }).then(r => r.ok ? r.json() : []),
+        fetch(`${apiBase()}/entities/SwarmJob`,   { headers: h }).then(r => r.ok ? r.json() : []),
       ]);
       const articles  = normalizeKnowledge(kn);
       const tasks     = normalizeTasks(ta);
@@ -226,7 +227,7 @@ export default function KnowledgeTaskContactSwarmAccountability() {
     setAssessText('');
     try {
       const script = buildKtcsawScript(rows);
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: script }),

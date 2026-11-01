@@ -31,8 +31,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'GROUNDED', 'CAPABLE', 'DOCUMENTED', 'BLIND'];
@@ -156,7 +157,7 @@ export default function InvestigationBrainSkillReportCoverage() {
     setAssessing(true);
     try {
       const summary = `IBSRCOV: ${stats.invs} investigations | ${stats.grounded} GROUNDED | ${stats.capable} CAPABLE | ${stats.documented} DOCUMENTED | ${stats.blind} BLIND (undefended open cases). Brain nodes: ${stats.nodes}, Skills: ${stats.skills}, Reports: ${stats.reports}.`;
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: `Active intelligence coverage assessment: ${summary} Identify the highest-risk blind spot investigations and recommend immediate remediation actions.` }),

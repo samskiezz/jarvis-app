@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ACTIVE', 'MONITORED', 'DEPLOYED', 'DORMANT'];
@@ -47,9 +48,9 @@ export default function IntelProfileOpsMap() {
     setError('');
     try {
       const [intelRes, contRes, swarmRes] = await Promise.all([
-        fetch(`${API}/entities/IntelProfile`),
-        fetch(`${API}/entities/Contact`),
-        fetch(`${API}/entities/SwarmJob`),
+        fetch(`${apiBase()}/entities/IntelProfile`),
+        fetch(`${apiBase()}/entities/Contact`),
+        fetch(`${apiBase()}/entities/SwarmJob`),
       ]);
       const intelJson = intelRes.ok ? await intelRes.json() : {};
       const contJson  = contRes.ok  ? await contRes.json()  : {};
@@ -124,7 +125,7 @@ export default function IntelProfileOpsMap() {
   const assess = async (profileId, context) => {
     setAssessing(profileId);
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: `Assess operational coverage for intelligence profile. Context: ${context}` }),
@@ -143,7 +144,7 @@ export default function IntelProfileOpsMap() {
     const context = `Total profiles: ${rows.length}, Active (contact+job): ${counts.ACTIVE}, Monitored (contact only): ${counts.MONITORED}, Deployed (job only): ${counts.DEPLOYED}, Dormant: ${dormant.length}. Coverage: ${covPct}%. Contacts pool: ${contCount}, Swarm jobs pool: ${swarmCount}. Top dormant: ${dormant.slice(0, 3).map(r => r.profile.name || r.profile.alias).join(', ')}`;
     setAssessing('global');
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: `Provide a 2-sentence intel profile operational coverage brief. ${context}` }),

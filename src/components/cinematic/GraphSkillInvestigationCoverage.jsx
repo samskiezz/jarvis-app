@@ -20,8 +20,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'INVESTIGATED', 'SKILLED', 'TRACED', 'DARK'];
@@ -82,9 +83,9 @@ export default function GraphSkillInvestigationCoverage() {
     try {
       const h = { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const [graphRes, skillRes, invRes] = await Promise.all([
-        fetch(`${API}/v1/graph/centrality`,  { headers: h }),
-        fetch(`${API}/v1/aip/skill`,         { headers: h }),
-        fetch(`${API}/v1/investigations`,    { headers: h }),
+        fetch(`${apiBase()}/v1/graph/centrality`,  { headers: h }),
+        fetch(`${apiBase()}/v1/aip/skill`,         { headers: h }),
+        fetch(`${apiBase()}/v1/investigations`,    { headers: h }),
       ]);
       const [graphRaw, skillRaw, invRaw] = await Promise.all([
         graphRes.ok ? graphRes.json() : [],
@@ -142,7 +143,7 @@ export default function GraphSkillInvestigationCoverage() {
     const darkNodes = rows.filter(r => r._cls === 'DARK').slice(0, 5).map(r => r.name).join(', ');
     const prompt = `Graph × Skill × Investigation Coverage Topology assessment: ${rows.length} graph nodes cross-referenced against ${skillCount} skills and ${invCount} investigations. ${counts.INVESTIGATED} nodes have full coverage (skill + investigation). ${counts.SKILLED} have skill coverage only. ${counts.TRACED} have investigation tracking only. ${counts.DARK} nodes are dark — no mapped skill or open investigation. ${darkNodes ? `Key dark nodes: ${darkNodes}.` : ''} Assess the blind spots, identify the highest-centrality uncovered nodes, and recommend investigation or skill assignment priorities.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${API_KEY}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),

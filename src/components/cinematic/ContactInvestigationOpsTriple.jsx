@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const TABS = ['ALL', 'FULL_CONTEXT', 'INV_ONLY', 'OPS_ONLY', 'ISOLATED'];
 
 function tokenise(str) {
@@ -73,9 +74,9 @@ export default function ContactInvestigationOpsTriple() {
     setErr(null);
     try {
       const [cRes, iRes, oRes] = await Promise.all([
-        fetch(`${API}/entities/Contact`),
-        fetch(`${API}/v1/investigations`),
-        fetch(`${API}/v1/ops/events`),
+        fetch(`${apiBase()}/entities/Contact`),
+        fetch(`${apiBase()}/v1/investigations`),
+        fetch(`${apiBase()}/v1/ops/events`),
       ]);
       const cd = cRes.ok ? await cRes.json() : {};
       const id = iRes.ok ? await iRes.json() : {};
@@ -135,7 +136,7 @@ export default function ContactInvestigationOpsTriple() {
     setBrief('');
     try {
       const summary = `${counts.FULL_CONTEXT} fully contextualized, ${counts.INV_ONLY} investigation-only, ${counts.OPS_ONLY} ops-only, ${counts.ISOLATED} isolated contacts with no operational context.`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

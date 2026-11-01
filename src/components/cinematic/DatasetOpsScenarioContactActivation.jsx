@@ -29,8 +29,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ACTIVATED', 'MONITORED', 'STAGED', 'DARK'];
@@ -173,10 +174,10 @@ export default function DatasetOpsScenarioContactActivation() {
     setErr('');
     try {
       const [dRaw, aRaw, sRaw, cRaw] = await Promise.all([
-        safeFetch(`${API}/v1/datasets`),
-        safeFetch(`${API}/v1/ops/alerts`),
-        safeFetch(`${API}/v1/scenario/list`),
-        safeFetch(`${API}/entities/Contact`),
+        safeFetch(`${apiBase()}/v1/datasets`),
+        safeFetch(`${apiBase()}/v1/ops/alerts`),
+        safeFetch(`${apiBase()}/v1/scenario/list`),
+        safeFetch(`${apiBase()}/entities/Contact`),
       ]);
       const dArr = normalizeDatasets(dRaw);
       const aArr = normalizeAlerts(aRaw);
@@ -231,7 +232,7 @@ export default function DatasetOpsScenarioContactActivation() {
     setAssess('');
     try {
       const script = buildDoscamScript(counts);
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: hdr(),
         body: JSON.stringify({ message: script }),
@@ -240,7 +241,7 @@ export default function DatasetOpsScenarioContactActivation() {
       const text = j?.response || j?.message || j?.result || 'No assessment returned.';
       setAssess(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST', headers: hdr(),
           body: JSON.stringify({ text: text.slice(0, 400) }),
         });

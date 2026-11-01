@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'CAPABLE', 'SKILLED', 'DATAED', 'BLIND'];
@@ -157,7 +158,7 @@ export default function OpsAlertSkillDatasetIncidentReadiness() {
     const counts = rows.reduce((acc, r) => { acc[r._cls] = (acc[r._cls] || 0) + 1; return acc; }, {});
     const prompt = `Ops Alert × Skill × Dataset Incident Response Capability summary: ${rows.length} alerts, ${skillCount} skills, ${datasetCount} datasets. CAPABLE:${counts.CAPABLE||0} SKILLED:${counts.SKILLED||0} DATAED:${counts.DATAED||0} BLIND:${counts.BLIND||0}. Identify the most critical response gap and recommend an immediate action to reduce blind-spot alerts.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -165,7 +166,7 @@ export default function OpsAlertSkillDatasetIncidentReadiness() {
       const d = await r.json();
       const txt = (d.answer || '').replace(/<<ACTION:[^>]*>>/g, '').trim() || 'No assessment available.';
       setAssessment(txt);
-      await fetch(`${API}/v1/voice/tts`, {
+      await fetch(`${apiBase()}/v1/voice/tts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ text: txt.slice(0, 300), voice: 'onyx' }),

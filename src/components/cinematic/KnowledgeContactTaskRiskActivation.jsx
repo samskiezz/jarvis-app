@@ -32,8 +32,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ACTIVATED', 'ACTIONED', 'REFERENCED', 'DORMANT'];
@@ -171,10 +172,10 @@ export default function KnowledgeContactTaskRiskActivation() {
     setLoading(true); setError(null);
     try {
       const [kRes, cRes, tRes, rRes] = await Promise.all([
-        fetch(`${API}/knowledge/`,           { headers: hdrs }),
-        fetch(`${API}/entities/Contact`,     { headers: hdrs }),
-        fetch(`${API}/entities/Task`,        { headers: hdrs }),
-        fetch(`${API}/entities/RiskSignal`,  { headers: hdrs }),
+        fetch(`${apiBase()}/knowledge/`,           { headers: hdrs }),
+        fetch(`${apiBase()}/entities/Contact`,     { headers: hdrs }),
+        fetch(`${apiBase()}/entities/Task`,        { headers: hdrs }),
+        fetch(`${apiBase()}/entities/RiskSignal`,  { headers: hdrs }),
       ]);
       const [kRaw, cRaw, tRaw, rRaw] = await Promise.all([
         kRes.ok ? kRes.json() : [],
@@ -218,7 +219,7 @@ export default function KnowledgeContactTaskRiskActivation() {
     });
     setAssessing(true); setAssessment('');
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: hdrs,
         body: JSON.stringify({ message: script }),
       });

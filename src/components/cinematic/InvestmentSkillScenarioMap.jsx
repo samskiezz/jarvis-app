@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const TABS = ['ALL', 'FULLY_COVERED', 'SKILL_COVERED', 'SCENARIO_COVERED', 'UNPROTECTED'];
 const CLASS_COLOR = {
   FULLY_COVERED: '#22c55e',
@@ -61,9 +62,9 @@ export default function InvestmentSkillScenarioMap() {
     setError('');
     try {
       const [invRes, skillRes, scenRes] = await Promise.all([
-        fetch(`${API}/entities/Investment`),
-        fetch(`${API}/v1/aip/skill`),
-        fetch(`${API}/v1/scenario/list`),
+        fetch(`${apiBase()}/entities/Investment`),
+        fetch(`${apiBase()}/v1/aip/skill`),
+        fetch(`${apiBase()}/v1/scenario/list`),
       ]);
       const [invData, skillData, scenData] = await Promise.all([
         invRes.ok ? invRes.json() : [],
@@ -117,7 +118,7 @@ export default function InvestmentSkillScenarioMap() {
   const assess = useCallback(async (row) => {
     setAssessing(row.id || row.name);
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

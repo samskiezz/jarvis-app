@@ -22,8 +22,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'READY', 'SCRIPTED', 'SKILLED', 'BLIND'];
@@ -146,9 +147,9 @@ export default function LiveIntelScenarioSkillCrisisReadiness() {
     setLoading(true);
     try {
       const [intelRes, scRes, skRes] = await Promise.all([
-        fetch(`${API}/functions/getLiveIntel`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/v1/scenario/list`,        { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/v1/aip/skill`,            { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/functions/getLiveIntel`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/scenario/list`,        { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/aip/skill`,            { headers: { Authorization: `Bearer ${API_KEY}` } }),
       ]);
       const [intelRaw, scRaw, skRaw] = await Promise.all([
         intelRes.ok ? intelRes.json() : {},
@@ -195,7 +196,7 @@ export default function LiveIntelScenarioSkillCrisisReadiness() {
     const readyCount  = rows.filter(r => r.cls === 'READY').length;
     const prompt = `Jarvis, I have ${rows.length} live intel events. ${blindCount} are BLIND (no scenario script and no skill coverage — undefended event types). ${readyCount} are READY (both a scenario and a skill are matched). Provide a 2-sentence operational advisory on addressing blind event types and ensuring crisis response readiness for live incidents.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -205,7 +206,7 @@ export default function LiveIntelScenarioSkillCrisisReadiness() {
       setAssessment(text);
       if (text) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
             body: JSON.stringify({ text, voice: 'ash' }),

@@ -30,8 +30,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'AWARE', 'COVERED', 'PARTIAL', 'DARK'];
@@ -159,7 +160,7 @@ export default function ContactScenarioRiskSwarmKnowledgeAwareness() {
     setAssessing(true);
     try {
       const summary = `CSRSK: ${stats.contacts} contacts | ${stats.aware} AWARE | ${stats.covered} COVERED | ${stats.partial} PARTIAL | ${stats.dark} DARK (invisible operators). Scenarios: ${stats.scenarios}, RiskSignals: ${stats.risks}, SwarmJobs: ${stats.swarmJobs}, KnowledgeArticles: ${stats.articles}.`;
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: `Mission awareness assessment: ${summary} Identify the highest-risk dark contacts with zero situational awareness and recommend immediate awareness uplift actions.` }),

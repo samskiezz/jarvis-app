@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_ARMED', 'DUAL_LINKED', 'SINGLE_LINKED', 'UNSUPPORTED'];
 const CLASS_COLOR = {
@@ -47,10 +48,10 @@ export default function TaskInvestmentSkillContactCoverage() {
     setError('');
     try {
       const [taskRes, invRes, skillRes, contactRes] = await Promise.all([
-        fetch(`${API}/entities/Task`),
-        fetch(`${API}/entities/Investment`),
-        fetch(`${API}/v1/aip/skill`),
-        fetch(`${API}/entities/Contact`),
+        fetch(`${apiBase()}/entities/Task`),
+        fetch(`${apiBase()}/entities/Investment`),
+        fetch(`${apiBase()}/v1/aip/skill`),
+        fetch(`${apiBase()}/entities/Contact`),
       ]);
       const taskJson    = taskRes.ok    ? await taskRes.json()    : {};
       const invJson     = invRes.ok     ? await invRes.json()     : {};
@@ -121,7 +122,7 @@ export default function TaskInvestmentSkillContactCoverage() {
     setAssessing(rid);
     try {
       const prompt = `Strategic execution coverage brief for task "${row.name || row.title || 'unnamed'}": classification ${row._cls}, ${row._invs.length} investments, ${row._skills.length} AIP skills, ${row._contacts.length} contacts linked. Two sentences.`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),
@@ -129,7 +130,7 @@ export default function TaskInvestmentSkillContactCoverage() {
       const data = res.ok ? await res.json() : {};
       const text = data.response || data.message || data.result || 'No assessment available.';
       setAssessment(prev => ({ ...prev, [rid]: text }));
-      const ttsRes = await fetch(`${API}/v1/voice/tts`, {
+      const ttsRes = await fetch(`${apiBase()}/v1/voice/tts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),

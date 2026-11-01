@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_EXPOSED', 'KB_ONLY', 'OPS_ONLY', 'CLEAR'];
 
@@ -51,9 +52,9 @@ export default function TaskKnowledgeOpsEventMesh() {
     setErr(null);
     try {
       const [tasksRes, kbRes, opsRes] = await Promise.all([
-        fetch(`${API}/entities/Task`),
-        fetch(`${API}/knowledge/`),
-        fetch(`${API}/v1/ops/events?limit=200`),
+        fetch(`${apiBase()}/entities/Task`),
+        fetch(`${apiBase()}/knowledge/`),
+        fetch(`${apiBase()}/v1/ops/events?limit=200`),
       ]);
       const tasksData = tasksRes.ok ? await tasksRes.json() : {};
       const kbData    = kbRes.ok    ? await kbRes.json()    : {};
@@ -152,7 +153,7 @@ export default function TaskKnowledgeOpsEventMesh() {
     setBrief('');
     try {
       const summary = `${counts.FULLY_EXPOSED} tasks fully exposed (KB + ops match), ${counts.KB_ONLY} KB-only, ${counts.OPS_ONLY} ops-only, ${counts.CLEAR} clear of both.`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

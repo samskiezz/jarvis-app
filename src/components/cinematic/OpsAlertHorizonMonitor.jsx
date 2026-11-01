@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_GROUNDED', 'DUAL_LINKED', 'SINGLE_LINKED', 'UNGROUNDED'];
 const CLASS_COLOR = {
@@ -47,10 +48,10 @@ export default function OpsAlertHorizonMonitor() {
     setError('');
     try {
       const [alertsRes, annotRes, kbRes, dsRes] = await Promise.all([
-        fetch(`${API}/v1/ops/alerts`),
-        fetch(`${API}/v1/graph/annotations`),
-        fetch(`${API}/knowledge/`),
-        fetch(`${API}/v1/datasets`),
+        fetch(`${apiBase()}/v1/ops/alerts`),
+        fetch(`${apiBase()}/v1/graph/annotations`),
+        fetch(`${apiBase()}/knowledge/`),
+        fetch(`${apiBase()}/v1/datasets`),
       ]);
       const alertsJson = alertsRes.ok ? await alertsRes.json() : {};
       const annotJson  = annotRes.ok  ? await annotRes.json()  : {};
@@ -120,7 +121,7 @@ export default function OpsAlertHorizonMonitor() {
     setAssessing(row._id || row.id);
     try {
       const prompt = `Intelligence horizon brief for alert "${row.title || row.message || 'unknown'}": classification ${row._cls}, ${row._annots.length} annotations, ${row._kb.length} KB articles, ${row._ds.length} datasets. Two sentences.`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: prompt }),
@@ -128,7 +129,7 @@ export default function OpsAlertHorizonMonitor() {
       const data = res.ok ? await res.json() : {};
       const text = data.response || data.message || data.result || 'No assessment available.';
       setAssessment(prev => ({ ...prev, [row._id || row.id]: text }));
-      const ttsRes = await fetch(`${API}/v1/voice/tts`, {
+      const ttsRes = await fetch(`${apiBase()}/v1/voice/tts`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text }),

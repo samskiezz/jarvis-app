@@ -22,8 +22,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'FILED', 'TRACKED', 'OPEN'];
@@ -93,9 +94,9 @@ export default function OpsAlertReportInvestigationCoverage() {
     try {
       const hdrs = { Authorization: `Bearer ${API_KEY}` };
       const [aRes, rRes, iRes] = await Promise.all([
-        fetch(`${API}/v1/ops/alerts`, { headers: hdrs }).catch(() => null),
-        fetch(`${API}/v1/reports`, { headers: hdrs }).catch(() => null),
-        fetch(`${API}/v1/investigations`, { headers: hdrs }).catch(() => null),
+        fetch(`${apiBase()}/v1/ops/alerts`, { headers: hdrs }).catch(() => null),
+        fetch(`${apiBase()}/v1/reports`, { headers: hdrs }).catch(() => null),
+        fetch(`${apiBase()}/v1/investigations`, { headers: hdrs }).catch(() => null),
       ]);
 
       const aJson = aRes?.ok ? await aRes.json().catch(() => ({})) : {};
@@ -174,7 +175,7 @@ export default function OpsAlertReportInvestigationCoverage() {
     };
     const prompt = `Ops Alert × Report × Investigation Incident Coverage Chain: ${alerts.length} alerts, ${reports.length} reports, ${invests.length} investigations. COVERED:${counts.COVERED} FILED:${counts.FILED} TRACKED:${counts.TRACKED} OPEN:${counts.OPEN}. Identify the most critical coverage gap and recommend an immediate action to ensure open alerts are documented and investigated.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -183,7 +184,7 @@ export default function OpsAlertReportInvestigationCoverage() {
       const text = j.response || j.message || j.text || j.content || 'Assessment complete.';
       setAssessment(text);
       if (text) {
-        fetch(`${API}/v1/voice/tts`, {
+        fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 300) }),

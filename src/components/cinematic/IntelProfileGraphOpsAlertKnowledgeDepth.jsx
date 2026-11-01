@@ -34,8 +34,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'SATURATED', 'TRACED', 'ALERTED', 'DARK'];
@@ -177,10 +178,10 @@ export default function IntelProfileGraphOpsAlertKnowledgeDepth() {
     setLoading(true); setError(null);
     try {
       const [pRes, gRes, aRes, kRes] = await Promise.all([
-        fetch(`${API}/entities/IntelProfile`,    { headers: hdrs }),
-        fetch(`${API}/v1/graph/centrality`,      { headers: hdrs }),
-        fetch(`${API}/v1/ops/alerts`,            { headers: hdrs }),
-        fetch(`${API}/knowledge/`,               { headers: hdrs }),
+        fetch(`${apiBase()}/entities/IntelProfile`,    { headers: hdrs }),
+        fetch(`${apiBase()}/v1/graph/centrality`,      { headers: hdrs }),
+        fetch(`${apiBase()}/v1/ops/alerts`,            { headers: hdrs }),
+        fetch(`${apiBase()}/knowledge/`,               { headers: hdrs }),
       ]);
       const [pRaw, gRaw, aRaw, kRaw] = await Promise.all([
         pRes.ok ? pRes.json() : [],
@@ -225,7 +226,7 @@ export default function IntelProfileGraphOpsAlertKnowledgeDepth() {
     });
     setAssessing(true); setAssessment('');
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: hdrs,
         body: JSON.stringify({ message: script }),
       });

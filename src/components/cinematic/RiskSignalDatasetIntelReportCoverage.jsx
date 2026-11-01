@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_COVERED', 'DUAL_COVERED', 'SINGLE_LINKED', 'UNCOVERED'];
 
@@ -44,10 +45,10 @@ export default function RiskSignalDatasetIntelReportCoverage() {
     setErr(null);
     try {
       const [rsRes, dsRes, ipRes, rpRes] = await Promise.all([
-        fetch(`${API}/entities/RiskSignal?limit=200`),
-        fetch(`${API}/v1/datasets`),
-        fetch(`${API}/entities/IntelProfile?limit=200`),
-        fetch(`${API}/v1/reports`),
+        fetch(`${apiBase()}/entities/RiskSignal?limit=200`),
+        fetch(`${apiBase()}/v1/datasets`),
+        fetch(`${apiBase()}/entities/IntelProfile?limit=200`),
+        fetch(`${apiBase()}/v1/reports`),
       ]);
       const rsData = rsRes.ok ? await rsRes.json() : {};
       const dsData = dsRes.ok ? await dsRes.json() : {};
@@ -159,7 +160,7 @@ export default function RiskSignalDatasetIntelReportCoverage() {
     setBrief('');
     try {
       const summary = `${counts.ALL} risk signals — ${counts.FULLY_COVERED} fully covered (dataset+intel+report), ${counts.DUAL_COVERED} dual-covered, ${counts.SINGLE_LINKED} single-linked, ${counts.UNCOVERED} uncovered (no intelligence backing). Coverage: ${covPct}%.`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

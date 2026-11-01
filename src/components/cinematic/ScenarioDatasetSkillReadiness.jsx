@@ -20,8 +20,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'READY', 'SKILLED', 'DATAD', 'BLOCKED'];
@@ -85,9 +86,9 @@ export default function ScenarioDatasetSkillReadiness() {
     try {
       const hdr = { Authorization: `Bearer ${API_KEY}` };
       const [scnRes, dsRes, skRes] = await Promise.all([
-        fetch(`${API}/v1/scenario/list`, { headers: hdr }),
-        fetch(`${API}/v1/datasets`,      { headers: hdr }),
-        fetch(`${API}/v1/aip/skill`,     { headers: hdr }),
+        fetch(`${apiBase()}/v1/scenario/list`, { headers: hdr }),
+        fetch(`${apiBase()}/v1/datasets`,      { headers: hdr }),
+        fetch(`${apiBase()}/v1/aip/skill`,     { headers: hdr }),
       ]);
 
       const scnRaw = await scnRes.json().catch(() => []);
@@ -135,7 +136,7 @@ export default function ScenarioDatasetSkillReadiness() {
     rows.forEach(r => { counts[r._cls] = (counts[r._cls] || 0) + 1; });
     const prompt = `Scenario execution readiness: ${rows.length} scenarios. READY: ${counts.READY}, SKILLED: ${counts.SKILLED}, DATAD: ${counts.DATAD}, BLOCKED: ${counts.BLOCKED}. In 2 sentences, identify the highest-risk blocked scenarios and recommend actions.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),

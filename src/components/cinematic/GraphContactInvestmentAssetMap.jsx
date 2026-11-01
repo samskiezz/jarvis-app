@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'STRATEGIC', 'CONNECTED', 'FUNDED', 'SHADOW'];
@@ -108,9 +109,9 @@ export default function GraphContactInvestmentAssetMap() {
     setLoading(true);
     try {
       const [gphRes, cntRes, invRes] = await Promise.all([
-        fetch(`${API}/v1/graph/centrality`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/entities/Contact`,    { headers: { Authorization: `Bearer ${API_KEY}` } }),
-        fetch(`${API}/entities/Investment`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/v1/graph/centrality`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/entities/Contact`,    { headers: { Authorization: `Bearer ${API_KEY}` } }),
+        fetch(`${apiBase()}/entities/Investment`, { headers: { Authorization: `Bearer ${API_KEY}` } }),
       ]);
       const [gphRaw, cntRaw, invRaw] = await Promise.all([
         gphRes.ok ? gphRes.json() : {},
@@ -161,7 +162,7 @@ export default function GraphContactInvestmentAssetMap() {
     const strategicCount = rows.filter(r => r.cls === 'STRATEGIC').length;
     const prompt = `Jarvis, I have ${rows.length} graph nodes. ${shadowCount} are SHADOW (no contact or investment link — blind spots). ${strategicCount} are STRATEGIC (both contact and investment mapped). Provide a 2-sentence operational advisory on improving strategic asset coverage and reducing shadow blind spots in the graph.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -171,7 +172,7 @@ export default function GraphContactInvestmentAssetMap() {
       setAssessment(text);
       if (text) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
             body: JSON.stringify({ text, voice: 'ash' }),

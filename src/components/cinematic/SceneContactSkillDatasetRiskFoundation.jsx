@@ -35,8 +35,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COVERED', 'STAFFED', 'CAPABLE', 'DARK'];
@@ -209,7 +210,7 @@ export default function SceneContactSkillDatasetRiskFoundation() {
     const summary = `Scenes: ${rows.length}. Covered: ${counts.COVERED}. Staffed: ${counts.STAFFED}. Capable: ${counts.CAPABLE}. Dark: ${counts.DARK}.`;
     const prompt = `JARVIS scene operational coverage foundation audit: ${summary}. Identify the most critical DARK scenes — those with no contact owner, no matching skill, no dataset backing, and no risk-signal awareness — representing ungrounded operational blind spots. Provide a 2-sentence advisory on the top dark scenes and priority actions to bring them into full coverage across contacts, skills, datasets, and risk signals.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -218,7 +219,7 @@ export default function SceneContactSkillDatasetRiskFoundation() {
       const text = d.response || d.message || d.content || JSON.stringify(d);
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 400) }),

@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const TABS = ['ALL', 'FULLY_PLANNED', 'SCENARIO_ONLY', 'TASK_ONLY', 'UNPLANNED'];
 const CLASS_COLOR = {
   FULLY_PLANNED: '#22c55e',
@@ -61,9 +62,9 @@ export default function RiskScenarioTaskReadiness() {
     setError('');
     try {
       const [riskRes, scenRes, taskRes] = await Promise.all([
-        fetch(`${API}/entities/RiskSignal`),
-        fetch(`${API}/v1/scenario/list`),
-        fetch(`${API}/entities/Task`),
+        fetch(`${apiBase()}/entities/RiskSignal`),
+        fetch(`${apiBase()}/v1/scenario/list`),
+        fetch(`${apiBase()}/entities/Task`),
       ]);
       const [riskData, scenData, taskData] = await Promise.all([
         riskRes.ok ? riskRes.json() : [],
@@ -128,7 +129,7 @@ export default function RiskScenarioTaskReadiness() {
     const key = row.id || row.title || row.name;
     setAssessing(key);
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

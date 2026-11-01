@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 
 const TABS = ['ALL', 'FULLY_COVERED', 'DUAL_LINKED', 'SINGLE_LINKED', 'UNCOVERED'];
 
@@ -44,10 +45,10 @@ export default function ContactPersonnelIntelCoverage() {
     setErr(null);
     try {
       const [conRes, kbRes, repRes, opsRes] = await Promise.all([
-        fetch(`${API}/entities/Contact?limit=200`),
-        fetch(`${API}/knowledge/`),
-        fetch(`${API}/v1/reports`),
-        fetch(`${API}/v1/ops/events`),
+        fetch(`${apiBase()}/entities/Contact?limit=200`),
+        fetch(`${apiBase()}/knowledge/`),
+        fetch(`${apiBase()}/v1/reports`),
+        fetch(`${apiBase()}/v1/ops/events`),
       ]);
       const conData = conRes.ok ? await conRes.json() : {};
       const kbData  = kbRes.ok  ? await kbRes.json()  : {};
@@ -164,7 +165,7 @@ export default function ContactPersonnelIntelCoverage() {
     setBrief('');
     try {
       const ctx = `Contacts:${stats.total} FullyCovered:${stats.fullyCovered} DualLinked:${stats.dualLinked} SingleLinked:${stats.singleLinked} Uncovered:${stats.uncovered} COVERAGE%:${covPct}`;
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: `CPRICOVER assessment: ${ctx}. In 2 sentences, assess personnel intelligence coverage and identify the most critical gap among uncovered contacts.` }),

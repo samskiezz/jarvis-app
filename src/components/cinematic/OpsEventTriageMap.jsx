@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'TRIAGED', 'ACTIVE', 'UNASSIGNED'];
@@ -45,9 +46,9 @@ export default function OpsEventTriageMap() {
     setError('');
     try {
       const [evRes, invRes, taskRes] = await Promise.all([
-        fetch(`${API}/v1/ops/events`),
-        fetch(`${API}/v1/investigations`),
-        fetch(`${API}/entities/Task`),
+        fetch(`${apiBase()}/v1/ops/events`),
+        fetch(`${apiBase()}/v1/investigations`),
+        fetch(`${apiBase()}/entities/Task`),
       ]);
       const evJson   = evRes.ok   ? await evRes.json()   : {};
       const invJson  = invRes.ok  ? await invRes.json()  : {};
@@ -119,7 +120,7 @@ export default function OpsEventTriageMap() {
     const context = `Ops events: ${rows.length}, Triaged (inv+task): ${counts.TRIAGED}, Active (inv or task only): ${counts.ACTIVE}, Unassigned: ${counts.UNASSIGNED}. Investigations: ${invCount}, Tasks: ${taskCount}.`;
     setAssessing(true);
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: `Provide a 2-sentence ops event triage brief. ${context}` }),

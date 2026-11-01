@@ -38,8 +38,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'COMMANDED', 'MODELED', 'GRAPHED', 'DOCUMENTED', 'ADRIFT'];
@@ -217,7 +218,7 @@ export default function TaskBrainGraphReportOpsMissionControl() {
     const summary = `Tasks: ${rows.length}. Commanded: ${counts.COMMANDED}. Modeled: ${counts.MODELED}. Graphed: ${counts.GRAPHED}. Documented: ${counts.DOCUMENTED}. Adrift: ${counts.ADRIFT}.`;
     const prompt = `JARVIS task mission-control intelligence audit: ${summary}. Identify the most critical ADRIFT tasks — those with no brain model, no graph trace, no report, and no ops alert coverage — representing full mission orphans. Provide a 2-sentence advisory on the top adrift tasks and priority actions to bring them into operational command across the brain, graph, reporting, and alert layers.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -226,7 +227,7 @@ export default function TaskBrainGraphReportOpsMissionControl() {
       const text = d.response || d.message || d.content || JSON.stringify(d);
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
           body: JSON.stringify({ text: text.slice(0, 400) }),

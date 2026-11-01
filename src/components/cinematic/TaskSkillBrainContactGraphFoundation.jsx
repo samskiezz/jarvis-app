@@ -36,8 +36,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'GROUNDED', 'CAPABLE', 'STAFFED', 'ADRIFT'];
@@ -163,11 +164,11 @@ export default function TaskSkillBrainContactGraphFoundation() {
       const hdrs = { Authorization: `Bearer ${API_KEY}` };
 
       const [tasksRaw, skillsRaw, brainRaw, contactsRaw, graphRaw] = await Promise.all([
-        fetch(`${API}/entities/Task`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/v1/aip/skill`,           { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/v1/cinematic/brain`,     { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/entities/Contact`,       { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
-        fetch(`${API}/v1/graph/centrality`,    { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/entities/Task`,          { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/aip/skill`,           { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/cinematic/brain`,     { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/entities/Contact`,       { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
+        fetch(`${apiBase()}/v1/graph/centrality`,    { headers: hdrs }).then(r => r.ok ? r.json() : null).catch(() => null),
       ]);
 
       const tasks      = normalizeTasks(tasksRaw);
@@ -274,7 +275,7 @@ export default function TaskSkillBrainContactGraphFoundation() {
     try {
       const hdrs = { Authorization: `Bearer ${API_KEY}`, 'Content-Type': 'application/json' };
       const script = buildTsbcgScript();
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers: hdrs,
         body: JSON.stringify({ message: script }),
       });
@@ -282,7 +283,7 @@ export default function TaskSkillBrainContactGraphFoundation() {
       const text = d.response || d.message || d.content || d.text || JSON.stringify(d);
       setAssessment(text);
       try {
-        await fetch(`${API}/v1/voice/tts`, {
+        await fetch(`${apiBase()}/v1/voice/tts`, {
           method: 'POST', headers: hdrs,
           body: JSON.stringify({ text: text.slice(0, 400) }),
         });

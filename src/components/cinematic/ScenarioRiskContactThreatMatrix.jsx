@@ -21,8 +21,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ACTIVE_THREAT', 'AT_RISK', 'SCENED', 'SHADOW'];
@@ -104,9 +105,9 @@ export default function ScenarioRiskContactThreatMatrix() {
     try {
       const h = { Authorization: `Bearer ${API_KEY}` };
       const [sRes, rRes, cRes] = await Promise.all([
-        fetch(`${API}/v1/scenario/list`,      { headers: h }),
-        fetch(`${API}/entities/RiskSignal`,   { headers: h }),
-        fetch(`${API}/entities/Contact`,      { headers: h }),
+        fetch(`${apiBase()}/v1/scenario/list`,      { headers: h }),
+        fetch(`${apiBase()}/entities/RiskSignal`,   { headers: h }),
+        fetch(`${apiBase()}/entities/Contact`,      { headers: h }),
       ]);
       const [sRaw, rRaw, cRaw] = await Promise.all([
         sRes.ok ? sRes.json() : {},
@@ -160,7 +161,7 @@ export default function ScenarioRiskContactThreatMatrix() {
     const atCount = rows.filter(r => r._cls === 'ACTIVE_THREAT').length;
     const prompt = `Scenario × RiskSignal × Contact Strategic Threat Matrix: ${rows.length} scenarios cross-referenced against ${riskCount} risk signals and ${contactCount} contacts. ACTIVE_THREAT:${atCount} AT_RISK:${rows.filter(r=>r._cls==='AT_RISK').length} SCENED:${rows.filter(r=>r._cls==='SCENED').length} SHADOW:${rows.filter(r=>r._cls==='SHADOW').length}. Provide a 2-sentence strategic threat assessment identifying the highest-priority active threat scenarios and recommended immediate actions.`;
     try {
-      const r = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const r = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${API_KEY}` },
         body: JSON.stringify({ message: prompt }),
@@ -170,7 +171,7 @@ export default function ScenarioRiskContactThreatMatrix() {
       setAssessment(answer);
       if (answer) {
         try {
-          await fetch(`${API}/v1/voice/tts`, {
+          await fetch(`${apiBase()}/v1/voice/tts`, {
             method: 'POST', headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text: answer }),
           });

@@ -19,8 +19,9 @@
  * Auto-refresh: 90 s
  */
 import React, { useState, useEffect, useCallback, useRef } from 'react';
+import { apiBase } from "@/api/cinematicDataAdapters";
 
-const API     = import.meta.env.VITE_API_URL || '';
+// API base resolved via apiBase()
 const API_KEY = import.meta.env.VITE_JARVIS_API_KEY || 'dev-key';
 
 const TABS = ['ALL', 'ANCHORED', 'TRACKED', 'DOCUMENTED', 'ORPHAN'];
@@ -84,9 +85,9 @@ export default function TaskInvestigationKnowledgeClosure() {
     setLoading(true); setError('');
     try {
       const [taskRes, invRes, knowRes] = await Promise.all([
-        fetch(`${API}/entities/Task`, { headers }),
-        fetch(`${API}/v1/investigations`, { headers }),
-        fetch(`${API}/knowledge/`, { headers }),
+        fetch(`${apiBase()}/entities/Task`, { headers }),
+        fetch(`${apiBase()}/v1/investigations`, { headers }),
+        fetch(`${apiBase()}/knowledge/`, { headers }),
       ]);
       const taskData = taskRes.ok ? await taskRes.json() : [];
       const invData  = invRes.ok  ? await invRes.json()  : [];
@@ -152,7 +153,7 @@ export default function TaskInvestigationKnowledgeClosure() {
       `Active investigations: ${invCount}. Knowledge base items: ${knowCount}. ` +
       `In two sentences, identify the most critical closure gap and recommend the immediate action to reduce orphaned tasks.`;
     try {
-      const res = await fetch(`${API}/v1/jarvis/agent/chat`, {
+      const res = await fetch(`${apiBase()}/v1/jarvis/agent/chat`, {
         method: 'POST', headers,
         body: JSON.stringify({ message: prompt }),
       });
