@@ -761,6 +761,7 @@ import SwarmInvestigationRiskKnowledge from '@/components/cinematic/SwarmInvesti
 import GraphOpsContactScenarioCommand from '@/components/cinematic/GraphOpsContactScenarioCommand';
 import TaskRiskOpsGraphThreatCoverage from '@/components/cinematic/TaskRiskOpsGraphThreatCoverage';
 import KnowledgeRiskOpsSwarmCoverageMap from '@/components/cinematic/KnowledgeRiskOpsSwarmCoverageMap';
+import ScenarioContactRiskDatasetCoverageMap from '@/components/cinematic/ScenarioContactRiskDatasetCoverageMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2388,6 +2389,8 @@ function App() {
             <TaskRiskOpsGraphThreatCoverage />
             {/* F254 (overnight 2026-11-01): Knowledge × RiskSignal × Ops Alert × SwarmJob Intelligence Response Coverage Map — ◈ KRSMAP button (left:190040, bottom:8, zIndex:350); fetches /knowledge/ + /entities/RiskSignal + /v1/ops/alerts + /entities/SwarmJob; keyword-matches each knowledge article against risk signals, ops alerts, and swarm jobs to classify COVERED/ALERTED/PROCESSING/DARK; red pulse on DARK count (intelligence blind spots with no grounding); expandable rows show matched risk signals with severity badge + matched ops alerts + matched swarm jobs with status badge; ASSESS + TTS; isKrsmapQuery+buildKrsmapScript exported; jarvis:krsmap-toggle event; 90-s auto-refresh */}
             <KnowledgeRiskOpsSwarmCoverageMap />
+            {/* F255 (overnight 2026-11-01): Scenario × Contact × RiskSignal × Dataset Strategic Coverage Map — ◈ SCRMAP button (left:190600, bottom:8, zIndex:351); fetches /v1/scenario/list + /entities/Contact + /entities/RiskSignal + /v1/datasets; keyword-matches each scenario against contacts, risk signals, and datasets to classify SECURED/STAFFED/SIGNALED/EXPOSED; red pulse on EXPOSED count (strategic blind spots); expandable rows show matched contacts with role/org badge + matched risk signals with severity badge + matched datasets with row-count badge; ASSESS + TTS; isScrmapQuery+buildScrmapScript exported; jarvis:scrmap-toggle event; 90-s auto-refresh */}
+            <ScenarioContactRiskDatasetCoverageMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
