@@ -283,3 +283,4 @@ Commits pushed to jarvis-overnight:
   b46a5209 fix: add BackendConnectionStatus indicator and API pattern check to Phase 2
   99c9364f fix: improve Phase 1 server-down detection during Playwright route checks
 [2026-11-01] F265 IntelProfileContactGraphOpsNetwork.jsx — ◈ ICONET panel; /entities/IntelProfile + /entities/Contact + /v1/graph/centrality + /v1/ops/alerts → IMPACT/CONNECTED/TRACED/DORMANT; isIconetQuery+buildIconetScript wired in JarvisBrain.jsx; mounted in App.jsx; Vite build exit:0
+[2026-11-01] F266 ReportDatasetContactSwarmProductionChain.jsx — ◈ RDCSP panel; /v1/reports + /v1/datasets + /entities/Contact + /entities/SwarmJob → AUTHORITATIVE/OWNED/ACTIVE/ADRIFT; isRdcspQuery+buildRdcspScript wired in JarvisBrain.jsx; mounted in App.jsx; Vite build exit:0

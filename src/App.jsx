@@ -772,6 +772,7 @@ import TaskKnowledgeBrainGraphFoundation from '@/components/cinematic/TaskKnowle
 import OpsAlertDatasetInvestigationBrainContinuity from '@/components/cinematic/OpsAlertDatasetInvestigationBrainContinuity';
 import ReportScenarioRiskGraphStrategicCommand from '@/components/cinematic/ReportScenarioRiskGraphStrategicCommand';
 import IntelProfileContactGraphOpsNetwork from '@/components/cinematic/IntelProfileContactGraphOpsNetwork';
+import ReportDatasetContactSwarmProductionChain from '@/components/cinematic/ReportDatasetContactSwarmProductionChain';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2418,6 +2419,7 @@ function App() {
             <OpsAlertDatasetInvestigationBrainContinuity />
             <ReportScenarioRiskGraphStrategicCommand />
             <IntelProfileContactGraphOpsNetwork />
+            <ReportDatasetContactSwarmProductionChain />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>
