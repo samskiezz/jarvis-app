@@ -191,6 +191,7 @@ import { isItskocQuery } from "@/components/cinematic/IntelProfileTaskScenarioKn
 import { isDoscamQuery } from "@/components/cinematic/DatasetOpsScenarioContactActivation";
 import { isSirkmapQuery } from "@/components/cinematic/SwarmInvestigationRiskKnowledge";
 import { isGoacmdQuery } from "@/components/cinematic/GraphOpsContactScenarioCommand";
+import { isTrgcovQuery } from "@/components/cinematic/TaskRiskOpsGraphThreatCoverage";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -468,6 +469,7 @@ export default function JarvisBrain() {
     if (isDoscamQuery(q))  { window.dispatchEvent(new Event("jarvis:doscam-toggle")); }
     if (isSirkmapQuery(q)) { window.dispatchEvent(new Event("jarvis:sirkmap-toggle")); }
     if (isGoacmdQuery(q))  { window.dispatchEvent(new Event("jarvis:goacmd-toggle")); }
+    if (isTrgcovQuery(q))  { window.dispatchEvent(new Event("jarvis:trgcov-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
