@@ -753,6 +753,7 @@ import ScenarioBrainContactOpsActivation from '@/components/cinematic/ScenarioBr
 import IntelProfileGraphTaskOpsNetwork from '@/components/cinematic/IntelProfileGraphTaskOpsNetwork';
 import SwarmKnowledgeOpsContactCoverage from '@/components/cinematic/SwarmKnowledgeOpsContactCoverage';
 import RiskSignalDatasetInvestigationContact from '@/components/cinematic/RiskSignalDatasetInvestigationContact';
+import BrainIntelProfileOpsAlertTaskActivation from '@/components/cinematic/BrainIntelProfileOpsAlertTaskActivation';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2364,6 +2365,8 @@ function App() {
             <SwarmKnowledgeOpsContactCoverage />
             {/* F246 (overnight 2026-11-01): RiskSignal × Dataset × Investigation × Contact Threat Intelligence Grounding — ◈ RIDIGC button (left:185560, bottom:8, zIndex:342); fetches /entities/RiskSignal + /v1/datasets + /v1/investigations + /entities/Contact; keyword-matches each risk signal against datasets, investigations, and contacts to classify GROUNDED/TRACKED/LINKED/DARK; red pulse on DARK count (ungrounded threat signals with no dataset backing, no investigation, no contact owner); expandable rows show matched datasets with row-count badge + matched investigations with status badge + matched contacts with role/org; ASSESS + TTS; isRidigcQuery+buildRidigcScript exported; jarvis:ridigc-toggle event; 90-s auto-refresh */}
             <RiskSignalDatasetInvestigationContact />
+            {/* F247 (overnight 2026-11-01): Brain × IntelProfile × Ops Alert × Task Intelligence Command Activation — ◈ BIOTCMD button (left:186120, bottom:8, zIndex:343); fetches /v1/cinematic/brain + /entities/IntelProfile + /v1/ops/alerts + /entities/Task; keyword-matches each brain node against intel profiles, ops alerts, and tasks to classify ACTIVATED/COMMANDING/ACTIVE/DARK; red pulse on DARK count (unactivated brain nodes with no intel profile, no ops alert, no task grounding); expandable rows show matched intel profiles with category badge + matched ops alerts with severity badge + matched tasks with status badge; ASSESS + TTS; isBiotcmdQuery+buildBiotcmdScript exported; jarvis:biotcmd-toggle event; 90-s auto-refresh */}
+            <BrainIntelProfileOpsAlertTaskActivation />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
