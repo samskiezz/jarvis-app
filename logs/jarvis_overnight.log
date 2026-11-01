@@ -266,3 +266,19 @@
 [2026-11-01] F262 TaskKnowledgeBrainGraphFoundation — Task×Knowledge×Brain×Graph GROUNDED/KNOWN/PARTIAL/ADRIFT; /entities/Task+/knowledge/+/v1/cinematic/brain+/v1/graph/centrality; left:194520 zIndex:358; Vite build exit:0
 [2026-11-01 18:18:40] F263 OpsAlertDatasetInvestigationBrainContinuity.jsx — ◈ OADIBC (left:195080 zIndex:359); /v1/ops/alerts+/v1/datasets+/v1/investigations+/v1/cinematic/brain → GROUNDED/SUPPORTED/TRACKED/BLIND; red pulse on BLIND; Vite build exit:0
 [2026-11-01] F264 Report × Scenario × RiskSignal × Graph Strategic Intelligence Command Network (RSGCN): ReportScenarioRiskGraphStrategicCommand.jsx; wired App.jsx + JarvisBrain.jsx; left:195640 zIndex:360; Vite build exit:0
+
+=== OVERNIGHT RUN 2026-11-01 ===
+Phase 1 (Health):  PASS — 6/6 routes healthy, build clean
+Phase 2 (Harden):  PASS — 8/8 checks clean
+Phase 3 (Feature): SKIPPED — backlog 265/265 complete, nothing to build
+
+Fixes applied:
+  - 185 components: broken VITE_API_URL || '' → apiBase() from cinematicDataAdapters
+  - New: BackendConnectionStatus.jsx (GREEN/RED/AMBER backend indicator)
+  - Phase 2: added apiPatterns check to detect broken API URL patterns
+  - Phase 1: improved server-down detection during Playwright route checks
+
+Commits pushed to jarvis-overnight:
+  fa3f5546 fix: replace broken VITE_API_URL pattern with apiBase() across 185 cinematic components
+  b46a5209 fix: add BackendConnectionStatus indicator and API pattern check to Phase 2
+  99c9364f fix: improve Phase 1 server-down detection during Playwright route checks
