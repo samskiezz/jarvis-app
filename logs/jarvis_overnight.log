@@ -282,3 +282,4 @@ Commits pushed to jarvis-overnight:
   fa3f5546 fix: replace broken VITE_API_URL pattern with apiBase() across 185 cinematic components
   b46a5209 fix: add BackendConnectionStatus indicator and API pattern check to Phase 2
   99c9364f fix: improve Phase 1 server-down detection during Playwright route checks
+[2026-11-01] F265 IntelProfileContactGraphOpsNetwork.jsx — ◈ ICONET panel; /entities/IntelProfile + /entities/Contact + /v1/graph/centrality + /v1/ops/alerts → IMPACT/CONNECTED/TRACED/DORMANT; isIconetQuery+buildIconetScript wired in JarvisBrain.jsx; mounted in App.jsx; Vite build exit:0

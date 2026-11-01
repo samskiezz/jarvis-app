@@ -771,6 +771,7 @@ import SwarmDatasetContactGraphIntelMap from '@/components/cinematic/SwarmDatase
 import TaskKnowledgeBrainGraphFoundation from '@/components/cinematic/TaskKnowledgeBrainGraphFoundation';
 import OpsAlertDatasetInvestigationBrainContinuity from '@/components/cinematic/OpsAlertDatasetInvestigationBrainContinuity';
 import ReportScenarioRiskGraphStrategicCommand from '@/components/cinematic/ReportScenarioRiskGraphStrategicCommand';
+import IntelProfileContactGraphOpsNetwork from '@/components/cinematic/IntelProfileContactGraphOpsNetwork';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2416,6 +2417,7 @@ function App() {
             <TaskKnowledgeBrainGraphFoundation />
             <OpsAlertDatasetInvestigationBrainContinuity />
             <ReportScenarioRiskGraphStrategicCommand />
+            <IntelProfileContactGraphOpsNetwork />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>

@@ -203,6 +203,7 @@ import { isSdcgamQuery } from "@/components/cinematic/SwarmDatasetContactGraphIn
 import { isTkbgfQuery } from "@/components/cinematic/TaskKnowledgeBrainGraphFoundation";
 import { isOadibcQuery } from "@/components/cinematic/OpsAlertDatasetInvestigationBrainContinuity";
 import { isRsgcnQuery } from "@/components/cinematic/ReportScenarioRiskGraphStrategicCommand";
+import { isIconetQuery } from "@/components/cinematic/IntelProfileContactGraphOpsNetwork";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -492,6 +493,7 @@ export default function JarvisBrain() {
     if (isTkbgfQuery(q))   { window.dispatchEvent(new Event("jarvis:tkbgf-toggle")); }
     if (isOadibcQuery(q))  { window.dispatchEvent(new Event("jarvis:oadibc-toggle")); }
     if (isRsgcnQuery(q))   { window.dispatchEvent(new Event("jarvis:rsgcn-toggle")); }
+    if (isIconetQuery(q))  { window.dispatchEvent(new Event("jarvis:iconet-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
