@@ -764,6 +764,7 @@ import KnowledgeRiskOpsSwarmCoverageMap from '@/components/cinematic/KnowledgeRi
 import ScenarioContactRiskDatasetCoverageMap from '@/components/cinematic/ScenarioContactRiskDatasetCoverageMap';
 import KnowledgeTaskContactSwarmAccountability from '@/components/cinematic/KnowledgeTaskContactSwarmAccountability';
 import ScenarioTaskContactBrainMissionAuthority from '@/components/cinematic/ScenarioTaskContactBrainMissionAuthority';
+import BrainRiskSignalReportSwarmMatrix from '@/components/cinematic/BrainRiskSignalReportSwarmMatrix';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2397,6 +2398,8 @@ function App() {
             <KnowledgeTaskContactSwarmAccountability />
             {/* F257 (overnight 2026-11-01): Scenario × Task × Contact × Brain Mission Authority Index — ◈ STCBMI button (left:191720, bottom:8, zIndex:353); fetches /v1/scenario/list + /entities/Task + /entities/Contact + /v1/cinematic/brain; keyword-matches each scenario against tasks, contacts, and brain nodes to classify COMMANDING/ACTIVE/PARTIAL/UNARMED; red pulse on UNARMED count (fully unsupported scenarios — strategic blind spots); expandable rows show matched tasks with status badge + matched contacts with role/org + matched brain nodes with type badge; ASSESS + TTS; isStcbmiQuery+buildStcbmiScript exported; jarvis:stcbmi-toggle event; 90-s auto-refresh */}
             <ScenarioTaskContactBrainMissionAuthority />
+            {/* F258 (overnight 2026-11-01): Brain × RiskSignal × Report × SwarmJob Operational Threat Intelligence Matrix — ◈ BRRSWT button (left:192280, bottom:8, zIndex:354); fetches /v1/cinematic/brain + /entities/RiskSignal + /v1/reports + /entities/SwarmJob; keyword-matches each brain node against risk signals, reports, and swarm jobs to classify COMMANDED/SIGNALED/PROCESSED/DARK; red pulse on DARK count (brain nodes with no threat signal, no report, no swarm job — operational blind spots); expandable rows show matched risk signals with severity badge + matched reports with date badge + matched swarm jobs with status badge; ASSESS + TTS; isBrrswtQuery+buildBrrswtScript exported; jarvis:brrswt-toggle event; 90-s auto-refresh */}
+            <BrainRiskSignalReportSwarmMatrix />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
