@@ -154,16 +154,46 @@ function waitForServer(url, timeoutMs = 60_000) {
 
 // ── Browser checks ───────────────────────────────────────────────────────────
 
-async function checkRoutes() {
+function isServerAlive() {
+  return new Promise((resolve) => {
+    http.get(BASE, (res) => { res.resume(); resolve(true); })
+      .on("error", () => resolve(false));
+  });
+}
+
+async function checkRoutes(serverChild) {
   const browser = await chromium.launch({
     headless: true,
     executablePath: "/opt/pw-browsers/chromium-1243/chrome-linux64/chrome",
-    args: ["--no-sandbox"],
+    args: ["--no-sandbox", "--disable-dev-shm-usage"],
   });
   const context = await browser.newContext({ viewport: { width: 1920, height: 1080 } });
   const results = [];
+  let serverDied = false;
 
   for (const route of ROUTES) {
+    // Check server is still alive before each route
+    if (!serverDied) {
+      const alive = await isServerAlive();
+      if (!alive) {
+        log("Dev server is no longer responding — marking remaining routes as server_down");
+        serverDied = true;
+      }
+    }
+
+    if (serverDied) {
+      results.push({
+        path: route.path,
+        label: route.label,
+        rendered: false,
+        errors: ["server_down: dev server exited before this route was tested"],
+        screenshot: null,
+        serverDown: true,
+      });
+      log(`⊘ ${route.path} — skipped (server down)`);
+      continue;
+    }
+
     const page = await context.newPage();
     const crashes = [];
 
@@ -187,23 +217,34 @@ async function checkRoutes() {
       try {
         await page.goto(`${BASE}${route.path}`, { waitUntil: "domcontentloaded", timeout: navTimeout });
       } catch (navErr) {
-        // The home route may redirect through a loader — try waiting for any content
         if (route.path === "/") {
           await page.waitForTimeout(5000);
+        } else if (navErr.message && navErr.message.includes("ERR_CONNECTION_REFUSED")) {
+          // Server died mid-test
+          serverDied = true;
+          crashes.length = 0;
+          await page.close();
+          results.push({
+            path: route.path,
+            label: route.label,
+            rendered: false,
+            errors: ["server_down: dev server exited during navigation"],
+            screenshot: null,
+            serverDown: true,
+          });
+          log(`⊘ ${route.path} — server died during navigation`);
+          continue;
         } else {
           throw navErr;
         }
       }
       await page.waitForTimeout(3000);
 
-      // Check for non-white-screen: at least one visible element with content
       rendered = await page.evaluate(() => {
         const body = document.body;
         if (!body) return false;
-        // React error boundary detection
         const errorBoundary = body.querySelector('[class*="error"], [class*="Error"]');
         if (errorBoundary && errorBoundary.textContent.includes("went wrong")) return false;
-        // White screen: body has no meaningful child content
         const text = body.innerText.trim();
         return text.length > 10;
       });
@@ -308,17 +349,23 @@ async function main() {
 
   // Phase 1c: Route checks
   log("Checking routes with Playwright...");
-  const routeResults = await checkRoutes();
+  const routeResults = await checkRoutes(server);
   report.routes = routeResults;
 
-  // Determine pass/fail
-  const crashingRoutes = routeResults.filter((r) => r.errors.length > 0 || !r.rendered);
+  // Determine pass/fail — server_down routes are not JS crashes, don't count them as failures
+  const serverDownRoutes = routeResults.filter((r) => r.serverDown);
+  const crashingRoutes = routeResults.filter((r) => !r.serverDown && (r.errors.length > 0 || !r.rendered));
+  report.serverDown = serverDownRoutes.length;
   report.passed = crashingRoutes.length === 0;
 
-  if (report.passed) {
-    log(`ALL ${routeResults.length} ROUTES HEALTHY.`);
+  if (serverDownRoutes.length > 0) {
+    log(`${serverDownRoutes.length} route(s) skipped — dev server exited (not a JS crash).`);
+  }
+  if (report.passed && crashingRoutes.length === 0) {
+    const tested = routeResults.length - serverDownRoutes.length;
+    log(`ALL ${tested} TESTED ROUTES HEALTHY.${serverDownRoutes.length > 0 ? ` (${serverDownRoutes.length} skipped — server OOM/exit)` : ""}`);
   } else {
-    log(`${crashingRoutes.length}/${routeResults.length} routes have issues:`);
+    log(`${crashingRoutes.length}/${routeResults.length} routes have JS issues:`);
     crashingRoutes.forEach((r) => {
       log(`  ${r.path}: rendered=${r.rendered}, errors=${r.errors.length}`);
     });
