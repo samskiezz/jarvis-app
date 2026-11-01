@@ -762,6 +762,7 @@ import GraphOpsContactScenarioCommand from '@/components/cinematic/GraphOpsConta
 import TaskRiskOpsGraphThreatCoverage from '@/components/cinematic/TaskRiskOpsGraphThreatCoverage';
 import KnowledgeRiskOpsSwarmCoverageMap from '@/components/cinematic/KnowledgeRiskOpsSwarmCoverageMap';
 import ScenarioContactRiskDatasetCoverageMap from '@/components/cinematic/ScenarioContactRiskDatasetCoverageMap';
+import KnowledgeTaskContactSwarmAccountability from '@/components/cinematic/KnowledgeTaskContactSwarmAccountability';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2391,6 +2392,8 @@ function App() {
             <KnowledgeRiskOpsSwarmCoverageMap />
             {/* F255 (overnight 2026-11-01): Scenario × Contact × RiskSignal × Dataset Strategic Coverage Map — ◈ SCRMAP button (left:190600, bottom:8, zIndex:351); fetches /v1/scenario/list + /entities/Contact + /entities/RiskSignal + /v1/datasets; keyword-matches each scenario against contacts, risk signals, and datasets to classify SECURED/STAFFED/SIGNALED/EXPOSED; red pulse on EXPOSED count (strategic blind spots); expandable rows show matched contacts with role/org badge + matched risk signals with severity badge + matched datasets with row-count badge; ASSESS + TTS; isScrmapQuery+buildScrmapScript exported; jarvis:scrmap-toggle event; 90-s auto-refresh */}
             <ScenarioContactRiskDatasetCoverageMap />
+            {/* F256 (overnight 2026-11-01): Knowledge × Task × Contact × SwarmJob Intelligence Activation Accountability — ◈ KTCSAW button (left:191160, bottom:8, zIndex:352); fetches /knowledge/ + /entities/Task + /entities/Contact + /entities/SwarmJob; keyword-matches each knowledge article against tasks, contacts, and swarm jobs to classify GROUNDED/ACTIVE/STAFFED/DARK; amber pulse on DARK count (orphaned knowledge with no task, no contact, no swarm processing — intelligence dead-ends); expandable rows show matched tasks with status badge + matched contacts with role/org + matched swarm jobs with status badge; ASSESS + TTS; isKtcsawQuery+buildKtcsawScript exported; jarvis:ktcsaw-toggle event; 90-s auto-refresh */}
+            <KnowledgeTaskContactSwarmAccountability />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
