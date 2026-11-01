@@ -169,7 +169,7 @@ export default function ScenarioKnowledgeReadiness() {
       <button
         onClick={() => { setOpen(true); load(); }}
         style={{
-          position: "fixed", bottom: 8, left: 12920, zIndex: 66,
+          position: "fixed", bottom: 8, left: 13200, zIndex: 66,
           background: "rgba(5,8,13,0.7)", border: `1px solid ${dark > 0 ? AMB : CY}44`,
           color: dark > 0 ? AMB : CY, fontSize: 10, letterSpacing: 1, padding: "3px 8px",
           borderRadius: 4, cursor: "pointer", fontFamily: "'JetBrains Mono',monospace",

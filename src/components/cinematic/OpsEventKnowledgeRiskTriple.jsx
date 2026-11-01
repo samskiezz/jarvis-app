@@ -20,7 +20,7 @@
  * Expand row:  matched KB articles + matched risk signals with scores.
  * ▶ ASSESS:   2-sentence AI brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
  *
- * Toggle:  ◈ OEKR  at left:3300 bottom:18, zIndex:68.
+ * Toggle:  ◈ OEKR  at left:3580 bottom:18, zIndex:68.
  * Event:   jarvis:oekr-toggle
  * Voice:   "ops knowledge risk / oekr / ops event coverage / ops triple /
  *           knowledge risk ops / ops coverage triple / which ops events have no coverage"
@@ -37,7 +37,7 @@ const MUTED = "#6E8AA0";
 const BG    = "rgba(4,7,14,0.96)";
 const MONO  = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
 
-const BTN_LEFT   = 3300;
+const BTN_LEFT   = 3580;
 const REFRESH_MS = 60_000;
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||

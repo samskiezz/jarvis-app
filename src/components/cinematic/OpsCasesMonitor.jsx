@@ -255,7 +255,7 @@ export default function OpsCasesMonitor() {
         onClick={() => setOpen(v => !v)}
         title="Ops Cases Monitor — F167 (live /v1/cases)"
         style={{
-          position: "fixed", bottom: 8, left: 55640, zIndex: 109,
+          position: "fixed", bottom: 8, left: 55920, zIndex: 109,
           background: open ? `${RED}22` : "rgba(5,8,13,0.7)",
           border: `1px solid ${open ? RED : RED + "55"}`,
           color: open ? RED : `${RED}99`,
@@ -275,7 +275,7 @@ export default function OpsCasesMonitor() {
 
       {open && (
         <div style={{
-          position: "fixed", bottom: 40, left: 55640,
+          position: "fixed", bottom: 40, left: 55920,
           width: "min(500px, 96vw)",
           maxHeight: "80vh",
           overflowY: "auto",

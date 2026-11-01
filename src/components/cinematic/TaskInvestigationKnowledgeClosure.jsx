@@ -174,7 +174,7 @@ export default function TaskInvestigationKnowledgeClosure() {
         <button
           onClick={() => setOpen(true)}
           style={{
-            position: 'fixed', bottom: 8, left: 70760, zIndex: 137,
+            position: 'fixed', bottom: 8, left: 71040, zIndex: 137,
             background: 'rgba(0,0,0,0.75)', border: '1px solid #F59E0B',
             color: '#F59E0B', fontSize: 9, padding: '3px 6px', cursor: 'pointer',
             borderRadius: 3, letterSpacing: 1, fontFamily: 'monospace',
@@ -333,7 +333,7 @@ export default function TaskInvestigationKnowledgeClosure() {
       <button
         onClick={() => setOpen(false)}
         style={{
-          position: 'fixed', bottom: 8, left: 70760, zIndex: 9138,
+          position: 'fixed', bottom: 8, left: 71040, zIndex: 9138,
           background: 'rgba(245,158,11,0.15)', border: '1px solid #F59E0B',
           color: '#F59E0B', fontSize: 9, padding: '3px 6px', cursor: 'pointer',
           borderRadius: 3, letterSpacing: 1, fontFamily: 'monospace',

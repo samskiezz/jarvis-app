@@ -129,8 +129,8 @@ import { isGdtrscQuery } from "@/components/cinematic/GraphDatasetTaskReportSkil
 import { isIgrcatQuery } from "@/components/cinematic/IntelProfileGraphRiskOpsContactCommand";
 import { isLbgkrsQuery } from "@/components/cinematic/LiveIntelBrainGraphKnowledgeRiskOpsConvergence";
 import { isScdbgrQuery } from "@/components/cinematic/ScenarioDatasetContactBrainGraphRisk";
-import { isSkhcmQuery, buildSkhcmScript } from "@/components/cinematic/SystemBrainKnowledgeHealthMonitor";
-import { isSdbarcQuery, buildSdbarcScript } from "@/components/cinematic/SkillDatasetBrainOpsContactReportNexus";
+import { isSkhcmQuery } from "@/components/cinematic/SystemBrainKnowledgeHealthMonitor";
+import { isSdbarcQuery } from "@/components/cinematic/SkillDatasetBrainOpsContactReportNexus";
 import { isIvpwebQuery } from "@/components/cinematic/InvestigationDatasetBrainKnowledgeOpsProsecution";
 import { isCidioQuery } from "@/components/cinematic/ContactSkillDatasetInvestigationOpsCoverage";
 import { isIdksgfQuery } from "@/components/cinematic/IntelProfileDatasetKnowledgeSkillGraph";
@@ -202,7 +202,7 @@ import { isInviamQuery } from "@/components/cinematic/InvestigationIntelProfileI
 import { isSdcgamQuery } from "@/components/cinematic/SwarmDatasetContactGraphIntelMap";
 import { isTkbgfQuery } from "@/components/cinematic/TaskKnowledgeBrainGraphFoundation";
 import { isOadibcQuery } from "@/components/cinematic/OpsAlertDatasetInvestigationBrainContinuity";
-import { isRsgcnQuery, buildRsgcnScript } from "@/components/cinematic/ReportScenarioRiskGraphStrategicCommand";
+import { isRsgcnQuery } from "@/components/cinematic/ReportScenarioRiskGraphStrategicCommand";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.

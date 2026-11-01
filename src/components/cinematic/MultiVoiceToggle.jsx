@@ -3,7 +3,7 @@
  * Lets you switch the JARVIS TTS voice between ash / fable / onyx live.
  * Voice is persisted in localStorage (jarvis:tts_voice).
  * JarvisBrain imports getActiveVoice() and includes it in every /v1/voice/tts POST.
- * Toggle: ◈ VOICE button at left:1740 bottom strip.
+ * Toggle: ◈ VOICE button at left:2020 bottom strip.
  * Voice query ("JARVIS, switch to fable voice") handled via isVoiceQuery + buildVoiceScript.
  */
 import { useEffect, useState } from "react";
@@ -104,7 +104,7 @@ export default function MultiVoiceToggle() {
         title={`TTS Voice: ${voice} — click to pick, right-click to cycle`}
         onContextMenu={e => { e.preventDefault(); cycleVoice(); }}
         style={{
-          position: "fixed", left: 1740, bottom: 18, zIndex: 68,
+          position: "fixed", left: 2020, bottom: 18, zIndex: 68,
           background: open ? col + "cc" : "rgba(5,8,13,0.78)",
           border: `1px solid ${open ? col : col + "44"}`,
           borderRadius: 8,
@@ -124,7 +124,7 @@ export default function MultiVoiceToggle() {
 
       {open && (
         <div style={{
-          position: "fixed", left: 1740, bottom: 54, zIndex: 68,
+          position: "fixed", left: 2020, bottom: 54, zIndex: 68,
           width: 220,
           background: "rgba(4,6,14,0.97)",
           border: `1px solid ${col}33`,

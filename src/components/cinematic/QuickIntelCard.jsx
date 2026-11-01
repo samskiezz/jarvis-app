@@ -159,7 +159,7 @@ export default function QuickIntelCard() {
         onClick={() => setOpen(o => !o)}
         title="Quick Intel Card (Ctrl+Shift+I)"
         style={{
-          position: "fixed", bottom: 8, left: 480, zIndex: 9100,
+          position: "fixed", bottom: 8, left: 760, zIndex: 9100,
           background: open ? `${CY}22` : "rgba(4,8,14,0.82)",
           border: `1px solid ${open ? CY : CY + "44"}`,
           borderRadius: 6, padding: "3px 10px", cursor: "pointer",
@@ -176,7 +176,7 @@ export default function QuickIntelCard() {
       {open && (
         <div
           style={{
-            position: "fixed", bottom: 36, left: 480, zIndex: 9101,
+            position: "fixed", bottom: 36, left: 760, zIndex: 9101,
             width: 260,
             background: BG,
             border: `1px solid ${CY}33`,

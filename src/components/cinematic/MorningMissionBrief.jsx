@@ -282,7 +282,7 @@ export default function MorningMissionBrief() {
         onClick={() => setOpen(v => !v)}
         title="Morning Mission Brief — F166 (AI daily ops briefing)"
         style={{
-          position: "fixed", bottom: 8, left: 55080, zIndex: 108,
+          position: "fixed", bottom: 8, left: 55360, zIndex: 108,
           background: open ? `${CY}22` : "rgba(5,8,13,0.7)",
           border: `1px solid ${open ? CY : CY + "55"}`,
           color: open ? CY : `${CY}99`,
@@ -299,7 +299,7 @@ export default function MorningMissionBrief() {
 
       {open && (
         <div style={{
-          position: "fixed", bottom: 40, left: 55080,
+          position: "fixed", bottom: 40, left: 55360,
           width: "min(540px, 96vw)",
           maxHeight: "84vh",
           overflowY: "auto",

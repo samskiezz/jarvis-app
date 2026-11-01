@@ -165,7 +165,7 @@ export default function OpsEventStream() {
         onClick={() => setOpen(v => !v)}
         title="Ops Event Stream (F31)"
         style={{
-          position: "fixed", left: 1948, bottom: 18, zIndex: 68,
+          position: "fixed", left: 2228, bottom: 18, zIndex: 68,
           background: open ? `${btnColor}22` : "rgba(5,8,13,0.78)",
           border: `1px solid ${btnColor}${open ? "cc" : "55"}`,
           borderRadius: 7, padding: "5px 10px", cursor: "pointer",

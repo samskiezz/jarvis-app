@@ -15,7 +15,7 @@
  * Expand signal → matched KB articles + ops events with relevance bars.
  * ▶ ASSESS: 2-sentence brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
  *
- * Toggle:  ◈ RKET  at left:5460 bottom:18, zIndex:68.
+ * Toggle:  ◈ RKET  at left:5740 bottom:18, zIndex:68.
  * Event:   jarvis:rket-toggle
  * Voice:   "risk knowledge ops / rket / dark risks / risk ops coverage /
  *           risk kb / risk knowledge / risk triple / ops risk knowledge /
@@ -32,7 +32,7 @@ const RED   = "#FF3B6B";
 const MUTED = "#6E8AA0";
 const MONO  = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
 
-const BTN_LEFT   = 5460;
+const BTN_LEFT   = 5740;
 const REFRESH_MS = 90_000;
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||

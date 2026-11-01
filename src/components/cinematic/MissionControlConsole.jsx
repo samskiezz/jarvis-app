@@ -12,7 +12,7 @@
  * /v1/jarvis/agent/chat for a 2-sentence operational brief + TTS via
  * jarvis:speak-dossier.
  *
- * Toggle: ⬛ MCTL at left:71320 bottom:18 (off-screen HUD strip).
+ * Toggle: ⬛ MCTL at left:71600 bottom:18 (off-screen HUD strip).
  * Ctrl+Shift+L keyboard shortcut.
  * Voice: "mission control / mission console / mctl / control console /
  *         ops console / ops overview / operational overview / ops cockpit"
@@ -28,7 +28,7 @@ const RED    = "#FF4D6D";
 const AMB    = "#FFD700";
 const VIOLET = "#A78BFA";
 const DARK   = "rgba(5,8,13,0.92)";
-const BTN_LEFT = 71320;
+const BTN_LEFT = 71600;
 const POLL_MS  = 45_000;
 const API_KEY  =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) || "dev-key";

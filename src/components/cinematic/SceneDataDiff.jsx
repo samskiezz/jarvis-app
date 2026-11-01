@@ -9,7 +9,7 @@
  * If ≥ 3 anchors change in a single cycle JARVIS announces a brief via
  * jarvis:speak-dossier so the notification reaches the user hands-free.
  *
- * Toggle: △ DIFF at left:5200 bottom strip.
+ * Toggle: △ DIFF at left:5480 bottom strip.
  * Event:  jarvis:scene-diff-toggle
  * Voice:  "scene diff" | "scene changes" | "anchor changes" | "what changed"
  */
@@ -312,7 +312,7 @@ export default function SceneDataDiff() {
         onClick={() => setOpen(v => !v)}
         title="Scene Anchor Diff — live change tracker"
         style={{
-          position: "fixed", left: 5200, bottom: 18, zIndex: 68,
+          position: "fixed", left: 5480, bottom: 18, zIndex: 68,
           background: open ? accent : "rgba(5,8,13,0.75)",
           color: open ? "#030509" : accent,
           border: `1px solid ${accent}`,

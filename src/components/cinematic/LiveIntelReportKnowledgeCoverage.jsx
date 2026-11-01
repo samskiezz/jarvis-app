@@ -20,7 +20,7 @@
  *              + matched KB articles with topic badge + relevance bar.
  * ▶ ASSESS:   2-sentence AI brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
  *
- * Toggle:  ◈ LIRKC  at left:5940 bottom:18, zIndex:68.
+ * Toggle:  ◈ LIRKC  at left:5940 bottom:18, zIndex:72.
  * Event:   jarvis:lirkc-toggle
  * Voice:   "live intel report knowledge / lirkc / live event documentation /
  *           world event coverage / live knowledge report / event doc gap /
@@ -214,7 +214,7 @@ const BASE = {
   fontFamily: "'Share Tech Mono', 'Courier New', monospace",
   fontSize: 11,
   color: CY,
-  zIndex: 68,
+  zIndex: 72,
 };
 
 // ─── component ────────────────────────────────────────────────────────────────

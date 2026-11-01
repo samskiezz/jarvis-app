@@ -19,7 +19,7 @@
  *              + matched datasets with type badge + relevance bar.
  * ▶ ASSESS:   2-sentence AI brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
  *
- * Toggle:  ◈ IASD  at left:5880 bottom:18, zIndex:68.
+ * Toggle:  ◈ IASD  at left:5880 bottom:18, zIndex:71.
  * Event:   jarvis:iasd-toggle
  * Voice:   "investigation skill dataset / iasd / dark investigations /
  *           investigation resource / skill coverage investigation /
@@ -186,7 +186,7 @@ const BASE = {
   fontFamily: "'Share Tech Mono', 'Courier New', monospace",
   fontSize: 11,
   color: CY,
-  zIndex: 68,
+  zIndex: 71,
 };
 
 export default function InvestigationSkillDatasetTriple() {

@@ -20,7 +20,7 @@
  *              + matched datasets with category badge + relevance bar.
  * ▶ ASSESS:   2-sentence AI brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
  *
- * Toggle:  ◈ CSDM  at left:6000 bottom:18, zIndex:68.
+ * Toggle:  ◈ CSDM  at left:6000 bottom:18, zIndex:70.
  * Event:   jarvis:csdm-toggle
  * Voice:   "contact swarm dataset / csdm / contact mesh / swarm contact coverage /
  *           dataset contact / untracked contacts / contact intelligence mesh /
@@ -202,7 +202,7 @@ const BASE = {
   fontFamily: "'Share Tech Mono', 'Courier New', monospace",
   fontSize: 11,
   color: CY,
-  zIndex: 68,
+  zIndex: 70,
 };
 
 // ─── component ────────────────────────────────────────────────────────────────

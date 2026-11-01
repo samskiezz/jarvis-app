@@ -17,7 +17,7 @@
  *   with severity badge + relevance score bar.
  * ▶ ASSESS: 2-sentence brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
  *
- * Toggle:  ◈ KIRNT  at left:3900 bottom:18, zIndex:68
+ * Toggle:  ◈ KIRNT  at left:4180 bottom:18, zIndex:68
  * Event:   jarvis:kirnt-toggle
  * Voice:   "knowledge triple / kirnt / kb triple / knowledge investigation risk /
  *           knowledge coverage triple / dark knowledge"
@@ -35,7 +35,7 @@ const MUTED = "#6E8AA0";
 const BG    = "rgba(4,7,14,0.96)";
 const MONO  = "'JetBrains Mono','SF Mono',ui-monospace,monospace";
 
-const BTN_LEFT   = 3900;
+const BTN_LEFT   = 4180;
 const REFRESH_MS = 90_000;
 const API_KEY =
   (typeof import.meta !== "undefined" && import.meta.env?.VITE_API_KEY) ||

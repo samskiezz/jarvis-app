@@ -10,7 +10,7 @@
  *   • current total + last-refresh timestamp
  *
  * Auto-announces a SURGE via jarvis:speak-dossier when velocity crosses 3/min.
- * Toggle: ⚡ VEL button at left:4860 in the bottom strip.
+ * Toggle: ⚡ VEL button at left:5140 in the bottom strip.
  * Exports isThreatVelocityQuery + buildThreatVelocityScript for JarvisBrain.
  */
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -134,7 +134,7 @@ export default function ThreatVelocityMonitor() {
         onClick={() => setVisible((v) => !v)}
         title="Threat Velocity Monitor (F59)"
         style={{
-          position: "fixed", bottom: 8, left: 4860, zIndex: 60,
+          position: "fixed", bottom: 8, left: 5140, zIndex: 60,
           background: visible ? velColor : "rgba(5,8,13,0.7)",
           border: `1px solid ${velColor}55`,
           color: visible ? "#04060A" : velColor,

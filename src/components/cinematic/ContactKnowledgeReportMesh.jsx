@@ -20,7 +20,7 @@
  *              + matched reports with type badge + relevance bar (max 5).
  * ▶ ASSESS:   2-sentence AI brief via /v1/jarvis/agent/chat + jarvis:speak-dossier TTS.
  *
- * Toggle:  ◈ CKRM  at left:6180 bottom:18, zIndex:68.
+ * Toggle:  ◈ CKRM  at left:6180 bottom:18, zIndex:69.
  * Event:   jarvis:ckrm-toggle
  * Voice:   "contact knowledge report / ckrm / dark contacts / contact documentation /
  *           contact kb / contact report / untracked contacts / contact coverage /
@@ -195,7 +195,7 @@ const BASE = {
   position: 'fixed',
   fontFamily: "'JetBrains Mono', monospace",
   color: '#DCEBF5',
-  zIndex: 68,
+  zIndex: 69,
 };
 
 const PANEL = {

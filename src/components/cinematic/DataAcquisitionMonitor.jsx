@@ -168,7 +168,7 @@ export default function DataAcquisitionMonitor() {
 
       {open && (
         <div style={{
-          position: "fixed", bottom: 26, left: 2580, zIndex: 61,
+          position: "fixed", bottom: 26, left: 2860, zIndex: 61,
           width: 480, maxHeight: "72vh",
           background: "rgba(5,8,16,0.96)", border: `1px solid ${CY}44`,
           borderRadius: 10, fontFamily: "'JetBrains Mono',monospace",
