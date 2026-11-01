@@ -205,6 +205,7 @@ import { isOadibcQuery } from "@/components/cinematic/OpsAlertDatasetInvestigati
 import { isRsgcnQuery } from "@/components/cinematic/ReportScenarioRiskGraphStrategicCommand";
 import { isIconetQuery } from "@/components/cinematic/IntelProfileContactGraphOpsNetwork";
 import { isRdcspQuery } from "@/components/cinematic/ReportDatasetContactSwarmProductionChain";
+import { isOntbrQuery } from "@/components/cinematic/OntologyTypeBrowser";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -496,6 +497,7 @@ export default function JarvisBrain() {
     if (isRsgcnQuery(q))   { window.dispatchEvent(new Event("jarvis:rsgcn-toggle")); }
     if (isIconetQuery(q))  { window.dispatchEvent(new Event("jarvis:iconet-toggle")); }
     if (isRdcspQuery(q))   { window.dispatchEvent(new Event("jarvis:rdcsp-toggle")); }
+    if (isOntbrQuery(q))   { window.dispatchEvent(new Event("jarvis:ontbr-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

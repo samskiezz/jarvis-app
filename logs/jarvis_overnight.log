@@ -284,3 +284,4 @@ Commits pushed to jarvis-overnight:
   99c9364f fix: improve Phase 1 server-down detection during Playwright route checks
 [2026-11-01] F265 IntelProfileContactGraphOpsNetwork.jsx — ◈ ICONET panel; /entities/IntelProfile + /entities/Contact + /v1/graph/centrality + /v1/ops/alerts → IMPACT/CONNECTED/TRACED/DORMANT; isIconetQuery+buildIconetScript wired in JarvisBrain.jsx; mounted in App.jsx; Vite build exit:0
 [2026-11-01] F266 ReportDatasetContactSwarmProductionChain.jsx — ◈ RDCSP panel; /v1/reports + /v1/datasets + /entities/Contact + /entities/SwarmJob → AUTHORITATIVE/OWNED/ACTIVE/ADRIFT; isRdcspQuery+buildRdcspScript wired in JarvisBrain.jsx; mounted in App.jsx; Vite build exit:0
+[2026-11-01] F267 OntologyTypeBrowser.jsx — TREE-VIEW accordion of ontology types with nested objects, inline inspector, ASSESS+TTS. Wired App.jsx + JarvisBrain.jsx. Vite build exit:0.

@@ -773,6 +773,7 @@ import OpsAlertDatasetInvestigationBrainContinuity from '@/components/cinematic/
 import ReportScenarioRiskGraphStrategicCommand from '@/components/cinematic/ReportScenarioRiskGraphStrategicCommand';
 import IntelProfileContactGraphOpsNetwork from '@/components/cinematic/IntelProfileContactGraphOpsNetwork';
 import ReportDatasetContactSwarmProductionChain from '@/components/cinematic/ReportDatasetContactSwarmProductionChain';
+import OntologyTypeBrowser from '@/components/cinematic/OntologyTypeBrowser';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2420,6 +2421,7 @@ function App() {
             <ReportScenarioRiskGraphStrategicCommand />
             <IntelProfileContactGraphOpsNetwork />
             <ReportDatasetContactSwarmProductionChain />
+            <OntologyTypeBrowser />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>
