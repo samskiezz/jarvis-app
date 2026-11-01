@@ -755,6 +755,7 @@ import SwarmKnowledgeOpsContactCoverage from '@/components/cinematic/SwarmKnowle
 import RiskSignalDatasetInvestigationContact from '@/components/cinematic/RiskSignalDatasetInvestigationContact';
 import BrainIntelProfileOpsAlertTaskActivation from '@/components/cinematic/BrainIntelProfileOpsAlertTaskActivation';
 import ContactScenarioOpsRiskCoverage from '@/components/cinematic/ContactScenarioOpsRiskCoverage';
+import IntelProfileTaskScenarioKnowledgeCoverage from '@/components/cinematic/IntelProfileTaskScenarioKnowledgeCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2370,6 +2371,8 @@ function App() {
             <BrainIntelProfileOpsAlertTaskActivation />
             {/* F248 (overnight 2026-11-01): Contact × Scenario × Ops Alert × RiskSignal Operational Threat Coverage — ◈ CSORC button (left:186680, bottom:8, zIndex:344); fetches /entities/Contact + /v1/scenario/list + /v1/ops/alerts + /entities/RiskSignal; keyword-matches each contact against scenarios, ops alerts, and risk signals to classify COVERED/ALERTED/PARTIAL/DARK; red pulse on DARK count (personnel with no matching scenario playbook, no ops alert, and no risk signal coverage); expandable rows show matched scenarios with playbook badge + matched ops alerts with severity badge + matched risk signals with level badge; ASSESS + TTS; isCsorcQuery+buildCsorcScript exported; jarvis:csorc-toggle event; 90-s auto-refresh */}
             <ContactScenarioOpsRiskCoverage />
+            {/* F249 (overnight 2026-11-01): IntelProfile × Task × Scenario × Knowledge Intelligence Orchestration Coverage — ◈ ITSKOC button (left:187240, bottom:8, zIndex:345); fetches /entities/IntelProfile + /entities/Task + /v1/scenario/list + /knowledge/; keyword-matches each intel profile against tasks, scenarios, and knowledge articles to classify ORCHESTRATED/ACTIVE/SCRIPTED/DORMANT; red pulse on DORMANT count (dead intel profiles with no task, no scenario playbook, no knowledge article); expandable rows show matched tasks with status badge + matched scenarios with status badge + matched knowledge articles with category badge; ASSESS + TTS; isItskocQuery+buildItskocScript exported; jarvis:itskoc-toggle event; 90-s auto-refresh */}
+            <IntelProfileTaskScenarioKnowledgeCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
