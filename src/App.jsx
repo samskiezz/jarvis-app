@@ -763,6 +763,7 @@ import TaskRiskOpsGraphThreatCoverage from '@/components/cinematic/TaskRiskOpsGr
 import KnowledgeRiskOpsSwarmCoverageMap from '@/components/cinematic/KnowledgeRiskOpsSwarmCoverageMap';
 import ScenarioContactRiskDatasetCoverageMap from '@/components/cinematic/ScenarioContactRiskDatasetCoverageMap';
 import KnowledgeTaskContactSwarmAccountability from '@/components/cinematic/KnowledgeTaskContactSwarmAccountability';
+import ScenarioTaskContactBrainMissionAuthority from '@/components/cinematic/ScenarioTaskContactBrainMissionAuthority';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2394,6 +2395,8 @@ function App() {
             <ScenarioContactRiskDatasetCoverageMap />
             {/* F256 (overnight 2026-11-01): Knowledge × Task × Contact × SwarmJob Intelligence Activation Accountability — ◈ KTCSAW button (left:191160, bottom:8, zIndex:352); fetches /knowledge/ + /entities/Task + /entities/Contact + /entities/SwarmJob; keyword-matches each knowledge article against tasks, contacts, and swarm jobs to classify GROUNDED/ACTIVE/STAFFED/DARK; amber pulse on DARK count (orphaned knowledge with no task, no contact, no swarm processing — intelligence dead-ends); expandable rows show matched tasks with status badge + matched contacts with role/org + matched swarm jobs with status badge; ASSESS + TTS; isKtcsawQuery+buildKtcsawScript exported; jarvis:ktcsaw-toggle event; 90-s auto-refresh */}
             <KnowledgeTaskContactSwarmAccountability />
+            {/* F257 (overnight 2026-11-01): Scenario × Task × Contact × Brain Mission Authority Index — ◈ STCBMI button (left:191720, bottom:8, zIndex:353); fetches /v1/scenario/list + /entities/Task + /entities/Contact + /v1/cinematic/brain; keyword-matches each scenario against tasks, contacts, and brain nodes to classify COMMANDING/ACTIVE/PARTIAL/UNARMED; red pulse on UNARMED count (fully unsupported scenarios — strategic blind spots); expandable rows show matched tasks with status badge + matched contacts with role/org + matched brain nodes with type badge; ASSESS + TTS; isStcbmiQuery+buildStcbmiScript exported; jarvis:stcbmi-toggle event; 90-s auto-refresh */}
+            <ScenarioTaskContactBrainMissionAuthority />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
