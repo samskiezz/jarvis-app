@@ -751,6 +751,7 @@ import ContactKnowledgeScenarioTaskMatrix from '@/components/cinematic/ContactKn
 import GraphKnowledgeTaskOpsAlertActionMap from '@/components/cinematic/GraphKnowledgeTaskOpsAlertActionMap';
 import ScenarioBrainContactOpsActivation from '@/components/cinematic/ScenarioBrainContactOpsActivation';
 import IntelProfileGraphTaskOpsNetwork from '@/components/cinematic/IntelProfileGraphTaskOpsNetwork';
+import SwarmKnowledgeOpsContactCoverage from '@/components/cinematic/SwarmKnowledgeOpsContactCoverage';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2358,6 +2359,8 @@ function App() {
             <ScenarioBrainContactOpsActivation />
             {/* F244 (overnight 2026-10-31): IntelProfile × Graph × Task × Ops Alert Intelligence Command Network — ◈ IGTOA button (left:184440, bottom:8, zIndex:340); fetches /entities/IntelProfile + /v1/graph/centrality + /entities/Task + /v1/ops/alerts; cross-matches each intel profile against graph nodes (centrality score), active tasks, and ops alerts to classify COMMANDING/ACTIVE/PARTIAL/DARK; red pulse on DARK count (intelligence dead-ends with no graph trace, no task, no ops alert); expandable rows show matched graph nodes with centrality badge + matched tasks with status badge + matched ops alerts with severity badge; ASSESS + TTS; isIgtoaQuery+buildIgtoaScript exported; jarvis:igtoa-toggle event; 90-s auto-refresh */}
             <IntelProfileGraphTaskOpsNetwork />
+            {/* F245 (overnight 2026-11-01): SwarmJob × Knowledge × Ops Alert × Contact Automation Intelligence Coverage — ◈ SKOAC button (left:185000, bottom:8, zIndex:341); fetches /entities/SwarmJob + /knowledge/ + /v1/ops/alerts + /entities/Contact; keyword-matches each swarm job against knowledge articles, ops alerts, and contacts to classify COVERED/ALERTED/STAFFED/BLIND; amber pulse on BLIND count (automation blind-spots with no knowledge article, no ops alert, no contact owner); expandable rows show matched knowledge articles + matched ops alerts with severity badge + matched contacts with role/org; ASSESS + TTS; isSkoacQuery+buildSkoacScript exported; jarvis:skoac-toggle event; 90-s auto-refresh */}
+            <SwarmKnowledgeOpsContactCoverage />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
