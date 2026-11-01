@@ -252,3 +252,4 @@
 2026-11-01 | F248 | ContactScenarioOpsRiskCoverage.jsx | Contact×Scenario×OpsAlert×RiskSignal COVERED/ALERTED/PARTIAL/DARK; ◈ CSORC left:186680 zIndex:344; isCsorcQuery wired JarvisBrain.jsx; Vite build exit:0
 [2026-11-01] F249 IntelProfileTaskScenarioKnowledgeCoverage.jsx — IntelProfile × Task × Scenario × Knowledge Intelligence Orchestration Coverage (ITSKOC); wired App.jsx + JarvisBrain.jsx; Vite build exit:0; pushed to jarvis-overnight
 [2026-11-01] F250 DatasetOpsScenarioContactActivation (◈ DOSCAM): Dataset×OpsAlert×Scenario×Contact 4-source activation map; ACTIVATED/MONITORED/STAGED/DARK; left:187800 zIndex:346; Vite build exit:0
+[2026-11-01] F251 SwarmInvestigationRiskKnowledge (◈ SIRKMAP): SwarmJob×Investigation×RiskSignal×Knowledge 4-source convergence map; CONVERGED/TRACKED/PARTIAL/DORMANT; left:188360 zIndex:347; isSirkmapQuery wired JarvisBrain.jsx; Vite build exit:0

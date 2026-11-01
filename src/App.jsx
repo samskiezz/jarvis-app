@@ -757,6 +757,7 @@ import BrainIntelProfileOpsAlertTaskActivation from '@/components/cinematic/Brai
 import ContactScenarioOpsRiskCoverage from '@/components/cinematic/ContactScenarioOpsRiskCoverage';
 import IntelProfileTaskScenarioKnowledgeCoverage from '@/components/cinematic/IntelProfileTaskScenarioKnowledgeCoverage';
 import DatasetOpsScenarioContactActivation from '@/components/cinematic/DatasetOpsScenarioContactActivation';
+import SwarmInvestigationRiskKnowledge from '@/components/cinematic/SwarmInvestigationRiskKnowledge';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2376,6 +2377,8 @@ function App() {
             <IntelProfileTaskScenarioKnowledgeCoverage />
             {/* F250 (overnight 2026-11-01): Dataset × Ops Alert × Scenario × Contact Evidence Intelligence Activation Map — ◈ DOSCAM button (left:187800, bottom:8, zIndex:346); fetches /v1/datasets + /v1/ops/alerts + /v1/scenario/list + /entities/Contact; keyword-matches each dataset against ops alerts, scenarios, and contacts to classify ACTIVATED/MONITORED/STAGED/DARK; red pulse on DARK count (evidence blind spots with no ops alert coverage, no scenario playbook, no assigned contact); expandable rows show matched alerts with severity badge + matched scenarios with status badge + matched contacts with role/org; ASSESS + TTS; isDoscamQuery+buildDoscamScript exported; jarvis:doscam-toggle event; 90-s auto-refresh */}
             <DatasetOpsScenarioContactActivation />
+            {/* F251 (overnight 2026-11-01): SwarmJob × Investigation × RiskSignal × Knowledge Swarm Intelligence Threat Convergence — ◈ SIRKMAP button (left:188360, bottom:8, zIndex:347); fetches /entities/SwarmJob + /v1/investigations + /entities/RiskSignal + /knowledge/; keyword-matches each swarm job against investigations, risk signals, and knowledge articles to classify CONVERGED/TRACKED/PARTIAL/DORMANT; red pulse on DORMANT count (ungrounded swarm jobs with no investigation, no risk signal, no knowledge link); expandable rows show matched investigations with status badge + matched risk signals with level badge + matched knowledge articles with category badge; ASSESS + TTS; isSirkmapQuery+buildSirkmapScript exported; jarvis:sirkmap-toggle event; 90-s auto-refresh */}
+            <SwarmInvestigationRiskKnowledge />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
