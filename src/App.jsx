@@ -760,6 +760,7 @@ import DatasetOpsScenarioContactActivation from '@/components/cinematic/DatasetO
 import SwarmInvestigationRiskKnowledge from '@/components/cinematic/SwarmInvestigationRiskKnowledge';
 import GraphOpsContactScenarioCommand from '@/components/cinematic/GraphOpsContactScenarioCommand';
 import TaskRiskOpsGraphThreatCoverage from '@/components/cinematic/TaskRiskOpsGraphThreatCoverage';
+import KnowledgeRiskOpsSwarmCoverageMap from '@/components/cinematic/KnowledgeRiskOpsSwarmCoverageMap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2385,6 +2386,8 @@ function App() {
             <GraphOpsContactScenarioCommand />
             {/* F253 (overnight 2026-11-01): Task × RiskSignal × Ops Alert × Graph Mission Threat Command Coverage — ◈ TRGCOV button (left:189480, bottom:8, zIndex:349); fetches /entities/Task + /entities/RiskSignal + /v1/ops/alerts + /v1/graph/centrality; keyword-matches each task against risk signals, ops alerts, and graph nodes to classify COVERED/SIGNALED/MONITORED/ADRIFT; red pulse on ADRIFT count (mission orphans with no risk signal, no ops alert, no graph trace); expandable rows show matched risk signals with severity badge + matched ops alerts with severity badge + matched graph nodes with centrality score badge; ASSESS + TTS; isTrgcovQuery+buildTrgcovScript exported; jarvis:trgcov-toggle event; 90-s auto-refresh */}
             <TaskRiskOpsGraphThreatCoverage />
+            {/* F254 (overnight 2026-11-01): Knowledge × RiskSignal × Ops Alert × SwarmJob Intelligence Response Coverage Map — ◈ KRSMAP button (left:190040, bottom:8, zIndex:350); fetches /knowledge/ + /entities/RiskSignal + /v1/ops/alerts + /entities/SwarmJob; keyword-matches each knowledge article against risk signals, ops alerts, and swarm jobs to classify COVERED/ALERTED/PROCESSING/DARK; red pulse on DARK count (intelligence blind spots with no grounding); expandable rows show matched risk signals with severity badge + matched ops alerts + matched swarm jobs with status badge; ASSESS + TTS; isKrsmapQuery+buildKrsmapScript exported; jarvis:krsmap-toggle event; 90-s auto-refresh */}
+            <KnowledgeRiskOpsSwarmCoverageMap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
