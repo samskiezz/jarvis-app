@@ -769,6 +769,7 @@ import SkillContactOpsGraphCapabilityNetwork from '@/components/cinematic/SkillC
 import InvestigationIntelProfileInvestmentReport from '@/components/cinematic/InvestigationIntelProfileInvestmentReport';
 import SwarmDatasetContactGraphIntelMap from '@/components/cinematic/SwarmDatasetContactGraphIntelMap';
 import TaskKnowledgeBrainGraphFoundation from '@/components/cinematic/TaskKnowledgeBrainGraphFoundation';
+import OpsAlertDatasetInvestigationBrainContinuity from '@/components/cinematic/OpsAlertDatasetInvestigationBrainContinuity';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2411,6 +2412,7 @@ function App() {
             {/* F261 (overnight 2026-11-01): SwarmJob × Dataset × Contact × Graph Automation Intelligence Map — ◈ SDCGAM button (left:193960, bottom:8, zIndex:357); fetches /entities/SwarmJob + /v1/datasets + /entities/Contact + /v1/graph/centrality; keyword-matches each swarm job against datasets, contacts, and graph nodes to classify COMMANDED/ACTIVE/PARTIAL/ORPHAN; red pulse on ORPHAN count (automation dead-ends — swarm jobs with no dataset, no contact owner, no graph trace); expandable rows show matched datasets with row-count badge + matched contacts with role/org + matched graph nodes with centrality score badge; ASSESS + TTS; isSdcgamQuery+buildSdcgamScript exported; jarvis:sdcgam-toggle event; 90-s auto-refresh */}
             <SwarmDatasetContactGraphIntelMap />
             <TaskKnowledgeBrainGraphFoundation />
+            <OpsAlertDatasetInvestigationBrainContinuity />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
