@@ -758,6 +758,7 @@ import ContactScenarioOpsRiskCoverage from '@/components/cinematic/ContactScenar
 import IntelProfileTaskScenarioKnowledgeCoverage from '@/components/cinematic/IntelProfileTaskScenarioKnowledgeCoverage';
 import DatasetOpsScenarioContactActivation from '@/components/cinematic/DatasetOpsScenarioContactActivation';
 import SwarmInvestigationRiskKnowledge from '@/components/cinematic/SwarmInvestigationRiskKnowledge';
+import GraphOpsContactScenarioCommand from '@/components/cinematic/GraphOpsContactScenarioCommand';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2379,6 +2380,8 @@ function App() {
             <DatasetOpsScenarioContactActivation />
             {/* F251 (overnight 2026-11-01): SwarmJob × Investigation × RiskSignal × Knowledge Swarm Intelligence Threat Convergence — ◈ SIRKMAP button (left:188360, bottom:8, zIndex:347); fetches /entities/SwarmJob + /v1/investigations + /entities/RiskSignal + /knowledge/; keyword-matches each swarm job against investigations, risk signals, and knowledge articles to classify CONVERGED/TRACKED/PARTIAL/DORMANT; red pulse on DORMANT count (ungrounded swarm jobs with no investigation, no risk signal, no knowledge link); expandable rows show matched investigations with status badge + matched risk signals with level badge + matched knowledge articles with category badge; ASSESS + TTS; isSirkmapQuery+buildSirkmapScript exported; jarvis:sirkmap-toggle event; 90-s auto-refresh */}
             <SwarmInvestigationRiskKnowledge />
+            {/* F252 (overnight 2026-11-01): Graph × Ops Alert × Contact × Scenario Intelligence Action Command — ◈ GOACMD button (left:188920, bottom:8, zIndex:348); fetches /v1/graph/centrality + /v1/ops/alerts + /entities/Contact + /v1/scenario/list; keyword-matches each graph node against ops alerts, contacts, and scenarios to classify COMMANDING/ACTIVE/PARTIAL/DARK; red pulse on DARK count (blind graph nodes with no ops alert, no contact, no scenario); expandable rows show matched alerts with severity badge + matched contacts with role/org + matched scenarios with status badge; ASSESS + TTS; isGoacmdQuery+buildGoacmdScript exported; jarvis:goacmd-toggle event; 90-s auto-refresh */}
+            <GraphOpsContactScenarioCommand />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
