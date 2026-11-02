@@ -301,3 +301,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-02 12:28 UTC] F282 OpsCaseManager.jsx — Ops Case Manager workbench; GET/POST /v1/cases; left case list + right detail panel (notes timeline, entity chips, status selector, new case form); ASSESS+TTS; wired App.jsx; Vite build exit:0
 2026-11-02 F283 OntologyActionAuditor: ONTACT panel wired to /v1/ontology/objects/{id} + /actions; build clean; pushed jarvis-overnight
 [2026-11-02] F284 LiveStreamMonitor: EventSource /streams/{key} SSE terminal; wired App.jsx + JarvisBrain.jsx; Vite build exit:0
+[2026-11-02 16:04] F285 AnomalyVolatilityHeatmap.jsx — GET /v1/history/series + /v1/temporal/patterns; SVG week×dow heatmap, HSL vol color, anomaly markers, cell tooltip, stats sidebar, ASSESS+TTS; wired App.jsx+JarvisBrain.jsx; Vite build exit:0

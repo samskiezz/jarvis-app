@@ -217,6 +217,7 @@ import { isLingtreeQuery } from "@/components/cinematic/DatasetLineageTree";
 import { isAlrtinbQuery } from "@/components/cinematic/AlertInbox";
 import { isRuengnQuery } from "@/components/cinematic/RuleEnginePanel";
 import { isStrmmonQuery } from "@/components/cinematic/LiveStreamMonitor";
+import { isAnvohtmQuery } from "@/components/cinematic/AnomalyVolatilityHeatmap";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -520,6 +521,7 @@ export default function JarvisBrain() {
     if (isAlrtinbQuery(q))  { window.dispatchEvent(new Event("jarvis:alrtinb-toggle")); }
     if (isRuengnQuery(q))   { window.dispatchEvent(new Event("jarvis:ruengn-toggle")); }
     if (isStrmmonQuery(q))  { window.dispatchEvent(new Event("jarvis:strmmon-toggle")); }
+    if (isAnvohtmQuery(q))  { window.dispatchEvent(new Event("jarvis:anvohtm-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

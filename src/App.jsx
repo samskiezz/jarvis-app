@@ -791,6 +791,7 @@ import RuleEnginePanel from '@/components/cinematic/RuleEnginePanel';
 import OpsCaseManager from '@/components/cinematic/OpsCaseManager';
 import OntologyActionAuditor from '@/components/cinematic/OntologyActionAuditor';
 import LiveStreamMonitor from '@/components/cinematic/LiveStreamMonitor';
+import AnomalyVolatilityHeatmap from '@/components/cinematic/AnomalyVolatilityHeatmap';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2470,6 +2471,8 @@ function App() {
             <OntologyActionAuditor />
             {/* F284 (overnight 2026-11-02): Live Stream Monitor — ◈ STRMMON button (left:206840, bottom:8, zIndex:380); stream key input (pre-populated: brain/alerts/tasks); "Connect" → EventSource /streams/{key}; auto-scrolling monospace panel (max 500 lines); line color by keyword ERROR=red/WARN=amber/INFO=cyan/OK=green; scroll-lock toggle; reconnect on error with exponential backoff; ASSESS + TTS; isStrmmonQuery exported */}
             <LiveStreamMonitor />
+            {/* F285 (overnight 2026-11-02): Anomaly Volatility Heatmap — ◈ ANVOHTM button (left:207400, zIndex:381); series selector from GET /v1/history/series; GET /v1/temporal/patterns?series_id= → 2D SVG grid rows=weeks cols=day-of-week; cell color=volatility HSL blue→amber→red; click cell → tooltip date/z-score/volatility/anomaly flag; stats sidebar: peak vol date, mean |z|, anomaly count; ASSESS + TTS; isAnvohtmQuery exported */}
+            <AnomalyVolatilityHeatmap />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
