@@ -789,6 +789,7 @@ import ReportGenerator from '@/components/cinematic/ReportGenerator';
 import AlertInbox from '@/components/cinematic/AlertInbox';
 import RuleEnginePanel from '@/components/cinematic/RuleEnginePanel';
 import OpsCaseManager from '@/components/cinematic/OpsCaseManager';
+import OntologyActionAuditor from '@/components/cinematic/OntologyActionAuditor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2464,6 +2465,8 @@ function App() {
             <RuleEnginePanel />
             {/* F282 (overnight 2026-11-02): Ops Case Manager — ◈ OPSCAS button (left:205720, zIndex:378); GET /v1/cases → case workbench; left column case list with status badges; right panel: detail + notes timeline + entity list; "Add Note" → POST /v1/cases/{id}/notes; "Link Entity" → POST /v1/cases/{id}/entities; status selector → POST /v1/cases/{id}/status; "New Case" → POST /v1/cases; ASSESS + TTS via jarvis:speak-dossier; isOpsCaseMgrQuery exported */}
             <OpsCaseManager />
+            {/* F283 (overnight 2026-11-02): Ontology Action Auditor — ◈ ONTACT button (left:206280, bottom:8, zIndex:379); object_id input; "Load" → GET /v1/ontology/objects/{id} → top panel: object label, type, mark badge, props accordion; GET /v1/ontology/objects/{id}/actions → scrollable audit log: ISO timestamp, action_type badge (color by type), actor, before/after props diff chips; filter by action_type; total action count + most-active actor in header; ASSESS + TTS; isOntactQuery exported */}
+            <OntologyActionAuditor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
