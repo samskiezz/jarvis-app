@@ -781,6 +781,7 @@ import GothamCaseSurface from '@/components/cinematic/GothamCaseSurface';
 import TemporalTimelineExplorer from '@/components/cinematic/TemporalTimelineExplorer';
 import ObjectVersionTrail from '@/components/cinematic/ObjectVersionTrail';
 import GeospatialObjectMap from '@/components/cinematic/GeospatialObjectMap';
+import RadiusQueryPanel from '@/components/cinematic/RadiusQueryPanel';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2442,6 +2443,8 @@ function App() {
             <ObjectVersionTrail />
             {/* F274 (overnight 2026-11-02): Geospatial Object Map — ◈ GEOMAP button (left:201240, bottom:8, zIndex:370); GET /v1/geo/objects → Mercator SVG dots colored by type (radius 6); hover tooltip label+type+lat/lon; click dot → inspector drawer; GET /v1/geo/layers → layer toggle sidebar; type filter checkboxes; zoom/pan via SVG transform; ASSESS + TTS; isGeomapQuery wired in JarvisBrain.jsx */}
             <GeospatialObjectMap />
+            {/* F275 (overnight 2026-11-02): Radius Query Panel — ◈ RADQRY button (left:201800, bottom:8, zIndex:371); GET /v1/geo/radius?lat=&lon=&km= → SVG Mercator map with radius circle + result dots; click row → GET /v1/geo/tracks/{object_id} → animated dashed purple track; ASSESS + TTS; isRadqryQuery wired in JarvisBrain.jsx */}
+            <RadiusQueryPanel />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>
