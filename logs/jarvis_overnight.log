@@ -309,3 +309,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-02] F290 DatasetHealthMonitor.jsx — GET /v1/datasets + /v1/datasets/{id}/health parallel; HEALTHY/DEGRADED/DOWN badges; inspector drawer; DOWN pulse; % healthy header; ASSESS+TTS; wired App.jsx + JarvisBrain; build exit:0
 [2026-11-02] F291 OntologyUpsertPanel.jsx — GET /v1/ontology/objects+types + POST /v1/ontology/objects + POST /v1/ontology/links; searchable list, prefill form, mark select, JSON props editor, link tab, toast feedback, ASSESS+TTS; Vite build exit:0
 [2026-11-02] F292 InvestigationGraphViewer.jsx — SVG force-directed investigation subgraph viewer; Verlet sim, per-type node shapes, inspector, annotations, share, ASSESS+TTS; wired App.jsx; build OK
+[2026-11-02] F293 GeoTrackAnimator.jsx — SVG Mercator world map + animated dot along /v1/geo/tracks/{id} waypoints; play/pause/step/reset + 1×/5×/20× speed; haversine distance badge; ASSESS+TTS; wired App.jsx; build passes

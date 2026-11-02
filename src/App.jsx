@@ -799,6 +799,7 @@ import ModelEvaluationRunner from '@/components/cinematic/ModelEvaluationRunner'
 import DatasetHealthMonitor from '@/components/cinematic/DatasetHealthMonitor';
 import OntologyUpsertPanel from '@/components/cinematic/OntologyUpsertPanel';
 import InvestigationGraphViewer from '@/components/cinematic/InvestigationGraphViewer';
+import GeoTrackAnimator from '@/components/cinematic/GeoTrackAnimator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2494,6 +2495,8 @@ function App() {
             <OntologyUpsertPanel />
             {/* F292 (overnight 2026-11-02): Investigation Graph Viewer — ◈ INVGRPH button (left:211320, zIndex:388); GET /v1/investigations → select; GET /v1/investigations/{id} → subgraph; D3-style SVG force graph; click node → GET /v1/ontology/objects/{id} inspector; click edge → POST /v1/investigations/{id}/annotations; share → POST /v1/investigations/{id}/share; ASSESS + TTS; isInvGraphQuery exported */}
             <InvestigationGraphViewer />
+            {/* F293 (overnight 2026-11-02): Geo Track Animator — ◈ GEOTRK button (left:211880, zIndex:389); GET /v1/geo/objects → dropdown; GET /v1/geo/tracks/{object_id} → waypoints; SVG Mercator world map with dashed path + animated dot; play/pause/step/reset scrubber; 1×/5×/20× speed; distance-traveled badge; waypoint tooltip; ASSESS + TTS; isGeoTrkQuery exported */}
+            <GeoTrackAnimator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
