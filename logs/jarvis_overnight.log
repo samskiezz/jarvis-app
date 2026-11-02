@@ -307,3 +307,4 @@ Commits pushed to jarvis-overnight:
 2026-11-02 F288 GothamEventFeed.jsx — Gotham event feed with poll/filter/link-draft/assess; build exit:0
 2026-11-02 19:12 UTC | F289 ModelEvaluationRunner | GET /v1/predict/models + POST /v1/predict/evaluate + GET /v1/predict/improvement | CRPS/RMSE/PSI/ECE metric bars, model scores tab, recent evals, Re-run, ASSESS+TTS | Vite build exit:0
 [2026-11-02] F290 DatasetHealthMonitor.jsx — GET /v1/datasets + /v1/datasets/{id}/health parallel; HEALTHY/DEGRADED/DOWN badges; inspector drawer; DOWN pulse; % healthy header; ASSESS+TTS; wired App.jsx + JarvisBrain; build exit:0
+[2026-11-02] F291 OntologyUpsertPanel.jsx — GET /v1/ontology/objects+types + POST /v1/ontology/objects + POST /v1/ontology/links; searchable list, prefill form, mark select, JSON props editor, link tab, toast feedback, ASSESS+TTS; Vite build exit:0

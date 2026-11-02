@@ -797,6 +797,7 @@ import GeofenceManager from '@/components/cinematic/GeofenceManager';
 import GothamEventFeed from '@/components/cinematic/GothamEventFeed';
 import ModelEvaluationRunner from '@/components/cinematic/ModelEvaluationRunner';
 import DatasetHealthMonitor from '@/components/cinematic/DatasetHealthMonitor';
+import OntologyUpsertPanel from '@/components/cinematic/OntologyUpsertPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2488,6 +2489,8 @@ function App() {
             <ModelEvaluationRunner />
             {/* F290 (overnight 2026-11-02): Dataset Health Monitor — ◈ DSHLTMON button (left:210200, zIndex:386); GET /v1/datasets → list; GET /v1/datasets/{id}/health parallel (max 10) → HEALTHY/DEGRADED/DOWN badge per dataset; inspector drawer; DOWN datasets pulse red; overall % healthy header; ASSESS + TTS; isDshltmonQuery exported */}
             <DatasetHealthMonitor />
+            {/* F291 (overnight 2026-11-02): Ontology Object Upsert Panel — ◈ ONTUPSERT button (left:210760, zIndex:387); GET /v1/ontology/objects → searchable list; click → prefill form; POST /v1/ontology/objects to save; POST /v1/ontology/links for link tab; success/error toast; ASSESS + TTS; isOntupsertQuery exported */}
+            <OntologyUpsertPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
