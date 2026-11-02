@@ -782,6 +782,7 @@ import TemporalTimelineExplorer from '@/components/cinematic/TemporalTimelineExp
 import ObjectVersionTrail from '@/components/cinematic/ObjectVersionTrail';
 import GeospatialObjectMap from '@/components/cinematic/GeospatialObjectMap';
 import RadiusQueryPanel from '@/components/cinematic/RadiusQueryPanel';
+import PredictionModelPanel from '@/components/cinematic/PredictionModelPanel';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2445,6 +2446,8 @@ function App() {
             <GeospatialObjectMap />
             {/* F275 (overnight 2026-11-02): Radius Query Panel — ◈ RADQRY button (left:201800, bottom:8, zIndex:371); GET /v1/geo/radius?lat=&lon=&km= → SVG Mercator map with radius circle + result dots; click row → GET /v1/geo/tracks/{object_id} → animated dashed purple track; ASSESS + TTS; isRadqryQuery wired in JarvisBrain.jsx */}
             <RadiusQueryPanel />
+            {/* F276 (overnight 2026-11-02): Prediction Model Panel — ◈ PREDMDL button (left:202360, bottom:8, zIndex:372); GET /v1/predict/models → model selector; POST /functions/predict → confidence bar + evidence list; GET /v1/predict/patterns (from history series) → patterns table; ASSESS + TTS; isPredmdlQuery exported */}
+            <PredictionModelPanel />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>

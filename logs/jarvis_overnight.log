@@ -293,3 +293,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-02] F273 ObjectVersionTrail.jsx — VERTR button (left:200680 zIndex:369); GET /v1/temporal/object/{object_id}/versions; timeline newest-first with version#/timestamp/actor/field chips; two-row diff panel (added=green/removed=red/changed=amber); versions/day metric; ASSESS+TTS; wired App.jsx+JarvisBrain.jsx; Vite build exit:0
 [2026-11-02 05:11 UTC] F274 GeospatialObjectMap: SVG Mercator map wired to /v1/geo/objects + /v1/geo/layers; zoom/pan, type filters, inspector drawer, ASSESS+TTS; Vite build exit:0
 2026-11-02 06:28:01 UTC | F275 Radius Query Panel | RadiusQueryPanel.jsx created; wired App.jsx + JarvisBrain.jsx; Vite build OK
+2026-11-02T07:38:50Z F276 PredictionModelPanel — PREDMDL button left:202360 zIndex:372; /v1/predict/models + /functions/predict + /v1/predict/patterns; build ✓
