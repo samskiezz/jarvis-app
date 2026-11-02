@@ -786,6 +786,7 @@ import PredictionModelPanel from '@/components/cinematic/PredictionModelPanel';
 import DatasetLineageTree from '@/components/cinematic/DatasetLineageTree';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 import ReportGenerator from '@/components/cinematic/ReportGenerator';
+import AlertInbox from '@/components/cinematic/AlertInbox';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2455,6 +2456,8 @@ function App() {
             <BackendConnectionStatus />
             {/* F279 Report Generator — ◈ RPRTGEN button (left:204040, bottom:8, zIndex:375); POST /v1/reports/generate → brief in formatted panel; GET /v1/reports history sidebar; GET /v1/reports/{id}/export → download; ASSESS + TTS; isRprtgenQuery exported */}
             <ReportGenerator />
+            {/* F280 (overnight 2026-11-02): Alert Inbox — ◈ ALRTINB button (left:204600, bottom:8, zIndex:376); GET /v1/alerts → inbox grouped by severity tabs CRITICAL/HIGH/MEDIUM/LOW; ACK button → POST /v1/alerts/{id}/ack → optimistic fade-out; unread count badge pulses red on CRITICAL; poll 15s; click alert → detail drawer; ASSESS + TTS; isAlrtinbQuery exported */}
+            <AlertInbox />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
