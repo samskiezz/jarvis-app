@@ -298,3 +298,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-02 09:13 UTC] F279 ReportGenerator.jsx — POST /v1/reports/generate + history list + export download + ASSESS/TTS; build OK
 2026-11-02 F280 AlertInbox — Alert Inbox panel implemented (AlertInbox.jsx); severity tabs CRITICAL/HIGH/MEDIUM/LOW; ACK → POST /v1/alerts/{id}/ack with optimistic fade; badge pulses red on criticals; poll 15s; detail drawer; ASSESS+TTS; wired App.jsx+JarvisBrain.jsx; build OK
 [2026-11-02] F281 RuleEnginePanel: GET /v1/rules + POST /v1/rules/evaluate + POST /v1/rules; severity badges, evaluate drawer, new-rule form, ASSESS+TTS; Vite build exit:0
+[2026-11-02 12:28 UTC] F282 OpsCaseManager.jsx — Ops Case Manager workbench; GET/POST /v1/cases; left case list + right detail panel (notes timeline, entity chips, status selector, new case form); ASSESS+TTS; wired App.jsx; Vite build exit:0

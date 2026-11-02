@@ -788,6 +788,7 @@ import BackendConnectionStatus from '@/components/cinematic/BackendConnectionSta
 import ReportGenerator from '@/components/cinematic/ReportGenerator';
 import AlertInbox from '@/components/cinematic/AlertInbox';
 import RuleEnginePanel from '@/components/cinematic/RuleEnginePanel';
+import OpsCaseManager from '@/components/cinematic/OpsCaseManager';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2461,6 +2462,8 @@ function App() {
             <AlertInbox />
             {/* F281 (overnight 2026-11-02): Rule Engine Panel — ◈ RUENGN button (left:205160, bottom:8, zIndex:377); GET /v1/rules → rules list with enabled/disabled badge + severity badge + condition preview; "Evaluate" → POST /v1/rules/evaluate → matched objects list; "New Rule" form → POST /v1/rules; ASSESS + TTS; isRuengnQuery exported */}
             <RuleEnginePanel />
+            {/* F282 (overnight 2026-11-02): Ops Case Manager — ◈ OPSCAS button (left:205720, zIndex:378); GET /v1/cases → case workbench; left column case list with status badges; right panel: detail + notes timeline + entity list; "Add Note" → POST /v1/cases/{id}/notes; "Link Entity" → POST /v1/cases/{id}/entities; status selector → POST /v1/cases/{id}/status; "New Case" → POST /v1/cases; ASSESS + TTS via jarvis:speak-dossier; isOpsCaseMgrQuery exported */}
+            <OpsCaseManager />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
