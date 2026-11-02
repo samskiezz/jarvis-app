@@ -778,6 +778,7 @@ import ObjectNeighborhoodExplorer from '@/components/cinematic/ObjectNeighborhoo
 import InvestigationWorkspace from '@/components/cinematic/InvestigationWorkspace';
 import TemporalGraphScrubber from '@/components/cinematic/TemporalGraphScrubber';
 import GothamCaseSurface from '@/components/cinematic/GothamCaseSurface';
+import TemporalTimelineExplorer from '@/components/cinematic/TemporalTimelineExplorer';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2433,6 +2434,8 @@ function App() {
             <TemporalGraphScrubber />
             {/* F271 (overnight 2026-11-02): Gotham Case Surface — ◈ GOTCAS button (left:199560, bottom:8, zIndex:367); GET /v1/gotham/cases → priority-badged list (CRITICAL=red/HIGH=orange/NORMAL=cyan/LOW=grey) + click-to-expand detail drawer; GET /v1/gotham/events → events feed right panel, filterable by kind; POST /v1/gotham/case → modal (title+priority+linked_objects); ASSESS + TTS; isGotcasQuery+buildGotcasScript exported; jarvis:gotcas-toggle event */}
             <GothamCaseSurface />
+            {/* F272 (overnight 2026-11-02): Temporal Timeline Explorer — ◈ TMPTML button (left:200120, bottom:8, zIndex:368); GET /v1/temporal/series → dropdown; GET /v1/temporal/range?series_id=&t0=&t1= → observation dots on SVG timeline; GET /v1/temporal/events?series_id= → red event markers; stats bar n/min/max/mean/first/last; brush-to-zoom narrows t0/t1 and re-fetches; quick-pick 1h/6h/24h/7d/30d; ASSESS → /v1/jarvis/agent/chat + TTS; isTmptmlQuery+buildTmptmlScript exported; jarvis:tmptml-toggle event */}
+            <TemporalTimelineExplorer />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>

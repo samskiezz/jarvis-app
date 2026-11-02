@@ -345,6 +345,17 @@ def object_versions(object_id: str) -> list[dict]:
     return events
 
 
+# ── series catalog ───────────────────────────────────────────────────────────────
+def list_series() -> dict:
+    """Return the catalog of all known series ids in the History Lake."""
+    try:
+        rows = lake.list_series()
+        ids = [r["series_id"] for r in rows if r.get("series_id")]
+    except Exception:  # noqa: BLE001
+        ids = []
+    return {"count": len(ids), "series": ids}
+
+
 # ── global merged timeline ────────────────────────────────────────────────────────
 def timeline(
     series_ids: Optional[list[str]] = None,

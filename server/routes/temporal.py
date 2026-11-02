@@ -93,6 +93,14 @@ class TimelineBody(BaseModel):
     limit: int | None = None
 
 
+@router.get("/series")
+async def series_list_endpoint(
+    _token: str | None = Depends(optional_bearer),
+):
+    """Catalog of all known series ids in the History Lake."""
+    return svc.list_series()
+
+
 @router.post("/timeline")
 async def timeline_endpoint(
     body: TimelineBody,
