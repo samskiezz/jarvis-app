@@ -785,6 +785,7 @@ import RadiusQueryPanel from '@/components/cinematic/RadiusQueryPanel';
 import PredictionModelPanel from '@/components/cinematic/PredictionModelPanel';
 import DatasetLineageTree from '@/components/cinematic/DatasetLineageTree';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
+import ReportGenerator from '@/components/cinematic/ReportGenerator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2452,6 +2453,8 @@ function App() {
             {/* F278 (overnight 2026-11-02): Dataset Lineage Tree — ◈ LINGTREE button (left:203480, bottom:8, zIndex:374); GET /v1/datasets → name selector; GET /v1/datasets/{name}/lineage → 3-column SVG tree (upstream left / selected centre / downstream right); node color = health status from GET /v1/datasets/{name}/health (HEALTHY=green/DEGRADED=amber/DOWN=red); click node → health detail tooltip; lineage depth counter; ASSESS + TTS; isLingtreeQuery exported for JarvisBrain; jarvis:lingtree-toggle event */}
             <DatasetLineageTree />
             <BackendConnectionStatus />
+            {/* F279 Report Generator — ◈ RPRTGEN button (left:204040, bottom:8, zIndex:375); POST /v1/reports/generate → brief in formatted panel; GET /v1/reports history sidebar; GET /v1/reports/{id}/export → download; ASSESS + TTS; isRprtgenQuery exported */}
+            <ReportGenerator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
