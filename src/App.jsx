@@ -779,6 +779,7 @@ import InvestigationWorkspace from '@/components/cinematic/InvestigationWorkspac
 import TemporalGraphScrubber from '@/components/cinematic/TemporalGraphScrubber';
 import GothamCaseSurface from '@/components/cinematic/GothamCaseSurface';
 import TemporalTimelineExplorer from '@/components/cinematic/TemporalTimelineExplorer';
+import ObjectVersionTrail from '@/components/cinematic/ObjectVersionTrail';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2436,6 +2437,8 @@ function App() {
             <GothamCaseSurface />
             {/* F272 (overnight 2026-11-02): Temporal Timeline Explorer — ◈ TMPTML button (left:200120, bottom:8, zIndex:368); GET /v1/temporal/series → dropdown; GET /v1/temporal/range?series_id=&t0=&t1= → observation dots on SVG timeline; GET /v1/temporal/events?series_id= → red event markers; stats bar n/min/max/mean/first/last; brush-to-zoom narrows t0/t1 and re-fetches; quick-pick 1h/6h/24h/7d/30d; ASSESS → /v1/jarvis/agent/chat + TTS; isTmptmlQuery+buildTmptmlScript exported; jarvis:tmptml-toggle event */}
             <TemporalTimelineExplorer />
+            {/* F273 (overnight 2026-11-02): Object Version Trail — ◈ VERTR button (left:200680, bottom:8, zIndex:369); GET /v1/temporal/object/{object_id}/versions → vertical timeline newest-first: version number, ISO timestamp, actor badge, field chips from detail keys; click 2 rows → diff panel (added=green/removed=red/changed=amber); versions/day rate-of-change metric; ASSESS → /v1/jarvis/agent/chat + TTS; isVertrQuery+buildVertrScript exported; jarvis:vertr-toggle event */}
+            <ObjectVersionTrail />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>

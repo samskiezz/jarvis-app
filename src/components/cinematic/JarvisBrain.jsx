@@ -210,6 +210,7 @@ import { isNbxplQuery } from "@/components/cinematic/ObjectNeighborhoodExplorer"
 import { isInvwrkQuery } from "@/components/cinematic/InvestigationWorkspace";
 import { isGotcasQuery } from "@/components/cinematic/GothamCaseSurface";
 import { isTmptmlQuery } from "@/components/cinematic/TemporalTimelineExplorer";
+import { isVertrQuery } from "@/components/cinematic/ObjectVersionTrail";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -506,6 +507,7 @@ export default function JarvisBrain() {
     if (isInvwrkQuery(q))  { window.dispatchEvent(new Event("jarvis:invwrk-toggle")); }
     if (isGotcasQuery(q))   { window.dispatchEvent(new Event("jarvis:gotcas-toggle")); }
     if (isTmptmlQuery(q))   { window.dispatchEvent(new Event("jarvis:tmptml-toggle")); }
+    if (isVertrQuery(q))    { window.dispatchEvent(new Event("jarvis:vertr-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
