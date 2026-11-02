@@ -798,6 +798,7 @@ import GothamEventFeed from '@/components/cinematic/GothamEventFeed';
 import ModelEvaluationRunner from '@/components/cinematic/ModelEvaluationRunner';
 import DatasetHealthMonitor from '@/components/cinematic/DatasetHealthMonitor';
 import OntologyUpsertPanel from '@/components/cinematic/OntologyUpsertPanel';
+import InvestigationGraphViewer from '@/components/cinematic/InvestigationGraphViewer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2491,6 +2492,8 @@ function App() {
             <DatasetHealthMonitor />
             {/* F291 (overnight 2026-11-02): Ontology Object Upsert Panel — ◈ ONTUPSERT button (left:210760, zIndex:387); GET /v1/ontology/objects → searchable list; click → prefill form; POST /v1/ontology/objects to save; POST /v1/ontology/links for link tab; success/error toast; ASSESS + TTS; isOntupsertQuery exported */}
             <OntologyUpsertPanel />
+            {/* F292 (overnight 2026-11-02): Investigation Graph Viewer — ◈ INVGRPH button (left:211320, zIndex:388); GET /v1/investigations → select; GET /v1/investigations/{id} → subgraph; D3-style SVG force graph; click node → GET /v1/ontology/objects/{id} inspector; click edge → POST /v1/investigations/{id}/annotations; share → POST /v1/investigations/{id}/share; ASSESS + TTS; isInvGraphQuery exported */}
+            <InvestigationGraphViewer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
