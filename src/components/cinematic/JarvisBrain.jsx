@@ -221,6 +221,7 @@ import { isAnvohtmQuery } from "@/components/cinematic/AnomalyVolatilityHeatmap"
 import { isCstlfeedQuery } from "@/components/cinematic/CrossSeriesTimelineFeed";
 import { isGeofncQuery } from "@/components/cinematic/GeofenceManager";
 import { isGoevtfdQuery } from "@/components/cinematic/GothamEventFeed";
+import { isDshltmonQuery } from "@/components/cinematic/DatasetHealthMonitor";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -528,6 +529,7 @@ export default function JarvisBrain() {
     if (isCstlfeedQuery(q))  { window.dispatchEvent(new Event("jarvis:cstlfeed-toggle")); }
     if (isGeofncQuery(q))    { window.dispatchEvent(new Event("jarvis:geofnc-toggle")); }
     if (isGoevtfdQuery(q))   { window.dispatchEvent(new Event("jarvis:goevtfd-toggle")); }
+    if (isDshltmonQuery(q))  { window.dispatchEvent(new Event("jarvis:dshltmon-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

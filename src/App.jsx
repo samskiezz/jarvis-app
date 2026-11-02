@@ -796,6 +796,7 @@ import CrossSeriesTimelineFeed from '@/components/cinematic/CrossSeriesTimelineF
 import GeofenceManager from '@/components/cinematic/GeofenceManager';
 import GothamEventFeed from '@/components/cinematic/GothamEventFeed';
 import ModelEvaluationRunner from '@/components/cinematic/ModelEvaluationRunner';
+import DatasetHealthMonitor from '@/components/cinematic/DatasetHealthMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2485,6 +2486,8 @@ function App() {
             <GothamEventFeed />
             {/* F289 (overnight 2026-11-02): Model Evaluation Runner — ◈ MEVLRUN button (left:209640, zIndex:385); GET /v1/predict/models → model selector; POST /v1/predict/evaluate → CRPS/RMSE/PSI/ECE metric bars; GET /v1/predict/improvement → model scores ranked + pending retrains; Re-run button; recent evaluations; ASSESS + TTS; isMevlrunQuery exported */}
             <ModelEvaluationRunner />
+            {/* F290 (overnight 2026-11-02): Dataset Health Monitor — ◈ DSHLTMON button (left:210200, zIndex:386); GET /v1/datasets → list; GET /v1/datasets/{id}/health parallel (max 10) → HEALTHY/DEGRADED/DOWN badge per dataset; inspector drawer; DOWN datasets pulse red; overall % healthy header; ASSESS + TTS; isDshltmonQuery exported */}
+            <DatasetHealthMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
