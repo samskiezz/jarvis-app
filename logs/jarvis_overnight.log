@@ -294,3 +294,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-02 05:11 UTC] F274 GeospatialObjectMap: SVG Mercator map wired to /v1/geo/objects + /v1/geo/layers; zoom/pan, type filters, inspector drawer, ASSESS+TTS; Vite build exit:0
 2026-11-02 06:28:01 UTC | F275 Radius Query Panel | RadiusQueryPanel.jsx created; wired App.jsx + JarvisBrain.jsx; Vite build OK
 2026-11-02T07:38:50Z F276 PredictionModelPanel — PREDMDL button left:202360 zIndex:372; /v1/predict/models + /functions/predict + /v1/predict/patterns; build ✓
+[2026-11-02 08:15 UTC] F277 SKIPPED (/v1/foundry/pipelines not in backend). F278 DONE: DatasetLineageTree.jsx — GET /v1/datasets + /lineage + /health; SVG 3-col tree; health colors; node tooltip; ASSESS+TTS; isLingtreeQuery wired in JarvisBrain; build exit:0

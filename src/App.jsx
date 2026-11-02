@@ -783,6 +783,7 @@ import ObjectVersionTrail from '@/components/cinematic/ObjectVersionTrail';
 import GeospatialObjectMap from '@/components/cinematic/GeospatialObjectMap';
 import RadiusQueryPanel from '@/components/cinematic/RadiusQueryPanel';
 import PredictionModelPanel from '@/components/cinematic/PredictionModelPanel';
+import DatasetLineageTree from '@/components/cinematic/DatasetLineageTree';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2448,6 +2449,8 @@ function App() {
             <RadiusQueryPanel />
             {/* F276 (overnight 2026-11-02): Prediction Model Panel — ◈ PREDMDL button (left:202360, bottom:8, zIndex:372); GET /v1/predict/models → model selector; POST /functions/predict → confidence bar + evidence list; GET /v1/predict/patterns (from history series) → patterns table; ASSESS + TTS; isPredmdlQuery exported */}
             <PredictionModelPanel />
+            {/* F278 (overnight 2026-11-02): Dataset Lineage Tree — ◈ LINGTREE button (left:203480, bottom:8, zIndex:374); GET /v1/datasets → name selector; GET /v1/datasets/{name}/lineage → 3-column SVG tree (upstream left / selected centre / downstream right); node color = health status from GET /v1/datasets/{name}/health (HEALTHY=green/DEGRADED=amber/DOWN=red); click node → health detail tooltip; lineage depth counter; ASSESS + TTS; isLingtreeQuery exported for JarvisBrain; jarvis:lingtree-toggle event */}
+            <DatasetLineageTree />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>
