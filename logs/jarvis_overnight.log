@@ -305,3 +305,4 @@ Commits pushed to jarvis-overnight:
 2026-11-02T17:03Z F286 CrossSeriesTimelineFeed.jsx — GET /v1/temporal/series + POST /v1/temporal/timeline; sparklines, kind/series filter, time-range selector, ASSESS+TTS; Vite build exit:0
 [2026-11-02] F287 Geofence Manager — GeofenceManager.jsx created; GET /v1/geo/geofences list + SVG Mercator polygon overlay; GET /v1/geo/contains test-point highlight; POST /v1/geo/geofences new-fence form; count badge; ASSESS+TTS; wired App.jsx + JarvisBrain.jsx; Vite build exit:0
 2026-11-02 F288 GothamEventFeed.jsx — Gotham event feed with poll/filter/link-draft/assess; build exit:0
+2026-11-02 19:12 UTC | F289 ModelEvaluationRunner | GET /v1/predict/models + POST /v1/predict/evaluate + GET /v1/predict/improvement | CRPS/RMSE/PSI/ECE metric bars, model scores tab, recent evals, Re-run, ASSESS+TTS | Vite build exit:0

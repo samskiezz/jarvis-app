@@ -795,6 +795,7 @@ import AnomalyVolatilityHeatmap from '@/components/cinematic/AnomalyVolatilityHe
 import CrossSeriesTimelineFeed from '@/components/cinematic/CrossSeriesTimelineFeed';
 import GeofenceManager from '@/components/cinematic/GeofenceManager';
 import GothamEventFeed from '@/components/cinematic/GothamEventFeed';
+import ModelEvaluationRunner from '@/components/cinematic/ModelEvaluationRunner';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2482,6 +2483,8 @@ function App() {
             <GeofenceManager />
             {/* F288 (overnight 2026-11-02): Gotham Event Feed — ◈ GOEVTFD button (left:209080, zIndex:384); GET /v1/gotham/events poll 10s → scrolling feed newest-first; event_type badge + description + timestamp + Link to Case; GET /v1/gotham/cases modal; draft proposal for link (no write endpoint); filter by event_type; unread badge; ASSESS + TTS; isGoevtfdQuery exported */}
             <GothamEventFeed />
+            {/* F289 (overnight 2026-11-02): Model Evaluation Runner — ◈ MEVLRUN button (left:209640, zIndex:385); GET /v1/predict/models → model selector; POST /v1/predict/evaluate → CRPS/RMSE/PSI/ECE metric bars; GET /v1/predict/improvement → model scores ranked + pending retrains; Re-run button; recent evaluations; ASSESS + TTS; isMevlrunQuery exported */}
+            <ModelEvaluationRunner />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
