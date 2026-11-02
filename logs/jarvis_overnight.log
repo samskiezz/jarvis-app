@@ -300,3 +300,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-02] F281 RuleEnginePanel: GET /v1/rules + POST /v1/rules/evaluate + POST /v1/rules; severity badges, evaluate drawer, new-rule form, ASSESS+TTS; Vite build exit:0
 [2026-11-02 12:28 UTC] F282 OpsCaseManager.jsx — Ops Case Manager workbench; GET/POST /v1/cases; left case list + right detail panel (notes timeline, entity chips, status selector, new case form); ASSESS+TTS; wired App.jsx; Vite build exit:0
 2026-11-02 F283 OntologyActionAuditor: ONTACT panel wired to /v1/ontology/objects/{id} + /actions; build clean; pushed jarvis-overnight
+[2026-11-02] F284 LiveStreamMonitor: EventSource /streams/{key} SSE terminal; wired App.jsx + JarvisBrain.jsx; Vite build exit:0

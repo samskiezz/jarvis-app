@@ -790,6 +790,7 @@ import AlertInbox from '@/components/cinematic/AlertInbox';
 import RuleEnginePanel from '@/components/cinematic/RuleEnginePanel';
 import OpsCaseManager from '@/components/cinematic/OpsCaseManager';
 import OntologyActionAuditor from '@/components/cinematic/OntologyActionAuditor';
+import LiveStreamMonitor from '@/components/cinematic/LiveStreamMonitor';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2467,6 +2468,8 @@ function App() {
             <OpsCaseManager />
             {/* F283 (overnight 2026-11-02): Ontology Action Auditor — ◈ ONTACT button (left:206280, bottom:8, zIndex:379); object_id input; "Load" → GET /v1/ontology/objects/{id} → top panel: object label, type, mark badge, props accordion; GET /v1/ontology/objects/{id}/actions → scrollable audit log: ISO timestamp, action_type badge (color by type), actor, before/after props diff chips; filter by action_type; total action count + most-active actor in header; ASSESS + TTS; isOntactQuery exported */}
             <OntologyActionAuditor />
+            {/* F284 (overnight 2026-11-02): Live Stream Monitor — ◈ STRMMON button (left:206840, bottom:8, zIndex:380); stream key input (pre-populated: brain/alerts/tasks); "Connect" → EventSource /streams/{key}; auto-scrolling monospace panel (max 500 lines); line color by keyword ERROR=red/WARN=amber/INFO=cyan/OK=green; scroll-lock toggle; reconnect on error with exponential backoff; ASSESS + TTS; isStrmmonQuery exported */}
+            <LiveStreamMonitor />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
