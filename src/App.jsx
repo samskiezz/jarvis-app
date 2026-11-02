@@ -776,6 +776,7 @@ import ReportDatasetContactSwarmProductionChain from '@/components/cinematic/Rep
 import OntologyTypeBrowser from '@/components/cinematic/OntologyTypeBrowser';
 import ObjectNeighborhoodExplorer from '@/components/cinematic/ObjectNeighborhoodExplorer';
 import InvestigationWorkspace from '@/components/cinematic/InvestigationWorkspace';
+import TemporalGraphScrubber from '@/components/cinematic/TemporalGraphScrubber';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2427,6 +2428,8 @@ function App() {
             <ObjectNeighborhoodExplorer />
             {/* F270 (overnight 2026-11-02): Investigation Workspace — ◈ INVWRK button (left:199000, bottom:8, zIndex:366); GET /v1/investigations → left panel case list; click → GET /v1/investigations/{id} → right panel: name/owner/seeds + annotations + shares; POST /v1/investigations/{id}/annotations; POST /v1/investigations (new case); DELETE /v1/investigations/{id} with confirm; ASSESS + TTS; isInvwrkQuery wired in JarvisBrain.jsx */}
             <InvestigationWorkspace />
+            {/* F269 (overnight 2026-11-02): Temporal Graph Scrubber — ◈ TGSCRB button (left:198440, bottom:8, zIndex:365); POST /v1/graph-time/playback with configurable N frames → SVG force graph animates frame-by-frame (new nodes=green flash, removed=red fade); play/pause/step-back/step-forward controls; frame counter + ISO timestamp; speed 1×/2×/5×/10×; ASSESS + TTS */}
+            <TemporalGraphScrubber />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>
