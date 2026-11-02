@@ -780,6 +780,7 @@ import TemporalGraphScrubber from '@/components/cinematic/TemporalGraphScrubber'
 import GothamCaseSurface from '@/components/cinematic/GothamCaseSurface';
 import TemporalTimelineExplorer from '@/components/cinematic/TemporalTimelineExplorer';
 import ObjectVersionTrail from '@/components/cinematic/ObjectVersionTrail';
+import GeospatialObjectMap from '@/components/cinematic/GeospatialObjectMap';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2439,6 +2440,8 @@ function App() {
             <TemporalTimelineExplorer />
             {/* F273 (overnight 2026-11-02): Object Version Trail — ◈ VERTR button (left:200680, bottom:8, zIndex:369); GET /v1/temporal/object/{object_id}/versions → vertical timeline newest-first: version number, ISO timestamp, actor badge, field chips from detail keys; click 2 rows → diff panel (added=green/removed=red/changed=amber); versions/day rate-of-change metric; ASSESS → /v1/jarvis/agent/chat + TTS; isVertrQuery+buildVertrScript exported; jarvis:vertr-toggle event */}
             <ObjectVersionTrail />
+            {/* F274 (overnight 2026-11-02): Geospatial Object Map — ◈ GEOMAP button (left:201240, bottom:8, zIndex:370); GET /v1/geo/objects → Mercator SVG dots colored by type (radius 6); hover tooltip label+type+lat/lon; click dot → inspector drawer; GET /v1/geo/layers → layer toggle sidebar; type filter checkboxes; zoom/pan via SVG transform; ASSESS + TTS; isGeomapQuery wired in JarvisBrain.jsx */}
+            <GeospatialObjectMap />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>
