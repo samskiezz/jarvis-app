@@ -302,3 +302,4 @@ Commits pushed to jarvis-overnight:
 2026-11-02 F283 OntologyActionAuditor: ONTACT panel wired to /v1/ontology/objects/{id} + /actions; build clean; pushed jarvis-overnight
 [2026-11-02] F284 LiveStreamMonitor: EventSource /streams/{key} SSE terminal; wired App.jsx + JarvisBrain.jsx; Vite build exit:0
 [2026-11-02 16:04] F285 AnomalyVolatilityHeatmap.jsx — GET /v1/history/series + /v1/temporal/patterns; SVG week×dow heatmap, HSL vol color, anomaly markers, cell tooltip, stats sidebar, ASSESS+TTS; wired App.jsx+JarvisBrain.jsx; Vite build exit:0
+2026-11-02T17:03Z F286 CrossSeriesTimelineFeed.jsx — GET /v1/temporal/series + POST /v1/temporal/timeline; sparklines, kind/series filter, time-range selector, ASSESS+TTS; Vite build exit:0

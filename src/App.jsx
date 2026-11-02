@@ -792,6 +792,7 @@ import OpsCaseManager from '@/components/cinematic/OpsCaseManager';
 import OntologyActionAuditor from '@/components/cinematic/OntologyActionAuditor';
 import LiveStreamMonitor from '@/components/cinematic/LiveStreamMonitor';
 import AnomalyVolatilityHeatmap from '@/components/cinematic/AnomalyVolatilityHeatmap';
+import CrossSeriesTimelineFeed from '@/components/cinematic/CrossSeriesTimelineFeed';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2473,6 +2474,8 @@ function App() {
             <LiveStreamMonitor />
             {/* F285 (overnight 2026-11-02): Anomaly Volatility Heatmap — ◈ ANVOHTM button (left:207400, zIndex:381); series selector from GET /v1/history/series; GET /v1/temporal/patterns?series_id= → 2D SVG grid rows=weeks cols=day-of-week; cell color=volatility HSL blue→amber→red; click cell → tooltip date/z-score/volatility/anomaly flag; stats sidebar: peak vol date, mean |z|, anomaly count; ASSESS + TTS; isAnvohtmQuery exported */}
             <AnomalyVolatilityHeatmap />
+            {/* F286 (overnight 2026-11-02): Cross-Series Timeline Feed — ◈ CSTLFEED button (left:207960, zIndex:382); GET /v1/temporal/series catalog; POST /v1/temporal/timeline → merged threshold-event feed; scrolling event log: series_id badge + kind + value + timestamp; sparklines per series in left gutter; filter by series or kind; time-range selector; ASSESS + TTS; isCstlfeedQuery exported */}
+            <CrossSeriesTimelineFeed />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
