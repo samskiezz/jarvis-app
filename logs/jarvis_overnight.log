@@ -288,3 +288,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-01] F268 Object Neighborhood Explorer — ObjectNeighborhoodExplorer.jsx (pure-JS Verlet force graph, no D3 dep); wired App.jsx + JarvisBrain.jsx; Vite build exit:0
 [2026-11-02 00:11 UTC] F270 InvestigationWorkspace.jsx — full CRUD workbench for /v1/investigations (list/get/create/annotate/delete); wired App.jsx + JarvisBrain.jsx; Vite build exit:0. F269 SKIPPED (POST /v1/graph-time/playback not confirmed-real).
 2026-11-02 F269 TemporalGraphScrubber.jsx — POST /v1/graph-time/playback; SVG force graph with play/pause/step/speed controls, frame counter, ASSESS+TTS; wired App.jsx; Vite build exit:0
+[2026-11-02] F271 GothamCaseSurface.jsx — GOTCAS button (left:199560 zIndex:367); GET /v1/gotham/cases + GET /v1/gotham/events + POST /v1/gotham/case; priority badges CRITICAL/HIGH/NORMAL/LOW; events feed with kind filter; New Case modal; ASSESS+TTS; wired App.jsx+JarvisBrain.jsx; build OK

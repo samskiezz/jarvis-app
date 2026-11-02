@@ -777,6 +777,7 @@ import OntologyTypeBrowser from '@/components/cinematic/OntologyTypeBrowser';
 import ObjectNeighborhoodExplorer from '@/components/cinematic/ObjectNeighborhoodExplorer';
 import InvestigationWorkspace from '@/components/cinematic/InvestigationWorkspace';
 import TemporalGraphScrubber from '@/components/cinematic/TemporalGraphScrubber';
+import GothamCaseSurface from '@/components/cinematic/GothamCaseSurface';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2430,6 +2431,8 @@ function App() {
             <InvestigationWorkspace />
             {/* F269 (overnight 2026-11-02): Temporal Graph Scrubber — ◈ TGSCRB button (left:198440, bottom:8, zIndex:365); POST /v1/graph-time/playback with configurable N frames → SVG force graph animates frame-by-frame (new nodes=green flash, removed=red fade); play/pause/step-back/step-forward controls; frame counter + ISO timestamp; speed 1×/2×/5×/10×; ASSESS + TTS */}
             <TemporalGraphScrubber />
+            {/* F271 (overnight 2026-11-02): Gotham Case Surface — ◈ GOTCAS button (left:199560, bottom:8, zIndex:367); GET /v1/gotham/cases → priority-badged list (CRITICAL=red/HIGH=orange/NORMAL=cyan/LOW=grey) + click-to-expand detail drawer; GET /v1/gotham/events → events feed right panel, filterable by kind; POST /v1/gotham/case → modal (title+priority+linked_objects); ASSESS + TTS; isGotcasQuery+buildGotcasScript exported; jarvis:gotcas-toggle event */}
+            <GothamCaseSurface />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>

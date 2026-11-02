@@ -208,6 +208,7 @@ import { isRdcspQuery } from "@/components/cinematic/ReportDatasetContactSwarmPr
 import { isOntbrQuery } from "@/components/cinematic/OntologyTypeBrowser";
 import { isNbxplQuery } from "@/components/cinematic/ObjectNeighborhoodExplorer";
 import { isInvwrkQuery } from "@/components/cinematic/InvestigationWorkspace";
+import { isGotcasQuery } from "@/components/cinematic/GothamCaseSurface";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -502,6 +503,7 @@ export default function JarvisBrain() {
     if (isOntbrQuery(q))   { window.dispatchEvent(new Event("jarvis:ontbr-toggle")); }
     if (isNbxplQuery(q))   { window.dispatchEvent(new Event("jarvis:nbxpl-toggle")); }
     if (isInvwrkQuery(q))  { window.dispatchEvent(new Event("jarvis:invwrk-toggle")); }
+    if (isGotcasQuery(q))  { window.dispatchEvent(new Event("jarvis:gotcas-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
