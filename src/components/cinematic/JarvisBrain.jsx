@@ -215,6 +215,7 @@ import { isGeomapQuery } from "@/components/cinematic/GeospatialObjectMap";
 import { isRadqryQuery } from "@/components/cinematic/RadiusQueryPanel";
 import { isLingtreeQuery } from "@/components/cinematic/DatasetLineageTree";
 import { isAlrtinbQuery } from "@/components/cinematic/AlertInbox";
+import { isRuengnQuery } from "@/components/cinematic/RuleEnginePanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -516,6 +517,7 @@ export default function JarvisBrain() {
     if (isRadqryQuery(q))   { window.dispatchEvent(new Event("jarvis:radqry-toggle")); }
     if (isLingtreeQuery(q)) { window.dispatchEvent(new Event("jarvis:lingtree-toggle")); }
     if (isAlrtinbQuery(q))  { window.dispatchEvent(new Event("jarvis:alrtinb-toggle")); }
+    if (isRuengnQuery(q))   { window.dispatchEvent(new Event("jarvis:ruengn-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

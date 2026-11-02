@@ -787,6 +787,7 @@ import DatasetLineageTree from '@/components/cinematic/DatasetLineageTree';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 import ReportGenerator from '@/components/cinematic/ReportGenerator';
 import AlertInbox from '@/components/cinematic/AlertInbox';
+import RuleEnginePanel from '@/components/cinematic/RuleEnginePanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2458,6 +2459,8 @@ function App() {
             <ReportGenerator />
             {/* F280 (overnight 2026-11-02): Alert Inbox — ◈ ALRTINB button (left:204600, bottom:8, zIndex:376); GET /v1/alerts → inbox grouped by severity tabs CRITICAL/HIGH/MEDIUM/LOW; ACK button → POST /v1/alerts/{id}/ack → optimistic fade-out; unread count badge pulses red on CRITICAL; poll 15s; click alert → detail drawer; ASSESS + TTS; isAlrtinbQuery exported */}
             <AlertInbox />
+            {/* F281 (overnight 2026-11-02): Rule Engine Panel — ◈ RUENGN button (left:205160, bottom:8, zIndex:377); GET /v1/rules → rules list with enabled/disabled badge + severity badge + condition preview; "Evaluate" → POST /v1/rules/evaluate → matched objects list; "New Rule" form → POST /v1/rules; ASSESS + TTS; isRuengnQuery exported */}
+            <RuleEnginePanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

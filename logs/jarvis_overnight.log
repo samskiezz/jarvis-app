@@ -297,3 +297,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-02 08:15 UTC] F277 SKIPPED (/v1/foundry/pipelines not in backend). F278 DONE: DatasetLineageTree.jsx — GET /v1/datasets + /lineage + /health; SVG 3-col tree; health colors; node tooltip; ASSESS+TTS; isLingtreeQuery wired in JarvisBrain; build exit:0
 [2026-11-02 09:13 UTC] F279 ReportGenerator.jsx — POST /v1/reports/generate + history list + export download + ASSESS/TTS; build OK
 2026-11-02 F280 AlertInbox — Alert Inbox panel implemented (AlertInbox.jsx); severity tabs CRITICAL/HIGH/MEDIUM/LOW; ACK → POST /v1/alerts/{id}/ack with optimistic fade; badge pulses red on criticals; poll 15s; detail drawer; ASSESS+TTS; wired App.jsx+JarvisBrain.jsx; build OK
+[2026-11-02] F281 RuleEnginePanel: GET /v1/rules + POST /v1/rules/evaluate + POST /v1/rules; severity badges, evaluate drawer, new-rule form, ASSESS+TTS; Vite build exit:0
