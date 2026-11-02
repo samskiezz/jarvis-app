@@ -793,6 +793,7 @@ import OntologyActionAuditor from '@/components/cinematic/OntologyActionAuditor'
 import LiveStreamMonitor from '@/components/cinematic/LiveStreamMonitor';
 import AnomalyVolatilityHeatmap from '@/components/cinematic/AnomalyVolatilityHeatmap';
 import CrossSeriesTimelineFeed from '@/components/cinematic/CrossSeriesTimelineFeed';
+import GeofenceManager from '@/components/cinematic/GeofenceManager';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2476,6 +2477,8 @@ function App() {
             <AnomalyVolatilityHeatmap />
             {/* F286 (overnight 2026-11-02): Cross-Series Timeline Feed — ◈ CSTLFEED button (left:207960, zIndex:382); GET /v1/temporal/series catalog; POST /v1/temporal/timeline → merged threshold-event feed; scrolling event log: series_id badge + kind + value + timestamp; sparklines per series in left gutter; filter by series or kind; time-range selector; ASSESS + TTS; isCstlfeedQuery exported */}
             <CrossSeriesTimelineFeed />
+            {/* F287 (overnight 2026-11-02): Geofence Manager — ◈ GEOFNC button (left:208520, zIndex:383); GET /v1/geo/geofences → list with name + polygon vertex count; click → highlight polygon on SVG world map; Test Point form lat/lon → GET /v1/geo/contains?lat=&lon= → green highlight; New Geofence → POST /v1/geo/geofences; geofence count badge; ASSESS + TTS; isGeofncQuery exported */}
+            <GeofenceManager />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
