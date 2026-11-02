@@ -794,6 +794,7 @@ import LiveStreamMonitor from '@/components/cinematic/LiveStreamMonitor';
 import AnomalyVolatilityHeatmap from '@/components/cinematic/AnomalyVolatilityHeatmap';
 import CrossSeriesTimelineFeed from '@/components/cinematic/CrossSeriesTimelineFeed';
 import GeofenceManager from '@/components/cinematic/GeofenceManager';
+import GothamEventFeed from '@/components/cinematic/GothamEventFeed';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2479,6 +2480,8 @@ function App() {
             <CrossSeriesTimelineFeed />
             {/* F287 (overnight 2026-11-02): Geofence Manager — ◈ GEOFNC button (left:208520, zIndex:383); GET /v1/geo/geofences → list with name + polygon vertex count; click → highlight polygon on SVG world map; Test Point form lat/lon → GET /v1/geo/contains?lat=&lon= → green highlight; New Geofence → POST /v1/geo/geofences; geofence count badge; ASSESS + TTS; isGeofncQuery exported */}
             <GeofenceManager />
+            {/* F288 (overnight 2026-11-02): Gotham Event Feed — ◈ GOEVTFD button (left:209080, zIndex:384); GET /v1/gotham/events poll 10s → scrolling feed newest-first; event_type badge + description + timestamp + Link to Case; GET /v1/gotham/cases modal; draft proposal for link (no write endpoint); filter by event_type; unread badge; ASSESS + TTS; isGoevtfdQuery exported */}
+            <GothamEventFeed />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

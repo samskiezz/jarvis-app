@@ -304,3 +304,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-02 16:04] F285 AnomalyVolatilityHeatmap.jsx — GET /v1/history/series + /v1/temporal/patterns; SVG week×dow heatmap, HSL vol color, anomaly markers, cell tooltip, stats sidebar, ASSESS+TTS; wired App.jsx+JarvisBrain.jsx; Vite build exit:0
 2026-11-02T17:03Z F286 CrossSeriesTimelineFeed.jsx — GET /v1/temporal/series + POST /v1/temporal/timeline; sparklines, kind/series filter, time-range selector, ASSESS+TTS; Vite build exit:0
 [2026-11-02] F287 Geofence Manager — GeofenceManager.jsx created; GET /v1/geo/geofences list + SVG Mercator polygon overlay; GET /v1/geo/contains test-point highlight; POST /v1/geo/geofences new-fence form; count badge; ASSESS+TTS; wired App.jsx + JarvisBrain.jsx; Vite build exit:0
+2026-11-02 F288 GothamEventFeed.jsx — Gotham event feed with poll/filter/link-draft/assess; build exit:0
