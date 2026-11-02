@@ -286,3 +286,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-01] F266 ReportDatasetContactSwarmProductionChain.jsx — ◈ RDCSP panel; /v1/reports + /v1/datasets + /entities/Contact + /entities/SwarmJob → AUTHORITATIVE/OWNED/ACTIVE/ADRIFT; isRdcspQuery+buildRdcspScript wired in JarvisBrain.jsx; mounted in App.jsx; Vite build exit:0
 [2026-11-01] F267 OntologyTypeBrowser.jsx — TREE-VIEW accordion of ontology types with nested objects, inline inspector, ASSESS+TTS. Wired App.jsx + JarvisBrain.jsx. Vite build exit:0.
 [2026-11-01] F268 Object Neighborhood Explorer — ObjectNeighborhoodExplorer.jsx (pure-JS Verlet force graph, no D3 dep); wired App.jsx + JarvisBrain.jsx; Vite build exit:0
+[2026-11-02 00:11 UTC] F270 InvestigationWorkspace.jsx — full CRUD workbench for /v1/investigations (list/get/create/annotate/delete); wired App.jsx + JarvisBrain.jsx; Vite build exit:0. F269 SKIPPED (POST /v1/graph-time/playback not confirmed-real).

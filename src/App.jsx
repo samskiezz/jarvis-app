@@ -775,6 +775,7 @@ import IntelProfileContactGraphOpsNetwork from '@/components/cinematic/IntelProf
 import ReportDatasetContactSwarmProductionChain from '@/components/cinematic/ReportDatasetContactSwarmProductionChain';
 import OntologyTypeBrowser from '@/components/cinematic/OntologyTypeBrowser';
 import ObjectNeighborhoodExplorer from '@/components/cinematic/ObjectNeighborhoodExplorer';
+import InvestigationWorkspace from '@/components/cinematic/InvestigationWorkspace';
 import BackendConnectionStatus from '@/components/cinematic/BackendConnectionStatus';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2424,6 +2425,8 @@ function App() {
             <ReportDatasetContactSwarmProductionChain />
             <OntologyTypeBrowser />
             <ObjectNeighborhoodExplorer />
+            {/* F270 (overnight 2026-11-02): Investigation Workspace — ◈ INVWRK button (left:199000, bottom:8, zIndex:366); GET /v1/investigations → left panel case list; click → GET /v1/investigations/{id} → right panel: name/owner/seeds + annotations + shares; POST /v1/investigations/{id}/annotations; POST /v1/investigations (new case); DELETE /v1/investigations/{id} with confirm; ASSESS + TTS; isInvwrkQuery wired in JarvisBrain.jsx */}
+            <InvestigationWorkspace />
             <BackendConnectionStatus />
             <Suspense fallback={<Loading />}>
               <Routes>
