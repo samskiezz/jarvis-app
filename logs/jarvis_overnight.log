@@ -313,3 +313,4 @@ Commits pushed to jarvis-overnight:
 2026-11-03 F295 TemporalReplayAnimator.jsx — SVG replay scrubber wired to /v1/temporal/series + /v1/temporal/replay + /v1/temporal/events; pulsing dot + event markers on final frame; play/pause/step/scrubber/speed; ASSESS+TTS; build exit 0
 2026-11-03 F300 DONE: AlertCaseCreator.jsx — Ops Alert → Case Creator; /v1/alerts inbox sorted by severity + /v1/cases list + POST /v1/cases; confirm modal, case-id badge, bulk CRITICAL creator, ASSESS+TTS; Vite build exit:0
 [2026-11-03] F307 ReportLibraryBrowser.jsx — Report Library Browser; GET /v1/reports list with type/date filters; GET /v1/reports/{id} inspector; GET /v1/reports/{id}/export download md/json; POST /v1/reports/generate drawer; ASSESS+TTS; mounted App.jsx; build: OK (exit 0)
+[2026-11-03] F317 InvestigationAnnotationViewer.jsx — GET /v1/investigations + GET/POST /v1/investigations/{id}/annotations; timeline + node filter + export + ASSESS/TTS; build OK (vite exit 0)
