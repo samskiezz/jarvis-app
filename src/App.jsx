@@ -800,6 +800,7 @@ import DatasetHealthMonitor from '@/components/cinematic/DatasetHealthMonitor';
 import OntologyUpsertPanel from '@/components/cinematic/OntologyUpsertPanel';
 import InvestigationGraphViewer from '@/components/cinematic/InvestigationGraphViewer';
 import GeoTrackAnimator from '@/components/cinematic/GeoTrackAnimator';
+import TemporalReplayAnimator from '@/components/cinematic/TemporalReplayAnimator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2497,6 +2498,8 @@ function App() {
             <InvestigationGraphViewer />
             {/* F293 (overnight 2026-11-02): Geo Track Animator — ◈ GEOTRK button (left:211880, zIndex:389); GET /v1/geo/objects → dropdown; GET /v1/geo/tracks/{object_id} → waypoints; SVG Mercator world map with dashed path + animated dot; play/pause/step/reset scrubber; 1×/5×/20× speed; distance-traveled badge; waypoint tooltip; ASSESS + TTS; isGeoTrkQuery exported */}
             <GeoTrackAnimator />
+            {/* F295 (overnight 2026-11-03): Temporal Replay Animator — ◈ TMPRLPY button (left:213000, zIndex:391); GET /v1/temporal/series → series_id selector; GET /v1/temporal/replay?series_id=&n_frames=50 → N cumulative frames; SVG line chart grows frame-by-frame; pulsing newest point; play/pause/step scrubber + speed 1×/2×/5×; final frame shows event markers from GET /v1/temporal/events; ASSESS + TTS; isTmprlpyQuery+buildTmprlpyScript exported for JarvisBrain */}
+            <TemporalReplayAnimator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
