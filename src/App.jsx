@@ -804,6 +804,7 @@ import GeoTrackAnimator from '@/components/cinematic/GeoTrackAnimator';
 import TemporalReplayAnimator from '@/components/cinematic/TemporalReplayAnimator';
 import AlertCaseCreator from '@/components/cinematic/AlertCaseCreator';
 import ReportLibraryBrowser from '@/components/cinematic/ReportLibraryBrowser';
+import EntityDeepLinkNavigator from '@/components/cinematic/EntityDeepLinkNavigator';
 import InvestigationAnnotationViewer from '@/components/cinematic/InvestigationAnnotationViewer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
@@ -2510,6 +2511,8 @@ function App() {
             <AlertCaseCreator />
             {/* F307 (overnight 2026-11-03): Report Library Browser — ◈ RPTBROW button (left:219720, zIndex:403); GET /v1/reports → list with type badge/date/count; click → GET /v1/reports/{id} inspector with full body; GET /v1/reports/{id}/export download md/json; filter ALL/GENERATED/MANUAL + date range + search; POST /v1/reports/generate form drawer; ASSESS + TTS; isRptbrowQuery+buildRptbrowScript exported */}
             <ReportLibraryBrowser />
+            {/* F308 (overnight 2026-11-03): Entity Deep-Link Navigator — ◈ ENTLINK button (left:220280, zIndex:404); search GET /v1/ontology/objects?q=; click entity → GET /v1/ontology/objects/{id}/neighbors → SVG Verlet force graph; breadcrumb trail (max depth 5); click neighbor → extend breadcrumb; Back button; left inspector panel shows entity props; ASSESS + TTS; isEntlinkQuery exported */}
+            <EntityDeepLinkNavigator />
             {/* F317 (overnight 2026-11-03): Investigation Annotation Viewer — ◈ INVANNO button (left:225320, zIndex:413); GET /v1/investigations → list; click → GET /v1/investigations/{id} → annotations timeline: ts + node_id + annotator + text; node_id filter bar + per-node count badges; "Add Annotation" form → POST /v1/investigations/{id}/annotations; export as TXT; ASSESS + TTS; isInvannoQuery+buildInvannoScript exported */}
             <InvestigationAnnotationViewer />
             <Suspense fallback={<Loading />}>
