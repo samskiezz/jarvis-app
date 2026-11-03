@@ -798,6 +798,7 @@ import GothamEventFeed from '@/components/cinematic/GothamEventFeed';
 import ModelEvaluationRunner from '@/components/cinematic/ModelEvaluationRunner';
 import DatasetHealthMonitor from '@/components/cinematic/DatasetHealthMonitor';
 import OntologyUpsertPanel from '@/components/cinematic/OntologyUpsertPanel';
+import OntologyObjectCreator from '@/components/cinematic/OntologyObjectCreator';
 import InvestigationGraphViewer from '@/components/cinematic/InvestigationGraphViewer';
 import GeoTrackAnimator from '@/components/cinematic/GeoTrackAnimator';
 import TemporalReplayAnimator from '@/components/cinematic/TemporalReplayAnimator';
@@ -2497,6 +2498,8 @@ function App() {
             <DatasetHealthMonitor />
             {/* F291 (overnight 2026-11-02): Ontology Object Upsert Panel — ◈ ONTUPSERT button (left:210760, zIndex:387); GET /v1/ontology/objects → searchable list; click → prefill form; POST /v1/ontology/objects to save; POST /v1/ontology/links for link tab; success/error toast; ASSESS + TTS; isOntupsertQuery exported */}
             <OntologyUpsertPanel />
+            {/* F306 (overnight 2026-11-03): Ontology Object Creator — ◈ ONTCREATE button (left:219160, zIndex:402); blank object creation form: id auto-gen, type selector GET /v1/ontology/types, label input, mark select (PUBLIC/INTERNAL/SECRET/RESTRICTED), key-value props editor; preview card before save; Create → POST /v1/ontology/objects; Link tab: two IDs + relation + strength → POST /v1/ontology/links; recent creations list; ASSESS + TTS; isOntcreateQuery exported */}
+            <OntologyObjectCreator />
             {/* F292 (overnight 2026-11-02): Investigation Graph Viewer — ◈ INVGRPH button (left:211320, zIndex:388); GET /v1/investigations → select; GET /v1/investigations/{id} → subgraph; D3-style SVG force graph; click node → GET /v1/ontology/objects/{id} inspector; click edge → POST /v1/investigations/{id}/annotations; share → POST /v1/investigations/{id}/share; ASSESS + TTS; isInvGraphQuery exported */}
             <InvestigationGraphViewer />
             {/* F293 (overnight 2026-11-02): Geo Track Animator — ◈ GEOTRK button (left:211880, zIndex:389); GET /v1/geo/objects → dropdown; GET /v1/geo/tracks/{object_id} → waypoints; SVG Mercator world map with dashed path + animated dot; play/pause/step/reset scrubber; 1×/5×/20× speed; distance-traveled badge; waypoint tooltip; ASSESS + TTS; isGeoTrkQuery exported */}
