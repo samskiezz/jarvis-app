@@ -820,6 +820,7 @@ import MissionBriefComposer from '@/components/cinematic/MissionBriefComposer';
 import LiveIntelThreatSynthesis from '@/components/cinematic/LiveIntelThreatSynthesis';
 import VolatilitySeriesComparison from '@/components/cinematic/VolatilitySeriesComparison';
 import AipToolExplorer from '@/components/cinematic/AipToolExplorer';
+import BboxSpatialQuery from '@/components/cinematic/BboxSpatialQuery';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2557,6 +2558,8 @@ function App() {
             <VolatilitySeriesComparison />
             {/* F303 (overnight 2026-11-03): AIP Tool Explorer — ◈ AIPTOOL button (left:217480, zIndex:399); GET /v1/aip/tools → tool list; click → detail drawer; "Call Tool" → POST /v1/aip/call; GET /v1/aip/proposals → proposals list; GET /v1/aip/skill → skill scorecard; ASSESS+TTS; isAiptoolQuery+buildAiptoolScript exported */}
             <AipToolExplorer />
+            {/* F304 (overnight 2026-11-03): Bbox Spatial Query — ◈ BBOXQRY button (left:218040, zIndex:400); four inputs min_lat/min_lon/max_lat/max_lon; GET /v1/geo/bbox → result objects as dots on SVG map with bbox rectangle overlay; click object → GET /v1/geo/tracks/{id} → movement track overlay; result count badge; sorted list by type; type filter chips; Export Coords to clipboard; ASSESS+TTS; isBboxqryQuery exported */}
+            <BboxSpatialQuery />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
