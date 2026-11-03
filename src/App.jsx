@@ -819,6 +819,7 @@ import GraphTimeDiff from '@/components/cinematic/GraphTimeDiff';
 import MissionBriefComposer from '@/components/cinematic/MissionBriefComposer';
 import LiveIntelThreatSynthesis from '@/components/cinematic/LiveIntelThreatSynthesis';
 import VolatilitySeriesComparison from '@/components/cinematic/VolatilitySeriesComparison';
+import OntologyGovernedActionPanel from '@/components/cinematic/OntologyGovernedActionPanel';
 import AipToolExplorer from '@/components/cinematic/AipToolExplorer';
 import BboxSpatialQuery from '@/components/cinematic/BboxSpatialQuery';
 import TemporalThresholdEventsPanel from '@/components/cinematic/TemporalThresholdEventsPanel';
@@ -2557,6 +2558,8 @@ function App() {
             <LiveIntelThreatSynthesis />
             {/* F310 (overnight 2026-11-03): Volatility Series Comparison — ◈ VOLCOMP button (left:221400, zIndex:406); multi-select up to 4 series from GET /v1/history/series; parallel GET /v1/temporal/patterns?series_id= per series; stacked SVG bands: rows=series, x=shared time axis, colour intensity=rolling_volatility; anomaly z-score spikes as vertical tick bars (height ∝ |z|); hover cross-hair across all bands; ASSESS speaks about most volatile series + co-occurring anomalies + TTS; isVolcompQuery exported */}
             <VolatilitySeriesComparison />
+            {/* F311 (overnight 2026-11-03): Ontology Governed Action Panel — ◈ ONTGOV button (left:221960, zIndex:407); GET /v1/ontology/objects → select; GET /v1/ontology/objects/{id}/actions → action types; POST /v1/ontology/objects/{id}/actions → execute; GET /v1/audit last 20 → history log; rollback proposal → POST /v1/jarvis/agent/chat; ASSESS+TTS; isOntgovQuery exported */}
+            <OntologyGovernedActionPanel />
             {/* F303 (overnight 2026-11-03): AIP Tool Explorer — ◈ AIPTOOL button (left:217480, zIndex:399); GET /v1/aip/tools → tool list; click → detail drawer; "Call Tool" → POST /v1/aip/call; GET /v1/aip/proposals → proposals list; GET /v1/aip/skill → skill scorecard; ASSESS+TTS; isAiptoolQuery+buildAiptoolScript exported */}
             <AipToolExplorer />
             {/* F304 (overnight 2026-11-03): Bbox Spatial Query — ◈ BBOXQRY button (left:218040, zIndex:400); four inputs min_lat/min_lon/max_lat/max_lon; GET /v1/geo/bbox → result objects as dots on SVG map with bbox rectangle overlay; click object → GET /v1/geo/tracks/{id} → movement track overlay; result count badge; sorted list by type; type filter chips; Export Coords to clipboard; ASSESS+TTS; isBboxqryQuery exported */}

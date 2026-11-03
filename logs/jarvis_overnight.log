@@ -333,3 +333,4 @@ Commits pushed to jarvis-overnight:
 2026-11-03 | F303 AIP Tool Explorer | AipToolExplorer.jsx | GET /v1/aip/tools + POST /v1/aip/call + GET /v1/aip/proposals + GET /v1/aip/skill + ASSESS+TTS | build exit 0
 2026-11-03 F304 BboxSpatialQuery.jsx — GET /v1/geo/bbox + /v1/geo/tracks/{id}; SVG Mercator map + bbox rect overlay + object dots + track path; type filter chips; Export Coords; ASSESS+TTS; build exit 0
 2026-11-03 F305 TemporalThresholdEventsPanel.jsx — GET /v1/temporal/events threshold-crossing panel; series selector + threshold + direction; SVG timeline + inspector + histogram + ASSESS+TTS; wired App.jsx+JarvisBrain.jsx; Vite build exit 0
+[2026-11-03] F311 OntologyGovernedActionPanel.jsx — EVAL-RUNNER+CRUD-PANEL; /v1/ontology/objects + /v1/ontology/objects/{id}/actions + POST execute + /v1/audit last 20 + rollback proposal via /v1/jarvis/agent/chat + ASSESS+TTS; isOntgovQuery wired in JarvisBrain.jsx; Vite build exit:0
