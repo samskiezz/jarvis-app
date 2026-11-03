@@ -820,6 +820,7 @@ import MissionBriefComposer from '@/components/cinematic/MissionBriefComposer';
 import LiveIntelThreatSynthesis from '@/components/cinematic/LiveIntelThreatSynthesis';
 import VolatilitySeriesComparison from '@/components/cinematic/VolatilitySeriesComparison';
 import OntologyGovernedActionPanel from '@/components/cinematic/OntologyGovernedActionPanel';
+import BulkPredictRunner from '@/components/cinematic/BulkPredictRunner';
 import AipToolExplorer from '@/components/cinematic/AipToolExplorer';
 import BboxSpatialQuery from '@/components/cinematic/BboxSpatialQuery';
 import TemporalThresholdEventsPanel from '@/components/cinematic/TemporalThresholdEventsPanel';
@@ -2560,6 +2561,8 @@ function App() {
             <VolatilitySeriesComparison />
             {/* F311 (overnight 2026-11-03): Ontology Governed Action Panel — ◈ ONTGOV button (left:221960, zIndex:407); GET /v1/ontology/objects → select; GET /v1/ontology/objects/{id}/actions → action types; POST /v1/ontology/objects/{id}/actions → execute; GET /v1/audit last 20 → history log; rollback proposal → POST /v1/jarvis/agent/chat; ASSESS+TTS; isOntgovQuery exported */}
             <OntologyGovernedActionPanel />
+            {/* F312 (overnight 2026-11-03): Bulk Predict Runner — ◈ BLKPRED button (left:222520, zIndex:408); entity type selector + GET /v1/ontology/objects?type={type} → multi-select (max 20); GET /v1/predict/models → model selector; "Run Bulk" → POST /functions/predict per entity (sequential, 500ms delay); progress bar; results table sorted by confidence; Export CSV; ASSESS+TTS; isBlkpredQuery exported */}
+            <BulkPredictRunner />
             {/* F303 (overnight 2026-11-03): AIP Tool Explorer — ◈ AIPTOOL button (left:217480, zIndex:399); GET /v1/aip/tools → tool list; click → detail drawer; "Call Tool" → POST /v1/aip/call; GET /v1/aip/proposals → proposals list; GET /v1/aip/skill → skill scorecard; ASSESS+TTS; isAiptoolQuery+buildAiptoolScript exported */}
             <AipToolExplorer />
             {/* F304 (overnight 2026-11-03): Bbox Spatial Query — ◈ BBOXQRY button (left:218040, zIndex:400); four inputs min_lat/min_lon/max_lat/max_lon; GET /v1/geo/bbox → result objects as dots on SVG map with bbox rectangle overlay; click object → GET /v1/geo/tracks/{id} → movement track overlay; result count badge; sorted list by type; type filter chips; Export Coords to clipboard; ASSESS+TTS; isBboxqryQuery exported */}
