@@ -808,6 +808,7 @@ import EntityDeepLinkNavigator from '@/components/cinematic/EntityDeepLinkNaviga
 import InvestigationAnnotationViewer from '@/components/cinematic/InvestigationAnnotationViewer';
 import GothamInvestigationLinker from '@/components/cinematic/GothamInvestigationLinker';
 import KnowledgeGraphSummary from '@/components/cinematic/KnowledgeGraphSummary';
+import CrossDomainEntityPivot from '@/components/cinematic/CrossDomainEntityPivot';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2521,6 +2522,8 @@ function App() {
             <GothamInvestigationLinker />
             {/* F315 (overnight 2026-11-03): Knowledge Graph Summary — ◈ KGSUM button (left:224200, zIndex:411); GET /knowledge/ + GET /v1/graph/centrality; SVG Verlet force graph: square=articles, circle=graph nodes, edges via keyword overlap; click article → content drawer; ASSESS + TTS; isKgsumQuery exported */}
             <KnowledgeGraphSummary />
+            {/* F318 (overnight 2026-11-03): Cross-Domain Entity Pivot — ◈ CDPIVOT button (left:225880, zIndex:414); search GET /v1/ontology/objects?q= → seed; GET /v1/ontology/objects/{id}/neighbors + GET /v1/gotham/cases + GET /v1/investigations + GET /v1/cases; multi-domain SVG Verlet force graph (Ontology=blue/Gotham=red/Investigation=green/Ops=orange); click node → pivot; ASSESS + TTS; isCdpivotQuery+buildCdpivotScript exported */}
+            <CrossDomainEntityPivot />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
