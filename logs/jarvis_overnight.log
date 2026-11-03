@@ -316,3 +316,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-03] F317 InvestigationAnnotationViewer.jsx — GET /v1/investigations + GET/POST /v1/investigations/{id}/annotations; timeline + node filter + export + ASSESS/TTS; build OK (vite exit 0)
 [2026-11-03] F306 ONTCREATE: OntologyObjectCreator.jsx created; key-value props editor, preview card, recent creations list; POST /v1/ontology/objects + /v1/ontology/links; wired App.jsx + JarvisBrain.jsx; build OK
 2026-11-03 | F308 Entity Deep-Link Navigator | EntityDeepLinkNavigator.jsx | SVG Verlet force graph; breadcrumb nav depth 1-5; GET /v1/ontology/objects?q= + GET /v1/ontology/objects/{id}/neighbors; ASSESS+TTS; wired App.jsx + JarvisBrain.jsx; build passes (exit 0)
+[2026-11-03] F309 GothamInvestigationLinker.jsx — CRUD-PANEL: /v1/gotham/cases + /v1/investigations; link → POST /v1/investigations/{id}/annotations; pivot → POST /v1/gotham/case; ASSESS+TTS; isGotinvlnkQuery; wired App.jsx+JarvisBrain.jsx; build OK

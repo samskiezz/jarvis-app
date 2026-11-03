@@ -806,6 +806,7 @@ import AlertCaseCreator from '@/components/cinematic/AlertCaseCreator';
 import ReportLibraryBrowser from '@/components/cinematic/ReportLibraryBrowser';
 import EntityDeepLinkNavigator from '@/components/cinematic/EntityDeepLinkNavigator';
 import InvestigationAnnotationViewer from '@/components/cinematic/InvestigationAnnotationViewer';
+import GothamInvestigationLinker from '@/components/cinematic/GothamInvestigationLinker';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2515,6 +2516,8 @@ function App() {
             <EntityDeepLinkNavigator />
             {/* F317 (overnight 2026-11-03): Investigation Annotation Viewer — ◈ INVANNO button (left:225320, zIndex:413); GET /v1/investigations → list; click → GET /v1/investigations/{id} → annotations timeline: ts + node_id + annotator + text; node_id filter bar + per-node count badges; "Add Annotation" form → POST /v1/investigations/{id}/annotations; export as TXT; ASSESS + TTS; isInvannoQuery+buildInvannoScript exported */}
             <InvestigationAnnotationViewer />
+            {/* F309 (overnight 2026-11-03): Gotham + Investigation Linker — ◈ GOTINVLNK button (left:220840, zIndex:405); CRUD-PANEL: GET /v1/gotham/cases (left) + GET /v1/investigations (right); select case+investigation → POST /v1/investigations/{id}/annotations "Linked to Gotham case: {id}"; linked pairs state w/timestamps; pivot → POST /v1/gotham/case; ASSESS + TTS; isGotinvlnkQuery exported */}
+            <GothamInvestigationLinker />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
