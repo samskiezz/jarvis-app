@@ -797,6 +797,7 @@ import GeofenceManager from '@/components/cinematic/GeofenceManager';
 import GothamEventFeed from '@/components/cinematic/GothamEventFeed';
 import ModelEvaluationRunner from '@/components/cinematic/ModelEvaluationRunner';
 import DatasetHealthMonitor from '@/components/cinematic/DatasetHealthMonitor';
+import ConnectorRegistry from '@/components/cinematic/ConnectorRegistry';
 import OntologyUpsertPanel from '@/components/cinematic/OntologyUpsertPanel';
 import OntologyObjectCreator from '@/components/cinematic/OntologyObjectCreator';
 import InvestigationGraphViewer from '@/components/cinematic/InvestigationGraphViewer';
@@ -2508,6 +2509,8 @@ function App() {
             <ModelEvaluationRunner />
             {/* F290 (overnight 2026-11-02): Dataset Health Monitor — ◈ DSHLTMON button (left:210200, zIndex:386); GET /v1/datasets → list; GET /v1/datasets/{id}/health parallel (max 10) → HEALTHY/DEGRADED/DOWN badge per dataset; inspector drawer; DOWN datasets pulse red; overall % healthy header; ASSESS + TTS; isDshltmonQuery exported */}
             <DatasetHealthMonitor />
+            {/* F301 (overnight 2026-11-03): Connector Registry — ◈ CNCTRREG button (left:216360, zIndex:397); GET /v1/connectors → connector catalog with kind badge (crypto/seismic/fx/equity/generic) + INTEGRATED/GENERIC adapter status; click connector → inspector drawer: description, params schema, adapter name, network flag; total count + integrated count header; ASSESS + TTS; isCnctrrQuery exported */}
+            <ConnectorRegistry />
             {/* F291 (overnight 2026-11-02): Ontology Object Upsert Panel — ◈ ONTUPSERT button (left:210760, zIndex:387); GET /v1/ontology/objects → searchable list; click → prefill form; POST /v1/ontology/objects to save; POST /v1/ontology/links for link tab; success/error toast; ASSESS + TTS; isOntupsertQuery exported */}
             <OntologyUpsertPanel />
             {/* F306 (overnight 2026-11-03): Ontology Object Creator — ◈ ONTCREATE button (left:219160, zIndex:402); blank object creation form: id auto-gen, type selector GET /v1/ontology/types, label input, mark select (PUBLIC/INTERNAL/SECRET/RESTRICTED), key-value props editor; preview card before save; Create → POST /v1/ontology/objects; Link tab: two IDs + relation + strength → POST /v1/ontology/links; recent creations list; ASSESS + TTS; isOntcreateQuery exported */}

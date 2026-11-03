@@ -223,6 +223,7 @@ import { isGeofncQuery } from "@/components/cinematic/GeofenceManager";
 import { isGeolyrQuery } from "@/components/cinematic/GeoLayerExplorer";
 import { isGoevtfdQuery } from "@/components/cinematic/GothamEventFeed";
 import { isDshltmonQuery } from "@/components/cinematic/DatasetHealthMonitor";
+import { isCnctrrQuery } from "@/components/cinematic/ConnectorRegistry";
 import { isOntupsertQuery } from "@/components/cinematic/OntologyUpsertPanel";
 import { isOntcreateQuery } from "@/components/cinematic/OntologyObjectCreator";
 import { isEntlinkQuery } from "@/components/cinematic/EntityDeepLinkNavigator";
@@ -545,6 +546,7 @@ export default function JarvisBrain() {
     if (isGeolyrQuery(q))    { window.dispatchEvent(new Event("jarvis:geolyr-toggle")); }
     if (isGoevtfdQuery(q))   { window.dispatchEvent(new Event("jarvis:goevtfd-toggle")); }
     if (isDshltmonQuery(q))   { window.dispatchEvent(new Event("jarvis:dshltmon-toggle")); }
+    if (isCnctrrQuery(q))     { window.dispatchEvent(new Event("jarvis:cnctrreg-toggle")); }
     if (isOntupsertQuery(q))  { window.dispatchEvent(new Event("jarvis:ontupsert-toggle")); }
     if (isOntcreateQuery(q))  { window.dispatchEvent(new Event("jarvis:ontcreate-toggle")); }
     if (isEntlinkQuery(q))    { window.dispatchEvent(new Event("jarvis:entlink-toggle")); }
