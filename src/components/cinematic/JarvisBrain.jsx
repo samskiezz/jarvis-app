@@ -229,6 +229,7 @@ import { isGotinvlnkQuery } from "@/components/cinematic/GothamInvestigationLink
 import { isKgsumQuery } from "@/components/cinematic/KnowledgeGraphSummary";
 import { isCdpivotQuery } from "@/components/cinematic/CrossDomainEntityPivot";
 import { isScnpbookQuery } from "@/components/cinematic/ScenarioPlaybookViewer";
+import { isLrnptnQuery } from "@/components/cinematic/LearnedPatternExplorer";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -544,6 +545,7 @@ export default function JarvisBrain() {
     if (isKgsumQuery(q))      { window.dispatchEvent(new Event("jarvis:kgsum-toggle")); }
     if (isCdpivotQuery(q))    { window.dispatchEvent(new Event("jarvis:cdpivot-toggle")); }
     if (isScnpbookQuery(q))   { window.dispatchEvent(new Event("jarvis:scnpbook-toggle")); }
+    if (isLrnptnQuery(q))     { window.dispatchEvent(new Event("jarvis:lrnptn-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

@@ -810,6 +810,7 @@ import GothamInvestigationLinker from '@/components/cinematic/GothamInvestigatio
 import KnowledgeGraphSummary from '@/components/cinematic/KnowledgeGraphSummary';
 import CrossDomainEntityPivot from '@/components/cinematic/CrossDomainEntityPivot';
 import ScenarioPlaybookViewer from '@/components/cinematic/ScenarioPlaybookViewer';
+import LearnedPatternExplorer from '@/components/cinematic/LearnedPatternExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2527,6 +2528,8 @@ function App() {
             <CrossDomainEntityPivot />
             {/* F314 (overnight 2026-11-04): Scenario Playbook Viewer — ◈ SCNPBOOK button (left:223640, zIndex:410); GET /v1/scenario/list → list with status badge (ACTIVE/PENDING/ARCHIVED) + kind chip; click scenario → detail inspector: title, description, steps (numbered), conditions, expected outcomes; "Run Scenario" → POST /v1/jarvis/agent/chat with scenario context → AI feasibility analysis; filter ALL/ACTIVE/PENDING/ARCHIVED + search; ASSESS speaks scenario coverage + TTS; NOTE: /v1/ontology/objects linked-entities step omitted (endpoint not in confirmed-real list); isScnpbookQuery+buildScnpbookScript exported */}
             <ScenarioPlaybookViewer />
+            {/* F297 (overnight 2026-11-04): Learned Pattern Explorer — ◈ LRNPTN button (left:214120 zIndex:393); GET /v1/predict/patterns (series floats + window) → motifs/discords/regimes/changepoints/anomalies tree view; GET /v1/predict/improvement → model scores + pending retrains panel; distance threshold filter; ASSESS + TTS; isLrnptnQuery exported */}
+            <LearnedPatternExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
