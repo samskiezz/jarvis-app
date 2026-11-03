@@ -235,6 +235,7 @@ import { isLrnptnQuery } from "@/components/cinematic/LearnedPatternExplorer";
 import { isGrtmdiffQuery } from "@/components/cinematic/GraphTimeDiff";
 import { isMsnbriefQuery } from "@/components/cinematic/MissionBriefComposer";
 import { isTisynthQuery } from "@/components/cinematic/LiveIntelThreatSynthesis";
+import { isVolcompQuery } from "@/components/cinematic/VolatilitySeriesComparison";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -556,6 +557,7 @@ export default function JarvisBrain() {
     if (isGrtmdiffQuery(q))   { window.dispatchEvent(new Event("jarvis:grtmdiff-toggle")); }
     if (isMsnbriefQuery(q))   { window.dispatchEvent(new Event("jarvis:msnbrief-toggle")); }
     if (isTisynthQuery(q))    { window.dispatchEvent(new Event("jarvis:tisynth-toggle")); }
+    if (isVolcompQuery(q))    { window.dispatchEvent(new Event("jarvis:volcomp-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

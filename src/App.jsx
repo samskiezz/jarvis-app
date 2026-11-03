@@ -816,6 +816,7 @@ import LearnedPatternExplorer from '@/components/cinematic/LearnedPatternExplore
 import GraphTimeDiff from '@/components/cinematic/GraphTimeDiff';
 import MissionBriefComposer from '@/components/cinematic/MissionBriefComposer';
 import LiveIntelThreatSynthesis from '@/components/cinematic/LiveIntelThreatSynthesis';
+import VolatilitySeriesComparison from '@/components/cinematic/VolatilitySeriesComparison';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2545,6 +2546,8 @@ function App() {
             <MissionBriefComposer />
             {/* F321 (overnight 2026-11-03): LiveIntelThreatSynthesis — ◈ TISYNTH button (left:227560, zIndex:417); /functions/getLiveIntel + /knowledge/ + /entities/Contact + /entities/RiskSignal → FULLY_GROUNDED/KNOWLEDGE_ONLY/SIGNALED/DARK; red pulse on DARK; expandable rows; ASSESS+TTS; isTisynthQuery exported */}
             <LiveIntelThreatSynthesis />
+            {/* F310 (overnight 2026-11-03): Volatility Series Comparison — ◈ VOLCOMP button (left:221400, zIndex:406); multi-select up to 4 series from GET /v1/history/series; parallel GET /v1/temporal/patterns?series_id= per series; stacked SVG bands: rows=series, x=shared time axis, colour intensity=rolling_volatility; anomaly z-score spikes as vertical tick bars (height ∝ |z|); hover cross-hair across all bands; ASSESS speaks about most volatile series + co-occurring anomalies + TTS; isVolcompQuery exported */}
+            <VolatilitySeriesComparison />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
