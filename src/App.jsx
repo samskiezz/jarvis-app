@@ -814,6 +814,7 @@ import OpsCaseInvestigationConvergence from '@/components/cinematic/OpsCaseInves
 import ScenarioPlaybookViewer from '@/components/cinematic/ScenarioPlaybookViewer';
 import LearnedPatternExplorer from '@/components/cinematic/LearnedPatternExplorer';
 import GraphTimeDiff from '@/components/cinematic/GraphTimeDiff';
+import MissionBriefComposer from '@/components/cinematic/MissionBriefComposer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2539,6 +2540,8 @@ function App() {
             <LearnedPatternExplorer />
             {/* F299 (overnight 2026-11-03): Graph Time Diff — ◈ GRTMDIFF button (left:215240, zIndex:395); two datetime inputs (t1, t2); GET /v1/graph-time/at?ts={t1} + GET /v1/graph-time/at?ts={t2}; diff: added (green), removed (red), unchanged (white); SVG Verlet force graph; diff summary bar; click node → tooltip; ASSESS + TTS; isGrtmdiffQuery exported */}
             <GraphTimeDiff />
+            {/* F320 (overnight 2026-11-03): Mission Brief Composer — ◈ MSNBRIEF button (left:227000, zIndex:416); GET /v1/scenario/list → scenario selector; parallel GET /entities/Task + /entities/RiskSignal + /entities/Contact + /entities/SwarmJob; keyword-match to context sections; "Compose Brief" → POST /v1/jarvis/agent/chat → structured brief (OBJECTIVE/RISKS/PERSONNEL/AUTOMATION/NOTES); "Speak Brief" → TTS; clipboard copy; ASSESS + TTS; isMsnbriefQuery exported */}
+            <MissionBriefComposer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
