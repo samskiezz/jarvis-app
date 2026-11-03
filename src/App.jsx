@@ -821,6 +821,7 @@ import LiveIntelThreatSynthesis from '@/components/cinematic/LiveIntelThreatSynt
 import VolatilitySeriesComparison from '@/components/cinematic/VolatilitySeriesComparison';
 import AipToolExplorer from '@/components/cinematic/AipToolExplorer';
 import BboxSpatialQuery from '@/components/cinematic/BboxSpatialQuery';
+import TemporalThresholdEventsPanel from '@/components/cinematic/TemporalThresholdEventsPanel';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2560,6 +2561,8 @@ function App() {
             <AipToolExplorer />
             {/* F304 (overnight 2026-11-03): Bbox Spatial Query — ◈ BBOXQRY button (left:218040, zIndex:400); four inputs min_lat/min_lon/max_lat/max_lon; GET /v1/geo/bbox → result objects as dots on SVG map with bbox rectangle overlay; click object → GET /v1/geo/tracks/{id} → movement track overlay; result count badge; sorted list by type; type filter chips; Export Coords to clipboard; ASSESS+TTS; isBboxqryQuery exported */}
             <BboxSpatialQuery />
+            {/* F305 (overnight 2026-11-03): Temporal Threshold Events Panel — ◈ THRSHEVT button (left:218600, zIndex:401); series_id selector from GET /v1/history/series; threshold input (blank=auto mean+1σ); direction up/down/both; GET /v1/temporal/events?series_id=&threshold=&direction= → event list; SVG timeline with vertical markers at crossing value; click event → inspector: exact value, timestamp, delta, duration; frequency histogram (events/day); ASSESS+TTS; isThrshevtQuery exported */}
+            <TemporalThresholdEventsPanel />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

@@ -238,6 +238,7 @@ import { isMsnbriefQuery } from "@/components/cinematic/MissionBriefComposer";
 import { isTisynthQuery } from "@/components/cinematic/LiveIntelThreatSynthesis";
 import { isVolcompQuery } from "@/components/cinematic/VolatilitySeriesComparison";
 import { isBboxqryQuery } from "@/components/cinematic/BboxSpatialQuery";
+import { isThrshevtQuery } from "@/components/cinematic/TemporalThresholdEventsPanel";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -562,6 +563,7 @@ export default function JarvisBrain() {
     if (isTisynthQuery(q))    { window.dispatchEvent(new Event("jarvis:tisynth-toggle")); }
     if (isVolcompQuery(q))    { window.dispatchEvent(new Event("jarvis:volcomp-toggle")); }
     if (isBboxqryQuery(q))    { window.dispatchEvent(new Event("jarvis:bboxqry-toggle")); }
+    if (isThrshevtQuery(q))   { window.dispatchEvent(new Event("jarvis:thrshevt-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
