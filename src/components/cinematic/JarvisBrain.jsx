@@ -232,6 +232,7 @@ import { isCdpivotQuery } from "@/components/cinematic/CrossDomainEntityPivot";
 import { isOpsinvQuery } from "@/components/cinematic/OpsCaseInvestigationConvergence";
 import { isScnpbookQuery } from "@/components/cinematic/ScenarioPlaybookViewer";
 import { isLrnptnQuery } from "@/components/cinematic/LearnedPatternExplorer";
+import { isGrtmdiffQuery } from "@/components/cinematic/GraphTimeDiff";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -550,6 +551,7 @@ export default function JarvisBrain() {
     if (isOpsinvQuery(q))     { window.dispatchEvent(new Event("jarvis:opsinv-toggle")); }
     if (isScnpbookQuery(q))   { window.dispatchEvent(new Event("jarvis:scnpbook-toggle")); }
     if (isLrnptnQuery(q))     { window.dispatchEvent(new Event("jarvis:lrnptn-toggle")); }
+    if (isGrtmdiffQuery(q))   { window.dispatchEvent(new Event("jarvis:grtmdiff-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };

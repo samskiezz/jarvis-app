@@ -813,6 +813,7 @@ import CrossDomainEntityPivot from '@/components/cinematic/CrossDomainEntityPivo
 import OpsCaseInvestigationConvergence from '@/components/cinematic/OpsCaseInvestigationConvergence';
 import ScenarioPlaybookViewer from '@/components/cinematic/ScenarioPlaybookViewer';
 import LearnedPatternExplorer from '@/components/cinematic/LearnedPatternExplorer';
+import GraphTimeDiff from '@/components/cinematic/GraphTimeDiff';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2536,6 +2537,8 @@ function App() {
             <ScenarioPlaybookViewer />
             {/* F297 (overnight 2026-11-04): Learned Pattern Explorer — ◈ LRNPTN button (left:214120 zIndex:393); GET /v1/predict/patterns (series floats + window) → motifs/discords/regimes/changepoints/anomalies tree view; GET /v1/predict/improvement → model scores + pending retrains panel; distance threshold filter; ASSESS + TTS; isLrnptnQuery exported */}
             <LearnedPatternExplorer />
+            {/* F299 (overnight 2026-11-03): Graph Time Diff — ◈ GRTMDIFF button (left:215240, zIndex:395); two datetime inputs (t1, t2); GET /v1/graph-time/at?ts={t1} + GET /v1/graph-time/at?ts={t2}; diff: added (green), removed (red), unchanged (white); SVG Verlet force graph; diff summary bar; click node → tooltip; ASSESS + TTS; isGrtmdiffQuery exported */}
+            <GraphTimeDiff />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
