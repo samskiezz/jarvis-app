@@ -802,6 +802,7 @@ import InvestigationGraphViewer from '@/components/cinematic/InvestigationGraphV
 import GeoTrackAnimator from '@/components/cinematic/GeoTrackAnimator';
 import TemporalReplayAnimator from '@/components/cinematic/TemporalReplayAnimator';
 import AlertCaseCreator from '@/components/cinematic/AlertCaseCreator';
+import ReportLibraryBrowser from '@/components/cinematic/ReportLibraryBrowser';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2503,6 +2504,8 @@ function App() {
             <TemporalReplayAnimator />
             {/* F300 (overnight 2026-11-03): Ops Alert → Case Creator — ◈ ALRTCAS button (left:215800, bottom:8, zIndex:396); fetches /v1/alerts + /v1/cases (real ops endpoints); alert inbox sorted by payload.severity; "Create Case" button → confirm modal → POST /v1/cases with alert title+description; success shows linked case id badge; bulk "Create Cases for All CRITICAL" (severity≥75); cases list right panel; stat tiles (alerts/cases/critical/created); red pulse on CRITICAL count; ASSESS → /v1/jarvis/agent/chat + TTS; isAlrtcasQuery+buildAlrtcasScript exported; "alert case"/"case creator"/"alrtcas"/"ops alert"/"alert inbox"/"critical alert"/"create case"/"case from alert"/"ops case" voice triggers; jarvis:alrtcas-toggle event; 60-s auto-refresh */}
             <AlertCaseCreator />
+            {/* F307 (overnight 2026-11-03): Report Library Browser — ◈ RPTBROW button (left:219720, zIndex:403); GET /v1/reports → list with type badge/date/count; click → GET /v1/reports/{id} inspector with full body; GET /v1/reports/{id}/export download md/json; filter ALL/GENERATED/MANUAL + date range + search; POST /v1/reports/generate form drawer; ASSESS + TTS; isRptbrowQuery+buildRptbrowScript exported */}
+            <ReportLibraryBrowser />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
