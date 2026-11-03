@@ -810,6 +810,7 @@ import InvestigationAnnotationViewer from '@/components/cinematic/InvestigationA
 import GothamInvestigationLinker from '@/components/cinematic/GothamInvestigationLinker';
 import KnowledgeGraphSummary from '@/components/cinematic/KnowledgeGraphSummary';
 import CrossDomainEntityPivot from '@/components/cinematic/CrossDomainEntityPivot';
+import OpsCaseInvestigationConvergence from '@/components/cinematic/OpsCaseInvestigationConvergence';
 import ScenarioPlaybookViewer from '@/components/cinematic/ScenarioPlaybookViewer';
 import LearnedPatternExplorer from '@/components/cinematic/LearnedPatternExplorer';
 
@@ -2529,6 +2530,8 @@ function App() {
             <KnowledgeGraphSummary />
             {/* F318 (overnight 2026-11-03): Cross-Domain Entity Pivot — ◈ CDPIVOT button (left:225880, zIndex:414); search GET /v1/ontology/objects?q= → seed; GET /v1/ontology/objects/{id}/neighbors + GET /v1/gotham/cases + GET /v1/investigations + GET /v1/cases; multi-domain SVG Verlet force graph (Ontology=blue/Gotham=red/Investigation=green/Ops=orange); click node → pivot; ASSESS + TTS; isCdpivotQuery+buildCdpivotScript exported */}
             <CrossDomainEntityPivot />
+            {/* F319 (overnight 2026-11-03): Ops Case × Investigation Convergence — ◈ OPSINV button (left:226440, zIndex:415); GET /v1/ops/cases + GET /v1/investigations; keyword-cross-reference → LINKED/CASED/INVESTIGATED/OPEN; red pulse on OPEN count; expandable rows show matched investigations with status badge; ASSESS + TTS; isOpsinvQuery exported */}
+            <OpsCaseInvestigationConvergence />
             {/* F314 (overnight 2026-11-04): Scenario Playbook Viewer — ◈ SCNPBOOK button (left:223640, zIndex:410); GET /v1/scenario/list → list with status badge (ACTIVE/PENDING/ARCHIVED) + kind chip; click scenario → detail inspector: title, description, steps (numbered), conditions, expected outcomes; "Run Scenario" → POST /v1/jarvis/agent/chat with scenario context → AI feasibility analysis; filter ALL/ACTIVE/PENDING/ARCHIVED + search; ASSESS speaks scenario coverage + TTS; NOTE: /v1/ontology/objects linked-entities step omitted (endpoint not in confirmed-real list); isScnpbookQuery+buildScnpbookScript exported */}
             <ScenarioPlaybookViewer />
             {/* F297 (overnight 2026-11-04): Learned Pattern Explorer — ◈ LRNPTN button (left:214120 zIndex:393); GET /v1/predict/patterns (series floats + window) → motifs/discords/regimes/changepoints/anomalies tree view; GET /v1/predict/improvement → model scores + pending retrains panel; distance threshold filter; ASSESS + TTS; isLrnptnQuery exported */}

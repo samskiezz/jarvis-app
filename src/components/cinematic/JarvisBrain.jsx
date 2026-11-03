@@ -229,6 +229,7 @@ import { isEntlinkQuery } from "@/components/cinematic/EntityDeepLinkNavigator";
 import { isGotinvlnkQuery } from "@/components/cinematic/GothamInvestigationLinker";
 import { isKgsumQuery } from "@/components/cinematic/KnowledgeGraphSummary";
 import { isCdpivotQuery } from "@/components/cinematic/CrossDomainEntityPivot";
+import { isOpsinvQuery } from "@/components/cinematic/OpsCaseInvestigationConvergence";
 import { isScnpbookQuery } from "@/components/cinematic/ScenarioPlaybookViewer";
 import { isLrnptnQuery } from "@/components/cinematic/LearnedPatternExplorer";
 
@@ -546,6 +547,7 @@ export default function JarvisBrain() {
     if (isGotinvlnkQuery(q))  { window.dispatchEvent(new Event("jarvis:gotinvlnk-toggle")); }
     if (isKgsumQuery(q))      { window.dispatchEvent(new Event("jarvis:kgsum-toggle")); }
     if (isCdpivotQuery(q))    { window.dispatchEvent(new Event("jarvis:cdpivot-toggle")); }
+    if (isOpsinvQuery(q))     { window.dispatchEvent(new Event("jarvis:opsinv-toggle")); }
     if (isScnpbookQuery(q))   { window.dispatchEvent(new Event("jarvis:scnpbook-toggle")); }
     if (isLrnptnQuery(q))     { window.dispatchEvent(new Event("jarvis:lrnptn-toggle")); }
     let answer = "";
