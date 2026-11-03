@@ -801,6 +801,7 @@ import OntologyUpsertPanel from '@/components/cinematic/OntologyUpsertPanel';
 import InvestigationGraphViewer from '@/components/cinematic/InvestigationGraphViewer';
 import GeoTrackAnimator from '@/components/cinematic/GeoTrackAnimator';
 import TemporalReplayAnimator from '@/components/cinematic/TemporalReplayAnimator';
+import AlertCaseCreator from '@/components/cinematic/AlertCaseCreator';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2500,6 +2501,8 @@ function App() {
             <GeoTrackAnimator />
             {/* F295 (overnight 2026-11-03): Temporal Replay Animator — ◈ TMPRLPY button (left:213000, zIndex:391); GET /v1/temporal/series → series_id selector; GET /v1/temporal/replay?series_id=&n_frames=50 → N cumulative frames; SVG line chart grows frame-by-frame; pulsing newest point; play/pause/step scrubber + speed 1×/2×/5×; final frame shows event markers from GET /v1/temporal/events; ASSESS + TTS; isTmprlpyQuery+buildTmprlpyScript exported for JarvisBrain */}
             <TemporalReplayAnimator />
+            {/* F300 (overnight 2026-11-03): Ops Alert → Case Creator — ◈ ALRTCAS button (left:215800, bottom:8, zIndex:396); fetches /v1/alerts + /v1/cases (real ops endpoints); alert inbox sorted by payload.severity; "Create Case" button → confirm modal → POST /v1/cases with alert title+description; success shows linked case id badge; bulk "Create Cases for All CRITICAL" (severity≥75); cases list right panel; stat tiles (alerts/cases/critical/created); red pulse on CRITICAL count; ASSESS → /v1/jarvis/agent/chat + TTS; isAlrtcasQuery+buildAlrtcasScript exported; "alert case"/"case creator"/"alrtcas"/"ops alert"/"alert inbox"/"critical alert"/"create case"/"case from alert"/"ops case" voice triggers; jarvis:alrtcas-toggle event; 60-s auto-refresh */}
+            <AlertCaseCreator />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

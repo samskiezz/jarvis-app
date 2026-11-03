@@ -311,3 +311,4 @@ Commits pushed to jarvis-overnight:
 [2026-11-02] F292 InvestigationGraphViewer.jsx — SVG force-directed investigation subgraph viewer; Verlet sim, per-type node shapes, inspector, annotations, share, ASSESS+TTS; wired App.jsx; build OK
 [2026-11-02] F293 GeoTrackAnimator.jsx — SVG Mercator world map + animated dot along /v1/geo/tracks/{id} waypoints; play/pause/step/reset + 1×/5×/20× speed; haversine distance badge; ASSESS+TTS; wired App.jsx; build passes
 2026-11-03 F295 TemporalReplayAnimator.jsx — SVG replay scrubber wired to /v1/temporal/series + /v1/temporal/replay + /v1/temporal/events; pulsing dot + event markers on final frame; play/pause/step/scrubber/speed; ASSESS+TTS; build exit 0
+2026-11-03 F300 DONE: AlertCaseCreator.jsx — Ops Alert → Case Creator; /v1/alerts inbox sorted by severity + /v1/cases list + POST /v1/cases; confirm modal, case-id badge, bulk CRITICAL creator, ASSESS+TTS; Vite build exit:0
