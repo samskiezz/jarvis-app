@@ -807,6 +807,7 @@ import ReportLibraryBrowser from '@/components/cinematic/ReportLibraryBrowser';
 import EntityDeepLinkNavigator from '@/components/cinematic/EntityDeepLinkNavigator';
 import InvestigationAnnotationViewer from '@/components/cinematic/InvestigationAnnotationViewer';
 import GothamInvestigationLinker from '@/components/cinematic/GothamInvestigationLinker';
+import KnowledgeGraphSummary from '@/components/cinematic/KnowledgeGraphSummary';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2518,6 +2519,8 @@ function App() {
             <InvestigationAnnotationViewer />
             {/* F309 (overnight 2026-11-03): Gotham + Investigation Linker — ◈ GOTINVLNK button (left:220840, zIndex:405); CRUD-PANEL: GET /v1/gotham/cases (left) + GET /v1/investigations (right); select case+investigation → POST /v1/investigations/{id}/annotations "Linked to Gotham case: {id}"; linked pairs state w/timestamps; pivot → POST /v1/gotham/case; ASSESS + TTS; isGotinvlnkQuery exported */}
             <GothamInvestigationLinker />
+            {/* F315 (overnight 2026-11-03): Knowledge Graph Summary — ◈ KGSUM button (left:224200, zIndex:411); GET /knowledge/ + GET /v1/graph/centrality; SVG Verlet force graph: square=articles, circle=graph nodes, edges via keyword overlap; click article → content drawer; ASSESS + TTS; isKgsumQuery exported */}
+            <KnowledgeGraphSummary />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).

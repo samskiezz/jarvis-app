@@ -226,6 +226,7 @@ import { isOntupsertQuery } from "@/components/cinematic/OntologyUpsertPanel";
 import { isOntcreateQuery } from "@/components/cinematic/OntologyObjectCreator";
 import { isEntlinkQuery } from "@/components/cinematic/EntityDeepLinkNavigator";
 import { isGotinvlnkQuery } from "@/components/cinematic/GothamInvestigationLinker";
+import { isKgsumQuery } from "@/components/cinematic/KnowledgeGraphSummary";
 
 /**
  * JarvisBrain — gives JARVIS a living presence across the cinematic HUD.
@@ -538,6 +539,7 @@ export default function JarvisBrain() {
     if (isOntcreateQuery(q))  { window.dispatchEvent(new Event("jarvis:ontcreate-toggle")); }
     if (isEntlinkQuery(q))    { window.dispatchEvent(new Event("jarvis:entlink-toggle")); }
     if (isGotinvlnkQuery(q))  { window.dispatchEvent(new Event("jarvis:gotinvlnk-toggle")); }
+    if (isKgsumQuery(q))      { window.dispatchEvent(new Event("jarvis:kgsum-toggle")); }
     let answer = "";
     try {
       const pageContext = { route: window.location.pathname, scene };
