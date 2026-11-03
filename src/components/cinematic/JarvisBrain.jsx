@@ -220,6 +220,7 @@ import { isStrmmonQuery } from "@/components/cinematic/LiveStreamMonitor";
 import { isAnvohtmQuery } from "@/components/cinematic/AnomalyVolatilityHeatmap";
 import { isCstlfeedQuery } from "@/components/cinematic/CrossSeriesTimelineFeed";
 import { isGeofncQuery } from "@/components/cinematic/GeofenceManager";
+import { isGeolyrQuery } from "@/components/cinematic/GeoLayerExplorer";
 import { isGoevtfdQuery } from "@/components/cinematic/GothamEventFeed";
 import { isDshltmonQuery } from "@/components/cinematic/DatasetHealthMonitor";
 import { isOntupsertQuery } from "@/components/cinematic/OntologyUpsertPanel";
@@ -536,6 +537,7 @@ export default function JarvisBrain() {
     if (isAnvohtmQuery(q))   { window.dispatchEvent(new Event("jarvis:anvohtm-toggle")); }
     if (isCstlfeedQuery(q))  { window.dispatchEvent(new Event("jarvis:cstlfeed-toggle")); }
     if (isGeofncQuery(q))    { window.dispatchEvent(new Event("jarvis:geofnc-toggle")); }
+    if (isGeolyrQuery(q))    { window.dispatchEvent(new Event("jarvis:geolyr-toggle")); }
     if (isGoevtfdQuery(q))   { window.dispatchEvent(new Event("jarvis:goevtfd-toggle")); }
     if (isDshltmonQuery(q))   { window.dispatchEvent(new Event("jarvis:dshltmon-toggle")); }
     if (isOntupsertQuery(q))  { window.dispatchEvent(new Event("jarvis:ontupsert-toggle")); }
