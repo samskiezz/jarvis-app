@@ -815,6 +815,7 @@ import ScenarioPlaybookViewer from '@/components/cinematic/ScenarioPlaybookViewe
 import LearnedPatternExplorer from '@/components/cinematic/LearnedPatternExplorer';
 import GraphTimeDiff from '@/components/cinematic/GraphTimeDiff';
 import MissionBriefComposer from '@/components/cinematic/MissionBriefComposer';
+import LiveIntelThreatSynthesis from '@/components/cinematic/LiveIntelThreatSynthesis';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2542,6 +2543,8 @@ function App() {
             <GraphTimeDiff />
             {/* F320 (overnight 2026-11-03): Mission Brief Composer — ◈ MSNBRIEF button (left:227000, zIndex:416); GET /v1/scenario/list → scenario selector; parallel GET /entities/Task + /entities/RiskSignal + /entities/Contact + /entities/SwarmJob; keyword-match to context sections; "Compose Brief" → POST /v1/jarvis/agent/chat → structured brief (OBJECTIVE/RISKS/PERSONNEL/AUTOMATION/NOTES); "Speak Brief" → TTS; clipboard copy; ASSESS + TTS; isMsnbriefQuery exported */}
             <MissionBriefComposer />
+            {/* F321 (overnight 2026-11-03): LiveIntelThreatSynthesis — ◈ TISYNTH button (left:227560, zIndex:417); /functions/getLiveIntel + /knowledge/ + /entities/Contact + /entities/RiskSignal → FULLY_GROUNDED/KNOWLEDGE_ONLY/SIGNALED/DARK; red pulse on DARK; expandable rows; ASSESS+TTS; isTisynthQuery exported */}
+            <LiveIntelThreatSynthesis />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
