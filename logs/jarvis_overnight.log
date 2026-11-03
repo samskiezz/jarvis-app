@@ -330,3 +330,4 @@ Commits pushed to jarvis-overnight:
 2026-11-03 17:20:59 UTC | F301 ConnectorRegistry | GET /v1/connectors | kind badge + INTEGRATED/GENERIC + inspector drawer + ASSESS+TTS | build OK | pushed jarvis-overnight
 2026-11-03 18:07:06 UTC | BACKLOG EXPANSION | Un-skipped 8 features (F302-F305,F311-F313,F316) — all endpoints confirmed real; updated RULES with full 100+ endpoint list; added F322-F401 (80 new features); 15-per-run batch builder strategy documented
 [2026-11-03] F302 InvestigationShareManager.jsx — INVSHR workbench; GET /v1/investigations + /shares + GET /v1/investigations/{id} + POST /share; share count badge; ASSESS+TTS; Vite build exit:0
+2026-11-03 | F303 AIP Tool Explorer | AipToolExplorer.jsx | GET /v1/aip/tools + POST /v1/aip/call + GET /v1/aip/proposals + GET /v1/aip/skill + ASSESS+TTS | build exit 0

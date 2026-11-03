@@ -819,6 +819,7 @@ import GraphTimeDiff from '@/components/cinematic/GraphTimeDiff';
 import MissionBriefComposer from '@/components/cinematic/MissionBriefComposer';
 import LiveIntelThreatSynthesis from '@/components/cinematic/LiveIntelThreatSynthesis';
 import VolatilitySeriesComparison from '@/components/cinematic/VolatilitySeriesComparison';
+import AipToolExplorer from '@/components/cinematic/AipToolExplorer';
 
 const Launcher = lazy(() => import('@/pages/Launcher'));
 const CinematicHome = lazy(() => import('@/pages/CinematicHome'));
@@ -2554,6 +2555,8 @@ function App() {
             <LiveIntelThreatSynthesis />
             {/* F310 (overnight 2026-11-03): Volatility Series Comparison — ◈ VOLCOMP button (left:221400, zIndex:406); multi-select up to 4 series from GET /v1/history/series; parallel GET /v1/temporal/patterns?series_id= per series; stacked SVG bands: rows=series, x=shared time axis, colour intensity=rolling_volatility; anomaly z-score spikes as vertical tick bars (height ∝ |z|); hover cross-hair across all bands; ASSESS speaks about most volatile series + co-occurring anomalies + TTS; isVolcompQuery exported */}
             <VolatilitySeriesComparison />
+            {/* F303 (overnight 2026-11-03): AIP Tool Explorer — ◈ AIPTOOL button (left:217480, zIndex:399); GET /v1/aip/tools → tool list; click → detail drawer; "Call Tool" → POST /v1/aip/call; GET /v1/aip/proposals → proposals list; GET /v1/aip/skill → skill scorecard; ASSESS+TTS; isAiptoolQuery+buildAiptoolScript exported */}
+            <AipToolExplorer />
             <Suspense fallback={<Loading />}>
               <Routes>
                 {/* Front door is now the cinematic selector (JARVIS / Underworld).
